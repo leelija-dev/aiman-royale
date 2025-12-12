@@ -1,81 +1,68 @@
 <x-admin::layouts>
     <x-slot:title>
-        {{ __('sizechart::app.sizechart.template.title') }}
+        @lang('sizechart::app.sizechart.template.title')
     </x-slot>
 
-    @push('styles')
-    <style>
-        /* Scoped styles for SizeChart index page */
-        .sizechart-index .page-header {
-            padding-bottom: 12px !important;
-            border-bottom: 1px solid #e5e7eb !important; /* gray-200 */
-            margin-bottom: 16px !important;
-        }
+    <div class="flex items-center justify-between">
+        <p class="text-xl font-bold text-gray-800 dark:text-white">
+            @lang('sizechart::app.sizechart.template.title')
+        </p>
 
-        .sizechart-index .page-title h1 {
-            font-weight: 700 !important;
-        }
+        <div class="flex items-center gap-x-2.5">
+            <!-- Export Modal -->
+            <x-admin::datagrid.export :src="route('sizechart.admin.index')" />
 
-        .sizechart-index .page-action {
-            display: inline-block !important;
-            margin-left: 8px !important;
-        }
-    </style>
-    @endpush
+            <a
+                href="{{ route('sizechart.admin.index.create', ['type' => '0']) }}"
+                class="primary-button"
+            >
+                @lang('sizechart::app.sizechart.template.add-configurable')
+            </a>
 
-    <div class="content sizechart-index" style="height: 100%;">
-        <?php $locale = request()->get('locale') ?: null; ?>
-        <?php $channel = request()->get('channel') ?: null; ?>
-        <div class="page-header">
-            <div class="page-title">
-                <h1>{{ __('sizechart::app.sizechart.template.title') }}</h1>
-            </div>
-
-            <div class="page-action">
-                <a href="{{ route('sizechart.admin.index.create', ['type' => '0'])  }}" class="btn btn-lg btn-primary">
-                    {{ __('sizechart::app.sizechart.template.add-configurable') }}
-                </a>
-            </div>
-
-            <div class="page-action">
-                <a href="{{ route('sizechart.admin.index.create', ['type' => '1']) }}" class="btn btn-lg btn-primary">
-                    {{ __('sizechart::app.sizechart.template.add-simple') }}
-                </a>
-            </div>
-
+            <a
+                href="{{ route('sizechart.admin.index.create', ['type' => '1']) }}"
+                class="primary-button"
+            >
+                @lang('sizechart::app.sizechart.template.add-simple')
+            </a>
         </div>
-
-        {!! view_render_event('bagisto.admin.sizechart.template.list.before') !!}
-
-        <div class="page-content">
-            <x-admin::datagrid :src="route('sizechart.admin.index')" />
-        </div>
-
-        {!! view_render_event('bagisto.admin.sizechart.template.list.after') !!}
-
     </div>
+
+    {!! view_render_event('bagisto.admin.sizechart.template.list.before') !!}
+
+    <x-admin::datagrid :src="route('sizechart.admin.index')">
+        <x-slot:header>
+            <x-admin::datagrid.toolbar>
+                <x-slot:bulk-actions>
+                    <x-admin::datagrid.toolbar.mass-action
+                        :title="__('admin::app.datagrid.delete')"
+                        :action="route('sizechart.admin.index.massdelete')"
+                        method="POST"
+                    >
+                        <input type="hidden" name="_method" value="DELETE">
+                        @csrf
+                    </x-admin::datagrid.toolbar.mass-action>
+                </x-slot:bulk-actions>
+            </x-admin::datagrid.toolbar>
+        </x-slot>
+    </x-admin::datagrid>
     
+    {!! view_render_event('bagisto.admin.sizechart.template.list.after') !!}
 
-<!-- @push('scripts')
-    <script>
-
-        function reloadPage(getVar, getVal) {
-            let url = new URL(window.location.href);
-            url.searchParams.set(getVar, getVal);
-
-            window.location.href = url.href;
-        }
-
-    </script>
-@endpush -->
-
-@pushOnce('scripts')
-    <script>
-        function reloadPage(getVar, getVal) {
-            let url = new URL(window.location.href);
-            url.searchParams.set(getVar, getVal);
-            window.location.href = url.href;
-        }
-    </script>
-@endPushOnce
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Handle delete button clicks
+                document.querySelectorAll('[data-confirm]').forEach(element => {
+                    element.addEventListener('click', function(event) {
+                        if (!confirm(this.dataset.confirm)) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            return false;
+                        }
+                    });
+                });
+            });
+        </script>
+    @endpush
 </x-admin::layouts>

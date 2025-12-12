@@ -4,6 +4,7 @@ namespace Webkul\SizeChart\Datagrids;
 
 use Illuminate\Support\Facades\DB;
 use Webkul\DataGrid\DataGrid;
+use Webkul\SizeChart\Models\SizeChart;
 
 class TemplateDataGrid extends DataGrid
 {
@@ -13,7 +14,21 @@ class TemplateDataGrid extends DataGrid
 
     public function prepareQueryBuilder()
     {
-        return DB::table('size_charts')->addSelect('id', 'template_name', 'template_code', 'template_type', 'image_path');
+        $queryBuilder = DB::table('size_charts')
+            ->select(
+                'id',
+                'template_name',
+                'template_code',
+                'template_type',
+                'image_path',
+                'created_at',
+                'updated_at'
+            );
+            
+        // Debug the query
+        // \Log::debug('SizeChart Query:', ['sql' => $queryBuilder->toSql(), 'bindings' => $queryBuilder->getBindings()]);
+        
+        return $queryBuilder;
     }
 
     public function prepareColumns()
@@ -50,13 +65,22 @@ class TemplateDataGrid extends DataGrid
             'label'      => trans('sizechart::app.sizechart.template.template-type'),
             'type'       => 'string',
             'searchable' => true,
+            'sortable'   => true,
             'filterable' => true,
             'closure' => function ($row) {
-                if ($row->template_type == 'configurable')
-                    return trans('sizechart::app.sizechart.template.configurable-type');
-                else
-                    return trans('sizechart::app.sizechart.template.simple-type');
+                return $row->template_type == 'configurable' 
+                    ? trans('sizechart::app.sizechart.template.configurable-type')
+                    : trans('sizechart::app.sizechart.template.simple-type');
             }
+        ]);
+        
+        $this->addColumn([
+            'index'      => 'created_at',
+            'label'      => trans('admin::app.datagrid.created_at'),
+            'type'       => 'datetime',
+            'searchable' => true,
+            'sortable'   => true,
+            'filterable' => true,
         ]);
     }
 

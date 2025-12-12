@@ -1,5 +1,36 @@
 <?php
 
+Route::get('/admin/sizechart/test', function() {
+    try {
+        // Check database connection
+        \DB::connection()->getPdo();
+        
+        // Check if table exists
+        if (!\Schema::hasTable('size_charts')) {
+            return 'size_charts table does not exist';
+        }
+        
+        // Get record count
+        $count = \DB::table('size_charts')->count();
+        
+        // Get first few records
+        $records = \DB::table('size_charts')->take(5)->get();
+        
+        return [
+            'status' => 'connected',
+            'table_exists' => true,
+            'record_count' => $count,
+            'sample_records' => $records
+        ];
+    } catch (\Exception $e) {
+        return [
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ];
+    }
+})->name('sizechart.test');
+
 Route::group(['middleware' => ['web', 'admin', 'locale']], function () {
 
     Route::get('/admin/sizechart', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@index')->defaults('_config', [

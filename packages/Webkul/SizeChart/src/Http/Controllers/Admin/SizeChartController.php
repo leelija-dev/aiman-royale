@@ -78,10 +78,23 @@ class SizeChartController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return datagrid(TemplateDataGrid::class)->process();
+            $datagrid = datagrid(TemplateDataGrid::class);
+            
+            // Debug: Log the datagrid query
+            // \Log::debug('Datagrid Query:', [
+            //     'sql' => $datagrid->getQueryBuilder()->toSql(),
+            //     'bindings' => $datagrid->getQueryBuilder()->getBindings()
+            // ]);
+            
+            return $datagrid->process();
         }
 
-        return view($this->_config['view']);
+        // Debug: Get records directly to verify
+        $records = \Webkul\SizeChart\Models\SizeChart::all();
+        
+        return view($this->_config['view'], [
+            'debug_records' => $records // For debugging in the view
+        ]);
     }
 
     /**
