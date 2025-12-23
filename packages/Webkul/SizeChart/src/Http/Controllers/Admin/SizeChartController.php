@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Webkul\SizeChart\Repositories\SizeChartRepository;
+use Webkul\Core\Http\Controllers\BackendBaseController;
+
 use Webkul\SizeChart\Repositories\AssignTemplateRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\SizeChart\Datagrids\TemplateDataGrid;
@@ -378,43 +382,99 @@ class SizeChartController extends Controller
     //     ]);
     // }
 
-    public function edit($id)
-    {
-        $sizeChart = \DB::table('size_charts')->find($id);
+    // public function edit($id)
+    // {
+    //     $sizeChart = \DB::table('size_charts')->find($id);
 
-        if (!$sizeChart) {
-            abort(404);
-        }
+    //     if (!$sizeChart) {
+    //         abort(404);
+    //     }
 
-        $attributes = $this->attributeRepository->findWhere(['is_filterable' => 1]);
+    //     $attributes = $this->attributeRepository->findWhere(['is_filterable' => 1]);
 
-        // Safely decode JSON fields
-        $options = json_decode($sizeChart->options ?? '[]', true) ?: [];
-        $rows = json_decode($sizeChart->rows ?? '[]', true) ?: [];
+    //     // Safely decode JSON fields
+    //     $options = json_decode($sizeChart->options ?? '[]', true) ?: [];
+    //     $rows = json_decode($sizeChart->rows ?? '[]', true) ?: [];
 
-        return view('sizechart::admin.sizechart.edit', [
-            'sizeChart' => $sizeChart,
-            'attributes' => $attributes,
-            'label' => $sizeChart->label ?? '',
-            'customOptions' => is_array($options) ? $options : [],
-            'addRows' => is_array($rows) ? $rows : [],
-        ]);
+    //     return view('sizechart::admin.sizechart.edit', [
+    //         'sizeChart' => $sizeChart,
+    //         'attributes' => $attributes,
+    //         'label' => $sizeChart->label ?? '',
+    //         'customOptions' => is_array($options) ? $options : [],
+    //         'addRows' => is_array($rows) ? $rows : [],
+    //     ]);
+    // }
+
+//     public function edit($id)
+//     {
+//         $sizeChart = $this->sizechartRepository->findOrFail($id);
+
+//         $data = json_decode($sizeChart->size_chart, true) ?? [];
+// ;
+//         if (!empty($data)) {
+//             $headers = array_shift($data); // first row
+//             $matrix  = array_values($data); // remaining rows
+//         } else {
+//             $headers = [];
+//             $matrix  = [];
+//         }
+
+//         return view('sizechart::admin.sizechart.edit', [
+//             'sizeChart' => $sizeChart,
+//             'headers'   => $headers,
+//             'matrix'    => $matrix,
+//         ]);
+//     }
+
+public function edit($id)
+{
+    $sizeChart = $this->sizechartRepository->findOrFail($id);
+    $data = json_decode($sizeChart->size_chart, true) ?? [];
+    
+    if (!empty($data)) {
+        // The first row should be headers
+        $firstRow = reset($data);
+        $headers = array_keys($firstRow);
+        
+        // The entire data is our matrix
+        $matrix = $data;
+    } else {
+        $headers = [];
+        $matrix = [];
     }
+
+    return view('sizechart::admin.sizechart.edit', [
+        'sizeChart' => $sizeChart,
+        'headers'   => $headers,
+        'matrix'    => $matrix,
+    ]);
+}
+
     /**
      * Update the specified resource in storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $id = request('template_id');
+        // Get the ID from the route parameter
+        $id = $id ?? request('template_id');
+        
+        if (empty($id)) {
+            session()->flash('error', 'Invalid size chart ID');
+            return redirect()->back();
+        }
+        
         $imagePath = '';
-        $sizeChart = json_encode(request('formname'));
+        $formData = request('formname');
+        $templateName = request('template_name');
+        $sizeChart = json_encode($formData);
 
-        if (count(request('formname')) < 2) {
-            session()->flash('error', trans('sizechart::app.sizechart.response.atleast-one-row', ['name' => request('template_name')]));
-
+        if (count($formData) < 2) {
+            session()->flash('error', trans('sizechart::app.sizechart.response.atleast-one-row', ['name' => $templateName]));
+            print_r("hi");
+            die;
             return redirect()->back();
         }
 
@@ -430,14 +490,41 @@ class SizeChartController extends Controller
             }
         }
 
-        $request->request->remove('formname');
-        $request->request->add(['size_chart' => $sizeChart]);
+        // Get all request data
+        $data = $request->all();
 
-        $this->sizechartRepository->update(request()->all(), $id);
+        // Add/update the size_chart field
+        $data['size_chart'] = $sizeChart;
 
-        session()->flash('success', trans('admin::app.response.update-success', ['name' => request('template_name')]));
+        // Remove formname as it's no longer needed
+        unset($data['formname']);
 
-        return redirect()->route('sizechart.admin.index');
+        try {
+            // Debug: Log the ID and check if it's valid
+            \Log::info('Updating size chart with ID: ' . $id);
+            \Log::info('All size chart IDs: ' . json_encode(\DB::table('size_charts')->pluck('id')->toArray()));
+            
+            // Try to find the record first
+            $sizeChart = $this->sizechartRepository->find($id);
+            \Log::info('Found size chart: ' . json_encode($sizeChart));
+
+            if (!$sizeChart) {
+                throw new \Exception('Size chart not found with ID: ' . $id);
+            }
+
+            // Update the record
+            $updated = $this->sizechartRepository->update($data, $id);
+
+            if ($updated) {
+                session()->flash('success', trans('admin::app.response.update-success', ['name' => $templateName]));
+                return redirect()->route('sizechart.admin.index');
+            }
+
+            throw new \Exception('Failed to update size chart');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**

@@ -135,6 +135,23 @@
 
                             @if($type)
                                 <input type="hidden" name="template_type" value="simple" />
+                                
+                                <!-- Column Names Input -->
+                                <div class="control-group">
+                                    <label for="column_names" class="required">
+                                        {{ __('sizechart::app.sizechart.template.column-names') }}
+                                    </label>
+                                    <input type="text"
+                                           id="column_names"
+                                           name="column_names"
+                                           class="control"
+                                           placeholder="{{ __('sizechart::app.sizechart.template.column-names-placeholder') }}"
+                                           value="{{ old('column_names', '') }}"
+                                           required>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ __('sizechart::app.sizechart.template.column-names-help') }}
+                                    </p>
+                                </div>
                             @else
                                 <input type="hidden" name="template_type" value="configurable" />
                             @endif

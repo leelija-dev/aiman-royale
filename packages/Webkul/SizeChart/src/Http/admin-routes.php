@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web', 'admin', 'locale']], function () {
         'view' => 'sizechart::admin.sizechart.edit',
     ])->name('sizechart.admin.index.edit');
 
-    Route::post('/admin/sizechart/edit/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@update')->defaults('_config', [
+    Route::put('/admin/sizechart/edit/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@update')->defaults('_config', [
         'view' => 'sizechart::admin.sizechart.edit',
     ])->name('sizechart.admin.index.update');
 
