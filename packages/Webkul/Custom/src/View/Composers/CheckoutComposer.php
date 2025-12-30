@@ -8,10 +8,17 @@ class CheckoutComposer
 {
     public function compose(View $view)
     {
-        // Set flag to hide shipping method
-        $view->with('hideShippingMethod', true);
+        // Set flags to control checkout flow
+        $view->with([
+            'hideShippingMethod' => true,
+            'shouldHideShipping' => true,
+            'skipShippingStep' => true
+        ]);
         
-        // Also set a global view variable that can be checked in the template
-        view()->share('shouldHideShipping', true);
+        // Set global view variables
+        view()->share([
+            'shouldHideShipping' => true,
+            'skipShippingStep' => true
+        ]);
     }
 }
