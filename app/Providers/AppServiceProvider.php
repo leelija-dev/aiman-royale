@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\ParallelTesting;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::prependNamespace(
+            'shop',
+            base_path('packages/Webkul/CustomCheckout/src/Resources/views')
+        );
+
         ParallelTesting::setUpTestDatabase(function (string $database, int $token) {
             Artisan::call('db:seed');
         });
