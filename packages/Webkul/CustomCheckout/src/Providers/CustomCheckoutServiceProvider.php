@@ -32,6 +32,11 @@ class CustomCheckoutServiceProvider extends ServiceProvider
                 $view->setPath(__DIR__ . '/../Resources/views/shop/customers/account/addresses/create.blade.php');
             });
             
+            // Override shop customer address edit form
+            $view->composer('shop::customers.account.addresses.edit', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/shop/customers/account/addresses/edit.blade.php');
+            });
+            
             // Override admin customer address create form
             $view->composer('admin::customers.customers.view.address.create', function ($view) {
                 $view->setPath(__DIR__ . '/../Resources/views/admin/customers/customers/view/address/create.blade.php');
