@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_DIR = '/var/www/aiman-royale'
+        DEPLOY_USER = 'deploy'
+        VPS_HOST = '82.25.104.117'
+    }
+
+    stages {
+
+        stage('Test SSH Connection') {
+            steps {
+                sh """
+                    ssh ${DEPLOY_USER}@${VPS_HOST} "echo '✅ SSH connection to \$(hostname) as \$(whoami) works.'"
+                """
+            }
+        }
+
+        stage('Deploy Code') {
+            steps {
+                sshagent (credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+
+                            echo "[DEPLOY] Pulling latest code..."
+                            cd ${PROJECT_DIR}
+                            
+                            # Fetch and reset to latest
+                            git fetch origin
+                            git reset --hard origin/main
+                            
+                            # Set proper permissions
+                            chmod -R 755 storage bootstrap/cache
+                            chmod -R 775 storage/framework
+
+                            echo "[DEPLOY] Building and restarting Docker stack..."
+                            ENV=prod docker compose -f docker-compose.yml down
+                            ENV=prod docker compose -f docker-compose.yml build --pull
+                            ENV=prod docker compose -f docker-compose.yml up -d
+
+                            echo "[DEPLOY] Waiting for services to settle..."
+                            sleep 10
+
+                            # Run migrations and clear caches
+                            echo "[DEPLOY] Running migrations..."
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan migrate
+                            
+                            echo "[DEPLOY] Optimizing application..."
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan optimize:clear
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan optimize
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan storage:link
+                                    
+                            # Warm up caches
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan view:cache
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan route:cache
+                            docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan config:cache
+                                    
+                            # Set deployment version
+                            echo "${BUILD_NUMBER}" > ${PROJECT_DIR}/.deployed-version
+                            echo "[DEPLOY] Checking container status..."
+                            ENV=prod docker compose -f docker-compose.yml ps
+
+                            echo "[DEPLOY] Deployment finished successfully ✅"
+                        '
+                    """
+                }
+            }
+        }
+
+        stage('Post-deploy Check') {
+            steps {
+                sshagent (credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            echo "[CHECK] Current branch: " \$(cd ${PROJECT_DIR} && git rev-parse --abbrev-ref HEAD)
+                        '
+                    """
+                }
+            }
+        }
+    }
+}
