@@ -37,22 +37,6 @@ pipeline {
                 sshagent (credentials: ['aiman-royale-vps-cred']) {
                     script {
                         try {
-                            // Create backup of current release
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                                    set -e
-                                    echo "[DEPLOY] Creating backup of current release..."
-                                    TIMESTAMP=\$(date +"%Y%m%d_%H%M%S")
-                                    BACKUP_DIR="${PROJECT_DIR}/backups/\${TIMESTAMP}"
-                                    mkdir -p "\${BACKUP_DIR}"
-                                    
-                                    # Backup database and volumes
-                                    ENV=prod docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T db pg_dump -U ${DB_USERNAME} ${DB_DATABASE} > \${BACKUP_DIR}/db_backup.sql
-                                    cp -r ${PROJECT_DIR}/storage/app/public \${BACKUP_DIR}/storage_public 2>/dev/null || true
-                                '
-                            """
-
-                            // Deploy new code
                             sh """
                                 ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
                                     set -e
@@ -100,14 +84,17 @@ pipeline {
                                 '
                             """
                         } catch (Exception e) {
-                            // Rollback to previous version
                             echo "Deployment failed, rolling back..."
                             sh """
                                 ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
                                     set -e
                                     echo "[ROLLBACK] Reverting to previous version..."
                                     ENV=prod docker compose -f ${PROJECT_DIR}/docker-compose.yml down
-                                    # Add rollback logic here
+                                    # Bring the application back up
+                                    echo "[ROLLBACK] Bringing up previous version..."
+                                    cd ${PROJECT_DIR}
+                                    git reset --hard HEAD@{1}
+                                    ENV=prod docker compose -f docker-compose.yml up -d
                                 '
                             """
                             error "Deployment failed: ${e.message}"
