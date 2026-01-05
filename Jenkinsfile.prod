@@ -7,8 +7,8 @@ pipeline {
         VPS_HOST = '82.25.104.117'
         COMPOSE_PROJECT_NAME = 'aiman_fashion'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
-        UID = '1000'  # Add this line
-        GID = '1000'  # Add this line
+        UID = '1000'
+        GID = '1000'
     }
 
     stages {
