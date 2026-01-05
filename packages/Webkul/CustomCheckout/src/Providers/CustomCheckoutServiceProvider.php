@@ -14,16 +14,39 @@ class CustomCheckoutServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Register view namespace
+        // Register view namespace for checkout
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'checkout');
         
-        // Also register the namespace for direct includes
-        View::addNamespace('checkout', __DIR__ . '/../Resources/views');
+        // Register shop namespace for overriding shop views with higher priority
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'shop');
         
-        // Publish views if needed
-        $this->publishes([
-            __DIR__ . '/../Resources/views' => resource_path('views/vendor/checkout'),
-        ], 'checkout-views');
+        // Register admin namespace for overriding admin views
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'admin');
+        
+        // Override specific views by extending the view factory
+        $this->app->booted(function () {
+            $view = $this->app['view'];
+            
+            // Override shop customer address create form
+            $view->composer('shop::customers.account.addresses.create', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/shop/customers/account/addresses/create.blade.php');
+            });
+            
+            // Override shop customer address edit form
+            $view->composer('shop::customers.account.addresses.edit', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/shop/customers/account/addresses/edit.blade.php');
+            });
+            
+            // Override admin customer address create form
+            $view->composer('admin::customers.customers.view.address.create', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/admin/customers/customers/view/address/create.blade.php');
+            });
+            
+            // Override admin customer address edit form
+            $view->composer('admin::customers.customers.view.address.edit', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/admin/customers/customers/view/address/edit.blade.php');
+            });
+        });
     }
 
     /**

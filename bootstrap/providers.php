@@ -44,4 +44,5 @@ return [
     Webkul\Theme\Providers\ThemeServiceProvider::class,
     Webkul\User\Providers\UserServiceProvider::class,
     Webkul\SizeChart\Providers\SizeChartServiceProvider::class,
+    Webkul\CustomCheckout\Providers\CustomCheckoutServiceProvider::class,
 ];
