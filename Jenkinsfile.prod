@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = '/var/www/aiman-fashion'
+        PROJECT_DIR = '/var/www/aiman-royale'
         DEPLOY_USER = 'deploy'
         VPS_HOST = '82.25.104.117'
         COMPOSE_PROJECT_NAME = 'aiman_fashion'
