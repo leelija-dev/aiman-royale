@@ -5,134 +5,88 @@ pipeline {
         PROJECT_DIR = '/var/www/aiman-royale'
         DEPLOY_USER = 'deploy'
         VPS_HOST = '82.25.104.117'
-        COMPOSE_PROJECT_NAME = 'aiman_fashion'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
-        UID = '1000'
-        GID = '1000'
     }
 
     stages {
+
         stage('Verify Environment') {
             steps {
-                sshagent (credentials: ['aiman-royale-vps-cred']) {
-                    script {
-                        try {
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                                    set -e
-                                    echo "Verifying deployment environment..."
-                                    [ -d "${PROJECT_DIR}" ] || { echo "Error: Project directory does not exist"; exit 1; }
-                                    which docker >/dev/null 2>&1 || { echo "Error: Docker is not installed"; exit 1; }
-                                    docker compose version >/dev/null 2>&1 || { echo "Error: Docker Compose is not installed"; exit 1; }
-                                '
-                            """
-                        } catch (Exception e) {
-                            error "Environment verification failed: ${e.message}"
-                        }
-                    }
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            echo "Verifying deployment environment..."
+                            [ -d "${PROJECT_DIR}" ]
+                            docker compose version >/dev/null
+                        '
+                    """
                 }
             }
         }
 
         stage('Deploy Code') {
             steps {
-                sshagent (credentials: ['aiman-royale-vps-cred']) {
-                    script {
-                        try {
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                                    set -e
-                                    echo "[DEPLOY] Pulling latest code..."
-                                    cd ${PROJECT_DIR}
-                                    
-                                    # Fetch and reset to latest
-                                    git fetch origin
-                                    git reset --hard origin/main
-                                    
-                                    # Set proper permissions
-                                    chmod -R 755 storage bootstrap/cache
-                                    chmod -R 775 storage/framework
-                                    
-                                    # Build and start containers
-                                    echo "[DEPLOY] Building and starting containers..."
-                                    ENV=prod docker compose -f docker-compose.yml down
-                                    ENV=prod docker compose -f docker-compose.yml build --pull
-                                    ENV=prod docker compose -f docker-compose.yml up -d
-                                    
-                                    # Wait for services to be ready
-                                    echo "[DEPLOY] Waiting for services to be ready..."
-                                    sleep 30
-                                    
-                                    # Run migrations and clear caches
-                                    echo "[DEPLOY] Running migrations..."
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan migrate --force
-                                    
-                                    echo "[DEPLOY] Optimizing application..."
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan optimize:clear
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan optimize
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan storage:link
-                                    
-                                    # Warm up caches
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan view:cache
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan route:cache
-                                    docker compose -f ${PROJECT_DIR}/docker-compose.yml exec -T app php artisan config:cache
-                                    
-                                    # Set deployment version
-                                    echo "${BUILD_NUMBER}" > ${PROJECT_DIR}/.deployed-version
-                                '
-                            """
-                        } catch (Exception e) {
-                            echo "Deployment failed, rolling back..."
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                                    set -e
-                                    echo "[ROLLBACK] Reverting to previous version..."
-                                    ENV=prod docker compose -f ${PROJECT_DIR}/docker-compose.yml down
-                                    # Bring the application back up
-                                    echo "[ROLLBACK] Bringing up previous version..."
-                                    cd ${PROJECT_DIR}
-                                    git reset --hard HEAD@{1}
-                                    ENV=prod docker compose -f docker-compose.yml up -d
-                                '
-                            """
-                            error "Deployment failed: ${e.message}"
-                        }
-                    }
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            cd ${PROJECT_DIR}
+
+                            echo "[DEPLOY] Stopping containers..."
+                            docker compose down || true
+
+                            echo "[DEPLOY] Updating code..."
+                            git fetch origin
+                            git reset --hard origin/main
+
+                            echo "[DEPLOY] Starting containers..."
+                            docker compose build --pull
+                            docker compose up -d
+
+                            echo "[DEPLOY] Waiting for services..."
+                            sleep 30
+
+                            echo "[DEPLOY] Running migrations..."
+                            docker compose exec -T app php artisan migrate --force
+
+                            echo "[DEPLOY] Optimizing application..."
+                            docker compose exec -T app php artisan optimize:clear
+                            docker compose exec -T app php artisan optimize
+                            docker compose exec -T app php artisan storage:link
+                            docker compose exec -T app php artisan view:cache
+                            docker compose exec -T app php artisan route:cache
+                            docker compose exec -T app php artisan config:cache
+
+                            echo "${BUILD_NUMBER}" > .deployed-version
+                        '
+                    """
                 }
             }
         }
 
         stage('Health Check') {
             steps {
-                script {
-                    // Wait for application to be ready
-                    sleep 30
-                    
-                    // Basic health check
-                    sh """
-                        if ! curl -sSf http://${VPS_HOST}/health > /dev/null; then
-                            echo "Health check failed!"
-                            exit 1
-                        fi
-                    """
-                    
-                    echo "Deployment completed successfully!"
-                }
+                sleep 20
+                sh """
+                    if ! curl -sSf http://${VPS_HOST}/health > /dev/null; then
+                        echo "Health check failed"
+                        exit 1
+                    fi
+                """
+                echo "Deployment completed successfully!"
             }
         }
     }
 
     post {
         always {
-            // Clean up workspace
             cleanWs()
-            
-            // Direct notification
             script {
                 if (currentBuild.currentResult == 'SUCCESS') {
-                    echo "✅ Deployment #${BUILD_NUMBER} to production was successful!"
+                    echo "✅ Deployment #${BUILD_NUMBER} successful"
                 } else {
-                    echo "❌ Deployment #${BUILD_NUMBER} to production failed! Check the logs for details."
+                    echo "❌ Deployment #${BUILD_NUMBER} failed"
                 }
             }
         }
