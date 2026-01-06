@@ -127,18 +127,12 @@ pipeline {
             // Clean up workspace
             cleanWs()
             
-            // Send notification
+            // Direct notification
             script {
                 if (currentBuild.currentResult == 'SUCCESS') {
-                    slackSend(
-                        color: 'good',
-                        message: "✅ Deployment #${BUILD_NUMBER} to production was successful!"
-                    )
+                    echo "✅ Deployment #${BUILD_NUMBER} to production was successful!"
                 } else {
-                    slackSend(
-                        color: 'danger',
-                        message: "❌ Deployment #${BUILD_NUMBER} to production failed! Check the logs for details."
-                    )
+                    echo "❌ Deployment #${BUILD_NUMBER} to production failed! Check the logs for details."
                 }
             }
         }
