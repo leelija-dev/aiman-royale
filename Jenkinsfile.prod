@@ -37,8 +37,8 @@ pipeline {
                             docker compose down || true
 
                             echo "[DEPLOY] Updating code..."
-                            sudo git fetch origin
-                            sudo git reset --hard origin/main
+                            git fetch origin
+                            git reset --hard origin/main
 
                             echo "[DEPLOY] Starting containers..."
                             docker compose build --pull
