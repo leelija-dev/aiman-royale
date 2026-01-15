@@ -10,7 +10,7 @@ class Occasion extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'occasions';
+    protected $table = 'ocassions';
 
     protected $fillable = [
         'name',

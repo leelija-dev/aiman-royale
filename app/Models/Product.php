@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ProductImage;
+use App\Models\Stock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,14 +20,18 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'sku',
-        'name',
-        'brand_id',
+        'design_no',
         'category_id',
-        'unit_amount',
-        'unit_id',
+        'ocassion_id',
+        'name',
         'description',
-        'is_active',
+        'brand',
+        'fabric',
+        'fit',
+        'price',
+        'discount_price',
+        'stock',
+        'status',
     ];
 
     /**
@@ -35,20 +40,26 @@ class Product extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_active' => 'boolean',
+        'price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
+        'stock' => 'integer',
+        'status' => 'string',
     ];
 
     /**
-     * Get the brand that owns the product.
+     * Get the category that owns the product.
      */
-    public function brand(): BelongsTo
-    {
-        return $this->belongsTo('App\\Models\\Brand');
-    }
-
-      public function category(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo('App\\Models\\Category');
+    }
+
+    /**
+     * Get the occasion that owns the product.
+     */
+    public function occasion(): BelongsTo
+    {
+        return $this->belongsTo('App\\Models\\Occasion', 'ocassion_id');
     }
 
     /**
@@ -59,15 +70,7 @@ class Product extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Get the unit associated with the product.
-     */
-    public function unit(): BelongsTo
-    {
-        return $this->belongsTo('App\\Models\\Unit');
+        return $query->where('status', 'active');
     }
 
     /**
@@ -76,13 +79,5 @@ class Product extends Model
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class, 'product_id');
-    }
-
-    /**
-     * Get the stocks associated with the product.
-     */
-    public function stocks(): HasMany
-    {
-        return $this->hasMany(Stock::class, 'product_id');
     }
 }

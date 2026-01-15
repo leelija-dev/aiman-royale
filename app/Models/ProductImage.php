@@ -14,7 +14,7 @@ class ProductImage extends Model
      * Explicitly set the table name because the migration uses a non-standard camelCase table.
      * Default for this model would be `product_images`.
      */
-    protected $table = 'productImages';
+    protected $table = 'product_images';
 
     /**
      * The attributes that are mass assignable.

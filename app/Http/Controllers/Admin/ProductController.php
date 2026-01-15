@@ -4,147 +4,137 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Brand;
-use App\Models\Unit;
 use App\Models\Category;
+use App\Models\Occasion;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    //
     public function index(Request $request){
-        // Eager-load images to fetch the first image per product efficiently
-        $query = Product::with(['images' => function ($q) {
+        $query = Product::with(['category', 'occasion', 'images' => function ($q) {
             $q->orderBy('id');
         }]); 
+        
         if ($request->filled('search')) {
-        $search = $request->input('search');
-        $query->where(function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%")
-              ->orWhere('sku', 'like', "%{$search}%");
-        });
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('design_no', 'like', "%{$search}%")
+                  ->orWhere('brand', 'like', "%{$search}%");
+            });
         }
+        
         $data = $query->paginate(15);
-        $brands = Brand::select('id','name')->where('is_active', true)->orderBy('name')->get();
-        $units=Unit::all();
-        $categories=Category::select('id','name')->where('is_active', 1)->orderBy('name')->get();
-        $categories=Category::select('id','name')->where('is_active', 1)->orderBy('name')->get();
-        return view('Admin.product.index', compact('data','brands','units','categories'));
+        $categories = Category::select('id','name')->orderBy('name')->get();
+        $occasions = Occasion::select('id','name')->orderBy('name')->get();
+        
+        return view('Admin.product.index', compact('data', 'categories', 'occasions'));
     }
+    
     public function create(){
-        // Provide brands and units for dropdowns
-        $brands = Brand::select('id','name')->orderBy('name')->get();
-        $units  = Unit::select('id','name','code')->orderBy('name')->get();
-        $categories = Category::select('id','name')->where('is_active', 1)->orderBy('name')->get();
-        return view('Admin.product.create', compact('brands','units','categories'));
+        $categories = Category::select('id','name')->orderBy('name')->get();
+        $occasions = Occasion::select('id','name')->orderBy('name')->get();
+        
+        return view('Admin.product.create', compact('categories', 'occasions'));
     }
     public function store(Request $request){
-        $data=$request->validate([
-            //'sku'         => 'nullable|string|max:64',
-            'sku'         =>'required|string|max:64|unique:products,sku',
-            //'name'        => 'required|string|max:255',
-            'name'        =>'required|string|max:255',
-            'brand_id'    => 'required|exists:brands,id',
-            'unit'        => 'required|string|max:12',
-            'unit_id'     => 'required|exists:units,id',
-            'category_id' => 'required|exists:product_categories,id',
+        $data = $request->validate([
+            'design_no' => 'required|string|max:40|unique:products,design_no',
+            'category_id' => 'required|exists:categories,id',
+            'occasion_id' => 'nullable|exists:occasions,id',
+            'name' => 'required|string|max:200',
             'description' => 'nullable|string',
-            'is_active'   => 'nullable|boolean',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg',
+            'brand' => 'nullable|string|max:100',
+            'fabric' => 'nullable|string|max:100',
+            'fit' => 'nullable|string|max:50',
+            'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'status' => 'required|in:active,inactive',
         ]);
 
-        $product = Product::create([
-            'sku'         => $data['sku'] ?? null,
-            'name'        => $data['name'],
-            'brand_id'    => $data['brand_id'] ?? null,
-            'unit_amount' => $data['unit'] ?? null,
-            'unit_id'     => $data['unit_id'],
-            'category_id' => $data['category_id'] ?? null,
-            'description' => $data['description'] ?? null,
-            'is_active'   => (bool)($data['is_active'] ?? true),
-        ]);
+        $product = Product::create($data);
 
+        // Handle image upload if present
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-
-            //Automatically create folder if it doesn’t exist
-            $uploadPath = public_path('upload_image');
-
-            if (!file_exists($uploadPath)) {
-            mkdir($uploadPath, 0777, true);
-            }
-
-            $file->move($uploadPath, $filename);
-            //
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
             
-            //
+            // Create upload directory if it doesn't exist
+            $uploadPath = public_path('uploads/products');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            
+            $image->move($uploadPath, $filename);
+            
             ProductImage::create([
                 'product_id' => $product->id,
-                'image'      => $filename,
+                'image' => $filename,
             ]);
         }
-        return(redirect()->route('admin.products')->with('success','Product data submitted successfully'));
+
+        return redirect()->route('admin.products')->with('success', 'Product created successfully!');
 
     }
-    public function update(Request $request,$id){
-        $data=$request->validate([
-            'sku'         => 'nullable|string|max:64|unique:products,sku,'.$id,
-            'name'        => 'required|string|max:255',
-            'brand_id'    => 'required|exists:brands,id',
-            'unit'        => 'required|string|max:12',
-            'unit_id'     => 'required|exists:units,id',
-            'category_id' => 'required|exists:product_categories,id',
+    public function update(Request $request, $id){
+        $data = $request->validate([
+            'design_no' => 'required|string|max:40|unique:products,design_no,'.$id,
+            'category_id' => 'required|exists:categories,id',
+            'occasion_id' => 'nullable|exists:occasions,id',
+            'name' => 'required|string|max:200',
             'description' => 'nullable|string',
-            'is_active'   => 'nullable|boolean',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg',
+            'brand' => 'nullable|string|max:100',
+            'fabric' => 'nullable|string|max:100',
+            'fit' => 'nullable|string|max:50',
+            'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'status' => 'required|in:active,inactive',
         ]);
 
-        Product::where('id',$id)->update([
-            'sku'         => $data['sku'] ?? null,
-            'name'        => $data['name'],
-            'brand_id'    => $data['brand_id'] ?? null,
-            'unit_amount'        => $data['unit'] ?? null,
-            'unit_id'     => $data['unit_id'],
-            'category_id' => $data['category_id'] ?? null,
-            'description' => $data['description'] ?? null,
-            'is_active'   => (bool)($data['is_active'] ?? true),
-        ]);
+        $product = Product::findOrFail($id);
+        $product->update($data);
 
-        // If a new image is uploaded, remove previous images and store the new one
+        // Handle image upload if present
         if ($request->hasFile('image')) {
-            // Delete existing image files and DB rows for this product
+            // Delete existing images
             $existingImages = ProductImage::where('product_id', $id)->get();
-            foreach ($existingImages as $img) {
-                $path = public_path('upload_image/' . $img->image);
-                if (File::exists($path)) {
-                    File::delete($path);
+            foreach ($existingImages as $existingImage) {
+                $imagePath = public_path('uploads/products/' . $existingImage->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
                 }
+                $existingImage->delete();
             }
-            ProductImage::where('product_id', $id)->delete();
 
-            // Save the new image
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('upload_image'), $filename);
-
+            // Upload new image
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            
+            $uploadPath = public_path('uploads/products');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            
+            $image->move($uploadPath, $filename);
+            
             ProductImage::create([
-                'product_id' => $id,
-                'image'      => $filename,
+                'product_id' => $product->id,
+                'image' => $filename,
             ]);
         }
-        $data=Product::all();
-        return(redirect()->route('admin.products',compact('data'))->with('success','Product data updated successfully'));
+
+        return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }
     public function delete($id)
     {
         $product = Product::findOrFail($id);
         $product->delete();
         
-        $data=Product::all();
-        return (redirect()->route('admin.products',compact('data')))->with('success', 'Product deleted successfully!');
+        return redirect()->route('admin.products')->with('success', 'Product deleted successfully!');
     }
     public function trashed()
     {

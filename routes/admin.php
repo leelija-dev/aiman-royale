@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\StockController;
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -30,13 +32,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FaqsController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\SummernoteController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\PrintBillController;
-use App\Http\Controllers\Admin\StockController;
-use App\Http\Controllers\ShopController;
+// use App\Http\Controllers\ShopController;
 
 
 Route::middleware(['web'])->prefix('admin')->group(function () {
@@ -106,6 +106,29 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::delete('occasions/{occasion}/force-delete', [AdminOccasionController::class, 'forceDelete'])
             ->name('admin.occasions.force-delete');
 
+        // Products
+        Route::resource('products', AdminProductController::class, [
+            'parameters' => ['products' => 'product:id'],
+            'names' => [
+                'index' => 'admin.products',
+                'create' => 'admin.products.create',
+                'store' => 'admin.products.store',
+                'edit' => 'admin.products.edit',
+                'update' => 'admin.products.update'
+            ]
+        ])->except(['show', 'destroy']);
+
+        // Custom delete route to use delete method
+        Route::delete('products/{id}', [AdminProductController::class, 'delete'])->name('admin.products.delete');
+
+        // Product Trashed Routes
+        Route::get('products/trashed', [AdminProductController::class, 'trashed'])->name('admin.products-trashed');
+        Route::patch('products/{id}/restore', [AdminProductController::class, 'restore'])->name('admin.products.restore');
+        Route::delete('products/{id}/force-delete', [AdminProductController::class, 'permanentlyDelete'])->name('admin.products.force-delete');
+
+        // Backward compatibility route alias
+        Route::get('add-product', [AdminProductController::class, 'create'])->name('admin.add-product');
+
         // ProductPackage routes (commented out - controller doesn't exist)
         // Route::get('/product-package/trashed',[ProductPackageController::class,'trashed'])->name('admin.product-package.trashed');
         // Route::patch('/trashed-product-package/{id}/restore',[ProductPackageController::class,'restore'])->name('admin.product-package.restore');
@@ -146,15 +169,6 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
     });
 
-
-    Route::get('/products',[ProductController::class, 'index'])->name('admin.products');
-    Route::get('/add-product',[ProductController::class, 'create'])->name('admin.add-product');
-    Route::post('/add-product',[ProductController::class, 'store'])->name('admin.product.store');
-    Route::post('/edit-product/{id}',[ProductController::class, 'update'])->name('admin.product.update');
-    Route::delete('/products/{id}', [ProductController::class, 'delete'])->name('products.delete');
-    Route::get('/products/trashed', [ProductController::class, 'trashed'])->name('admin.products-trashed');
-    Route::patch('/restore-product/{id}', [ProductController::class, 'restore'])->name('product.restore');
-    Route::delete('/force-delete-product/{id}', [ProductController::class, 'permanentlyDelete'])->name('product.force-delete');
 
     Route::prefix('unit')->group(function () {
         Route::get('/',[UnitController::class,'index'])->name('admin.unit');
@@ -207,6 +221,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // });
 
 
+    // Shop Routes (commented out - controller doesn't exist)
+    /*
     Route::prefix('shops')->group(function () {
         Route::get('/', [ShopController::class, 'index'])->name('shops.index');
         Route::get('/create', [ShopController::class, 'create'])->name('shops.create');
@@ -221,6 +237,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::patch('/trashed/{id}/restore', [ShopController::class, 'restore'])->name('shops.restore');
         Route::delete('/trashed/{id}/force-delete', [ShopController::class, 'deletePermanently'])->name('shops.force-delete');
     });
+    */
 
     // Stock Management Routes
     Route::prefix('stocks')->name('stocks.')->group(function () {
@@ -234,7 +251,6 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // Stock operations
         Route::post('/{stock}/add-stock', [StockController::class, 'addStock'])->name('add-stock');
         Route::post('/{stock}/deduct-stock', [StockController::class, 'deductStock'])->name('deduct-stock');
-
     });
 
 

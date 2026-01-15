@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products','admin.add-product', 'admin.product-package.*', 'admin.unit','admin.add-unit','admin.unit.update', 'admin.brands.*','admin.products-trashed') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.unit.*', 'admin.brands.*') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp
@@ -272,7 +272,7 @@ $isEmailActive = false;
                     data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.products','admin.add-product','admin.products-trashed') ? 'active' : '' }}"
+                            <a class="submenu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}"
                                 href="{{ route('admin.products') }}">Products</a>
                         </li>
                     </ul>
@@ -321,14 +321,14 @@ $isEmailActive = false;
                 </div> --}}
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('shops.*') ? 'active' : '' }}" href="{{ route('shops.index') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-store"></i>
                     </div>
                     <span class="nav-link-text ms-1">Shops</span>
                 </a>
-            </li>
+            </li> --}}
 
             {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('') ? 'active' : '' }}" href="{{ route('Admin.dashboard') }}">
