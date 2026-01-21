@@ -52,7 +52,8 @@
                         </div>
                     </div>
 
-                    <form class="space-y-5">
+                    <form action="<?php echo e(route('web.register.add')); ?>" method="post" class="space-y-5">
+                        <?php echo csrf_field(); ?>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>

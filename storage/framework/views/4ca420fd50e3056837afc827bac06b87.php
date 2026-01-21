@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 <?php $__env->startSection('content'); ?>
 
 <style>
@@ -139,4 +130,4 @@
 
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layout.web.main-layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\aiman-royal\aiman-royale\resources\views/web/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layout.web.main-layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\aiman\resources\views/web/login.blade.php ENDPATH**/ ?>
