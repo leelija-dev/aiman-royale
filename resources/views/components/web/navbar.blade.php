@@ -72,9 +72,11 @@
             <i class="fa-regular fa-heart text-lg"></i>
           </button>
 
-          <button class="text-gray-700 hover:text-black">
+          <button  onclick="window.location.href='{{ route('cart.index') }}'" class="text-gray-700 hover:text-black">
             <i class="fa-solid fa-bag-shopping text-lg"></i>
           </button>
+          
+
 
           <!-- Profile with Dropdown -->
           <div class="relative">

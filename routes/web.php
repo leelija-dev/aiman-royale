@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\CheckoutController;
 
 
 // use App\Http\Controllers\Web\PageController;
@@ -31,7 +32,7 @@ use App\Http\Controllers\Web\AuthController;
 
 
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
-Route::view('/checkout', 'web.checkout')->name('page.checkout');
+
 Route::view('/single-product', 'web.single-product')->name('page.single-product');
 Route::view('/multi-product', 'web.multi-product')->name('page.multi-product');
 Route::view('/login', 'web.login')->name('page.login');
@@ -46,6 +47,11 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 
 Route::fallback(function () { abort(404); });
+
+//Checkout route
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 
 // Route::get('/career', [CareerController::class, 'index'])->name('page.career');
 // Route::get('/contact-us', [ContactController::class, 'index'])->name('page.contact');
