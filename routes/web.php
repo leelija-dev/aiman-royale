@@ -38,7 +38,7 @@ Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::view('/single-product', 'web.single-product')->name('page.single-product');
-Route::view('/multi-product', 'web.multi-product')->name('page.multi-product');
+Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 Route::view('/login', 'web.login')->name('page.login');
 Route::post('/login', [AuthController::class, 'login'])->name('web.login');
 Route::view('/register', 'web.register')->name('page.register');
@@ -56,6 +56,10 @@ Route::fallback(function () { abort(404); });
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
+Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
+Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
 
 // Route::get('/career', [CareerController::class, 'index'])->name('page.career');
 // Route::get('/contact-us', [ContactController::class, 'index'])->name('page.contact');

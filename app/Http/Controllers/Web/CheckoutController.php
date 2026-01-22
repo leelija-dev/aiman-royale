@@ -60,7 +60,7 @@ class CheckoutController extends Controller
 
         // Calculate total
         $subtotal = $carts->sum(function($cart) { 
-            return $cart->discount_price * $cart->quantity; 
+            return $cart->discount_price * $cart->count; 
         });
         $shipping = 7.00;
         $tax = $subtotal * 0.05;
@@ -69,42 +69,99 @@ class CheckoutController extends Controller
         // Create order
         $order_id = DB::table('orders')->insertGetId([
             'user_id' => $user_id,
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address1' => $request->address1,
-            'address2' => $request->address2,
+            // 'first_name' => $request->firstName,
+            // 'last_name' => $request->lastName,
+            // 'email' => $request->email,
+            'phone_no' => $request->phone,
+            'address_1' => $request->address1,
+            'address_2' => $request->address2,
             'city' => $request->city,
             'state' => $request->state,
-            'pin_code' => $request->pinCode,
-            'description' => $request->description,
-            'subtotal' => $subtotal,
-            'shipping' => $shipping,
-            'tax' => $tax,
-            'total' => $total,
-            'status' => 'pending',
+            'pincode' => $request->pinCode,
+            'payment_status' => 'pending',
+            // 'subtotal' => $subtotal,
+            // 'shipping' => $shipping,
+            // 'tax' => $tax,
+            'total_amount' => $total,
+            'order_status' => 'pending',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         // Create order items
         foreach($carts as $cart) {
-            DB::table('order_items')->insert([
+            DB::table('ordered_products')->insert([
+                'user_id' => $user_id,
                 'order_id' => $order_id,
                 'product_id' => $cart->product_id,
                 'variant_id' => $cart->variant_id,
-                'quantity' => $cart->quantity,
+                'quantity' => $cart->count,
                 'price' => $cart->discount_price,
-                'total' => $cart->discount_price * $cart->quantity,
+                'total' => $cart->discount_price * $cart->count,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        // Clear cart
-        DB::table('carts')->where('user_id', $user_id)->delete();
+        // Store order details in session for PayPal
+        session([
+            'paypal_order_id' => $order_id,
+            'paypal_total' => $total,
+            'paypal_currency' => 'USD'
+        ]);
 
-        return redirect()->route('page.index')->with('success', 'Order placed successfully!');
+        // Redirect to PayPal payment page
+        return redirect()->route('checkout.payment');
+    }
+
+    public function payment()
+    {
+        if (!session('paypal_order_id')) {
+            return redirect()->route('checkout.index')->with('error', 'No order found');
+        }
+
+        $orderId = session('paypal_order_id');
+        $total = session('paypal_total');
+        $currency = session('paypal_currency');
+
+        return view('web.payment', compact('orderId', 'total', 'currency'));
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        $orderId = session('paypal_order_id');
+        
+        if (!$orderId) {
+            return redirect()->route('checkout.index')->with('error', 'No order found');
+        }
+
+        // Update order status to paid
+        DB::table('orders')->where('id', $orderId)->update([
+            'order_status' => 'paid',
+            'payment_status' => 'paid',
+            'paid_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        // Clear cart
+        DB::table('carts')->where('user_id', auth()->id())->delete();
+
+        // Clear PayPal session
+        session()->forget(['paypal_order_id', 'paypal_total', 'paypal_currency']);
+
+        return redirect()->route('page.index')->with('success', 'Payment successful! Order placed.');
+    }
+
+    public function paymentCancel()
+    {
+        // Clear PayPal session
+        session()->forget(['paypal_order_id', 'paypal_total', 'paypal_currency']);
+        
+        return redirect()->route('checkout.index')->with('error', 'Payment was cancelled. Please try again.');
+    }
+
+    public function orderSuccess()
+    {
+        return view('web.order-success');
     }
 }

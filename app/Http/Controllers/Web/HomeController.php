@@ -15,23 +15,10 @@ class HomeController extends Controller
     public function __construct() {}
     public function home()
     {
-        // $services = Service::with(['children' => function ($query) {
-        //     $query->select('id', 'name', 'slug', 'parent_id');
-        // }])
-        //     ->select('id', 'name', 'parent_id')
-        //     ->whereNull('parent_id')
-        //     ->orderBy('name')
-        //     ->get();
-        // // dd($services);
         $data = Service::all();
-        // $categories = Category::all();
-
-        // $products = DB::table('products')
-        //     ->where('is_active', 1)
-        //     ->get();
-
         $products = DB::table('products')
             ->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id') 
             ->where('products.is_active', 1)
             ->select(
                 'products.*',
@@ -39,12 +26,14 @@ class HomeController extends Controller
                 'product_variants.size',
                 'product_variants.color',
                 'product_variants.price',
-                'product_variants.stock'
+                'product_variants.discount_price as price_after_discount',
+                'product_variants.stock',
+                'product_images.image'
             )
             ->get();
 
 
-       
+
 
         $categories = Category::withCount('products')->get();
 
@@ -52,5 +41,45 @@ class HomeController extends Controller
         $testimonials = [];
 
         return view('web.home', compact('data', 'testimonials', 'categories', 'products'));
+    }
+
+    public function ShowAllProduct()
+    {
+
+        //  $products = DB::table('products')
+        //         ->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
+        //         ->leftjoin('product_images', 'product_variants.id', '=', 'product_variants.product_id')
+        //         ->where('products.is_active', 1)
+        //         ->select(
+        //             'products.*',
+        //             'product_variants.id as variant_id',
+        //             'product_variants.size',
+        //             'product_variants.color',
+        //             'product_variants.price',
+        //             'product_variants.discount_price as price_after_discount',
+        //             'product_variants.stock'
+        //         )
+        //         ->get();
+
+
+
+        $products = DB::table('products')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id') // 👈 inner join
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id') 
+            ->where('products.is_active', 1)
+            ->select(
+                'products.*',
+                'product_variants.id as variant_id',
+                'product_variants.size',
+                'product_variants.color',
+                'product_variants.price',
+                'product_variants.discount_price as price_after_discount',
+                'product_variants.stock',
+                'product_images.image as variant_image'
+            )
+            ->get();
+
+            // dd($products);
+        return view('web.multi-product', compact('products'));
     }
 }

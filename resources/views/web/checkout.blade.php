@@ -18,7 +18,7 @@
             </nav>
             <h1 class="text-2xl font-semibold mb-8">Shipping Address</h1>
 
-            <form action="{{ route('checkout.place') }}" method="post" class="space-y-6">
+            <form id="checkout-form" action="{{ route('checkout.place') }}" method="post" class="space-y-6">
               @csrf
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
@@ -217,7 +217,8 @@
                 </div>
 
                 <button
-                  type="submit"
+                  type="button"
+                  onclick="document.getElementById('checkout-form').submit()"
                   class="w-full mt-6 py-4 bg-black text-white font-medium rounded-md hover:bg-gray-900 transition"
                   @if($carts->count() == 0) disabled
                   @endif

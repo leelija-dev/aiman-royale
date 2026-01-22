@@ -26,7 +26,9 @@ return new class extends Migration
                   ->constrained('product_variants')
                   ->cascadeOnDelete();
 
-            $table->integer('count');
+            $table->integer('quantity');
+            $table->decimal('price', 10, 2);
+            $table->decimal('total', 10, 2);
 
             $table->timestamps();
         });
