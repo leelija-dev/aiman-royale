@@ -47,19 +47,19 @@
                   class="flex flex-wrap lg:flex-nowrap gap-3 justify-center lg:justify-start max-w-sm"
                 >
                   <img
-                    src="./assets/images/Home-image/pic-17.avif"
+                   src="{{asset('web/images/product-images/dark-red-plazo-5_15_11zon.webp')}}"
                     class="w-20 h-20 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px] rounded-md object-cover object-center object-top"
                   />
                   <img
-                    src="./assets/images/Home-image/pic-18.avif"
+                    src="{{asset('web/images/product-images/glow-orange-3_18_11zon.webp')}}"
                     class="w-20 h-20 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px] rounded-md object-cover object-center object-top"
                   />
                   <img
-                    src="./assets/images/Home-image/pic-19.avif"
+                    src="{{asset('web/images/product-images/glow-red-1_33_11zon.webp')}}"
                     class="w-20 h-20 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px] rounded-md object-cover object-center object-top"
                   />
                   <img
-                    src="./assets/images/Home-image/pic-20.avif"
+                    src="{{asset('web/images/product-images/green-plazo-4_46_11zon.webp')}}"
                     class="w-20 h-20 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px] rounded-md object-cover object-center object-top"
                   />
                 </div>

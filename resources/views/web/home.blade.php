@@ -15,7 +15,7 @@
                 <div class="h-full w-full">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-16.avif"
+                 src="{{asset('web/images/banner-images/light-pink-salwar-m-1.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -26,7 +26,7 @@
                     class="w-full xll:h-[300px] h-[250px] overflow-hidden flex-shrink-0">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-2.avif"
+                        src="{{asset('web/images/banner-images/glow-pink-m-1.webp')}}"
                         alt="" />
                 </div>
 
@@ -52,7 +52,7 @@
                     class="w-full xll:h-[300px] h-[250px] overflow-hidden flex-shrink-0">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-3.avif"
+                        src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="h-full w-full">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-4.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -249,7 +249,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-17.avif"
+                        src="{{asset('web/images/product-images/gray-lahenga-3_40_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -278,7 +278,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-18.avif"
+                         src="{{asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -300,7 +300,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-19.avif"
+                       src="{{asset('web/images/product-images/pink-plazo-1_76_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -328,7 +328,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-20.avif"
+                         src="{{asset('web/images/product-images/red-plazo-9_95_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -606,7 +606,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon1.svg"
+                     src="{{asset('web/images/icons/icon1.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -623,7 +623,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon2.svg"
+                    src="{{asset('web/images/icons/icon2.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -640,7 +640,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon4.svg"
+                    src="{{asset('web/images/icons/icon4.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -657,7 +657,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon3.svg"
+                    src="{{asset('web/images/icons/icon3.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -945,17 +945,17 @@
                 <div
                     class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
                     <img
-                        src="./assets/images/Home-image/pic-8.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Trendy To<br />Traditional Blouses
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -968,17 +968,17 @@
                 <div
                     class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
                     <img
-                        src="./assets/images/Home-image/pic-9.avif"
+                        src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Jewellery Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -994,17 +994,17 @@
                 <!-- Left Banner -->
                 <div class="relative bg-[#b8a89a] overflow-hidden">
                     <img
-                        src="./assets/images/Home-image/pic-10.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Trendy To<br />Traditional Blouses
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -1016,17 +1016,17 @@
                 <!-- Right Banner -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden">
                     <img
-                        src="./assets/images/Home-image/pic-11.avif"
+                       src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Jewellery Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">

@@ -58,7 +58,8 @@ nav a {
       <div class="lgg:flex hidden items-center gap-8 flex-1">
         <!-- Logo -->
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-blue-700 rounded-sm"></div>
+          <!-- <div class="w-8 h-8 bg-blue-700 rounded-sm"></div> -->
+            <img class="h-[50px] w-auto" src="{{asset('web/images/company-logo/aiman-royal-logo.webp')}}" alt="">
         </div>
 
         <!-- Desktop Navigation -->
