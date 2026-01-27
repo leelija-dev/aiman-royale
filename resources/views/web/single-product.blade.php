@@ -93,12 +93,14 @@
             @php
               $sizes = $product->pluck('size')->unique()->filter();
               $availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
+              $allVariants = $product->groupBy(['size', 'color']);
             @endphp
             @foreach($availableSizes as $size)
               @if($sizes->contains($size))
                 <button
-                  class="size-btn w-12 h-12 rounded-full border text-sm hover:border-secondary transition {{ $size == 'M' ? 'bg-secondary text-white' : '' }}"
-                  data-size="{{ $size }}">
+                  class="size-btn w-12 h-12 rounded-full border text-sm hover:border-secondary transition {{ $size == ($product[0]->size ?? 'M') ? 'bg-secondary text-white' : '' }}"
+                  data-size="{{ $size }}"
+                  onclick="updateColorOptions('{{ $size }}')">
                   {{ $size }}
                 </button>
               @endif
@@ -109,18 +111,26 @@
         <!-- Color Selection -->
         <div>
           <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
-          <div class="flex gap-3">
+          <div class="flex gap-3" id="color-selection">
             @php
-              $colors = $product->pluck('color')->unique()->filter();
+              $selectedSize = $product[0]->size ?? 'M';
+              $colorsForSize = $product->where('size', $selectedSize)->pluck('color')->unique()->filter();
             @endphp
-            @foreach($colors as $index => $color)
+            @foreach($colorsForSize as $index => $color)
+              @php
+                $variantForColor = $product->where('size', $selectedSize)->where('color', $color)->first();
+              @endphp
               <div
                 class="color-option {{ $index == 0 ? 'selected-color' : '' }} w-14 h-20 rounded border-2 cursor-pointer overflow-hidden"
-                data-display="{{ $product->get($index)->images ? asset('uploads/products/' . $product->get($index)->images) : asset('assets/images/placeholder.jpg') }}"
-                data-large="{{ $product->get($index)->images ? asset('uploads/products/' . $product->get($index)->images) : asset('assets/images/placeholder.jpg') }}">
-                @if($product->get($index)->images)
+                data-size="{{ $selectedSize }}"
+                data-color="{{ $color }}"
+                data-variant-id="{{ $variantForColor->variant_id }}"
+                data-display="{{ $variantForColor->images ? asset('uploads/products/' . $variantForColor->images) : asset('assets/images/placeholder.jpg') }}"
+                data-large="{{ $variantForColor->images ? asset('uploads/products/' . $variantForColor->images) : asset('assets/images/placeholder.jpg') }}"
+                onclick="selectVariant(this)">
+                @if($variantForColor->images)
                   <img
-                    src="{{ asset('uploads/products/' . $product->get($index)->images) }}"
+                    src="{{ asset('uploads/products/' . $variantForColor->images) }}"
                     class="w-full h-full object-cover"
                     alt="{{ $color }}" />
                 @else
@@ -149,7 +159,8 @@
         </div>
 
         <div
-          class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]">
+          class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+          data-product-variants="{{ json_encode($product) }}">
           <button
             id="add-to-cart"
             data-variant-id="{{ $product[0]->variant_id }}"
@@ -821,5 +832,224 @@
 </section>
 
 <script src="{{asset('web/js/single-product.js')}}"></script>
+
+<script>
+// Store all product variants data
+const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
+
+function updateColorOptions(selectedSize) {
+    const colorSelection = document.getElementById('color-selection');
+    const colorsForSize = productVariants.filter(variant => variant.size === selectedSize);
+    
+    // Clear existing color options
+    colorSelection.innerHTML = '';
+    
+    if (colorsForSize.length === 0) {
+        colorSelection.innerHTML = '<p class="text-gray-500">No colors available for this size.</p>';
+        return;
+    }
+    
+    // Generate color options for selected size
+    colorsForSize.forEach((variant, index) => {
+        const colorDiv = document.createElement('div');
+        colorDiv.className = `color-option ${index === 0 ? 'selected-color' : ''} w-14 h-20 rounded border-2 cursor-pointer overflow-hidden`;
+        colorDiv.setAttribute('data-size', selectedSize);
+        colorDiv.setAttribute('data-color', variant.color);
+        colorDiv.setAttribute('data-variant-id', variant.variant_id);
+        colorDiv.setAttribute('data-display', variant.images ? `{{ asset('uploads/products/') }}${variant.images}` : '{{ asset("assets/images/placeholder.jpg") }}');
+        colorDiv.setAttribute('data-large', variant.images ? `{{ asset('uploads/products/') }}${variant.images}` : '{{ asset("assets/images/placeholder.jpg") }}');
+        colorDiv.setAttribute('onclick', 'selectVariant(this)');
+        
+        if (variant.images) {
+            colorDiv.innerHTML = `<img src="{{ asset('uploads/products/') }}${variant.images}" class="w-full h-full object-cover" alt="${variant.color}" />`;
+        } else {
+            colorDiv.innerHTML = `<div class="w-full h-full bg-gray-200 flex items-center justify-center text-xs text-gray-600">${variant.color}</div>`;
+        }
+        
+        colorSelection.appendChild(colorDiv);
+    });
+    
+    // Update size button styles
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        if (btn.getAttribute('data-size') === selectedSize) {
+            btn.classList.add('bg-secondary', 'text-white');
+        } else {
+            btn.classList.remove('bg-secondary', 'text-white');
+        }
+    });
+    
+    // Auto-select first color and update variant
+    if (colorsForSize.length > 0) {
+        const firstColorOption = colorSelection.querySelector('.color-option');
+        if (firstColorOption) {
+            selectVariant(firstColorOption);
+        }
+    }
+}
+
+function selectVariant(element) {
+    // Update color selection styles
+    document.querySelectorAll('.color-option').forEach(option => {
+        option.classList.remove('selected-color');
+    });
+    element.classList.add('selected-color');
+    
+    // Update add to cart button with selected variant ID
+    const addToCartBtn = document.getElementById('add-to-cart');
+    const variantId = element.getAttribute('data-variant-id');
+    addToCartBtn.setAttribute('data-variant-id', variantId);
+    
+    // Update main image if available
+    const displayImage = element.getAttribute('data-display');
+    if (displayImage) {
+        const mainImage = document.getElementById('main-image');
+        if (mainImage) {
+            mainImage.src = displayImage;
+        }
+    }
+    
+    // Update price for selected variant
+    const size = element.getAttribute('data-size');
+    const color = element.getAttribute('data-color');
+    const selectedVariant = productVariants.find(v => v.size === size && v.color === color);
+    
+    if (selectedVariant) {
+        updatePrice(selectedVariant);
+    }
+}
+
+function updatePrice(variant) {
+    const priceContainer = document.querySelector('.flex.items-center.gap-3');
+    if (priceContainer && variant) {
+        const currentPrice = variant.price_after_discount || variant.price;
+        const originalPrice = variant.price;
+        
+        priceContainer.innerHTML = `
+            <span class="text-2xl font-bold text-gray-900">Rs. ${currentPrice}</span>
+            ${variant.price_after_discount && variant.price_after_discount != originalPrice ? 
+                `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>
+                 <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                     (${Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}% off)
+                 </span>` : ''}
+        `;
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set initial size based on first product variant
+    const initialSize = '{{ $product[0]->size ?? "M" }}';
+    updateColorOptions(initialSize);
+});
+
+// Add to Cart function
+function addToCart(variantId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    // Get the variant ID from the button if not provided
+    if (!variantId) {
+        const addToCartBtn = document.getElementById('add-to-cart');
+        variantId = addToCartBtn.getAttribute('data-variant-id');
+    }
+    
+    if (!variantId) {
+        alert('Please select a size and color');
+        return;
+    }
+    
+    // Get CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+   
+    // Send AJAX request to add to cart
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            variant_id: variantId,
+            count: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+        if (data.success) {
+            // Show success message
+            showNotification('Product added to cart successfully!', 'success');
+            
+            // Update cart count if you have a cart counter
+            updateCartCount(data.cart_count);
+        } else {
+            showNotification(data.message || 'Failed to add product to cart', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while adding to cart', 'error');
+    });
+}
+
+// Show notification function
+function showNotification(message, type = 'success') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    notification.textContent = message;
+    
+    // Add to body
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Update cart count function (optional)
+function updateCartCount(count) {
+    const cartCountElement = document.querySelector('.cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+    }
+}
+
+// Add click event listener to add to cart button
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartBtn = document.getElementById('add-to-cart');
+    console.log('Add to cart button found:', addToCartBtn);
+    
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Disable button to prevent multiple clicks
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
+            
+            const variantId = this.getAttribute('data-variant-id');
+            console.log('Add to cart clicked, variant ID:', variantId);
+            
+            addToCart(variantId, e).finally(() => {
+                // Re-enable button after request completes
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            });
+        });
+    } else {
+        console.error('Add to cart button not found in the DOM');
+    }
+});
+</script>
 
 @endsection
