@@ -269,7 +269,7 @@ nav a {
               </div>
               <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                 <div class="overflow-hidden rounded-md  max-h-[500px] w-full relative">
-                  <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                  <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
                   <div class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
                     <p class="text-[2rem] font-bold text-white text-center">
                       Orlieve Striv
@@ -293,7 +293,7 @@ nav a {
               <div class="w-full xll:grid-cols-4  xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
                 <div class="">
                   <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
                   </div>
 
@@ -305,7 +305,7 @@ nav a {
                 </div>
                 <div class="">
                   <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
                   </div>
 
@@ -317,7 +317,7 @@ nav a {
                 </div>
                 <div class="">
                   <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
                   </div>
 
@@ -329,7 +329,7 @@ nav a {
                 </div>
                 <div class="">
                   <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
                   </div>
 
@@ -345,7 +345,7 @@ nav a {
               </div>
               <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                 <div class="overflow-hidden rounded-md  max-h-[500px] w-full">
-                  <img class="w-full h-full object-cover aspect-auto" src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="">
+                  <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
                 </div>
                 <p class="text-[2rem] font-bold text-gray-700 text-center">
@@ -365,7 +365,7 @@ nav a {
               <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
-                  <img src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                  <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -402,7 +402,7 @@ nav a {
               <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
-                  <img src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                  <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -439,7 +439,7 @@ nav a {
               <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
-                  <img src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                  <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -476,7 +476,7 @@ nav a {
               <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
-                  <img src="https://cdn.shopify.com/s/files/1/0341/4805/7228/files/img2_1_5774071f-195b-4a94-b480-d9f01fae2836.webp?v=1725865689" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                  <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
