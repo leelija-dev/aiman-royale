@@ -3,17 +3,25 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Webkul\Installer\Database\Seeders\DatabaseSeeder as BagistoDatabaseSeeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->call(BagistoDatabaseSeeder::class);
+        // Optional: Factory-based test user
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        // 👉 Call your SuperAdminSeeder here
+        $this->call([
+            SuperAdminSeeder::class,
+            // BlogSeeder::class,
+        ]);
     }
 }

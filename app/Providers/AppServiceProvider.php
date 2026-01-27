@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\ParallelTesting;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
+use App\Models\Notification;
+use App\Models\Category;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,19 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $allowedIPs = array_map('trim', explode(',', config('app.debug_allowed_ips')));
-
-        $allowedIPs = array_filter($allowedIPs);
-
-        if (empty($allowedIPs)) {
-            return;
-        }
-
-        if (in_array(Request::ip(), $allowedIPs)) {
-            Debugbar::enable();
-        } else {
-            Debugbar::disable();
-        }
+        //
     }
 
     /**
@@ -36,13 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::prependNamespace(
-            'shop',
-            base_path('packages/Webkul/CustomCheckout/src/Resources/views')
-        );
-
-        ParallelTesting::setUpTestDatabase(function (string $database, int $token) {
-            Artisan::call('db:seed');
+        //
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('superadmin') ? true : null;
         });
-    }
+        View::composer('*', function ($view) {
+        $notifications = Notification::where('viewed', 0)->latest()->get();
+        $categories = Category::where('is_active', 1)->orderBy('name')->get();
+        $view->with('notifications', $notifications)->with('categories', $categories);
+    });
+   }
 }

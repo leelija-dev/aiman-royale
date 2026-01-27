@@ -1,0 +1,244 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  font-family: "Poppins", sans-serif;
+}
+/* Firefox: Basic matching styling */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #ec4899 #fce7f3; /* thumb: dark pink, track: light pink */
+}
+
+/* WebKit-based browsers (Chrome, Edge, Safari, Opera) */
+html::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #fce7f3; /* secondary-light */
+  border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #ec4899; /* secondary - dark pink */
+  border-radius: 10px;
+  border: 3px solid #fce7f3; /* Creates a nice inset/padding effect */
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #db2777; /* Slightly darker pink on hover for contrast */
+}
+
+html::-webkit-scrollbar-thumb:active {
+  background: #be185d; /* Even darker when clicked (optional) */
+}
+
+html::-webkit-scrollbar-corner {
+  background: #fce7f3;
+}
+.heading-font {
+  font-family: "Playfair Display", serif;
+}
+@font-face {
+  font-family: "Digital7Mono";
+  src: url("../fonts/digital-7\ \(mono\).ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.digital-font {
+  font-family: "Digital7Mono", monospace;
+}
+/* Custom font adjustments if needed */
+.font-script {
+  font-family: "Great Vibes", cursive;
+}
+.font-serif {
+  font-family: "Playfair Display", serif;
+}
+.font-serif-alt {
+  font-family: "Cormorant Garamond", serif;
+}
+.font-sans {
+  font-family: "Montserrat", sans-serif;
+}
+.owl-nav {
+  display: flex !important;
+}
+
+.owl-nav .owl-prev {
+  left: -20px;
+}
+
+.owl-nav .owl-next {
+  right: -20px;
+}
+.banner-carousel .owl-nav .owl-prev {
+  left: -11px;
+}
+
+.banner-carousel .owl-nav .owl-next {
+  right: -11px;
+}
+
+/* Navigation buttons for both carousels */
+
+.main-owl .owl-nav button {
+  position: absolute;
+  top: 38%;
+  transform: translateY(-50%);
+  background: #ffffffdb !important;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 100% !important;
+  font-size: 22px !important;
+  color: #575757 !important;
+}
+.second-owl .owl-nav button {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  background: #ffffffdb !important;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 100% !important;
+  font-size: 22px !important;
+  color: #575757 !important;
+}
+.banner-carousel .owl-nav button {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  background: #ffffffdb !important;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 100% !important;
+  font-size: 22px !important;
+  color: #575757 !important;
+}
+
+.second-owl .owl-nav button:hover,
+.main-owl .owl-nav button:hover {
+  background: #f9fafb !important;
+}
+
+.second-owl .owl-nav button span,
+.main-owl .owl-nav button span {
+  font-size: 24px;
+  line-height: 1;
+  color: #4b5563;
+}
+
+.second-owl .owl-nav .owl-prev {
+  left: -27px;
+}
+
+.second-owl .owl-nav .owl-next {
+  right: -14px;
+}
+
+.main-owl .owl-nav .owl-prev {
+  left: -20px;
+}
+
+.main-owl .owl-nav .owl-next {
+  right: -20px;
+}
+
+@media screen and (max-width: 1000px) {
+  .second-owl .owl-nav .owl-prev {
+    left: -20px !important;
+  }
+
+  .second-owl .owl-nav .owl-next {
+    right: -20px !important;
+  }
+}
+
+/* single product page css  */
+
+/* Hover Pan Zoom Styles */
+.zoom-container {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1 / 1;
+}
+
+.zoom-container img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: 50% 50%;
+}
+
+.zoom-container:hover img {
+  transform: scale(2.2); /* Adjust zoom level here */
+}
+
+/* Fullscreen button on hover */
+.group:hover .fullscreen-btn {
+  opacity: 1;
+}
+
+/* Thumbnail styles */
+.thumbnail {
+  transition: all 0.3s ease;
+  opacity: 0.85;
+}
+
+.thumbnail:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.thumbnail.selected {
+  opacity: 1;
+  border-color: #ec4899 !important;
+  box-shadow: 0 0 0 3px #fce7f3;
+}
+/* Smooth transition for tab content (desktop) */
+.tab-content {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+.tab-content.active {
+  opacity: 1;
+}
+
+/* Smooth accordion (mobile) */
+.accordion-wrapper .line-border-block {
+  height: 1px;
+  background-color: #e5e7eb;
+  transition: width 0.3s ease-in-out;
+  width: 0;
+}
+
+.accordion-wrapper.active .line-border-block {
+  width: 100%;
+}
+
+.accordion-chevron {
+  transform: rotate(90deg); /* closed */
+  transition: transform 0.3s ease;
+}
+
+.accordion-wrapper.active .accordion-chevron {
+  transform: rotate(-90deg); /* open */
+}
+
+.accordion-content-block {
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.accordion-wrapper.active .accordion-content-block {
+  opacity: 1;
+}

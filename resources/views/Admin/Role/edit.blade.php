@@ -1,0 +1,135 @@
+@extends('Admin.layouts.master')
+
+@section('source','Roles')
+@section('page-title','Edit Roles')
+@section('title')
+{{config('app.name')}} - Edit Roles
+@endsection
+@section('content')
+<div id="create-page" class="mt-4 mx-3">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+
+                <!-- < ?php if (isset($_GET['msg'])) { ?>
+                    <div class="alert < ?= $_GET['action'] == 'SU' ? 'alert-info' : 'alert-danger'; ?> alert-dismissible fade show" role="alert">
+                        <span class="alert-text text-light"><strong>< ?= $_GET['msg']; ?></strong></span>
+                    </div>
+                < ?php } ?> -->
+
+            </div>
+            <div class="card px-0 pt-0 pb-2">
+
+                <form action="{{ route('admin.roles.update',$role->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row px-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="service" class="text-uppercase text-secondary">Permission</label>
+                                <input type="text" name="name" id="name" placeholder="Regular"
+                                    value="{{$role['name'];}}" class="form-control" />
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="service">Slug</label>
+                                <input type="text" name="slug" id="slug" placeholder="Regular"
+                                    class="form-control" />
+                            </div> -->
+
+                            <!-- <div class="form-group">
+                                <label for="category">Slug </label>
+                                <select class="form-control" id="slug" name="category" required>
+
+                                </select>
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="meta_description">Meta Description: </label>
+                                <textarea class="form-control" name="meta_description" id="meta_description"
+                                    rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="page-title">Page Title: </label>
+                                <input type="text" name="page_title" id="page_title" class="form-control" />
+                            </div> -->
+
+
+
+
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+                            <label class="mb-2 text-uppercase text-secondary">Assign Permissions</label>
+                            <div class="row">
+                                @foreach ($permissions as $permission)
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input type="checkbox"
+                                            name="permissions[]"
+                                            value="{{ $permission->name }}"
+                                            class="form-check-input"
+                                            id="perm_{{ $permission->id }}"
+                                            {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}>
+
+                                        <label class="form-check-label" for="perm_{{ $permission->id }}">
+                                            {{ ucwords(str_replace('_', ' ', $permission->name)) }}
+                                        </label>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="seo-url">Meta Keyword: </label>
+                                <input type="text" name="meta_keyword" id="meta_keyword" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="seo-url">Meta Tags: </label>
+                                <input type="text" name="meta_tags" id="meta_tags" class="form-control" />
+                            </div>
+
+                           
+                            <div>
+                                <input type="file" class="dropify" name="service-icon"
+                                    data-default-file="" data-max-file-size="2M"
+                                    data-allowed-file-extensions="jpg jpeg png" data-height="200" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="seo-url">Alt</label>
+                                <input type="text" name="alt" id="alt" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="seo-url">Schema</label>
+                                <input type="text" name="schema" id="schema" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category">Status </label>
+                                <select class="form-control" id="status" name="status" required>
+                                    <option value="1">Active</option>
+                                    <option value="2">Inactive</option>
+                                </select>
+                            </div>
+
+                            
+                    
+                        </div> -->
+                    </div>
+                    <!-- <div class="col-12 px-4 mt-2">
+                                    <textarea class="form-control" id="summernote"
+                                        name="service-description"></textarea>
+                                </div> -->
+                    <div class="d-flex justify-content-start ms-4 mt-2">
+                        <a href="{{route('admin.roles')}}" role="button" class="btn btn-secondary btm-sm">Cancel</a>
+                        <button type="submit" class="btn btn-primary btm-sm ms-2">Update</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

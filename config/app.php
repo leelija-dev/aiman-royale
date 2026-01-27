@@ -7,13 +7,13 @@ return [
     | Application Name
     |--------------------------------------------------------------------------
     |
-    | This value is the name of your application. This value is used when the
+    | This value is the name of your application, which will be used when the
     | framework needs to place the application's name in a notification or
-    | any other location as required by the application or its packages.
+    | other UI elements where an application name needs to be displayed.
     |
     */
 
-    'name' => env('APP_NAME', 'Bagisto'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     |
     | This value determines the "environment" your application is currently
     | running in. This may determine how you prefer to configure various
-    | services your application utilizes. Set this in your ".env" file.
+    | services the application utilizes. Set this in your ".env" file.
     |
     */
 
@@ -39,19 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Debug Allowed IPs
-    |--------------------------------------------------------------------------
-    |
-    | This value is used to allow the debug mode only for the specified IPs.
-    | This is useful when you want to debug the application on the production
-    | server without enabling it for everyone.
-    */
-
-    'debug_allowed_ips' => env('APP_DEBUG_ALLOWED_IPS', null),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -60,7 +48,7 @@ return [
     |
     | This URL is used by the console to properly generate URLs when using
     | the Artisan command line tool. You should set this to the root of
-    | your application so that it is used when running Artisan tasks.
+    | the application so that it's available within Artisan commands.
     |
     */
 
@@ -68,28 +56,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application Admin URL
-    |--------------------------------------------------------------------------
-    |
-    | This URL suffix is used to define the admin url for example
-    | admin/ or backend/
-    |
-    */
-
-    'admin_url' => env('APP_ADMIN_URL', 'admin'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
     | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. We have gone
-    | ahead and set this to a sensible default for you out of the box.
+    | will be used by the PHP date and date-time functions. The timezone
+    | is set to "UTC" by default as it is suitable for most use cases.
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'Asia/Kolkata'),
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -97,8 +73,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | The application locale determines the default locale that will be used
-    | by the translation service provider. You are free to set this value
-    | to any of the locales which will be supported by the application.
+    | by Laravel's translation / localization methods. This option can be
+    | set to any locale for which you plan to have translation strings.
     |
     */
 
@@ -110,49 +86,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Country
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default country by country code.
-    | Ensure it is uppercase and reflects the 'code' column of the
-    | countries table.
-    |
-    | for example: DE EN FR
-    | (use capital letters!)
-    */
-
-    'default_country' => null,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Base Currency Code
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the base currency code for your application.
-    |
-    */
-
-    'currency' => env('APP_CURRENCY', 'USD'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default channel Code
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default channel code for your application.
-    |
-    */
-
-    'channel' => 'default',
-
-    /*
-    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
-    | This key is used by the Illuminate encrypter service and should be set
-    | to a random, 32 character string, otherwise these encrypted strings
-    | will not be safe. Please do this before deploying an application!
+    | This key is utilized by Laravel's encryption services and should be set
+    | to a random, 32 character string to ensure that all encrypted values
+    | are secure. You should do this prior to deploying the application.
     |
     */
 
@@ -181,7 +120,12 @@ return [
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store'  => env('APP_MAINTENANCE_STORE', 'database'),
+        'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'rupees' => env('RUPEES', '₹'),
+    'business_mail' => env('BUSINESS_MAIL','support@businessname.com'),
+    'business_contact'=> env('BUSINESS_CONTACT','91-123-456-7890'),
+    'business_website'=> env('BUSINESS_WEBSITE','www.businessname.com')
 
 ];
