@@ -8,7 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\File;
 class CategoryController extends Controller
 {
     /**
@@ -100,6 +100,25 @@ class CategoryController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
+              if ($request->hasFile('image')) {
+
+            $image = $request->file('image');
+
+            // CREATE FOLDER IF NOT EXISTS
+            $path = public_path('uploads/category');
+
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0777, true, true);
+            }
+
+            // CREATE UNIQUE NAME
+            $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
+
+            // MOVE FILE
+            $image->move($path, $filename);
+
+            $data['image'] = $filename;
+        }
 
             Category::create($data);
 
@@ -165,6 +184,31 @@ class CategoryController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
+            // dd($data['image']);
+             // CHECK IF NEW IMAGE UPLOADED
+        if ($request->hasFile('image')) {
+
+            $image = $request->file('image');
+
+            // CREATE FOLDER IF NOT EXISTS
+            $path = public_path('uploads/category');
+
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0777, true, true);
+            }
+
+            // DELETE OLD IMAGE
+            if ($category->image && File::exists($path.'/'.$category->image)) {
+                File::delete($path.'/'.$category->image);
+            }
+
+            // SAVE NEW IMAGE
+            $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
+
+            $image->move($path, $filename);
+
+            $data['image'] = $filename;
+        }
 
             $category->update($data);
 

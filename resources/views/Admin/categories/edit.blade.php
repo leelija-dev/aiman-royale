@@ -11,7 +11,7 @@
 <div class="container-fluid py-4">
   <div class="card">
     <div class="card-body overflow-visible mh-100">
-      <form id="updateCategory" action="{{ route('admin.categories.update', $category->id) }}" method="post" novalidate>
+      <form id="updateCategory" action="{{ route('admin.categories.update', $category->id) }}" method="post" enctype="multipart/form-data" novalidate>
         @csrf
         @method('PUT')
         <div class="row">
@@ -32,6 +32,27 @@
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
+           <div class="mb-3">
+    <label class="form-label text-secondary text-uppercase">
+        Image <sup class="text-danger">*</sup>
+    </label>
+
+    {{-- Show existing image (edit page) --}}
+    @if(!empty($category->image))
+        <div class="mb-2">
+            <img src="{{ asset('uploads/category/'.$category->image) }}"
+                 alt="Category Image"
+                 style="width:120px;height:auto;border:1px solid #ddd;padding:5px;border-radius:6px;">
+        </div>
+    @endif
+
+    {{-- File input --}}
+    <input type="file"
+           name="image"
+           class="form-control"
+           accept=".jpg,.jpeg,.png">
+</div>
+
             <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Parent Category</label>
               <select name="parent_id" class="form-control">
@@ -89,4 +110,18 @@
     }, false);
   });
 </script>
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById("previewImg").src = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
 @endsection
