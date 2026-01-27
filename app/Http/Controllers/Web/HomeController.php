@@ -85,24 +85,19 @@ class HomeController extends Controller
 
     public function ShowSingleProduct($id)
     {
-        $product = DB::table('products')
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id') // inner join
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->where('products.is_active', 1)
-            ->where('products.id', $id)   // 👈 filter by product id
-            ->select(
-                'products.*',
-                'product_variants.id as variant_id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price',
-                'product_variants.discount_price as price_after_discount',
-                'product_variants.stock',
-                'product_images.image as images'
-            )
-            ->get();
+        $product = Product::with([
+            'variants' => function($query) {
+                $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');
+            },
+            'images' => function($query) {
+                $query->select('product_id', 'image');
+            }
+        ])
+        ->where('is_active', 1)
+        ->where('id', $id)
+        ->firstOrFail();
 
-            // dd($product);
-            return view('web.single-product', compact('product'));
+        // dd($product);
+        return view('web.single-product', compact('product'));
     }
 }

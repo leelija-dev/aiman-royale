@@ -80,4 +80,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, 'product_id');
     }
+
+    /**
+     * Get the variants associated with the product.
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany('App\\Models\\ProductVariant', 'product_id');
+    }
 }

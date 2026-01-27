@@ -21,7 +21,7 @@
           <!-- Image Wrapper -->
           <div class="relative rounded-xl overflow-hidden">
             <img 
-              src="{{ asset('uploads/products/' . $product->product_image) }}"
+              src="{{ $product->images->first() ? asset('uploads/products/' . $product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
               alt="{{ $product->name }}"
               class="w-full h-[340px] object-cover object-top object-center"
             />
