@@ -120,7 +120,7 @@
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
-            @foreach($products as $product):
+            @foreach($products as $product)
               
             <div class="item flex justify-center items-center">
                 <div

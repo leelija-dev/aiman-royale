@@ -16,18 +16,16 @@
         <!-- Thumbnails -->
         <div
           class="flex min-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1">
-          @forelse($product as $index => $productItem)
-            @if($productItem->images)
-              <div
-                class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-transparent cursor-pointer {{ $index == 0 ? 'selected' : '' }}"
-                data-display="{{ asset('uploads/products/' . $productItem->images) }}"
-                data-large="{{ asset('uploads/products/' . $productItem->images) }}">
-                <img
-                  src="{{ asset('uploads/products/' . $productItem->images) }}"
-                  class="w-full h-full object-cover object-center object-top"
-                  alt="{{ $productItem->name }}" />
-              </div>
-            @endif
+          @forelse($product->images as $index => $image)
+            <div
+              class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-transparent cursor-pointer {{ $index == 0 ? 'selected' : '' }}"
+              data-display="{{ asset('uploads/products/' . $image->image) }}"
+              data-large="{{ asset('uploads/products/' . $image->image) }}">
+              <img
+                src="{{ asset('uploads/products/' . $image->image) }}"
+                class="w-full h-full object-cover object-center object-top"
+                alt="{{ $product->name }}" />
+            </div>
           @empty
             <div
               class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-transparent cursor-pointer selected"
@@ -36,7 +34,7 @@
               <img
                 src="{{ asset('assets/images/placeholder.jpg') }}"
                 class="w-full h-full object-cover object-center object-top"
-              alt="{{ $product[0]->name ?? 'Product' }}" />
+                alt="{{ $product->name ?? 'Product' }}" />
             </div>
           @endforelse
         </div>
@@ -45,9 +43,9 @@
         <div
           class="zoom-container w-full relative group order-1 lg:order-2 h-full">
           <img
-            src="{{ $product->firstWhere('images') ? asset('uploads/products/' . $product->firstWhere('images')->images) : asset('assets/images/placeholder.jpg') }}"
+            src="{{ $product->images->first() ? asset('uploads/products/' . $product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
             class="w-full h-full object-cover object-center object-top"
-            alt="{{ $product[0]->name ?? 'Product' }}"
+            alt="{{ $product->name ?? 'Product' }}"
             id="main-image" />
           <div
             class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
@@ -66,9 +64,9 @@
           <!-- Title -->
           <h3
             class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg xl:text-h3-xl 2xl:text-h3-2xl font-semibold">
-            {{ $product[0]->name }}
+            {{ $product->name }}
           </h3>
-          <p class="text-sm text-gray-500 mt-1">{{ $product[0]->brand ?? 'Brand Name' }}</p>
+          <p class="text-sm text-gray-500 mt-1">{{ $product->brand ?? 'Brand Name' }}</p>
           <p class="text-sm text-gray-500">Sold By: Store</p>
         </div>
         <div class="flex items-center gap-2">
@@ -77,12 +75,12 @@
           </div>
           <span class="text-sm text-gray-500">4.4 · 36 Reviews</span>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="text-2xl font-bold text-gray-900">Rs. {{ $product[0]->price_after_discount ?? $product[0]->price }}</span>
-          @if($product[0]->price_after_discount && $product[0]->price_after_discount != $product[0]->price)
-            <span class="line-through text-gray-400">Rs. {{ $product[0]->price }}</span>
+        <div class="flex items-center gap-3" id="price-container">
+          <span class="text-2xl font-bold text-gray-900">Rs. {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }}</span>
+          @if($product->variants->first()->discount_price && $product->variants->first()->discount_price != $product->variants->first()->price)
+            <span class="line-through text-gray-400">Rs. {{ $product->variants->first()->price }}</span>
             <span
-              class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round((($product[0]->price - $product[0]->price_after_discount) / $product[0]->price) * 100) }}% off)</span>
+              class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round((($product->variants->first()->price - $product->variants->first()->discount_price) / $product->variants->first()->price) * 100) }}% off)</span>
           @endif
         </div>
 
@@ -91,16 +89,15 @@
           <h3 class="font-medium mb-3 text-gray-800">Select Size</h3>
           <div class="flex gap-3 flex-wrap">
             @php
-              $sizes = $product->pluck('size')->unique()->filter();
+              $sizes = $product->variants->pluck('size')->unique()->filter();
               $availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
-              $allVariants = $product->groupBy(['size', 'color']);
             @endphp
             @foreach($availableSizes as $size)
               @if($sizes->contains($size))
                 <button
-                  class="size-btn w-12 h-12 rounded-full border text-sm hover:border-secondary transition {{ $size == ($product[0]->size ?? 'M') ? 'bg-secondary text-white' : '' }}"
+                  class="size-btn w-12 h-12 rounded-full border text-sm hover:border-secondary transition"
                   data-size="{{ $size }}"
-                  onclick="updateColorOptions('{{ $size }}')">
+                  onclick="selectSize('{{ $size }}')">
                   {{ $size }}
                 </button>
               @endif
@@ -113,30 +110,28 @@
           <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
           <div class="flex gap-3" id="color-selection">
             @php
-              $selectedSize = $product[0]->size ?? 'M';
-              $colorsForSize = $product->where('size', $selectedSize)->pluck('color')->unique()->filter();
+              $selectedSize = $product->variants->first()->size ?? 'M';
+              $colorsForSize = $product->variants->where('size', $selectedSize)->pluck('color')->unique()->filter();
             @endphp
             @foreach($colorsForSize as $index => $color)
               @php
-                $variantForColor = $product->where('size', $selectedSize)->where('color', $color)->first();
+                $variantForColor = $product->variants->where('size', $selectedSize)->where('color', $color)->first();
+                $variantId = $variantForColor ? $variantForColor->id : null;
+                $isSelected = ($index == 0);
+                // Use different product images for different variants based on index
+                $productImages = $product->images->toArray();
+                $imageIndex = $index % count($productImages);
+                $variantImage = $productImages[$imageIndex]['image'] ?? ($product->images->first()->image ?? null);
               @endphp
-              <div
-                class="color-option {{ $index == 0 ? 'selected-color' : '' }} w-14 h-20 rounded border-2 cursor-pointer overflow-hidden"
-                data-size="{{ $selectedSize }}"
+              <button
+                class="color-btn w-10 h-10 rounded-full border-2 {{ $isSelected ? 'border-secondary' : 'border-gray-300' }} transition-all hover:scale-110"
+                style="background-color: {{ $color }};"
                 data-color="{{ $color }}"
-                data-variant-id="{{ $variantForColor->variant_id }}"
-                data-display="{{ $variantForColor->images ? asset('uploads/products/' . $variantForColor->images) : asset('assets/images/placeholder.jpg') }}"
-                data-large="{{ $variantForColor->images ? asset('uploads/products/' . $variantForColor->images) : asset('assets/images/placeholder.jpg') }}"
-                onclick="selectVariant(this)">
-                @if($variantForColor->images)
-                  <img
-                    src="{{ asset('uploads/products/' . $variantForColor->images) }}"
-                    class="w-full h-full object-cover"
-                    alt="{{ $color }}" />
-                @else
-                  <div class="w-full h-full bg-gray-200 flex items-center justify-center text-xs text-gray-600">{{ $color }}</div>
-                @endif
-              </div>
+                data-size="{{ $selectedSize }}"
+                data-variant-id="{{ $variantId }}"
+                data-variant-image="{{ $variantImage ? asset('uploads/products/' . $variantImage) : asset('assets/images/placeholder.jpg') }}"
+                onclick="selectColor('{{ $color }}', '{{ $selectedSize }}', {{ $variantId }}, this)">
+              </button>
             @endforeach
           </div>
         </div>
@@ -160,10 +155,10 @@
 
         <div
           class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
-          data-product-variants="{{ json_encode($product) }}">
+          data-product-variants="{{ json_encode($product->variants) }}">
           <button
             id="add-to-cart"
-            data-variant-id="{{ $product[0]->variant_id }}"
+            data-variant-id="{{ $product->variants->first()->id }}"
             class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
             <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
           </button>
@@ -226,27 +221,27 @@
           </h3>
           <p
             class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-            {{ $product[0]->description ?? 'No description available.' }}
+            {{ $product->description ?? 'No description available.' }}
           </p>
-          @if($product[0]->fabric)
+          @if($product->fabric)
             <h3
               class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
               Material & Care
             </h3>
             <p
               class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-              {{ $product[0]->fabric }}<br />
+              {{ $product->fabric }}<br />
               Machine Wash
             </p>
           @endif
-          @if($product[0]->fit)
+          @if($product->fit)
             <h3
               class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
               Size & Fit
             </h3>
             <p
               class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-              {{ $product[0]->fit }}
+              {{ $product->fit }}
             </p>
           @endif
         </div>
@@ -837,9 +832,28 @@
 // Store all product variants data
 const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
 
-function updateColorOptions(selectedSize) {
+let selectedSize = '{{ $product->variants->first()->size ?? "M" }}';
+let selectedColor = '{{ $product->variants->first()->color ?? "" }}';
+
+function selectSize(size) {
+    selectedSize = size;
+    
+    // Update size button styles
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        if (btn.getAttribute('data-size') === size) {
+            btn.classList.add('bg-secondary', 'text-white');
+        } else {
+            btn.classList.remove('bg-secondary', 'text-white');
+        }
+    });
+    
+    // Update color options for selected size
+    updateColorOptions(size);
+}
+
+function updateColorOptions(size) {
     const colorSelection = document.getElementById('color-selection');
-    const colorsForSize = productVariants.filter(variant => variant.size === selectedSize);
+    const colorsForSize = productVariants.filter(variant => variant.size === size);
     
     // Clear existing color options
     colorSelection.innerHTML = '';
@@ -851,82 +865,71 @@ function updateColorOptions(selectedSize) {
     
     // Generate color options for selected size
     colorsForSize.forEach((variant, index) => {
-        const colorDiv = document.createElement('div');
-        colorDiv.className = `color-option ${index === 0 ? 'selected-color' : ''} w-14 h-20 rounded border-2 cursor-pointer overflow-hidden`;
-        colorDiv.setAttribute('data-size', selectedSize);
-        colorDiv.setAttribute('data-color', variant.color);
-        colorDiv.setAttribute('data-variant-id', variant.variant_id);
-        colorDiv.setAttribute('data-display', variant.images ? `{{ asset('uploads/products/') }}${variant.images}` : '{{ asset("assets/images/placeholder.jpg") }}');
-        colorDiv.setAttribute('data-large', variant.images ? `{{ asset('uploads/products/') }}${variant.images}` : '{{ asset("assets/images/placeholder.jpg") }}');
-        colorDiv.setAttribute('onclick', 'selectVariant(this)');
+        const colorBtn = document.createElement('button');
+        colorBtn.className = `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
+        colorBtn.style.backgroundColor = variant.color;
+        colorBtn.setAttribute('data-color', variant.color);
+        colorBtn.setAttribute('data-size', size);
+        colorBtn.setAttribute('data-variant-id', variant.id);
+        colorBtn.setAttribute('onclick', `selectColor('${variant.color}', '${size}', ${variant.id}, this)`);
         
-        if (variant.images) {
-            colorDiv.innerHTML = `<img src="{{ asset('uploads/products/') }}${variant.images}" class="w-full h-full object-cover" alt="${variant.color}" />`;
-        } else {
-            colorDiv.innerHTML = `<div class="w-full h-full bg-gray-200 flex items-center justify-center text-xs text-gray-600">${variant.color}</div>`;
-        }
-        
-        colorSelection.appendChild(colorDiv);
+        colorSelection.appendChild(colorBtn);
     });
     
-    // Update size button styles
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        if (btn.getAttribute('data-size') === selectedSize) {
-            btn.classList.add('bg-secondary', 'text-white');
-        } else {
-            btn.classList.remove('bg-secondary', 'text-white');
-        }
-    });
-    
-    // Auto-select first color and update variant
+    // Auto-select first color
     if (colorsForSize.length > 0) {
-        const firstColorOption = colorSelection.querySelector('.color-option');
-        if (firstColorOption) {
-            selectVariant(firstColorOption);
-        }
+        const firstColor = colorsForSize[0].color;
+        selectColor(firstColor, size, colorsForSize[0].id, colorSelection.querySelector('.color-btn'));
     }
 }
 
-function selectVariant(element) {
-    // Update color selection styles
-    document.querySelectorAll('.color-option').forEach(option => {
-        option.classList.remove('selected-color');
+function selectColor(color, size, variantId, element) {
+    selectedColor = color;
+    
+    // Update color button styles
+    document.querySelectorAll('.color-btn').forEach(btn => {
+        if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
+            btn.classList.add('border-secondary');
+            btn.classList.remove('border-gray-300');
+        } else {
+            btn.classList.remove('border-secondary');
+            btn.classList.add('border-gray-300');
+        }
     });
-    element.classList.add('selected-color');
     
     // Update add to cart button with selected variant ID
     const addToCartBtn = document.getElementById('add-to-cart');
-    const variantId = element.getAttribute('data-variant-id');
     addToCartBtn.setAttribute('data-variant-id', variantId);
     
-    // Update main image if available
-    const displayImage = element.getAttribute('data-display');
-    if (displayImage) {
+    // Update main image for selected variant
+    const variantImage = element.getAttribute('data-variant-image');
+    if (variantImage) {
         const mainImage = document.getElementById('main-image');
         if (mainImage) {
-            mainImage.src = displayImage;
+            mainImage.src = variantImage;
+            mainImage.alt = `${color} ${size} - {{ $product->name }}`;
         }
     }
     
     // Update price for selected variant
-    const size = element.getAttribute('data-size');
-    const color = element.getAttribute('data-color');
     const selectedVariant = productVariants.find(v => v.size === size && v.color === color);
-    
     if (selectedVariant) {
         updatePrice(selectedVariant);
     }
 }
 
 function updatePrice(variant) {
-    const priceContainer = document.querySelector('.flex.items-center.gap-3');
+    console.log('Updating price for variant:', variant); // Debug log
+    const priceContainer = document.getElementById('price-container');
     if (priceContainer && variant) {
-        const currentPrice = variant.price_after_discount || variant.price;
+        const currentPrice = variant.discount_price || variant.price;
         const originalPrice = variant.price;
+        
+        console.log('Current price:', currentPrice, 'Original price:', originalPrice); // Debug log
         
         priceContainer.innerHTML = `
             <span class="text-2xl font-bold text-gray-900">Rs. ${currentPrice}</span>
-            ${variant.price_after_discount && variant.price_after_discount != originalPrice ? 
+            ${variant.discount_price && variant.discount_price != originalPrice ? 
                 `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>
                  <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
                      (${Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}% off)
@@ -937,10 +940,18 @@ function updatePrice(variant) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Set initial size based on first product variant
-    const initialSize = '{{ $product[0]->size ?? "M" }}';
-    updateColorOptions(initialSize);
+    // Set initial size
+    selectSize(selectedSize);
+    
+    // Add event listener for add to cart button
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(event) {
+            addToCart(null, event);
+        });
+    }
 });
+
 
 // Add to Cart function
 function addToCart(variantId, event) {
@@ -962,7 +973,18 @@ function addToCart(variantId, event) {
     
     // Get CSRF token
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    if (!csrfToken) {
+        alert('Security token not found. Please refresh the page.');
+        return;
+    }
    
+    // Disable button and show loading
+    const addToCartBtn = document.getElementById('add-to-cart');
+    const originalText = addToCartBtn.innerHTML;
+    addToCartBtn.disabled = true;
+    addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
+    
     // Send AJAX request to add to cart
     fetch('/cart/add', {
         method: 'POST',
@@ -977,13 +999,14 @@ function addToCart(variantId, event) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
         if (data.success) {
             // Show success message
             showNotification('Product added to cart successfully!', 'success');
             
             // Update cart count if you have a cart counter
-            updateCartCount(data.cart_count);
+            if (data.cart_count !== undefined) {
+                updateCartCount(data.cart_count);
+            }
         } else {
             showNotification(data.message || 'Failed to add product to cart', 'error');
         }
@@ -991,6 +1014,11 @@ function addToCart(variantId, event) {
     .catch(error => {
         console.error('Error:', error);
         showNotification('An error occurred while adding to cart', 'error');
+    })
+    .finally(() => {
+        // Re-enable button
+        addToCartBtn.disabled = false;
+        addToCartBtn.innerHTML = originalText;
     });
 }
 
@@ -1015,41 +1043,21 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Update cart count function (optional)
+// Update cart count function
 function updateCartCount(count) {
-    const cartCountElement = document.querySelector('.cart-count');
-    if (cartCountElement) {
-        cartCountElement.textContent = count;
+    // Find cart count elements and update them
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
+    
+    // If you have a cart icon with badge, update it
+    const cartBadge = document.querySelector('.cart-badge');
+    if (cartBadge) {
+        cartBadge.textContent = count;
+        cartBadge.style.display = count > 0 ? 'block' : 'none';
     }
 }
-
-// Add click event listener to add to cart button
-document.addEventListener('DOMContentLoaded', function() {
-    const addToCartBtn = document.getElementById('add-to-cart');
-    console.log('Add to cart button found:', addToCartBtn);
-    
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Disable button to prevent multiple clicks
-            this.disabled = true;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
-            
-            const variantId = this.getAttribute('data-variant-id');
-            console.log('Add to cart clicked, variant ID:', variantId);
-            
-            addToCart(variantId, e).finally(() => {
-                // Re-enable button after request completes
-                this.disabled = false;
-                this.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-            });
-        });
-    } else {
-        console.error('Add to cart button not found in the DOM');
-    }
-});
 </script>
 
 @endsection
