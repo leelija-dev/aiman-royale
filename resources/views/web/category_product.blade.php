@@ -17,7 +17,7 @@
     <div class="w-full grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">
       @forelse($products as $product)
 
-        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card" data-product-id="{{ $product->id }}">
           <!-- Image Wrapper -->
           <div class="relative rounded-xl overflow-hidden">
             <img 
@@ -102,4 +102,26 @@
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click event listeners to all product cards
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Prevent navigation if clicking on buttons or links inside the card
+            if (e.target.closest('button') || e.target.closest('a')) {
+                return;
+            }
+            
+            const productId = this.getAttribute('data-product-id');
+            if (productId) {
+                window.location.href = `/single-product/${productId}`;
+            }
+        });
+    });
+});
+</script>
+
 @endsection
