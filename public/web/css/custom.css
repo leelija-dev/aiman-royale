@@ -243,3 +243,106 @@ html::-webkit-scrollbar-corner {
   opacity: 1;
 }
 
+
+/* Reset & base */
+.mega-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.menu-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 23px;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.menu-link:hover {
+  background: #f5f5f5;
+}
+
+/* Submenus hidden by default */
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease-out;
+  display: block !important;
+}
+
+.submenu.active {
+  max-height: 1000px;
+}
+
+/* Hide all other top items when one is open */
+.mega-menu.top-level-open .menu-item:not(.top-level-active) {
+  display: none;
+}
+
+/* Hide the top link when its menu is open */
+.menu-item.top-level-active > .menu-link {
+  display: none !important;
+}
+
+/* Show back button when top level is open */
+.back-button {
+  display: none;
+  padding: 10px 16px;
+  background: #f0f0f0;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 0;
+}
+
+.mega-menu.top-level-open .back-button {
+  display: block;
+}
+
+/* Force submenu to show when top level is active */
+.menu-item.top-level-active > .submenu {
+  display: block !important;
+  max-height: 1000px !important;
+}
+
+/* Ensure all menu items inside active submenu are visible */
+.menu-item.top-level-active > .submenu,
+.menu-item.top-level-active > .submenu .menu-item {
+  display: block !important;
+}
+
+/* Rotate arrow when open */
+.menu-link i.fa-angle-right {
+  transition: transform 0.25s;
+}
+
+.menu-link.active i.fa-angle-right,
+.submenu-toggle.active i.fa-angle-right {
+  transform: rotate(90deg);
+}
+
+/* Optional: indent sub-levels */
+.submenu .submenu {
+  padding-left: 16px;
+}
+
+@media screen and (max-width:991px) {
+  #categories-wrapper-menu{
+    display: none !important;
+  }
+  
+}
+
