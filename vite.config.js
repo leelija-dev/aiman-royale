@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css', // Your main CSS file
+                // 'resources/css/app.css', // Your main CSS file
                 'resources/js/app.js',
                 'node_modules/summernote/dist/summernote-lite.min.css',
                 'node_modules/summernote/dist/summernote-lite.min.js'
