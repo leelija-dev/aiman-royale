@@ -61,7 +61,6 @@
     <!-- <link rel="stylesheet" href="{{asset('build/assets/css/main.css')}}">
     <link rel="stylesheet" href="{{asset('build/assets/css/main2.css')}}"> -->
 
-     <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
     @vite(['resources/js/app.js'])
 
     @if(isset($ogMeta))
