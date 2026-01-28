@@ -122,10 +122,6 @@
         <div class="main-owl owl-carousel owl-theme">
             @if($products && $products->count() > 0)
                 @foreach($products as $product)
-                    @php
-                        $firstVariant = $product->variants->first();
-                        $firstImage = $product->images->first();
-                    @endphp
                     
                     <div class="item flex justify-center items-center">
                         <div
@@ -133,7 +129,7 @@
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
                                 <img
-                                    src="{{ $firstImage ? asset('uploads/products/' . $firstImage->image) : asset('assets/images/placeholder.jpg') }}"
+                                    src="{{ $product->product_image ? asset('uploads/products/' . $product->product_image) : asset('assets/images/placeholder.jpg') }}"
                                     alt="{{ $product->name }}"
                                     class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -169,7 +165,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart({{ $product->variant_id }}, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -178,39 +174,34 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            {{ $product->name }}{{ $firstVariant ? ', ' . $firstVariant->size . ', ' . $firstVariant->color : '' }}
+                            {{ $product->name }}, {{ $product->size }}, {{ $product->color }}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>{{ $product->brand ?? 'Brand Name' }}</span>
+                            <span>{{ $product->brand }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            @if($firstVariant)
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $firstVariant->discount_price ?? $firstVariant->price }}</span>
-                                @if($firstVariant->discount_price)
-                                    <span class="text-sm text-gray-400 line-through">Rs. {{ $firstVariant->price }}</span>
-                                @endif
-                            @else
-                                <span class="text-lg font-bold text-gray-900">Rs. 0</span>
+                            <span class="text-lg font-bold text-gray-900">Rs. {{ $product->price_after_discount }}</span>
+                            @if($product->price_after_discount != $product->price)
+                                <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
                             @endif
                         </div>
                         <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                            <button onclick="addToCart({{ $product->variant_id }}, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
             @endforeach
-            @else
-                <div class="text-center py-12">
-                    <p class="text-gray-500 text-lg">No products available at the moment.</p>
-                    <p class="text-gray-400 text-sm mt-2">Check back later for new arrivals!</p>
-                </div>
-            @endif
+        @else
+            <div class="text-center py-8">
+                <p class="text-gray-500">No products available at the moment.</p>
+            </div>
+        @endif
         </div>
     </div>
 </section>
@@ -716,7 +707,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="{{ asset('uploads/products/' . $product->image) }}"
+                            src="{{ $product->product_image ? asset('uploads/products/' . $product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -765,7 +756,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            {{ $product->name }}{{ $firstVariant ? ', ' . $firstVariant->size . ', ' . $firstVariant->color : '' }}
+                            {{ $product->name }}, {{ $product->size }}, {{ $product->color }}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -776,17 +767,13 @@
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            @if($firstVariant)
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $firstVariant->discount_price ?? $firstVariant->price }}</span>
-                                @if($firstVariant->discount_price)
-                                    <span class="text-sm text-gray-400 line-through">Rs. {{ $firstVariant->price }}</span>
-                                @endif
-                            @else
-                                <span class="text-lg font-bold text-gray-900">Rs. 0</span>
+                            <span class="text-lg font-bold text-gray-900">Rs. {{ $product->price_after_discount }}</span>
+                            @if($product->price_after_discount != $product->price)
+                                <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
                             @endif
                         </div>
                         <div class="lgg:hidden block">
-                            <button onclick="addToCart({{ $firstVariant ? $firstVariant->id : 1 }}, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                            <button onclick="addToCart({{ $product->variant_id }}, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>

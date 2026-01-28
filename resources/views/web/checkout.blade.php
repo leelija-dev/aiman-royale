@@ -161,6 +161,7 @@
 
               <div class="space-y-6 mb-6">
                 @if($carts->count() > 0)
+                
                   @foreach($carts as $cart)
                   <div class="flex gap-4">
                     <div class="w-20 h-20 bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">

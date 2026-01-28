@@ -198,12 +198,21 @@
               </div>
             </div>
 
-            <a href="{{ route('checkout.index') }}">
-              <button
-                class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
-                Proceed to checkout
-              </button>
-            </a>
+            @if(auth()->check())
+              <a href="{{ route('checkout.index') }}">
+                <button
+                  class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
+                  Proceed to checkout
+                </button>
+              </a>
+            @else
+              <a href="{{ route('page.login') }}">
+                <button
+                  class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
+                  Login to checkout
+                </button>
+              </a>
+            @endif
           </div>
         </div>
       </div>

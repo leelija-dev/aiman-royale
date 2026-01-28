@@ -16,9 +16,23 @@ class HomeController extends Controller
     public function home()
     {
         $data = Service::all();
+        // $products = Product::with([
+        //     'variants' => function($query) {
+        //         $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');
+        //     },
+        //     'images' => function($query) {
+        //         $query->select('product_id', 'image');
+        //     }
+        // ])
+        // ->where('is_active', 1)
+        // ->select('id', 'name', 'brand', 'description', 'is_active')
+        // ->latest()
+        // ->take(10)
+        // ->get();
+
         $products = DB::table('products')
-            ->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->leftJoin('product_images', 'product_variants.id', '=', 'product_images.variant_id')
             ->where('products.is_active', 1)
             ->select(
                 'products.*',
@@ -28,15 +42,14 @@ class HomeController extends Controller
                 'product_variants.price',
                 'product_variants.discount_price as price_after_discount',
                 'product_variants.stock',
-                'product_images.image'
+                'product_images.image as product_image'
             )
             ->get();
 
 
-
+        // dd($products);
 
         $categories = Category::withCount('products')->get();
-
 
         $testimonials = [];
 
@@ -86,16 +99,16 @@ class HomeController extends Controller
     public function ShowSingleProduct($id)
     {
         $product = Product::with([
-            'variants' => function($query) {
+            'variants' => function ($query) {
                 $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');
             },
-            'images' => function($query) {
+            'images' => function ($query) {
                 $query->select('product_id', 'image');
             }
         ])
-        ->where('is_active', 1)
-        ->where('id', $id)
-        ->firstOrFail();
+            ->where('is_active', 1)
+            ->where('id', $id)
+            ->firstOrFail();
 
         // dd($product);
         return view('web.single-product', compact('product'));

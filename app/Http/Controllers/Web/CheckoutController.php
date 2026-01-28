@@ -17,7 +17,10 @@ class CheckoutController extends Controller
     $carts = DB::table('carts')
     ->join('products', 'carts.product_id',  '=', 'products.id')
     ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
-    ->join('product_images', 'carts.product_id', '=', 'product_images.product_id')
+    ->leftJoin('product_images', function($join) {
+        $join->on('carts.product_id', '=', 'product_images.product_id')
+             ->whereRaw('product_images.id = (SELECT MIN(id) FROM product_images WHERE product_id = carts.product_id)');
+    })
     ->where('user_id', $user_id)
     ->select(
         'carts.*',
