@@ -2,37 +2,40 @@
     /* Fix z-index stacking */
 
 
-#categories-wrapper-menu {
-    display: none; /* Start hidden */
-    position: fixed;
-    z-index: 20004;
-    top: 80px; /* Adjust based on your header height */
-    left: 0;
-    right: 0;
-}
+    #categories-wrapper-menu {
+      display: none;
+      /* Start hidden */
+      position: fixed;
+      z-index: 20004;
+      top: 80px;
+      /* Adjust based on your header height */
+      left: 0;
+      right: 0;
+    }
 
-nav a {
-    position: relative;
-    cursor: pointer;
-}
+    nav a {
+      position: relative;
+      cursor: pointer;
+    }
 
-/* Optional: Add animation for smoother appearance */
-#categories-wrapper-menu {
-    animation: fadeIn 0.2s ease-out;
-}
+    /* Optional: Add animation for smoother appearance */
+    #categories-wrapper-menu {
+      animation: fadeIn 0.2s ease-out;
+    }
 
-@keyframes fadeIn {
-    from {
+    @keyframes fadeIn {
+      from {
         opacity: 0;
         transform: translateY(-10px);
-    }
-    to {
+      }
+
+      to {
         opacity: 1;
         transform: translateY(0);
+      }
     }
-}
   </style>
-  
+
   <header
     id="nav-wrapper"
     class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
@@ -59,7 +62,7 @@ nav a {
         <!-- Logo -->
         <div class="flex items-center gap-2">
           <!-- <div class="w-8 h-8 bg-blue-700 rounded-sm"></div> -->
-            <img class="h-[50px] w-auto" src="{{asset('web/images/company-logo/aiman-royal-logo.webp')}}" alt="">
+          <img class="h-[50px] w-auto" src="{{asset('web/images/company-logo/aiman-royal-logo.webp')}}" alt="">
         </div>
 
         <!-- Desktop Navigation -->
@@ -166,7 +169,7 @@ nav a {
   <!-- Mobile Sidebar -->
   <div
     id="mobile-sidebar"
-    class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden">
+    class="fixed inset-y-0 left-0  bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[400px]">
     <div class="flex items-center justify-between p-6 border-b">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-blue-700 rounded-sm"></div>
@@ -190,17 +193,209 @@ nav a {
     </div>
 
     <!-- Mobile Navigation -->
-    <nav class="p-6">
+    <nav class="py-6">
       <ul class="space-y-4 text-gray-700 font-medium">
         @if(isset($categories) && count($categories) > 0)
         @foreach($categories as $category)
-        <li><a href="{{ route('category.show', $category->slug) }}" class="block hover:text-black">{{ $category->name }}</a></li>
+        <!-- <li>
+          <div>
+            <a href="{{ route('category.show', $category->slug) }}" class="block hover:text-black w-full flex gap-1 justify-between items-center">{{ $category->name }}<i class="fa-solid fa-angle-right"></i></a>
+            <ul>
+              <li>
+                <div class="flex justify-between items-center gap-1">
+                  Salwar Kameez <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <div>
+                  <ul>
+                    <li>
+                      Red Saree
+                    </li>
+                    <li>
+                      Salwar Kameez
+                    </li>
+                    <li>
+                      Lehenga
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li> -->
+
+        <ul class="mega-menu">
+          <li class="menu-item has-submenu top-level-item">
+            <button class="back-button">← Back to Main Menu</button>
+            <a href="{{ route('category.show', $category->slug) }}" class="menu-link top-level-link">
+              Lahenga <i class="fa-solid fa-angle-right"></i>
+            </a>
+            <ul class="submenu">
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Style <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Ocation <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Collection <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <!-- You can add more level-2 items here -->
+            </ul>
+          </li>
+          <li class="menu-item has-submenu top-level-item">
+            <button class="back-button">← Back to Main Menu</button>
+            <a href="{{ route('category.show', $category->slug) }}" class="menu-link top-level-link">
+              Salwar Kameez <i class="fa-solid fa-angle-right"></i>
+            </a>
+            <ul class="submenu">
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Style <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Ocation <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="menu-item has-submenu">
+                <div class="menu-link submenu-toggle">
+                  Collection <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <ul class="submenu">
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Red Saree</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Salwar Kameez</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="menu-link">Lehenga</a>
+                  </li>
+                </ul>
+              </li>
+              <!-- You can add more level-2 items here -->
+            </ul>
+          </li>
+
+          
+        </ul>
         @endforeach
         @else
-        <li><a href="#" class="block hover:text-black">Salwar Kameez</a></li>
-        <li><a href="#" class="block hover:text-black">Lehengas</a></li>
-        <li><a href="#" class="block hover:text-black">Bridal</a></li>
-        <li><a href="#" class="block hover:text-black">Wedding</a></li>
+        <li>
+          <div>
+            <a href="{{ route('category.show', $category->slug) }}" class="block hover:text-black w-full flex gap-1 justify-between items-center">Lahenga<i class="fa-solid fa-angle-right"></i></a>
+            <ul>
+              <li>
+                <div class="flex justify-between items-center gap-1">
+                  Salwar Kameez <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <div>
+                  <ul>
+                    <li>
+                      Red Saree
+                    </li>
+                    <li>
+                      Salwar Kameez
+                    </li>
+                    <li>
+                      Lehenga
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <div>
+            <a href="{{ route('category.show', $category->slug) }}" class="block hover:text-black w-full flex gap-1 justify-between items-center">Lahenga<i class="fa-solid fa-angle-right"></i></a>
+            <ul>
+              <li>
+                <div class="flex justify-between items-center gap-1">
+                  Salwar Kameez <i class="fa-solid fa-angle-right"></i>
+                </div>
+                <div>
+                  <ul>
+                    <li>
+                      Red Saree
+                    </li>
+                    <li>
+                      Salwar Kameez
+                    </li>
+                    <li>
+                      Lehenga
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
         @endif
       </ul>
     </nav>
@@ -539,177 +734,331 @@ nav a {
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
-    const navLinks = document.querySelectorAll('nav a');
-    const categoriesMenu = document.getElementById('categories-wrapper-menu');
-    const styleProducts = document.getElementById('style-products');
-    const occasionProducts = document.getElementById('occation-products');
-    const collectionProducts = document.getElementById('collection-products');
-    const sidebarButtons = document.querySelectorAll('.bg-\\[\\#fdebdc\\] button');
-    
-    // Check if elements exist
-    if (!categoriesMenu || !styleProducts || !occasionProducts || !collectionProducts) {
+      // Get elements
+      const navLinks = document.querySelectorAll('nav a');
+      const categoriesMenu = document.getElementById('categories-wrapper-menu');
+      const styleProducts = document.getElementById('style-products');
+      const occasionProducts = document.getElementById('occation-products');
+      const collectionProducts = document.getElementById('collection-products');
+      const sidebarButtons = document.querySelectorAll('.bg-\\[\\#fdebdc\\] button');
+
+      // Check if elements exist
+      if (!categoriesMenu || !styleProducts || !occasionProducts || !collectionProducts) {
         console.error('Required elements not found');
         return;
-    }
-    
-    // Variables for hover timeout management
-    let menuTimeout;
-    let linkTimeout;
-    const HOVER_DELAY = 150; // milliseconds delay for hover
-    
-    // Track if mouse is over menu
-    let isOverMenu = false;
-    let isOverNav = false;
-    
-    // Function to show the categories menu
-    function showCategoriesMenu() {
+      }
+
+      // Variables for hover timeout management
+      let menuTimeout;
+      let linkTimeout;
+      const HOVER_DELAY = 150; // milliseconds delay for hover
+
+      // Track if mouse is over menu
+      let isOverMenu = false;
+      let isOverNav = false;
+
+      // Function to show the categories menu
+      function showCategoriesMenu() {
         clearTimeout(menuTimeout);
         categoriesMenu.style.display = 'block';
         isOverMenu = true;
-    }
-    
-    // Function to hide the categories menu
-    function hideCategoriesMenu() {
+      }
+
+      // Function to hide the categories menu
+      function hideCategoriesMenu() {
         isOverMenu = false;
         menuTimeout = setTimeout(() => {
-            if (!isOverNav && !isOverMenu) {
-                categoriesMenu.style.display = 'none';
-                // Reset all product sections to default (show style)
-                resetProductSections();
-            }
+          if (!isOverNav && !isOverMenu) {
+            categoriesMenu.style.display = 'none';
+            // Reset all product sections to default (show style)
+            resetProductSections();
+          }
         }, HOVER_DELAY);
-    }
-    
-    // Function to reset product sections to default (show style)
-    function resetProductSections() {
+      }
+
+      // Function to reset product sections to default (show style)
+      function resetProductSections() {
         if (styleProducts) styleProducts.classList.remove('hidden');
         if (occasionProducts) occasionProducts.classList.add('hidden');
         if (collectionProducts) collectionProducts.classList.add('hidden');
-        
+
         // Reset sidebar button styles
         if (sidebarButtons && sidebarButtons.length > 0) {
-            sidebarButtons.forEach(button => {
-                button.classList.remove('bg-white');
-                button.classList.add('bg-[#fdebdc]');
-            });
-            sidebarButtons[0].classList.remove('bg-[#fdebdc]');
-            sidebarButtons[0].classList.add('bg-white');
+          sidebarButtons.forEach(button => {
+            button.classList.remove('bg-white');
+            button.classList.add('bg-[#fdebdc]');
+          });
+          sidebarButtons[0].classList.remove('bg-[#fdebdc]');
+          sidebarButtons[0].classList.add('bg-white');
         }
-    }
-    
-    // Function to switch product sections
-    function switchProductSection(sectionToShow) {
+      }
+
+      // Function to switch product sections
+      function switchProductSection(sectionToShow) {
         // Hide all sections
         if (styleProducts) styleProducts.classList.add('hidden');
         if (occasionProducts) occasionProducts.classList.add('hidden');
         if (collectionProducts) collectionProducts.classList.add('hidden');
-        
+
         // Show the requested section
         if (sectionToShow) sectionToShow.classList.remove('hidden');
-    }
-    
-    // Add hover event listeners to desktop nav links
-    navLinks.forEach(link => {
+      }
+
+      // Add hover event listeners to desktop nav links
+      navLinks.forEach(link => {
         link.addEventListener('mouseenter', function(e) {
-            clearTimeout(linkTimeout);
-            isOverNav = true;
-            showCategoriesMenu();
+          clearTimeout(linkTimeout);
+          isOverNav = true;
+          showCategoriesMenu();
         });
-        
+
         link.addEventListener('mouseleave', function(e) {
-            isOverNav = false;
-            linkTimeout = setTimeout(() => {
-                if (!isOverMenu) {
-                    hideCategoriesMenu();
-                }
-            }, HOVER_DELAY);
+          isOverNav = false;
+          linkTimeout = setTimeout(() => {
+            if (!isOverMenu) {
+              hideCategoriesMenu();
+            }
+          }, HOVER_DELAY);
         });
-    });
-    
-    // Add hover event listeners to categories menu
-    if (categoriesMenu) {
+      });
+
+      // Add hover event listeners to categories menu
+      if (categoriesMenu) {
         categoriesMenu.addEventListener('mouseenter', function() {
-            clearTimeout(menuTimeout);
-            isOverMenu = true;
+          clearTimeout(menuTimeout);
+          isOverMenu = true;
         });
-        
+
         categoriesMenu.addEventListener('mouseleave', function() {
-            isOverMenu = false;
-            hideCategoriesMenu();
+          isOverMenu = false;
+          hideCategoriesMenu();
         });
-    }
-    
-    // Add hover event listeners to sidebar buttons
-    if (sidebarButtons && sidebarButtons.length > 0) {
+      }
+
+      // Add hover event listeners to sidebar buttons
+      if (sidebarButtons && sidebarButtons.length > 0) {
         sidebarButtons.forEach((button, index) => {
-            button.addEventListener('mouseenter', function() {
-                // Update button styles
-                sidebarButtons.forEach(btn => {
-                    btn.classList.remove('bg-white');
-                    btn.classList.add('bg-[#fdebdc]');
-                });
-                this.classList.remove('bg-[#fdebdc]');
-                this.classList.add('bg-white');
-                
-                // Switch to corresponding product section
-                switch(index) {
-                    case 0:
-                        switchProductSection(styleProducts);
-                        break;
-                    case 1:
-                        switchProductSection(occasionProducts);
-                        break;
-                    case 2:
-                        switchProductSection(collectionProducts);
-                        break;
-                    default:
-                        switchProductSection(styleProducts);
-                }
+          button.addEventListener('mouseenter', function() {
+            // Update button styles
+            sidebarButtons.forEach(btn => {
+              btn.classList.remove('bg-white');
+              btn.classList.add('bg-[#fdebdc]');
             });
+            this.classList.remove('bg-[#fdebdc]');
+            this.classList.add('bg-white');
+
+            // Switch to corresponding product section
+            switch (index) {
+              case 0:
+                switchProductSection(styleProducts);
+                break;
+              case 1:
+                switchProductSection(occasionProducts);
+                break;
+              case 2:
+                switchProductSection(collectionProducts);
+                break;
+              default:
+                switchProductSection(styleProducts);
+            }
+          });
         });
-    }
-    
-    // Initialize with style section visible by default
-    resetProductSections();
-    
-    // Add click event listener to close menu when clicking outside
-    document.addEventListener('click', function(event) {
+      }
+
+      // Initialize with style section visible by default
+      resetProductSections();
+
+      // Add click event listener to close menu when clicking outside
+      document.addEventListener('click', function(event) {
         const isClickInsideMenu = categoriesMenu.contains(event.target);
         const isClickOnNavLink = Array.from(navLinks).some(link => link.contains(event.target));
-        
+
         if (!isClickInsideMenu && !isClickOnNavLink && categoriesMenu.style.display === 'block') {
-            categoriesMenu.style.display = 'none';
-            resetProductSections();
+          categoriesMenu.style.display = 'none';
+          resetProductSections();
         }
+      });
+
+      // Mobile menu functionality (already in your code, but ensure it doesn't interfere)
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileSidebar = document.getElementById('mobile-sidebar');
+      const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+      if (mobileMenuBtn && mobileSidebar) {
+        mobileMenuBtn.addEventListener('click', function() {
+          mobileSidebar.classList.remove('-translate-x-full');
+          if (sidebarOverlay) sidebarOverlay.classList.remove('hidden');
+        });
+      }
+
+      if (closeSidebarBtn && mobileSidebar) {
+        closeSidebarBtn.addEventListener('click', function() {
+          mobileSidebar.classList.add('-translate-x-full');
+          if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+          mobileSidebar.classList.add('-translate-x-full');
+          sidebarOverlay.classList.add('hidden');
+        });
+      }
+    });
+  </script>
+
+
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+  const megaMenu = document.querySelector('.mega-menu');
+  const backButtons = document.querySelectorAll('.back-button');
+  
+  // Reset function to show initial state - INSTANT
+  function resetToInitialState() {
+    // Remove all active classes
+    document.querySelectorAll('.active, .top-level-active').forEach(el => {
+      el.classList.remove('active', 'top-level-active');
     });
     
-    // Mobile menu functionality (already in your code, but ensure it doesn't interfere)
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileSidebar = document.getElementById('mobile-sidebar');
-    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    // Remove top-level-open class
+    megaMenu.classList.remove('top-level-open');
     
-    if (mobileMenuBtn && mobileSidebar) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileSidebar.classList.remove('-translate-x-full');
-            if (sidebarOverlay) sidebarOverlay.classList.remove('hidden');
-        });
-    }
+    // Hide all back buttons INSTANTLY
+    backButtons.forEach(button => {
+      button.style.display = 'none';
+    });
     
-    if (closeSidebarBtn && mobileSidebar) {
-        closeSidebarBtn.addEventListener('click', function() {
-            mobileSidebar.classList.add('-translate-x-full');
-            if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
-        });
-    }
+    // Show all top level items INSTANTLY
+    document.querySelectorAll('.top-level-item').forEach(item => {
+      item.style.display = 'block';
+      // Remove any inline max-height from submenus
+      const submenu = item.querySelector('.submenu');
+      if (submenu) {
+        submenu.style.maxHeight = '';
+        submenu.style.transition = 'none'; // Remove transition temporarily
+      }
+    });
     
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', function() {
-            mobileSidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
+    // Show all top level links
+    document.querySelectorAll('.top-level-link').forEach(link => {
+      link.style.display = 'flex';
+    });
+    
+    // Reset all submenus to hidden INSTANTLY - no transition
+    document.querySelectorAll('.submenu').forEach(submenu => {
+      submenu.classList.remove('active');
+      submenu.style.maxHeight = '0';
+      submenu.style.transition = 'none'; // Disable transition for instant hide
+    });
+    
+    // Re-enable transitions after a tiny delay
+    setTimeout(() => {
+      document.querySelectorAll('.submenu').forEach(submenu => {
+        submenu.style.transition = '';
+      });
+    }, 10);
+  }
+  
+  // Add back button functionality to ALL back buttons
+  backButtons.forEach(button => {
+    button.addEventListener('click', resetToInitialState);
+  });
+
+  // Handle top-level menu clicks (Lahenga, Salwar Kameez)
+  document.querySelectorAll('.top-level-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const parentItem = this.closest('.top-level-item');
+      const isAlreadyActive = parentItem.classList.contains('top-level-active');
+      const submenu = this.nextElementSibling;
+      
+      if (isAlreadyActive) {
+        // If already active, close everything
+        resetToInitialState();
+      } else {
+        // Close any other open top-level first
+        resetToInitialState();
+        
+        // Open this top-level
+        parentItem.classList.add('top-level-active');
+        this.classList.add('active');
+        
+        // Force the submenu to open WITH transition
+        if (submenu) {
+          submenu.classList.add('active');
+          submenu.style.maxHeight = '1000px';
+          submenu.style.transition = ''; // Ensure transition is enabled
+        }
+        
+        // Activate mega menu state
+        megaMenu.classList.add('top-level-open');
+        
+        // Show the back button inside this specific top-level item
+        const currentBackButton = parentItem.querySelector('.back-button');
+        if (currentBackButton) {
+          currentBackButton.style.display = 'block';
+        }
+        
+        // Hide other top level items
+        document.querySelectorAll('.top-level-item').forEach(item => {
+          if (!item.classList.contains('top-level-active')) {
+            item.style.display = 'none';
+          }
         });
-    }
+      }
+    });
+  });
+
+  // Handle inner accordion clicks (Style, Ocation, Collection, etc.)
+  document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      const isAlreadyActive = this.classList.contains('active');
+      const submenu = this.nextElementSibling;
+      
+      // Close other open items at the same level
+      const parentSubmenu = this.closest('.submenu');
+      if (parentSubmenu) {
+        const siblings = parentSubmenu.querySelectorAll('.submenu-toggle.active');
+        siblings.forEach(sib => {
+          if (sib !== this) {
+            sib.classList.remove('active');
+            const sibSubmenu = sib.nextElementSibling;
+            if (sibSubmenu) {
+              sibSubmenu.classList.remove('active');
+              sibSubmenu.style.maxHeight = '0';
+            }
+          }
+        });
+      }
+      
+      // Toggle current - WITH transition for smooth accordion
+      if (isAlreadyActive) {
+        this.classList.remove('active');
+        if (submenu) {
+          submenu.classList.remove('active');
+          submenu.style.maxHeight = '0';
+        }
+      } else {
+        this.classList.add('active');
+        if (submenu) {
+          submenu.classList.add('active');
+          submenu.style.maxHeight = '500px';
+        }
+      }
+    });
+  });
+
+  // Handle inner link clicks (Red Saree, etc.)
+  document.querySelectorAll('.submenu .menu-link[href="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Add your navigation logic here
+      console.log('Navigating to:', this.textContent);
+    });
+  });
 });
   </script>
-  
