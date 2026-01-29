@@ -107,6 +107,13 @@
     #account-dropdown.show {
         display: block;
     }
+
+    @media screen and (min-width: 1366px) and (max-width: 1600px) {
+        .respon-wrap-img{
+            max-height: 350px !important;
+        }
+        
+    }
 </style>
 
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
@@ -461,7 +468,7 @@
                                 <!-- Product items here -->
                             </div>
                             <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                                <div class="overflow-hidden rounded-md xll:max-h-[500px] max-h-[400px] w-full">
+                                <div class="overflow-hidden rounded-md xll:max-h-[500px] max-h-[400px] w-full respon-wrap-img">
                                     <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
                                 </div>
                                 <p class="text-[2rem] font-bold text-gray-700 text-center">Orlieve Striv</p>
