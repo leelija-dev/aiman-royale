@@ -299,6 +299,30 @@
                             </ul>
                         </li>
                     </ul>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle">
+                                Occasion <i class="fa-solid fa-angle-right"></i>
+                            </div>
+                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle">
+                                Collection <i class="fa-solid fa-angle-right"></i>
+                            </div>
+                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
                 <div class="menu-item has-submenu top-level-item">
                     <button class="back-button bg-white" style="background-color: white !important; display: none;">← Back to Main Menu</button>
@@ -309,6 +333,30 @@
                         <li class="menu-item has-submenu">
                             <div class="menu-link submenu-toggle">
                                 Style <i class="fa-solid fa-angle-right"></i>
+                            </div>
+                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle">
+                                Occasion <i class="fa-solid fa-angle-right"></i>
+                            </div>
+                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle">
+                                Collection <i class="fa-solid fa-angle-right"></i>
                             </div>
                             <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
                                 <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
@@ -348,28 +396,28 @@
                 <!-- Style Products -->
                 <div id="style-products" class="category-content active">
                     <div class="flex flex-row justify-between gap-3 items-start">
-                        <div class="w-full flex flex-row gap-4 justify-between pr-4">
+                        <div class="w-full flex flex-row gap-4">
                             <div>
                                 <ul class="px-0">
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
                                 </ul>
                             </div>
                             <div>
                                 <ul class="px-0">
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
+                                    <li class="mb-1 text-[1.5rem]">Red Saree</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                            <div class="overflow-hidden rounded-md max-h-[380px] w-full relative">
+                            <div class="overflow-hidden rounded-md max-h-[500px] w-full relative">
                                 <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
                                 <div class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
                                     <p class="text-[2rem] font-bold text-white text-center">Orlieve Striv</p>
