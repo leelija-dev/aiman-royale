@@ -292,6 +292,16 @@ $isEmailActive = false;
                     data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('admin.occasions.*') ? 'active' : '' }} "
+                                href="{{ route('admin.occasions.index') }}">Ocassions</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="marketing-menu"
+                    class="collapse submenu {{$productAndUnit ? 'show' : ''}} "
+                    data-bs-parent="#menu-accordion">
+                    <ul class="submenu-list list-unstyled">
+                        <li class="submenu-item">
                             <a class="submenu-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }} "
                                 href="{{ route('admin.brands.index') }}">Brands</a>
                         </li>
