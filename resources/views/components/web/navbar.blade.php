@@ -343,146 +343,65 @@
                 </button>
             </div>
 
-        <!--  Product Section -->
-        <div class="flex-1  bg-[url('https://www.transparenttextures.com/patterns/geometry.png')] bg-opacity-20 py-8 pl-8 pr-4">
-
-          <div id="style-products" class="flex flex-col gap-2   pr-4">
-            <div class="flex flex-row justify-between gap-3 items-start">
-
-              <div class="w-full flex flex-row  gap-4">
-                <div>
-                  <ul class="px-0 ">
-                    @if(isset($categories) && count($categories) > 0)
-                      @foreach($categories->take(5) as $category)
-                        <li class="mb-1 text-[1.5rem] "><a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a></li>
-                      @endforeach
-                    @else
-                      <li class="mb-1 text-[1.5rem] ">Salwar Kameez</li>
-                      <li class="mb-1 text-[1.5rem] ">Lehengas</li>
-                      <li class="mb-1 text-[1.5rem] ">Bridal</li>
-                      <li class="mb-1 text-[1.5rem] ">Wedding</li>
-                      <li class="mb-1 text-[1.5rem] ">Sarees</li>
-                    @endif
-                  </ul>
-
-                </div>
-                <div>
-                  <ul class="px-0 ">
-                    @if(isset($categories) && count($categories) > 5)
-                      @foreach($categories->skip(5)->take(5) as $category)
-                        <li class="mb-1 text-[1.5rem] "><a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a></li>
-                      @endforeach
-                    @else
-                      <li class="mb-1 text-[1.5rem] ">Kurtis</li>
-                      <li class="mb-1 text-[1.5rem] ">Gowns</li>
-                      <li class="mb-1 text-[1.5rem] ">Anarkali</li>
-                      <li class="mb-1 text-[1.5rem] ">Indo Western</li>
-                      <li class="mb-1 text-[1.5rem] ">Party Wear</li>
-                    @endif
-                  </ul>
-
-                </div>
-              </div>
-              <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                <div class="overflow-hidden rounded-md  max-h-[500px] w-full relative">
-                  <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                  <div class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
-                    <p class="text-[2rem] font-bold text-white text-center">
-                      Orlieve Striv
-                    </p>
-                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white ">Shop Now</button>
-                  </div>
-
+            <!-- Product Section -->
+            <div class="flex-1 bg-[url('https://www.transparenttextures.com/patterns/geometry.png')] bg-opacity-20 py-8 pl-8 pr-4">
+                <!-- Style Products -->
+                <div id="style-products" class="category-content active">
+                    <div class="flex flex-row justify-between gap-3 items-start">
+                        <div class="w-full flex flex-row gap-4 justify-between pr-4">
+                            <div>
+                                <ul class="px-0">
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="px-0">
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
+                            <div class="overflow-hidden rounded-md max-h-[380px] w-full relative">
+                                <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                <div class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
+                                    <p class="text-[2rem] font-bold text-white text-center">Orlieve Striv</p>
+                                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white">Shop Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-              </div>
-            </div>
-
-
-
-          </div>
-          <div id="occation-products" class="flex flex-col gap-2  hidden xll:max-h-[590px] max-h-[400px] overflow-y-auto pr-4">
-            <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
-
-
-
-              <div class="w-full xll:grid-cols-4  xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
-                @if(isset($categories) && count($categories) > 0)
-                  @foreach($categories->take(4) as $category)
-                  <div class="">
-                    <div class="overflow-hidden rounded-md ">
-                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
+                <!-- Occasion Products -->
+                <div id="occation-products" class="category-content hidden">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
+                            <div class="w-full xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
+                                <!-- Product items here -->
+                            </div>
+                            <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
+                                <div class="overflow-hidden rounded-md max-h-[500px] w-full">
+                                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                </div>
+                                <p class="text-[2rem] font-bold text-gray-700 text-center">Orlieve Striv</p>
+                            </div>
+                        </div>
+                        <button class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show More</button>
                     </div>
-
-                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                      <a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a>
-                    </p>
-                  </div>
-                  @endforeach
-                @else
-                  <div class="">
-                    <div class="overflow-hidden rounded-md ">
-                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
-                    </div>
-
-                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                      Salwar Kameez
-                    </p>
-                  </div>
-                  <div class="">
-                    <div class="overflow-hidden rounded-md ">
-                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
-                    </div>
-
-                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                      Lehengas
-                    </p>
-                  </div>
-                  <div class="">
-                    <div class="overflow-hidden rounded-md ">
-                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
-                    </div>
-
-                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                      Bridal
-                    </p>
-                  </div>
-                  <div class="">
-                    <div class="overflow-hidden rounded-md ">
-                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
-                    </div>
-
-                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                      Wedding
-                    </p>
-                  </div>
-                @endif
-              </div>
-              <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                <div class="overflow-hidden rounded-md  max-h-[500px] w-full">
-                  <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
                 </div>
-                <p class="text-[2rem] font-bold text-gray-700 text-center">
-                  Orlieve Striv
-                </p>
-              </div>
-            </div>
 
-            <!-- Show More Button -->
-            <button class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit ">
-              Show More
-            </button>
-
-          </div>
-          <div id="collection-products" class="flex flex-col gap-2 hidden max-h-[590px] overflow-y-auto pr-4">
-            <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3">
-              <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <!-- Collection Products -->
+                <div id="collection-products" class="category-content hidden">
+                    <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3">
+                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
                   <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
