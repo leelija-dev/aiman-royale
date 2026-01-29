@@ -1,0 +1,111 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aiman-fashion-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - aiman-fashion-network
+    depends_on:
+      - redis
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+
+  nginx:
+    image: nginx:alpine
+    container_name: aiman-fashion-nginx
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/${NGINX_CONFIG_FILE}.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - aiman-fashion-network
+    depends_on:
+      - app
+
+  redis:
+    image: redis:alpine
+    container_name: aiman-fashion-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - aiman-fashion-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  node:
+    image: node:22-alpine
+    container_name: aiman-fashion-node
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    networks:
+      - aiman-fashion-network
+    command: sh -c "npm install && if [ \"${APP_ENV}\" = \"production\" ]; then npm run build && rm -f /var/www/html/public/hot; else npm run dev -- --host 0.0.0.0; fi"
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    depends_on:
+      - app
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: aiman-fashion-elasticsearch
+    restart: unless-stopped
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - elasticsearch_data:/var/lib/elasticsearch/data
+    networks:
+      - aiman-fashion-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: aiman-fashion-kibana
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - aiman-fashion-network
+    depends_on:
+      - elasticsearch
+
+networks:
+  aiman-fashion-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  node_modules:
+    driver: local

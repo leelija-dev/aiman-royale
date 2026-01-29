@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_DIR = '/var/www/aiman-royale'
+        DEPLOY_USER = 'deploy'
+        VPS_HOST = '82.25.104.117'
+        BUILD_NUMBER = "${env.BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage('Verify Environment') {
+            steps {
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            echo "Verifying deployment environment..."
+                            [ -d "${PROJECT_DIR}" ]
+                            docker compose version >/dev/null
+                        '
+                    """
+                }
+            }
+        }
+
+        stage('Deploy Code') {
+            steps {
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            cd ${PROJECT_DIR}
+
+                            echo "[DEPLOY] Stopping containers..."
+                            docker compose down || true
+
+                            echo "[DEPLOY] Updating code..."
+                            git fetch origin
+                            git reset --hard origin/main
+
+                            echo "[DEPLOY] Starting containers..."
+                            docker compose build --pull
+                            docker compose up -d
+
+                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache
+
+                            echo "[DEPLOY] Waiting for services..."
+                            sleep 30
+
+                            echo "[DEPLOY] Running migrations..."
+                            docker compose exec -T app php artisan migrate --force
+
+                            echo "[DEPLOY] Optimizing application..."
+                            docker compose exec -T app php artisan optimize:clear
+                            # docker compose exec -T app php artisan optimize
+                            docker compose exec -T app php artisan view:cache
+                            # docker compose exec -T app php artisan route:cache
+                            docker compose exec -T app php artisan config:cache
+
+                            echo "${BUILD_NUMBER}" > .deployed-version
+                        '
+                    """
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sleep 20
+                sh """
+                    if ! curl -sSf http://${VPS_HOST}/health > /dev/null; then
+                        echo "Health check failed"
+                        exit 1
+                    fi
+                """
+                echo "Deployment completed successfully!"
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+            script {
+                if (currentBuild.currentResult == 'SUCCESS') {
+                    echo "✅ Deployment #${BUILD_NUMBER} successful"
+                } else {
+                    echo "❌ Deployment #${BUILD_NUMBER} failed"
+                }
+            }
+        }
+    }
+}

@@ -46,8 +46,8 @@
       rel="stylesheet"
     />
     <!-- Font Awesome in  project -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
 
 
     <!-- <link rel="stylesheet" href="web/css/staging.css"> -->
@@ -57,11 +57,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
 
     <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
-    <!-- build css -->
-    <link rel="stylesheet" href="{{asset('build/assets/css/main.css')}}">
-    <link rel="stylesheet" href="{{asset('build/assets/css/main2.css')}}">
 
-     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if(isset($ogMeta))
     <x-blog.og-tags
