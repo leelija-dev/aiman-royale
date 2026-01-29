@@ -127,7 +127,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mt-6 text-center">
+    <p class="text-sm text-gray-600">
+        Don’t have an account?
+        <a href="{{ route('page.register') }}" 
+           class="text-purple-600 font-medium hover:text-purple-500">
+            Create one
+        </a>
+    </p>
+</div>
+
+                    
                 </div>
+                
+
             </div>
 
            
