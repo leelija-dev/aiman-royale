@@ -227,7 +227,7 @@
 <div id="mobile-sidebar" class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[400px]">
     <div class="flex items-center justify-between p-6 border-b">
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-blue-700 rounded-sm"></div>
+            <img class="h-[50px] w-auto" src="{{asset('web/images/company-logo/aiman-royal-logo.webp')}}" alt="">
             <span class="text-xl font-semibold">Aiman</span>
         </div>
         <button id="close-sidebar-btn" class="text-gray-700 hover:text-black">
@@ -545,7 +545,7 @@
                         <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                                <img src="{{asset('web/images/product-images/light-pink-m-2_49_11zon.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -562,7 +562,7 @@
                             <!-- Content -->
                             <div class="p-4 space-y-1">
                                 <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Womens Denim Jacket
+                                    Light Pink Salwar 
                                 </h3>
 
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -582,7 +582,7 @@
                         <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                                <img src="{{asset('web/images/product-images/gray-lahenga-3_40_11zon.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -599,7 +599,7 @@
                             <!-- Content -->
                             <div class="p-4 space-y-1">
                                 <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Womens Denim Jacket
+                                    Gray Lahenga 
                                 </h3>
 
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -619,7 +619,7 @@
                         <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                                <img src="{{asset('web/images/product-images/red-plazo-3_89_11zon.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -636,7 +636,7 @@
                             <!-- Content -->
                             <div class="p-4 space-y-1">
                                 <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Womens Denim Jacket
+                                    Red Plazo 
                                 </h3>
 
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -656,7 +656,7 @@
                         <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
+                                <img src="{{asset('web/images/product-images/short-plazo-1_99_11zon.webp')}}" alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center">
 
 
 
@@ -673,7 +673,7 @@
                             <!-- Content -->
                             <div class="p-4 space-y-1">
                                 <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Womens Denim Jacket
+                                    Short Plazo 
                                 </h3>
 
                                 <div class="flex items-center gap-2 text-sm text-gray-600">

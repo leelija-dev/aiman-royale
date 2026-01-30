@@ -432,7 +432,7 @@
                             class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="./assets/images/Home-image/pic-21.avif"
+                                    src="{{asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp')}}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -460,7 +460,7 @@
                             class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="./assets/images/Home-image/pic-22.avif"
+                                    src="{{asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp')}}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -488,7 +488,7 @@
                             class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="./assets/images/Home-image/pic-23.avif"
+                                     src="{{asset('web/images/product-images/red-plazo-1_87_11zon.webp')}}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -516,7 +516,7 @@
                             class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="./assets/images/Home-image/pic-24.avif"
+                                     src="{{asset('web/images/product-images/purple-plazo-4_84_11zon.webp')}}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -544,7 +544,7 @@
                             class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="./assets/images/Home-image/pic-25.avif"
+                                     src="{{asset('web/images/product-images/short-plazo-2_100_11zon.webp')}}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -567,34 +567,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="item flex justify-center items-center">
-                        <div
-                            class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img
-                                    src="./assets/images/Home-image/pic-26.avif"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span
-                                            class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div
-                                        class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
 
                     <!-- Add more products... -->
                 </div>
@@ -1061,7 +1034,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-22.avif"
+                         src="{{asset('web/images/product-images/short-plazo-2_100_11zon.webp')}}"
                             alt="Silver Lehenga"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1106,7 +1079,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
+                           Red Plazo 
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -1132,7 +1105,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-23.avif"
+                           src="{{asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp')}}"
                             alt="Silver Lehenga"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1177,7 +1150,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
+                            Light Pink Plazo 
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -1203,7 +1176,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-24.avif"
+                            src="{{asset('web/images/product-images/cherry-plazo-3_1_11zon.webp')}}"
                             alt="Silver Lehenga"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1248,7 +1221,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
+                            Cherry Plazo Light
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -1274,7 +1247,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-25.avif"
+                             src="{{asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp')}}"
                             alt="Silver Lehenga"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1319,7 +1292,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
+                            Cherry Plazo 
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
