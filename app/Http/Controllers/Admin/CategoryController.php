@@ -95,44 +95,78 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-
-
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
-            print_r($data);
-              if ($request->hasFile('image')) {
+            
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
 
-            $image = $request->file('image');
+                // CREATE FOLDER IF NOT EXISTS
+                $path = public_path('uploads/category');
+                
+                // Ensure directory exists with proper permissions
+                if (!File::exists($path)) {
+                    try {
+                        File::makeDirectory($path, 0775, true, true);
+                        
+                        // Set ownership if possible (for Linux servers)
+                        if (function_exists('chown')) {
+                            @chown($path, 'www-data');
+                            @chgrp($path, 'www-data');
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Failed to create upload directory: ' . $e->getMessage());
+                        throw new \Exception('Unable to create upload directory. Please check server permissions.');
+                    }
+                }
 
-            // CREATE FOLDER IF NOT EXISTS
-            $path = public_path('uploads/category');
+                // Check if directory is writable
+                if (!is_writable($path)) {
+                    Log::error('Upload directory is not writable: ' . $path);
+                    throw new \Exception('Upload directory is not writable. Please check server permissions.');
+                }
 
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0777, true, true);
+                // CREATE UNIQUE NAME
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+
+                // MOVE FILE with error handling
+                try {
+                    $image->move($path, $filename);
+                    Log::info('File uploaded successfully: ' . $filename);
+                } catch (\Exception $e) {
+                    Log::error('Failed to move uploaded file: ' . $e->getMessage());
+                    throw new \Exception('Failed to save uploaded file. Please check server permissions and disk space.');
+                }
+
+                $data['image'] = $filename;
             }
 
-            // CREATE UNIQUE NAME
-            $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-dd($filename);
-            // MOVE FILE
-            $image->move($path, $filename);
-
-            $data['image'] = $filename;
-        }
-
-            Category::create($data);
+            // Create category with error handling
+            try {
+                $category = Category::create($data);
+                Log::info('Category created successfully with ID: ' . $category->id);
+            } catch (\Exception $e) {
+                Log::error('Failed to create category in database: ' . $e->getMessage());
+                throw new \Exception('Failed to save category to database: ' . $e->getMessage());
+            }
 
             return redirect()->route('admin.categories.index')
                 ->with('success', 'Product category created successfully.');
+                
         } catch (\Exception $e) {
             Log::error('Error creating product category', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'request_data' => $request->all(),
+                'upload_path' => public_path('uploads/category'),
+                'directory_exists' => File::exists(public_path('uploads/category')),
+                'directory_writable' => is_writable(public_path('uploads/category')) ? 'Yes' : 'No'
             ]);
 
             return back()->withInput()
-                ->with('error', 'An error occurred while creating the product category.');
+                ->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
