@@ -100,6 +100,7 @@ class CategoryController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
+            print_r($data);
               if ($request->hasFile('image')) {
 
             $image = $request->file('image');
@@ -113,7 +114,7 @@ class CategoryController extends Controller
 
             // CREATE UNIQUE NAME
             $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-
+dd($filename);
             // MOVE FILE
             $image->move($path, $filename);
 
