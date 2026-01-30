@@ -15,7 +15,8 @@ class OccasionController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        $products = Product::where('occasion_id', $occasion->id)
+            // dd($occasion);
+        $products = Product::where('ocassion_id', $occasion->id)
             ->where('is_active', 1)
             ->with(['images' => function($query) {
                 $query->select('product_id', 'image');

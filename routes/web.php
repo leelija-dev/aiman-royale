@@ -42,6 +42,11 @@ Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categ
 // Occasion Routes
 Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
+// Test route
+Route::get('/test-occasion', function() {
+    return 'Test route is working!';
+});
+
 Route::get('/single-product/{id}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
 Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 Route::view('/login', 'web.login')->name('page.login');
