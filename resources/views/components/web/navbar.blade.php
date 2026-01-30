@@ -478,36 +478,46 @@
                                 @if(isset($occasions) && count($occasions) > 0)
                                     @foreach($occasions->take(4) as $occasion)
                                         <div class=" flex flex-col gap-2">
-                                            <div class="overflow-hidden rounded-md  w-full">
-                                                <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                                            </div>
-                                            <p class="text-[1.2rem] font-bold text-gray-700 text-center">{{ $occasion->name }}</p>
+                                            <a href="{{ route('occasion.show', $occasion->slug) }}" class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                                <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="{{ $occasion->name }}">
+                                            </a>
+                                            <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                                <a href="{{ route('occasion.show', $occasion->slug) }}" class="hover:text-black transition-colors">{{ $occasion->name }}</a>
+                                            </p>
                                         </div>
                                     @endforeach
                                 @else
                                     <div class=" flex flex-col gap-2">
-                                        <div class="overflow-hidden rounded-md  w-full">
-                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                                        </div>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Wedding</p>
+                                        <a href="#" class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Wedding">
+                                        </a>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                            <a href="#" class="hover:text-black transition-colors">Wedding</a>
+                                        </p>
                                     </div>
                                     <div class=" flex flex-col gap-2">
-                                        <div class="overflow-hidden rounded-md  w-full">
-                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                                        </div>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Party</p>
+                                        <a href="#" class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Party">
+                                        </a>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                            <a href="#" class="hover:text-black transition-colors">Party</a>
+                                        </p>
                                     </div>
                                     <div class=" flex flex-col gap-2">
-                                        <div class="overflow-hidden rounded-md  w-full">
-                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                                        </div>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Festival</p>
+                                        <a href="#" class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Festival">
+                                        </a>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                            <a href="#" class="hover:text-black transition-colors">Festival</a>
+                                        </p>
                                     </div>
                                     <div class=" flex flex-col gap-2">
-                                        <div class="overflow-hidden rounded-md  w-full">
-                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-                                        </div>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Casual</p>
+                                        <a href="#" class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="Casual">
+                                        </a>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                            <a href="#" class="hover:text-black transition-colors">Casual</a>
+                                        </p>
                                     </div>
                                 @endif
                                 <!-- Product items here -->
