@@ -166,7 +166,7 @@
                   <div class="flex gap-4">
                     <div class="w-20 h-20 bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">
                       @if($cart->image)
-                        <img src="{{ asset('uploads/products/' . $cart->image) }}" alt="{{ $cart->name }}" class="w-full h-full object-cover">
+                        <img src="{{ asset($cart->image) }}" alt="{{ $cart->name }}" class="w-full h-full object-cover">
                       @endif
                     </div>
                     <div class="flex-1">
