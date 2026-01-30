@@ -23,9 +23,9 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($products as $product)
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                        <div class="aspect-square bg-gray-200 relative overflow-hidden">
+                        <a href="{{ route('page.single-product', $product->id) }}" class="block aspect-square bg-gray-200 relative overflow-hidden">
                             @if($product->images->first())
-                                <img src="{{ asset('uploads/products/' . $product->images->first()->image) }}" 
+                                <img src="{{ asset($product->images->first()->image) }}" 
                                      alt="{{ $product->name }}" 
                                      class="w-full h-full object-cover">
                             @else
@@ -33,9 +33,13 @@
                                     <span class="text-gray-500">No Image</span>
                                 </div>
                             @endif
-                        </div>
+                        </a>
                         <div class="p-4">
-                            <h3 class="font-semibold text-gray-800 mb-2">{{ $product->name }}</h3>
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <a href="{{ route('page.single-product', $product->id) }}" class="hover:text-black transition-colors">
+                                    {{ $product->name }}
+                                </a>
+                            </h3>
                             <div class="flex items-center justify-between">
                                 <div>
                                     @if($product->discount_price && $product->discount_price < $product->price)

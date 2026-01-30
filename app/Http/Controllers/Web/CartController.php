@@ -17,7 +17,7 @@ class CartController extends Controller
         $userId = Auth::id();
         $sessionId = session()->getId();
 
-        $cartItems = Cart::with(['product', 'variant'])
+        $cartItems = Cart::with(['product.images', 'variant'])
             ->where(function ($query) use ($userId, $sessionId) {
                 if ($userId) {
                     $query->where('user_id', $userId);
