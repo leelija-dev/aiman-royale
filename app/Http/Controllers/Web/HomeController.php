@@ -112,7 +112,7 @@ class HomeController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
-        dd($product);
+        // dd($product);
         return view('web.single-product', compact('product'));
     }
 }
