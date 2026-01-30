@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\SingleProductController;
+use App\Http\Controllers\Web\OccasionController;
 
 
 // use App\Http\Controllers\Web\PageController;
@@ -37,6 +38,9 @@ Route::get('/', [HomeController::class, 'home'])->name('page.index');
 
 // Category Routes
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
+
+// Occasion Routes
+Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
 Route::get('/single-product/{id}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
 Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');

@@ -43,7 +43,7 @@ class ProductController extends Controller
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no',
             'category_id' => 'required|exists:categories,id',
-            'occasion_id' => 'nullable|exists:occasions,id',
+            'occasion_id' => 'nullable|exists:ocassions,id',
             'name' => 'required|string|max:200',
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:100',
@@ -113,7 +113,7 @@ class ProductController extends Controller
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,'.$id,
             'category_id' => 'required|exists:categories,id',
-            'occasion_id' => 'nullable|exists:occasions,id',
+            'occasion_id' => 'nullable|exists:ocassions,id',
             'name' => 'required|string|max:200',
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:100',

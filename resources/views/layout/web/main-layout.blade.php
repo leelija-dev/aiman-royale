@@ -87,7 +87,7 @@
 </head>
 
 <body class="overflow-x-hidden ">
-    <x-web.navbar />
+    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
 
     <main class="">
         @yield('content')

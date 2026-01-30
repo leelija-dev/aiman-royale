@@ -115,7 +115,6 @@
         
     }
 </style>
-
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
     <!-- Top Bar: Special Offer + Product Title (hidden on small screens for product title) -->
     <div class="text-sm text-gray-600 px-6 py-2 border-b">
@@ -260,9 +259,17 @@
                             Style <i class="fa-solid fa-angle-right"></i>
                         </div>
                         <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            @if(isset($categories) && count($categories) > 0)
+                                @foreach($categories->take(5) as $category)
+                                    <li class="menu-item mb-1">
+                                        <a href="{{ route('category.show', $category->slug) }}" class="menu-link">{{ $category->name }}</a>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Traditional</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Modern</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Fusion</a></li>
+                            @endif
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
@@ -270,9 +277,18 @@
                             Occasion <i class="fa-solid fa-angle-right"></i>
                         </div>
                         <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            @if(isset($occasions) && count($occasions) > 0)
+                           
+                                @foreach($occasions->take(5) as $occasion)
+                                    <li class="menu-item mb-1">
+                                        <a href="{{ route('occasion.show', $occasion->slug) }}" class="menu-link">{{ $occasion->name }}</a>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Wedding</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Party</a></li>
+                                <li class="menu-item mb-1"><a href="#" class="menu-link">Festival</a></li>
+                            @endif
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
@@ -407,20 +423,32 @@
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
                             <div>
                                 <ul class="px-0">
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    @if(isset($categories) && count($categories) > 0)
+                                        @foreach($categories->take(5) as $category)
+                                            <li class="mb-4 text-[1.3rem]">{{ $category->name }}</li>
+                                        @endforeach
+                                    @else
+                                        <li class="mb-4 text-[1.3rem]">Salwar Kameez</li>
+                                        <li class="mb-4 text-[1.3rem]">Lehengas</li>
+                                        <li class="mb-4 text-[1.3rem]">Sarees</li>
+                                        <li class="mb-4 text-[1.3rem]">Kurtis</li>
+                                        <li class="mb-4 text-[1.3rem]">Gowns</li>
+                                    @endif
                                 </ul>
                             </div>
                             <div>
                                 <ul class="px-0">
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
-                                    <li class="mb-4 text-[1.3rem]">Red Saree</li>
+                                    @if(isset($categories) && count($categories) > 5)
+                                        @foreach($categories->slice(5, 5) as $category)
+                                            <li class="mb-4 text-[1.3rem]">{{ $category->name }}</li>
+                                        @endforeach
+                                    @else
+                                        <li class="mb-4 text-[1.3rem]">Anarkali</li>
+                                        <li class="mb-4 text-[1.3rem]">Patiala</li>
+                                        <li class="mb-4 text-[1.3rem]">Churidar</li>
+                                        <li class="mb-4 text-[1.3rem]">Palazzo</li>
+                                        <li class="mb-4 text-[1.3rem]">Sharara</li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -428,7 +456,13 @@
                             <div class="overflow-hidden rounded-md max-h-[400px] w-full relative">
                                 <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
                                 <div class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
-                                    <p class="text-[2rem] font-bold text-white text-center">Orlieve Striv</p>
+                                    <p class="text-[2rem] font-bold text-white text-center">
+                                        @if(isset($categories) && count($categories) > 0)
+                                            {{ $categories->first()->name ?? 'Styles' }}
+                                        @else
+                                            Styles
+                                        @endif
+                                    </p>
                                     <button class="px-6 py-2 text-[1.2rem] font-bold bg-white">Shop Now</button>
                                 </div>
                             </div>
@@ -441,37 +475,54 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
                             <div class="w-full xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
-                                <div class=" flex flex-col gap-2">
-                                    <div class="overflow-hidden rounded-md  w-full">
-                                        <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                @if(isset($occasions) && count($occasions) > 0)
+                                    @foreach($occasions->take(4) as $occasion)
+                                        <div class=" flex flex-col gap-2">
+                                            <div class="overflow-hidden rounded-md  w-full">
+                                                <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                            </div>
+                                            <p class="text-[1.2rem] font-bold text-gray-700 text-center">{{ $occasion->name }}</p>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class=" flex flex-col gap-2">
+                                        <div class="overflow-hidden rounded-md  w-full">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                        </div>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Wedding</p>
                                     </div>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">Lahenga Pink</p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <div class="overflow-hidden rounded-md  w-full">
-                                        <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                    <div class=" flex flex-col gap-2">
+                                        <div class="overflow-hidden rounded-md  w-full">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                        </div>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Party</p>
                                     </div>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">Lahenga Pink</p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <div class="overflow-hidden rounded-md  w-full">
-                                        <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                    <div class=" flex flex-col gap-2">
+                                        <div class="overflow-hidden rounded-md  w-full">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                        </div>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Festival</p>
                                     </div>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">Lahenga Pink</p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <div class="overflow-hidden rounded-md  w-full">
-                                        <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                    <div class=" flex flex-col gap-2">
+                                        <div class="overflow-hidden rounded-md  w-full">
+                                            <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                                        </div>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">Casual</p>
                                     </div>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">Lahenga Pink</p>
-                                </div>
+                                @endif
                                 <!-- Product items here -->
                             </div>
                             <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                                 <div class="overflow-hidden rounded-md xll:max-h-[500px] max-h-[400px] w-full respon-wrap-img">
                                     <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
                                 </div>
-                                <p class="text-[2rem] font-bold text-gray-700 text-center">Orlieve Striv</p>
+                                <p class="text-[2rem] font-bold text-gray-700 text-center">
+                                    @if(isset($occasions) && count($occasions) > 0)
+                                        {{ $occasions->first()->name ?? 'Occasions' }}
+                                    @else
+                                        Occasions
+                                    @endif
+                                </p>
                             </div>
                         </div>
                         <button class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show More</button>

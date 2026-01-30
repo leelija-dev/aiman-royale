@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Occasion;
 
 class CategoryController extends Controller
 {
@@ -28,9 +29,9 @@ class CategoryController extends Controller
             ->select('products.*')
             ->latest()
             ->paginate(12);
-        // dd($products);
+        
+        $occasions = Occasion::where('is_active', 1)->get();
 
-
-        return view('web.category_product', compact('category', 'products'));
+        return view('web.category_product', compact('category', 'products', 'occasions'));
     }
 }

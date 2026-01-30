@@ -15,10 +15,10 @@ class OccasionRequest extends FormRequest
     {
         $id = $this->route('occasion')?->id ?? null;
         return [
-            'name' => ['required', 'string', 'max:100','unique:occasions,name,' . $id],
-            'slug' => ['required', 'string', 'max:120', 'unique:occasions,slug,' . $id],
+            'name' => ['required', 'string', 'max:100','unique:ocassions,name,' . $id],
+            'slug' => ['required', 'string', 'max:120', 'unique:ocassions,slug,' . $id],
             'description' => ['nullable', 'string'],
-            'parent_id' => ['nullable', 'exists:occasions,id'],
+            'parent_id' => ['nullable', 'exists:ocassions,id'],
             'is_active' => ['boolean'],
         ];
     }

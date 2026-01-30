@@ -30,8 +30,9 @@ class CheckoutController extends Controller
     )
     ->get();
 
+    $occasions = \App\Models\Occasion::active()->get();
 
-        return view('web.checkout', compact('carts'));
+        return view('web.checkout', compact('carts', 'occasions'));
     }
 
     public function placeOrder(Request $request){

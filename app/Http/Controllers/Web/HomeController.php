@@ -50,10 +50,11 @@ class HomeController extends Controller
         // dd($products);
 
         $categories = Category::withCount('products')->get();
+        $occasions = \App\Models\Occasion::active()->get();
 
         $testimonials = [];
 
-        return view('web.home', compact('data', 'testimonials', 'categories', 'products'));
+        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions'));
     }
 
     public function ShowAllProduct()
