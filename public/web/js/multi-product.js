@@ -1,258 +1,282 @@
+// ============================================================================
+// MULTI-PRODUCT PAGE – FILTERS, SORT, SIDEBAR, ACCORDION
+// ============================================================================
+
 document.addEventListener("DOMContentLoaded", function () {
-  const filterButton = document.querySelector("#open-filter");
-  const sidebar = document.getElementById("filter-sidebar");
-  const closeButton = document.getElementById("close-filter");
-  const overlay = document.getElementById("filter-overlay");
 
-  // Only apply mobile behavior if screen < 991px
-  function isMobile() {
-    return window.innerWidth < 991;
-  }
+    // ──────────────────────────────────────────────
+    //  Mobile Filter Sidebar Controls
+    // ──────────────────────────────────────────────
+    const filterButton = document.querySelector("#open-filter");
+    const sidebar      = document.getElementById("filter-sidebar");
+    const overlay      = document.getElementById("filter-overlay");
+    const clearButton  = document.querySelector(".text-blue-600.hover\\:underline"); // "Clear all"
 
-  function openSidebar() {
-    if (!isMobile()) return;
-
-    sidebar.classList.remove("translate-x-[-150%]");
-    sidebar.classList.add("translate-x-0");
-    overlay.classList.remove("hidden");
-    document.body.style.overflow = "hidden"; // prevent background scroll
-  }
-
-  function closeSidebar() {
-    if (!isMobile()) return;
-
-    sidebar.classList.remove("translate-x-0");
-    sidebar.classList.add("translate-x-[-150%]");
-    overlay.classList.add("hidden");
-    document.body.style.overflow = "";
-  }
-
-  // Initial setup: hide sidebar off-screen on mobile
-  if (isMobile()) {
-    sidebar.classList.add(
-      "transition-transform",
-      "duration-300",
-      "ease-in-out",
-      "fixed",
-      "z-50",
-      "h-full",
-      "overflow-y-auto"
-    );
-    sidebar.classList.remove("relative");
-    sidebar.classList.add("translate-x-[-150%]"); // start hidden
-  }
-
-  // Event Listeners
-  if (filterButton) {
-    filterButton.addEventListener("click", openSidebar);
-  }
-
-  if (closeButton) {
-    closeButton.addEventListener("click", closeSidebar);
-  }
-
-  if (overlay) {
-    overlay.addEventListener("click", closeSidebar);
-  }
-
-  // Handle window resize
-  window.addEventListener("resize", function () {
-    if (isMobile()) {
-      // Ensure correct state on mobile
-      sidebar.classList.add("fixed", "translate-x-[-150%]");
-      sidebar.classList.remove("relative");
-    } else {
-      // On desktop: restore normal layout
-      sidebar.classList.remove("fixed", "translate-x-[-150%]", "translate-x-0");
-      sidebar.classList.add("relative");
-      overlay.classList.add("hidden");
-      document.body.style.overflow = "";
+    function isMobile() {
+        return window.innerWidth < 991;
     }
-  });
-});
 
-// accordian code
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(function () {
-    const e = document.querySelectorAll(".accordion-wrapper");
-    let t;
-    function o(e, t) {
-      if (t) {
-        const t = e.scrollHeight;
-        (e.style.maxHeight = "0px"),
-          (e.style.paddingTop = "0px"),
-          (e.style.paddingBottom = "0px"),
-          requestAnimationFrame(() => {
-            (e.style.maxHeight = t + 32 + "px"),
-              (e.style.paddingTop = "1rem"),
-              (e.style.paddingBottom = "1rem");
-          });
-      } else (e.style.maxHeight = "0px"), (e.style.paddingTop = "0px"), (e.style.paddingBottom = "0px");
+    function openSidebar() {
+        if (!isMobile()) return;
+        sidebar.classList.remove("translate-x-[-150%]");
+        sidebar.classList.add("translate-x-0");
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
     }
-    function n() {
-      e.forEach((e) => {
-        if (e.classList.contains("active")) {
-          o(e.querySelector(".accordion-content-block"), !0);
+
+    function closeSidebar() {
+        if (!isMobile()) return;
+        sidebar.classList.remove("translate-x-0");
+        sidebar.classList.add("translate-x-[-150%]");
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+    }
+
+    if (filterButton) filterButton.addEventListener("click", openSidebar);
+    if (overlay)      overlay.addEventListener("click", closeSidebar);
+
+    // Resize handling for sidebar behavior
+    window.addEventListener("resize", () => {
+        if (isMobile()) {
+            sidebar.classList.add("fixed", "translate-x-[-150%]");
+            sidebar.classList.remove("relative");
+        } else {
+            sidebar.classList.remove("fixed", "translate-x-[-150%]", "translate-x-0");
+            sidebar.classList.add("relative", "lgg:sticky");
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "";
         }
-      });
-    }
-    function i(t) {
-      const n = t.querySelector(".flex.justify-between.items-center"),
-        i = t.querySelector(".accordion-content-block"),
-        s = t.querySelector(".accordion-chevron"),
-        r = t.querySelector(".line-border-block");
-      n.addEventListener("click", function () {
-        const n = t.classList.contains("active");
-        var l;
-        (l = t),
-          e.forEach((e) => {
-            if (e !== l && e.classList.contains("active")) {
-              const t = e.querySelector(".accordion-content-block"),
-                n = e.querySelector(".accordion-chevron"),
-                i = e.querySelector(".line-border-block");
-              o(t, !1),
-                (t.style.opacity = "0"),
-                (i.style.width = "0"),
-                (n.style.transform = "rotate(90deg)"),
-                e.classList.remove("active");
-            }
-          }),
-          n
-            ? (o(i, !1),
-              (i.style.opacity = "0"),
-              (r.style.width = "0"),
-              (s.style.transform = "rotate(90deg)"),
-              t.classList.remove("active"))
-            : ((i.style.opacity = "1"),
-              (r.style.width = "100%"),
-              (s.style.transform = "rotate(-90deg)"),
-              t.classList.add("active"),
-              o(i, !0),
-              setTimeout(() => {
-                o(i, !0);
-              }, 50));
-      });
-    }
-    e.forEach((e, t) => {
-      const n = e.querySelector(".accordion-content-block"),
-        s = e.querySelector(".line-border-block");
-      (n.style.transition =
-        "max-height 0.4s ease, opacity 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease"),
-        (n.style.overflow = "hidden"),
-        (s.style.transition = "width 0.3s ease-in-out"),
-        0 === t
-          ? ((n.style.opacity = "1"),
-            (n.style.paddingTop = "1rem"),
-            (n.style.paddingBottom = "1rem"),
-            (s.style.width = "100%"),
-            (e.querySelector(".accordion-chevron").style.transform =
-              "rotate(-90deg)"),
-            e.classList.add("active"),
-            o(n, !0),
-            setTimeout(() => {
-              o(n, !0);
-            }, 50))
-          : (o(n, !1),
-            (n.style.opacity = "0"),
-            (n.style.paddingTop = "0px"),
-            (n.style.paddingBottom = "0px"),
-            (s.style.width = "0")),
-        i(e);
-    }),
-      window.addEventListener("resize", function () {
-        clearTimeout(t),
-          (t = setTimeout(function () {
-            n();
-          }, 250));
-      }),
-      window.addEventListener("scroll", function () {
-        clearTimeout(t),
-          (t = setTimeout(function () {
-            n();
-          }, 100));
-      }),
-      setTimeout(() => {
-        n();
-      }, 50);
-  }, 2000);
-});
-
-// sort dropdown code
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("sort-button");
-  const menu = document.getElementById("sort-menu");
-  const label = document.getElementById("sort-label");
-  const chevron = document.getElementById("chevron-icon");
-  const options = document.querySelectorAll(".sort-option");
-
-  // Default label
-  let currentLabel = "Sort by";
-  let currentValue = "";
-
-  // Set initial active state (Date newest first as example)
-  const initialOption = menu.querySelector(".sort-option.active");
-  if (initialOption) {
-    currentLabel = initialOption.querySelector("span").textContent.trim();
-    currentValue = initialOption.dataset.value;
-    label.textContent = currentLabel;
-  }
-
-  // Toggle dropdown
-  button.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isOpen = !menu.classList.contains("hidden");
-    menu.classList.toggle("hidden");
-    chevron.classList.toggle("rotate-180", !isOpen);
-    button.setAttribute("aria-expanded", !isOpen);
-  });
-
-  // Select option
-  options.forEach((option) => {
-    option.addEventListener("click", () => {
-      // Update active state
-      menu
-        .querySelectorAll(".sort-option")
-        .forEach((opt) => opt.classList.remove("active"));
-      option.classList.add("active");
-
-      // Update checkmarks
-      menu
-        .querySelectorAll(".checkmark")
-        .forEach((mark) => mark.classList.add("opacity-0"));
-      option.querySelector(".checkmark").classList.remove("opacity-0");
-
-      // Update button label
-      currentLabel = option.querySelector("span").textContent.trim();
-      currentValue = option.dataset.value;
-      label.textContent = currentLabel;
-
-      // Close menu
-      menu.classList.add("hidden");
-      chevron.classList.remove("rotate-180");
-      button.setAttribute("aria-expanded", "false");
-
-      // Here you can trigger your actual sorting logic
-      // console.log('Sort by:', currentValue);
-      // Example: sortData(currentValue);
     });
-  });
 
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!button.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.add("hidden");
-      chevron.classList.remove("rotate-180");
-      button.setAttribute("aria-expanded", "false");
-    }
-  });
+    // ──────────────────────────────────────────────
+    //  Helper: Parse current URL query params (supports arrays)
+    // ──────────────────────────────────────────────
+    function getCurrentQueryParams() {
+        const params = {};
+        const search = window.location.search.substring(1);
+        if (!search) return params;
 
-  // Keyboard accessibility (ESC to close)
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !menu.classList.contains("hidden")) {
-      menu.classList.add("hidden");
-      chevron.classList.remove("rotate-180");
-      button.setAttribute("aria-expanded", "false");
-      button.focus();
+        search.split('&').forEach(pair => {
+            const [key, val] = pair.split('=');
+            if (!key) return;
+            const decodedKey   = decodeURIComponent(key);
+            const decodedValue = decodeURIComponent(val || '');
+
+            if (decodedKey.endsWith('[]')) {
+                const cleanKey = decodedKey.replace('[]', '');
+                if (!params[cleanKey]) params[cleanKey] = [];
+                params[cleanKey].push(decodedValue);
+            } else {
+                params[decodedKey] = decodedValue;
+            }
+        });
+        return params;
     }
-  });
+
+    // ──────────────────────────────────────────────
+    //  Build URL that combines current filters + sort + page
+    // ──────────────────────────────────────────────
+    function buildFilterURL() {
+        const currentParams = getCurrentQueryParams();
+        const form         = document.getElementById("filter-form");
+        const sortOption   = document.querySelector('.sort-option.active');
+        const sortValue    = sortOption?.dataset.value || currentParams.sort || '';
+
+        const finalParams = new URLSearchParams();
+
+        // 1. Add all checked filters from form
+        if (form) {
+            const formData = new FormData(form);
+            for (let [key, value] of formData.entries()) {
+                if (value) {
+                    finalParams.append(key, value);
+                }
+            }
+        }
+
+        // 2. Keep / set sort
+        if (sortValue) {
+            finalParams.set('sort', sortValue);
+        }
+
+        // 3. Preserve page (if you add pagination later)
+        if (currentParams.page) {
+            finalParams.set('page', currentParams.page);
+        }
+
+        const query = finalParams.toString();
+        return query ? `${window.location.pathname}?${query}` : window.location.pathname;
+    }
+
+    // ──────────────────────────────────────────────
+    //  Apply filters → page reload with correct params
+    // ──────────────────────────────────────────────
+    function applyFilters() {
+        window.location.href = buildFilterURL();
+    }
+
+    // Debounced filter apply (prevents too many reloads when clicking fast)
+    let filterTimeout;
+    document.addEventListener('change', e => {
+        if (e.target.classList.contains('filter-checkbox')) {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(applyFilters, 220);
+        }
+    });
+
+    // ──────────────────────────────────────────────
+    //  Sort Dropdown Logic
+    // ──────────────────────────────────────────────
+    const sortButton = document.getElementById("sort-button");
+    const sortMenu   = document.getElementById("sort-menu");
+    const sortLabel  = document.getElementById("sort-label");
+    const chevron    = document.getElementById("chevron-icon");
+    const sortOptions = document.querySelectorAll(".sort-option");
+
+    // Set initial label from active option (if any)
+    const initialActive = document.querySelector(".sort-option.active");
+    if (initialActive) {
+        sortLabel.textContent = initialActive.querySelector("span").textContent.trim();
+    }
+
+    // Toggle dropdown
+    if (sortButton) {
+        sortButton.addEventListener("click", e => {
+            e.stopPropagation();
+            const willBeOpen = sortMenu.classList.toggle("hidden");
+            chevron.classList.toggle("rotate-180", !willBeOpen);
+            sortButton.setAttribute("aria-expanded", !willBeOpen);
+        });
+    }
+
+    // Click on sort option
+    sortOptions.forEach(option => {
+        option.addEventListener("click", () => {
+            // Update active state
+            sortOptions.forEach(opt => opt.classList.remove("active"));
+            option.classList.add("active");
+
+            // Update checkmarks
+            document.querySelectorAll(".checkmark").forEach(m => m.classList.add("opacity-0"));
+            option.querySelector(".checkmark").classList.remove("opacity-0");
+
+            // Update button label
+            sortLabel.textContent = option.querySelector("span").textContent.trim();
+
+            // Close menu
+            sortMenu.classList.add("hidden");
+            chevron.classList.remove("rotate-180");
+            sortButton.setAttribute("aria-expanded", "false");
+
+            // Apply sort + keep existing filters
+            applyFilters();
+        });
+    });
+
+    // Close sort dropdown when clicking outside
+    document.addEventListener("click", e => {
+        if (!sortButton?.contains(e.target) && !sortMenu?.contains(e.target)) {
+            sortMenu.classList.add("hidden");
+            chevron.classList.remove("rotate-180");
+            sortButton?.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    // ESC key → close sort
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && !sortMenu.classList.contains("hidden")) {
+            sortMenu.classList.add("hidden");
+            chevron.classList.remove("rotate-180");
+            sortButton?.setAttribute("aria-expanded", "false");
+            sortButton?.focus();
+        }
+    });
+
+    // ──────────────────────────────────────────────
+    //  Accordion (your original logic – slightly cleaned)
+    // ──────────────────────────────────────────────
+    setTimeout(() => {
+        const accordions = document.querySelectorAll(".accordion-wrapper");
+
+        function toggleContent(content, open) {
+            if (open) {
+                const height = content.scrollHeight + 32;
+                content.style.maxHeight = height + "px";
+                content.style.paddingTop = "1rem";
+                content.style.paddingBottom = "1rem";
+            } else {
+                content.style.maxHeight = "0px";
+                content.style.paddingTop = "0px";
+                content.style.paddingBottom = "0px";
+            }
+        }
+
+        accordions.forEach((wrapper, index) => {
+            const header  = wrapper.querySelector(".flex.justify-between.items-center");
+            const content = wrapper.querySelector(".accordion-content-block");
+            const chevron = wrapper.querySelector(".accordion-chevron");
+            const border  = wrapper.querySelector(".line-border-block");
+
+            content.style.transition = "max-height 0.4s ease, padding-top 0.3s ease, padding-bottom 0.3s ease";
+            content.style.overflow   = "hidden";
+            border.style.transition  = "width 0.3s ease-in-out";
+
+            // First accordion open by default
+            if (index === 0) {
+                wrapper.classList.add("active");
+                content.style.opacity = "1";
+                border.style.width = "100%";
+                chevron.style.transform = "rotate(-90deg)";
+                toggleContent(content, true);
+            } else {
+                toggleContent(content, false);
+                content.style.opacity = "0";
+                border.style.width = "0";
+            }
+
+            header.addEventListener("click", () => {
+                const isActive = wrapper.classList.contains("active");
+
+                // Close others (accordion group behavior)
+                accordions.forEach(other => {
+                    if (other !== wrapper && other.classList.contains("active")) {
+                        const otherContent = other.querySelector(".accordion-content-block");
+                        const otherChevron = other.querySelector(".accordion-chevron");
+                        const otherBorder  = other.querySelector(".line-border-block");
+                        other.classList.remove("active");
+                        toggleContent(otherContent, false);
+                        otherContent.style.opacity = "0";
+                        otherBorder.style.width = "0";
+                        otherChevron.style.transform = "rotate(90deg)";
+                    }
+                });
+
+                if (isActive) {
+                    // Close this one
+                    wrapper.classList.remove("active");
+                    toggleContent(content, false);
+                    content.style.opacity = "0";
+                    border.style.width = "0";
+                    chevron.style.transform = "rotate(90deg)";
+                } else {
+                    // Open this one
+                    wrapper.classList.add("active");
+                    content.style.opacity = "1";
+                    border.style.width = "100%";
+                    chevron.style.transform = "rotate(-90deg)";
+                    toggleContent(content, true);
+                }
+            });
+        });
+    }, 300); // small delay to make sure DOM is ready
+
+    // Optional: Clear all filters button
+    if (clearButton) {
+        clearButton.addEventListener("click", e => {
+            e.preventDefault();
+            document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
+            window.location.href = window.location.pathname;
+        });
+    }
+
 });

@@ -203,7 +203,9 @@
       <div
         id="filter-sidebar"
         class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 z-[20003] transition-all duration-300 ease-in-out">
-        <div class="space-y-6 h-full overflow-auto px-2">
+        <form id="filter-form" method="GET" action="{{ route('page.multi-product') }}">
+          @csrf
+          <div class="space-y-6 h-full overflow-auto px-2">
           <!-- Header -->
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-gray-900">Filters</h2>
@@ -252,30 +254,16 @@
 
             <div class="accordion-content-block">
               <div class="space-y-2 text-sm mt-4">
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" checked class="accent-gray-800" />
-                  Tokyo Talkies <span class="text-gray-500">(206)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  Roadster <span class="text-gray-500">(26)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  Here&amp;Now <span class="text-gray-500">(706)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  High Star <span class="text-gray-500">(64)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" checked class="accent-gray-800" />
-                  Miss Chase <span class="text-gray-500">(16)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  Vovati <span class="text-gray-500">(20)</span>
-                </label>
+                @foreach($filterOptions['brands'] as $brand)
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" 
+                           name="brands[]" 
+                           value="{{ $brand }}" 
+                           class="accent-gray-800 filter-checkbox"
+                           @if(in_array($brand, request('brands', []))) checked @endif>
+                    {{ ucfirst($brand) }} <span class="text-gray-500">({{ DB::table('products')->where('brand', $brand)->where('is_active', 1)->count() }})</span>
+                  </label>
+                @endforeach
               </div>
 
               <button class="text-sm text-blue-600 hover:underline mt-3">
@@ -342,23 +330,17 @@
 
             <div class="accordion-content-block">
               <div class="space-y-2 text-sm mt-4">
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" checked class="accent-gray-800" />
-                  Blue <span class="text-gray-500">(206)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  Black <span class="text-gray-500">(206)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  White <span class="text-gray-500">(206)</span>
-                </label>
+                @foreach($filterOptions['colors'] as $color)
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" 
+                           name="colors[]" 
+                           value="{{ $color }}" 
+                           class="accent-gray-800 filter-checkbox"
+                           @if(in_array($color, request('colors', []))) checked @endif>
+                    {{ ucfirst($color) }} <span class="text-gray-500">({{ DB::table('product_variants')->where('color', $color)->count() }})</span>
+                  </label>
+                @endforeach
               </div>
-
-              <button class="text-sm text-blue-600 hover:underline mt-3">
-                + 40 more
-              </button>
             </div>
           </div>
 
@@ -384,33 +366,77 @@
             <div class="accordion-content-block">
               <div class="space-y-2 text-sm mt-4">
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  10% and above <span class="text-gray-500">(26)</span>
+                  <input type="checkbox" 
+                         name="discount_ranges[]" 
+                         value="10+" 
+                         class="accent-gray-800 filter-checkbox"
+                         @if(in_array('10+', request('discount_ranges', []))) checked @endif>
+                  10% and above <span class="text-gray-500">({{ DB::table('product_variants')->where('discount_price', '>', 0)->whereRaw('((price - discount_price) / price * 100) >= 10')->count() }})</span>
                 </label>
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  20% and above <span class="text-gray-500">(62)</span>
+                  <input type="checkbox" 
+                         name="discount_ranges[]" 
+                         value="20+" 
+                         class="accent-gray-800 filter-checkbox"
+                         @if(in_array('20+', request('discount_ranges', []))) checked @endif>
+                  20% and above <span class="text-gray-500">({{ DB::table('product_variants')->where('discount_price', '>', 0)->whereRaw('((price - discount_price) / price * 100) >= 20')->count() }})</span>
                 </label>
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  30% and above <span class="text-gray-500">(20)</span>
+                  <input type="checkbox" 
+                         name="discount_ranges[]" 
+                         value="30+" 
+                         class="accent-gray-800 filter-checkbox"
+                         @if(in_array('30+', request('discount_ranges', []))) checked @endif>
+                  30% and above <span class="text-gray-500">({{ DB::table('product_variants')->where('discount_price', '>', 0)->whereRaw('((price - discount_price) / price * 100) >= 30')->count() }})</span>
                 </label>
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  40% and above <span class="text-gray-500">(106)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" checked class="accent-gray-800" />
-                  50% and above <span class="text-gray-500">(32)</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  60% and above <span class="text-gray-500">(46)</span>
+                  <input type="checkbox" 
+                         name="discount_ranges[]" 
+                         value="50+" 
+                         class="accent-gray-800 filter-checkbox"
+                         @if(in_array('50+', request('discount_ranges', []))) checked @endif>
+                  50% and above <span class="text-gray-500">({{ DB::table('product_variants')->where('discount_price', '>', 0)->whereRaw('((price - discount_price) / price * 100) >= 50')->count() }})</span>
                 </label>
               </div>
             </div>
           </div>
+
+          <!-- ==================== Size Accordion ================= -->
+          <div class="accordion-wrapper">
+            <div class="flex justify-between items-center cursor-pointer">
+              <h3 class="font-semibold text-gray-900">Size</h3>
+              <svg
+                class="w-5 h-5 text-gray-600 accordion-chevron transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div class="line-border-block bg-gray-300 h-0.5 mt-3"></div>
+
+            <div class="accordion-content-block">
+              <div class="space-y-2 text-sm mt-4">
+                @foreach($filterOptions['sizes'] as $size)
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" 
+                           name="sizes[]" 
+                           value="{{ $size }}" 
+                           class="accent-gray-800 filter-checkbox"
+                           @if(in_array($size, request('sizes', []))) checked @endif>
+                    {{ strtoupper($size) }} <span class="text-gray-500">({{ DB::table('product_variants')->where('size', $size)->count() }})</span>
+                  </label>
+                @endforeach
+              </div>
+            </div>
+          </div>
         </div>
+        </form>
       </div>
       <div
         class="w-full grid xl:grid-cols-4 lg:grid-cols-3 lgg:grid-cols-2 smui:grid-cols-3 xxs:grid-cols-2 grid-cols-1 m gap-4">
@@ -421,8 +447,8 @@
           <!-- Image Wrapper -->
           <div class="relative rounded-xl overflow-hidden">
             <img
-              src="{{ asset('uploads/products/' . $product->variant_image) }}"
-              alt="Silver Lehenga"
+              src="{{ asset('uploads/products/' . ($product['images'][0] ?? 'default.jpg')) }}"
+              alt="{{ $product['name'] }}"
               class="w-full h-[340px] object-cover object-top object-center" />
 
             <!-- Badges -->
@@ -431,10 +457,12 @@
                 class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                 Trending
               </span>
+              @if($product['discount_price'] && $product['discount_price'] < $product['price'])
               <span
                 class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                -17%
+                -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
               </span>
+              @endif
             </div>
 
             <!-- Wishlist Heart Icon (Top Right) -->
@@ -467,20 +495,48 @@
           <!-- Content -->
           <div class="p-4 space-y-1">
             <h3 class="text-[15px] font-semibold text-gray-900">
-              {{ $product->name }}
+              {{ $product['name'] }}
             </h3>
 
             <div class="flex items-center gap-2 text-sm text-gray-600">
-              <span>Brand Name</span>
+              <span>{{ $product['brand'] ?? 'Brand Name' }}</span>
               <span class="flex items-center gap-1 text-gray-700">
                 <span class="text-sm font-medium">4.4</span>
               </span>
             </div>
 
             <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span class="text-lg font-bold text-gray-900">Rs. {{ $product->price_after_discount }}</span>
-              <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
+              @php
+              $firstVariant = reset($product['variants']);
+              $displayPrice = $firstVariant['price_after_discount'] ?? $firstVariant['price'] ?? $product['price'];
+              $originalPrice = $firstVariant['price'] ?? $product['price'];
+              @endphp
+              <span class="text-lg font-bold text-gray-900">Rs. {{ number_format($displayPrice, 2) }}</span>
+              @if($firstVariant['price_after_discount'] && $firstVariant['price_after_discount'] < $originalPrice)
+              <span class="text-sm text-gray-400 line-through">Rs. {{ number_format($originalPrice, 2) }}</span>
+              @endif
             </div>
+            
+            <!-- Variants Display -->
+            @if(count($product['variants']) > 1)
+            <div class="mt-3 space-y-2">
+              <div class="text-xs font-medium text-gray-600">Available Variants:</div>
+              <div class="flex flex-wrap gap-2">
+                @foreach($product['variants'] as $variant)
+                  <div class="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded">
+                    <span class="font-medium">{{ strtoupper($variant['color'] ?? '') }}</span>
+                    @if($variant['size'])
+                    <span class="text-gray-500">|</span>
+                    <span>{{ $variant['size'] }}</span>
+                    @endif
+                    <span class="text-gray-500">|</span>
+                    <span class="font-bold">Rs. {{ number_format($variant['price_after_discount'] ?? $variant['price'], 0) }}</span>
+                  </div>
+                @endforeach
+              </div>
+            </div>
+            @endif
+            
             <div class="lgg:hidden block">
               <button
                 class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">
