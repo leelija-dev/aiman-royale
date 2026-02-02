@@ -67,9 +67,13 @@ Route::fallback(function () { abort(404); });
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
 Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
 Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
 Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
+
+// Cashfree Webhook Route
+Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
 
 // Route::get('/career', [CareerController::class, 'index'])->name('page.career');
 // Route::get('/contact-us', [ContactController::class, 'index'])->name('page.contact');
