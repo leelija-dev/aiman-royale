@@ -82,4 +82,12 @@ class Occasion extends Model
         
         return $path->join(' > ');
     }
+
+    /**
+     * Get the products for the occasion.
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'ocassion_id');
+    }
 }
