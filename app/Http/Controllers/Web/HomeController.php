@@ -232,6 +232,7 @@ class HomeController extends Controller
 
     public function ShowSingleProduct($id)
     {
+        // dd($id);
         $product = Product::with([
             'variants' => function ($query) {
                 $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');

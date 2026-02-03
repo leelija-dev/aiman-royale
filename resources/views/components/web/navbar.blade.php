@@ -61,8 +61,6 @@
         transition: max-height 0.3s ease;
     }
 
-
-
     .menu-link {
         display: flex;
         justify-content: space-between;
@@ -71,7 +69,6 @@
         padding: 12px 16px;
         text-decoration: none;
         color: #374151;
-
         border-radius: 7px;
         margin: 8px;
         margin-bottom: 0 !important;
@@ -108,85 +105,661 @@
         display: block;
     }
 
+    /* ==================== NEW MOBILE SIDEBAR STYLES ==================== */
+    #mobile-sidebar {
+        background: linear-gradient(135deg, #ffffff 0%, #fef8f5 100%);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+        border-right: 1px solid rgba(212, 165, 116, 0.1);
+    }
+
+    #mobile-sidebar .border-b {
+        background: linear-gradient(135deg, #fef8f5 0%, #ffffff 100%);
+        border-bottom: 1px solid rgba(212, 165, 116, 0.1);
+    }
+
+    #mobile-sidebar .search-input {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(212, 165, 116, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    #mobile-sidebar .search-input:focus {
+        border-color: #d4a574;
+        box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        background: white;
+    }
+
+    #mobile-sidebar nav {
+        background: linear-gradient(135deg, #fff9f5 0%, #fef6f0 100%);
+    }
+
+    .menu-link {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 3px solid transparent;
+        margin: 4px 12px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .menu-link:hover {
+        background: white;
+        transform: translateX(5px);
+        border-left-color: #d4a574;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .menu-link i {
+        transition: transform 0.3s ease;
+    }
+
+    .menu-link:hover i {
+        transform: translateX(3px);
+        color: #d4a574;
+    }
+
+    .submenu .menu-link {
+        background: rgba(255, 255, 255, 0.8);
+        margin-left: 0px;
+        margin-right: 12px;
+        padding-left: 20px;
+    }
+
+    .submenu .submenu .menu-link {
+        margin-left: 0px;
+    }
+
+    .back-button {
+        background: linear-gradient(135deg, #ffffff 0%, #fef8f5 100%) !important;
+        color: #5d4037;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(212, 165, 116, 0.2) !important;
+        transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+        background: white !important;
+        padding-left: 20px;
+        color: #d4a574;
+    }
+
+    .back-button i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .back-button:hover i {
+        transform: translateX(-3px);
+    }
+
+    /* Mobile sidebar header */
+    #mobile-sidebar .p-6 {
+        position: relative;
+    }
+
+    #mobile-sidebar .p-6::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.3), transparent);
+    }
+
+    #close-sidebar-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(212, 165, 116, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    #close-sidebar-btn:hover {
+        background: rgba(212, 165, 116, 0.2);
+        transform: rotate(90deg);
+        color: #d4a574;
+    }
+
+    /* Scrollbar styling for mobile sidebar */
+    #mobile-sidebar nav::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #mobile-sidebar nav::-webkit-scrollbar-track {
+        background: rgba(212, 165, 116, 0.1);
+        border-radius: 10px;
+    }
+
+    #mobile-sidebar nav::-webkit-scrollbar-thumb {
+        background: rgba(212, 165, 116, 0.5);
+        border-radius: 10px;
+    }
+
+    #mobile-sidebar nav::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 165, 116, 0.7);
+    }
+
+    /* Category indicator */
+    .menu-item.has-submenu .menu-link::after {
+        content: '';
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background: rgba(212, 165, 116, 0.3);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .menu-item.has-submenu .menu-link:hover::after {
+        background: #d4a574;
+        transform: translateY(-50%) scale(1.2);
+    }
+
+    /* Active state */
+    .top-level-active .menu-link {
+        background: white;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.15);
+        border-left-color: #d4a574;
+    }
+
+    /* ==================== DESKTOP SEARCH DROPDOWN STYLES ==================== */
+    #search-dropdown {
+        position: fixed;
+        top: 136px;
+        left: 0;
+        right: 0;
+        /* background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 12px; */
+        margin-top: 10px;
+        z-index: 20005;
+        /* overflow: hidden; */
+        display: none;
+        animation: slideDown 0.3s ease-out;
+        /* max-height: 70vh; */
+        /* overflow-y: auto; */
+    }
+
+    #search-dropdown.active {
+        display: block;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-section {
+        padding: 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .search-section:last-child {
+        border-bottom: none;
+    }
+
+    .search-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .search-categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .search-category-item {
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .search-category-item:hover {
+        background: #f0f0f0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-trending {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .trending-tag {
+        padding: 8px 16px;
+        background: #f5f5f5;
+        border-radius: 20px;
+        font-size: 13px;
+        color: #666;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .trending-tag:hover {
+        background: #e0e0e0;
+        color: #333;
+    }
+
+    .search-products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .search-product-card {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .search-product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-color: #ddd;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .product-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+        line-height: 1.4;
+    }
+
+    .product-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .view-more {
+        display: block;
+        text-align: center;
+        padding: 12px;
+        color: #d4a574;
+        font-weight: 500;
+        text-decoration: none;
+        border-top: 1px solid #f0f0f0;
+        transition: all 0.2s ease;
+    }
+
+    .view-more:hover {
+        background: #f9f9f9;
+        color: #b8863c;
+    }
+
+    /* ==================== MOBILE SEARCH DROPDOWN STYLES ==================== */
+    #mobile-search-dropdown {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        z-index: 20006;
+        display: none;
+        flex-direction: column;
+    }
+
+    #mobile-search-dropdown.active {
+        display: flex;
+    }
+
+    .mobile-search-header {
+        padding: 15px;
+        background: white;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mobile-search-header input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .mobile-search-header button {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .mobile-search-results {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+    }
+
+    .mobile-search-section {
+        margin-bottom: 20px;
+    }
+
+    .mobile-search-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mobile-search-items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .mobile-search-item {
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: 1px solid #eee;
+    }
+
+    .mobile-search-item:hover {
+        background: #f0f0f0;
+    }
+
+    .mobile-search-item.product-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .mobile-search-item.product-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .mobile-search-item.product-item .product-details {
+        flex: 1;
+    }
+
+    .mobile-search-item.product-item .product-name {
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    .mobile-search-item.product-item .product-price {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .mobile-search-no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Search result highlighting */
+    .highlight {
+        background-color: #fffacd;
+        padding: 0 2px;
+        border-radius: 2px;
+    }
+
+    /* No results message */
+    .no-results {
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Loading indicator */
+    .search-loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+
+    .search-loading.active {
+        display: block;
+    }
+
+    /* Mobile loading indicator */
+    .mobile-search-loading {
+        display: none;
+        text-align: center;
+        padding: 30px;
+        color: #666;
+    }
+
+    .mobile-search-loading.active {
+        display: block;
+    }
+
+    /* Close search button */
+    .close-search {
+        position: absolute;
+        right: 45px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        display: none;
+        padding: 5px;
+        z-index: 10;
+    }
+
+    .close-search:hover {
+        color: #666;
+    }
+
+    /* Search input focus state */
+    .search-input:focus+.close-search,
+    .search-input:not(:placeholder-shown)+.close-search {
+        display: block;
+    }
+
     @media screen and (min-width: 1366px) and (max-width: 1600px) {
         .respon-wrap-img {
             max-height: 350px !important;
         }
+    }
 
+    /* Mobile sidebar animation */
+    #mobile-sidebar {
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #sidebar-overlay {
+        transition: opacity 0.3s ease;
+    }
+
+    /* Hide/Show based on screen size */
+    @media (max-width: 768px) {
+        #search-dropdown {
+            display: none !important;
+        }
+
+        .mobile-search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 8px;
+            z-index: 20005;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .mobile-search-suggestions.active {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-suggestion-item:hover {
+            background: #f9f9f9;
+            padding-left: 20px;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item i {
+            color: #999;
+            min-width: 16px;
+            text-align: center;
+        }
+    }
+
+    @media (min-width: 769px) {
+        #mobile-search-dropdown {
+            display: none !important;
+        }
+
+        .mobile-search-suggestions {
+            display: none !important;
+        }
     }
 </style>
+
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
     <!-- Top Bar: Special Offer + Product Title (hidden on small screens for product title) -->
-    <div class="text-sm text-gray-600  py-2 border-b">
-        <div class="xl:container mx-auto flex smx:flex-nowrap flex-wrap smx:justify-between justify-center items-center relative ">
-          <div class="lgg:block hidden">
-              <p>
-                Special offer get <span class="font-semibold">25% off</span>
-                <a href="#" class="underline ml-1">T&amp;C</a>
-            </p>
-          </div>
-           <div class="lgg:absolute lgg:top-0 lgg:left-0 lgg:w-full lgg:flex lgg:justify-center lgg:items-center lgg:pointer-events-none">
-             <a href="/">
-             <img class="h-[42px] w-auto pointer-events-auto" src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}" alt="">
-             </a>
-           </div>
+    <div class="text-sm text-gray-600 py-2 border-b">
+        <div class="xl:container mx-auto flex smx:flex-nowrap gap-2 justify-between items-center relative">
+            <div class="hidden lgg:flex justify-center">
+                <p
+                    class="inline-flex items-center gap-2 text-sm font-medium
+            bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10
+            text-primary px-4 py-2 rounded-full shadow-sm border border-primary/20">
+
+                    <span class="animate-pulse text-secondary">🔥</span>
+                    <span>New Arrivals!</span>
+
+                    <span class="text-gray-400">|</span>
+
+                    <span>
+                        Get up to
+                        <span class="font-semibold text-secondary">20% OFF</span>
+
+                    </span>
+
+                </p>
+            </div>
+
+            <div
+                class="lgg:absolute lgg:top-0 lgg:left-0 lgg:w-full lgg:flex lgg:justify-center lgg:items-center lgg:pointer-events-none">
+                <a href="/">
+                    <img class="xxs:h-[42px] xxs:max-h-max max-h-[40px] h-auto w-auto pointer-events-auto"
+                        src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}" alt="">
+                </a>
+            </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="tel:+1234567890" class="text-gray-600 hover:text-blue-600 transition-all duration-300 hover:scale-110" title="Call us">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-blue-50 transition-colors">
+                    <a href="tel:+1234567890"
+                        class="text-gray-600 hover:text-blue-600 transition-all duration-300 hover:scale-110"
+                        title="Call us">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-blue-50 transition-colors">
                             <i class="fa-solid fa-phone text-sm"></i>
                         </div>
                     </a>
                     <a href="https://wa.me/1234567890" target="_blank"
-                        class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110" title="WhatsApp">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
+                        class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
+                        title="WhatsApp">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
                             <i class="fa-brands fa-whatsapp text-sm"></i>
                         </div>
                     </a>
-                    {{-- <a href="https://facebook.com" target="_blank"
-                        class="text-gray-600 hover:text-blue-700 transition-all duration-300 hover:scale-110" title="Facebook">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-blue-50 transition-colors">
-                            <i class="fa-brands fa-facebook text-sm"></i>
-                        </div>
-                    </a>
-                    <a href="https://instagram.com" target="_blank"
-                        class="text-gray-600 hover:text-pink-600 transition-all duration-300 hover:scale-110" title="Instagram">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-pink-50 transition-colors">
-                            <i class="fa-brands fa-instagram text-sm"></i>
-                        </div>
-                    </a> --}}
                 </div>
-
-                <!-- Mobile Search Icon -->
-                <button class="sm:hidden text-gray-700 hover:text-black group relative">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100  transition-colors">
-                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
-                    </div>
-                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                        Search
-                    </span>
-                </button>
 
                 <!-- Icons -->
                 <button class="text-gray-700 hover:text-black group relative">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
+                    <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
                         <i class="fa-regular fa-heart text-lg group-hover:text-red-500"></i>
                     </div>
-                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                    <span
+                        class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
                         Wishlist
                     </span>
                 </button>
 
                 <button onclick="window.location.href='{{ route('cart.index') }}'"
                     class="text-gray-700 hover:text-black group relative">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors relative">
+                    <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors relative">
                         <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
-                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                        <span
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
                             3
                         </span>
                     </div>
-                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                    <span
+                        class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
                         Cart (3)
                     </span>
                 </button>
@@ -197,11 +770,14 @@
                     <div class="relative group">
                         <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
                             <div class="relative">
-                                <img src="https://i.pravatar.cc/32" alt="User" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
-                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                                <img src="https://i.pravatar.cc/32" alt="User"
+                                    class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
+                                <span
+                                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
                             </div>
                             <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
-                            <i class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                            <i
+                                class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
                         </button>
 
                         <!-- Account Dropdown -->
@@ -212,16 +788,19 @@
                                 <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
                             </div>
 
-                            <a href="#" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                                 <i class="fa-regular fa-user text-gray-500 w-4"></i>
                                 <span>My Profile</span>
                             </a>
-                            <a href="#" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                                 <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
                                 <span>Orders</span>
                                 <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
                             </a>
-                            <a href="#" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                                 <i class="fa-regular fa-heart text-gray-500 w-4"></i>
                                 <span>Wishlist</span>
                                 <span class="ml-auto text-primary text-xs">12</span>
@@ -242,12 +821,14 @@
                 @else
                     <!-- Login Button (Not Logged In) -->
                     <a href="{{ route('page.login') }}"
-                        class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl  group">
-                        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
+                        class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
+                        <div
+                            class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
                             <i class="fa-solid fa-user text-xs"></i>
                         </div>
                         <span class="text-sm font-semibold">Login</span>
-                        <i class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                        <i
+                            class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 @endauth
             </div>
@@ -255,7 +836,7 @@
     </div>
 
     <!-- Main Header -->
-    <div class=" py-4 flex items-center justify-between gap-6 xl:container mx-auto">
+    <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Logo -->
@@ -308,107 +889,213 @@
         </button>
 
         <!-- Right Section -->
-        <div class="flex items-center gap-4 lgg:w-auto w-full">
-            <!-- Search (visible on sm and up) -->
-            <div class="relative hidden sm:block w-full">
-                <input type="text" placeholder="Search here"
-                    class="pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
-                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+        <div class="flex items-center gap-4 lgg:w-auto w-full relative">
+            <!-- Search Container -->
+            <div class="relative block w-full" id="search-container">
+                <input type="text" placeholder="Search here" id="search-input"
+                    class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
+                <button class="close-search" id="close-search-btn" type="button">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                    id="search-icon"></i>
+
+                <!-- Desktop Search Dropdown (only shown on desktop) -->
+                <div id="search-dropdown" class="px-4">
+                    <div class="bg-white rounded-md shadow-lg px-4 py-3">
+                        <div class="max-h-[70vh] overflow-y-auto">
+
+                            <!-- Loading Indicator -->
+                            <div class="search-loading" id="search-loading">
+                                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                                Searching...
+                            </div>
+
+                            <!-- Categories Section -->
+                            <div class="search-section" id="categories-section">
+                                <div class="search-section-title">CATEGORIES</div>
+                                <div class="search-categories" id="categories-list">
+                                    <!-- Categories will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Trending Searches Section -->
+                            <div class="search-section" id="trending-section">
+                                <div class="search-section-title">TRENDING SEARCHES</div>
+                                <div class="search-trending" id="trending-list">
+                                    <!-- Trending searches will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Products Section -->
+                            <div class="search-section" id="products-section">
+                                <div class="search-section-title">POPULAR PRODUCTS</div>
+                                <div class="search-products" id="products-list">
+                                    <!-- Products will be populated here -->
+                                </div>
+                                <a href="#" class="view-more" id="view-more">View More →</a>
+                            </div>
+
+                            <!-- No Results Message -->
+                            <div class="no-results" id="no-results" style="display: none;">
+                                No results found for "<span id="search-query"></span>"
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Search Suggestions (only shown on mobile) -->
+                <div class="mobile-search-suggestions" id="mobile-search-suggestions">
+                    <!-- Suggestions will be populated dynamically -->
+                </div>
             </div>
-
-
         </div>
     </div>
 </header>
 
+<!-- Mobile Search Dropdown (Full Screen) -->
+<div id="mobile-search-dropdown">
+    <div class="mobile-search-header">
+        <button id="mobile-search-back">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" />
+        <button id="mobile-search-clear">
+            <i class="fa-solid fa-times"></i>
+        </button>
+    </div>
+
+    <div class="mobile-search-results" id="mobile-search-results">
+        <!-- Loading Indicator -->
+        <div class="mobile-search-loading" id="mobile-search-loading">
+            <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+            Searching...
+        </div>
+
+        <!-- Categories Section -->
+        <div class="mobile-search-section" id="mobile-categories-section">
+            <div class="mobile-search-section-title">Categories</div>
+            <div class="mobile-search-items" id="mobile-categories-list">
+                <!-- Categories will be populated here -->
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="mobile-search-section" id="mobile-products-section">
+            <div class="mobile-search-section-title">Products</div>
+            <div class="mobile-search-items" id="mobile-products-list">
+                <!-- Products will be populated here -->
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div class="mobile-search-no-results" id="mobile-no-results" style="display: none;">
+            No results found for "<span id="mobile-search-query"></span>"
+        </div>
+    </div>
+</div>
+
 <!-- Mobile Sidebar -->
 <div id="mobile-sidebar"
-    class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[400px]">
+    class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px]">
+    <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b">
-        <div class="flex items-center gap-2">
-            <img class="h-[50px] w-auto" src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}"
-                alt="">
-
+        <div class="flex items-center gap-3">
+            <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}"
+                alt="Aiman Royal">
         </div>
-        <button id="close-sidebar-btn" class="text-gray-700 hover:text-black">
-            <i class="fa-solid fa-xmark text-2xl"></i>
+        <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors">
+            <i class="fa-solid fa-xmark text-xl"></i>
         </button>
     </div>
 
     <!-- Mobile Search -->
-    <div class="p-6 border-b">
+    <div class="p-4 border-b">
         <div class="relative">
-            <input type="text" placeholder="Search here"
-                class="w-full pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none" />
-            <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            <input type="text" placeholder="Search products..." id="mobile-sidebar-search-input"
+                class="search-input w-full pl-4 pr-10 py-3 text-sm outline-none rounded-[60px]" />
+            <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                id="mobile-sidebar-search-icon"></i>
         </div>
+        {{-- <div class="flex justify-center mt-4">
+            <div class="flex items-center gap-4">
+                <a href="tel:+1234567890" class="text-gray-600 hover:text-primary">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
+                <a href="https://wa.me/1234567890" target="_blank" class="text-gray-600 hover:text-green-600">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+            </div>
+        </div> --}}
     </div>
 
     <!-- Mobile Navigation -->
-    <nav class="py-6 bg-[#fdebdc] h-full overflow-y-auto">
-        <div class="mega-menu">
+    <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
+        <div class="mega-menu px-2">
             @if (isset($categories) && count($categories) > 0)
                 @foreach ($categories as $category)
                     <div class="menu-item has-submenu top-level-item">
-                        <button class="back-button bg-white"
-                            style="background-color: white !important; display: none;">← Back to Main Menu</button>
+                        <button class="back-button">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                        </button>
                         <a href="{{ route('category.show', $category->slug) }}"
-                            class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0 ">
-                            {{ $category->name }} <i class="fa-solid fa-angle-right"></i>
+                            class="menu-link top-level-link group">
+                            <span class="flex-1">{{ $category->name }}</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </a>
                         <ul class="submenu">
                             <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle">
-                                    Style <i class="fa-solid fa-angle-right"></i>
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Style</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                                 </div>
-                                <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <ul class="submenu">
                                     @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->take(5) as $category)
-                                            <li class="menu-item mb-1">
-                                                <a href="{{ route('category.show', $category->slug) }}"
-                                                    class="menu-link">{{ $category->name }}</a>
+                                        @foreach ($categories->take(5) as $cat)
+                                            <li class="menu-item">
+                                                <a href="{{ route('category.show', $cat->slug) }}"
+                                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
                                             </li>
                                         @endforeach
-                                    @else
-                                        <li class="menu-item mb-1"><a href="#"
-                                                class="menu-link">Traditional</a></li>
-                                        <li class="menu-item mb-1"><a href="#" class="menu-link">Modern</a>
-                                        </li>
-                                        <li class="menu-item mb-1"><a href="#" class="menu-link">Fusion</a>
-                                        </li>
                                     @endif
                                 </ul>
                             </li>
                             <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle">
-                                    Occasion <i class="fa-solid fa-angle-right"></i>
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Occasion</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                                 </div>
-                                <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
+                                <ul class="submenu">
                                     @if (isset($occasions) && count($occasions) > 0)
                                         @foreach ($occasions->take(5) as $occasion)
-                                            <li class="menu-item mb-1">
+                                            <li class="menu-item">
                                                 <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                    class="menu-link">{{ $occasion->name }}</a>
+                                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
                                             </li>
                                         @endforeach
-                                    @else
-                                        <li class="menu-item mb-1"><a href="#" class="menu-link">Wedding</a>
-                                        </li>
-                                        <li class="menu-item mb-1"><a href="#" class="menu-link">Party</a></li>
-                                        <li class="menu-item mb-1"><a href="#" class="menu-link">Festival</a>
-                                        </li>
                                     @endif
                                 </ul>
                             </li>
                             <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle">
-                                    Collection <i class="fa-solid fa-angle-right"></i>
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Collection</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                                 </div>
-                                <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                    <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                    <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a>
+                                <ul class="submenu">
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
                                     </li>
-                                    <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
+                                            Kameez</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -417,87 +1104,51 @@
             @else
                 <!-- Default menu items -->
                 <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button bg-white" style="background-color: white !important; display: none;">←
-                        Back to Main Menu</button>
-                    <a href="#" class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0">
-                        Lahenga <i class="fa-solid fa-angle-right"></i>
+                    <button class="back-button">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <a href="#" class="menu-link top-level-link group">
+                        <span class="flex-1">Lahenga</span>
+                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                     </a>
                     <ul class="submenu">
                         <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Style <i class="fa-solid fa-angle-right"></i>
+                            <div class="menu-link submenu-toggle group">
+                                <span class="flex-1">Style</span>
+                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                             </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Occasion <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Collection <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            <ul class="submenu">
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button bg-white" style="background-color: white !important; display: none;">←
-                        Back to Main Menu</button>
-                    <a href="#" class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0">
-                        Salwar Kameez <i class="fa-solid fa-angle-right"></i>
+                    <button class="back-button">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <a href="#" class="menu-link top-level-link group">
+                        <span class="flex-1">Salwar Kameez</span>
+                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                     </a>
                     <ul class="submenu">
                         <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Style <i class="fa-solid fa-angle-right"></i>
+                            <div class="menu-link submenu-toggle group">
+                                <span class="flex-1">Style</span>
+                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                             </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Occasion <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle">
-                                Collection <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
+                            <ul class="submenu">
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -505,6 +1156,21 @@
             @endif
         </div>
     </nav>
+
+    <!-- Quick Links Footer -->
+    <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
+        <div class="grid grid-cols-2 gap-2">
+            <a href="{{ route('page.login') }}"
+                class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm">
+                <i class="fa-solid fa-user mr-2"></i> Login
+            </a>
+            <a href="{{ route('cart.index') }}"
+                class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm">
+                <i class="fa-solid fa-shopping-cart mr-2"></i> Cart
+            </a>
+        </div>
+
+    </div>
 </div>
 
 <!-- Overlay for mobile sidebar -->
@@ -894,6 +1560,632 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ==================== SEARCH DATA ====================
+        const searchData = {
+            categories: [
+                "Saree",
+                "Saree Gown",
+                "Saree with Ready-made Blouse",
+                "Salwar Kameez",
+                "Lehengas",
+                "Bridal Wear",
+                "Party Wear",
+                "Casual Wear"
+            ],
+
+            trending: [
+                "Saree Gown for Women",
+                "Saree with Readymade Blouse for women",
+                "Saree for women",
+                "Saree Gown for Cocktail",
+                "Saree Gown for Reception",
+                "Saree Gown for Party",
+                "Saree Gown for Bridal Cocktail",
+                "Blue Banarasi Silk Saree",
+                "Mint Green Satin Saree",
+                "Wine Tissue Organza Saree"
+            ],
+
+            products: [{
+                    title: "Blue Banarasi Silk Woven Saree With Zari Paisley Motifs",
+                    price: "MRP ₹5,085",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["blue", "banarasi", "silk", "saree", "zari"]
+                },
+                {
+                    title: "Mint Green Satin Printed Saree With Digital Florals",
+                    price: "MRP ₹16,895",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["mint", "green", "satin", "saree", "floral"]
+                },
+                {
+                    title: "Wine Tissue Organza Embroidered Saree with Unstitched Blouse",
+                    price: "MRP ₹8,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["wine", "organza", "embroidered", "saree", "blouse"]
+                },
+                {
+                    title: "Teal Green Organza Silk Saree with Unstitched Blouse",
+                    price: "MRP ₹5,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["teal", "green", "organza", "silk", "saree"]
+                },
+                {
+                    title: "Maroon Shaded Organza Silk Saree with Unstitched Blouse",
+                    price: "MRP ₹5,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["maroon", "organza", "silk", "saree", "shaded"]
+                },
+                {
+                    title: "Black Cotton Linen Saree with Blouse Fabric",
+                    price: "MRP ₹7,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["black", "cotton", "linen", "saree", "blouse"]
+                },
+                {
+                    title: "Olive Green Linen Printed Saree With Heritage Ajrakh Geometric Print",
+                    price: "MRP ₹2,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["olive", "green", "linen", "saree", "printed"]
+                },
+                {
+                    title: "Maroon Tissue Organza Resham Work Saree with Unstitched Blouse",
+                    price: "MRP ₹10,995",
+                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                    tags: ["maroon", "tissue", "organza", "resham", "saree"]
+                }
+            ]
+        };
+
+        // ==================== SEARCH FUNCTIONALITY ====================
+        // Desktop elements
+        const searchInput = document.getElementById('search-input');
+        const searchIcon = document.getElementById('search-icon');
+        const searchDropdown = document.getElementById('search-dropdown');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+        const searchContainer = document.getElementById('search-container');
+        const searchLoading = document.getElementById('search-loading');
+        const noResults = document.getElementById('no-results');
+        const searchQuery = document.getElementById('search-query');
+
+        // Mobile elements
+        const mobileSearchDropdown = document.getElementById('mobile-search-dropdown');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const mobileSearchBack = document.getElementById('mobile-search-back');
+        const mobileSearchClear = document.getElementById('mobile-search-clear');
+        const mobileSearchResults = document.getElementById('mobile-search-results');
+        const mobileSearchLoading = document.getElementById('mobile-search-loading');
+        const mobileNoResults = document.getElementById('mobile-no-results');
+        const mobileSearchQuery = document.getElementById('mobile-search-query');
+        const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
+        const mobileSidebarSearchInput = document.getElementById('mobile-sidebar-search-input');
+        const mobileSidebarSearchIcon = document.getElementById('mobile-sidebar-search-icon');
+
+        // DOM elements for desktop search results
+        const categoriesList = document.getElementById('categories-list');
+        const trendingList = document.getElementById('trending-list');
+        const productsList = document.getElementById('products-list');
+        const viewMore = document.getElementById('view-more');
+
+        // DOM elements for mobile search results
+        const mobileCategoriesList = document.getElementById('mobile-categories-list');
+        const mobileProductsList = document.getElementById('mobile-products-list');
+
+        // Check if we're on mobile
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Highlight search terms in text
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+
+            const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Filter data based on search term
+        function filterData(searchTerm) {
+            const term = searchTerm.toLowerCase().trim();
+
+            if (!term) {
+                return {
+                    categories: searchData.categories.slice(0, 3),
+                    trending: searchData.trending.slice(0, 7),
+                    products: searchData.products.slice(0, 4),
+                    hasResults: true
+                };
+            }
+
+            // Filter categories
+            const filteredCategories = searchData.categories.filter(category =>
+                category.toLowerCase().includes(term)
+            ).slice(0, 3);
+
+            // Filter trending searches
+            const filteredTrending = searchData.trending.filter(trend =>
+                trend.toLowerCase().includes(term)
+            ).slice(0, 7);
+
+            // Filter products
+            const filteredProducts = searchData.products.filter(product => {
+                // Search in title
+                if (product.title.toLowerCase().includes(term)) return true;
+
+                // Search in tags
+                if (product.tags.some(tag => tag.toLowerCase().includes(term))) return true;
+
+                return false;
+            }).slice(0, 8);
+
+            return {
+                categories: filteredCategories,
+                trending: filteredTrending,
+                products: filteredProducts,
+                hasResults: filteredCategories.length > 0 || filteredTrending.length > 0 || filteredProducts
+                    .length > 0
+            };
+        }
+
+        // ==================== DESKTOP SEARCH FUNCTIONS ====================
+        // Render desktop search results
+        function renderDesktopSearchResults(searchTerm = '') {
+            const results = filterData(searchTerm);
+
+            // Clear previous results
+            categoriesList.innerHTML = '';
+            trendingList.innerHTML = '';
+            productsList.innerHTML = '';
+
+            // Show/hide sections based on results
+            const categoriesSection = document.getElementById('categories-section');
+            const trendingSection = document.getElementById('trending-section');
+            const productsSection = document.getElementById('products-section');
+
+            categoriesSection.style.display = results.categories.length > 0 ? 'block' : 'none';
+            trendingSection.style.display = results.trending.length > 0 ? 'block' : 'none';
+            productsSection.style.display = results.products.length > 0 ? 'block' : 'none';
+            noResults.style.display = results.hasResults ? 'none' : 'block';
+
+            if (!results.hasResults) {
+                searchQuery.textContent = searchTerm;
+                return;
+            }
+
+            // Render categories
+            results.categories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'search-category-item';
+                categoryElement.innerHTML = highlightText(category, searchTerm);
+                categoryElement.addEventListener('click', () => {
+                    searchInput.value = category;
+                    searchInput.focus();
+                    performDesktopSearch(category);
+                });
+                categoriesList.appendChild(categoryElement);
+            });
+
+            // Render trending searches
+            results.trending.forEach(trend => {
+                const trendElement = document.createElement('div');
+                trendElement.className = 'trending-tag';
+                trendElement.innerHTML = highlightText(trend, searchTerm);
+                trendElement.addEventListener('click', () => {
+                    searchInput.value = trend;
+                    searchInput.focus();
+                    performDesktopSearch(trend);
+                });
+                trendingList.appendChild(trendElement);
+            });
+
+            // Render products
+            results.products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'search-product-card';
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-title">${highlightText(product.title, searchTerm)}</div>
+                        <div class="product-price">${product.price}</div>
+                    </div>
+                `;
+                productElement.addEventListener('click', () => {
+                    console.log('Product clicked:', product.title);
+                    hideDesktopSearchDropdown();
+                });
+                productsList.appendChild(productElement);
+            });
+
+            // Update view more link
+            if (searchTerm) {
+                viewMore.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                viewMore.textContent = `View all results for "${searchTerm}" →`;
+            } else {
+                viewMore.href = '#';
+                viewMore.textContent = 'View More →';
+            }
+        }
+
+        // Perform desktop search
+        function performDesktopSearch(searchTerm) {
+            showDesktopSearchDropdown();
+
+            // Show loading indicator
+            searchLoading.classList.add('active');
+
+            // Simulate API call delay
+            setTimeout(() => {
+                renderDesktopSearchResults(searchTerm);
+                searchLoading.classList.remove('active');
+            }, 300);
+        }
+
+        // Show desktop search dropdown
+        function showDesktopSearchDropdown() {
+            if (!isMobile()) {
+                searchDropdown.classList.add('active');
+            }
+        }
+
+        // Hide desktop search dropdown
+        function hideDesktopSearchDropdown() {
+            searchDropdown.classList.remove('active');
+        }
+
+        // ==================== MOBILE SEARCH FUNCTIONS ====================
+        // Update mobile search suggestions
+        function updateMobileSuggestions(searchTerm = '') {
+            const suggestionsContainer = document.getElementById('mobile-search-suggestions');
+            suggestionsContainer.innerHTML = '';
+
+            if (!searchTerm.trim()) {
+                // Show default trending suggestions
+                searchData.trending.slice(0, 5).forEach(trend => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'search-suggestion-item';
+                    suggestionItem.setAttribute('data-search', trend);
+                    suggestionItem.innerHTML = `
+                        <i class="fa-solid fa-tag"></i>
+                        <span>${trend}</span>
+                    `;
+                    suggestionItem.addEventListener('click', () => {
+                        openMobileSearch(trend);
+                    });
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            } else {
+                // Show filtered suggestions
+                const term = searchTerm.toLowerCase();
+                const filteredTrending = searchData.trending.filter(trend =>
+                    trend.toLowerCase().includes(term)
+                ).slice(0, 5);
+
+                if (filteredTrending.length === 0) {
+                    const noSuggestion = document.createElement('div');
+                    noSuggestion.className = 'search-suggestion-item';
+                    noSuggestion.innerHTML = `
+                        <i class="fa-solid fa-search"></i>
+                        <span>No suggestions found</span>
+                    `;
+                    suggestionsContainer.appendChild(noSuggestion);
+                } else {
+                    filteredTrending.forEach(trend => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'search-suggestion-item';
+                        suggestionItem.setAttribute('data-search', trend);
+                        suggestionItem.innerHTML = `
+                            <i class="fa-solid fa-tag"></i>
+                            <span>${highlightText(trend, searchTerm)}</span>
+                        `;
+                        suggestionItem.addEventListener('click', () => {
+                            openMobileSearch(trend);
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                }
+            }
+        }
+
+        // Render mobile search results
+        function renderMobileSearchResults(searchTerm = '') {
+            const results = filterData(searchTerm);
+
+            // Clear previous results
+            mobileCategoriesList.innerHTML = '';
+            mobileProductsList.innerHTML = '';
+
+            // Show/hide sections based on results
+            const mobileCategoriesSection = document.getElementById('mobile-categories-section');
+            const mobileProductsSection = document.getElementById('mobile-products-section');
+
+            mobileCategoriesSection.style.display = results.categories.length > 0 ? 'block' : 'none';
+            mobileProductsSection.style.display = results.products.length > 0 ? 'block' : 'none';
+            mobileNoResults.style.display = results.hasResults ? 'none' : 'block';
+
+            if (!results.hasResults) {
+                mobileSearchQuery.textContent = searchTerm;
+                return;
+            }
+
+            // Render categories for mobile
+            results.categories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'mobile-search-item';
+                categoryElement.innerHTML = `
+                    <i class="fa-solid fa-tag mr-2"></i>
+                    ${highlightText(category, searchTerm)}
+                `;
+                categoryElement.addEventListener('click', () => {
+                    mobileSearchInput.value = category;
+                    performMobileSearch(category);
+                });
+                mobileCategoriesList.appendChild(categoryElement);
+            });
+
+            // Render products for mobile (simplified view)
+            results.products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'mobile-search-item product-item';
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}">
+                    <div class="product-details">
+                        <div class="product-name">${highlightText(product.title, searchTerm)}</div>
+                        <div class="product-price">${product.price}</div>
+                    </div>
+                `;
+                productElement.addEventListener('click', () => {
+                    console.log('Mobile product clicked:', product.title);
+                    closeMobileSearch();
+                });
+                mobileProductsList.appendChild(productElement);
+            });
+        }
+
+        // Perform mobile search
+        function performMobileSearch(searchTerm) {
+            // Show loading indicator
+            mobileSearchLoading.classList.add('active');
+
+            // Simulate API call delay
+            setTimeout(() => {
+                renderMobileSearchResults(searchTerm);
+                mobileSearchLoading.classList.remove('active');
+            }, 300);
+        }
+
+        // Open mobile search
+        function openMobileSearch(initialValue = '') {
+            if (!isMobile()) return;
+
+            mobileSearchDropdown.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            if (initialValue) {
+                mobileSearchInput.value = initialValue;
+                performMobileSearch(initialValue);
+            } else {
+                mobileSearchInput.value = '';
+                renderMobileSearchResults(); // Show default results
+            }
+
+            // Focus on mobile search input
+            setTimeout(() => {
+                mobileSearchInput.focus();
+            }, 100);
+        }
+
+        // Close mobile search
+        function closeMobileSearch() {
+            mobileSearchDropdown.classList.remove('active');
+            document.body.style.overflow = '';
+            mobileSearchInput.value = '';
+            hideMobileSearchSuggestions();
+        }
+
+        // Show mobile search suggestions
+        function showMobileSearchSuggestions() {
+            if (!isMobile()) return;
+            mobileSearchSuggestions.classList.add('active');
+        }
+
+        // Hide mobile search suggestions
+        function hideMobileSearchSuggestions() {
+            mobileSearchSuggestions.classList.remove('active');
+        }
+
+        // ==================== INITIALIZE SEARCH ====================
+        function initSearch() {
+            // Initial render of default results
+            renderDesktopSearchResults();
+            updateMobileSuggestions();
+
+            // ==================== DESKTOP SEARCH EVENTS ====================
+            if (searchInput) {
+                searchInput.addEventListener('focus', function() {
+                    if (!isMobile()) {
+                        showDesktopSearchDropdown();
+                        hideCategoriesMenu();
+                        renderDesktopSearchResults();
+                    }
+                });
+
+                // Real-time search as user types (desktop only)
+                let desktopSearchTimeout;
+                searchInput.addEventListener('input', function() {
+                    if (isMobile()) return;
+
+                    clearTimeout(desktopSearchTimeout);
+
+                    const searchTerm = this.value.trim();
+
+                    // Debounce the search
+                    desktopSearchTimeout = setTimeout(() => {
+                        performDesktopSearch(searchTerm);
+                    }, 300);
+                });
+
+                // Handle Enter key
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const searchTerm = this.value.trim();
+                        if (searchTerm) {
+                            window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                        }
+                    }
+                });
+            }
+
+            // Search icon click (desktop)
+            if (searchIcon) {
+                searchIcon.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (!isMobile()) {
+                        if (searchDropdown.classList.contains('active')) {
+                            hideDesktopSearchDropdown();
+                        } else {
+                            showDesktopSearchDropdown();
+                            renderDesktopSearchResults();
+                        }
+                    }
+                });
+            }
+
+            // Close search button (desktop)
+            if (closeSearchBtn) {
+                closeSearchBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    searchInput.value = '';
+                    searchInput.focus();
+                    hideDesktopSearchDropdown();
+                    renderDesktopSearchResults(); // Reset to default results
+                });
+            }
+
+            // ==================== MOBILE SEARCH EVENTS ====================
+            // Mobile search input events
+            if (mobileSearchInput) {
+                // Open mobile search on focus
+                searchInput.addEventListener('focus', function() {
+                    if (isMobile()) {
+                        openMobileSearch();
+                    }
+                });
+
+                // Mobile sidebar search input focus
+                if (mobileSidebarSearchInput) {
+                    mobileSidebarSearchInput.addEventListener('focus', function() {
+                        if (isMobile()) {
+                            openMobileSearch();
+                        }
+                    });
+                }
+
+                // Mobile sidebar search icon click
+                if (mobileSidebarSearchIcon) {
+                    mobileSidebarSearchIcon.addEventListener('click', function() {
+                        if (isMobile()) {
+                            openMobileSearch();
+                        }
+                    });
+                }
+
+                // Search icon click on mobile
+                if (searchIcon) {
+                    searchIcon.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (isMobile()) {
+                            openMobileSearch(searchInput.value);
+                        }
+                    });
+                }
+
+                // Real-time mobile search
+                let mobileSearchTimeout;
+                mobileSearchInput.addEventListener('input', function() {
+                    clearTimeout(mobileSearchTimeout);
+
+                    const searchTerm = this.value.trim();
+
+                    // Debounce the search
+                    mobileSearchTimeout = setTimeout(() => {
+                        performMobileSearch(searchTerm);
+                    }, 300);
+                });
+
+                // Handle Enter key in mobile search
+                mobileSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const searchTerm = this.value.trim();
+                        if (searchTerm) {
+                            window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                        }
+                    }
+                });
+            }
+
+            // Mobile search back button
+            if (mobileSearchBack) {
+                mobileSearchBack.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeMobileSearch();
+                });
+            }
+
+            // Mobile search clear button
+            if (mobileSearchClear) {
+                mobileSearchClear.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileSearchInput.value = '';
+                    mobileSearchInput.focus();
+                    renderMobileSearchResults();
+                });
+            }
+
+            // Close search when clicking outside (desktop only)
+            if (!isMobile()) {
+                document.addEventListener('click', function(event) {
+                    const isClickInsideSearch = searchContainer && searchContainer.contains(event
+                        .target);
+
+                    if (!isClickInsideSearch) {
+                        hideDesktopSearchDropdown();
+                    }
+                });
+            }
+
+            // Mobile search input focus for suggestions
+            if (searchInput) {
+                searchInput.addEventListener('focus', function() {
+                    if (isMobile()) {
+                        updateMobileSuggestions(this.value);
+                        showMobileSearchSuggestions();
+                    }
+                });
+
+                searchInput.addEventListener('input', function() {
+                    if (isMobile()) {
+                        updateMobileSuggestions(this.value);
+                        showMobileSearchSuggestions();
+                    }
+                });
+            }
+
+            // Close mobile suggestions when clicking outside
+            document.addEventListener('click', function(event) {
+                if (isMobile()) {
+                    const isClickInsideSuggestions = mobileSearchSuggestions.contains(event.target);
+                    const isClickOnSearchInput = searchInput.contains(event.target);
+
+                    if (!isClickInsideSuggestions && !isClickOnSearchInput) {
+                        hideMobileSearchSuggestions();
+                    }
+                }
+            });
+        }
+
+        // Initialize search functionality
+        initSearch();
+
         // ==================== DESKTOP CATEGORIES MENU ====================
         const categoriesMenu = document.getElementById('categories-wrapper-menu');
         const desktopNavLinks = document.querySelectorAll('.desktop-nav-link');
@@ -1195,5 +2487,22 @@
 
         // Initialize desktop menu to default state
         hideCategoriesMenu();
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            // Close all search dropdowns on resize
+            hideDesktopSearchDropdown();
+            closeMobileSearch();
+            hideMobileSearchSuggestions();
+
+            // Reset mobile menu if switching to desktop
+            if (!isMobile()) {
+                if (mobileSidebar && !mobileSidebar.classList.contains('-translate-x-full')) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
     });
 </script>

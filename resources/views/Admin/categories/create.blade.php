@@ -42,7 +42,13 @@
                             </div>
                             <div class="mb-3">
                               <label class="form-label text-secondary text-uppercase">Image<sup class="text-danger">*</sup></label>
-                              <input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png" value="{{ old('image') }}" required>
+                              <input type="file" name="image" id="imageInput" class="form-control" max-size="1024" accept=".jpg,.jpeg,.png" value="{{ old('image') }}" required>
+                                {{-- <small id="imageError" class="text-danger d-none"></small> --}}
+                              @error('image')
+                            <div>
+                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                            </div>
+                            @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-secondary text-uppercase">Parent Category</label>
@@ -103,4 +109,28 @@
             }, false);
         })();
     </script>
+    {{-- <script>
+document.getElementById('imageInput').addEventListener('change', function () {
+
+    const file = this.files[0];
+    const errorBox = document.getElementById('imageError');
+
+    if (!file) return;
+
+    const maxSize = 1 * 1024 * 1024; // 1 MB
+
+    if (file.size > maxSize) {
+
+        errorBox.innerText = "Image size must be less than 1 MB";
+        this.value = ""; // Remove selected file immediately
+
+    } else {
+
+        errorBox.innerText = "";
+
+    }
+});
+</script> --}}
+
+
 @endsection
