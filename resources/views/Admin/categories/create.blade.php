@@ -42,7 +42,12 @@
                             </div>
                             <div class="mb-3">
                               <label class="form-label text-secondary text-uppercase">Image<sup class="text-danger">*</sup></label>
-                              <input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png" value="{{ old('image') }}" required>
+                              <input type="file" name="image" class="form-control" max-size="1024" accept=".jpg,.jpeg,.png" value="{{ old('image') }}" required>
+                            @error('image')
+                            <div>
+                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                            </div>
+                            @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-secondary text-uppercase">Parent Category</label>

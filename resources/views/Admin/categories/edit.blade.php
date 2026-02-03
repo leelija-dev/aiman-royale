@@ -50,8 +50,13 @@
     <input type="file"
            name="image"
            class="form-control"
+           max-size="1024"
            accept=".jpg,.jpeg,.png">
-</div>
+
+    @error('image')
+        <div class="invalid-feedback d-block">{{ $message }}</div>
+    @enderror
+        </div>
 
             <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Parent Category</label>
