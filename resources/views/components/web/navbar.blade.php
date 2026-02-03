@@ -435,7 +435,7 @@
     }
 
     #mobile-search-dropdown.active {
-       opacity: 1;
+        opacity: 1;
         pointer-events: auto;
     }
 
@@ -452,9 +452,9 @@
 
     .mobile-search-header input {
         flex: 1;
-        padding: 12px 15px;
+        padding: 8px 15px;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 60px;
         font-size: 16px;
         outline: none;
         box-sizing: border-box;
@@ -632,7 +632,7 @@
     }
 
     /* Hide/Show based on screen size */
-    @media (max-width: 768px) {
+    @media (max-width:991px) {
         #search-dropdown {
             display: none !important;
         }
@@ -644,21 +644,20 @@
 
         /* Make search icon more prominent on mobile */
         #search-icon {
-            width: 40px;
+           width: 100%;
+  justify-content: right;
+  padding: 0 13px;
             height: 40px;
             display: flex !important;
             align-items: center;
-            justify-content: center;
-            background: #f3f4f6;
+
+            /* background: #f3f4f6; */
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        #search-icon:hover {
-            background: #e5e7eb;
-            transform: scale(1.05);
-        }
+
 
         .close-search {
             display: none !important;
@@ -743,7 +742,7 @@
         }
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: 992px) {
         #mobile-search-dropdown {
             display: none !important;
         }
@@ -971,10 +970,13 @@
             <div class="relative block w-full" id="search-container">
                 <input type="text" placeholder="Search here" id="search-input"
                     class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
-                <button class="close-search" id="close-search-btn" type="button">
+                    <button class="close-search" id="close-search-btn" type="button">
                     <i class="fa-solid fa-times"></i>
                 </button>
-                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                <input type="text" placeholder="Search here"
+                    class="lgg:hidden block pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
+
+                <i class="fa-solid fa-magnifying-glass absolute lgg:right-4 right-[5px] lgg:top-1/2 top-0 lgg:-translate-y-1/2 text-gray-500 cursor-pointer"
                     id="search-icon"></i>
 
                 <!-- Desktop Search Dropdown (only shown on desktop) -->
@@ -1045,11 +1047,11 @@
 
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
-    <div class="mobile-search-header">
+    <div class="mobile-search-header flex flex-row">
         <button id="mobile-search-back">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" />
+        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" class="w-full rounded-full" />
         <button id="mobile-search-clear">
             <i class="fa-solid fa-times"></i>
         </button>
@@ -1755,7 +1757,7 @@
 
         // Check if we're on mobile
         function isMobile() {
-            return window.innerWidth <= 768;
+            return window.innerWidth <= 991;
         }
 
         // Highlight search terms in text
@@ -2635,31 +2637,31 @@
         hideCategoriesMenu();
 
         // Handle window resize
-       // Handle window resize
-       let lastWindowWidth = window.innerWidth;
-window.addEventListener('resize', function() {
-    const currentWidth = window.innerWidth;
-    const widthChanged = currentWidth !== lastWindowWidth;
-    lastWindowWidth = currentWidth;
+        // Handle window resize
+        let lastWindowWidth = window.innerWidth;
+        window.addEventListener('resize', function() {
+            const currentWidth = window.innerWidth;
+            const widthChanged = currentWidth !== lastWindowWidth;
+            lastWindowWidth = currentWidth;
 
-    // If only height changed (likely keyboard show/hide on mobile), do nothing
-    if (!widthChanged && isMobile()) {
-        return;
-    }
+            // If only height changed (likely keyboard show/hide on mobile), do nothing
+            if (!widthChanged && isMobile()) {
+                return;
+            }
 
-    // Close all search dropdowns on real resizes (orientation / breakpoint)
-    hideDesktopSearchDropdown();
-    closeMobileSearch();
-    hideMobileSuggestions();
+            // Close all search dropdowns on real resizes (orientation / breakpoint)
+            hideDesktopSearchDropdown();
+            closeMobileSearch();
+            hideMobileSuggestions();
 
-    // Reset mobile menu if switching to desktop
-    if (!isMobile()) {
-        if (mobileSidebar && !mobileSidebar.classList.contains('-translate-x-full')) {
-            mobileSidebar.classList.add('-translate-x-full');
-            if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-    }
-});
+            // Reset mobile menu if switching to desktop
+            if (!isMobile()) {
+                if (mobileSidebar && !mobileSidebar.classList.contains('-translate-x-full')) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
     });
 </script>
