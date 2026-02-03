@@ -362,7 +362,7 @@
             </div>
           </div>
 
-          <!-- ==================== Discount Accordion ==================== -->
+          <!-- ==================== Discount Accordion ================= -->
           <div class="accordion-wrapper">
             <div class="flex justify-between items-center cursor-pointer">
               <h3 class="font-semibold text-gray-900">Discount Range</h3>
