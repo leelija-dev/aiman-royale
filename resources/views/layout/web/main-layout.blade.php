@@ -24,9 +24,9 @@
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="icon" type="image/png" href="{{asset('web/images/amarmaa-logo.webp')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/amarmaa-logo.webp')}}" />
-    <link rel="shortcut icon" href="{{asset('web/images/amarmaa-logo.webp')}}" />
+    <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
+    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
 
 
