@@ -1,7 +1,17 @@
 @extends('layout.web.main-layout')
 
 
-<sttyle>
+
+
+
+
+
+
+
+@section('content')
+
+
+<style>
 
     /* Custom font classes */
 
@@ -64,14 +74,7 @@
     #categories-carousel .owl-dot span {
         display: none;
     }
-</sttyle>
-
-
-
-
-
-
-@section('content')
+</style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
