@@ -76,13 +76,7 @@
     }
 </style>
 <div class="w-full bg-gradient-to-b from-pink-50/40 to-white px-4 py-6 md:py-8 lgg:hidden block">
-  <!-- Category Tabs – Elegant & Centered -->
-  {{-- <div class="flex justify-center gap-6 md:gap-12 mb-6">
-    <button class="pb-2 text-lg md:text-xl font-semibold text-black border-b-2 border-black tracking-wide">WOMEN</button>
-    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">MEN</button>
-    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">BRIDAL</button>
-    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">LUXE</button>
-  </div> --}}
+
 
   <!-- Catchy Headline (optional – remove if not wanted) -->
   <h3 class="text-center text-xl md:text-2xl font-bold text-gray-800 mb-5 tracking-wide">
@@ -94,77 +88,77 @@
     <div class="flex gap-5 md:gap-8 pb-6 min-w-max">
 
       <!-- Bestsellers -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-pink-200/60">
           <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                alt="Bestsellers" class="w-full h-full object-cover object-top">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Bestsellers</span>
-      </div>
+      </a>
 
       <!-- Saree -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-amber-200/60">
           <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
                alt="Saree" class="w-full h-full object-cover object-top">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Saree</span>
-      </div>
+      </a>
 
       <!-- Salwar Kameez -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-emerald-200/60">
             <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
                 alt="Salwar Kameez" class="w-full h-full object-cover object-top">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Salwar Kameez</span>
-      </div>
+      </a>
 
       <!-- Lehenga -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-rose-200/60">
           <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
                alt="Lehenga" class="w-full h-full object-cover object-top">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Lehenga</span>
-      </div>
+      </a>
 
       <!-- Indo Western -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-indigo-200/60">
           <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
                alt="Indo Western" class="w-full h-full object-cover object-top">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Indo Western</span>
-      </div>
+      </a>
 
       <!-- Blouses -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-purple-200/60">
-          <img src="https://blog.kalkifashion.com/wp-content/uploads/2023/05/11-Indian-Traditional-Saree-Draping-Styles.jpg"
+          <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
                alt="Blouses" class="w-full h-full object-cover">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Blouses</span>
-      </div>
+      </a>
 
       <!-- Menswear -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-blue-200/60">
           <!-- Use your own menswear image here -->
-          <img src="https://images.unsplash.com/photo-1609815368508-5b8c5e3d8e4e?w=400"
+          <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                alt="Menswear" class="w-full h-full object-cover">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Menswear</span>
-      </div>
+      </a>
 
       <!-- Bridal Edit -->
-      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+      <a href="/" class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
         <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-amber-300/60">
-          <img src="https://www.twamev.com/dw/image/v2/BJZV_PRD/on/demandware.static/-/Library-Sites-TwamevSharedLibrary/default/dw848d8fcc/Twamev%20Images%20October/54820/Twamev%20Apparel%20-%20Types%20of%20Lehengas%20Every%20Bride%20Should%20Know_blog%201%20copy.jpg"
+          <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
                alt="Bridal Edit" class="w-full h-full object-cover">
         </div>
         <span class="text-sm sm:text-base font-semibold text-gray-800">Bridal Edit</span>
-      </div>
+      </a>
 
     </div>
   </div>
@@ -207,7 +201,7 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10"></div>
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" />
-                    <div class="absolute top-4 left-4">
+                    <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                         <span
                             class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">NEW</span>
                     </div>
@@ -373,7 +367,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Popular
@@ -412,7 +406,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Bridal
@@ -450,7 +444,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Traditional
@@ -489,7 +483,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Modern
@@ -528,7 +522,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Trending
@@ -568,7 +562,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Casual
@@ -607,7 +601,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Casual
@@ -654,35 +648,27 @@
 </section>
 
 
-<section class="px-4 lg:py-12 py-6">
+<section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto px-4">
-        <!-- Scrollable Wrapper -->
-        <div class="overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 lg:-mx-0 lg:px-0">
-            <div class="flex flex-nowrap gap-3 min-w-max snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:gap-4 lg:snap-none">
-                @foreach ($categories as $category)
-                    <div
-                        class="group flex justify-between items-center gap-3 min-w-[220px] sm:min-w-[240px] lg:min-w-0 flex-shrink-0 border border-gray-200 rounded-full px-4 py-3 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5 snap-center lg:snap-none"
-                    >
-                        <img
-                            src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                            class="min-w-12 min-h-12 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110"
-                            alt="{{ $category->name }}"
-                        />
+        <!-- Scroll Wrapper -->
+        <div class="flex gap-3 flex-wrap lgg:justify-start justify-center">
+            @foreach ($categories->where('parent_id', null) as $category)
+            <div
+                class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
+                <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                    class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
-                        <span
-                            class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary"
-                        >
-                            {{ $category->name }}
-                        </span>
+                <span
+                    class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary">
+                    {{ $category->name }}
+                </span>
 
-                        <span
-                            class="ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white"
-                        >
-                            {{ $category->products_count }}
-                        </span>
-                    </div>
-                @endforeach
+                <span
+                    class="lgg:ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white">
+                    {{ $category->products_count }}
+                </span>
             </div>
+            @endforeach
         </div>
     </div>
 </section>
