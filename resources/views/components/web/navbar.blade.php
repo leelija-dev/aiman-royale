@@ -379,8 +379,9 @@
 
     .product-image {
         width: 100%;
-        height: 160px;
+        height: 230px;
         object-fit: cover;
+       object-position: 0px -18px;
     }
 
     .product-info {
