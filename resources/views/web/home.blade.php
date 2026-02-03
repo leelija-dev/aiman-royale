@@ -5,8 +5,6 @@
 
 
 
-
-
 @section('content')
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
@@ -405,8 +403,8 @@
                     </div>
                 </div>
                 @else
-                    @foreach($categories as $category)
-                   <div class="item flex justify-center items-center">
+                @foreach($categories as $category)
+                <div class="item flex justify-center items-center">
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
@@ -420,6 +418,7 @@
 
                         <div
                             class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                            <a href="{{ route('category.show', $category->slug) }}" class="block">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
                                     {{ $category->name }}
@@ -445,7 +444,7 @@
                 </div>
                 @endforeach
                 @endif
-                
+
             </div>
 
             <!-- Custom Navigation Arrows -->
@@ -562,7 +561,7 @@
         <!-- Scroll Wrapper -->
         <div class="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-3 smxl:grid-cols-2 grid-cols-1 gap-3">
             @foreach ($categories->where('parent_id', null) as $category)
-            
+
             <div
                 class="group flex justify-between items-center lgg:gap-3 gap-[3px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
                 <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"

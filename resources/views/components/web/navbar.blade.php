@@ -748,15 +748,15 @@
                     </span>
                 </button>
 
-@php
-    // Get cart count for current user/guest
-    $cartCount = 0;
-    if (Auth::check()) {
-        $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
-    } else {
-        $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
-    }
-@endphp
+                @php
+                // Get cart count for current user/guest
+                $cartCount = 0;
+                if (Auth::check()) {
+                $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
+                } else {
+                $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
+                }
+                @endphp
 
                 <button onclick="window.location.href='{{ route('cart.index') }}'"
                     class="text-gray-700 hover:text-black group relative">
@@ -778,70 +778,70 @@
 
                 <!-- Profile Section -->
                 @auth
-                    <!-- Profile with Dropdown (Logged In) -->
-                    <div class="relative group">
-                        <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                            <div class="relative">
-                                <img src="https://i.pravatar.cc/32" alt="User"
-                                    class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
-                                <span
-                                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
-                            </div>
-                            <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
-                            <i
-                                class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
-                        </button>
-
-                        <!-- Account Dropdown -->
-                        <div id="account-dropdown"
-                            class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
-                            <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                            </div>
-
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-user text-gray-500 w-4"></i>
-                                <span>My Profile</span>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
-                                <span>Orders</span>
-                                <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-heart text-gray-500 w-4"></i>
-                                <span>Wishlist</span>
-                                <span class="ml-auto text-primary text-xs">12</span>
-                            </a>
-
-                            <hr class="my-2 border-gray-100" />
-
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                    <i class="fa-solid fa-right-from-bracket w-4"></i>
-                                    <span>Logout</span>
-                                </button>
-                            </form>
+                <!-- Profile with Dropdown (Logged In) -->
+                <div class="relative group">
+                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
+                        <div class="relative">
+                            <img src="https://i.pravatar.cc/32" alt="User"
+                                class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
+                            <span
+                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
                         </div>
-                    </div>
-                @else
-                    <!-- Login Button (Not Logged In) -->
-                    <a href="{{ route('page.login') }}"
-                        class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
-                        <div
-                            class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
-                            <i class="fa-solid fa-user text-xs"></i>
-                        </div>
-                        <span class="text-sm font-semibold">Login</span>
+                        <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
                         <i
-                            class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
-                    </a>
+                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                    </button>
+
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown"
+                        class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        </div>
+
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-user text-gray-500 w-4"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
+                            <span>Orders</span>
+                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-heart text-gray-500 w-4"></i>
+                            <span>Wishlist</span>
+                            <span class="ml-auto text-primary text-xs">12</span>
+                        </a>
+
+                        <hr class="my-2 border-gray-100" />
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                <i class="fa-solid fa-right-from-bracket w-4"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @else
+                <!-- Login Button (Not Logged In) -->
+                <a href="{{ route('page.login') }}"
+                    class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
+                    <div
+                        class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
+                        <i class="fa-solid fa-user text-xs"></i>
+                    </div>
+                    <span class="text-sm font-semibold">Login</span>
+                    <i
+                        class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                </a>
                 @endauth
             </div>
         </div>
@@ -857,40 +857,41 @@
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
-                    @foreach ($categories->where('parent_id', null) as $category)
-                        <div class="relative group">
-                            <a href="{{ route('category.show', $category->slug) }}"
-                                class="hover:text-black desktop-nav-link flex items-center gap-1"
-                                data-category="{{ $category->name }}">
-                                {{ $category->name }}
-                                @if($categories->where('parent_id', $category->id)->count() > 0)
-                                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                                @endif
+
+                @foreach ($categories->where('parent_id', null) as $category)
+                <div class="relative group">
+                    <a href="{{ route('category.show', $category->slug) }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1"
+                        data-category="{{ $category->name }}">
+                        {{ $category->name }}
+                        @if($categories->where('parent_id', $category->id)->count() > 0)
+                        <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        @endif
+                    </a>
+
+                    <!-- Subcategories Dropdown -->
+                    @if($categories->where('parent_id', $category->id)->count() > 0)
+                    <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="py-2">
+                            @foreach($categories->where('parent_id', $category->id) as $subcategory)
+                            <a href="{{ route('category.show', $subcategory->slug) }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
+                                {{ $subcategory->name }}
                             </a>
-                            
-                            <!-- Subcategories Dropdown -->
-                            @if($categories->where('parent_id', $category->id)->count() > 0)
-                            <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                <div class="py-2">
-                                    @foreach($categories->where('parent_id', $category->id) as $subcategory)
-                                    <a href="{{ route('category.show', $subcategory->slug) }}" 
-                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
-                                        {{ $subcategory->name }}
-                                    </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                            @endif
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
+                    @endif
+                </div>
+                @endforeach
                 @else
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
-                        Kameez</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
+                    Kameez</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
                 @endif
             </nav>
         </div>
@@ -1046,125 +1047,126 @@
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
             @if (isset($categories) && count($categories) > 0)
-                @foreach ($categories as $category)
-                    <div class="menu-item has-submenu top-level-item">
-                        <button class="back-button">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                        </button>
-                        <a href="{{ route('category.show', $category->slug) }}"
-                            class="menu-link top-level-link group">
-                            <span class="flex-1">{{ $category->name }}</span>
-                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </a>
+
+            @foreach ($categories as $category)
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="{{ route('category.show', $category->slug) }}"
+                    class="menu-link top-level-link group">
+                    <span class="flex-1">{{ $category->name }}</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
                         <ul class="submenu">
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Style</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->take(5) as $cat)
-                                            <li class="menu-item">
-                                                <a href="{{ route('category.show', $cat->slug) }}"
-                                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
+                            @if (isset($categories) && count($categories) > 0)
+                            @foreach ($categories->take(5) as $cat)
+                            <li class="menu-item">
+                                <a href="{{ route('category.show', $cat->slug) }}"
+                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
                             </li>
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Occasion</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    @if (isset($occasions) && count($occasions) > 0)
-                                        @foreach ($occasions->take(5) as $occasion)
-                                            <li class="menu-item">
-                                                <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
+                            @endforeach
+                            @endif
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Occasion</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            @if (isset($occasions) && count($occasions) > 0)
+                            @foreach ($occasions->take(5) as $occasion)
+                            <li class="menu-item">
+                                <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
                             </li>
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Collection</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
-                                            Kameez</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
-                                    </li>
-                                </ul>
+                            @endforeach
+                            @endif
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
+                                    Kameez</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
                             </li>
                         </ul>
-                    </div>
-                @endforeach
+                    </li>
+                </ul>
+            </div>
+            @endforeach
             @else
-                <!-- Default menu items -->
-                <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                    </button>
-                    <a href="#" class="menu-link top-level-link group">
-                        <span class="flex-1">Lahenga</span>
-                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle group">
-                                <span class="flex-1">Style</span>
-                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                    </button>
-                    <a href="#" class="menu-link top-level-link group">
-                        <span class="flex-1">Salwar Kameez</span>
-                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle group">
-                                <span class="flex-1">Style</span>
-                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+            <!-- Default menu items -->
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Lahenga</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Salwar Kameez</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             @endif
         </div>
     </nav>
@@ -1222,52 +1224,54 @@
                             <div>
                                 <ul class="px-0">
                                     @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->where('parent_id', null)->take(5) as $parentCategory)
-                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
-                                            <ul class="ml-4 mb-4">
-                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
-                                                            {{ $subcategory->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                                @endif
-                                            </ul>
+                                    @foreach ($categories->where('parent_id', null)->take(5) as $parentCategory)
+                                    <li class="mb-4 text-[1.3rem]"><a href="{{ route('category.show', $parentCategory->slug) }}">
+                                            {{ $parentCategory->name }}
+                                        </a></li>
+                                    <ul class="ml-4 mb-4">
+                                        @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
+                                        <li class="mb-2 text-[1.1rem] text-gray-600">
+                                            <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                {{ $subcategory->name }}
+                                            </a>
+                                        </li>
                                         @endforeach
+                                        @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                        <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
+                                        @endif
+                                    </ul>
+                                    @endforeach
                                     @else
-                                        <li class="mb-4 text-[1.3rem]">Traditional</li>
-                                        <li class="mb-4 text-[1.3rem]">Modern</li>
-                                        <li class="mb-4 text-[1.3rem]">Fusion</li>
+                                    <li class="mb-4 text-[1.3rem]">Traditional</li>
+                                    <li class="mb-4 text-[1.3rem]">Modern</li>
+                                    <li class="mb-4 text-[1.3rem]">Fusion</li>
                                     @endif
                                 </ul>
                             </div>
                             <div>
                                 <ul class="px-0">
                                     @if (isset($categories) && count($categories) > 5)
-                                        @foreach ($categories->where('parent_id', null)->slice(5, 5) as $parentCategory)
-                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
-                                            <ul class="ml-4 mb-4">
-                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
-                                                            {{ $subcategory->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                                @endif
-                                            </ul>
+                                    @foreach ($categories->where('parent_id', null)->slice(5, 5) as $parentCategory)
+                                    <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
+                                    <ul class="ml-4 mb-4">
+                                        @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
+                                        <li class="mb-2 text-[1.1rem] text-gray-600">
+                                            <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                {{ $subcategory->name }}
+                                            </a>
+                                        </li>
                                         @endforeach
+                                        @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                        <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
+                                        @endif
+                                    </ul>
+                                    @endforeach
                                     @else
-                                        <li class="mb-4 text-[1.3rem]">Casual</li>
-                                        <li class="mb-4 text-[1.3rem]">Formal</li>
-                                        <li class="mb-4 text-[1.3rem]">Party</li>
-                                        <li class="mb-4 text-[1.3rem]">Office</li>
-                                        <li class="mb-4 text-[1.3rem]">Ethnic</li>
+                                    <li class="mb-4 text-[1.3rem]">Casual</li>
+                                    <li class="mb-4 text-[1.3rem]">Formal</li>
+                                    <li class="mb-4 text-[1.3rem]">Party</li>
+                                    <li class="mb-4 text-[1.3rem]">Office</li>
+                                    <li class="mb-4 text-[1.3rem]">Ethnic</li>
                                     @endif
                                 </ul>
                             </div>
@@ -1280,9 +1284,9 @@
                                     class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
                                     <p class="text-[2rem] font-bold text-white text-center">
                                         @if (isset($categories) && count($categories) > 0)
-                                            {{ $categories->first()->name ?? 'Styles' }}
+                                        {{ $categories->first()->name ?? 'Styles' }}
                                         @else
-                                            Styles
+                                        Styles
                                         @endif
                                     </p>
                                     <button class="px-6 py-2 text-[1.2rem] font-bold bg-white">Shop Now</button>
@@ -1300,65 +1304,65 @@
                             <div
                                 class="w-full xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
                                 @if (isset($occasions) && count($occasions) > 0)
-                                    @foreach ($occasions->take(4) as $occasion)
-                                        <div class=" flex flex-col gap-2">
-                                            <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                                <img class="w-full h-full object-cover aspect-auto"
-                                                    src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                    alt="{{ $occasion->name }}">
-                                            </a>
-                                            <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                                <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                    class="hover:text-black transition-colors">{{ $occasion->name }}</a>
-                                            </p>
-                                        </div>
-                                    @endforeach
+                                @foreach ($occasions->take(4) as $occasion)
+                                <div class=" flex flex-col gap-2">
+                                    <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                        <img class="w-full h-full object-cover aspect-auto"
+                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                            alt="{{ $occasion->name }}">
+                                    </a>
+                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                        <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                            class="hover:text-black transition-colors">{{ $occasion->name }}</a>
+                                    </p>
+                                </div>
+                                @endforeach
                                 @else
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Wedding">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Wedding</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Party">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Party</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Festival">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Festival</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Casual">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Casual</a>
-                                        </p>
-                                    </div>
+                                <div class=" flex flex-col gap-2">
+                                    <a href="#"
+                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                        <img class="w-full h-full object-cover aspect-auto"
+                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                            alt="Wedding">
+                                    </a>
+                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                        <a href="#" class="hover:text-black transition-colors">Wedding</a>
+                                    </p>
+                                </div>
+                                <div class=" flex flex-col gap-2">
+                                    <a href="#"
+                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                        <img class="w-full h-full object-cover aspect-auto"
+                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                            alt="Party">
+                                    </a>
+                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                        <a href="#" class="hover:text-black transition-colors">Party</a>
+                                    </p>
+                                </div>
+                                <div class=" flex flex-col gap-2">
+                                    <a href="#"
+                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                        <img class="w-full h-full object-cover aspect-auto"
+                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                            alt="Festival">
+                                    </a>
+                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                        <a href="#" class="hover:text-black transition-colors">Festival</a>
+                                    </p>
+                                </div>
+                                <div class=" flex flex-col gap-2">
+                                    <a href="#"
+                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                        <img class="w-full h-full object-cover aspect-auto"
+                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                            alt="Casual">
+                                    </a>
+                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                        <a href="#" class="hover:text-black transition-colors">Casual</a>
+                                    </p>
+                                </div>
                                 @endif
                                 <!-- Product items here -->
                             </div>
@@ -1371,9 +1375,9 @@
                                 </div>
                                 <p class="text-[2rem] font-bold text-gray-700 text-center">
                                     @if (isset($occasions) && count($occasions) > 0)
-                                        {{ $occasions->first()->name ?? 'Occasions' }}
+                                    {{ $occasions->first()->name ?? 'Occasions' }}
                                     @else
-                                        Occasions
+                                    Occasions
                                     @endif
                                 </p>
                             </div>
