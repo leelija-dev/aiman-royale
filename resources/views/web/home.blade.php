@@ -75,6 +75,111 @@
         display: none;
     }
 </style>
+<div class="w-full bg-gradient-to-b from-pink-50/40 to-white px-4 py-6 md:py-8 lgg:hidden block">
+  <!-- Category Tabs – Elegant & Centered -->
+  {{-- <div class="flex justify-center gap-6 md:gap-12 mb-6">
+    <button class="pb-2 text-lg md:text-xl font-semibold text-black border-b-2 border-black tracking-wide">WOMEN</button>
+    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">MEN</button>
+    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">BRIDAL</button>
+    <button class="pb-2 text-lg md:text-xl font-medium text-gray-500 hover:text-black hover:border-b-2 hover:border-black transition-all duration-300">LUXE</button>
+  </div> --}}
+
+  <!-- Catchy Headline (optional – remove if not wanted) -->
+  <h3 class="text-center text-xl md:text-2xl font-bold text-gray-800 mb-5 tracking-wide">
+    Discover Your Signature Style ✨
+  </h3>
+
+  <!-- Horizontal Scroll – No scrollbar, snap feel -->
+  <div class="overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+    <div class="flex gap-5 md:gap-8 pb-6 min-w-max">
+
+      <!-- Bestsellers -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-pink-200/60">
+          <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+               alt="Bestsellers" class="w-full h-full object-cover object-top">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Bestsellers</span>
+      </div>
+
+      <!-- Saree -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-amber-200/60">
+          <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+               alt="Saree" class="w-full h-full object-cover object-top">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Saree</span>
+      </div>
+
+      <!-- Salwar Kameez -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-emerald-200/60">
+            <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                alt="Salwar Kameez" class="w-full h-full object-cover object-top">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Salwar Kameez</span>
+      </div>
+
+      <!-- Lehenga -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-rose-200/60">
+          <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
+               alt="Lehenga" class="w-full h-full object-cover object-top">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Lehenga</span>
+      </div>
+
+      <!-- Indo Western -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-indigo-200/60">
+          <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
+               alt="Indo Western" class="w-full h-full object-cover object-top">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Indo Western</span>
+      </div>
+
+      <!-- Blouses -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-purple-200/60">
+          <img src="https://blog.kalkifashion.com/wp-content/uploads/2023/05/11-Indian-Traditional-Saree-Draping-Styles.jpg"
+               alt="Blouses" class="w-full h-full object-cover">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Blouses</span>
+      </div>
+
+      <!-- Menswear -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-blue-200/60">
+          <!-- Use your own menswear image here -->
+          <img src="https://images.unsplash.com/photo-1609815368508-5b8c5e3d8e4e?w=400"
+               alt="Menswear" class="w-full h-full object-cover">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Menswear</span>
+      </div>
+
+      <!-- Bridal Edit -->
+      <div class="flex flex-col items-center min-w-[100px] sm:min-w-[120px] snap-center transition-transform duration-300 hover:scale-105">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-lg ring-1 ring-amber-300/60">
+          <img src="https://www.twamev.com/dw/image/v2/BJZV_PRD/on/demandware.static/-/Library-Sites-TwamevSharedLibrary/default/dw848d8fcc/Twamev%20Images%20October/54820/Twamev%20Apparel%20-%20Types%20of%20Lehengas%20Every%20Bride%20Should%20Know_blog%201%20copy.jpg"
+               alt="Bridal Edit" class="w-full h-full object-cover">
+        </div>
+        <span class="text-sm sm:text-base font-semibold text-gray-800">Bridal Edit</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Required CSS for no scrollbar + smooth snap -->
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -549,30 +654,48 @@
 </section>
 
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lg:py-12 py-6">
     <div class="container mx-auto px-4">
-        <!-- Scroll Wrapper -->
-        <div class="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-3 smxl:grid-cols-2 grid-cols-1 gap-3">
-            @foreach ($categories as $category)
-            <div
-                class="group flex justify-between items-center lgg:gap-3 gap-[3px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
-                <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                    class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
+        <!-- Scrollable Wrapper -->
+        <div class="overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 lg:-mx-0 lg:px-0">
+            <div class="flex flex-nowrap gap-3 min-w-max snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:gap-4 lg:snap-none">
+                @foreach ($categories as $category)
+                    <div
+                        class="group flex justify-between items-center gap-3 min-w-[220px] sm:min-w-[240px] lg:min-w-0 flex-shrink-0 border border-gray-200 rounded-full px-4 py-3 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5 snap-center lg:snap-none"
+                    >
+                        <img
+                            src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            class="min-w-12 min-h-12 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            alt="{{ $category->name }}"
+                        />
 
-                <span
-                    class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary">
-                    {{ $category->name }}
-                </span>
+                        <span
+                            class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary"
+                        >
+                            {{ $category->name }}
+                        </span>
 
-                <span
-                    class="lgg:ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white">
-                    {{ $category->products_count }}
-                </span>
+                        <span
+                            class="ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white"
+                        >
+                            {{ $category->products_count }}
+                        </span>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
 </section>
+
+<style>
+    .scrollbar-hide {
+        -ms-overflow-style: none;          /* IE and Edge */
+        scrollbar-width: none;             /* Firefox */
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;                     /* Chrome, Safari, Opera */
+    }
+</style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
@@ -1918,11 +2041,11 @@
 
                 <!-- Top Banner -->
                 <div class="flex justify-center items-center">
-                    <div class="w-auto flex sm:flex-row flex-col  bg-gradient-to-r from-primary  to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg whitespace-nowrap flex items-center gap-2">
+                    <div class="w-auto flex sm:flex-row flex-col  bg-gradient-to-r from-primary  to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg   items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:block hidden" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
                         </svg>
-                        DESIGNER'S PERSPECTIVE · AIMAN FASHION
+                        DESIGNER'S PERSPECTIVE
                     </div>
                 </div>
 

@@ -426,12 +426,17 @@
         bottom: 0;
         background: white;
         z-index: 20006;
-        display: none;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
         flex-direction: column;
+        overflow: hidden;
+        /* Prevent content from being pushed by keyboard */
     }
 
     #mobile-search-dropdown.active {
-        display: flex;
+       opacity: 1;
+        pointer-events: auto;
     }
 
     .mobile-search-header {
@@ -441,6 +446,8 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        flex-shrink: 0;
+        /* Prevent header from shrinking */
     }
 
     .mobile-search-header input {
@@ -450,6 +457,7 @@
         border-radius: 8px;
         font-size: 16px;
         outline: none;
+        box-sizing: border-box;
     }
 
     .mobile-search-header button {
@@ -459,12 +467,16 @@
         font-size: 18px;
         cursor: pointer;
         padding: 8px;
+        flex-shrink: 0;
+        /* Prevent buttons from shrinking */
     }
 
     .mobile-search-results {
         flex: 1;
         overflow-y: auto;
         padding: 15px;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
     }
 
     .mobile-search-section {
@@ -599,6 +611,11 @@
         display: block;
     }
 
+    /* Mobile specific search icon container */
+    .mobile-search-icon-container {
+        display: none;
+    }
+
     @media screen and (min-width: 1366px) and (max-width: 1600px) {
         .respon-wrap-img {
             max-height: 350px !important;
@@ -620,23 +637,82 @@
             display: none !important;
         }
 
+        /* Hide desktop search input on mobile */
+        #search-input {
+            display: none !important;
+        }
+
+        /* Make search icon more prominent on mobile */
+        #search-icon {
+            width: 40px;
+            height: 40px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #search-icon:hover {
+            background: #e5e7eb;
+            transform: scale(1.05);
+        }
+
+        .close-search {
+            display: none !important;
+        }
+
+        /* Mobile search suggestions */
         .mobile-search-suggestions {
-            position: absolute;
-            top: 100%;
+            position: fixed;
+            top: 0;
             left: 0;
             right: 0;
+            bottom: 0;
             background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 8px;
-            z-index: 20005;
+            z-index: 20007;
             display: none;
-            max-height: 300px;
-            overflow-y: auto;
+            flex-direction: column;
         }
 
         .mobile-search-suggestions.active {
-            display: block;
+            display: flex;
+        }
+
+        .mobile-search-suggestions-header {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .mobile-search-suggestions-header input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .mobile-search-suggestions-header button {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-search-suggestions-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
         }
 
         .search-suggestion-item {
@@ -665,19 +741,6 @@
             min-width: 16px;
             text-align: center;
         }
-
-        /* Hide the regular search input on mobile, show only icon */
-        #search-input {
-            display: none;
-        }
-
-        #search-icon {
-            display: block !important;
-        }
-
-        .close-search {
-            display: none !important;
-        }
     }
 
     @media (min-width: 769px) {
@@ -690,10 +753,6 @@
         }
 
         #search-input {
-            display: block;
-        }
-
-        #search-icon {
             display: block !important;
         }
     }
@@ -965,7 +1024,19 @@
 
                 <!-- Mobile Search Suggestions (only shown on mobile) -->
                 <div class="mobile-search-suggestions" id="mobile-search-suggestions">
-                    <!-- Suggestions will be populated dynamically -->
+                    <div class="mobile-search-suggestions-header">
+                        <button id="mobile-suggestions-back">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <input type="text" placeholder="Search products..." id="mobile-suggestions-input"
+                            autocomplete="off" />
+                        <button id="mobile-suggestions-clear">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mobile-search-suggestions-content" id="mobile-suggestions-content">
+                        <!-- Suggestions will be populated dynamically -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1667,6 +1738,10 @@
         const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
         const mobileSidebarSearchInput = document.getElementById('mobile-sidebar-search-input');
         const mobileSidebarSearchIcon = document.getElementById('mobile-sidebar-search-icon');
+        const mobileSuggestionsInput = document.getElementById('mobile-suggestions-input');
+        const mobileSuggestionsBack = document.getElementById('mobile-suggestions-back');
+        const mobileSuggestionsClear = document.getElementById('mobile-suggestions-clear');
+        const mobileSuggestionsContent = document.getElementById('mobile-suggestions-content');
 
         // DOM elements for desktop search results
         const categoriesList = document.getElementById('categories-list');
@@ -1840,59 +1915,6 @@
         }
 
         // ==================== MOBILE SEARCH FUNCTIONS ====================
-        // Update mobile search suggestions
-        function updateMobileSuggestions(searchTerm = '') {
-            const suggestionsContainer = document.getElementById('mobile-search-suggestions');
-            suggestionsContainer.innerHTML = '';
-
-            if (!searchTerm.trim()) {
-                // Show default trending suggestions
-                searchData.trending.slice(0, 5).forEach(trend => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.className = 'search-suggestion-item';
-                    suggestionItem.setAttribute('data-search', trend);
-                    suggestionItem.innerHTML = `
-                        <i class="fa-solid fa-tag"></i>
-                        <span>${trend}</span>
-                    `;
-                    suggestionItem.addEventListener('click', () => {
-                        openMobileSearch(trend);
-                    });
-                    suggestionsContainer.appendChild(suggestionItem);
-                });
-            } else {
-                // Show filtered suggestions
-                const term = searchTerm.toLowerCase();
-                const filteredTrending = searchData.trending.filter(trend =>
-                    trend.toLowerCase().includes(term)
-                ).slice(0, 5);
-
-                if (filteredTrending.length === 0) {
-                    const noSuggestion = document.createElement('div');
-                    noSuggestion.className = 'search-suggestion-item';
-                    noSuggestion.innerHTML = `
-                        <i class="fa-solid fa-search"></i>
-                        <span>No suggestions found</span>
-                    `;
-                    suggestionsContainer.appendChild(noSuggestion);
-                } else {
-                    filteredTrending.forEach(trend => {
-                        const suggestionItem = document.createElement('div');
-                        suggestionItem.className = 'search-suggestion-item';
-                        suggestionItem.setAttribute('data-search', trend);
-                        suggestionItem.innerHTML = `
-                            <i class="fa-solid fa-tag"></i>
-                            <span>${highlightText(trend, searchTerm)}</span>
-                        `;
-                        suggestionItem.addEventListener('click', () => {
-                            openMobileSearch(trend);
-                        });
-                        suggestionsContainer.appendChild(suggestionItem);
-                    });
-                }
-            }
-        }
-
         // Render mobile search results
         function renderMobileSearchResults(searchTerm = '') {
             const results = filterData(searchTerm);
@@ -1948,6 +1970,61 @@
             });
         }
 
+        // Update mobile search suggestions
+        function updateMobileSuggestions(searchTerm = '') {
+            const suggestionsContainer = mobileSuggestionsContent;
+            suggestionsContainer.innerHTML = '';
+
+            if (!searchTerm.trim()) {
+                // Show default trending suggestions
+                searchData.trending.slice(0, 5).forEach(trend => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'search-suggestion-item';
+                    suggestionItem.setAttribute('data-search', trend);
+                    suggestionItem.innerHTML = `
+                        <i class="fa-solid fa-tag"></i>
+                        <span>${trend}</span>
+                    `;
+                    suggestionItem.addEventListener('click', () => {
+                        openMobileSearch(trend);
+                        hideMobileSuggestions();
+                    });
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            } else {
+                // Show filtered suggestions
+                const term = searchTerm.toLowerCase();
+                const filteredTrending = searchData.trending.filter(trend =>
+                    trend.toLowerCase().includes(term)
+                ).slice(0, 5);
+
+                if (filteredTrending.length === 0) {
+                    const noSuggestion = document.createElement('div');
+                    noSuggestion.className = 'search-suggestion-item';
+                    noSuggestion.innerHTML = `
+                        <i class="fa-solid fa-search"></i>
+                        <span>No suggestions found</span>
+                    `;
+                    suggestionsContainer.appendChild(noSuggestion);
+                } else {
+                    filteredTrending.forEach(trend => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'search-suggestion-item';
+                        suggestionItem.setAttribute('data-search', trend);
+                        suggestionItem.innerHTML = `
+                            <i class="fa-solid fa-tag"></i>
+                            <span>${highlightText(trend, searchTerm)}</span>
+                        `;
+                        suggestionItem.addEventListener('click', () => {
+                            openMobileSearch(trend);
+                            hideMobileSuggestions();
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                }
+            }
+        }
+
         // Perform mobile search
         function performMobileSearch(searchTerm) {
             // Show loading indicator
@@ -1964,6 +2041,9 @@
         function openMobileSearch(initialValue = '') {
             if (!isMobile()) return;
 
+            // Close any open suggestions first
+            hideMobileSuggestions();
+
             mobileSearchDropdown.classList.add('active');
             document.body.style.overflow = 'hidden';
 
@@ -1975,10 +2055,12 @@
                 renderMobileSearchResults(); // Show default results
             }
 
-            // Focus on mobile search input
+            // Focus on mobile search input with a delay to ensure it works
             setTimeout(() => {
                 mobileSearchInput.focus();
-            }, 100);
+                // Scroll to top to ensure input is visible
+                mobileSearchResults.scrollTop = 0;
+            }, 150);
         }
 
         // Close mobile search
@@ -1986,18 +2068,25 @@
             mobileSearchDropdown.classList.remove('active');
             document.body.style.overflow = '';
             mobileSearchInput.value = '';
-            hideMobileSearchSuggestions();
+            hideMobileSuggestions();
         }
 
-        // Show mobile search suggestions
-        function showMobileSearchSuggestions() {
+        // Show mobile suggestions
+        function showMobileSuggestions() {
             if (!isMobile()) return;
             mobileSearchSuggestions.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Focus on suggestions input
+            setTimeout(() => {
+                mobileSuggestionsInput.focus();
+            }, 100);
         }
 
-        // Hide mobile search suggestions
-        function hideMobileSearchSuggestions() {
+        // Hide mobile suggestions
+        function hideMobileSuggestions() {
             mobileSearchSuggestions.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // ==================== INITIALIZE SEARCH ====================
@@ -2043,7 +2132,7 @@
             }
 
             // ==================== MOBILE SEARCH EVENTS ====================
-            // Search icon click - opens mobile search on mobile, desktop search on desktop
+            // Search icon click - opens mobile search on mobile
             if (searchIcon) {
                 searchIcon.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -2099,6 +2188,32 @@
                 });
             }
 
+            // Mobile suggestions input events
+            if (mobileSuggestionsInput) {
+                let suggestionsTimeout;
+                mobileSuggestionsInput.addEventListener('input', function() {
+                    clearTimeout(suggestionsTimeout);
+
+                    const searchTerm = this.value.trim();
+
+                    // Debounce the suggestions update
+                    suggestionsTimeout = setTimeout(() => {
+                        updateMobileSuggestions(searchTerm);
+                    }, 200);
+                });
+
+                // Handle Enter key in suggestions
+                mobileSuggestionsInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const searchTerm = this.value.trim();
+                        if (searchTerm) {
+                            openMobileSearch(searchTerm);
+                            hideMobileSuggestions();
+                        }
+                    }
+                });
+            }
+
             // Mobile sidebar search input focus - also opens mobile search
             if (mobileSidebarSearchInput) {
                 mobileSidebarSearchInput.addEventListener('focus', function() {
@@ -2135,6 +2250,24 @@
                 });
             }
 
+            // Mobile suggestions back button
+            if (mobileSuggestionsBack) {
+                mobileSuggestionsBack.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hideMobileSuggestions();
+                });
+            }
+
+            // Mobile suggestions clear button
+            if (mobileSuggestionsClear) {
+                mobileSuggestionsClear.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileSuggestionsInput.value = '';
+                    mobileSuggestionsInput.focus();
+                    updateMobileSuggestions('');
+                });
+            }
+
             // Close search when clicking outside (desktop only)
             if (!isMobile()) {
                 document.addEventListener('click', function(event) {
@@ -2151,28 +2284,47 @@
             if (searchInput) {
                 searchInput.addEventListener('focus', function() {
                     if (isMobile()) {
-                        // On mobile, when search input gets focus, open full-screen mobile search
-                        openMobileSearch(this.value);
-                    }
-                });
-
-                searchInput.addEventListener('input', function() {
-                    if (isMobile()) {
+                        // On mobile, when search input gets focus, open mobile suggestions
+                        showMobileSuggestions();
                         updateMobileSuggestions(this.value);
-                        showMobileSearchSuggestions();
                     }
                 });
             }
 
-            // Close mobile suggestions when clicking outside
-            document.addEventListener('click', function(event) {
-                if (isMobile()) {
-                    const isClickInsideSuggestions = mobileSearchSuggestions.contains(event.target);
-                    const isClickOnSearchInput = searchInput.contains(event.target);
+            // Handle keyboard visibility changes on mobile
+            let originalHeight = window.innerHeight;
+            window.addEventListener('resize', function() {
+                if (!isMobile()) return;
 
-                    if (!isClickInsideSuggestions && !isClickOnSearchInput) {
-                        hideMobileSearchSuggestions();
+                const newHeight = window.innerHeight;
+                const keyboardVisible = newHeight < originalHeight;
+
+                if (keyboardVisible) {
+                    // Keyboard is shown - ensure search dropdown is visible
+                    if (mobileSearchDropdown.classList.contains('active')) {
+                        // Adjust scroll position to keep input visible
+                        setTimeout(() => {
+                            mobileSearchResults.scrollTop = 0;
+                        }, 100);
                     }
+                } else {
+                    // Keyboard is hidden - check if we need to close search
+                    if (mobileSearchInput.value.trim() === '' && mobileSearchDropdown.classList
+                        .contains('active')) {
+                        // User might have closed keyboard without searching
+                        // Keep search open but reset results
+                        renderMobileSearchResults();
+                    }
+                }
+
+                originalHeight = newHeight;
+            });
+
+            // Handle back button on Android/iOS
+            window.addEventListener('popstate', function(event) {
+                if (isMobile() && mobileSearchDropdown.classList.contains('active')) {
+                    closeMobileSearch();
+                    event.preventDefault();
                 }
             });
         }
@@ -2483,20 +2635,31 @@
         hideCategoriesMenu();
 
         // Handle window resize
-        window.addEventListener('resize', function() {
-            // Close all search dropdowns on resize
-            hideDesktopSearchDropdown();
-            closeMobileSearch();
-            hideMobileSearchSuggestions();
+       // Handle window resize
+       let lastWindowWidth = window.innerWidth;
+window.addEventListener('resize', function() {
+    const currentWidth = window.innerWidth;
+    const widthChanged = currentWidth !== lastWindowWidth;
+    lastWindowWidth = currentWidth;
 
-            // Reset mobile menu if switching to desktop
-            if (!isMobile()) {
-                if (mobileSidebar && !mobileSidebar.classList.contains('-translate-x-full')) {
-                    mobileSidebar.classList.add('-translate-x-full');
-                    if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }
-            }
-        });
+    // If only height changed (likely keyboard show/hide on mobile), do nothing
+    if (!widthChanged && isMobile()) {
+        return;
+    }
+
+    // Close all search dropdowns on real resizes (orientation / breakpoint)
+    hideDesktopSearchDropdown();
+    closeMobileSearch();
+    hideMobileSuggestions();
+
+    // Reset mobile menu if switching to desktop
+    if (!isMobile()) {
+        if (mobileSidebar && !mobileSidebar.classList.contains('-translate-x-full')) {
+            mobileSidebar.classList.add('-translate-x-full');
+            if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+});
     });
 </script>
