@@ -142,12 +142,33 @@
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if(isset($categories) && count($categories) > 0)
-                @foreach($categories as $category)
-                <a href="{{ route('category.show', $category->slug) }}"
-                    class="hover:text-black desktop-nav-link"
-                    data-category="{{ $category->name }}">
-                    {{ $category->name }}
-                </a>
+                @foreach($categories->where('parent_id', null) as $category)
+                <div class="relative group">
+                    <a href="{{ route('category.show', $category->slug) }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1"
+                        data-category="{{ $category->name }}">
+                        {{ $category->name }}
+                        @if($categories->where('parent_id', $category->id)->count() > 0)
+                        <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        @endif
+                    </a>
+                    
+                    <!-- Subcategories Dropdown -->
+                    @if($categories->where('parent_id', $category->id)->count() > 0)
+                    <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="py-2">
+                            @foreach($categories->where('parent_id', $category->id) as $subcategory)
+                            <a href="{{ route('category.show', $subcategory->slug) }}" 
+                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
+                                {{ $subcategory->name }}
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
                 @endforeach
                 @else
                 <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar Kameez</a>
@@ -246,151 +267,33 @@
     <!-- Mobile Navigation -->
     <nav class="py-6 bg-[#fdebdc] h-full overflow-y-auto">
         <div class="mega-menu">
-            @if(isset($categories) && count($categories) > 0)
-            @foreach($categories as $category)
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button bg-white" style="background-color: white !important; display: none;">← Back to Main Menu</button>
-                <a href="{{ route('category.show', $category->slug) }}" class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0 ">
-                    {{ $category->name }} <i class="fa-solid fa-angle-right"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Style <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            @if(isset($categories) && count($categories) > 0)
-                                @foreach($categories->take(5) as $category)
-                                    <li class="menu-item mb-1">
-                                        <a href="{{ route('category.show', $category->slug) }}" class="menu-link">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                            @else
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Traditional</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Modern</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Fusion</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Occasion <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            @if(isset($occasions) && count($occasions) > 0)
-                           
-                                @foreach($occasions->take(5) as $occasion)
-                                    <li class="menu-item mb-1">
-                                        <a href="{{ route('occasion.show', $occasion->slug) }}" class="menu-link">{{ $occasion->name }}</a>
-                                    </li>
-                                @endforeach
-                            @else
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Wedding</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Party</a></li>
-                                <li class="menu-item mb-1"><a href="#" class="menu-link">Festival</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Collection <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
+            <!-- Categories Section -->
+            <div class="space-y-2">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3">Categories</h3>
+                @if(isset($categories) && count($categories) > 0)
+                @foreach($categories->where('parent_id', null) as $category)
+                <div class="top-level-item">
+                    <a href="{{ route('category.show', $category->slug) }}" 
+                       class="menu-link top-level-link">
+                        {{ $category->name }}
+                    </a>
+                </div>
+                @endforeach
+                @else
+                <div class="top-level-item">
+                    <a href="#" class="menu-link top-level-link">Salwar Kameez</a>
+                </div>
+                <div class="top-level-item">
+                    <a href="#" class="menu-link top-level-link">Lehengas</a>
+                </div>
+                <div class="top-level-item">
+                    <a href="#" class="menu-link top-level-link">Bridal</a>
+                </div>
+                <div class="top-level-item">
+                    <a href="#" class="menu-link top-level-link">Wedding</a>
+                </div>
+                @endif
             </div>
-            @endforeach
-            @else
-            <!-- Default menu items -->
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button bg-white" style="background-color: white !important; display: none;">← Back to Main Menu</button>
-                <a href="#" class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0">
-                    Lahenga <i class="fa-solid fa-angle-right"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Style <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Occasion <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Collection <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button bg-white" style="background-color: white !important; display: none;">← Back to Main Menu</button>
-                <a href="#" class="menu-link top-level-link bg-white rounded-[7px] my-2 mb-0 mx-0">
-                    Salwar Kameez <i class="fa-solid fa-angle-right"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Style <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Occasion <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle">
-                            Collection <i class="fa-solid fa-angle-right"></i>
-                        </div>
-                        <ul class="submenu bg-white mx-[23px] rounded-[6px] pl-[5px]">
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Red Saree</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Salwar Kameez</a></li>
-                            <li class="menu-item mb-1"><a href="#" class="menu-link">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            @endif
         </div>
     </nav>
 </div>
