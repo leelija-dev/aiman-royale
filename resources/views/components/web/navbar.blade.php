@@ -274,16 +274,10 @@
         top: 136px;
         left: 0;
         right: 0;
-        /* background: white;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        border-radius: 12px; */
         margin-top: 10px;
         z-index: 20005;
-        /* overflow: hidden; */
         display: none;
         animation: slideDown 0.3s ease-out;
-        /* max-height: 70vh; */
-        /* overflow-y: auto; */
     }
 
     #search-dropdown.active {
@@ -671,6 +665,19 @@
             min-width: 16px;
             text-align: center;
         }
+
+        /* Hide the regular search input on mobile, show only icon */
+        #search-input {
+            display: none;
+        }
+
+        #search-icon {
+            display: block !important;
+        }
+
+        .close-search {
+            display: none !important;
+        }
     }
 
     @media (min-width: 769px) {
@@ -680,6 +687,14 @@
 
         .mobile-search-suggestions {
             display: none !important;
+        }
+
+        #search-input {
+            display: block;
+        }
+
+        #search-icon {
+            display: block !important;
         }
     }
 </style>
@@ -851,25 +866,28 @@
                                 class="hover:text-black desktop-nav-link flex items-center gap-1"
                                 data-category="{{ $category->name }}">
                                 {{ $category->name }}
-                                @if($categories->where('parent_id', $category->id)->count() > 0)
-                                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
+                                @if ($categories->where('parent_id', $category->id)->count() > 0)
+                                    <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
                                 @endif
                             </a>
 
                             <!-- Subcategories Dropdown -->
-                            @if($categories->where('parent_id', $category->id)->count() > 0)
-                            <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                <div class="py-2">
-                                    @foreach($categories->where('parent_id', $category->id) as $subcategory)
-                                    <a href="{{ route('category.show', $subcategory->slug) }}"
-                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
-                                        {{ $subcategory->name }}
-                                    </a>
-                                    @endforeach
+                            @if ($categories->where('parent_id', $category->id)->count() > 0)
+                                <div
+                                    class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        @foreach ($categories->where('parent_id', $category->id) as $subcategory)
+                                            <a href="{{ route('category.show', $subcategory->slug) }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
+                                                {{ $subcategory->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         </div>
                     @endforeach
@@ -1018,16 +1036,6 @@
             <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
                 id="mobile-sidebar-search-icon"></i>
         </div>
-        {{-- <div class="flex justify-center mt-4">
-            <div class="flex items-center gap-4">
-                <a href="tel:+1234567890" class="text-gray-600 hover:text-primary">
-                    <i class="fa-solid fa-phone"></i>
-                </a>
-                <a href="https://wa.me/1234567890" target="_blank" class="text-gray-600 hover:text-green-600">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-            </div>
-        </div> --}}
     </div>
 
     <!-- Mobile Navigation -->
@@ -1215,12 +1223,13 @@
                                             <ul class="ml-4 mb-4">
                                                 @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
                                                     <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                        <a href="{{ route('category.show', $subcategory->slug) }}"
+                                                            class="hover:text-black transition-colors">
                                                             {{ $subcategory->name }}
                                                         </a>
                                                     </li>
                                                 @endforeach
-                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                                @if ($categories->where('parent_id', $parentCategory->id)->count() == 0)
                                                     <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
                                                 @endif
                                             </ul>
@@ -1240,12 +1249,13 @@
                                             <ul class="ml-4 mb-4">
                                                 @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
                                                     <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                        <a href="{{ route('category.show', $subcategory->slug) }}"
+                                                            class="hover:text-black transition-colors">
                                                             {{ $subcategory->name }}
                                                         </a>
                                                     </li>
                                                 @endforeach
-                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                                @if ($categories->where('parent_id', $parentCategory->id)->count() == 0)
                                                     <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
                                                 @endif
                                             </ul>
@@ -2032,11 +2042,16 @@
                 });
             }
 
-            // Search icon click (desktop)
+            // ==================== MOBILE SEARCH EVENTS ====================
+            // Search icon click - opens mobile search on mobile, desktop search on desktop
             if (searchIcon) {
                 searchIcon.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (!isMobile()) {
+                    if (isMobile()) {
+                        // On mobile: open full-screen mobile search dropdown
+                        openMobileSearch(searchInput.value);
+                    } else {
+                        // On desktop: toggle the desktop search dropdown
                         if (searchDropdown.classList.contains('active')) {
                             hideDesktopSearchDropdown();
                         } else {
@@ -2058,44 +2073,8 @@
                 });
             }
 
-            // ==================== MOBILE SEARCH EVENTS ====================
             // Mobile search input events
             if (mobileSearchInput) {
-                // Open mobile search on focus
-                searchInput.addEventListener('focus', function() {
-                    if (isMobile()) {
-                        openMobileSearch();
-                    }
-                });
-
-                // Mobile sidebar search input focus
-                if (mobileSidebarSearchInput) {
-                    mobileSidebarSearchInput.addEventListener('focus', function() {
-                        if (isMobile()) {
-                            openMobileSearch();
-                        }
-                    });
-                }
-
-                // Mobile sidebar search icon click
-                if (mobileSidebarSearchIcon) {
-                    mobileSidebarSearchIcon.addEventListener('click', function() {
-                        if (isMobile()) {
-                            openMobileSearch();
-                        }
-                    });
-                }
-
-                // Search icon click on mobile
-                if (searchIcon) {
-                    searchIcon.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (isMobile()) {
-                            openMobileSearch(searchInput.value);
-                        }
-                    });
-                }
-
                 // Real-time mobile search
                 let mobileSearchTimeout;
                 mobileSearchInput.addEventListener('input', function() {
@@ -2116,6 +2095,24 @@
                         if (searchTerm) {
                             window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
                         }
+                    }
+                });
+            }
+
+            // Mobile sidebar search input focus - also opens mobile search
+            if (mobileSidebarSearchInput) {
+                mobileSidebarSearchInput.addEventListener('focus', function() {
+                    if (isMobile()) {
+                        openMobileSearch();
+                    }
+                });
+            }
+
+            // Mobile sidebar search icon click - also opens mobile search
+            if (mobileSidebarSearchIcon) {
+                mobileSidebarSearchIcon.addEventListener('click', function() {
+                    if (isMobile()) {
+                        openMobileSearch(mobileSidebarSearchInput.value);
                     }
                 });
             }
@@ -2150,12 +2147,12 @@
                 });
             }
 
-            // Mobile search input focus for suggestions
+            // Mobile search input focus for suggestions (when clicking on main search input on mobile)
             if (searchInput) {
                 searchInput.addEventListener('focus', function() {
                     if (isMobile()) {
-                        updateMobileSuggestions(this.value);
-                        showMobileSearchSuggestions();
+                        // On mobile, when search input gets focus, open full-screen mobile search
+                        openMobileSearch(this.value);
                     }
                 });
 

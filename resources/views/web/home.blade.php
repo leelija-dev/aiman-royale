@@ -1,6 +1,70 @@
 @extends('layout.web.main-layout')
 
 
+<sttyle>
+
+    /* Custom font classes */
+
+
+    /* Update existing classes with custom fonts */
+    .text-center h2 {
+
+        font-weight: 800;
+    }
+
+    .group h3 {
+
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+
+
+
+    /* Card hover shine effect */
+
+
+    .group:hover::before {
+        left: 100%;
+    }
+
+    /* DOTS CONTAINER */
+    #categories-carousel .owl-dots {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* EACH DOT BUTTON */
+    #categories-carousel .owl-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        /* light gray */
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    /* HOVER EFFECT */
+    #categories-carousel .owl-dot:hover {
+        transform: scale(1.2);
+        background: #c084fc;
+    }
+
+    /* ACTIVE DOT */
+    #categories-carousel .owl-dot.active {
+        width: 32px;
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Inner span removal (optional for cleaner look) */
+    #categories-carousel .owl-dot span {
+        display: none;
+    }
+</sttyle>
 
 
 
@@ -481,81 +545,6 @@
     </div>
 </section>
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
-
-    /* Custom font classes */
-    .font-display {
-        font-family: 'Playfair Display', serif;
-    }
-
-    .font-body {
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Update existing classes with custom fonts */
-    .text-center h2 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 800;
-    }
-
-    .group h3 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-
-    .text-center p,
-    .group p,
-    a span {
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Card hover shine effect */
-
-
-    .group:hover::before {
-        left: 100%;
-    }
-
-    /* DOTS CONTAINER */
-    #categories-carousel .owl-dots {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* EACH DOT BUTTON */
-    #categories-carousel .owl-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: #e5e7eb;
-        /* light gray */
-        transition: all 0.4s ease;
-        position: relative;
-    }
-
-    /* HOVER EFFECT */
-    #categories-carousel .owl-dot:hover {
-        transform: scale(1.2);
-        background: #c084fc;
-    }
-
-    /* ACTIVE DOT */
-    #categories-carousel .owl-dot.active {
-        width: 32px;
-        background: linear-gradient(90deg, #a855f7, #ec4899);
-        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
-    }
-
-    /* Inner span removal (optional for cleaner look) */
-    #categories-carousel .owl-dot span {
-        display: none;
-    }
-</style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto px-4">
@@ -2257,7 +2246,7 @@
             loop: true,
             margin: 20,
             nav: false, // 🚫 Disable Owl default nav buttons
-            dots: true,
+            dots: false,
             autoplay: true,
             autoplayTimeout: 5000,
             autoplayHoverPause: true,
@@ -2265,27 +2254,38 @@
             responsive: {
                 0: {
                     items: 1,
-                    dots: true
+                    dots: false,
+                     margin: 10,
+                },
+                450: {
+                    items: 2,
+                    dots: false,
+                    margin: 10,
                 },
                 640: {
                     items: 2,
-                    dots: true
+                    dots: false,
+                     margin: 10,
                 },
                 768: {
                     items: 3,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1024: {
                     items: 4,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1280: {
                     items: 5,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1366: {
                     items: 6,
-                    dots: false
+                    dots: false,
+                    margin: 10,
                 }
             }
         });

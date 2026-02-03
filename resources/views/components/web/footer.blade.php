@@ -133,12 +133,10 @@
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12 lg:mb-16">
         <div class="mb-8 lg:mb-0">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#8B1E2D] to-[#D26A6A] flex items-center justify-center shadow-lg">
-              <span class="text-2xl font-bold text-white">A</span>
-            </div>
-            <h2 class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#8B1E2D] via-[#D26A6A] to-[#D29A1E] bg-clip-text text-transparent">
-              Aiman
-            </h2>
+            <a href="/">
+                    <img class="xxs:h-[60px] xxs:max-h-max max-h-[40px] h-auto w-auto pointer-events-auto"
+                        src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}" alt="">
+                </a>
           </div>
           <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed">
             We are a fashion brand that offers the best of contemporary, ethnic Indian fashion,
