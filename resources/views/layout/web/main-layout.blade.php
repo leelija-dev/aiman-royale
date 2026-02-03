@@ -17,7 +17,7 @@
     <meta name="description" content="{{$pageMeta->meta_description ?? ''}}">
     <meta name="keywords" content="{{$pageMeta->meta_keyword ?? ''}}">
     <meta name="tag" content="{{$pageMeta->meta_tags ?? ''}}">
-    
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -29,7 +29,7 @@
     <link rel="shortcut icon" href="{{asset('web/images/amarmaa-logo.webp')}}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
 
-   
+
     @yield('styles')
 
     @stack('styles')
@@ -95,13 +95,13 @@
 
     <x-web.footer />
     <!-- Add this temporarily for testing -->
-    <!-- <button onclick="localStorage.clear(); location.reload();" 
+    <!-- <button onclick="localStorage.clear(); location.reload();"
         style="position: fixed; top: 10px; right: 10px; z-index: 10000; background: red; color: white; padding: 5px;display:none;">
     Reset Popup
 </button> -->
 
     <!-- PWA Installation Popup -->
-    <div class="pwa-popup-overlay" id="pwaPopupOverlay"></div>
+    {{-- <div class="pwa-popup-overlay" id="pwaPopupOverlay"></div>
     <div class="pwa-install-popup" id="pwaInstallPopup">
         <button class="pwa-close-btn" id="pwaCloseBtn">
             <i class="fas fa-times"></i>
@@ -134,7 +134,7 @@
             <li>Confirm by tapping <strong>"Install"</strong></li>
         </ol>
         <button class="pwa-instructions-close" id="pwaInstructionsClose">Got It</button>
-    </div>
+    </div> --}}
 
     @yield('scripts')
 
@@ -144,7 +144,7 @@
 
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
     <script src="{{asset('web/js/pwa-installation.js')}}"></script>
-    
+
 
     <!-- common js  -->
     <script src="{{asset('web/js/main.js')}}"></script>

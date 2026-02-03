@@ -1,5 +1,5 @@
 <footer class="bg-gradient-to-b from-[#FBEDEC] to-[#F9E4E2]">
-  <div class="container mx-auto px-4 lg:px-8">
+  <div class="container mx-auto px-4 lg:px-8 pt-6">
 
     <!-- Top Section with Newsletter & Instagram -->
     <div class="border-b border-[#E8C8C8]/50 pb-12 lg:pb-16">

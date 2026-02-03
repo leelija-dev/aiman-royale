@@ -445,7 +445,7 @@
                 </div>
                 @endforeach
                 @endif
-                
+
             </div>
 
             <!-- Custom Navigation Arrows -->
@@ -1888,7 +1888,7 @@
 
 <style>
     .parallax-bg {
-        background-image: url('{{ asset(' web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
+        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
         /* change path */
         will-change: transform;
     }
