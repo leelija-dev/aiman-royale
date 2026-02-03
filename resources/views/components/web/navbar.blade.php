@@ -857,13 +857,13 @@
                                 </svg>
                                 @endif
                             </a>
-                            
+
                             <!-- Subcategories Dropdown -->
                             @if($categories->where('parent_id', $category->id)->count() > 0)
                             <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                 <div class="py-2">
                                     @foreach($categories->where('parent_id', $category->id) as $subcategory)
-                                    <a href="{{ route('category.show', $subcategory->slug) }}" 
+                                    <a href="{{ route('category.show', $subcategory->slug) }}"
                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
                                         {{ $subcategory->name }}
                                     </a>
@@ -1286,7 +1286,7 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
                             <div
-                                class="w-full xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
+                                class="w-full xll:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid gap-3">
                                 @if (isset($occasions) && count($occasions) > 0)
                                     @foreach ($occasions->take(4) as $occasion)
                                         <div class=" flex flex-col gap-2">
@@ -1347,24 +1347,21 @@
                                             <a href="#" class="hover:text-black transition-colors">Casual</a>
                                         </p>
                                     </div>
+                                    <div class=" flex flex-col gap-2">
+                                        <a href="#"
+                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
+                                            <img class="w-full h-full object-cover aspect-auto"
+                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                                alt="Casual">
+                                        </a>
+                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
+                                            <a href="#" class="hover:text-black transition-colors">Casual</a>
+                                        </p>
+                                    </div>
                                 @endif
                                 <!-- Product items here -->
                             </div>
-                            <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                                <div
-                                    class="overflow-hidden rounded-md xll:max-h-[500px] max-h-[400px] w-full respon-wrap-img">
-                                    <img class="w-full h-full object-cover aspect-auto"
-                                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                        alt="">
-                                </div>
-                                <p class="text-[2rem] font-bold text-gray-700 text-center">
-                                    @if (isset($occasions) && count($occasions) > 0)
-                                        {{ $occasions->first()->name ?? 'Occasions' }}
-                                    @else
-                                        Occasions
-                                    @endif
-                                </p>
-                            </div>
+
                         </div>
                         <button
                             class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show
