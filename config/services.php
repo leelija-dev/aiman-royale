@@ -18,6 +18,17 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
+    'cashfree' => [
+        'test_mode' => env('CASHFREE_TEST_MODE', true),
+        'test_app_id' => env('CASHFREE_TEST_APP_ID'),
+        'test_secret_key' => env('CASHFREE_TEST_SECRET_KEY'),
+        'app_id' => env('CASHFREE_APP_ID'),
+        'secret_key' => env('CASHFREE_SECRET_KEY'),
+        'environment' => env('CASHFREE_ENVIRONMENT', 'sandbox'),
+        'return_url' => env('CASHFREE_RETURN_URL'),
+        'webhook_url' => env('CASHFREE_WEBHOOK_URL'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
