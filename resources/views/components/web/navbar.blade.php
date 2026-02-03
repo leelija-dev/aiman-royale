@@ -264,11 +264,33 @@
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
-                    @foreach ($categories as $category)
-                        <a href="{{ route('category.show', $category->slug) }}"
-                            class="hover:text-black desktop-nav-link" data-category="{{ $category->name }}">
-                            {{ $category->name }}
-                        </a>
+                    @foreach ($categories->where('parent_id', null) as $category)
+                        <div class="relative group">
+                            <a href="{{ route('category.show', $category->slug) }}"
+                                class="hover:text-black desktop-nav-link flex items-center gap-1"
+                                data-category="{{ $category->name }}">
+                                {{ $category->name }}
+                                @if($categories->where('parent_id', $category->id)->count() > 0)
+                                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                @endif
+                            </a>
+                            
+                            <!-- Subcategories Dropdown -->
+                            @if($categories->where('parent_id', $category->id)->count() > 0)
+                            <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <div class="py-2">
+                                    @foreach($categories->where('parent_id', $category->id) as $subcategory)
+                                    <a href="{{ route('category.show', $subcategory->slug) }}" 
+                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
+                                        {{ $subcategory->name }}
+                                    </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                        </div>
                     @endforeach
                 @else
                     <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
@@ -522,30 +544,52 @@
                             <div>
                                 <ul class="px-0">
                                     @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->take(5) as $category)
-                                            <li class="mb-4 text-[1.3rem]">{{ $category->name }}</li>
+                                        @foreach ($categories->where('parent_id', null)->take(5) as $parentCategory)
+                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
+                                            <ul class="ml-4 mb-4">
+                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
+                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
+                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                            {{ $subcategory->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
+                                                @endif
+                                            </ul>
                                         @endforeach
                                     @else
-                                        <li class="mb-4 text-[1.3rem]">Salwar Kameez</li>
-                                        <li class="mb-4 text-[1.3rem]">Lehengas</li>
-                                        <li class="mb-4 text-[1.3rem]">Sarees</li>
-                                        <li class="mb-4 text-[1.3rem]">Kurtis</li>
-                                        <li class="mb-4 text-[1.3rem]">Gowns</li>
+                                        <li class="mb-4 text-[1.3rem]">Traditional</li>
+                                        <li class="mb-4 text-[1.3rem]">Modern</li>
+                                        <li class="mb-4 text-[1.3rem]">Fusion</li>
                                     @endif
                                 </ul>
                             </div>
                             <div>
                                 <ul class="px-0">
                                     @if (isset($categories) && count($categories) > 5)
-                                        @foreach ($categories->slice(5, 5) as $category)
-                                            <li class="mb-4 text-[1.3rem]">{{ $category->name }}</li>
+                                        @foreach ($categories->where('parent_id', null)->slice(5, 5) as $parentCategory)
+                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
+                                            <ul class="ml-4 mb-4">
+                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
+                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
+                                                        <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
+                                                            {{ $subcategory->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                                @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
+                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
+                                                @endif
+                                            </ul>
                                         @endforeach
                                     @else
-                                        <li class="mb-4 text-[1.3rem]">Anarkali</li>
-                                        <li class="mb-4 text-[1.3rem]">Patiala</li>
-                                        <li class="mb-4 text-[1.3rem]">Churidar</li>
-                                        <li class="mb-4 text-[1.3rem]">Palazzo</li>
-                                        <li class="mb-4 text-[1.3rem]">Sharara</li>
+                                        <li class="mb-4 text-[1.3rem]">Casual</li>
+                                        <li class="mb-4 text-[1.3rem]">Formal</li>
+                                        <li class="mb-4 text-[1.3rem]">Party</li>
+                                        <li class="mb-4 text-[1.3rem]">Office</li>
+                                        <li class="mb-4 text-[1.3rem]">Ethnic</li>
                                     @endif
                                 </ul>
                             </div>
