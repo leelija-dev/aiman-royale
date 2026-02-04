@@ -482,14 +482,6 @@
               </svg>
             </button>
 
-            <!-- Add To Cart (Hidden → Hover Show) -->
-            <div
-              class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-              <button
-                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                Add To Cart
-              </button>
-            </div>
           </div>
 
           <!-- Content -->

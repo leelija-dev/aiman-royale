@@ -67,6 +67,7 @@ class HomeController extends Controller
         $sortBy = $request->input('sort', 'date-desc');
         $priceMin = $request->input('price_min');
         $priceMax = $request->input('price_max');
+        $search = $request->input('search');
 
         // Start building the query
         $query = DB::table('products')
@@ -83,6 +84,16 @@ class HomeController extends Controller
                 'product_variants.stock',
                 'product_images.image as variant_image'
             );
+
+        // Apply search filter
+        if ($search && !empty(trim($search))) {
+            $searchTerm = trim($search);
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
 
         // Apply brand filters
         if (!empty($brands)) {

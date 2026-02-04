@@ -781,13 +781,13 @@
                 <!-- Profile with Dropdown (Logged In) -->
                 <div class="relative group">
                     <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                        <!-- <div class="relative">
-                            <img src="https://i.pravatar.cc/32" alt="User"
+                         <!-- <div class="relative">
+                             <img src="https://i.pravatar.cc/32" alt="User"
                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
                             <span
-                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> -->
-                        </div>
-                        <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
+                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> 
+                         </div> -->
+                        <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
                         <i
                             class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
                     </button>
@@ -919,7 +919,7 @@
                         <div class="max-h-[70vh] overflow-y-auto">
 
                             <!-- Loading Indicator -->
-                            <div class="search-loading" id="search-loading">
+                            <div class="search-loading" id="search-loading" style="display: none;">
                                 <i class="fa-solid fa-spinner fa-spin mr-2"></i>
                                 Searching...
                             </div>
@@ -963,6 +963,203 @@
                     <!-- Suggestions will be populated dynamically -->
                 </div>
             </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Sidebar -->
+<div id="mobile-sidebar" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-50" id="sidebar-overlay"></div>
+    <div class="fixed right-0 top-0 h-full w-80 bg-white shadow-xl transform translate-x-full transition-transform duration-300" id="sidebar-content">
+        <!-- Mobile sidebar content here -->
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const searchDropdown = document.getElementById('search-dropdown');
+    const searchLoading = document.getElementById('search-loading');
+    const categoriesList = document.getElementById('categories-list');
+    const trendingList = document.getElementById('trending-list');
+    const productsList = document.getElementById('products-list');
+    const noResults = document.getElementById('no-results');
+    const searchQuery = document.getElementById('search-query');
+    const viewMore = document.getElementById('view-more');
+    const closeSearchBtn = document.getElementById('close-search-btn');
+    const searchIcon = document.getElementById('search-icon');
+
+    let searchTimeout;
+    let allCategories = [];
+    let allProducts = [];
+
+    // Initialize search with categories and products
+    initializeSearch();
+
+    function initializeSearch() {
+        // Load categories and products on page load
+        Promise.all([
+            fetch('/api/categories/all-with-children').then(res => res.json()),
+            fetch('/api/products').then(res => res.json())
+        ]).then(([categoriesData, productsData]) => {
+            if (categoriesData.success) {
+                allCategories = categoriesData.data;
+                populateCategories(allCategories);
+            }
+            if (productsData.success) {
+                allProducts = productsData.data;
+                populateTrendingSearches(allProducts);
+            }
+        }).catch(error => {
+            console.error('Error initializing search:', error);
+        });
+    }
+
+    function populateCategories(categories) {
+        categoriesList.innerHTML = '';
+        const parentCategories = categories.filter(cat => !cat.parent_id);
+        
+        parentCategories.forEach(category => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'search-category-item';
+            categoryItem.innerHTML = `
+                <a href="/category/${category.slug}" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
+                    <i class="fa-solid fa-tag text-gray-400 text-sm"></i>
+                    <span class="text-sm">${category.name}</span>
+                </a>
+            `;
+            categoriesList.appendChild(categoryItem);
+        });
+    }
+
+    function populateTrendingSearches(products) {
+        trendingList.innerHTML = '';
+        const trendingProducts = products.slice(0, 5); // Show first 5 as trending
+        
+        trendingProducts.forEach(product => {
+            const trendingItem = document.createElement('div');
+            trendingItem.className = 'search-trending-item';
+            trendingItem.innerHTML = `
+                <a href="#" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
+                    <i class="fa-solid fa-fire text-orange-400 text-sm"></i>
+                    <span class="text-sm">${product.name}</span>
+                </a>
+            `;
+            trendingList.appendChild(trendingItem);
+        });
+    }
+
+    function searchProducts(query) {
+        if (!query || query.length < 2) {
+            showDefaultResults();
+            return;
+        }
+
+        searchLoading.style.display = 'block';
+        categoriesList.parentElement.style.display = 'none';
+        trendingList.parentElement.style.display = 'none';
+        productsList.parentElement.style.display = 'none';
+        noResults.style.display = 'none';
+
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+
+        // Set new timeout for debounced search
+        searchTimeout = setTimeout(() => {
+            const filteredProducts = allProducts.filter(product => 
+                product.name.toLowerCase().includes(query.toLowerCase()) ||
+                (product.description && product.description.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            searchLoading.style.display = 'none';
+
+            if (filteredProducts.length > 0) {
+                populateProducts(filteredProducts.slice(0, 8)); // Show max 8 products
+                productsList.parentElement.style.display = 'block';
+                viewMore.style.display = 'block';
+                viewMore.href = `/all-product?search=${encodeURIComponent(query)}`;
+            } else {
+                noResults.style.display = 'block';
+                searchQuery.textContent = query;
+            }
+        }, 300);
+    }
+
+    function populateProducts(products) {
+        productsList.innerHTML = '';
+        
+        products.forEach(product => {
+            const productItem = document.createElement('div');
+            productItem.className = 'search-product-item';
+            
+            const productImage = product.images && product.images.length > 0 
+                ? `/${product.images[0].image_path}` 
+                : '/assets/images/placeholder.jpg';
+            
+            const price = product.discount_price || product.price;
+            
+            productItem.innerHTML = `
+                <a href="/single-product/${product.id}" class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded">
+                    <img src="${productImage}" alt="${product.name}" class="w-12 h-12 object-cover rounded">
+                    <div class="flex-1">
+                        <div class="text-sm font-medium">${product.name}</div>
+                        <div class="text-xs text-gray-500">Rs. ${price}</div>
+                    </div>
+                </a>
+            `;
+            productsList.appendChild(productItem);
+        });
+    }
+
+    function showDefaultResults() {
+        searchLoading.style.display = 'none';
+        categoriesList.parentElement.style.display = 'block';
+        trendingList.parentElement.style.display = 'block';
+        productsList.parentElement.style.display = 'none';
+        noResults.style.display = 'none';
+        viewMore.style.display = 'none';
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.trim();
+        searchProducts(query);
+    });
+
+    searchInput.addEventListener('focus', function() {
+        if (this.value.trim().length < 2) {
+            showDefaultResults();
+        }
+        searchDropdown.style.display = 'block';
+    });
+
+    // Close search dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+            searchDropdown.style.display = 'none';
+        }
+    });
+
+    closeSearchBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchDropdown.style.display = 'none';
+        showDefaultResults();
+    });
+
+    searchIcon.addEventListener('click', function() {
+        if (searchInput.value.trim()) {
+            window.location.href = `/all-product?search=${encodeURIComponent(searchInput.value)}`;
+        }
+    });
+
+    // Handle Enter key in search
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+            window.location.href = `/all-product?search=${encodeURIComponent(this.value)}`;
+        }
+    });
+});
+</script>
         </div>
     </div>
 </header>
