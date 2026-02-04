@@ -1398,10 +1398,10 @@
                     <!-- Content will be loaded dynamically -->
                     <div class="flex flex-row justify-between gap-3 items-start">
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
-                            <div id="style-list-left">
+                            <div id="style-list-left" class="flex flex-col">
                                
                             </div>
-                            <div id="style-list-right">
+                            <div id="style-list-right" class="flex flex-col">
                               
                             </div>
                         </div>
