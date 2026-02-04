@@ -442,100 +442,81 @@
         class="w-full grid xl:grid-cols-4 lg:grid-cols-3 lgg:grid-cols-2 smui:grid-cols-3 xxs:grid-cols-2 grid-cols-1 m gap-4">
 
         @foreach($products as $product)
-        <div
-          class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-          <!-- Image Wrapper -->
-          <div class="relative rounded-xl overflow-hidden">
-            <img
-              src="{{ asset('uploads/products/' . ($product['images'][0] ?? 'default.jpg')) }}"
-              alt="{{ $product['name'] }}"
-              class="w-full h-[340px] object-cover object-top object-center" />
+        <div class="item flex justify-center items-center">
+          <a href="/single-product/{{ $product['id'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
+            <!-- Image Wrapper -->
+            <div class="relative rounded-xl overflow-hidden">
+              <img
+                src="{{ !empty($product['images']) ? asset($product['images'][0]) : asset('assets/images/placeholder.jpg') }}"
+                alt="{{ $product['name'] }}"
+                class="w-full h-[340px] object-cover object-top object-center" />
 
-            <!-- Badges -->
-            <div class="absolute top-3 left-3 flex flex-col gap-2">
-              <span
-                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                Trending
-              </span>
-              @if($product['discount_price'] && $product['discount_price'] < $product['price'])
-              <span
-                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
-              </span>
-              @endif
+              <!-- Badges -->
+              <div class="absolute top-3 left-3 flex flex-col gap-2">
+                <span
+                  class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                  Trending
+                </span>
+                @if($product['discount_price'] && $product['discount_price'] < $product['price'])
+                <span
+                  class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                  -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
+                </span>
+                @endif
+              </div>
+
+              <!-- Wishlist Heart Icon (Top Right) -->
+              <button
+                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="w-5 h-5 text-red-500">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+
             </div>
 
-            <!-- Wishlist Heart Icon (Top Right) -->
-            <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                class="w-5 h-5 text-red-500">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
+            <!-- Content -->
+            <div class="p-4 space-y-1">
+              <h3 class="text-[15px] font-semibold text-gray-900">
+                {{ $product['name'] }}
+              </h3>
 
-          </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <span>{{ $product['brand'] ?? 'Brand Name' }}</span>
+                <span class="flex items-center gap-1 text-gray-700">
+                  <span class="text-sm font-medium">4.4</span>
+                </span>
+              </div>
 
-          <!-- Content -->
-          <div class="p-4 space-y-1">
-            <h3 class="text-[15px] font-semibold text-gray-900">
-              {{ $product['name'] }}
-            </h3>
-
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-              <span>{{ $product['brand'] ?? 'Brand Name' }}</span>
-              <span class="flex items-center gap-1 text-gray-700">
-                <span class="text-sm font-medium">4.4</span>
-              </span>
-            </div>
-
-            <div class="flex items-center gap-2 mt-2 flex-wrap">
-              @php
-              $firstVariant = reset($product['variants']);
-              $displayPrice = $firstVariant['price_after_discount'] ?? $firstVariant['price'] ?? $product['price'];
-              $originalPrice = $firstVariant['price'] ?? $product['price'];
-              @endphp
-              <span class="text-lg font-bold text-gray-900">Rs. {{ number_format($displayPrice, 2) }}</span>
-              @if($firstVariant['price_after_discount'] && $firstVariant['price_after_discount'] < $originalPrice)
-              <span class="text-sm text-gray-400 line-through">Rs. {{ number_format($originalPrice, 2) }}</span>
-              @endif
-            </div>
-            
-            <!-- Variants Display -->
-            @if(count($product['variants']) > 1)
-            <div class="mt-3 space-y-2">
-              <div class="text-xs font-medium text-gray-600">Available Variants:</div>
-              <div class="flex flex-wrap gap-2">
-                @foreach($product['variants'] as $variant)
-                  <div class="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded">
-                    <span class="font-medium">{{ strtoupper($variant['color'] ?? '') }}</span>
-                    @if($variant['size'])
-                    <span class="text-gray-500">|</span>
-                    <span>{{ $variant['size'] }}</span>
-                    @endif
-                    <span class="text-gray-500">|</span>
-                    <span class="font-bold">Rs. {{ number_format($variant['price_after_discount'] ?? $variant['price'], 0) }}</span>
-                  </div>
-                @endforeach
+              <div class="flex items-center gap-2 mt-2 flex-wrap">
+                @php
+                $firstVariant = reset($product['variants']);
+                $displayPrice = $firstVariant['price_after_discount'] ?? $firstVariant['price'] ?? $product['price'];
+                $originalPrice = $firstVariant['price'] ?? $product['price'];
+                @endphp
+                <span class="text-lg font-bold text-gray-900">Rs. {{ number_format($displayPrice, 2) }}</span>
+                @if($firstVariant['price_after_discount'] && $firstVariant['price_after_discount'] < $originalPrice)
+                <span class="text-sm text-gray-400 line-through">Rs. {{ number_format($originalPrice, 2) }}</span>
+                @endif
+              </div>
+              
+              <div class="lgg:hidden block">
+                <button
+                  class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">
+                  Add
+                </button>
               </div>
             </div>
-            @endif
-            
-            <div class="lgg:hidden block">
-              <button
-                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">
-                Add
-              </button>
-            </div>
-          </div>
+          </a>
         </div>
         @endforeach
       </div>
