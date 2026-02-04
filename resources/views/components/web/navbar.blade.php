@@ -1,12 +1,26 @@
 <style>
     /* Fix z-index stacking */
     #categories-wrapper-menu {
-        display: none;
+        display: block;
         position: fixed;
         z-index: 20004;
-        top: 80px;
+        opacity: 0;
+        pointer-events: none;
+        top: 101px;
         left: 0;
         right: 0;
+        transform: translateY(-20px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #mobile-sidebar .submenu.active{
+        max-height:600px;
+    }
+
+    #categories-wrapper-menu.visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
     }
 
     nav a {
@@ -94,6 +108,7 @@
     .submenu .submenu {
         margin-left: 20px;
         margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     /* Profile dropdown styles */
@@ -381,7 +396,7 @@
         width: 100%;
         height: 230px;
         object-fit: cover;
-       object-position: 0px -18px;
+        object-position: 0px -18px;
     }
 
     .product-info {
@@ -587,6 +602,19 @@
         display: block;
     }
 
+    /* Category menu loading indicator */
+    .category-menu-loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .category-menu-loading.active {
+        display: block;
+    }
+
     /* Close search button */
     .close-search {
         position: absolute;
@@ -632,6 +660,93 @@
         transition: opacity 0.3s ease;
     }
 
+    /* Categories menu inner animation */
+    .category-content {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease-out;
+    }
+
+    .category-content.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Category sidebar button animation */
+    .category-sidebar-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* .category-sidebar-btn::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: #d4a574;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .category-sidebar-btn.active::after {
+        transform: translateX(0);
+    } */
+
+    .category-sidebar-btn:hover {
+        padding-left: 24px !important;
+        /* transform: translateX(5px); */
+    }
+    .category-sidebar-btn{
+        transition:
+    }
+
+    /* Category menu container animation */
+    #categories-wrapper-menu .max-w-\[calc\(100\%-50px\)\] {
+        animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: top center;
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Desktop nav link hover effect */
+    .desktop-nav-link {
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .desktop-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #d4a574, #b8863c);
+        transition: width 0.3s ease;
+    }
+
+    .desktop-nav-link:hover::after {
+        width: 100%;
+    }
+
+    .desktop-nav-link:hover {
+        color: #d4a574;
+        transform: translateY(-2px);
+    }
+
     /* Hide/Show based on screen size */
     @media (max-width:991px) {
         #search-dropdown {
@@ -645,20 +760,16 @@
 
         /* Make search icon more prominent on mobile */
         #search-icon {
-           width: 100%;
-  justify-content: right;
-  padding: 0 13px;
+            width: 100%;
+            justify-content: right;
+            padding: 0 13px;
             height: 40px;
             display: flex !important;
             align-items: center;
-
-            /* background: #f3f4f6; */
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
-
 
         .close-search {
             display: none !important;
@@ -925,9 +1036,6 @@
     <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
-            <!-- Logo -->
-
-
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
@@ -935,31 +1043,12 @@
                         <div class="relative group">
                             <a href="{{ route('category.show', $category->slug) }}"
                                 class="hover:text-black desktop-nav-link flex items-center gap-1"
-                                data-category="{{ $category->name }}">
+                                data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
                                 {{ $category->name }}
-                                @if ($categories->where('parent_id', $category->id)->count() > 0)
-                                    <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                @endif
+                              
                             </a>
 
-                            <!-- Subcategories Dropdown -->
-                            @if ($categories->where('parent_id', $category->id)->count() > 0)
-                                <div
-                                    class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                    <div class="py-2">
-                                        @foreach ($categories->where('parent_id', $category->id) as $subcategory)
-                                            <a href="{{ route('category.show', $subcategory->slug) }}"
-                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
-                                                {{ $subcategory->name }}
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
+                           
                         </div>
                     @endforeach
                 @else
@@ -1128,7 +1217,7 @@
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
             @if (isset($categories) && count($categories) > 0)
-                @foreach ($categories as $category)
+               @foreach ($categories->where('parent_id', null) as $category)
                     <div class="menu-item has-submenu top-level-item">
                         <button class="back-button">
                             <i class="fa-solid fa-arrow-left mr-2"></i> Back
@@ -1271,7 +1360,7 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[20004] lg:hidden"></div>
 
 <!-- Categories Menu for Desktop -->
-<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto lg:block hidden top-[80px]">
+<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px]">
     <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white">
         <div class="flex">
             <!-- Left Sidebar -->
@@ -1296,80 +1385,39 @@
             <!-- Product Section -->
             <div
                 class="flex-1 bg-[url('https://www.transparenttextures.com/patterns/geometry.png')] bg-opacity-20 py-8 pl-8 pr-4 ">
+                <!-- Loading Indicator for Category Data -->
+                <div class="category-menu-loading" id="category-menu-loading">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                    Loading category data...
+                </div>
+
                 <!-- Style Products -->
                 <div id="style-products"
                     class="category-content xll:max-h-max max-h-[450px] pr-3 overflow-auto active">
+                    <!-- Content will be loaded dynamically -->
                     <div class="flex flex-row justify-between gap-3 items-start">
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
                             <div>
-                                <ul class="px-0">
-                                    @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->where('parent_id', null)->take(5) as $parentCategory)
-                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
-                                            <ul class="ml-4 mb-4">
-                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}"
-                                                            class="hover:text-black transition-colors">
-                                                            {{ $subcategory->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                                @if ($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                                @endif
-                                            </ul>
-                                        @endforeach
-                                    @else
-                                        <li class="mb-4 text-[1.3rem]">Traditional</li>
-                                        <li class="mb-4 text-[1.3rem]">Modern</li>
-                                        <li class="mb-4 text-[1.3rem]">Fusion</li>
-                                    @endif
+                                <ul class="px-0" id="style-list-left">
+                                    <!-- Style items will be populated here -->
                                 </ul>
                             </div>
                             <div>
-                                <ul class="px-0">
-                                    @if (isset($categories) && count($categories) > 5)
-                                        @foreach ($categories->where('parent_id', null)->slice(5, 5) as $parentCategory)
-                                            <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
-                                            <ul class="ml-4 mb-4">
-                                                @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-600">
-                                                        <a href="{{ route('category.show', $subcategory->slug) }}"
-                                                            class="hover:text-black transition-colors">
-                                                            {{ $subcategory->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                                @if ($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                                    <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                                @endif
-                                            </ul>
-                                        @endforeach
-                                    @else
-                                        <li class="mb-4 text-[1.3rem]">Casual</li>
-                                        <li class="mb-4 text-[1.3rem]">Formal</li>
-                                        <li class="mb-4 text-[1.3rem]">Party</li>
-                                        <li class="mb-4 text-[1.3rem]">Office</li>
-                                        <li class="mb-4 text-[1.3rem]">Ethnic</li>
-                                    @endif
+                                <ul class="px-0" id="style-list-right">
+                                    <!-- Style items will be populated here -->
                                 </ul>
                             </div>
                         </div>
                         <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                             <div class="overflow-hidden rounded-md max-h-[400px] w-full relative">
-                                <img class="w-full h-full object-cover aspect-auto"
+                                <img class="w-full h-full object-cover aspect-auto" id="category-banner-image"
                                     src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="">
                                 <div
                                     class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
-                                    <p class="text-[2rem] font-bold text-white text-center">
-                                        @if (isset($categories) && count($categories) > 0)
-                                            {{ $categories->first()->name ?? 'Styles' }}
-                                        @else
-                                            Styles
-                                        @endif
+                                    <p class="text-[2rem] font-bold text-white text-center" id="category-banner-title">
+                                        Styles
                                     </p>
-                                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white">Shop Now</button>
+                                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white" id="category-shop-btn">Shop Now</button>
                                 </div>
                             </div>
                         </div>
@@ -1382,85 +1430,12 @@
                     <div class="flex flex-col gap-2">
                         <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
                             <div
-                                class="w-full xll:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid gap-3">
-                                @if (isset($occasions) && count($occasions) > 0)
-                                    @foreach ($occasions->take(4) as $occasion)
-                                        <div class=" flex flex-col gap-2">
-                                            <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                                <img class="w-full h-full object-cover aspect-auto"
-                                                    src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                    alt="{{ $occasion->name }}">
-                                            </a>
-                                            <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                                <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                    class="hover:text-black transition-colors">{{ $occasion->name }}</a>
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Wedding">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Wedding</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Party">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Party</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Festival">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Festival</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Casual">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Casual</a>
-                                        </p>
-                                    </div>
-                                    <div class=" flex flex-col gap-2">
-                                        <a href="#"
-                                            class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                            <img class="w-full h-full object-cover aspect-auto"
-                                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                                alt="Casual">
-                                        </a>
-                                        <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                            <a href="#" class="hover:text-black transition-colors">Casual</a>
-                                        </p>
-                                    </div>
-                                @endif
-                                <!-- Product items here -->
+                                class="w-full xll:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid gap-3" id="occasion-list">
+                                <!-- Occasion items will be populated here -->
                             </div>
-
                         </div>
                         <button
-                            class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show
+                            class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit" id="occasion-show-more">Show
                             More</button>
                     </div>
                 </div>
@@ -1468,182 +1443,11 @@
                 <!-- Collection Products -->
                 <div id="collection-products"
                     class="category-content xll:max-h-max max-h-[450px] pr-3 overflow-auto hidden">
-                    <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3">
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Light Pink Salwar
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Gray Lahenga
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Red Plazo
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Short Plazo
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
+                    <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3" id="collection-products-list">
+                        <!-- Collection products will be populated here -->
                     </div>
                     <button
-                        class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show
+                        class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit" id="collection-show-more">Show
                         More</button>
                 </div>
             </div>
@@ -1653,6 +1457,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ==================== GLOBAL VARIABLES ====================
+        let currentCategoryId = null;
+        let currentCategoryData = null;
+        let categoryCache = {}; // Cache for API responses
+
         // ==================== SEARCH DATA ====================
         const searchData = {
             categories: [
@@ -1729,6 +1538,396 @@
                 }
             ]
         };
+
+        // ==================== CATEGORY API FUNCTIONS ====================
+        async function fetchCategoryData(categoryId) {
+            // Check cache first
+            if (categoryCache[categoryId]) {
+                return categoryCache[categoryId];
+            }
+
+            const loadingElement = document.getElementById('category-menu-loading');
+            if (loadingElement) {
+                loadingElement.classList.add('active');
+            }
+
+            try {
+                const response = await fetch(`/api/categories/${categoryId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data);
+
+                if (data.success) {
+                    // Cache the response
+                    categoryCache[categoryId] = data.data;
+                    return data.data;
+                } else {
+                    throw new Error(data.message || 'Failed to fetch category data');
+                }
+            } catch (error) {
+                console.error('Error fetching category data:', error);
+                // Return fallback data structure
+                return {
+                    parent_category: { id: categoryId, name: 'Category', slug: 'category' },
+                    style: [],
+                    ocassions: [],
+                    collection: [],
+                    products_by_category: {},
+                    parent_category_products: []
+                };
+            } finally {
+                if (loadingElement) {
+                    loadingElement.classList.remove('active');
+                }
+            }
+        }
+
+        function renderCategoryMenuData(categoryData) {
+            if (!categoryData) return;
+
+            currentCategoryData = categoryData;
+            const parentCategory = categoryData.parent_category;
+            
+            // Update category banner
+            const bannerTitle = document.getElementById('category-banner-title');
+            const shopBtn = document.getElementById('category-shop-btn');
+            if (bannerTitle) bannerTitle.textContent = parentCategory.name || 'Styles';
+            if (shopBtn) shopBtn.textContent = 'Shop Now';
+
+            // Update shop button link
+            if (shopBtn && parentCategory.slug) {
+                shopBtn.onclick = function() {
+                    window.location.href = `/category/${parentCategory.slug}`;
+                };
+            }
+
+            // ==================== RENDER STYLE SECTION ====================
+            renderStyleSection(categoryData);
+
+            // ==================== RENDER OCCASION SECTION ====================
+            renderOccasionSection(categoryData);
+
+            // ==================== RENDER COLLECTION SECTION ====================
+            renderCollectionSection(categoryData);
+        }
+
+        function renderStyleSection(categoryData) {
+            const styleLeftList = document.getElementById('style-list-left');
+            const styleRightList = document.getElementById('style-list-right');
+            
+            if (!styleLeftList || !styleRightList) return;
+
+            // Clear existing content
+            styleLeftList.innerHTML = '';
+            styleRightList.innerHTML = '';
+
+            const styleItems = categoryData.style || [];
+            
+            if (styleItems.length === 0) {
+                // Show default message if no styles
+                styleLeftList.innerHTML = '<li class="mb-4 text-[1.1rem] text-gray-400">No styles found</li>';
+                return;
+            }
+
+            // Split styles into two columns
+            const midIndex = Math.ceil(styleItems.length / 2);
+            const leftStyles = styleItems.slice(0, midIndex);
+            const rightStyles = styleItems.slice(midIndex);
+
+            // Render left column styles
+            leftStyles.forEach(style => {
+                const li = document.createElement('li');
+                li.className = 'mb-4 text-[1.3rem]';
+                li.textContent = style.name;
+                
+                // Create subcategories list
+                const subUl = document.createElement('ul');
+                subUl.className = 'ml-4 mb-4';
+                
+                // You might want to fetch subcategories or use existing data
+                // For now, we'll show the style name as the only item
+                const subLi = document.createElement('li');
+                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
+                
+                const link = document.createElement('a');
+                link.href = `/category/${style.slug}`;
+                link.className = 'hover:text-black transition-colors';
+                link.textContent = style.name;
+                
+                subLi.appendChild(link);
+                subUl.appendChild(subLi);
+                
+                li.appendChild(subUl);
+                styleLeftList.appendChild(li);
+            });
+
+            // Render right column styles
+            rightStyles.forEach(style => {
+                const li = document.createElement('li');
+                li.className = 'mb-4 text-[1.3rem]';
+                li.textContent = style.name;
+                
+                const subUl = document.createElement('ul');
+                subUl.className = 'ml-4 mb-4';
+                
+                const subLi = document.createElement('li');
+                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
+                
+                const link = document.createElement('a');
+                link.href = `/category/${style.slug}`;
+                link.className = 'hover:text-black transition-colors';
+                link.textContent = style.name;
+                
+                subLi.appendChild(link);
+                subUl.appendChild(subLi);
+                li.appendChild(subUl);
+                styleRightList.appendChild(li);
+            });
+        }
+
+        function renderOccasionSection(categoryData) {
+            const occasionList = document.getElementById('occasion-list');
+            const showMoreBtn = document.getElementById('occasion-show-more');
+            
+            if (!occasionList) return;
+
+            occasionList.innerHTML = '';
+
+            const occasions = categoryData.ocassions || [];
+            
+            
+            if (occasions.length === 0) {
+                // Show default fallback occasions
+                const fallbackOccasions = [
+                    { name: 'Wedding', slug: 'wedding' },
+                    { name: 'Party', slug: 'party' },
+                    { name: 'Festival', slug: 'festival' },
+                    { name: 'Casual', slug: 'casual' }
+                ];
+
+                fallbackOccasions.forEach(occasion => {
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col gap-2';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/occasion/${occasion.slug}`;
+                    link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'w-full h-full object-cover aspect-auto';
+                    img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.alt = occasion.name;
+                    
+                    link.appendChild(img);
+                    div.appendChild(link);
+                    
+                    const p = document.createElement('p');
+                    p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+                    
+                    const occLink = document.createElement('a');
+                    occLink.href = `/occasion/${occasion.slug}`;
+                    occLink.className = 'hover:text-black transition-colors';
+                    occLink.textContent = occasion.name;
+                    
+                    p.appendChild(occLink);
+                    div.appendChild(p);
+                    occasionList.appendChild(div);
+                });
+            } else {
+                occasions.slice(0, 4).forEach(occasion => {
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col gap-2';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/occasion/${occasion.slug}`;
+                    link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'w-full h-full object-cover aspect-auto';
+                    img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.alt = occasion.name;
+                    
+                    link.appendChild(img);
+                    div.appendChild(link);
+                    
+                    const p = document.createElement('p');
+                    p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+                    
+                    const occLink = document.createElement('a');
+                    occLink.href = `/occasion/${occasion.slug}`;
+                    occLink.className = 'hover:text-black transition-colors';
+                    occLink.textContent = occasion.name;
+                    
+                    p.appendChild(occLink);
+                    div.appendChild(p);
+                    occasionList.appendChild(div);
+                });
+            }
+
+            // Update show more button
+            if (showMoreBtn && occasions.length > 4) {
+                showMoreBtn.style.display = 'block';
+                showMoreBtn.onclick = function() {
+                    // Implement show more functionality
+                    console.log('Show more occasions clicked');
+                };
+            } else if (showMoreBtn) {
+                showMoreBtn.style.display = 'none';
+            }
+        }
+
+       function renderCollectionSection(categoryData) {
+    const collectionList = document.getElementById('collection-products-list');
+    const showMoreBtn = document.getElementById('collection-show-more');
+    
+    if (!collectionList) return;
+
+    collectionList.innerHTML = '';
+
+    // Extract products from the complex data structure
+    let products = [];
+    
+    if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
+        // Get all products from all categories in products_by_category
+        const productsByCategory = categoryData.collection.products_by_category;
+        
+        // Iterate through each category's product array
+        for (const categoryId in productsByCategory) {
+            if (Array.isArray(productsByCategory[categoryId])) {
+                products = products.concat(productsByCategory[categoryId]);
+            }
+        }
+    }
+    
+    console.log("Extracted products:", products);
+    
+    if (products.length === 0) {
+        // Show default fallback products
+        const fallbackProducts = [
+            {
+                name: "Light Pink Salwar",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
+                slug: "light-pink-salwar"
+            },
+            {
+                name: "Gray Lahenga",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
+                slug: "gray-lahenga"
+            },
+            {
+                name: "Red Plazo",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
+                slug: "red-plazo"
+            },
+            {
+                name: "Short Plazo",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
+                slug: "short-plazo"
+            }
+        ];
+
+        fallbackProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            collectionList.appendChild(productCard);
+        });
+    } else {
+        // Display products (limit to 4 for initial view)
+        products.slice(0, 4).forEach(product => {
+            const productCard = createProductCard({
+                name: product.name,
+                price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
+                originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
+                image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
+            });
+            collectionList.appendChild(productCard);
+        });
+    }
+
+    // Update show more button
+    if (showMoreBtn) {
+        if (products.length > 4) {
+            showMoreBtn.style.display = 'block';
+            showMoreBtn.onclick = function() {
+                // Show remaining products
+                products.slice(4).forEach(product => {
+                    const productCard = createProductCard({
+                        name: product.name,
+                        price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
+                        originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
+                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
+                    });
+                    collectionList.appendChild(productCard);
+                });
+                showMoreBtn.style.display = 'none';
+            };
+        } else {
+            showMoreBtn.style.display = 'none';
+        }
+    }
+}
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow';
+            
+            card.innerHTML = `
+                <!-- Image Wrapper -->
+                <div class="relative rounded-xl overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}"
+                        class="w-full h-[340px] object-cover object-top object-center">
+                    
+                    <!-- Wishlist Heart Icon (Top Right) -->
+                    <button
+                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 space-y-1">
+                    <h3 class="text-[15px] font-semibold text-gray-900">
+                        ${product.name}
+                    </h3>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span>Brand Name</span>
+                        <span class="flex items-center gap-1 text-gray-700">
+                            <span class="text-sm font-medium">4.4</span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2 mt-2 flex-wrap">
+                        <span class="text-lg font-bold text-gray-900">${product.price}</span>
+                        ${product.originalPrice ? `<span class="text-sm text-gray-400 line-through">${product.originalPrice}</span>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add click event to navigate to product page
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                window.location.href = `/product/${product.slug}`;
+            });
+            
+            return card;
+        }
 
         // ==================== SEARCH FUNCTIONALITY ====================
         // Desktop elements
@@ -2366,6 +2565,13 @@
                 link.addEventListener('mouseenter', function() {
                     clearTimeout(hideMenuTimeout);
                     isOverNav = true;
+                    
+                    const categoryId = this.getAttribute('data-category-id');
+                    if (categoryId) {
+                        currentCategoryId = categoryId;
+                        loadCategoryData(categoryId);
+                    }
+                    
                     showCategoriesMenu();
                 });
 
@@ -2393,6 +2599,12 @@
                     }
                 }, HOVER_DELAY);
             });
+        }
+
+        // Load category data from API
+        async function loadCategoryData(categoryId) {
+            const categoryData = await fetchCategoryData(categoryId);
+            renderCategoryMenuData(categoryData);
         }
 
         // Category sidebar button functionality
@@ -2427,7 +2639,7 @@
 
         // Click outside to close menu
         document.addEventListener('click', function(event) {
-            if (categoriesMenu && categoriesMenu.style.display === 'block') {
+            if (categoriesMenu && categoriesMenu.classList.contains('visible')) {
                 const isClickInsideMenu = categoriesMenu.contains(event.target);
                 const isClickOnNavLink = Array.from(desktopNavLinks).some(link => link.contains(event
                     .target));
@@ -2616,13 +2828,14 @@
         function showCategoriesMenu() {
             clearTimeout(hideMenuTimeout);
             if (categoriesMenu) {
-                categoriesMenu.style.display = 'block';
+                categoriesMenu.classList.add('visible');
             }
         }
 
         function hideCategoriesMenu() {
             if (categoriesMenu) {
-                categoriesMenu.style.display = 'none';
+                categoriesMenu.classList.remove('visible');
+
                 // Reset to default state
                 if (categorySidebarBtns.length > 0 && categoryContents.length > 0) {
                     categorySidebarBtns.forEach((btn, index) => {

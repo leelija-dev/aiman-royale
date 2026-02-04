@@ -1,3 +1,5 @@
+
+
 <footer class="bg-gradient-to-b from-[#FBEDEC] to-[#F9E4E2]">
   <div class="container mx-auto px-4 lg:px-8 pt-6">
 
@@ -390,6 +392,47 @@
     </div>
   </div>
 </footer>
+ <!-- Light-themed Mobile Navigation Bar -->
+   <div class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
+    <!-- Main navigation content -->
+    <div class="px-2 py-2 flex items-center justify-between gap-0 max-w-screen-sm mx-auto">
+        
+        <!-- Wishlist Button -->
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-[#FCE7F3] active:scale-95 transition-all duration-200 relative group">
+            <div class="relative">
+                <i class="fas fa-heart text-xl text-gray-500 mb-0.5 group-hover:text-[#EC4899] transition-all duration-200"></i>
+                <div class="absolute -top-1 -right-1 w-4 h-4 bg-[#EC4899] text-white text-[10px] rounded-full flex items-center justify-center">3</div>
+            </div>
+            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#EC4899] transition-colors">Wishlist</span>
+        </button>
+        
+        <!-- Discounts Button -->
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition-all duration-200 group">
+            <i class="fas fa-tag text-xl text-gray-500 mb-0.5 group-hover:text-[#A10000] transition-all duration-200"></i>
+            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#A10000] transition-colors">Deals</span>
+        </button>
+        
+        <!-- Sales Button (Active/Featured) -->
+        <button class="nav-item active-nav flex flex-col items-center justify-center w-16 py-2 -mt-3 rounded-xl bg-gradient-to-br from-[#A10000] to-[#EC4899] border-2 border-white shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 relative">
+            <div class="relative mb-0.5">
+                <i class="fas fa-bolt text-xl text-white"></i>
+                <div class="absolute -inset-1 bg-[#EC4899] rounded-full animate-ping opacity-30"></div>
+            </div>
+            <span class="text-[10px] font-bold text-white">Sales</span>
+            <div class="absolute -top-1 inset-x-1/4 w-8 h-0.5 bg-white/80 rounded-full"></div>
+        </button>
+        
+        <!-- Account Button -->
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition-all duration-200 group">
+            <i class="fas fa-user-circle text-xl text-gray-500 mb-0.5 group-hover:text-[#A10000] transition-all duration-200"></i>
+            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#A10000] transition-colors">Account</span>
+        </button>
+        
+    </div>
+    
+    <!-- Safe area padding for iPhone bottom notch -->
+    <div class="h-[env(safe-area-inset-bottom)] bg-white"></div>
+</div>
 
 <!-- Add this script at the end of your HTML -->
 <script>
