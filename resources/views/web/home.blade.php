@@ -10,10 +10,8 @@
 
 @section('content')
 
-
 <style>
-
-    /* Custom font classes */
+      /* Custom font classes */
 
 
     /* Update existing classes with custom fonts */
@@ -74,168 +72,236 @@
     #categories-carousel .owl-dot span {
         display: none;
     }
+
+      @keyframes gradient {
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+
+    .animate-gradient {
+        animation: gradient 3s ease-in-out infinite;
+        background-size: 200% 200%;
+    }
+
+    #categories-carousel .owl-stage-outer {
+        padding: 20px 0;
+    }
+
+    #categories-carousel .disabled,
+    #designer-thoughts .disabled {
+        display: none !important;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+    }
+
+
+     .parallax-bg {
+        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
+        /* change path */
+        will-change: transform;
+    }
+
+    /* Custom owl carousel dots */
+    .owl-theme .owl-dots .owl-dot span {
+        width: 10px;
+        height: 10px;
+        margin: 5px 4px;
+        background: #d1d5db;
+        transition: all 0.3s ease;
+    }
+
+    .owl-theme .owl-dots .owl-dot.active span {
+        background: #EC4899;
+        width: 30px;
+        border-radius: 10px;
+    }
+
+    .owl-theme .owl-dots .owl-dot:hover span {
+        background: #ec5da5;
+    }
 </style>
+
+
+
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
-  <!-- Animated Gradient Background Decoration -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-200/20 rounded-full blur-3xl"></div>
-    <div class="absolute top-1/2 -right-10 w-32 h-32 bg-pink-200/20 rounded-full blur-3xl"></div>
-  </div>
-
-  <!-- Enhanced Header with Animation -->
-  <div class="relative text-center mb-3 md:mb-6">
-    <div class="inline-block mb-3">
-      <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-4"></div>
-      <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
-        Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
-      </h3>
-      <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
-        Curated styles for every occasion. Discover your perfect look.
-      </p>
+    <!-- Animated Gradient Background Decoration -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-200/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 -right-10 w-32 h-32 bg-pink-200/20 rounded-full blur-3xl"></div>
     </div>
-  </div>
 
-  <!-- Horizontal Scroll with Enhanced Styling -->
-  <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
-    <!-- Gradient fade edges -->
-    {{-- <div class="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10"></div>
+    <!-- Enhanced Header with Animation -->
+    <div class="relative text-center mb-3 md:mb-6">
+        <div class="inline-block mb-3">
+            <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-4"></div>
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+                Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
+            </h3>
+            <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
+                Curated styles for every occasion. Discover your perfect look.
+            </p>
+        </div>
+    </div>
+
+    <!-- Horizontal Scroll with Enhanced Styling -->
+    <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
+        <!-- Gradient fade edges -->
+        {{-- <div class="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10"></div>
     <div class="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent z-10"></div> --}}
 
-    <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
+        <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
 
-      <!-- Category Items with Enhanced Cards -->
-      <!-- Bestsellers -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
-                 alt="Bestsellers"
-                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-          </div>
+            <!-- Category Items with Enhanced Cards -->
+            <!-- Bestsellers -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            alt="Bestsellers"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                    </div>
+
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Bestsellers</span>
+                <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+            </a>
+
+            <!-- Saree -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+                            alt="Saree"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
+                <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
+            </a>
+
+            <!-- Salwar Kameez -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                            alt="Salwar Kameez"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar Kameez</span>
+                <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
+            </a>
+
+            <!-- Lehenga -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
+                            alt="Lehenga"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
+                <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
+            </a>
+
+            <!-- Indo Western -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
+                            alt="Indo Western"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo Western</span>
+                <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
+            </a>
+
+            <!-- Blouses -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                            alt="Blouses"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
+                <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
+            </a>
+
+            <!-- Menswear -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            alt="Menswear"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
+                <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
+            </a>
+
+            <!-- Bridal Edit -->
+            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+                <div class="relative mb-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+                        <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
+                            alt="Bridal Edit"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+
+                </div>
+                <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal Edit</span>
+                <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
+            </a>
 
         </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Bestsellers</span>
-        <span class="text-xs text-gray-500 mt-1">Most Loved</span>
-      </a>
-
-      <!-- Saree -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
-                 alt="Saree"
-                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-          </div>
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
-        <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
-      </a>
-
-      <!-- Salwar Kameez -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
-                 alt="Salwar Kameez"
-                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-          </div>
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar Kameez</span>
-        <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
-      </a>
-
-      <!-- Lehenga -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
-                 alt="Lehenga"
-                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </div>
-
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
-        <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
-      </a>
-
-      <!-- Indo Western -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
-                 alt="Indo Western"
-                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-          </div>
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo Western</span>
-        <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
-      </a>
-
-      <!-- Blouses -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
-                 alt="Blouses"
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          </div>
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
-        <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
-      </a>
-
-      <!-- Menswear -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
-                 alt="Menswear"
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          </div>
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
-        <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
-      </a>
-
-      <!-- Bridal Edit -->
-      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
-        <div class="relative mb-2">
-          <div class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
-            <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
-                 alt="Bridal Edit"
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          </div>
-
-        </div>
-        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal Edit</span>
-        <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
-      </a>
-
     </div>
-  </div>
 
 
 </div>
 
 <!-- Required CSS for no scrollbar + smooth snap -->
 <style>
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
@@ -355,33 +421,7 @@
     </div>
 </section>
 
-<style>
-    @keyframes gradient {
 
-        0%,
-        100% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-    }
-
-    .animate-gradient {
-        animation: gradient 3s ease-in-out infinite;
-        background-size: 200% 200%;
-    }
-
-    #categories-carousel .owl-stage-outer {
-        padding: 20px 0;
-    }
-
-    #categories-carousel .disabled,
-    #designer-thoughts .disabled {
-        display: none !important;
-    }
-</style>
 
 <section class="px-4 lgg:py-12 py-6 ">
     <div class="container mx-auto">
@@ -650,19 +690,20 @@
                         <div
                             class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                             <a href="{{ route('category.show', $category->slug) }}" class="block">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    {{ $category->name }}
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                100+ Styles
-                            </p>
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
+                                        {{ $category->name }}
+                                    </h3>
+                                    <span class="text-white/80 group-hover:text-white transition-colors">
+                                        →
+                                    </span>
+                                </div>
+                                <p
+                                    class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                                    100+ Styles
+                                </p>
                         </div>
+                        </a>
 
                         <!-- Floating Badge -->
                         <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
@@ -738,15 +779,6 @@
     </div>
 </section>
 
-<style>
-    .scrollbar-hide {
-        -ms-overflow-style: none;          /* IE and Edge */
-        scrollbar-width: none;             /* Firefox */
-    }
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;                     /* Chrome, Safari, Opera */
-    }
-</style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
@@ -2052,32 +2084,7 @@
     </div>
 </section>
 
-<style>
-    .parallax-bg {
-        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
-        /* change path */
-        will-change: transform;
-    }
 
-    /* Custom owl carousel dots */
-    .owl-theme .owl-dots .owl-dot span {
-        width: 10px;
-        height: 10px;
-        margin: 5px 4px;
-        background: #d1d5db;
-        transition: all 0.3s ease;
-    }
-
-    .owl-theme .owl-dots .owl-dot.active span {
-        background: #EC4899;
-        width: 30px;
-        border-radius: 10px;
-    }
-
-    .owl-theme .owl-dots .owl-dot:hover span {
-        background: #ec5da5;
-    }
-</style>
 
 <section class="relative w-full min-h-[800px] h-auto py-12 flex items-center justify-center overflow-hidden">
     <div class="parallax-bg absolute inset-0 bg-cover bg-top scale-110" data-parallax>
@@ -2432,7 +2439,7 @@
                 0: {
                     items: 1,
                     dots: false,
-                     margin: 10,
+                    margin: 10,
                 },
                 450: {
                     items: 2,
@@ -2442,7 +2449,7 @@
                 640: {
                     items: 2,
                     dots: false,
-                     margin: 10,
+                    margin: 10,
                 },
                 768: {
                     items: 3,
