@@ -34,46 +34,53 @@ use App\Http\Controllers\Web\OccasionController;
 // });
 
 
-Route::get('/', [HomeController::class, 'home'])->name('page.index');
-
-// Category Routes
-Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
-
-// Occasion Routes
-Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
-
-// Test route
-Route::get('/test-occasion', function() {
-    return 'Test route is working!';
+// Public routes (accessible without authentication)
+Route::middleware(['guest'])->group(function () {
+    Route::view('/login', 'web.login')->name('page.login');
+    Route::post('/login', [AuthController::class, 'login'])->name('web.login');
+    Route::view('/register', 'web.register')->name('page.register');
+    Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
 });
 
-Route::get('/single-product/{id}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
-Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
-Route::view('/login', 'web.login')->name('page.login');
-Route::post('/login', [AuthController::class, 'login'])->name('web.login');
-Route::view('/register', 'web.register')->name('page.register');
-Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
+// Authenticated routes (require login)
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'home'])->name('page.index');
 
-// Cart Routes
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+    // Category Routes
+    Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
-Route::fallback(function () { abort(404); });
+    // Occasion Routes
+    Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
-//Checkout route
+    // Test route
+    Route::get('/test-occasion', function() {
+        return 'Test route is working!';
+    });
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
-Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
-Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
-Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
-Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
-Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
+    Route::get('/single-product/{id}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
+    Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 
-// Cashfree Webhook Route
-Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
+    // Auth Routes
+    Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
+
+    // Cart Routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+
+    //Checkout route
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+    Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+    Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
+    Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
+    Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
+    Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
+
+    // Cashfree Webhook Route
+    Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
+// });
 
 // Route::get('/career', [CareerController::class, 'index'])->name('page.career');
 // Route::get('/contact-us', [ContactController::class, 'index'])->name('page.contact');

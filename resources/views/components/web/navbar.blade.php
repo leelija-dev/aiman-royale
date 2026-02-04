@@ -781,11 +781,11 @@
                 <!-- Profile with Dropdown (Logged In) -->
                 <div class="relative group">
                     <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                        <div class="relative">
+                        <!-- <div class="relative">
                             <img src="https://i.pravatar.cc/32" alt="User"
                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
                             <span
-                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> -->
                         </div>
                         <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
                         <i
@@ -820,7 +820,7 @@
 
                         <hr class="my-2 border-gray-100" />
 
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('web.logout') }}">
                             @csrf
                             <button type="submit"
                                 class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">

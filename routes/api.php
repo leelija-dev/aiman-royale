@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BlogApiController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
 
 Route::prefix('blog')->group(function () {
     Route::get('/posts', [BlogApiController::class, 'posts']);
@@ -22,3 +23,4 @@ Route::prefix('categories')->group(function () {
     Route::get('/all-with-children', [CategoryController::class, 'getAllCategoriesWithChildren'])->name('api.categories.all-with-children');
     Route::get('/{categoryId}/with-children', [CategoryController::class, 'getCategoryWithChildren'])->name('api.categories.with-children');
 });
+Route::get('/products', [ProductController::class, 'getAllProduct']);

@@ -87,7 +87,11 @@
 </head>
 
 <body class="overflow-x-hidden ">
-    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
+
+        @if(!request()->is('login') && !request()->is('register'))
+        <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
+        @endif
+   
 
     <main class="">
         @yield('content')
