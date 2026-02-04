@@ -441,32 +441,33 @@
       <div
         class="w-full grid xl:grid-cols-4 lg:grid-cols-3 lgg:grid-cols-2 smui:grid-cols-3 xxs:grid-cols-2 grid-cols-1 m gap-4">
 
-        @foreach($products as $product)
-        <div class="item flex justify-center items-center">
-          <a href="/single-product/{{ $product['id'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
-            <!-- Image Wrapper -->
-            <div class="relative rounded-xl overflow-hidden">
-              <img
-                src="{{ !empty($product['images']) ? asset($product['images'][0]) : asset('assets/images/placeholder.jpg') }}"
-                alt="{{ $product['name'] }}"
-                class="w-full h-[340px] object-cover object-top object-center" />
+        @if($products->count() > 0)
+          @foreach($products as $product)
+          <div class="item flex justify-center items-center">
+            <a href="/single-product/{{ $product['id'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
+              <!-- Image Wrapper -->
+              <div class="relative rounded-xl overflow-hidden">
+                <img
+                  src="{{ !empty($product['images']) ? asset($product['images'][0]) : asset('assets/images/placeholder.jpg') }}"
+                  alt="{{ $product['name'] }}"
+                  class="w-full h-[340px] object-cover object-top object-center" />
 
-              <!-- Badges -->
-              <div class="absolute top-3 left-3 flex flex-col gap-2">
-                <span
-                  class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                  Trending
-                </span>
-                @if($product['discount_price'] && $product['discount_price'] < $product['price'])
-                <span
-                  class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                  -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
-                </span>
-                @endif
-              </div>
+                <!-- Badges -->
+                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                  <span
+                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                    Trending
+                  </span>
+                  @if($product['discount_price'] && $product['discount_price'] < $product['price'])
+                  <span
+                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                    -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
+                  </span>
+                  @endif
+                </div>
 
-              <!-- Wishlist Heart Icon (Top Right) -->
-              <button
+                <!-- Wishlist Heart Icon (Top Right) -->
+                <button
                 class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -519,6 +520,34 @@
           </a>
         </div>
         @endforeach
+        @else
+        <!-- No Products Found Message -->
+        <div class="col-span-full flex flex-col items-center justify-center py-16">
+          <div class="text-center">
+            <div class="mb-4">
+              <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">No product found</h3>
+            <p class="text-gray-600 mb-6">
+              @if(request('search'))
+                We couldn't find any products matching "{{ request('search') }}".
+              @else
+                We couldn't find any products matching your criteria.
+              @endif
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="{{ route('page.multi-product') }}" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                View All Products
+              </a>
+              <button onclick="clearFilters()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+        @endif
       </div>
     </div>
   </div>

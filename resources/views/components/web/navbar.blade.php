@@ -2054,7 +2054,7 @@
                 categoryElement.addEventListener('click', () => {
                     searchInput.value = category;
                     searchInput.focus();
-                    performDesktopSearch(category);
+                    performComprehensiveSearch(category);
                 });
                 categoriesList.appendChild(categoryElement);
             });
@@ -2067,7 +2067,7 @@
                 trendElement.addEventListener('click', () => {
                     searchInput.value = trend;
                     searchInput.focus();
-                    performDesktopSearch(trend);
+                    performComprehensiveSearch(trend);
                 });
                 trendingList.appendChild(trendElement);
             });
@@ -2084,15 +2084,20 @@
                     </div>
                 `;
                 productElement.addEventListener('click', () => {
-                    console.log('Product clicked:', product.title);
-                    hideDesktopSearchDropdown();
+                    // Navigate to product detail page
+                    if (product.id) {
+                        window.location.href = `/single-product/${product.id}`;
+                    } else {
+                        // If no ID, perform search with product title
+                        performComprehensiveSearch(product.title);
+                    }
                 });
                 productsList.appendChild(productElement);
             });
 
             // Update view more link
             if (searchTerm) {
-                viewMore.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                viewMore.href = `/all-product?search=${encodeURIComponent(searchTerm)}`;
                 viewMore.textContent = `View all results for "${searchTerm}" →`;
             } else {
                 viewMore.href = '#';
@@ -2337,30 +2342,49 @@
                     if (e.key === 'Enter') {
                         const searchTerm = this.value.trim();
                         if (searchTerm) {
-                            window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                            performComprehensiveSearch(searchTerm);
                         }
                     }
                 });
             }
 
-            // ==================== MOBILE SEARCH EVENTS ====================
-            // Search icon click - opens mobile search on mobile
+            // ==================== SEARCH FUNCTIONALITY ====================
+            
+            // Search icon click - main search trigger
             if (searchIcon) {
                 searchIcon.addEventListener('click', function(e) {
+                    e.preventDefault();
                     e.stopPropagation();
+                    
+                    const searchValue = searchInput.value.trim();
+                    
                     if (isMobile()) {
                         // On mobile: open full-screen mobile search dropdown
-                        openMobileSearch(searchInput.value);
+                        openMobileSearch(searchValue);
                     } else {
-                        // On desktop: toggle the desktop search dropdown
-                        if (searchDropdown.classList.contains('active')) {
-                            hideDesktopSearchDropdown();
+                        // On desktop: perform search or toggle dropdown
+                        if (searchValue) {
+                            // If there's a search term, navigate to results
+                            performComprehensiveSearch(searchValue);
                         } else {
-                            showDesktopSearchDropdown();
-                            renderDesktopSearchResults();
+                            // If no search term, toggle the desktop search dropdown
+                            if (searchDropdown.classList.contains('active')) {
+                                hideDesktopSearchDropdown();
+                            } else {
+                                showDesktopSearchDropdown();
+                                searchInput.focus();
+                            }
                         }
                     }
                 });
+            }
+
+            // ==================== COMPREHENSIVE SEARCH FUNCTION ====================
+            
+            function performComprehensiveSearch(searchTerm) {
+                // Navigate to all-product page with search parameter
+                // This will search across product names, categories, occasions, etc.
+                window.location.href = `/all-product?search=${encodeURIComponent(searchTerm)}`;
             }
 
             // Close search button (desktop)

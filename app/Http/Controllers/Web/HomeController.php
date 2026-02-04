@@ -73,6 +73,8 @@ class HomeController extends Controller
         $query = DB::table('products')
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
             ->where('products.is_active', 1)
             ->select(
                 'products.*',
