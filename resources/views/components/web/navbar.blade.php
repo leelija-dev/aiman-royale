@@ -933,15 +933,15 @@
                     </span>
                 </button>
 
-@php
-    // Get cart count for current user/guest
-    $cartCount = 0;
-    if (Auth::check()) {
-        $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
-    } else {
-        $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
-    }
-@endphp
+     @php
+                // Get cart count for current user/guest
+                $cartCount = 0;
+                if (Auth::check()) {
+                $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
+                } else {
+                $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
+                }
+                @endphp
 
                 <button onclick="window.location.href='{{ route('cart.index') }}'"
                     class="text-gray-700 hover:text-black group relative">
@@ -963,71 +963,70 @@
 
                 <!-- Profile Section -->
                 @auth
-                    <!-- Profile with Dropdown (Logged In) -->
-                    <div class="relative group">
-                        <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                            <!-- <div class="relative">
-                                <img src="https://i.pravatar.cc/32" alt="User"
-                                    class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
-                                <span
-                                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
-                            </div> -->
-                            <!-- <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span> -->
-                           <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
-                            <i
-                                class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
-                        </button>
-
-                        <!-- Account Dropdown -->
-                        <div id="account-dropdown"
-                            class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
-                            <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                            </div>
-
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-user text-gray-500 w-4"></i>
-                                <span>My Profile</span>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
-                                <span>Orders</span>
-                                <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <i class="fa-regular fa-heart text-gray-500 w-4"></i>
-                                <span>Wishlist</span>
-                                <span class="ml-auto text-primary text-xs">12</span>
-                            </a>
-
-                            <hr class="my-2 border-gray-100" />
-
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                    <i class="fa-solid fa-right-from-bracket w-4"></i>
-                                    <span>Logout</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <!-- Login Button (Not Logged In) -->
-                    <a href="{{ route('page.login') }}"
-                        class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
-                        <div
-                            class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
-                            <i class="fa-solid fa-user text-xs"></i>
-                        </div>
-                        <span class="text-sm font-semibold">Login</span>
+                <!-- Profile with Dropdown (Logged In) -->
+                <div class="relative group">
+                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
+                         <!-- <div class="relative">
+                             <img src="https://i.pravatar.cc/32" alt="User"
+                                class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
+                            <span
+                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> 
+                         </div> -->
+                        <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
                         <i
-                            class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
-                    </a>
+                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                    </button>
+
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown"
+                        class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        </div>
+
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-user text-gray-500 w-4"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
+                            <span>Orders</span>
+                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fa-regular fa-heart text-gray-500 w-4"></i>
+                            <span>Wishlist</span>
+                            <span class="ml-auto text-primary text-xs">12</span>
+                        </a>
+
+                        <hr class="my-2 border-gray-100" />
+
+                        <form method="POST" action="{{ route('web.logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                <i class="fa-solid fa-right-from-bracket w-4"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @else
+                <!-- Login Button (Not Logged In) -->
+                <a href="{{ route('page.login') }}"
+                    class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
+                    <div
+                        class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
+                        <i class="fa-solid fa-user text-xs"></i>
+                    </div>
+                    <span class="text-sm font-semibold">Login</span>
+                    <i
+                        class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                </a>
                 @endauth
             </div>
         </div>

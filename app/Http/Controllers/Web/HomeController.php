@@ -91,7 +91,9 @@ class HomeController extends Controller
             $query->where(function($q) use ($searchTerm) {
                 $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
                   ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%');
+                  ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
 
