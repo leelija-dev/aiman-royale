@@ -1397,15 +1397,11 @@
                     <!-- Content will be loaded dynamically -->
                     <div class="flex flex-row justify-between gap-3 items-start">
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
-                            <div>
-                                <ul class="px-0" id="style-list-left">
-                                    <!-- Style items will be populated here -->
-                                </ul>
+                            <div id="style-list-left">
+                               
                             </div>
-                            <div>
-                                <ul class="px-0" id="style-list-right">
-                                    <!-- Style items will be populated here -->
-                                </ul>
+                            <div id="style-list-right">
+                              
                             </div>
                         </div>
                         <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
@@ -1638,9 +1634,10 @@
 
             // Render left column styles
             leftStyles.forEach(style => {
-                const li = document.createElement('li');
+                const li = document.createElement('a');
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
+                li.href = `/category/${style.slug}`;
                 
                 // Create subcategories list
                 const subUl = document.createElement('ul');
@@ -1656,18 +1653,19 @@
                 link.className = 'hover:text-black transition-colors';
                 link.textContent = style.name;
                 
-                subLi.appendChild(link);
-                subUl.appendChild(subLi);
+                // subLi.appendChild(link);
+                // subUl.appendChild(subLi);
                 
-                li.appendChild(subUl);
+                // li.appendChild(subUl);
                 styleLeftList.appendChild(li);
             });
 
             // Render right column styles
             rightStyles.forEach(style => {
-                const li = document.createElement('li');
+                const li = document.createElement('a');
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
+                li.href = `/category/${style.slug}`;
                 
                 const subUl = document.createElement('ul');
                 subUl.className = 'ml-4 mb-4';
@@ -1680,9 +1678,9 @@
                 link.className = 'hover:text-black transition-colors';
                 link.textContent = style.name;
                 
-                subLi.appendChild(link);
-                subUl.appendChild(subLi);
-                li.appendChild(subUl);
+                // subLi.appendChild(link);
+                // subUl.appendChild(subLi);
+                // li.appendChild(subUl);
                 styleRightList.appendChild(li);
             });
         }
