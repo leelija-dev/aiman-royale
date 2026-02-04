@@ -18,9 +18,9 @@
 
     <title> @yield('title')</title>
 
-    <link rel="icon" type="image/png" href="{{asset('web/images/amarmaa-logo.webp')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/amarmaa-logo.webp')}}" />
-    <link rel="shortcut icon" href="{{asset('web/images/amarmaa-logo.webp')}}" />
+     <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
+    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
     <link rel="manifest" href="{{asset('images/site-img/site.webmanifest')}}" />
 
@@ -112,11 +112,11 @@
         <button class="pwa-instructions-close" id="pwaInstructionsClose">Got It</button>
     </div>
 
-    {{-- @include('Admin.layouts.partials.footer') 
+    {{-- @include('Admin.layouts.partials.footer')
      @include('Admin.layouts.partials.footer') --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
     <script src="{{asset('web/js/pwa-installation.js')}}"></script>
 

@@ -1,12 +1,26 @@
 <style>
     /* Fix z-index stacking */
     #categories-wrapper-menu {
-        display: none;
+        display: block;
         position: fixed;
         z-index: 20004;
-        top: 80px;
+        opacity: 0;
+        pointer-events: none;
+        top: 101px;
         left: 0;
         right: 0;
+        transform: translateY(-20px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #mobile-sidebar .submenu.active{
+        max-height:600px;
+    }
+
+    #categories-wrapper-menu.visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
     }
 
     nav a {
@@ -94,6 +108,7 @@
     .submenu .submenu {
         margin-left: 20px;
         margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     /* Profile dropdown styles */
@@ -274,16 +289,10 @@
         top: 136px;
         left: 0;
         right: 0;
-        /* background: white;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        border-radius: 12px; */
-        margin-top: 10px;
+        /* margin-top: 10px; */
         z-index: 20005;
-        /* overflow: hidden; */
         display: none;
         animation: slideDown 0.3s ease-out;
-        /* max-height: 70vh; */
-        /* overflow-y: auto; */
     }
 
     #search-dropdown.active {
@@ -385,8 +394,9 @@
 
     .product-image {
         width: 100%;
-        height: 160px;
+        height: 230px;
         object-fit: cover;
+        object-position: 0px -18px;
     }
 
     .product-info {
@@ -432,12 +442,17 @@
         bottom: 0;
         background: white;
         z-index: 20006;
-        display: none;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
         flex-direction: column;
+        overflow: hidden;
+        /* Prevent content from being pushed by keyboard */
     }
 
     #mobile-search-dropdown.active {
-        display: flex;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .mobile-search-header {
@@ -447,15 +462,18 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        flex-shrink: 0;
+        /* Prevent header from shrinking */
     }
 
     .mobile-search-header input {
         flex: 1;
-        padding: 12px 15px;
+        padding: 8px 15px;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 60px;
         font-size: 16px;
         outline: none;
+        box-sizing: border-box;
     }
 
     .mobile-search-header button {
@@ -465,12 +483,16 @@
         font-size: 18px;
         cursor: pointer;
         padding: 8px;
+        flex-shrink: 0;
+        /* Prevent buttons from shrinking */
     }
 
     .mobile-search-results {
         flex: 1;
         overflow-y: auto;
         padding: 15px;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
     }
 
     .mobile-search-section {
@@ -580,6 +602,19 @@
         display: block;
     }
 
+    /* Category menu loading indicator */
+    .category-menu-loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .category-menu-loading.active {
+        display: block;
+    }
+
     /* Close search button */
     .close-search {
         position: absolute;
@@ -605,6 +640,11 @@
         display: block;
     }
 
+    /* Mobile specific search icon container */
+    .mobile-search-icon-container {
+        display: none;
+    }
+
     @media screen and (min-width: 1366px) and (max-width: 1600px) {
         .respon-wrap-img {
             max-height: 350px !important;
@@ -620,29 +660,170 @@
         transition: opacity 0.3s ease;
     }
 
+    /* Categories menu inner animation */
+    .category-content {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease-out;
+    }
+
+    .category-content.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Category sidebar button animation */
+    .category-sidebar-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* .category-sidebar-btn::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: #d4a574;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .category-sidebar-btn.active::after {
+        transform: translateX(0);
+    } */
+
+    .category-sidebar-btn:hover {
+        padding-left: 24px !important;
+        /* transform: translateX(5px); */
+    }
+    .category-sidebar-btn{
+        transition:
+    }
+
+    /* Category menu container animation */
+    #categories-wrapper-menu .max-w-\[calc\(100\%-50px\)\] {
+        animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: top center;
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Desktop nav link hover effect */
+    .desktop-nav-link {
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .desktop-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #d4a574, #b8863c);
+        transition: width 0.3s ease;
+    }
+
+    .desktop-nav-link:hover::after {
+        width: 100%;
+    }
+
+    .desktop-nav-link:hover {
+        color: #d4a574;
+        transform: translateY(-2px);
+    }
+
     /* Hide/Show based on screen size */
-    @media (max-width: 768px) {
+    @media (max-width:991px) {
         #search-dropdown {
             display: none !important;
         }
 
+        /* Hide desktop search input on mobile */
+        #search-input {
+            display: none !important;
+        }
+
+        /* Make search icon more prominent on mobile */
+        #search-icon {
+            width: 100%;
+            justify-content: right;
+            padding: 0 13px;
+            height: 40px;
+            display: flex !important;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-search {
+            display: none !important;
+        }
+
+        /* Mobile search suggestions */
         .mobile-search-suggestions {
-            position: absolute;
-            top: 100%;
+            position: fixed;
+            top: 0;
             left: 0;
             right: 0;
+            bottom: 0;
             background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 8px;
-            z-index: 20005;
+            z-index: 20007;
             display: none;
-            max-height: 300px;
-            overflow-y: auto;
+            flex-direction: column;
         }
 
         .mobile-search-suggestions.active {
-            display: block;
+            display: flex;
+        }
+
+        .mobile-search-suggestions-header {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .mobile-search-suggestions-header input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .mobile-search-suggestions-header button {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-search-suggestions-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
         }
 
         .search-suggestion-item {
@@ -673,13 +854,17 @@
         }
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: 992px) {
         #mobile-search-dropdown {
             display: none !important;
         }
 
         .mobile-search-suggestions {
             display: none !important;
+        }
+
+        #search-input {
+            display: block !important;
         }
     }
 </style>
@@ -748,15 +933,15 @@
                     </span>
                 </button>
 
-                @php
-                // Get cart count for current user/guest
-                $cartCount = 0;
-                if (Auth::check()) {
-                $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
-                } else {
-                $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
-                }
-                @endphp
+@php
+    // Get cart count for current user/guest
+    $cartCount = 0;
+    if (Auth::check()) {
+        $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
+    } else {
+        $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
+    }
+@endphp
 
                 <button onclick="window.location.href='{{ route('cart.index') }}'"
                     class="text-gray-700 hover:text-black group relative">
@@ -778,70 +963,70 @@
 
                 <!-- Profile Section -->
                 @auth
-                <!-- Profile with Dropdown (Logged In) -->
-                <div class="relative group">
-                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                         <!-- <div class="relative">
-                             <img src="https://i.pravatar.cc/32" alt="User"
-                                class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
-                            <span
-                                class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> 
-                         </div> -->
-                        <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
-                        <i
-                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
-                    </button>
+                    <!-- Profile with Dropdown (Logged In) -->
+                    <div class="relative group">
+                        <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
+                            <div class="relative">
+                                <img src="https://i.pravatar.cc/32" alt="User"
+                                    class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
+                                <span
+                                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                            </div>
+                            <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
+                            <i
+                                class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                        </button>
 
-                    <!-- Account Dropdown -->
-                    <div id="account-dropdown"
-                        class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
-                        <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        <!-- Account Dropdown -->
+                        <div id="account-dropdown"
+                            class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                            </div>
+
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                <i class="fa-regular fa-user text-gray-500 w-4"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
+                                <span>Orders</span>
+                                <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                <i class="fa-regular fa-heart text-gray-500 w-4"></i>
+                                <span>Wishlist</span>
+                                <span class="ml-auto text-primary text-xs">12</span>
+                            </a>
+
+                            <hr class="my-2 border-gray-100" />
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
                         </div>
-
-                        <a href="#"
-                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                            <i class="fa-regular fa-user text-gray-500 w-4"></i>
-                            <span>My Profile</span>
-                        </a>
-                        <a href="#"
-                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                            <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
-                            <span>Orders</span>
-                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
-                        </a>
-                        <a href="#"
-                            class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                            <i class="fa-regular fa-heart text-gray-500 w-4"></i>
-                            <span>Wishlist</span>
-                            <span class="ml-auto text-primary text-xs">12</span>
-                        </a>
-
-                        <hr class="my-2 border-gray-100" />
-
-                        <form method="POST" action="{{ route('web.logout') }}">
-                            @csrf
-                            <button type="submit"
-                                class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                <i class="fa-solid fa-right-from-bracket w-4"></i>
-                                <span>Logout</span>
-                            </button>
-                        </form>
                     </div>
-                </div>
                 @else
-                <!-- Login Button (Not Logged In) -->
-                <a href="{{ route('page.login') }}"
-                    class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
-                    <div
-                        class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
-                        <i class="fa-solid fa-user text-xs"></i>
-                    </div>
-                    <span class="text-sm font-semibold">Login</span>
-                    <i
-                        class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
-                </a>
+                    <!-- Login Button (Not Logged In) -->
+                    <a href="{{ route('page.login') }}"
+                        class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
+                        <div
+                            class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </div>
+                        <span class="text-sm font-semibold">Login</span>
+                        <i
+                            class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 @endauth
             </div>
         </div>
@@ -851,47 +1036,27 @@
     <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
-            <!-- Logo -->
-
-
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
-
-                @foreach ($categories->where('parent_id', null) as $category)
-                <div class="relative group">
-                    <a href="{{ route('category.show', $category->slug) }}"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1"
-                        data-category="{{ $category->name }}">
-                        {{ $category->name }}
-                        @if($categories->where('parent_id', $category->id)->count() > 0)
-                        <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                        @endif
-                    </a>
-
-                    <!-- Subcategories Dropdown -->
-                    @if($categories->where('parent_id', $category->id)->count() > 0)
-                    <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div class="py-2">
-                            @foreach($categories->where('parent_id', $category->id) as $subcategory)
-                            <a href="{{ route('category.show', $subcategory->slug) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black transition-colors">
-                                {{ $subcategory->name }}
+                    @foreach ($categories->where('parent_id', null) as $category)
+                        <div class="relative group">
+                            <a href="{{ route('category.show', $category->slug) }}"
+                                class="hover:text-black desktop-nav-link flex items-center gap-1"
+                                data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
+                                {{ $category->name }}
+                              
                             </a>
-                            @endforeach
+
+                           
                         </div>
-                    </div>
-                    @endif
-                </div>
-                @endforeach
+                    @endforeach
                 @else
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
-                    Kameez</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
+                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
+                        Kameez</a>
+                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
+                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
+                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
                 @endif
             </nav>
         </div>
@@ -907,10 +1072,13 @@
             <div class="relative block w-full" id="search-container">
                 <input type="text" placeholder="Search here" id="search-input"
                     class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
-                <button class="close-search" id="close-search-btn" type="button">
+                    <button class="close-search" id="close-search-btn" type="button">
                     <i class="fa-solid fa-times"></i>
                 </button>
-                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                <input type="text" placeholder="Search here"
+                    class="lgg:hidden block pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
+
+                <i class="fa-solid fa-magnifying-glass absolute lgg:right-4 right-[5px] lgg:top-1/2 top-0 lgg:-translate-y-1/2 text-gray-500 cursor-pointer"
                     id="search-icon"></i>
 
                 <!-- Desktop Search Dropdown (only shown on desktop) -->
@@ -919,7 +1087,7 @@
                         <div class="max-h-[70vh] overflow-y-auto">
 
                             <!-- Loading Indicator -->
-                            <div class="search-loading" id="search-loading" style="display: none;">
+                            <div class="search-loading" id="search-loading">
                                 <i class="fa-solid fa-spinner fa-spin mr-2"></i>
                                 Searching...
                             </div>
@@ -960,217 +1128,32 @@
 
                 <!-- Mobile Search Suggestions (only shown on mobile) -->
                 <div class="mobile-search-suggestions" id="mobile-search-suggestions">
-                    <!-- Suggestions will be populated dynamically -->
+                    <div class="mobile-search-suggestions-header">
+                        <button id="mobile-suggestions-back">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <input type="text" placeholder="Search products..." id="mobile-suggestions-input"
+                            autocomplete="off" />
+                        <button id="mobile-suggestions-clear">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mobile-search-suggestions-content" id="mobile-suggestions-content">
+                        <!-- Suggestions will be populated dynamically -->
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</nav>
-
-<!-- Mobile Sidebar -->
-<div id="mobile-sidebar" class="fixed inset-0 z-50 hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-50" id="sidebar-overlay"></div>
-    <div class="fixed right-0 top-0 h-full w-80 bg-white shadow-xl transform translate-x-full transition-transform duration-300" id="sidebar-content">
-        <!-- Mobile sidebar content here -->
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    const searchDropdown = document.getElementById('search-dropdown');
-    const searchLoading = document.getElementById('search-loading');
-    const categoriesList = document.getElementById('categories-list');
-    const trendingList = document.getElementById('trending-list');
-    const productsList = document.getElementById('products-list');
-    const noResults = document.getElementById('no-results');
-    const searchQuery = document.getElementById('search-query');
-    const viewMore = document.getElementById('view-more');
-    const closeSearchBtn = document.getElementById('close-search-btn');
-    const searchIcon = document.getElementById('search-icon');
-
-    let searchTimeout;
-    let allCategories = [];
-    let allProducts = [];
-
-    // Initialize search with categories and products
-    initializeSearch();
-
-    function initializeSearch() {
-        // Load categories and products on page load
-        Promise.all([
-            fetch('/api/categories/all-with-children').then(res => res.json()),
-            fetch('/api/products').then(res => res.json())
-        ]).then(([categoriesData, productsData]) => {
-            if (categoriesData.success) {
-                allCategories = categoriesData.data;
-                populateCategories(allCategories);
-            }
-            if (productsData.success) {
-                allProducts = productsData.data;
-                populateTrendingSearches(allProducts);
-            }
-        }).catch(error => {
-            console.error('Error initializing search:', error);
-        });
-    }
-
-    function populateCategories(categories) {
-        categoriesList.innerHTML = '';
-        const parentCategories = categories.filter(cat => !cat.parent_id);
-        
-        parentCategories.forEach(category => {
-            const categoryItem = document.createElement('div');
-            categoryItem.className = 'search-category-item';
-            categoryItem.innerHTML = `
-                <a href="/category/${category.slug}" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
-                    <i class="fa-solid fa-tag text-gray-400 text-sm"></i>
-                    <span class="text-sm">${category.name}</span>
-                </a>
-            `;
-            categoriesList.appendChild(categoryItem);
-        });
-    }
-
-    function populateTrendingSearches(products) {
-        trendingList.innerHTML = '';
-        const trendingProducts = products.slice(0, 5); // Show first 5 as trending
-        
-        trendingProducts.forEach(product => {
-            const trendingItem = document.createElement('div');
-            trendingItem.className = 'search-trending-item';
-            trendingItem.innerHTML = `
-                <a href="#" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
-                    <i class="fa-solid fa-fire text-orange-400 text-sm"></i>
-                    <span class="text-sm">${product.name}</span>
-                </a>
-            `;
-            trendingList.appendChild(trendingItem);
-        });
-    }
-
-    function searchProducts(query) {
-        if (!query || query.length < 2) {
-            showDefaultResults();
-            return;
-        }
-
-        searchLoading.style.display = 'block';
-        categoriesList.parentElement.style.display = 'none';
-        trendingList.parentElement.style.display = 'none';
-        productsList.parentElement.style.display = 'none';
-        noResults.style.display = 'none';
-
-        // Clear previous timeout
-        clearTimeout(searchTimeout);
-
-        // Set new timeout for debounced search
-        searchTimeout = setTimeout(() => {
-            const filteredProducts = allProducts.filter(product => 
-                product.name.toLowerCase().includes(query.toLowerCase()) ||
-                (product.description && product.description.toLowerCase().includes(query.toLowerCase()))
-            );
-
-            searchLoading.style.display = 'none';
-
-            if (filteredProducts.length > 0) {
-                populateProducts(filteredProducts.slice(0, 8)); // Show max 8 products
-                productsList.parentElement.style.display = 'block';
-                viewMore.style.display = 'block';
-                viewMore.href = `/all-product?search=${encodeURIComponent(query)}`;
-            } else {
-                noResults.style.display = 'block';
-                searchQuery.textContent = query;
-            }
-        }, 300);
-    }
-
-    function populateProducts(products) {
-        productsList.innerHTML = '';
-        
-        products.forEach(product => {
-            const productItem = document.createElement('div');
-            productItem.className = 'search-product-item';
-            
-            const productImage = product.images && product.images.length > 0 
-                ? `/${product.images[0].image_path}` 
-                : '/assets/images/placeholder.jpg';
-            
-            const price = product.discount_price || product.price;
-            
-            productItem.innerHTML = `
-                <a href="/single-product/${product.id}" class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded">
-                    <img src="${productImage}" alt="${product.name}" class="w-12 h-12 object-cover rounded">
-                    <div class="flex-1">
-                        <div class="text-sm font-medium">${product.name}</div>
-                        <div class="text-xs text-gray-500">Rs. ${price}</div>
-                    </div>
-                </a>
-            `;
-            productsList.appendChild(productItem);
-        });
-    }
-
-    function showDefaultResults() {
-        searchLoading.style.display = 'none';
-        categoriesList.parentElement.style.display = 'block';
-        trendingList.parentElement.style.display = 'block';
-        productsList.parentElement.style.display = 'none';
-        noResults.style.display = 'none';
-        viewMore.style.display = 'none';
-    }
-
-    // Event listeners
-    searchInput.addEventListener('input', function(e) {
-        const query = e.target.value.trim();
-        searchProducts(query);
-    });
-
-    searchInput.addEventListener('focus', function() {
-        if (this.value.trim().length < 2) {
-            showDefaultResults();
-        }
-        searchDropdown.style.display = 'block';
-    });
-
-    // Close search dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
-            searchDropdown.style.display = 'none';
-        }
-    });
-
-    closeSearchBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        searchDropdown.style.display = 'none';
-        showDefaultResults();
-    });
-
-    searchIcon.addEventListener('click', function() {
-        if (searchInput.value.trim()) {
-            window.location.href = `/all-product?search=${encodeURIComponent(searchInput.value)}`;
-        }
-    });
-
-    // Handle Enter key in search
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && this.value.trim()) {
-            window.location.href = `/all-product?search=${encodeURIComponent(this.value)}`;
-        }
-    });
-});
-</script>
         </div>
     </div>
 </header>
 
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
-    <div class="mobile-search-header">
+    <div class="mobile-search-header flex flex-row">
         <button id="mobile-search-back">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" />
+        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" class="w-full rounded-full" />
         <button id="mobile-search-clear">
             <i class="fa-solid fa-times"></i>
         </button>
@@ -1228,142 +1211,131 @@ document.addEventListener('DOMContentLoaded', function() {
             <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
                 id="mobile-sidebar-search-icon"></i>
         </div>
-        {{-- <div class="flex justify-center mt-4">
-            <div class="flex items-center gap-4">
-                <a href="tel:+1234567890" class="text-gray-600 hover:text-primary">
-                    <i class="fa-solid fa-phone"></i>
-                </a>
-                <a href="https://wa.me/1234567890" target="_blank" class="text-gray-600 hover:text-green-600">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-            </div>
-        </div> --}}
     </div>
 
     <!-- Mobile Navigation -->
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
             @if (isset($categories) && count($categories) > 0)
-
-            @foreach ($categories as $category)
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                </button>
-                <a href="{{ route('category.show', $category->slug) }}"
-                    class="menu-link top-level-link group">
-                    <span class="flex-1">{{ $category->name }}</span>
-                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle group">
-                            <span class="flex-1">Style</span>
-                            <i
-                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </div>
+               @foreach ($categories->where('parent_id', null) as $category)
+                    <div class="menu-item has-submenu top-level-item">
+                        <button class="back-button">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                        </button>
+                        <a href="{{ route('category.show', $category->slug) }}"
+                            class="menu-link top-level-link group">
+                            <span class="flex-1">{{ $category->name }}</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </a>
                         <ul class="submenu">
-                            @if (isset($categories) && count($categories) > 0)
-                            @foreach ($categories->take(5) as $cat)
-                            <li class="menu-item">
-                                <a href="{{ route('category.show', $cat->slug) }}"
-                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
+                            <li class="menu-item has-submenu">
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Style</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                                </div>
+                                <ul class="submenu">
+                                    @if (isset($categories) && count($categories) > 0)
+                                        @foreach ($categories->take(5) as $cat)
+                                            <li class="menu-item">
+                                                <a href="{{ route('category.show', $cat->slug) }}"
+                                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ul>
                             </li>
-                            @endforeach
-                            @endif
+                            <li class="menu-item has-submenu">
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Occasion</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                                </div>
+                                <ul class="submenu">
+                                    @if (isset($occasions) && count($occasions) > 0)
+                                        @foreach ($occasions->take(5) as $occasion)
+                                            <li class="menu-item">
+                                                <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <div class="menu-link submenu-toggle group">
+                                    <span class="flex-1">Collection</span>
+                                    <i
+                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                                </div>
+                                <ul class="submenu">
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
+                                            Kameez</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle group">
-                            <span class="flex-1">Occasion</span>
-                            <i
-                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                        <ul class="submenu">
-                            @if (isset($occasions) && count($occasions) > 0)
-                            @foreach ($occasions->take(5) as $occasion)
-                            <li class="menu-item">
-                                <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
-                            </li>
-                            @endforeach
-                            @endif
-                        </ul>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle group">
-                            <span class="flex-1">Collection</span>
-                            <i
-                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                        <ul class="submenu">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
-                                    Kameez</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            @endforeach
+                    </div>
+                @endforeach
             @else
-            <!-- Default menu items -->
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                </button>
-                <a href="#" class="menu-link top-level-link group">
-                    <span class="flex-1">Lahenga</span>
-                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle group">
-                            <span class="flex-1">Style</span>
-                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                        <ul class="submenu">
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                </button>
-                <a href="#" class="menu-link top-level-link group">
-                    <span class="flex-1">Salwar Kameez</span>
-                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="menu-item has-submenu">
-                        <div class="menu-link submenu-toggle group">
-                            <span class="flex-1">Style</span>
-                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                        <ul class="submenu">
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                            <li class="menu-item"><a href="#"
-                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+                <!-- Default menu items -->
+                <div class="menu-item has-submenu top-level-item">
+                    <button class="back-button">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <a href="#" class="menu-link top-level-link group">
+                        <span class="flex-1">Lahenga</span>
+                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle group">
+                                <span class="flex-1">Style</span>
+                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-item has-submenu top-level-item">
+                    <button class="back-button">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <a href="#" class="menu-link top-level-link group">
+                        <span class="flex-1">Salwar Kameez</span>
+                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="menu-item has-submenu">
+                            <div class="menu-link submenu-toggle group">
+                                <span class="flex-1">Style</span>
+                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                                <li class="menu-item"><a href="#"
+                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             @endif
         </div>
     </nav>
@@ -1388,7 +1360,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[20004] lg:hidden"></div>
 
 <!-- Categories Menu for Desktop -->
-<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto lg:block hidden top-[80px]">
+<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px]">
     <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white">
         <div class="flex">
             <!-- Left Sidebar -->
@@ -1413,80 +1385,39 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Product Section -->
             <div
                 class="flex-1 bg-[url('https://www.transparenttextures.com/patterns/geometry.png')] bg-opacity-20 py-8 pl-8 pr-4 ">
+                <!-- Loading Indicator for Category Data -->
+                <div class="category-menu-loading" id="category-menu-loading">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                    Loading category data...
+                </div>
+
                 <!-- Style Products -->
                 <div id="style-products"
                     class="category-content xll:max-h-max max-h-[450px] pr-3 overflow-auto active">
+                    <!-- Content will be loaded dynamically -->
                     <div class="flex flex-row justify-between gap-3 items-start">
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
                             <div>
-                                <ul class="px-0">
-                                    @if (isset($categories) && count($categories) > 0)
-                                    @foreach ($categories->where('parent_id', null)->take(5) as $parentCategory)
-                                    <li class="mb-4 text-[1.3rem]"><a href="{{ route('category.show', $parentCategory->slug) }}">
-                                            {{ $parentCategory->name }}
-                                        </a></li>
-                                    <ul class="ml-4 mb-4">
-                                        @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                        <li class="mb-2 text-[1.1rem] text-gray-600">
-                                            <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
-                                                {{ $subcategory->name }}
-                                            </a>
-                                        </li>
-                                        @endforeach
-                                        @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                        <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                        @endif
-                                    </ul>
-                                    @endforeach
-                                    @else
-                                    <li class="mb-4 text-[1.3rem]">Traditional</li>
-                                    <li class="mb-4 text-[1.3rem]">Modern</li>
-                                    <li class="mb-4 text-[1.3rem]">Fusion</li>
-                                    @endif
+                                <ul class="px-0" id="style-list-left">
+                                    <!-- Style items will be populated here -->
                                 </ul>
                             </div>
                             <div>
-                                <ul class="px-0">
-                                    @if (isset($categories) && count($categories) > 5)
-                                    @foreach ($categories->where('parent_id', null)->slice(5, 5) as $parentCategory)
-                                    <li class="mb-4 text-[1.3rem]">{{ $parentCategory->name }}</li>
-                                    <ul class="ml-4 mb-4">
-                                        @foreach ($categories->where('parent_id', $parentCategory->id) as $subcategory)
-                                        <li class="mb-2 text-[1.1rem] text-gray-600">
-                                            <a href="{{ route('category.show', $subcategory->slug) }}" class="hover:text-black transition-colors">
-                                                {{ $subcategory->name }}
-                                            </a>
-                                        </li>
-                                        @endforeach
-                                        @if($categories->where('parent_id', $parentCategory->id)->count() == 0)
-                                        <li class="mb-2 text-[1.1rem] text-gray-400">No subcategories</li>
-                                        @endif
-                                    </ul>
-                                    @endforeach
-                                    @else
-                                    <li class="mb-4 text-[1.3rem]">Casual</li>
-                                    <li class="mb-4 text-[1.3rem]">Formal</li>
-                                    <li class="mb-4 text-[1.3rem]">Party</li>
-                                    <li class="mb-4 text-[1.3rem]">Office</li>
-                                    <li class="mb-4 text-[1.3rem]">Ethnic</li>
-                                    @endif
+                                <ul class="px-0" id="style-list-right">
+                                    <!-- Style items will be populated here -->
                                 </ul>
                             </div>
                         </div>
                         <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                             <div class="overflow-hidden rounded-md max-h-[400px] w-full relative">
-                                <img class="w-full h-full object-cover aspect-auto"
+                                <img class="w-full h-full object-cover aspect-auto" id="category-banner-image"
                                     src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="">
                                 <div
                                     class="absolute bottom-[10px] w-full flex justify-center flex-col items-center gap-3">
-                                    <p class="text-[2rem] font-bold text-white text-center">
-                                        @if (isset($categories) && count($categories) > 0)
-                                        {{ $categories->first()->name ?? 'Styles' }}
-                                        @else
+                                    <p class="text-[2rem] font-bold text-white text-center" id="category-banner-title">
                                         Styles
-                                        @endif
                                     </p>
-                                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white">Shop Now</button>
+                                    <button class="px-6 py-2 text-[1.2rem] font-bold bg-white" id="category-shop-btn">Shop Now</button>
                                 </div>
                             </div>
                         </div>
@@ -1499,88 +1430,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="flex flex-col gap-2">
                         <div class="flex flex-row justify-between gap-3 xll:items-center items-start">
                             <div
-                                class="w-full xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
-                                @if (isset($occasions) && count($occasions) > 0)
-                                @foreach ($occasions->take(4) as $occasion)
-                                <div class=" flex flex-col gap-2">
-                                    <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                        <img class="w-full h-full object-cover aspect-auto"
-                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                            alt="{{ $occasion->name }}">
-                                    </a>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                        <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                            class="hover:text-black transition-colors">{{ $occasion->name }}</a>
-                                    </p>
-                                </div>
-                                @endforeach
-                                @else
-                                <div class=" flex flex-col gap-2">
-                                    <a href="#"
-                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                        <img class="w-full h-full object-cover aspect-auto"
-                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                            alt="Wedding">
-                                    </a>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                        <a href="#" class="hover:text-black transition-colors">Wedding</a>
-                                    </p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <a href="#"
-                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                        <img class="w-full h-full object-cover aspect-auto"
-                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                            alt="Party">
-                                    </a>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                        <a href="#" class="hover:text-black transition-colors">Party</a>
-                                    </p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <a href="#"
-                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                        <img class="w-full h-full object-cover aspect-auto"
-                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                            alt="Festival">
-                                    </a>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                        <a href="#" class="hover:text-black transition-colors">Festival</a>
-                                    </p>
-                                </div>
-                                <div class=" flex flex-col gap-2">
-                                    <a href="#"
-                                        class="overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity">
-                                        <img class="w-full h-full object-cover aspect-auto"
-                                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                            alt="Casual">
-                                    </a>
-                                    <p class="text-[1.2rem] font-bold text-gray-700 text-center">
-                                        <a href="#" class="hover:text-black transition-colors">Casual</a>
-                                    </p>
-                                </div>
-                                @endif
-                                <!-- Product items here -->
-                            </div>
-                            <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
-                                <div
-                                    class="overflow-hidden rounded-md xll:max-h-[500px] max-h-[400px] w-full respon-wrap-img">
-                                    <img class="w-full h-full object-cover aspect-auto"
-                                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                        alt="">
-                                </div>
-                                <p class="text-[2rem] font-bold text-gray-700 text-center">
-                                    @if (isset($occasions) && count($occasions) > 0)
-                                    {{ $occasions->first()->name ?? 'Occasions' }}
-                                    @else
-                                    Occasions
-                                    @endif
-                                </p>
+                                class="w-full xll:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid gap-3" id="occasion-list">
+                                <!-- Occasion items will be populated here -->
                             </div>
                         </div>
                         <button
-                            class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show
+                            class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit" id="occasion-show-more">Show
                             More</button>
                     </div>
                 </div>
@@ -1588,182 +1443,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <!-- Collection Products -->
                 <div id="collection-products"
                     class="category-content xll:max-h-max max-h-[450px] pr-3 overflow-auto hidden">
-                    <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3">
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Light Pink Salwar
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Gray Lahenga
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Red Plazo
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                            <!-- Image Wrapper -->
-                            <div class="relative rounded-xl overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[340px] object-cover object-top object-center">
-
-
-
-                                <!-- Wishlist Heart Icon (Top Right) -->
-                                <button
-                                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-1">
-                                <h3 class="text-[15px] font-semibold text-gray-900">
-                                    Short Plazo
-                                </h3>
-
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span>Brand Name</span>
-                                    <span class="flex items-center gap-1 text-gray-700">
-                                        <span class="text-sm font-medium">4.4</span>
-                                    </span>
-                                </div>
-
-                                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                    <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                                    <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                                </div>
-
-                            </div>
-                        </div>
+                    <div class="grid xll:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-3" id="collection-products-list">
+                        <!-- Collection products will be populated here -->
                     </div>
                     <button
-                        class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit">Show
+                        class="mt-4 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-800 transition w-fit" id="collection-show-more">Show
                         More</button>
                 </div>
             </div>
@@ -1773,6 +1457,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ==================== GLOBAL VARIABLES ====================
+        let currentCategoryId = null;
+        let currentCategoryData = null;
+        let categoryCache = {}; // Cache for API responses
+
         // ==================== SEARCH DATA ====================
         const searchData = {
             categories: [
@@ -1850,6 +1539,396 @@ document.addEventListener('DOMContentLoaded', function() {
             ]
         };
 
+        // ==================== CATEGORY API FUNCTIONS ====================
+        async function fetchCategoryData(categoryId) {
+            // Check cache first
+            if (categoryCache[categoryId]) {
+                return categoryCache[categoryId];
+            }
+
+            const loadingElement = document.getElementById('category-menu-loading');
+            if (loadingElement) {
+                loadingElement.classList.add('active');
+            }
+
+            try {
+                const response = await fetch(`/api/categories/${categoryId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data);
+
+                if (data.success) {
+                    // Cache the response
+                    categoryCache[categoryId] = data.data;
+                    return data.data;
+                } else {
+                    throw new Error(data.message || 'Failed to fetch category data');
+                }
+            } catch (error) {
+                console.error('Error fetching category data:', error);
+                // Return fallback data structure
+                return {
+                    parent_category: { id: categoryId, name: 'Category', slug: 'category' },
+                    style: [],
+                    ocassions: [],
+                    collection: [],
+                    products_by_category: {},
+                    parent_category_products: []
+                };
+            } finally {
+                if (loadingElement) {
+                    loadingElement.classList.remove('active');
+                }
+            }
+        }
+
+        function renderCategoryMenuData(categoryData) {
+            if (!categoryData) return;
+
+            currentCategoryData = categoryData;
+            const parentCategory = categoryData.parent_category;
+            
+            // Update category banner
+            const bannerTitle = document.getElementById('category-banner-title');
+            const shopBtn = document.getElementById('category-shop-btn');
+            if (bannerTitle) bannerTitle.textContent = parentCategory.name || 'Styles';
+            if (shopBtn) shopBtn.textContent = 'Shop Now';
+
+            // Update shop button link
+            if (shopBtn && parentCategory.slug) {
+                shopBtn.onclick = function() {
+                    window.location.href = `/category/${parentCategory.slug}`;
+                };
+            }
+
+            // ==================== RENDER STYLE SECTION ====================
+            renderStyleSection(categoryData);
+
+            // ==================== RENDER OCCASION SECTION ====================
+            renderOccasionSection(categoryData);
+
+            // ==================== RENDER COLLECTION SECTION ====================
+            renderCollectionSection(categoryData);
+        }
+
+        function renderStyleSection(categoryData) {
+            const styleLeftList = document.getElementById('style-list-left');
+            const styleRightList = document.getElementById('style-list-right');
+            
+            if (!styleLeftList || !styleRightList) return;
+
+            // Clear existing content
+            styleLeftList.innerHTML = '';
+            styleRightList.innerHTML = '';
+
+            const styleItems = categoryData.style || [];
+            
+            if (styleItems.length === 0) {
+                // Show default message if no styles
+                styleLeftList.innerHTML = '<li class="mb-4 text-[1.1rem] text-gray-400">No styles found</li>';
+                return;
+            }
+
+            // Split styles into two columns
+            const midIndex = Math.ceil(styleItems.length / 2);
+            const leftStyles = styleItems.slice(0, midIndex);
+            const rightStyles = styleItems.slice(midIndex);
+
+            // Render left column styles
+            leftStyles.forEach(style => {
+                const li = document.createElement('li');
+                li.className = 'mb-4 text-[1.3rem]';
+                li.textContent = style.name;
+                
+                // Create subcategories list
+                const subUl = document.createElement('ul');
+                subUl.className = 'ml-4 mb-4';
+                
+                // You might want to fetch subcategories or use existing data
+                // For now, we'll show the style name as the only item
+                const subLi = document.createElement('li');
+                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
+                
+                const link = document.createElement('a');
+                link.href = `/category/${style.slug}`;
+                link.className = 'hover:text-black transition-colors';
+                link.textContent = style.name;
+                
+                subLi.appendChild(link);
+                subUl.appendChild(subLi);
+                
+                li.appendChild(subUl);
+                styleLeftList.appendChild(li);
+            });
+
+            // Render right column styles
+            rightStyles.forEach(style => {
+                const li = document.createElement('li');
+                li.className = 'mb-4 text-[1.3rem]';
+                li.textContent = style.name;
+                
+                const subUl = document.createElement('ul');
+                subUl.className = 'ml-4 mb-4';
+                
+                const subLi = document.createElement('li');
+                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
+                
+                const link = document.createElement('a');
+                link.href = `/category/${style.slug}`;
+                link.className = 'hover:text-black transition-colors';
+                link.textContent = style.name;
+                
+                subLi.appendChild(link);
+                subUl.appendChild(subLi);
+                li.appendChild(subUl);
+                styleRightList.appendChild(li);
+            });
+        }
+
+        function renderOccasionSection(categoryData) {
+            const occasionList = document.getElementById('occasion-list');
+            const showMoreBtn = document.getElementById('occasion-show-more');
+            
+            if (!occasionList) return;
+
+            occasionList.innerHTML = '';
+
+            const occasions = categoryData.ocassions || [];
+            
+            
+            if (occasions.length === 0) {
+                // Show default fallback occasions
+                const fallbackOccasions = [
+                    { name: 'Wedding', slug: 'wedding' },
+                    { name: 'Party', slug: 'party' },
+                    { name: 'Festival', slug: 'festival' },
+                    { name: 'Casual', slug: 'casual' }
+                ];
+
+                fallbackOccasions.forEach(occasion => {
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col gap-2';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/occasion/${occasion.slug}`;
+                    link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'w-full h-full object-cover aspect-auto';
+                    img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.alt = occasion.name;
+                    
+                    link.appendChild(img);
+                    div.appendChild(link);
+                    
+                    const p = document.createElement('p');
+                    p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+                    
+                    const occLink = document.createElement('a');
+                    occLink.href = `/occasion/${occasion.slug}`;
+                    occLink.className = 'hover:text-black transition-colors';
+                    occLink.textContent = occasion.name;
+                    
+                    p.appendChild(occLink);
+                    div.appendChild(p);
+                    occasionList.appendChild(div);
+                });
+            } else {
+                occasions.slice(0, 4).forEach(occasion => {
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col gap-2';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/occasion/${occasion.slug}`;
+                    link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'w-full h-full object-cover aspect-auto';
+                    img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.alt = occasion.name;
+                    
+                    link.appendChild(img);
+                    div.appendChild(link);
+                    
+                    const p = document.createElement('p');
+                    p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+                    
+                    const occLink = document.createElement('a');
+                    occLink.href = `/occasion/${occasion.slug}`;
+                    occLink.className = 'hover:text-black transition-colors';
+                    occLink.textContent = occasion.name;
+                    
+                    p.appendChild(occLink);
+                    div.appendChild(p);
+                    occasionList.appendChild(div);
+                });
+            }
+
+            // Update show more button
+            if (showMoreBtn && occasions.length > 4) {
+                showMoreBtn.style.display = 'block';
+                showMoreBtn.onclick = function() {
+                    // Implement show more functionality
+                    console.log('Show more occasions clicked');
+                };
+            } else if (showMoreBtn) {
+                showMoreBtn.style.display = 'none';
+            }
+        }
+
+       function renderCollectionSection(categoryData) {
+    const collectionList = document.getElementById('collection-products-list');
+    const showMoreBtn = document.getElementById('collection-show-more');
+    
+    if (!collectionList) return;
+
+    collectionList.innerHTML = '';
+
+    // Extract products from the complex data structure
+    let products = [];
+    
+    if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
+        // Get all products from all categories in products_by_category
+        const productsByCategory = categoryData.collection.products_by_category;
+        
+        // Iterate through each category's product array
+        for (const categoryId in productsByCategory) {
+            if (Array.isArray(productsByCategory[categoryId])) {
+                products = products.concat(productsByCategory[categoryId]);
+            }
+        }
+    }
+    
+    console.log("Extracted products:", products);
+    
+    if (products.length === 0) {
+        // Show default fallback products
+        const fallbackProducts = [
+            {
+                name: "Light Pink Salwar",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
+                slug: "light-pink-salwar"
+            },
+            {
+                name: "Gray Lahenga",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
+                slug: "gray-lahenga"
+            },
+            {
+                name: "Red Plazo",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
+                slug: "red-plazo"
+            },
+            {
+                name: "Short Plazo",
+                price: "Rs. 700",
+                originalPrice: "Rs. 1000",
+                image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
+                slug: "short-plazo"
+            }
+        ];
+
+        fallbackProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            collectionList.appendChild(productCard);
+        });
+    } else {
+        // Display products (limit to 4 for initial view)
+        products.slice(0, 4).forEach(product => {
+            const productCard = createProductCard({
+                name: product.name,
+                price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
+                originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
+                image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
+            });
+            collectionList.appendChild(productCard);
+        });
+    }
+
+    // Update show more button
+    if (showMoreBtn) {
+        if (products.length > 4) {
+            showMoreBtn.style.display = 'block';
+            showMoreBtn.onclick = function() {
+                // Show remaining products
+                products.slice(4).forEach(product => {
+                    const productCard = createProductCard({
+                        name: product.name,
+                        price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
+                        originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
+                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
+                    });
+                    collectionList.appendChild(productCard);
+                });
+                showMoreBtn.style.display = 'none';
+            };
+        } else {
+            showMoreBtn.style.display = 'none';
+        }
+    }
+}
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow';
+            
+            card.innerHTML = `
+                <!-- Image Wrapper -->
+                <div class="relative rounded-xl overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}"
+                        class="w-full h-[340px] object-cover object-top object-center">
+                    
+                    <!-- Wishlist Heart Icon (Top Right) -->
+                    <button
+                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 space-y-1">
+                    <h3 class="text-[15px] font-semibold text-gray-900">
+                        ${product.name}
+                    </h3>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span>Brand Name</span>
+                        <span class="flex items-center gap-1 text-gray-700">
+                            <span class="text-sm font-medium">4.4</span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2 mt-2 flex-wrap">
+                        <span class="text-lg font-bold text-gray-900">${product.price}</span>
+                        ${product.originalPrice ? `<span class="text-sm text-gray-400 line-through">${product.originalPrice}</span>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add click event to navigate to product page
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                window.location.href = `/product/${product.slug}`;
+            });
+            
+            return card;
+        }
+
         // ==================== SEARCH FUNCTIONALITY ====================
         // Desktop elements
         const searchInput = document.getElementById('search-input');
@@ -1873,6 +1952,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
         const mobileSidebarSearchInput = document.getElementById('mobile-sidebar-search-input');
         const mobileSidebarSearchIcon = document.getElementById('mobile-sidebar-search-icon');
+        const mobileSuggestionsInput = document.getElementById('mobile-suggestions-input');
+        const mobileSuggestionsBack = document.getElementById('mobile-suggestions-back');
+        const mobileSuggestionsClear = document.getElementById('mobile-suggestions-clear');
+        const mobileSuggestionsContent = document.getElementById('mobile-suggestions-content');
 
         // DOM elements for desktop search results
         const categoriesList = document.getElementById('categories-list');
@@ -1886,7 +1969,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if we're on mobile
         function isMobile() {
-            return window.innerWidth <= 768;
+            return window.innerWidth <= 991;
         }
 
         // Highlight search terms in text
@@ -2046,59 +2129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // ==================== MOBILE SEARCH FUNCTIONS ====================
-        // Update mobile search suggestions
-        function updateMobileSuggestions(searchTerm = '') {
-            const suggestionsContainer = document.getElementById('mobile-search-suggestions');
-            suggestionsContainer.innerHTML = '';
-
-            if (!searchTerm.trim()) {
-                // Show default trending suggestions
-                searchData.trending.slice(0, 5).forEach(trend => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.className = 'search-suggestion-item';
-                    suggestionItem.setAttribute('data-search', trend);
-                    suggestionItem.innerHTML = `
-                        <i class="fa-solid fa-tag"></i>
-                        <span>${trend}</span>
-                    `;
-                    suggestionItem.addEventListener('click', () => {
-                        openMobileSearch(trend);
-                    });
-                    suggestionsContainer.appendChild(suggestionItem);
-                });
-            } else {
-                // Show filtered suggestions
-                const term = searchTerm.toLowerCase();
-                const filteredTrending = searchData.trending.filter(trend =>
-                    trend.toLowerCase().includes(term)
-                ).slice(0, 5);
-
-                if (filteredTrending.length === 0) {
-                    const noSuggestion = document.createElement('div');
-                    noSuggestion.className = 'search-suggestion-item';
-                    noSuggestion.innerHTML = `
-                        <i class="fa-solid fa-search"></i>
-                        <span>No suggestions found</span>
-                    `;
-                    suggestionsContainer.appendChild(noSuggestion);
-                } else {
-                    filteredTrending.forEach(trend => {
-                        const suggestionItem = document.createElement('div');
-                        suggestionItem.className = 'search-suggestion-item';
-                        suggestionItem.setAttribute('data-search', trend);
-                        suggestionItem.innerHTML = `
-                            <i class="fa-solid fa-tag"></i>
-                            <span>${highlightText(trend, searchTerm)}</span>
-                        `;
-                        suggestionItem.addEventListener('click', () => {
-                            openMobileSearch(trend);
-                        });
-                        suggestionsContainer.appendChild(suggestionItem);
-                    });
-                }
-            }
-        }
-
         // Render mobile search results
         function renderMobileSearchResults(searchTerm = '') {
             const results = filterData(searchTerm);
@@ -2154,6 +2184,61 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // Update mobile search suggestions
+        function updateMobileSuggestions(searchTerm = '') {
+            const suggestionsContainer = mobileSuggestionsContent;
+            suggestionsContainer.innerHTML = '';
+
+            if (!searchTerm.trim()) {
+                // Show default trending suggestions
+                searchData.trending.slice(0, 5).forEach(trend => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'search-suggestion-item';
+                    suggestionItem.setAttribute('data-search', trend);
+                    suggestionItem.innerHTML = `
+                        <i class="fa-solid fa-tag"></i>
+                        <span>${trend}</span>
+                    `;
+                    suggestionItem.addEventListener('click', () => {
+                        openMobileSearch(trend);
+                        hideMobileSuggestions();
+                    });
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            } else {
+                // Show filtered suggestions
+                const term = searchTerm.toLowerCase();
+                const filteredTrending = searchData.trending.filter(trend =>
+                    trend.toLowerCase().includes(term)
+                ).slice(0, 5);
+
+                if (filteredTrending.length === 0) {
+                    const noSuggestion = document.createElement('div');
+                    noSuggestion.className = 'search-suggestion-item';
+                    noSuggestion.innerHTML = `
+                        <i class="fa-solid fa-search"></i>
+                        <span>No suggestions found</span>
+                    `;
+                    suggestionsContainer.appendChild(noSuggestion);
+                } else {
+                    filteredTrending.forEach(trend => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'search-suggestion-item';
+                        suggestionItem.setAttribute('data-search', trend);
+                        suggestionItem.innerHTML = `
+                            <i class="fa-solid fa-tag"></i>
+                            <span>${highlightText(trend, searchTerm)}</span>
+                        `;
+                        suggestionItem.addEventListener('click', () => {
+                            openMobileSearch(trend);
+                            hideMobileSuggestions();
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                }
+            }
+        }
+
         // Perform mobile search
         function performMobileSearch(searchTerm) {
             // Show loading indicator
@@ -2170,6 +2255,9 @@ document.addEventListener('DOMContentLoaded', function() {
         function openMobileSearch(initialValue = '') {
             if (!isMobile()) return;
 
+            // Close any open suggestions first
+            hideMobileSuggestions();
+
             mobileSearchDropdown.classList.add('active');
             document.body.style.overflow = 'hidden';
 
@@ -2181,10 +2269,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderMobileSearchResults(); // Show default results
             }
 
-            // Focus on mobile search input
+            // Focus on mobile search input with a delay to ensure it works
             setTimeout(() => {
                 mobileSearchInput.focus();
-            }, 100);
+                // Scroll to top to ensure input is visible
+                mobileSearchResults.scrollTop = 0;
+            }, 150);
         }
 
         // Close mobile search
@@ -2192,18 +2282,25 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileSearchDropdown.classList.remove('active');
             document.body.style.overflow = '';
             mobileSearchInput.value = '';
-            hideMobileSearchSuggestions();
+            hideMobileSuggestions();
         }
 
-        // Show mobile search suggestions
-        function showMobileSearchSuggestions() {
+        // Show mobile suggestions
+        function showMobileSuggestions() {
             if (!isMobile()) return;
             mobileSearchSuggestions.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Focus on suggestions input
+            setTimeout(() => {
+                mobileSuggestionsInput.focus();
+            }, 100);
         }
 
-        // Hide mobile search suggestions
-        function hideMobileSearchSuggestions() {
+        // Hide mobile suggestions
+        function hideMobileSuggestions() {
             mobileSearchSuggestions.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // ==================== INITIALIZE SEARCH ====================
@@ -2248,11 +2345,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            // Search icon click (desktop)
+            // ==================== MOBILE SEARCH EVENTS ====================
+            // Search icon click - opens mobile search on mobile
             if (searchIcon) {
                 searchIcon.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (!isMobile()) {
+                    if (isMobile()) {
+                        // On mobile: open full-screen mobile search dropdown
+                        openMobileSearch(searchInput.value);
+                    } else {
+                        // On desktop: toggle the desktop search dropdown
                         if (searchDropdown.classList.contains('active')) {
                             hideDesktopSearchDropdown();
                         } else {
@@ -2274,44 +2376,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            // ==================== MOBILE SEARCH EVENTS ====================
             // Mobile search input events
             if (mobileSearchInput) {
-                // Open mobile search on focus
-                searchInput.addEventListener('focus', function() {
-                    if (isMobile()) {
-                        openMobileSearch();
-                    }
-                });
-
-                // Mobile sidebar search input focus
-                if (mobileSidebarSearchInput) {
-                    mobileSidebarSearchInput.addEventListener('focus', function() {
-                        if (isMobile()) {
-                            openMobileSearch();
-                        }
-                    });
-                }
-
-                // Mobile sidebar search icon click
-                if (mobileSidebarSearchIcon) {
-                    mobileSidebarSearchIcon.addEventListener('click', function() {
-                        if (isMobile()) {
-                            openMobileSearch();
-                        }
-                    });
-                }
-
-                // Search icon click on mobile
-                if (searchIcon) {
-                    searchIcon.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (isMobile()) {
-                            openMobileSearch(searchInput.value);
-                        }
-                    });
-                }
-
                 // Real-time mobile search
                 let mobileSearchTimeout;
                 mobileSearchInput.addEventListener('input', function() {
@@ -2336,6 +2402,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
+            // Mobile suggestions input events
+            if (mobileSuggestionsInput) {
+                let suggestionsTimeout;
+                mobileSuggestionsInput.addEventListener('input', function() {
+                    clearTimeout(suggestionsTimeout);
+
+                    const searchTerm = this.value.trim();
+
+                    // Debounce the suggestions update
+                    suggestionsTimeout = setTimeout(() => {
+                        updateMobileSuggestions(searchTerm);
+                    }, 200);
+                });
+
+                // Handle Enter key in suggestions
+                mobileSuggestionsInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const searchTerm = this.value.trim();
+                        if (searchTerm) {
+                            openMobileSearch(searchTerm);
+                            hideMobileSuggestions();
+                        }
+                    }
+                });
+            }
+
+            // Mobile sidebar search input focus - also opens mobile search
+            if (mobileSidebarSearchInput) {
+                mobileSidebarSearchInput.addEventListener('focus', function() {
+                    if (isMobile()) {
+                        openMobileSearch();
+                    }
+                });
+            }
+
+            // Mobile sidebar search icon click - also opens mobile search
+            if (mobileSidebarSearchIcon) {
+                mobileSidebarSearchIcon.addEventListener('click', function() {
+                    if (isMobile()) {
+                        openMobileSearch(mobileSidebarSearchInput.value);
+                    }
+                });
+            }
+
             // Mobile search back button
             if (mobileSearchBack) {
                 mobileSearchBack.addEventListener('click', function(e) {
@@ -2354,6 +2464,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
+            // Mobile suggestions back button
+            if (mobileSuggestionsBack) {
+                mobileSuggestionsBack.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hideMobileSuggestions();
+                });
+            }
+
+            // Mobile suggestions clear button
+            if (mobileSuggestionsClear) {
+                mobileSuggestionsClear.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileSuggestionsInput.value = '';
+                    mobileSuggestionsInput.focus();
+                    updateMobileSuggestions('');
+                });
+            }
+
             // Close search when clicking outside (desktop only)
             if (!isMobile()) {
                 document.addEventListener('click', function(event) {
@@ -2366,32 +2494,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            // Mobile search input focus for suggestions
+            // Mobile search input focus for suggestions (when clicking on main search input on mobile)
             if (searchInput) {
                 searchInput.addEventListener('focus', function() {
                     if (isMobile()) {
+                        // On mobile, when search input gets focus, open mobile suggestions
+                        showMobileSuggestions();
                         updateMobileSuggestions(this.value);
-                        showMobileSearchSuggestions();
-                    }
-                });
-
-                searchInput.addEventListener('input', function() {
-                    if (isMobile()) {
-                        updateMobileSuggestions(this.value);
-                        showMobileSearchSuggestions();
                     }
                 });
             }
 
-            // Close mobile suggestions when clicking outside
-            document.addEventListener('click', function(event) {
-                if (isMobile()) {
-                    const isClickInsideSuggestions = mobileSearchSuggestions.contains(event.target);
-                    const isClickOnSearchInput = searchInput.contains(event.target);
+            // Handle keyboard visibility changes on mobile
+            let originalHeight = window.innerHeight;
+            window.addEventListener('resize', function() {
+                if (!isMobile()) return;
 
-                    if (!isClickInsideSuggestions && !isClickOnSearchInput) {
-                        hideMobileSearchSuggestions();
+                const newHeight = window.innerHeight;
+                const keyboardVisible = newHeight < originalHeight;
+
+                if (keyboardVisible) {
+                    // Keyboard is shown - ensure search dropdown is visible
+                    if (mobileSearchDropdown.classList.contains('active')) {
+                        // Adjust scroll position to keep input visible
+                        setTimeout(() => {
+                            mobileSearchResults.scrollTop = 0;
+                        }, 100);
                     }
+                } else {
+                    // Keyboard is hidden - check if we need to close search
+                    if (mobileSearchInput.value.trim() === '' && mobileSearchDropdown.classList
+                        .contains('active')) {
+                        // User might have closed keyboard without searching
+                        // Keep search open but reset results
+                        renderMobileSearchResults();
+                    }
+                }
+
+                originalHeight = newHeight;
+            });
+
+            // Handle back button on Android/iOS
+            window.addEventListener('popstate', function(event) {
+                if (isMobile() && mobileSearchDropdown.classList.contains('active')) {
+                    closeMobileSearch();
+                    event.preventDefault();
                 }
             });
         }
@@ -2418,6 +2565,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 link.addEventListener('mouseenter', function() {
                     clearTimeout(hideMenuTimeout);
                     isOverNav = true;
+                    
+                    const categoryId = this.getAttribute('data-category-id');
+                    if (categoryId) {
+                        currentCategoryId = categoryId;
+                        loadCategoryData(categoryId);
+                    }
+                    
                     showCategoriesMenu();
                 });
 
@@ -2445,6 +2599,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, HOVER_DELAY);
             });
+        }
+
+        // Load category data from API
+        async function loadCategoryData(categoryId) {
+            const categoryData = await fetchCategoryData(categoryId);
+            renderCategoryMenuData(categoryData);
         }
 
         // Category sidebar button functionality
@@ -2479,7 +2639,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Click outside to close menu
         document.addEventListener('click', function(event) {
-            if (categoriesMenu && categoriesMenu.style.display === 'block') {
+            if (categoriesMenu && categoriesMenu.classList.contains('visible')) {
                 const isClickInsideMenu = categoriesMenu.contains(event.target);
                 const isClickOnNavLink = Array.from(desktopNavLinks).some(link => link.contains(event
                     .target));
@@ -2668,13 +2828,14 @@ document.addEventListener('DOMContentLoaded', function() {
         function showCategoriesMenu() {
             clearTimeout(hideMenuTimeout);
             if (categoriesMenu) {
-                categoriesMenu.style.display = 'block';
+                categoriesMenu.classList.add('visible');
             }
         }
 
         function hideCategoriesMenu() {
             if (categoriesMenu) {
-                categoriesMenu.style.display = 'none';
+                categoriesMenu.classList.remove('visible');
+
                 // Reset to default state
                 if (categorySidebarBtns.length > 0 && categoryContents.length > 0) {
                     categorySidebarBtns.forEach((btn, index) => {
@@ -2702,11 +2863,22 @@ document.addEventListener('DOMContentLoaded', function() {
         hideCategoriesMenu();
 
         // Handle window resize
+        // Handle window resize
+        let lastWindowWidth = window.innerWidth;
         window.addEventListener('resize', function() {
-            // Close all search dropdowns on resize
+            const currentWidth = window.innerWidth;
+            const widthChanged = currentWidth !== lastWindowWidth;
+            lastWindowWidth = currentWidth;
+
+            // If only height changed (likely keyboard show/hide on mobile), do nothing
+            if (!widthChanged && isMobile()) {
+                return;
+            }
+
+            // Close all search dropdowns on real resizes (orientation / breakpoint)
             hideDesktopSearchDropdown();
             closeMobileSearch();
-            hideMobileSearchSuggestions();
+            hideMobileSuggestions();
 
             // Reset mobile menu if switching to desktop
             if (!isMobile()) {

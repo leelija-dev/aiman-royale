@@ -5,7 +5,238 @@
 
 
 
+
+
+
 @section('content')
+
+
+<style>
+
+    /* Custom font classes */
+
+
+    /* Update existing classes with custom fonts */
+    .text-center h2 {
+
+        font-weight: 800;
+    }
+
+    .group h3 {
+
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+
+
+
+    /* Card hover shine effect */
+
+
+    .group:hover::before {
+        left: 100%;
+    }
+
+    /* DOTS CONTAINER */
+    #categories-carousel .owl-dots {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* EACH DOT BUTTON */
+    #categories-carousel .owl-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        /* light gray */
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    /* HOVER EFFECT */
+    #categories-carousel .owl-dot:hover {
+        transform: scale(1.2);
+        background: #c084fc;
+    }
+
+    /* ACTIVE DOT */
+    #categories-carousel .owl-dot.active {
+        width: 32px;
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Inner span removal (optional for cleaner look) */
+    #categories-carousel .owl-dot span {
+        display: none;
+    }
+</style>
+<div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
+
+  <!-- Animated Gradient Background Decoration -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-200/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 -right-10 w-32 h-32 bg-pink-200/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Enhanced Header with Animation -->
+  <div class="relative text-center mb-3 md:mb-6">
+    <div class="inline-block mb-3">
+      <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-4"></div>
+      <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+        Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
+      </h3>
+      <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
+        Curated styles for every occasion. Discover your perfect look.
+      </p>
+    </div>
+  </div>
+
+  <!-- Horizontal Scroll with Enhanced Styling -->
+  <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
+    <!-- Gradient fade edges -->
+    {{-- <div class="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10"></div>
+    <div class="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent z-10"></div> --}}
+
+    <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
+
+      <!-- Category Items with Enhanced Cards -->
+      <!-- Bestsellers -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                 alt="Bestsellers"
+                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+          </div>
+
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Bestsellers</span>
+        <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+      </a>
+
+      <!-- Saree -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+                 alt="Saree"
+                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+          </div>
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
+        <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
+      </a>
+
+      <!-- Salwar Kameez -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                 alt="Salwar Kameez"
+                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+          </div>
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar Kameez</span>
+        <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
+      </a>
+
+      <!-- Lehenga -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
+                 alt="Lehenga"
+                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
+        <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
+      </a>
+
+      <!-- Indo Western -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
+                 alt="Indo Western"
+                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+          </div>
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo Western</span>
+        <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
+      </a>
+
+      <!-- Blouses -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                 alt="Blouses"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          </div>
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
+        <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
+      </a>
+
+      <!-- Menswear -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                 alt="Menswear"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          </div>
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
+        <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
+      </a>
+
+      <!-- Bridal Edit -->
+      <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+        <div class="relative mb-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+            <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
+                 alt="Bridal Edit"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          </div>
+
+        </div>
+        <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal Edit</span>
+        <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
+      </a>
+
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Required CSS for no scrollbar + smooth snap -->
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -33,7 +264,7 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10"></div>
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" />
-                    <div class="absolute top-4 left-4">
+                    <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                         <span
                             class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">NEW</span>
                     </div>
@@ -199,7 +430,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Popular
@@ -238,7 +469,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Bridal
@@ -276,7 +507,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Traditional
@@ -315,7 +546,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Modern
@@ -354,7 +585,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Trending
@@ -394,7 +625,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Casual
@@ -434,7 +665,7 @@
                         </div>
 
                         <!-- Floating Badge -->
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                             <span
                                 class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                 Casual
@@ -480,81 +711,6 @@
     </div>
 </section>
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
-
-    /* Custom font classes */
-    .font-display {
-        font-family: 'Playfair Display', serif;
-    }
-
-    .font-body {
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Update existing classes with custom fonts */
-    .text-center h2 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 800;
-    }
-
-    .group h3 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-
-    .text-center p,
-    .group p,
-    a span {
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Card hover shine effect */
-
-
-    .group:hover::before {
-        left: 100%;
-    }
-
-    /* DOTS CONTAINER */
-    #categories-carousel .owl-dots {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* EACH DOT BUTTON */
-    #categories-carousel .owl-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: #e5e7eb;
-        /* light gray */
-        transition: all 0.4s ease;
-        position: relative;
-    }
-
-    /* HOVER EFFECT */
-    #categories-carousel .owl-dot:hover {
-        transform: scale(1.2);
-        background: #c084fc;
-    }
-
-    /* ACTIVE DOT */
-    #categories-carousel .owl-dot.active {
-        width: 32px;
-        background: linear-gradient(90deg, #a855f7, #ec4899);
-        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
-    }
-
-    /* Inner span removal (optional for cleaner look) */
-    #categories-carousel .owl-dot span {
-        display: none;
-    }
-</style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto px-4">
@@ -563,7 +719,7 @@
             @foreach ($categories->where('parent_id', null) as $category)
 
             <div
-                class="group flex justify-between items-center lgg:gap-3 gap-[3px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
+                class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
                 <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                     class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
@@ -581,6 +737,16 @@
         </div>
     </div>
 </section>
+
+<style>
+    .scrollbar-hide {
+        -ms-overflow-style: none;          /* IE and Edge */
+        scrollbar-width: none;             /* Firefox */
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;                     /* Chrome, Safari, Opera */
+    }
+</style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
@@ -1888,7 +2054,7 @@
 
 <style>
     .parallax-bg {
-        background-image: url('{{ asset(' web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
+        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
         /* change path */
         will-change: transform;
     }
@@ -1926,11 +2092,11 @@
 
                 <!-- Top Banner -->
                 <div class="flex justify-center items-center">
-                    <div class="w-auto flex sm:flex-row flex-col  bg-gradient-to-r from-primary  to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg whitespace-nowrap flex items-center gap-2">
+                    <div class="w-auto flex sm:flex-row flex-col  bg-gradient-to-r from-primary  to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg   items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:block hidden" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
                         </svg>
-                        DESIGNER'S PERSPECTIVE · AIMAN FASHION
+                        DESIGNER'S PERSPECTIVE
                     </div>
                 </div>
 
@@ -2257,7 +2423,7 @@
             loop: true,
             margin: 20,
             nav: false, // 🚫 Disable Owl default nav buttons
-            dots: true,
+            dots: false,
             autoplay: true,
             autoplayTimeout: 5000,
             autoplayHoverPause: true,
@@ -2265,27 +2431,38 @@
             responsive: {
                 0: {
                     items: 1,
-                    dots: true
+                    dots: false,
+                     margin: 10,
+                },
+                450: {
+                    items: 2,
+                    dots: false,
+                    margin: 10,
                 },
                 640: {
                     items: 2,
-                    dots: true
+                    dots: false,
+                     margin: 10,
                 },
                 768: {
                     items: 3,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1024: {
                     items: 4,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1280: {
                     items: 5,
-                    dots: true
+                    dots: false,
+                    margin: 10,
                 },
                 1366: {
                     items: 6,
-                    dots: false
+                    dots: false,
+                    margin: 10,
                 }
             }
         });
