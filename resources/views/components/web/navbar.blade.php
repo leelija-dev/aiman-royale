@@ -966,13 +966,14 @@
                     <!-- Profile with Dropdown (Logged In) -->
                     <div class="relative group">
                         <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                            <div class="relative">
+                            <!-- <div class="relative">
                                 <img src="https://i.pravatar.cc/32" alt="User"
                                     class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
                                 <span
                                     class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
-                            </div>
-                            <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span>
+                            </div> -->
+                            <!-- <span class="hidden sm:block text-sm font-medium">{{ Auth::user()->name }}</span> -->
+                           <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
                             <i
                                 class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
                         </button>
