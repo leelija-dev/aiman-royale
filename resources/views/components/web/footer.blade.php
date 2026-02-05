@@ -384,17 +384,46 @@
     </div>
   </div>
 </footer>
+<!-- WhatsApp Floating Button -->
+<!-- Fashion WhatsApp Floating Button -->
+<a href="https://wa.me/919999999999" target="_blank"
+   class="fixed bottom-[7.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
+
+    <!-- Soft Glow Background -->
+    <div class="absolute inset-0 rounded-full bg-green-500 blur-xl opacity-30 group-hover:opacity-50 transition duration-500"></div>
+
+    <!-- Animated Ring -->
+    <span class="absolute inset-0 rounded-full border-2 border-pink-300/40 animate-ping"></span>
+
+    <!-- Main Button -->
+    <div class="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-[0_10px_25px_rgba(236,72,153,0.35)] hover:shadow-[0_15px_35px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all duration-300">
+
+        <i class="fab fa-whatsapp text-white text-2xl md:text-3xl drop-shadow"></i>
+
+        <!-- Shine Effect -->
+        <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+    </div>
+
+    <!-- Fashion Tooltip -->
+    <div class="absolute right-16 md:right-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#111] to-[#333] text-white text-xs px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap shadow-xl tracking-wide">
+        Chat Now on WhatsApp
+    </div>
+</a>
+
+
 <!-- Light-themed Mobile Navigation Bar -->
 <div class="sticky bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
     
     <!-- Attractive Banner -->
-    <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
+    <a href="/" class="w-full">
+      <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
         <div class="flex items-center justify-center gap-2 animate-pulse">
             <i class="fas fa-gem text-white text-sm"></i>
             <span class="text-white text-xs font-semibold tracking-wide">Custom style meets live shopping</span>
             <i class="fas fa-arrow-right text-white text-sm  ml-1"></i>
         </div>
     </div>
+    </a>
     
     <!-- Navigation Buttons -->
     <div class="px-2 py-2 flex items-center justify-between gap-0 max-w-screen-sm mx-auto">
@@ -440,7 +469,7 @@
         </button>
         
         <!-- Book Appointment Button -->
-        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+        <button class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
             <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
@@ -452,6 +481,7 @@
     <!-- Safe area padding for iPhone bottom notch -->
     <div class="h-[env(safe-area-inset-bottom)] bg-gradient-to-b from-white to-gray-50/50"></div>
 </div>
+
 
 <!-- Add this script at the end of your HTML -->
 <script>
