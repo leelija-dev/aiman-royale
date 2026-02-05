@@ -385,53 +385,72 @@
   </div>
 </footer>
 <!-- Light-themed Mobile Navigation Bar -->
-<div class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
-    <!-- Main navigation content -->
+<div class="sticky bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
+    
+    <!-- Attractive Banner -->
+    <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
+        <div class="flex items-center justify-center gap-2 animate-pulse">
+            <i class="fas fa-gem text-white text-sm"></i>
+            <span class="text-white text-xs font-semibold tracking-wide">Check our custom design and live shopping experience</span>
+            <i class="fas fa-arrow-right text-white text-sm animate-bounce ml-1"></i>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
     <div class="px-2 py-2 flex items-center justify-between gap-0 max-w-screen-sm mx-auto">
         
         <!-- Home Button -->
-        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-[#FCE7F3] active:scale-95 transition-all duration-200 group">
-            <i class="fas fa-home text-xl text-gray-500 mb-0.5 group-hover:text-[#EC4899] transition-all duration-200"></i>
-            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#EC4899] transition-colors">Home</span>
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-[#FCE7F3] active:scale-95 transition-all duration-300 group relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <i class="fas fa-home text-xl text-gray-600 mb-1 group-hover:text-[#EC4899] group-hover:scale-110 transition-all duration-300 relative z-10"></i>
+            <span class="text-[10px] font-semibold text-gray-700 group-hover:text-[#EC4899] transition-colors relative z-10">Home</span>
+            <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-[#EC4899] rounded-full transition-all duration-300"></div>
         </button>
         
-        <!-- Wishlist Button -->
-        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-[#FCE7F3] active:scale-95 transition-all duration-200 relative group">
-            <div class="relative">
-                <i class="fas fa-heart text-xl text-gray-500 mb-0.5 group-hover:text-[#EC4899] transition-all duration-200"></i>
-                <div class="absolute -top-1 -right-1 w-4 h-4 bg-[#EC4899] text-white text-[10px] rounded-full flex items-center justify-center">3</div>
-            </div>
-            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#EC4899] transition-colors">Wishlist</span>
+        <!-- Categories Button -->
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-blue-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <i class="fas fa-th-large text-xl text-gray-600 mb-1 group-hover:text-blue-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
+            <span class="text-[10px] font-semibold text-gray-700 group-hover:text-blue-600 transition-colors relative z-10">Categories</span>
+            <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-blue-600 rounded-full transition-all duration-300"></div>
         </button>
         
         <!-- Trending Button (Active/Featured) -->
-        <button class="nav-item active-nav flex flex-col items-center justify-center w-16 py-2 -mt-3 rounded-xl bg-gradient-to-br from-[#A10000] to-[#EC4899] border-2 border-white shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 relative">
+        <button class="nav-item mt-[-5px] active-nav flex flex-col items-center justify-center w-16 py-2  rounded-2xl bg-gradient-to-br from-[#A10000] via-[#EC4899] to-[#FF6B9D] border-2 border-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 relative group">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="relative mb-0.5">
-                <i class="fas fa-fire text-xl text-white"></i>
-                <div class="absolute -inset-1 bg-[#EC4899] rounded-full animate-ping opacity-30"></div>
+                <i class="fas fa-fire text-xl text-white group-hover:animate-pulse"></i>
+                <div class="absolute -inset-2 bg-gradient-to-r from-[#EC4899] to-[#FF6B9D] rounded-full animate-ping opacity-20"></div>
+                <div class="absolute -inset-1 bg-gradient-to-r from-[#EC4899] to-[#FF6B9D] rounded-full opacity-20"></div>
             </div>
-            <span class="text-xs font-bold text-white">Trending</span>
-            <div class="absolute -top-1 inset-x-1/4 w-8 h-0.5 bg-white/80 rounded-full"></div>
+            <span class="text-xs font-bold text-white drop-shadow-sm">Trending</span>
+            <div class="absolute -top-1 inset-x-1/4 w-8 h-1 bg-gradient-to-r from-white/90 to-white/60 rounded-full shadow-sm"></div>
+            <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full blur-sm"></div>
         </button>
         
         <!-- Offers Button -->
-        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-amber-50 active:scale-95 transition-all duration-200 group">
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="relative">
-                <i class="fas fa-percent text-xl text-gray-500 mb-0.5 group-hover:text-amber-600 transition-all duration-200"></i>
+                <i class="fas fa-percent text-xl text-gray-600 mb-1 group-hover:text-amber-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
+                <div class="absolute -top-1 -right-2 w-2 h-2 bg-amber-400 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
-            <span class="text-[10px] font-medium text-gray-600 group-hover:text-amber-600 transition-colors">Offers</span>
+            <span class="text-[10px] font-semibold text-gray-700 group-hover:text-amber-600 transition-colors relative z-10">Offers</span>
+            <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-amber-600 rounded-full transition-all duration-300"></div>
         </button>
         
-        <!-- Account Button -->
-        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition-all duration-200 group">
-            <i class="fas fa-user-circle text-xl text-gray-500 mb-0.5 group-hover:text-[#A10000] transition-all duration-200"></i>
-            <span class="text-[10px] font-medium text-gray-600 group-hover:text-[#A10000] transition-colors">Account</span>
+        <!-- Book Appointment Button -->
+        <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
+            <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
+            <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-emerald-600 rounded-full transition-all duration-300"></div>
         </button>
         
     </div>
     
     <!-- Safe area padding for iPhone bottom notch -->
-    <div class="h-[env(safe-area-inset-bottom)] bg-white"></div>
+    <div class="h-[env(safe-area-inset-bottom)] bg-gradient-to-b from-white to-gray-50/50"></div>
 </div>
 
 <!-- Add this script at the end of your HTML -->
