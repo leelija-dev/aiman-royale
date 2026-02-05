@@ -1,0 +1,133 @@
+/* Custom font classes */
+
+
+    /* Update existing classes with custom fonts */
+    .text-center h2 {
+
+        font-weight: 800;
+    }
+
+    .group h3 {
+
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+
+
+
+    /* Card hover shine effect */
+
+
+    .group:hover::before {
+        left: 100%;
+    }
+
+    /* DOTS CONTAINER */
+    #categories-carousel .owl-dots {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* EACH DOT BUTTON */
+    #categories-carousel .owl-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        /* light gray */
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    /* HOVER EFFECT */
+    #categories-carousel .owl-dot:hover {
+        transform: scale(1.2);
+        background: #c084fc;
+    }
+
+    /* ACTIVE DOT */
+    #categories-carousel .owl-dot.active {
+        width: 32px;
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Inner span removal (optional for cleaner look) */
+    #categories-carousel .owl-dot span {
+        display: none;
+    }
+
+    @keyframes gradient {
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+
+    .animate-gradient {
+        animation: gradient 3s ease-in-out infinite;
+        background-size: 200% 200%;
+    }
+
+    #categories-carousel .owl-stage-outer {
+        padding: 20px 0;
+    }
+
+    #categories-carousel .disabled,
+    #designer-thoughts .disabled {
+        display: none !important;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+    }
+    
+
+
+    .parallax-bg {
+        background-image: url('/web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg');
+        /* change path */
+        will-change: transform;
+    }
+
+    /* Custom owl carousel dots */
+    .owl-theme .owl-dots .owl-dot span {
+        width: 10px;
+        height: 10px;
+        margin: 5px 4px;
+        background: #d1d5db;
+        transition: all 0.3s ease;
+    }
+
+    .owl-theme .owl-dots .owl-dot.active span {
+        background: #EC4899;
+        width: 30px;
+        border-radius: 10px;
+    }
+
+    .owl-theme .owl-dots .owl-dot:hover span {
+        background: #ec5da5;
+    }
+
+    @media screen and (min-width:992px) {
+        .banner-carousel {
+            display: none !important;
+        }
+
+    }

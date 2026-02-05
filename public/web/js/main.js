@@ -1,129 +1,279 @@
+// $(document).ready(function () {
+//   var secondOwl;
+//   var mainOwl;
+//   var bannerOwl; // New variable for banner carousel
+
+//   function initCarousels() {
+//     var width = $(window).width();
+
+//     // Initialize or re-initialize banner carousel (for screens < 992px)
+//     if ($(".banner-carousel").length) {
+//       if (bannerOwl) {
+//         $(".banner-carousel")
+//           .trigger("destroy.owl.carousel")
+//           .removeClass("owl-loaded")
+//           .find(".owl-stage-outer")
+//           .children()
+//           .unwrap();
+//       }
+
+//       // Only initialize if screen width is less than 992px
+//       if (width < 992) {
+//         bannerOwl = $(".banner-carousel").owlCarousel({
+//           loop: true,
+//           margin: 10,
+//           nav: true,
+//           navText: [
+//             '<i class="fas fa-chevron-left"></i>',
+//             '<i class="fas fa-chevron-right"></i>',
+//           ],
+//           dots: true,
+//           autoplay: true,
+//           autoplayTimeout: 4000,
+//           autoplayHoverPause: true,
+//           items: 1,
+//           responsive: {
+//             0: { items: 1, margin: 10 },
+//             768: { items: 1, margin: 20 },
+//           },
+//         });
+//       } else {
+//         // Destroy if exists and screen is desktop
+//         if (bannerOwl) {
+//           $(".banner-carousel")
+//             .trigger("destroy.owl.carousel")
+//             .removeClass("owl-loaded")
+//             .find(".owl-stage-outer")
+//             .children()
+//             .unwrap();
+//           bannerOwl = null;
+//         }
+//       }
+//     }
+
+//     // Initialize or re-initialize .second-owl (dots always true in your current setup)
+//     if ($(".second-owl").length) {
+//       if (secondOwl) {
+//         $(".second-owl")
+//           .trigger("destroy.owl.carousel")
+//           .removeClass("owl-loaded")
+//           .find(".owl-stage-outer")
+//           .children()
+//           .unwrap();
+//       }
+//       secondOwl = $(".second-owl").owlCarousel({
+//         loop: true,
+//         margin: 24,
+//         navText: [
+//           '<i class="fas fa-chevron-left"></i>',
+//           '<i class="fas fa-chevron-right"></i>',
+//         ],
+//         dots: true,
+//         autoplay: true,
+//         autoplayTimeout: 3000,
+//         autoplayHoverPause: true,
+//         responsive: {
+//           0: { items: 1 },
+//           550: { items: 2 },
+//           1000: { items: 2 },
+//           1200: { items: 3 },
+//         },
+//       });
+//     }
+
+//     // Initialize or re-initialize .main-owl (nav always true in your current setup)
+//     if ($(".main-owl").length) {
+//       if (mainOwl) {
+//         $(".main-owl")
+//           .trigger("destroy.owl.carousel")
+//           .removeClass("owl-loaded")
+//           .find(".owl-stage-outer")
+//           .children()
+//           .unwrap();
+//       }
+//       mainOwl = $(".main-owl").owlCarousel({
+//         loop: true,
+//         margin: 24,
+//         nav: true,
+//         navText: [
+//           '<i class="fas fa-chevron-left"></i>',
+//           '<i class="fas fa-chevron-right"></i>',
+//         ],
+//         dots: false,
+//         autoplay: true,
+//         autoplayTimeout: 3000,
+//         autoplayHoverPause: true,
+//         responsive: {
+//           0: { items: 1, margin: 10 },
+//           450: { items: 2, margin: 16 },
+//           768: { items: 3, margin: 20 },
+//           1024: { items: 4 },
+//           1280: { items: 5 },
+//         },
+//       });
+//     }
+//   }
+
+//   // Initial initialization
+//   initCarousels();
+
+//   // Re-initialize on window resize (with debounce to avoid too many calls)
+//   var resizeTimer;
+//   $(window).on("resize", function () {
+//     clearTimeout(resizeTimer);
+//     resizeTimer = setTimeout(initCarousels, 300);
+//   });
+// });
+
+
+
 $(document).ready(function () {
-  var secondOwl;
-  var mainOwl;
-  var bannerOwl; // New variable for banner carousel
-
-  function initCarousels() {
-    var width = $(window).width();
-
-    // Initialize or re-initialize banner carousel (for screens < 992px)
-    if ($(".banner-carousel").length) {
-      if (bannerOwl) {
-        $(".banner-carousel")
-          .trigger("destroy.owl.carousel")
-          .removeClass("owl-loaded")
-          .find(".owl-stage-outer")
-          .children()
-          .unwrap();
-      }
-
-      // Only initialize if screen width is less than 992px
-      if (width < 992) {
-        bannerOwl = $(".banner-carousel").owlCarousel({
-          loop: true,
-          margin: 10,
-          nav: true,
-          navText: [
-            '<i class="fas fa-chevron-left"></i>',
-            '<i class="fas fa-chevron-right"></i>',
-          ],
-          dots: true,
-          autoplay: true,
-          autoplayTimeout: 4000,
-          autoplayHoverPause: true,
-          items: 1,
-          responsive: {
-            0: { items: 1, margin: 10 },
-            768: { items: 1, margin: 20 },
-          },
-        });
-      } else {
-        // Destroy if exists and screen is desktop
-        if (bannerOwl) {
-          $(".banner-carousel")
-            .trigger("destroy.owl.carousel")
-            .removeClass("owl-loaded")
-            .find(".owl-stage-outer")
-            .children()
-            .unwrap();
-          bannerOwl = null;
-        }
-      }
+  // Common configuration presets
+  const carouselPresets = {
+    autoplay: {
+      autoplay: true,
+      autoplayHoverPause: true
+    },
+    navigation: {
+      nav: true,
+      navText: [
+        '<i class="fas fa-chevron-left"></i>',
+        '<i class="fas fa-chevron-right"></i>'
+      ]
     }
+  };
 
-    // Initialize or re-initialize .second-owl (dots always true in your current setup)
-    if ($(".second-owl").length) {
-      if (secondOwl) {
-        $(".second-owl")
-          .trigger("destroy.owl.carousel")
-          .removeClass("owl-loaded")
-          .find(".owl-stage-outer")
-          .children()
-          .unwrap();
-      }
-      secondOwl = $(".second-owl").owlCarousel({
+  // All carousel configurations
+  const carouselConfigs = [
+    {
+      selector: "#categories-carousel",
+      options: {
         loop: true,
-        margin: 24,
-        navText: [
-          '<i class="fas fa-chevron-left"></i>',
-          '<i class="fas fa-chevron-right"></i>',
-        ],
-        dots: true,
-        autoplay: true,
-        autoplayTimeout: 3000,
-        autoplayHoverPause: true,
-        responsive: {
-          0: { items: 1 },
-          550: { items: 2 },
-          1000: { items: 2 },
-          1200: { items: 3 },
-        },
-      });
-    }
-
-    // Initialize or re-initialize .main-owl (nav always true in your current setup)
-    if ($(".main-owl").length) {
-      if (mainOwl) {
-        $(".main-owl")
-          .trigger("destroy.owl.carousel")
-          .removeClass("owl-loaded")
-          .find(".owl-stage-outer")
-          .children()
-          .unwrap();
-      }
-      mainOwl = $(".main-owl").owlCarousel({
-        loop: true,
-        margin: 24,
-        nav: true,
-        navText: [
-          '<i class="fas fa-chevron-left"></i>',
-          '<i class="fas fa-chevron-right"></i>',
-        ],
+        margin: 20,
+        nav: false,
         dots: false,
-        autoplay: true,
+        ...carouselPresets.autoplay,
+        autoplayTimeout: 5000,
+        responsive: {
+          0: { items: 1, margin: 10 },
+          450: { items: 2, margin: 10 },
+          640: { items: 2, margin: 10 },
+          768: { items: 3, margin: 10 },
+          1024: { items: 4, margin: 10 },
+          1280: { items: 5, margin: 10 },
+          1366: { items: 6, margin: 10 }
+        }
+      },
+      customNav: {
+        prev: '.custom-nav .owl-prev',
+        next: '.custom-nav .owl-next'
+      }
+    },
+    {
+      selector: ".main-owl",
+      options: {
+        loop: true,
+        margin: 24,
+        dots: false,
+        ...carouselPresets.navigation,
+        ...carouselPresets.autoplay,
         autoplayTimeout: 3000,
-        autoplayHoverPause: true,
         responsive: {
           0: { items: 1, margin: 10 },
           450: { items: 2, margin: 16 },
           768: { items: 3, margin: 20 },
           1024: { items: 4 },
-          1280: { items: 5 },
-        },
-      });
+          1280: { items: 5 }
+        }
+      }
+    },
+    {
+      selector: ".banner-carousel",
+      options: {
+        loop: true,
+        margin: 10,
+        items: 1,
+        dots: true,
+        ...carouselPresets.navigation,
+        ...carouselPresets.autoplay,
+        autoplayTimeout: 4000,
+        responsive: {
+          0: { items: 1, margin: 10 },
+          768: { items: 1, margin: 20 }
+        }
+      }
+    },
+    {
+      selector: ".second-owl",
+      options: {
+        loop: true,
+        margin: 24,
+        dots: true,
+        ...carouselPresets.autoplay,
+        autoplayTimeout: 3000,
+        nav: true,
+        navText: carouselPresets.navigation.navText,
+        responsive: {
+          0: { items: 1 },
+          550: { items: 2 },
+          1000: { items: 2 },
+          1200: { items: 3 }
+        }
+      }
+    },
+    {
+      selector: "#designer-thoughts",
+      options: {
+        loop: true,
+        margin: 20,
+        nav: false,
+        dots: true,
+        ...carouselPresets.autoplay,
+        autoplayTimeout: 5000,
+        responsive: {
+          0: { items: 1, dots: true },
+          640: { items: 1, dots: true },
+          768: { items: 1, dots: true },
+          1024: { items: 1, dots: true },
+          1280: { items: 1, dots: true }
+        }
+      },
+      customNav: {
+        prev: '.thoughts-nav .custom-prev-btn',
+        next: '.thoughts-nav .custom-next-btn'
+      }
     }
-  }
+  ];
 
-  // Initial initialization
-  initCarousels();
+  // Initialize all carousels
+  carouselConfigs.forEach(config => {
+    const $carousel = $(config.selector);
 
-  // Re-initialize on window resize (with debounce to avoid too many calls)
-  var resizeTimer;
-  $(window).on("resize", function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(initCarousels, 300);
+    if ($carousel.length) {
+      $carousel.owlCarousel(config.options);
+
+      // Setup custom navigation if specified
+      if (config.customNav) {
+        $(config.customNav.prev).on('click', () => {
+          $carousel.trigger('prev.owl.carousel');
+        });
+
+        $(config.customNav.next).on('click', () => {
+          $carousel.trigger('next.owl.carousel');
+        });
+      }
+
+      // Optional: Add slide change event listener
+      $carousel.on('changed.owl.carousel', function (event) {
+        // You can add slide change animations or tracking here
+        console.log(`${config.selector} changed to slide: ${event.item.index}`);
+      });
+    } else {
+      console.warn(`Carousel element not found: ${config.selector}`);
+    }
   });
 });
+
 
 // Mobile menu toggle
 const mobileMenuBtn = document.getElementById("mobile-menu-btn");

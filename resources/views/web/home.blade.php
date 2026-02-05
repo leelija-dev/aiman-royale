@@ -10,133 +10,7 @@
 
 @section('content')
 
-<style>
-      /* Custom font classes */
 
-
-    /* Update existing classes with custom fonts */
-    .text-center h2 {
-
-        font-weight: 800;
-    }
-
-    .group h3 {
-
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-
-
-
-    /* Card hover shine effect */
-
-
-    .group:hover::before {
-        left: 100%;
-    }
-
-    /* DOTS CONTAINER */
-    #categories-carousel .owl-dots {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* EACH DOT BUTTON */
-    #categories-carousel .owl-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: #e5e7eb;
-        /* light gray */
-        transition: all 0.4s ease;
-        position: relative;
-    }
-
-    /* HOVER EFFECT */
-    #categories-carousel .owl-dot:hover {
-        transform: scale(1.2);
-        background: #c084fc;
-    }
-
-    /* ACTIVE DOT */
-    #categories-carousel .owl-dot.active {
-        width: 32px;
-        background: linear-gradient(90deg, #a855f7, #ec4899);
-        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
-    }
-
-    /* Inner span removal (optional for cleaner look) */
-    #categories-carousel .owl-dot span {
-        display: none;
-    }
-
-      @keyframes gradient {
-
-        0%,
-        100% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-    }
-
-    .animate-gradient {
-        animation: gradient 3s ease-in-out infinite;
-        background-size: 200% 200%;
-    }
-
-    #categories-carousel .owl-stage-outer {
-        padding: 20px 0;
-    }
-
-    #categories-carousel .disabled,
-    #designer-thoughts .disabled {
-        display: none !important;
-    }
-
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-        /* Chrome, Safari, Opera */
-    }
-
-
-     .parallax-bg {
-        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
-        /* change path */
-        will-change: transform;
-    }
-
-    /* Custom owl carousel dots */
-    .owl-theme .owl-dots .owl-dot span {
-        width: 10px;
-        height: 10px;
-        margin: 5px 4px;
-        background: #d1d5db;
-        transition: all 0.3s ease;
-    }
-
-    .owl-theme .owl-dots .owl-dot.active span {
-        background: #EC4899;
-        width: 30px;
-        border-radius: 10px;
-    }
-
-    .owl-theme .owl-dots .owl-dot:hover span {
-        background: #ec5da5;
-    }
-</style>
 
 
 
@@ -293,16 +167,7 @@
 </div>
 
 <!-- Required CSS for no scrollbar + smooth snap -->
-<style>
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
 
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-</style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -373,8 +238,8 @@
                     <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">NEW COLLECTION</p>
 
                     <div class="text-center text-gray-500 mb-2">
-                        <span class="line-through text-sm mr-2">$199.99</span>
-                        <span class="text-xl font-bold text-rose-600">$99.99</span>
+                        <span class="line-through text-sm mr-2">₹199.99</span>
+                        <span class="text-xl font-bold text-rose-600">₹99.99</span>
                     </div>
 
                     <button
@@ -423,6 +288,10 @@
 
 
 
+
+
+
+
 <section class="px-4 lgg:py-12 py-6 ">
     <div class="container mx-auto">
         <!-- Section Header -->
@@ -446,7 +315,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-pink-100 to-purple-100">
-                            <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Salwar Kameez"
+                            <img loading="lazy" src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Salwar Kameez"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -484,7 +353,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-blue-100 to-cyan-100">
-                            <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
+                            <img loading="lazy" src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
                                 alt="Lehengas"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -523,7 +392,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-amber-100 to-orange-100">
-                            <img src="{{ asset('web/images/product-images/red-plazo-2_88_11zon.webp') }}" alt="Sarees"
+                            <img loading="lazy" src="{{ asset('web/images/product-images/red-plazo-2_88_11zon.webp') }}" alt="Sarees"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -561,7 +430,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-emerald-100 to-green-100">
-                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            <img loading="lazy" src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                                 alt="Plazo Suits"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -600,7 +469,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-purple-100 to-violet-100">
-                            <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
+                            <img loading="lazy" src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
                                 alt="Party Wear"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -640,7 +509,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            <img loading="lazy" src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                                 alt="Kurtis"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -679,7 +548,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            <img loading="lazy" src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                                 alt="Kurtis"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -761,7 +630,7 @@
 
             <div
                 class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
-                <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                <img loading="lazy" src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                     class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
                 <span
@@ -806,7 +675,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img loading="lazy" src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -923,7 +792,7 @@
             <!-- Banner 1: Autumn Sale -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top"
+                    <img loading="lazy" class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
@@ -947,7 +816,7 @@
             <!-- Banner 2: Summer Skincare Tips -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top"
+                    <img loading="lazy" class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp') }}"
                         alt="" />
                 </div>
@@ -965,7 +834,7 @@
             <!-- Banner 3: Summer Dress Sale -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top"
+                    <img loading="lazy" class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/pink-plazo-1_76_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-center p-12 h-full text-white">
@@ -986,7 +855,7 @@
             <!-- Banner 4: Latest Fashion -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top"
+                    <img loading="lazy" class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/red-plazo-9_95_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-end p-8 h-full text-white">
@@ -1079,7 +948,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
+                                <img loading="lazy" src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1104,7 +973,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
+                                <img loading="lazy" src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1129,7 +998,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
+                                <img loading="lazy" src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1154,7 +1023,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
+                                <img loading="lazy" src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1179,7 +1048,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
+                                <img loading="lazy" src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1215,7 +1084,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
             <!-- Item 1 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
+                <img loading="lazy" class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1229,7 +1098,7 @@
 
             <!-- Item 2 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
+                <img loading="lazy" class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1243,7 +1112,7 @@
 
             <!-- Item 3 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
+                <img loading="lazy" class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1257,7 +1126,7 @@
 
             <!-- Item 4 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
+                <img loading="lazy" class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1297,7 +1166,7 @@
                     data-product-id="{{ $product->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img loading="lazy" src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1437,7 +1306,7 @@
                     data-category-id="{{ $category->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        <img loading="lazy" src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                             alt="{{ $category->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1521,7 +1390,7 @@
             <div class="owl-carousel banner-carousel lgg:hidden">
                 <!-- Slide 1 -->
                 <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                    <img loading="lazy" src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1540,7 +1409,7 @@
 
                 <!-- Slide 2 -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
+                    <img loading="lazy" src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1562,7 +1431,7 @@
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
                 <!-- Left Banner -->
                 <div class="relative bg-[#b8a89a] overflow-hidden">
-                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                    <img loading="lazy" src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1581,7 +1450,7 @@
 
                 <!-- Right Banner -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden">
-                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
+                    <img loading="lazy" src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1616,7 +1485,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
+                        <img loading="lazy" src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1678,7 +1547,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
+                        <img loading="lazy" src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1740,7 +1609,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
+                        <img loading="lazy" src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1802,7 +1671,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
+                        <img loading="lazy" src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -2312,29 +2181,7 @@
 
 
 
-{{-- <style>
-        /* Card hover effects */
-        .group:hover {
-            transform: translateY(-5px);
-        }
 
-        /* Smooth transitions */
-        .transition-all {
-            transition-property: all;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 300ms;
-        }
-
-        /* Button glow effect */
-        a:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Icon scaling */
-        .group:hover .group-hover\:scale-110 {
-            transform: scale(1.1);
-        }
-    </style> --}}
 
 
 @endsection
@@ -2421,123 +2268,5 @@
     }
 </script>
 
-<script>
-    $(document).ready(function() {
 
-        var $carousel = $("#categories-carousel");
-
-        $carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false, // 🚫 Disable Owl default nav buttons
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            autoplayHoverPause: true,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    dots: false,
-                    margin: 10,
-                },
-                450: {
-                    items: 2,
-                    dots: false,
-                    margin: 10,
-                },
-                640: {
-                    items: 2,
-                    dots: false,
-                    margin: 10,
-                },
-                768: {
-                    items: 3,
-                    dots: false,
-                    margin: 10,
-                },
-                1024: {
-                    items: 4,
-                    dots: false,
-                    margin: 10,
-                },
-                1280: {
-                    items: 5,
-                    dots: false,
-                    margin: 10,
-                },
-                1366: {
-                    items: 6,
-                    dots: false,
-                    margin: 10,
-                }
-            }
-        });
-
-        // ✅ Custom Navigation Controls
-        $('.custom-nav .owl-prev').on('click', function() {
-            $carousel.trigger('prev.owl.carousel');
-        });
-
-        $('.custom-nav .owl-next').on('click', function() {
-            $carousel.trigger('next.owl.carousel');
-        });
-
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        var $carousel = $("#designer-thoughts");
-
-        $carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false, // 🚫 Disable Owl default nav buttons
-            dots: true,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            autoplayHoverPause: true,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    dots: true
-                },
-                640: {
-                    items: 1,
-                    dots: true
-                },
-                768: {
-                    items: 1,
-                    dots: true
-                },
-                1024: {
-                    items: 1,
-                    dots: true
-                },
-                1280: {
-                    items: 1,
-                    dots: true
-                },
-            }
-        });
-
-        // ✅ Custom Navigation Controls
-        $('.thoughts-nav .custom-prev-btn').on('click', function() {
-            $carousel.trigger('prev.owl.carousel');
-        });
-
-        $('.thoughts-nav .custom-next-btn').on('click', function() {
-            $carousel.trigger('next.owl.carousel');
-        });
-
-        // Add slide change animations
-        $carousel.on('changed.owl.carousel', function(event) {
-            // You can add additional animations here if needed
-            console.log('Slide changed to: ' + event.item.index);
-        });
-
-    });
-</script>
 @endsection

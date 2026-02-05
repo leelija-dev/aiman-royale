@@ -1,7 +1,7 @@
 <style>
     /* Fix z-index stacking */
     #categories-wrapper-menu {
-        display: block;
+
         position: fixed;
         z-index: 20004;
         opacity: 0;
@@ -904,14 +904,7 @@
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="tel:+1234567890"
-                        class="text-gray-600 hover:text-blue-600 transition-all duration-300 hover:scale-110"
-                        title="Call us">
-                        <div
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-blue-50 transition-colors">
-                            <i class="fa-solid fa-phone text-sm"></i>
-                        </div>
-                    </a>
+                    
                     <a href="https://wa.me/1234567890" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
@@ -1357,7 +1350,7 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[20004] lg:hidden"></div>
 
 <!-- Categories Menu for Desktop -->
-<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px]">
+<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px] hidden">
     <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white">
         <div class="flex">
             <!-- Left Sidebar -->
@@ -2860,6 +2853,8 @@
         // ==================== HELPER FUNCTIONS ====================
         function showCategoriesMenu() {
             clearTimeout(hideMenuTimeout);
+            categoriesMenu.classList.remove('hidden');
+            
             if (categoriesMenu) {
                 categoriesMenu.classList.add('visible');
             }
