@@ -56,6 +56,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
+            'is_featured' => 'required|boolean',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
@@ -128,6 +129,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
+            'is_featured' => 'required|boolean',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 

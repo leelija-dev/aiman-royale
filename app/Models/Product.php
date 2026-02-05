@@ -32,6 +32,7 @@ class Product extends Model
         'discount_price',
         'stock',
         'status',
+        'is_featured',
     ];
 
     /**
@@ -44,6 +45,7 @@ class Product extends Model
         'discount_price' => 'decimal:2',
         'stock' => 'integer',
         'status' => 'string',
+        'is_featured' => 'boolean',
     ];
 
     /**

@@ -241,6 +241,14 @@
                                                         </div>
 
                                                         <div class="mb-3">
+                                                            <label for="edit_is_featured_{{ $product->id }}" class="form-label">Is Featured</label>
+                                                            <select class="form-control" id="edit_is_featured_{{ $product->id }}" name="is_featured">
+                                                                <option value="0" {{ $product->is_featured == false ? 'selected' : '' }}>No</option>
+                                                                <option value="1" {{ $product->is_featured == true ? 'selected' : '' }}>Yes</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
                                                             <label for="edit_image_{{ $product->id }}" class="form-label">Product Image</label>
                                                             <input type="file" class="form-control" id="edit_image_{{ $product->id }}" name="image" accept="image/*">
                                                             @if($product->images->count() > 0)

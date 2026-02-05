@@ -148,6 +148,18 @@
                                 @enderror
                             </div>
 
+                            <!-- Is Featured -->
+                            <div class="mb-3">
+                                <label for="is_featured" class="form-label">Is Featured</label>
+                                <select class="form-control" id="is_featured" name="is_featured">
+                                    <option value="0" {{ old('is_featured') == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_featured') == '1' ? 'selected' : '' }}>Yes</option>
+                                </select>
+                                @error('is_featured')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <!-- Image -->
                             <div class="mb-3">
                                 <label for="image" class="form-label">Product Image</label>
