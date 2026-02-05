@@ -45,6 +45,7 @@ Route::middleware(['guest'])->group(function () {
 // Authenticated routes (require login)
 // Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('page.index');
+    Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 
     // Category Routes
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
