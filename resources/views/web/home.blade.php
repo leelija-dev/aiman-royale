@@ -699,14 +699,7 @@
                             </svg>
                         </button>
 
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart({{ $product->variant_id }}, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
+                        
                     </div>
 
                     <!-- Content -->
@@ -747,42 +740,42 @@
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Red Policy Card -->
-            <div
-                class="flex xxs:flex-row flex-col xxs:text-left text-center overflow-hidden relative items-center justify-between gap-4 border-2 border-red-500 bg-red-100 rounded-lg px-6 py-5">
-                <div>
-                    <h3 class="text-secondary font-semibold text-lg">
-                        Our Policy: Best Price !
-                    </h3>
-                    <p class="text-red-500 text-sm">
-                        Sign Up to avoid missing diamonds!
-                    </p>
+<section class="px-4 py-10 bg-gray-50">
+    <div class="container mx-auto max-w-4xl">
+        <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col md:flex-row items-center gap-6">
+            
+            <!-- Left Text -->
+            <div class="md:w-2/5">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                        <span class="text-pink-500 text-lg">💎</span>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-800">Best Price Guarantee</h4>
+                        <p class="text-sm text-gray-500">Always shop with confidence</p>
+                    </div>
                 </div>
-                <button
-                    class="shrink-0 bg-primary hover:bg-red-700 text-white text-sm font-medium px-5 py-2 rounded-md transition">
-                    Check Coupons
+            </div>
+
+            <!-- Middle Images -->
+            <div class="md:w-2/5 flex justify-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?w=100&h=100&fit=crop" 
+                         alt="Fashion Item" 
+                         class="w-20 h-20 rounded-lg object-cover shadow">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=100&h=100&fit=crop" 
+                         alt="Fashion Item" 
+                         class="w-20 h-20 rounded-lg object-cover shadow absolute -top-2 -right-2 border-2 border-white">
+                </div>
+            </div>
+
+            <!-- Right Button -->
+            <div class="md:w-1/5 text-center md:text-right">
+                <button class="px-5 py-2.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition">
+                    Shop Deals
                 </button>
             </div>
 
-            <!-- Green Policy Card -->
-            <div
-                class="flex xxs:flex-row flex-col xxs:text-left text-center items-center justify-between gap-4 border-2 border-green-500 bg-green-100 rounded-lg px-6 py-5">
-                <div>
-                    <h3 class="text-green-600 font-semibold text-lg">
-                        Our Policy: Best Price !
-                    </h3>
-                    <p class="text-green-500 text-sm">
-                        Sign Up to avoid missing diamonds!
-                    </p>
-                </div>
-                <button
-                    class="shrink-0 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-5 py-2 rounded-md transition">
-                    Check Coupons
-                </button>
-            </div>
         </div>
     </div>
 </section>
@@ -2166,10 +2159,7 @@
 
 @endsection
 @section('scripts')
-<!-- jQuery (required for Owl Carousel) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Owl Carousel JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
 
 <!-- Cart Functionality -->
 <script>

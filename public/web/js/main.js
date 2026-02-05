@@ -132,14 +132,19 @@ $(document).ready(function () {
   const carouselPresets = {
     autoplay: {
       autoplay: true,
-      autoplayHoverPause: true
+      autoplayTimeout: 4000,
+      autoplayHoverPause: true,
+      autoplaySpeed: 800,
+      smartSpeed: 500,
+      fluidSpeed: 500
     },
     navigation: {
       nav: true,
       navText: [
         '<i class="fas fa-chevron-left"></i>',
         '<i class="fas fa-chevron-right"></i>'
-      ]
+      ],
+      navSpeed: 500
     }
   };
 
@@ -152,6 +157,8 @@ $(document).ready(function () {
         margin: 20,
         nav: false,
         dots: false,
+        lazyLoad: true,  // ✅ Enable lazy loading
+        lazyLoadEager: 1, // ✅ Load 1 adjacent image
         ...carouselPresets.autoplay,
         autoplayTimeout: 5000,
         responsive: {
@@ -175,9 +182,9 @@ $(document).ready(function () {
         loop: true,
         margin: 24,
         dots: false,
+        lazyLoad: true,
         ...carouselPresets.navigation,
         ...carouselPresets.autoplay,
-        autoplayTimeout: 3000,
         responsive: {
           0: { items: 1, margin: 10 },
           450: { items: 2, margin: 16 },
@@ -194,9 +201,9 @@ $(document).ready(function () {
         margin: 10,
         items: 1,
         dots: true,
+        lazyLoad: true,
         ...carouselPresets.navigation,
         ...carouselPresets.autoplay,
-        autoplayTimeout: 4000,
         responsive: {
           0: { items: 1, margin: 10 },
           768: { items: 1, margin: 20 }
@@ -209,8 +216,8 @@ $(document).ready(function () {
         loop: true,
         margin: 24,
         dots: true,
+        lazyLoad: true,
         ...carouselPresets.autoplay,
-        autoplayTimeout: 3000,
         nav: true,
         navText: carouselPresets.navigation.navText,
         responsive: {
@@ -228,8 +235,8 @@ $(document).ready(function () {
         margin: 20,
         nav: false,
         dots: true,
+        lazyLoad: true,
         ...carouselPresets.autoplay,
-        autoplayTimeout: 5000,
         responsive: {
           0: { items: 1, dots: true },
           640: { items: 1, dots: true },
@@ -245,28 +252,98 @@ $(document).ready(function () {
     }
   ];
 
-  // Initialize all carousels
-  carouselConfigs.forEach(config => {
+  // Track initialized carousels
+  const initializedCarousels = new Set();
+
+  // Function to check if element is in viewport
+  function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 1.5 &&
+      rect.bottom >= -100
+    );
+  }
+
+  // Initialize single carousel with optimization
+  function initCarousel(config) {
     const $carousel = $(config.selector);
+    
+    if (!$carousel.length || initializedCarousels.has(config.selector)) {
+      return;
+    }
 
-    if ($carousel.length) {
+    // Check if carousel should be initialized (in viewport or near)
+    if (!isInViewport($carousel[0])) {
+      return;
+    }
+
+    try {
+      // Initialize the carousel
       $carousel.owlCarousel(config.options);
+      initializedCarousels.add(config.selector);
 
-      // Setup custom navigation if specified
+      // Setup custom navigation with event delegation
       if (config.customNav) {
-        $(config.customNav.prev).on('click', () => {
+        // Use event delegation instead of direct binding
+        $(document).off(`click.${config.selector}-prev`).on(`click.${config.selector}-prev`, config.customNav.prev, function(e) {
+          e.preventDefault();
           $carousel.trigger('prev.owl.carousel');
         });
 
-        $(config.customNav.next).on('click', () => {
+        $(document).off(`click.${config.selector}-next`).on(`click.${config.selector}-next`, config.customNav.next, function(e) {
+          e.preventDefault();
           $carousel.trigger('next.owl.carousel');
         });
       }
 
-     
-    } else {
-      console.warn(`Carousel element not found: ${config.selector}`);
+      // Add performance optimization
+      $carousel.on('changed.owl.carousel', function() {
+        // Pause animations when not in viewport
+        if (!isInViewport(this)) {
+          $carousel.trigger('stop.owl.autoplay');
+        }
+      });
+
+      console.log(`Initialized: ${config.selector}`);
+    } catch (error) {
+      console.error(`Failed to initialize ${config.selector}:`, error);
     }
+  }
+
+  // Initialize carousels on scroll (lazy initialization)
+  function lazyInitCarousels() {
+    carouselConfigs.forEach(config => {
+      if (!initializedCarousels.has(config.selector)) {
+        initCarousel(config);
+      }
+    });
+  }
+
+  // Initialize immediately visible carousels
+  lazyInitCarousels();
+
+  // Lazy initialize on scroll with debounce
+  let scrollTimeout;
+  $(window).on('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(lazyInitCarousels, 100);
+  });
+
+  // Also initialize on resize (for responsive changes)
+  let resizeTimeout;
+  $(window).on('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(lazyInitCarousels, 200);
+  });
+
+  // Cleanup on page unload
+  $(window).on('beforeunload', function() {
+    carouselConfigs.forEach(config => {
+      if (config.customNav) {
+        $(document).off(`click.${config.selector}-prev`);
+        $(document).off(`click.${config.selector}-next`);
+      }
+    });
   });
 });
 
