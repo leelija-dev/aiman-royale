@@ -133,6 +133,15 @@
                                 @enderror
                                 <small class="text-muted">Number of items available for this variant</small>
                             </div>
+                            <div class="mb-3">
+                                <label for="video_url" class="form-label">Video URL</label>
+                                <input type="url" class="form-control" id="video_url" name="video_url" 
+                                       value="{{ old('video_url') }}" placeholder="https://www.youtube.com/watch?v=...">
+                                @error('video_url')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Optional - Add a video URL for this variant (YouTube, Vimeo, etc.)</small>
+                            </div>
                         </div>
                     </div>
 

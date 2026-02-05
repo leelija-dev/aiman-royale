@@ -315,6 +315,11 @@
                                                             <input type="number" class="form-control" id="edit_stock_{{ $variant->id }}" name="stock" 
                                                                    value="{{ $variant->stock }}" min="0" required>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label for="edit_video_url_{{ $variant->id }}" class="form-label">Video URL</label>
+                                                            <input type="url" class="form-control" id="edit_video_url_{{ $variant->id }}" name="video_url" 
+                                                                   value="{{ $variant->video_url }}" placeholder="https://www.youtube.com/watch?v=...">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

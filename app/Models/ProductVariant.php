@@ -22,6 +22,7 @@ class ProductVariant extends Model
         'price',
         'discount_price',
         'stock',
+        'video_url',
     ];
 
     /**
@@ -37,6 +38,7 @@ class ProductVariant extends Model
         'price' => 'decimal:2',
         'discount_price' => 'decimal:2',
         'stock' => 'integer',
+        'video_url' => 'string',
     ];
 
     /**
