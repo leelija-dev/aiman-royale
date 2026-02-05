@@ -51,7 +51,7 @@
            name="image"
            class="form-control"
            max-size="1024"
-           accept=".jpg,.jpeg,.png">
+           accept=".jpg,.jpeg,.png,.webp,.svg">
 
     @error('image')
         <div class="invalid-feedback d-block">{{ $message }}</div>
