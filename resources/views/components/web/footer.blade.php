@@ -391,8 +391,8 @@
     <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
         <div class="flex items-center justify-center gap-2 animate-pulse">
             <i class="fas fa-gem text-white text-sm"></i>
-            <span class="text-white text-xs font-semibold tracking-wide">Check our custom design and live shopping experience</span>
-            <i class="fas fa-arrow-right text-white text-sm animate-bounce ml-1"></i>
+            <span class="text-white text-xs font-semibold tracking-wide">Custom style meets live shopping</span>
+            <i class="fas fa-arrow-right text-white text-sm  ml-1"></i>
         </div>
     </div>
     
