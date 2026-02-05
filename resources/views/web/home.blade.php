@@ -735,162 +735,161 @@
     </div>
 </section>
 
-<section class="w-full bg-gradient-to-br from-gray-900 to-black py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-8 md:p-12 shadow-2xl border border-gray-700">
-            <!-- Background Pattern -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-                <div class="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000"></div>
-                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000"></div>
+<section class="w-full  py-16 md:py-20 lg:py-24 px-4">
+    <div class="container mx-auto lgg:py-12 lgg:px-12 py-12  px-4 relative rounded-[10px] overflow-hidden">
+        <span class="absolute z-[1] top-[8px] right-[30px] text-secondary/30 text-[100px]">%</span>
+        <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-50 z-[-1]"></div>
+        <div class="grid lgg:grid-cols-3 lgg:gap-4 gap-8 xl:gap-16 items-center">
+
+            <!-- Left - Guarantee Info -->
+            <div class="">
+
+            <div class="lgg:text-left text-center">
+                <div class="mb-6 ">
+                    <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Best Price Guarantee</h3>
+
+
+                </div>
+
+
+                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
+                    We guarantee the lowest prices on premium fashion. If you find it cheaper elsewhere within 30 days, we'll match or beat it.
+                </p>
+
             </div>
-            
-            <!-- Glowing Border Effect -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-500 rounded-3xl blur opacity-20"></div>
-            
-            <div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                <!-- Left Content - Guarantee Info -->
-                <div class="md:w-2/5">
-                    <div class="flex items-start gap-6 mb-6">
-                        <div class="diamond-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
-                            <i class="fas fa-gem text-2xl text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex flex-wrap items-center gap-3 mb-3">
-                                <h3 class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Best Price Guarantee</h3>
-                                <span class="trust-tag bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg shadow-emerald-500/20">TRUSTED</span>
-                            </div>
-                            <p class="text-gray-300 text-base mb-6 leading-relaxed">We promise you'll always get the lowest prices on premium fashion items with our exclusive price match policy.</p>
+                
 
-                            <div class="space-y-4 mt-6">
-                                <div class="flex items-center text-gray-200 group">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
-                                        <i class="fas fa-check text-white text-sm"></i>
-                                    </div>
-                                    <span class="font-medium">Price match within 30 days</span>
-                                </div>
-                                <div class="flex items-center text-gray-200 group">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
-                                        <i class="fas fa-check text-white text-sm"></i>
-                                    </div>
-                                    <span class="font-medium">Lowest price guarantee</span>
-                                </div>
-                                <div class="flex items-center text-gray-200 group">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
-                                        <i class="fas fa-check text-white text-sm"></i>
-                                    </div>
-                                    <span class="font-medium">24/7 customer support</span>
-                                </div>
-                            </div>
+                <ul class=" text-gray-700 flex flex-col gap-3 lgg:items-start items-center justify-center">
+                    <li class="flex items-center">
+                        <div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        Price match within 30 days
+                    </li>
+                    <li class="flex items-center">
+                        <div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        Always the lowest price guaranteed
+                    </li>
+                    <li class="flex items-center">
+                        <div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        24/7 friendly support
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Center - Geometric Product Mosaic -->
+            <div class="relative">
+                <!-- Main Geometric Container -->
+                <div class="relative w-full max-w-md mx-auto">
+
+                    <!-- Diamond Pattern Background -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                        <div class="w-64 h-64 border-2 border-secondary/30 rotate-45 rounded-3xl"></div>
+                    </div>
+
+                    <!-- Product 1 - Large & Centered (Parallelogram Shape) -->
+                    
+
+                    <!-- Product 2 - Top Right (Rhombus Shape) -->
+                    <div class="absolute top-0 right-8 w-36 h-36 transform rotate-12 hover:-rotate-6 transition-transform duration-500 cursor-pointer group z-10">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-pink-500/10 rounded-xl"></div>
+                        <img
+                           src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+                            alt="Saree Collection"
+                            class="w-full h-full object-cover object-top  rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300">
+                        <div class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
+                            <p class="text-gray-900 text-xs font-bold">₹74.99</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Middle Divider with Glow -->
-                <div class="hidden md:block h-64 w-1 bg-gradient-to-b from-purple-500 via-pink-500 to-blue-500 rounded-full shadow-lg shadow-purple-500/30"></div>
-
-                <!-- Middle Content - Product Images -->
-                <div class="md:w-2/5 flex justify-center">
-                    <div class="relative">
-                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl group hover:scale-105 transition-transform duration-300">
-                            <img src="https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?w=400&h=400&fit=crop"
-                                alt="Designer Handbag"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="price-badge absolute -top-3 -right-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg shadow-pink-500/30">-25%</div>
-
-                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl absolute -top-4 -right-4 group hover:scale-105 transition-transform duration-300">
-                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop"
-                                alt="Luxury Watch"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-
-                        <div class="absolute -bottom-6 -left-4 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl shadow-2xl p-4 border border-gray-700">
-                            <div class="text-center">
-                                <p class="text-xs text-gray-400">Starting from</p>
-                                <p class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">$89<span class="text-sm">.99</span></p>
-                                <p class="text-xs text-gray-400 mt-1">Limited time offer</p>
-                            </div>
+                    <div class="relative w-56 h-56 mx-auto transform -rotate-3 hover:rotate-0 transition-transform duration-500 cursor-pointer group z-[10]">
+                        <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-pink-400/10 rounded-2xl"></div>
+                        <img
+                            src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}"
+                            alt="Premium Lehenga"
+                            class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300">
+                        <div class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6">
+                            -25%
                         </div>
                     </div>
+
+                    <!-- Product 3 - Bottom Left (Tilted Square) -->
+                    <div class="absolute bottom-8 left-4 w-40 h-40 transform -rotate-12 hover:rotate-3 transition-transform duration-500 cursor-pointer group z-10">
+                        <div class="absolute inset-0 bg-gradient-to-tl from-secondary/10 to-pink-600/10 rounded-xl"></div>
+                        <img
+                            src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
+                            alt="Party Wear"
+                            class="w-full h-full object-cover object-top  rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300">
+                        <div class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            New
+                        </div>
+                    </div>
+
+                    <!-- Product 4 - Bottom Right (Circle) -->
+                    <div class="absolute bottom-4 right-0 w-32 h-32 rounded-full overflow-hidden border-4 border-white hover:border-secondary transition-all duration-300 cursor-pointer group z-10 shadow-lg">
+                        <div class="absolute inset-0 bg-gradient-to-r from-secondary/10 to-pink-600/10"></div>
+                        <img
+                           src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}"
+                            alt="Kurta Set"
+                            class="w-full h-full object-cover object-top  group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span class="text-white text-sm font-bold">View</span>
+                        </div>
+                    </div>
+
+                    <!-- Connecting Lines -->
+                    <div class="absolute inset-0 pointer-events-none">
+                        <div class="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-secondary/20 to-transparent transform -translate-x-20"></div>
+                        <div class="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-l from-secondary/20 to-transparent transform translate-x-20"></div>
+                    </div>
+
                 </div>
 
-                <!-- Right Content - CTA -->
-                <div class="md:w-1/5 w-full">
-                    <div class="text-center md:text-left">
-                        <div class="mb-6">
-                            <div class="inline-flex items-center bg-gradient-to-r from-red-900/30 to-rose-900/30 text-red-300 px-4 py-2.5 rounded-full mb-4 border border-red-800/30 shadow-lg shadow-red-900/10">
-                                <i class="fas fa-clock text-sm mr-2 animate-pulse"></i>
-                                <span class="text-sm font-bold">Ends in 2 days</span>
+                <!-- Collection Badge -->
+                <div class="mt-10 text-center">
+                    <div class="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-6 py-3 shadow-sm hover:border-secondary-light transition-all duration-300 cursor-pointer group">
+                        <div class="flex -space-x-3">
+                            <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="" class="w-full h-full object-cover">
                             </div>
                         </div>
-
-                        <button class="shop-button px-8 py-4 font-bold rounded-xl w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white shadow-2xl shadow-purple-600/30 hover:shadow-purple-600/40 transition-all duration-300 hover:scale-105 group">
-                            <div class="flex items-center justify-center">
-                                <i class="fas fa-shopping-bag mr-3 text-lg group-hover:rotate-12 transition-transform"></i>
-                                <span class="text-lg">Shop Deals</span>
-                            </div>
-                        </button>
-
-                        <p class="text-sm text-gray-400 mt-6 flex items-center justify-center md:justify-start">
-                            <i class="fas fa-lock mr-2 text-green-400"></i> 
-                            <span>Secure checkout • 256-bit encryption</span>
-                        </p>
-                        
-                        <div class="mt-8 flex items-center justify-center md:justify-start gap-4">
-                            <div class="flex -space-x-3">
-                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
-                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
-                                </div>
-                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
-                                    <img src="https://randomuser.me/api/portraits/men/54.jpg" class="w-full h-full object-cover">
-                                </div>
-                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
-                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-full h-full object-cover">
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-400">Join 5k+ satisfied</p>
-                                <p class="text-xs text-gray-400">customers today</p>
-                            </div>
+                        <div class="text-left">
+                            <p class="text-gray-900 text-sm font-semibold group-hover:text-secondary transition-colors">Premium Collection</p>
+                            <p class="text-gray-500 text-xs">4+ stunning designs</p>
+                        </div>
+                        <div class="w-10 min-w-10 h-10 min-h-10 rounded-full bg-gradient-to-r from-secondary to-pink-500 flex items-center justify-center group-hover:bg-secondary-light transition-all duration-300">
+                            <i class="fas fa-arrow-right text-white text-sm"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Floating Elements -->
-            <div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full animate-bounce"></div>
-            <div class="absolute bottom-6 left-8 w-3 h-3 bg-purple-400 rounded-full animate-bounce animation-delay-1000"></div>
+
+            <!-- Right - CTA + Trust -->
+            <div class="text-center">
+                <h3 class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">Exclusive Deals Just for You</h3>
+                <button class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
+                    <i class="fas fa-shopping-bag mr-3 text-xl"></i>
+                    Shop Deals Now 
+                </button>
+
+
+
+
+            </div>
+
         </div>
     </div>
 </section>
-
-<style>
-    @keyframes pulse {
-        0%, 100% { opacity: 0.7; }
-        50% { opacity: 0.3; }
-    }
-    
-    .animate-pulse {
-        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    
-    .animation-delay-1000 {
-        animation-delay: 1s;
-    }
-    
-    .animation-delay-2000 {
-        animation-delay: 2s;
-    }
-    
-    .animation-delay-4000 {
-        animation-delay: 4s;
-    }
-    
-    .image-frame {
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    }
-</style>
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 smx:grid-cols-2 lg:grid-cols-4 lgg:gap-8 gap-4">
