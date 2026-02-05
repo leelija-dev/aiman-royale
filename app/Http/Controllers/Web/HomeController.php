@@ -31,11 +31,34 @@ class HomeController extends Controller
         // ->get();
 
         $products = DB::table('products')
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'product_variants.id', '=', 'product_images.variant_id')
+            ->leftJoin('product_variants', function($join) {
+                $join->on('products.id', '=', 'product_variants.product_id')
+                     ->where('product_variants.stock', '>', 0)
+                     ->whereRaw('product_variants.id = (
+                         SELECT MIN(id) FROM product_variants 
+                         WHERE product_id = products.id AND stock > 0
+                     )');
+            })
+            ->leftJoin('product_images', function($join) {
+                $join->on('products.id', '=', 'product_images.product_id')
+                     ->whereRaw('product_images.id = (
+                         SELECT MIN(id) FROM product_images 
+                         WHERE product_id = products.id
+                     )');
+            })
             ->where('products.is_active', 1)
             ->select(
-                'products.*',
+                'products.id',
+                'products.name',
+                'products.brand',
+                'products.description',
+                'products.category_id',
+                'products.ocassion_id',
+                'products.fabric',
+                'products.fit',
+                'products.status',
+                'products.is_featured',
+                'products.created_at',
                 'product_variants.id as variant_id',
                 'product_variants.size',
                 'product_variants.color',
@@ -44,6 +67,8 @@ class HomeController extends Controller
                 'product_variants.stock',
                 'product_images.image as product_image'
             )
+            ->latest('products.created_at')
+            ->take(12)
             ->get();
 
 
