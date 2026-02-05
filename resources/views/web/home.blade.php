@@ -672,7 +672,8 @@
             @foreach ($products as $product)
             <div class="item flex justify-center items-center">
                 <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                    onclick="window.location.href='{{ route('page.single-product', $product->id) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
@@ -698,14 +699,12 @@
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                         </button>
-
-
                     </div>
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            {{ $product->name }}, {{ $product->size }}, {{ $product->color }}
+                            {{ $product->name }}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -722,10 +721,6 @@
                             <span class="text-sm text-gray-400 line-through">Rs.
                                 {{ $product->price }}</span>
                             @endif
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart({{ $product->variant_id }}, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
