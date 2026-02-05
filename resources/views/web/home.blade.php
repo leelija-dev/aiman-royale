@@ -315,7 +315,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-pink-100 to-purple-100">
-                            <img  src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Salwar Kameez"
+                            <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Salwar Kameez"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -353,7 +353,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-blue-100 to-cyan-100">
-                            <img  src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
+                            <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
                                 alt="Lehengas"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -392,7 +392,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-amber-100 to-orange-100">
-                            <img  src="{{ asset('web/images/product-images/red-plazo-2_88_11zon.webp') }}" alt="Sarees"
+                            <img src="{{ asset('web/images/product-images/red-plazo-2_88_11zon.webp') }}" alt="Sarees"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -430,7 +430,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-emerald-100 to-green-100">
-                            <img  src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                                 alt="Plazo Suits"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -469,7 +469,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-purple-100 to-violet-100">
-                            <img  src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
+                            <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
                                 alt="Party Wear"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -509,7 +509,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img  src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
+                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                                 alt="Kurtis"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -548,7 +548,7 @@
                     <div class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
                         <div
                             class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img  src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                                 alt="Kurtis"
                                 class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
                             <div
@@ -630,7 +630,7 @@
 
             <div
                 class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
-                <img  src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                     class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
                 <span
@@ -675,7 +675,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -699,7 +699,7 @@
                             </svg>
                         </button>
 
-                        
+
                     </div>
 
                     <!-- Content -->
@@ -740,52 +740,169 @@
     </div>
 </section>
 
-<section class="px-4 py-10 bg-gray-50">
-    <div class="container mx-auto max-w-4xl">
-        <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col md:flex-row items-center gap-6">
+<section class="w-full bg-gradient-to-br from-gray-900 to-black py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-8 md:p-12 shadow-2xl border border-gray-700">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                <div class="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000"></div>
+                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000"></div>
+            </div>
             
-            <!-- Left Text -->
-            <div class="md:w-2/5">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
-                        <span class="text-pink-500 text-lg">💎</span>
+            <!-- Glowing Border Effect -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-500 rounded-3xl blur opacity-20"></div>
+            
+            <div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <!-- Left Content - Guarantee Info -->
+                <div class="md:w-2/5">
+                    <div class="flex items-start gap-6 mb-6">
+                        <div class="diamond-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
+                            <i class="fas fa-gem text-2xl text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Best Price Guarantee</h3>
+                                <span class="trust-tag bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg shadow-emerald-500/20">TRUSTED</span>
+                            </div>
+                            <p class="text-gray-300 text-base mb-6 leading-relaxed">We promise you'll always get the lowest prices on premium fashion items with our exclusive price match policy.</p>
+
+                            <div class="space-y-4 mt-6">
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">Price match within 30 days</span>
+                                </div>
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">Lowest price guarantee</span>
+                                </div>
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">24/7 customer support</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="font-medium text-gray-800">Best Price Guarantee</h4>
-                        <p class="text-sm text-gray-500">Always shop with confidence</p>
+                </div>
+
+                <!-- Middle Divider with Glow -->
+                <div class="hidden md:block h-64 w-1 bg-gradient-to-b from-purple-500 via-pink-500 to-blue-500 rounded-full shadow-lg shadow-purple-500/30"></div>
+
+                <!-- Middle Content - Product Images -->
+                <div class="md:w-2/5 flex justify-center">
+                    <div class="relative">
+                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl group hover:scale-105 transition-transform duration-300">
+                            <img src="https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?w=400&h=400&fit=crop"
+                                alt="Designer Handbag"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="price-badge absolute -top-3 -right-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg shadow-pink-500/30">-25%</div>
+
+                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl absolute -top-4 -right-4 group hover:scale-105 transition-transform duration-300">
+                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop"
+                                alt="Luxury Watch"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+
+                        <div class="absolute -bottom-6 -left-4 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl shadow-2xl p-4 border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-xs text-gray-400">Starting from</p>
+                                <p class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">$89<span class="text-sm">.99</span></p>
+                                <p class="text-xs text-gray-400 mt-1">Limited time offer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - CTA -->
+                <div class="md:w-1/5 w-full">
+                    <div class="text-center md:text-left">
+                        <div class="mb-6">
+                            <div class="inline-flex items-center bg-gradient-to-r from-red-900/30 to-rose-900/30 text-red-300 px-4 py-2.5 rounded-full mb-4 border border-red-800/30 shadow-lg shadow-red-900/10">
+                                <i class="fas fa-clock text-sm mr-2 animate-pulse"></i>
+                                <span class="text-sm font-bold">Ends in 2 days</span>
+                            </div>
+                        </div>
+
+                        <button class="shop-button px-8 py-4 font-bold rounded-xl w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white shadow-2xl shadow-purple-600/30 hover:shadow-purple-600/40 transition-all duration-300 hover:scale-105 group">
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-shopping-bag mr-3 text-lg group-hover:rotate-12 transition-transform"></i>
+                                <span class="text-lg">Shop Deals</span>
+                            </div>
+                        </button>
+
+                        <p class="text-sm text-gray-400 mt-6 flex items-center justify-center md:justify-start">
+                            <i class="fas fa-lock mr-2 text-green-400"></i> 
+                            <span>Secure checkout • 256-bit encryption</span>
+                        </p>
+                        
+                        <div class="mt-8 flex items-center justify-center md:justify-start gap-4">
+                            <div class="flex -space-x-3">
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/men/54.jpg" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Join 5k+ satisfied</p>
+                                <p class="text-xs text-gray-400">customers today</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Middle Images -->
-            <div class="md:w-2/5 flex justify-center">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?w=100&h=100&fit=crop" 
-                         alt="Fashion Item" 
-                         class="w-20 h-20 rounded-lg object-cover shadow">
-                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=100&h=100&fit=crop" 
-                         alt="Fashion Item" 
-                         class="w-20 h-20 rounded-lg object-cover shadow absolute -top-2 -right-2 border-2 border-white">
-                </div>
-            </div>
-
-            <!-- Right Button -->
-            <div class="md:w-1/5 text-center md:text-right">
-                <button class="px-5 py-2.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition">
-                    Shop Deals
-                </button>
-            </div>
-
+            
+            <!-- Floating Elements -->
+            <div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full animate-bounce"></div>
+            <div class="absolute bottom-6 left-8 w-3 h-3 bg-purple-400 rounded-full animate-bounce animation-delay-1000"></div>
         </div>
     </div>
 </section>
+
+<style>
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 0.3; }
+    }
+    
+    .animate-pulse {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    .animation-delay-1000 {
+        animation-delay: 1s;
+    }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+    
+    .image-frame {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+</style>
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 smx:grid-cols-2 lg:grid-cols-4 lgg:gap-8 gap-4">
             <!-- Banner 1: Autumn Sale -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img  class="w-full h-full object-cover object-center object-top"
+                    <img class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
@@ -809,7 +926,7 @@
             <!-- Banner 2: Summer Skincare Tips -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img  class="w-full h-full object-cover object-center object-top"
+                    <img class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp') }}"
                         alt="" />
                 </div>
@@ -827,7 +944,7 @@
             <!-- Banner 3: Summer Dress Sale -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img  class="w-full h-full object-cover object-center object-top"
+                    <img class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/pink-plazo-1_76_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-center p-12 h-full text-white">
@@ -848,7 +965,7 @@
             <!-- Banner 4: Latest Fashion -->
             <div class="relative overflow-hidden rounded-lg shadow-lg bg-cover bg-center h-96">
                 <div class="absolute top-0 left-0 w-full h-full">
-                    <img  class="w-full h-full object-cover object-center object-top"
+                    <img class="w-full h-full object-cover object-center object-top"
                         src="{{ asset('web/images/product-images/red-plazo-9_95_11zon.webp') }}" alt="" />
                 </div>
                 <div class="relative flex flex-col justify-end p-8 h-full text-white">
@@ -941,7 +1058,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img  src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
+                                <img src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -966,7 +1083,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img  src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
+                                <img src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -991,7 +1108,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img  src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
+                                <img src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1016,7 +1133,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img  src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
+                                <img src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1041,7 +1158,7 @@
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
                             <div class="relative overflow-hidden">
-                                <img  src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
+                                <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
                                     alt="Silver Lehenga"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
@@ -1077,7 +1194,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
             <!-- Item 1 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img  class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1091,7 +1208,7 @@
 
             <!-- Item 2 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img  class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1105,7 +1222,7 @@
 
             <!-- Item 3 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img  class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1119,7 +1236,7 @@
 
             <!-- Item 4 -->
             <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img  class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -1159,7 +1276,7 @@
                     data-product-id="{{ $product->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1299,7 +1416,7 @@
                     data-category-id="{{ $category->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                             alt="{{ $category->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -1383,7 +1500,7 @@
             <div class="owl-carousel banner-carousel lgg:hidden">
                 <!-- Slide 1 -->
                 <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img  src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1402,7 +1519,7 @@
 
                 <!-- Slide 2 -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img  src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
+                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1424,7 +1541,7 @@
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
                 <!-- Left Banner -->
                 <div class="relative bg-[#b8a89a] overflow-hidden">
-                    <img  src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1443,7 +1560,7 @@
 
                 <!-- Right Banner -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden">
-                    <img  src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
+                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
@@ -1478,7 +1595,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1540,7 +1657,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1602,7 +1719,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
@@ -1664,7 +1781,7 @@
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
-                        <img  src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
                             alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
