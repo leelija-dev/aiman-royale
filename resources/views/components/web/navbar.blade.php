@@ -1,7 +1,7 @@
 <style>
     /* Fix z-index stacking */
     #categories-wrapper-menu {
-        display: block;
+
         position: fixed;
         z-index: 20004;
         opacity: 0;
@@ -13,8 +13,8 @@
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    #mobile-sidebar .submenu.active{
-        max-height:600px;
+    #mobile-sidebar .submenu.active {
+        max-height: 600px;
     }
 
     #categories-wrapper-menu.visible {
@@ -699,7 +699,8 @@
         padding-left: 24px !important;
         /* transform: translateX(5px); */
     }
-    .category-sidebar-btn{
+
+    .category-sidebar-btn {
         transition:
     }
 
@@ -903,14 +904,7 @@
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="tel:+1234567890"
-                        class="text-gray-600 hover:text-blue-600 transition-all duration-300 hover:scale-110"
-                        title="Call us">
-                        <div
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-blue-50 transition-colors">
-                            <i class="fa-solid fa-phone text-sm"></i>
-                        </div>
-                    </a>
+                    
                     <a href="https://wa.me/1234567890" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
@@ -933,7 +927,7 @@
                     </span>
                 </button>
 
-     @php
+                @php
                 // Get cart count for current user/guest
                 $cartCount = 0;
                 if (Auth::check()) {
@@ -946,7 +940,7 @@
                 <button onclick="window.location.href='{{ route('cart.index') }}'"
                     class="text-gray-700 hover:text-black group relative">
                     <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors relative">
+                        class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
                         <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
                         @if($cartCount > 0)
                         <span
@@ -966,7 +960,7 @@
                 <!-- Profile with Dropdown (Logged In) -->
                 <div class="relative group">
                     <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
-                         <!-- <div class="relative">
+                        <!-- <div class="relative">
                              <img src="https://i.pravatar.cc/32" alt="User"
                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
                             <span
@@ -1017,15 +1011,11 @@
                 </div>
                 @else
                 <!-- Login Button (Not Logged In) -->
-                <a href="{{ route('page.login') }}"
-                    class="flex items-center gap-2 xxs:px-6 px-[10px] xxs:py-3 py-[10px] bg-gradient-to-r from-secondary to-primary text-white rounded-xl hover:from-primary hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl group">
-                    <div
-                        class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors group-hover:scale-110">
-                        <i class="fa-solid fa-user text-xs"></i>
+
+                <a href="{{ route('page.login') }}">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
+                        <i class="fa-solid fa-user text-xs text-[14px]"></i>
                     </div>
-                    <span class="text-sm font-semibold">Login</span>
-                    <i
-                        class="fa-solid fa-chevron-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
                 </a>
                 @endauth
             </div>
@@ -1039,24 +1029,24 @@
             <!-- Desktop Navigation -->
             <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
-                    @foreach ($categories->where('parent_id', null) as $category)
-                        <div class="relative group">
-                            <a href="{{ route('category.show', $category->slug) }}"
-                                class="hover:text-black desktop-nav-link flex items-center gap-1"
-                                data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
-                                {{ $category->name }}
-                              
-                            </a>
+                @foreach ($categories->where('parent_id', null) as $category)
+                <div class="relative group">
+                    <a href="{{ route('category.show', $category->slug) }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1"
+                        data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
+                        {{ $category->name }}
 
-                           
-                        </div>
-                    @endforeach
+                    </a>
+
+
+                </div>
+                @endforeach
                 @else
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
-                        Kameez</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
-                    <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
+                    Kameez</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
+                <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
                 @endif
             </nav>
         </div>
@@ -1072,7 +1062,7 @@
             <div class="relative block w-full" id="search-container">
                 <input type="text" placeholder="Search here" id="search-input"
                     class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
-                    <button class="close-search" id="close-search-btn" type="button">
+                <button class="close-search" id="close-search-btn" type="button">
                     <i class="fa-solid fa-times"></i>
                 </button>
                 <input type="text" placeholder="Search here"
@@ -1217,125 +1207,125 @@
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
             @if (isset($categories) && count($categories) > 0)
-               @foreach ($categories->where('parent_id', null) as $category)
-                    <div class="menu-item has-submenu top-level-item">
-                        <button class="back-button">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                        </button>
-                        <a href="{{ route('category.show', $category->slug) }}"
-                            class="menu-link top-level-link group">
-                            <span class="flex-1">{{ $category->name }}</span>
-                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                        </a>
+            @foreach ($categories->where('parent_id', null) as $category)
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="{{ route('category.show', $category->slug) }}"
+                    class="menu-link top-level-link group">
+                    <span class="flex-1">{{ $category->name }}</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
                         <ul class="submenu">
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Style</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    @if (isset($categories) && count($categories) > 0)
-                                        @foreach ($categories->take(5) as $cat)
-                                            <li class="menu-item">
-                                                <a href="{{ route('category.show', $cat->slug) }}"
-                                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
+                            @if (isset($categories) && count($categories) > 0)
+                            @foreach ($categories->take(5) as $cat)
+                            <li class="menu-item">
+                                <a href="{{ route('category.show', $cat->slug) }}"
+                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
                             </li>
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Occasion</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    @if (isset($occasions) && count($occasions) > 0)
-                                        @foreach ($occasions->take(5) as $occasion)
-                                            <li class="menu-item">
-                                                <a href="{{ route('occasion.show', $occasion->slug) }}"
-                                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
+                            @endforeach
+                            @endif
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Occasion</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            @if (isset($occasions) && count($occasions) > 0)
+                            @foreach ($occasions->take(5) as $occasion)
+                            <li class="menu-item">
+                                <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                    class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
                             </li>
-                            <li class="menu-item has-submenu">
-                                <div class="menu-link submenu-toggle group">
-                                    <span class="flex-1">Collection</span>
-                                    <i
-                                        class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <ul class="submenu">
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
-                                            Kameez</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
-                                    </li>
-                                </ul>
+                            @endforeach
+                            @endif
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i
+                                class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
+                                    Kameez</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
                             </li>
                         </ul>
-                    </div>
-                @endforeach
+                    </li>
+                </ul>
+            </div>
+            @endforeach
             @else
-                <!-- Default menu items -->
-                <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                    </button>
-                    <a href="#" class="menu-link top-level-link group">
-                        <span class="flex-1">Lahenga</span>
-                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle group">
-                                <span class="flex-1">Style</span>
-                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-item has-submenu top-level-item">
-                    <button class="back-button">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                    </button>
-                    <a href="#" class="menu-link top-level-link group">
-                        <span class="flex-1">Salwar Kameez</span>
-                        <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="menu-item has-submenu">
-                            <div class="menu-link submenu-toggle group">
-                                <span class="flex-1">Style</span>
-                                <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
-                                <li class="menu-item"><a href="#"
-                                        class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+            <!-- Default menu items -->
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Lahenga</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu-item has-submenu top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Salwar Kameez</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Red Saree</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Salwar Kameez</a></li>
+                            <li class="menu-item"><a href="#"
+                                    class="menu-link hover:pl-6 transition-all">Lehenga</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             @endif
         </div>
     </nav>
@@ -1360,7 +1350,7 @@
 <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[20004] lg:hidden"></div>
 
 <!-- Categories Menu for Desktop -->
-<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px]">
+<div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px] hidden">
     <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white">
         <div class="flex">
             <!-- Left Sidebar -->
@@ -1398,10 +1388,10 @@
                     <div class="flex flex-row justify-between gap-3 items-start">
                         <div class="w-full flex flex-row gap-4 justify-between pr-[1.2rem]">
                             <div id="style-list-left" class="flex flex-col">
-                               
+
                             </div>
                             <div id="style-list-right" class="flex flex-col">
-                              
+
                             </div>
                         </div>
                         <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
@@ -1566,7 +1556,11 @@
                 console.error('Error fetching category data:', error);
                 // Return fallback data structure
                 return {
-                    parent_category: { id: categoryId, name: 'Category', slug: 'category' },
+                    parent_category: {
+                        id: categoryId,
+                        name: 'Category',
+                        slug: 'category'
+                    },
                     style: [],
                     ocassions: [],
                     collection: [],
@@ -1585,7 +1579,7 @@
 
             currentCategoryData = categoryData;
             const parentCategory = categoryData.parent_category;
-            
+
             // Update category banner
             const bannerTitle = document.getElementById('category-banner-title');
             const shopBtn = document.getElementById('category-shop-btn');
@@ -1612,7 +1606,7 @@
         function renderStyleSection(categoryData) {
             const styleLeftList = document.getElementById('style-list-left');
             const styleRightList = document.getElementById('style-list-right');
-            
+
             if (!styleLeftList || !styleRightList) return;
 
             // Clear existing content
@@ -1620,7 +1614,7 @@
             styleRightList.innerHTML = '';
 
             const styleItems = categoryData.style || [];
-            
+
             if (styleItems.length === 0) {
                 // Show default message if no styles
                 styleLeftList.innerHTML = '<li class="mb-4 text-[1.1rem] text-gray-400">No styles found</li>';
@@ -1638,24 +1632,24 @@
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
                 li.href = `/category/${style.slug}`;
-                
+
                 // Create subcategories list
                 const subUl = document.createElement('ul');
                 subUl.className = 'ml-4 mb-4';
-                
+
                 // You might want to fetch subcategories or use existing data
                 // For now, we'll show the style name as the only item
                 const subLi = document.createElement('li');
                 subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
-                
+
                 const link = document.createElement('a');
                 link.href = `/category/${style.slug}`;
                 link.className = 'hover:text-black transition-colors';
                 link.textContent = style.name;
-                
+
                 // subLi.appendChild(link);
                 // subUl.appendChild(subLi);
-                
+
                 // li.appendChild(subUl);
                 styleLeftList.appendChild(li);
             });
@@ -1666,18 +1660,18 @@
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
                 li.href = `/category/${style.slug}`;
-                
+
                 const subUl = document.createElement('ul');
                 subUl.className = 'ml-4 mb-4';
-                
+
                 const subLi = document.createElement('li');
                 subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
-                
+
                 const link = document.createElement('a');
                 link.href = `/category/${style.slug}`;
                 link.className = 'hover:text-black transition-colors';
                 link.textContent = style.name;
-                
+
                 // subLi.appendChild(link);
                 // subUl.appendChild(subLi);
                 // li.appendChild(subUl);
@@ -1688,47 +1682,58 @@
         function renderOccasionSection(categoryData) {
             const occasionList = document.getElementById('occasion-list');
             const showMoreBtn = document.getElementById('occasion-show-more');
-            
+
             if (!occasionList) return;
 
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
-            
-            
+
+
             if (occasions.length === 0) {
                 // Show default fallback occasions
-                const fallbackOccasions = [
-                    { name: 'Wedding', slug: 'wedding' },
-                    { name: 'Party', slug: 'party' },
-                    { name: 'Festival', slug: 'festival' },
-                    { name: 'Casual', slug: 'casual' }
+                const fallbackOccasions = [{
+                        name: 'Wedding',
+                        slug: 'wedding'
+                    },
+                    {
+                        name: 'Party',
+                        slug: 'party'
+                    },
+                    {
+                        name: 'Festival',
+                        slug: 'festival'
+                    },
+                    {
+                        name: 'Casual',
+                        slug: 'casual'
+                    }
                 ];
 
                 fallbackOccasions.forEach(occasion => {
                     const div = document.createElement('div');
                     div.className = 'flex flex-col gap-2';
-                    
+
                     const link = document.createElement('a');
                     link.href = `/occasion/${occasion.slug}`;
                     link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
-                    
+
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
                     img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
-                    
+
                     link.appendChild(img);
                     div.appendChild(link);
-                    
+
                     const p = document.createElement('p');
                     p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
-                    
+
                     const occLink = document.createElement('a');
                     occLink.href = `/occasion/${occasion.slug}`;
                     occLink.className = 'hover:text-black transition-colors';
                     occLink.textContent = occasion.name;
-                    
+
                     p.appendChild(occLink);
                     div.appendChild(p);
                     occasionList.appendChild(div);
@@ -1737,27 +1742,27 @@
                 occasions.slice(0, 4).forEach(occasion => {
                     const div = document.createElement('div');
                     div.className = 'flex flex-col gap-2';
-                    
+
                     const link = document.createElement('a');
                     link.href = `/occasion/${occasion.slug}`;
                     link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
-                    
+
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
                     img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
-                    
+
                     link.appendChild(img);
                     div.appendChild(link);
-                    
+
                     const p = document.createElement('p');
                     p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
-                    
+
                     const occLink = document.createElement('a');
                     occLink.href = `/occasion/${occasion.slug}`;
                     occLink.className = 'hover:text-black transition-colors';
                     occLink.textContent = occasion.name;
-                    
+
                     p.appendChild(occLink);
                     div.appendChild(p);
                     occasionList.appendChild(div);
@@ -1776,89 +1781,70 @@
             }
         }
 
-       function renderCollectionSection(categoryData) {
-    const collectionList = document.getElementById('collection-products-list');
-    const showMoreBtn = document.getElementById('collection-show-more');
-    
-    if (!collectionList) return;
+        function renderCollectionSection(categoryData) {
+            const collectionList = document.getElementById('collection-products-list');
+            const showMoreBtn = document.getElementById('collection-show-more');
 
-    collectionList.innerHTML = '';
+            if (!collectionList) return;
 
-    // Extract products from the complex data structure
-    let products = [];
-    
-    if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
-        // Get all products from all categories in products_by_category
-        const productsByCategory = categoryData.collection.products_by_category;
-        
-        // Iterate through each category's product array
-        for (const categoryId in productsByCategory) {
-            if (Array.isArray(productsByCategory[categoryId])) {
-                products = products.concat(productsByCategory[categoryId]);
+            collectionList.innerHTML = '';
+
+            // Extract products from the complex data structure
+            let products = [];
+
+            if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
+                // Get all products from all categories in products_by_category
+                const productsByCategory = categoryData.collection.products_by_category;
+
+                // Iterate through each category's product array
+                for (const categoryId in productsByCategory) {
+                    if (Array.isArray(productsByCategory[categoryId])) {
+                        products = products.concat(productsByCategory[categoryId]);
+                    }
+                }
             }
-        }
-    }
-    
-    console.log("Extracted products:", products);
-    
-    if (products.length === 0) {
-        // Show default fallback products
-        const fallbackProducts = [
-            {
-                name: "Light Pink Salwar",
-                price: "Rs. 700",
-                originalPrice: "Rs. 1000",
-                image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
-                slug: "light-pink-salwar"
-            },
-            {
-                name: "Gray Lahenga",
-                price: "Rs. 700",
-                originalPrice: "Rs. 1000",
-                image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
-                slug: "gray-lahenga"
-            },
-            {
-                name: "Red Plazo",
-                price: "Rs. 700",
-                originalPrice: "Rs. 1000",
-                image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
-                slug: "red-plazo"
-            },
-            {
-                name: "Short Plazo",
-                price: "Rs. 700",
-                originalPrice: "Rs. 1000",
-                image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
-                slug: "short-plazo"
-            }
-        ];
 
-        fallbackProducts.forEach(product => {
-            const productCard = createProductCard(product);
-            collectionList.appendChild(productCard);
-        });
-    } else {
-        // Display products (limit to 4 for initial view)
-        products.slice(0, 4).forEach(product => {
-            const productCard = createProductCard({
-                name: product.name,
-                price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
-                originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
-                image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
-            });
-            collectionList.appendChild(productCard);
-        });
-    }
+            console.log("Extracted products:", products);
 
-    // Update show more button
-    if (showMoreBtn) {
-        if (products.length > 4) {
-            showMoreBtn.style.display = 'block';
-            showMoreBtn.onclick = function() {
-                // Show remaining products
-                products.slice(4).forEach(product => {
+            if (products.length === 0) {
+                // Show default fallback products
+                const fallbackProducts = [{
+                        name: "Light Pink Salwar",
+                        price: "Rs. 700",
+                        originalPrice: "Rs. 1000",
+                        image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
+                        slug: "light-pink-salwar"
+                    },
+                    {
+                        name: "Gray Lahenga",
+                        price: "Rs. 700",
+                        originalPrice: "Rs. 1000",
+                        image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
+                        slug: "gray-lahenga"
+                    },
+                    {
+                        name: "Red Plazo",
+                        price: "Rs. 700",
+                        originalPrice: "Rs. 1000",
+                        image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
+                        slug: "red-plazo"
+                    },
+                    {
+                        name: "Short Plazo",
+                        price: "Rs. 700",
+                        originalPrice: "Rs. 1000",
+                        image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
+                        slug: "short-plazo"
+                    }
+                ];
+
+                fallbackProducts.forEach(product => {
+                    const productCard = createProductCard(product);
+                    collectionList.appendChild(productCard);
+                });
+            } else {
+                // Display products (limit to 4 for initial view)
+                products.slice(0, 4).forEach(product => {
                     const productCard = createProductCard({
                         name: product.name,
                         price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
@@ -1868,18 +1854,36 @@
                     });
                     collectionList.appendChild(productCard);
                 });
-                showMoreBtn.style.display = 'none';
-            };
-        } else {
-            showMoreBtn.style.display = 'none';
+            }
+
+            // Update show more button
+            if (showMoreBtn) {
+                if (products.length > 4) {
+                    showMoreBtn.style.display = 'block';
+                    showMoreBtn.onclick = function() {
+                        // Show remaining products
+                        products.slice(4).forEach(product => {
+                            const productCard = createProductCard({
+                                name: product.name,
+                                price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
+                                originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
+                                image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                                slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
+                            });
+                            collectionList.appendChild(productCard);
+                        });
+                        showMoreBtn.style.display = 'none';
+                    };
+                } else {
+                    showMoreBtn.style.display = 'none';
+                }
+            }
         }
-    }
-}
 
         function createProductCard(product) {
             const card = document.createElement('div');
             card.className = 'group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow';
-            
+
             card.innerHTML = `
                 <!-- Image Wrapper -->
                 <div class="relative rounded-xl overflow-hidden">
@@ -1917,13 +1921,13 @@
                     </div>
                 </div>
             `;
-            
+
             // Add click event to navigate to product page
             card.style.cursor = 'pointer';
             card.addEventListener('click', function() {
                 window.location.href = `/product/${product.slug}`;
             });
-            
+
             return card;
         }
 
@@ -2349,15 +2353,15 @@
             }
 
             // ==================== SEARCH FUNCTIONALITY ====================
-            
+
             // Search icon click - main search trigger
             if (searchIcon) {
                 searchIcon.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     const searchValue = searchInput.value.trim();
-                    
+
                     if (isMobile()) {
                         // On mobile: open full-screen mobile search dropdown
                         openMobileSearch(searchValue);
@@ -2380,7 +2384,7 @@
             }
 
             // ==================== COMPREHENSIVE SEARCH FUNCTION ====================
-            
+
             function performComprehensiveSearch(searchTerm) {
                 // Navigate to all-product page with search parameter
                 // This will search across product names, categories, occasions, etc.
@@ -2587,13 +2591,13 @@
                 link.addEventListener('mouseenter', function() {
                     clearTimeout(hideMenuTimeout);
                     isOverNav = true;
-                    
+
                     const categoryId = this.getAttribute('data-category-id');
                     if (categoryId) {
                         currentCategoryId = categoryId;
                         loadCategoryData(categoryId);
                     }
-                    
+
                     showCategoriesMenu();
                 });
 
@@ -2849,6 +2853,8 @@
         // ==================== HELPER FUNCTIONS ====================
         function showCategoriesMenu() {
             clearTimeout(hideMenuTimeout);
+            categoriesMenu.classList.remove('hidden');
+            
             if (categoriesMenu) {
                 categoriesMenu.classList.add('visible');
             }

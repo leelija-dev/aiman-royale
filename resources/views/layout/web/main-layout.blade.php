@@ -37,14 +37,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap"
+        rel="stylesheet" />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet" />
     <!-- Font Awesome in  project -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
@@ -56,6 +54,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
 
+    <link rel="stylesheet" href="{{asset('web/css/home-page.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -88,16 +87,17 @@
 
 <body class="overflow-x-hidden ">
 
-        @if(!request()->is('login') && !request()->is('register'))
-        <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
-        @endif
-   
+    @if(!request()->is('login') && !request()->is('register'))
+    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
+    @endif
+
 
     <main class="">
         @yield('content')
     </main>
-
+    @if(!request()->is('login') && !request()->is('register'))
     <x-web.footer />
+    @endif
     <!-- Add this temporarily for testing -->
     <!-- <button onclick="localStorage.clear(); location.reload();"
         style="position: fixed; top: 10px; right: 10px; z-index: 10000; background: red; color: white; padding: 5px;display:none;">
