@@ -625,7 +625,7 @@
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto px-4">
         <!-- Scroll Wrapper -->
-        <div class="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-3 smxl:grid-cols-2 grid-cols-1 gap-3">
+        <div class="flex gap-4 flex-wrap lgg:gap-6 justify-start items-center ">
             @foreach ($categories->where('parent_id', null) as $category)
 
             <div
