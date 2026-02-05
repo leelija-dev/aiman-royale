@@ -42,7 +42,7 @@
                             </div>
                             <div class="mb-3">
                               <label class="form-label text-secondary text-uppercase">Image<sup class="text-danger">*</sup></label>
-                              <input type="file" name="image" id="imageInput" class="form-control" max-size="1024" accept=".jpg,.jpeg,.png" value="{{ old('image') }}" required>
+                              <input type="file" name="image" id="imageInput" class="form-control" max-size="1024" accept=".jpg,.jpeg,.png, .webp, .svg" value="{{ old('image') }}" required>
                                 {{-- <small id="imageError" class="text-danger d-none"></small> --}}
                               @error('image')
                             <div>
