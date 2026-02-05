@@ -263,11 +263,7 @@ $(document).ready(function () {
         });
       }
 
-      // Optional: Add slide change event listener
-      $carousel.on('changed.owl.carousel', function (event) {
-        // You can add slide change animations or tracking here
-        console.log(`${config.selector} changed to slide: ${event.item.index}`);
-      });
+     
     } else {
       console.warn(`Carousel element not found: ${config.selector}`);
     }
