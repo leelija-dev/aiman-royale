@@ -2152,27 +2152,7 @@
     </div>
 </section>
 
-<script>
-    const bg = document.querySelector(".parallax-bg");
-    const section = bg.closest("section");
 
-    function updateParallax() {
-        const rect = section.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        // Only run when section is visible
-        if (rect.bottom > 0 && rect.top < windowHeight) {
-            const scrollProgress = rect.top / windowHeight;
-            const movement = scrollProgress * -500; // adjust strength here
-
-            bg.style.transform = `translateY(${movement}px) scale(1.2)`;
-        }
-    }
-
-    window.addEventListener("scroll", updateParallax);
-    window.addEventListener("resize", updateParallax);
-    updateParallax();
-</script>
 
 
 
@@ -2266,6 +2246,27 @@
             element.textContent = count;
         });
     }
+</script>
+<script>
+    const bg = document.querySelector(".parallax-bg");
+    const section = bg.closest("section");
+
+    function updateParallax() {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Only run when section is visible
+        if (rect.bottom > 0 && rect.top < windowHeight) {
+            const scrollProgress = rect.top / windowHeight;
+            const movement = scrollProgress * -500; // adjust strength here
+
+            bg.style.transform = `translateY(${movement}px) scale(1.2)`;
+        }
+    }
+
+    window.addEventListener("scroll", updateParallax);
+    window.addEventListener("resize", updateParallax);
+    updateParallax();
 </script>
 
 
