@@ -10,6 +10,12 @@
 @section('content')
 
 <style>
+    html, body {
+           height: 100%;
+           display: flex;
+              align-items: center;
+                justify-content: center;
+        }
       .fashion-gradient {
             background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
         }

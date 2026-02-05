@@ -10,133 +10,7 @@
 
 @section('content')
 
-<style>
-      /* Custom font classes */
 
-
-    /* Update existing classes with custom fonts */
-    .text-center h2 {
-
-        font-weight: 800;
-    }
-
-    .group h3 {
-
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-
-
-
-    /* Card hover shine effect */
-
-
-    .group:hover::before {
-        left: 100%;
-    }
-
-    /* DOTS CONTAINER */
-    #categories-carousel .owl-dots {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* EACH DOT BUTTON */
-    #categories-carousel .owl-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: #e5e7eb;
-        /* light gray */
-        transition: all 0.4s ease;
-        position: relative;
-    }
-
-    /* HOVER EFFECT */
-    #categories-carousel .owl-dot:hover {
-        transform: scale(1.2);
-        background: #c084fc;
-    }
-
-    /* ACTIVE DOT */
-    #categories-carousel .owl-dot.active {
-        width: 32px;
-        background: linear-gradient(90deg, #a855f7, #ec4899);
-        box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
-    }
-
-    /* Inner span removal (optional for cleaner look) */
-    #categories-carousel .owl-dot span {
-        display: none;
-    }
-
-      @keyframes gradient {
-
-        0%,
-        100% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-    }
-
-    .animate-gradient {
-        animation: gradient 3s ease-in-out infinite;
-        background-size: 200% 200%;
-    }
-
-    #categories-carousel .owl-stage-outer {
-        padding: 20px 0;
-    }
-
-    #categories-carousel .disabled,
-    #designer-thoughts .disabled {
-        display: none !important;
-    }
-
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-        /* Chrome, Safari, Opera */
-    }
-
-
-     .parallax-bg {
-        background-image: url('{{ asset('web/images/product-images/Blog_slay_wedding_lehenga_photoshoot.jpg') }}');
-        /* change path */
-        will-change: transform;
-    }
-
-    /* Custom owl carousel dots */
-    .owl-theme .owl-dots .owl-dot span {
-        width: 10px;
-        height: 10px;
-        margin: 5px 4px;
-        background: #d1d5db;
-        transition: all 0.3s ease;
-    }
-
-    .owl-theme .owl-dots .owl-dot.active span {
-        background: #EC4899;
-        width: 30px;
-        border-radius: 10px;
-    }
-
-    .owl-theme .owl-dots .owl-dot:hover span {
-        background: #ec5da5;
-    }
-</style>
 
 
 
@@ -293,16 +167,7 @@
 </div>
 
 <!-- Required CSS for no scrollbar + smooth snap -->
-<style>
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
 
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-</style>
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -373,8 +238,8 @@
                     <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">NEW COLLECTION</p>
 
                     <div class="text-center text-gray-500 mb-2">
-                        <span class="line-through text-sm mr-2">$199.99</span>
-                        <span class="text-xl font-bold text-rose-600">$99.99</span>
+                        <span class="line-through text-sm mr-2">₹199.99</span>
+                        <span class="text-xl font-bold text-rose-600">₹99.99</span>
                     </div>
 
                     <button
@@ -420,6 +285,10 @@
         </div>
     </div>
 </section>
+
+
+
+
 
 
 
@@ -830,14 +699,7 @@
                             </svg>
                         </button>
 
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart({{ $product->variant_id }}, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
+
                     </div>
 
                     <!-- Content -->
@@ -878,45 +740,162 @@
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Red Policy Card -->
-            <div
-                class="flex xxs:flex-row flex-col xxs:text-left text-center overflow-hidden relative items-center justify-between gap-4 border-2 border-red-500 bg-red-100 rounded-lg px-6 py-5">
-                <div>
-                    <h3 class="text-secondary font-semibold text-lg">
-                        Our Policy: Best Price !
-                    </h3>
-                    <p class="text-red-500 text-sm">
-                        Sign Up to avoid missing diamonds!
-                    </p>
-                </div>
-                <button
-                    class="shrink-0 bg-primary hover:bg-red-700 text-white text-sm font-medium px-5 py-2 rounded-md transition">
-                    Check Coupons
-                </button>
+<section class="w-full bg-gradient-to-br from-gray-900 to-black py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-8 md:p-12 shadow-2xl border border-gray-700">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                <div class="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000"></div>
+                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000"></div>
             </div>
+            
+            <!-- Glowing Border Effect -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-500 rounded-3xl blur opacity-20"></div>
+            
+            <div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <!-- Left Content - Guarantee Info -->
+                <div class="md:w-2/5">
+                    <div class="flex items-start gap-6 mb-6">
+                        <div class="diamond-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
+                            <i class="fas fa-gem text-2xl text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Best Price Guarantee</h3>
+                                <span class="trust-tag bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg shadow-emerald-500/20">TRUSTED</span>
+                            </div>
+                            <p class="text-gray-300 text-base mb-6 leading-relaxed">We promise you'll always get the lowest prices on premium fashion items with our exclusive price match policy.</p>
 
-            <!-- Green Policy Card -->
-            <div
-                class="flex xxs:flex-row flex-col xxs:text-left text-center items-center justify-between gap-4 border-2 border-green-500 bg-green-100 rounded-lg px-6 py-5">
-                <div>
-                    <h3 class="text-green-600 font-semibold text-lg">
-                        Our Policy: Best Price !
-                    </h3>
-                    <p class="text-green-500 text-sm">
-                        Sign Up to avoid missing diamonds!
-                    </p>
+                            <div class="space-y-4 mt-6">
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">Price match within 30 days</span>
+                                </div>
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">Lowest price guarantee</span>
+                                </div>
+                                <div class="flex items-center text-gray-200 group">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center mr-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-check text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">24/7 customer support</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button
-                    class="shrink-0 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-5 py-2 rounded-md transition">
-                    Check Coupons
-                </button>
+
+                <!-- Middle Divider with Glow -->
+                <div class="hidden md:block h-64 w-1 bg-gradient-to-b from-purple-500 via-pink-500 to-blue-500 rounded-full shadow-lg shadow-purple-500/30"></div>
+
+                <!-- Middle Content - Product Images -->
+                <div class="md:w-2/5 flex justify-center">
+                    <div class="relative">
+                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl group hover:scale-105 transition-transform duration-300">
+                            <img src="https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?w=400&h=400&fit=crop"
+                                alt="Designer Handbag"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="price-badge absolute -top-3 -right-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg shadow-pink-500/30">-25%</div>
+
+                        <div class="image-frame w-32 h-32 rounded-xl overflow-hidden border-4 border-gray-800 shadow-2xl absolute -top-4 -right-4 group hover:scale-105 transition-transform duration-300">
+                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop"
+                                alt="Luxury Watch"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+
+                        <div class="absolute -bottom-6 -left-4 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl shadow-2xl p-4 border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-xs text-gray-400">Starting from</p>
+                                <p class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">$89<span class="text-sm">.99</span></p>
+                                <p class="text-xs text-gray-400 mt-1">Limited time offer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - CTA -->
+                <div class="md:w-1/5 w-full">
+                    <div class="text-center md:text-left">
+                        <div class="mb-6">
+                            <div class="inline-flex items-center bg-gradient-to-r from-red-900/30 to-rose-900/30 text-red-300 px-4 py-2.5 rounded-full mb-4 border border-red-800/30 shadow-lg shadow-red-900/10">
+                                <i class="fas fa-clock text-sm mr-2 animate-pulse"></i>
+                                <span class="text-sm font-bold">Ends in 2 days</span>
+                            </div>
+                        </div>
+
+                        <button class="shop-button px-8 py-4 font-bold rounded-xl w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white shadow-2xl shadow-purple-600/30 hover:shadow-purple-600/40 transition-all duration-300 hover:scale-105 group">
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-shopping-bag mr-3 text-lg group-hover:rotate-12 transition-transform"></i>
+                                <span class="text-lg">Shop Deals</span>
+                            </div>
+                        </button>
+
+                        <p class="text-sm text-gray-400 mt-6 flex items-center justify-center md:justify-start">
+                            <i class="fas fa-lock mr-2 text-green-400"></i> 
+                            <span>Secure checkout • 256-bit encryption</span>
+                        </p>
+                        
+                        <div class="mt-8 flex items-center justify-center md:justify-start gap-4">
+                            <div class="flex -space-x-3">
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/men/54.jpg" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Join 5k+ satisfied</p>
+                                <p class="text-xs text-gray-400">customers today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            <!-- Floating Elements -->
+            <div class="absolute top-4 right-4 w-4 h-4 bg-blue-400 rounded-full animate-bounce"></div>
+            <div class="absolute bottom-6 left-8 w-3 h-3 bg-purple-400 rounded-full animate-bounce animation-delay-1000"></div>
         </div>
     </div>
 </section>
+
+<style>
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 0.3; }
+    }
+    
+    .animate-pulse {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    .animation-delay-1000 {
+        animation-delay: 1s;
+    }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+    
+    .image-frame {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+</style>
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 smx:grid-cols-2 lg:grid-cols-4 lgg:gap-8 gap-4">
@@ -2283,27 +2262,6 @@
     </div>
 </section>
 
-<script>
-    const bg = document.querySelector(".parallax-bg");
-    const section = bg.closest("section");
-
-    function updateParallax() {
-        const rect = section.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        // Only run when section is visible
-        if (rect.bottom > 0 && rect.top < windowHeight) {
-            const scrollProgress = rect.top / windowHeight;
-            const movement = scrollProgress * -500; // adjust strength here
-
-            bg.style.transform = `translateY(${movement}px) scale(1.2)`;
-        }
-    }
-
-    window.addEventListener("scroll", updateParallax);
-    window.addEventListener("resize", updateParallax);
-    updateParallax();
-</script>
 
 
 
@@ -2312,37 +2270,13 @@
 
 
 
-{{-- <style>
-        /* Card hover effects */
-        .group:hover {
-            transform: translateY(-5px);
-        }
 
-        /* Smooth transitions */
-        .transition-all {
-            transition-property: all;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 300ms;
-        }
 
-        /* Button glow effect */
-        a:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Icon scaling */
-        .group:hover .group-hover\:scale-110 {
-            transform: scale(1.1);
-        }
-    </style> --}}
 
 
 @endsection
 @section('scripts')
-<!-- jQuery (required for Owl Carousel) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Owl Carousel JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
 
 <!-- Cart Functionality -->
 <script>
@@ -2420,124 +2354,27 @@
         });
     }
 </script>
-
 <script>
-    $(document).ready(function() {
+    const bg = document.querySelector(".parallax-bg");
+    const section = bg.closest("section");
 
-        var $carousel = $("#categories-carousel");
+    function updateParallax() {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-        $carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false, // 🚫 Disable Owl default nav buttons
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            autoplayHoverPause: true,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    dots: false,
-                    margin: 10,
-                },
-                450: {
-                    items: 2,
-                    dots: false,
-                    margin: 10,
-                },
-                640: {
-                    items: 2,
-                    dots: false,
-                    margin: 10,
-                },
-                768: {
-                    items: 3,
-                    dots: false,
-                    margin: 10,
-                },
-                1024: {
-                    items: 4,
-                    dots: false,
-                    margin: 10,
-                },
-                1280: {
-                    items: 5,
-                    dots: false,
-                    margin: 10,
-                },
-                1366: {
-                    items: 6,
-                    dots: false,
-                    margin: 10,
-                }
-            }
-        });
+        // Only run when section is visible
+        if (rect.bottom > 0 && rect.top < windowHeight) {
+            const scrollProgress = rect.top / windowHeight;
+            const movement = scrollProgress * -500; // adjust strength here
 
-        // ✅ Custom Navigation Controls
-        $('.custom-nav .owl-prev').on('click', function() {
-            $carousel.trigger('prev.owl.carousel');
-        });
+            bg.style.transform = `translateY(${movement}px) scale(1.2)`;
+        }
+    }
 
-        $('.custom-nav .owl-next').on('click', function() {
-            $carousel.trigger('next.owl.carousel');
-        });
-
-    });
+    window.addEventListener("scroll", updateParallax);
+    window.addEventListener("resize", updateParallax);
+    updateParallax();
 </script>
 
-<script>
-    $(document).ready(function() {
-        var $carousel = $("#designer-thoughts");
 
-        $carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false, // 🚫 Disable Owl default nav buttons
-            dots: true,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            autoplayHoverPause: true,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    dots: true
-                },
-                640: {
-                    items: 1,
-                    dots: true
-                },
-                768: {
-                    items: 1,
-                    dots: true
-                },
-                1024: {
-                    items: 1,
-                    dots: true
-                },
-                1280: {
-                    items: 1,
-                    dots: true
-                },
-            }
-        });
-
-        // ✅ Custom Navigation Controls
-        $('.thoughts-nav .custom-prev-btn').on('click', function() {
-            $carousel.trigger('prev.owl.carousel');
-        });
-
-        $('.thoughts-nav .custom-next-btn').on('click', function() {
-            $carousel.trigger('next.owl.carousel');
-        });
-
-        // Add slide change animations
-        $carousel.on('changed.owl.carousel', function(event) {
-            // You can add additional animations here if needed
-            console.log('Slide changed to: ' + event.item.index);
-        });
-
-    });
-</script>
 @endsection
