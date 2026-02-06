@@ -1183,67 +1183,7 @@
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
-            <!-- Item 1 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        High Quality
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        crafted from top materials
-                    </p>
-                </div>
-            </div>
 
-            <!-- Item 2 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Warranty Protection
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Over 2 years
-                    </p>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Free Shipping
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Order over 150 $
-                    </p>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        24 / 7 Support
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Dedicated support
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -1341,52 +1281,69 @@
         </div>
     </div>
 </section>
+
 <section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Banner 1 -->
-        <div
-            class="relative xxs:flex-row flex-col xxs:text-left text-center gap-4 overflow-hidden rounded-lg bg-gradient-to-r from-red-700 to-red-600 px-6 py-6 flex items-center justify-between">
-            <!-- Decorative shape -->
-            <div class="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_50%,orange_0%,transparent_40%)]">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
+            <!-- Item 1 -->
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
+                    alt="" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
+                        High Quality
+                    </h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
+                        crafted from top materials
+                    </p>
+                </div>
             </div>
 
-            <div class="relative z-10">
-                <h3 class="text-white font-semibold text-lg">
-                    Special campaigns: November!
-                </h3>
-                <p class="text-white/80 text-sm mt-1">
-                    Sign up to avoid missing discounts!
-                </p>
+            <!-- Item 2 -->
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
+                    alt="" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
+                        Warranty Protection
+                    </h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
+                        Over 2 years
+                    </p>
+                </div>
             </div>
 
-            <button
-                class="relative z-10 bg-white text-red-700 text-sm font-medium px-4 py-2 rounded-md shadow hover:bg-gray-100 transition">
-                Buy Products
-            </button>
-        </div>
-
-        <!-- Banner 2 -->
-        <div
-            class="relative overflow-hidden xxs:flex-row flex-col xxs:text-left text-center gap-4 rounded-lg bg-red-700 px-6 py-6 flex items-center justify-between">
-            <!-- Pattern overlay -->
-            <div
-                class="absolute inset-0 opacity-25 bg-[url('https://www.transparenttextures.com/patterns/floral.png')]">
+            <!-- Item 3 -->
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
+                    alt="" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
+                        Free Shipping
+                    </h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
+                        Order over 150 $
+                    </p>
+                </div>
             </div>
 
-            <div class="relative z-10">
-                <h3 class="text-white font-semibold text-lg">Check New Patterns</h3>
-                <p class="text-white/80 text-sm mt-1">
-                    Sign up to avoid missing campaigns!
-                </p>
+            <!-- Item 4 -->
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
+                    alt="" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
+                        24 / 7 Support
+                    </h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
+                        Dedicated support
+                    </p>
+                </div>
             </div>
-
-            <button
-                class="relative z-10 bg-white text-red-700 text-sm font-medium px-4 py-2 rounded-md shadow hover:bg-gray-100 transition">
-                Check Products
-            </button>
         </div>
     </div>
 </section>
+
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
