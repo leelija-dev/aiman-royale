@@ -904,7 +904,7 @@
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
-                    
+
                     <a href="https://wa.me/1234567890" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
@@ -916,16 +916,18 @@
                 </div>
 
                 <!-- Icons -->
-                <button class="text-gray-700 hover:text-black group relative">
-                    <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
-                        <i class="fa-regular fa-heart text-lg group-hover:text-red-500"></i>
-                    </div>
-                    <span
-                        class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                        Wishlist
-                    </span>
-                </button>
+                <a href="{{ route('wishlist.index') }}">
+                    <button class="text-gray-700 hover:text-black group relative">
+                        <div
+                            class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
+                            <i class="fa-regular fa-heart text-lg group-hover:text-red-500"></i>
+                        </div>
+                        <span
+                            class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                            Wishlist
+                        </span>
+                    </button>
+                </a>
 
                 @php
                 // Get cart count for current user/guest
@@ -2854,7 +2856,7 @@
         function showCategoriesMenu() {
             clearTimeout(hideMenuTimeout);
             categoriesMenu.classList.remove('hidden');
-            
+
             if (categoriesMenu) {
                 categoriesMenu.classList.add('visible');
             }

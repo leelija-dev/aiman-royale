@@ -164,7 +164,8 @@
           </button>
           <button
             id="wishlist-btn"
-            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition">
+            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
+            onclick="toggleWishlist({{ $product->id }}, event);">
             <i class="far fa-heart"></i>
           </button>
         </div>
@@ -916,6 +917,9 @@ function selectColor(color, size, variantId, element) {
     if (selectedVariant) {
         updatePrice(selectedVariant);
     }
+    
+    // Check if this variant is already in cart
+    checkVariantInCart(variantId);
 }
 
 function updatePrice(variant) {
@@ -949,9 +953,167 @@ document.addEventListener('DOMContentLoaded', function() {
         addToCartBtn.addEventListener('click', function(event) {
             addToCart(null, event);
         });
+        
+        // Check if initial variant is already in cart
+        const initialVariantId = addToCartBtn.getAttribute('data-variant-id');
+        if (initialVariantId) {
+            checkVariantInCart(initialVariantId);
+        }
     }
+    
+    // Check if product is already in wishlist
+    checkProductInWishlist({{ $product->id }});
 });
 
+
+// Check if variant is in cart and update button
+function checkVariantInCart(variantId) {
+    if (!variantId) return;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/cart/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            variant_id: variantId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateAddToCartButton(data.in_cart, data.quantity);
+    })
+    .catch(error => {
+        console.error('Error checking cart:', error);
+    });
+}
+
+// Check if product is in wishlist and update button
+function checkProductInWishlist(productId) {
+    if (!productId) return;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/wishlist/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateWishlistButton(data.in_wishlist);
+    })
+    .catch(error => {
+        console.error('Error checking wishlist:', error);
+    });
+}
+
+// Update wishlist button based on wishlist status
+function updateWishlistButton(inWishlist) {
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    if (!wishlistBtn) return;
+    
+    if (inWishlist) {
+        wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+        wishlistBtn.classList.add('border-red-500', 'text-red-500');
+        wishlistBtn.classList.remove('border-gray-300');
+    } else {
+        wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
+        wishlistBtn.classList.remove('border-red-500', 'text-red-500');
+        wishlistBtn.classList.add('border-gray-300');
+    }
+}
+
+// Toggle wishlist
+function toggleWishlist(productId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    if (!productId) {
+        alert('Product ID not found');
+        return;
+    }
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    const isInWishlist = wishlistBtn.classList.contains('text-red-500');
+    
+    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+    
+    // Show loading state
+    const originalContent = wishlistBtn.innerHTML;
+    wishlistBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    wishlistBtn.disabled = true;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message, 'success');
+            updateWishlistButton(!isInWishlist);
+            
+            // Update wishlist count if you have a counter
+            if (data.wishlist_count !== undefined) {
+                updateWishlistCount(data.wishlist_count);
+            }
+        } else {
+            showNotification(data.message || 'Failed to update wishlist', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while updating wishlist', 'error');
+    })
+    .finally(() => {
+        wishlistBtn.disabled = false;
+    });
+}
+
+// Update wishlist count (if you have a counter)
+function updateWishlistCount(count) {
+    // Update your wishlist counter element here
+    const wishlistCounter = document.getElementById('wishlist-counter');
+    if (wishlistCounter) {
+        wishlistCounter.textContent = count;
+    }
+}
+
+// Update add to cart button based on cart status
+function updateAddToCartButton(inCart, quantity = 0) {
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+    
+    if (inCart) {
+        addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added (${quantity})`;
+        addToCartBtn.classList.remove('bg-secondary');
+        addToCartBtn.classList.add('bg-green-600');
+        addToCartBtn.disabled = true;
+    } else {
+        addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+        addToCartBtn.classList.remove('bg-green-600');
+        addToCartBtn.classList.add('bg-secondary');
+        addToCartBtn.disabled = false;
+    }
+}
 
 // Add to Cart function
 function addToCart(variantId, event) {
@@ -1007,6 +1169,9 @@ function addToCart(variantId, event) {
             if (data.cart_count !== undefined) {
                 updateCartCount(data.cart_count);
             }
+            
+            // Check cart status again to update button
+            checkVariantInCart(variantId);
         } else {
             showNotification(data.message || 'Failed to add product to cart', 'error');
         }
@@ -1016,9 +1181,8 @@ function addToCart(variantId, event) {
         showNotification('An error occurred while adding to cart', 'error');
     })
     .finally(() => {
-        // Re-enable button
-        addToCartBtn.disabled = false;
-        addToCartBtn.innerHTML = originalText;
+        // Re-enable button with original state will be handled by checkVariantInCart
+        // The button state will be updated by the checkVariantInCart function
     });
 }
 

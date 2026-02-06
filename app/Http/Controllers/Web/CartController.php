@@ -222,4 +222,26 @@ class CartController extends Controller
             }
         })->sum('count');
     }
+
+    public function checkVariantInCart(Request $request)
+    {
+        $variantId = $request->variant_id;
+        $userId = Auth::id();
+        $sessionId = session()->getId();
+
+        $cartItem = Cart::where('variant_id', $variantId)
+            ->where(function ($query) use ($userId, $sessionId) {
+                if ($userId) {
+                    $query->where('user_id', $userId);
+                } else {
+                    $query->where('session_id', $sessionId);
+                }
+            })
+            ->first();
+
+        return response()->json([
+            'in_cart' => $cartItem ? true : false,
+            'quantity' => $cartItem ? $cartItem->count : 0
+        ]);
+    }
 }
