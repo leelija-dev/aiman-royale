@@ -916,6 +916,9 @@ function selectColor(color, size, variantId, element) {
     if (selectedVariant) {
         updatePrice(selectedVariant);
     }
+    
+    // Check if this variant is already in cart
+    checkVariantInCart(variantId);
 }
 
 function updatePrice(variant) {
@@ -949,9 +952,58 @@ document.addEventListener('DOMContentLoaded', function() {
         addToCartBtn.addEventListener('click', function(event) {
             addToCart(null, event);
         });
+        
+        // Check if initial variant is already in cart
+        const initialVariantId = addToCartBtn.getAttribute('data-variant-id');
+        if (initialVariantId) {
+            checkVariantInCart(initialVariantId);
+        }
     }
 });
 
+
+// Check if variant is in cart and update button
+function checkVariantInCart(variantId) {
+    if (!variantId) return;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/cart/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            variant_id: variantId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateAddToCartButton(data.in_cart, data.quantity);
+    })
+    .catch(error => {
+        console.error('Error checking cart:', error);
+    });
+}
+
+// Update add to cart button based on cart status
+function updateAddToCartButton(inCart, quantity = 0) {
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+    
+    if (inCart) {
+        addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added (${quantity})`;
+        addToCartBtn.classList.remove('bg-secondary');
+        addToCartBtn.classList.add('bg-green-600');
+        addToCartBtn.disabled = true;
+    } else {
+        addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+        addToCartBtn.classList.remove('bg-green-600');
+        addToCartBtn.classList.add('bg-secondary');
+        addToCartBtn.disabled = false;
+    }
+}
 
 // Add to Cart function
 function addToCart(variantId, event) {
@@ -1007,6 +1059,9 @@ function addToCart(variantId, event) {
             if (data.cart_count !== undefined) {
                 updateCartCount(data.cart_count);
             }
+            
+            // Check cart status again to update button
+            checkVariantInCart(variantId);
         } else {
             showNotification(data.message || 'Failed to add product to cart', 'error');
         }
@@ -1016,9 +1071,8 @@ function addToCart(variantId, event) {
         showNotification('An error occurred while adding to cart', 'error');
     })
     .finally(() => {
-        // Re-enable button
-        addToCartBtn.disabled = false;
-        addToCartBtn.innerHTML = originalText;
+        // Re-enable button with original state will be handled by checkVariantInCart
+        // The button state will be updated by the checkVariantInCart function
     });
 }
 

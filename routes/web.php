@@ -69,6 +69,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+    Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
 
     //Checkout route
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
