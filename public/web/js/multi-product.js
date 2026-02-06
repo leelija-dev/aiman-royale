@@ -3,14 +3,13 @@
 // ============================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
-
     // ──────────────────────────────────────────────
     //  Mobile Filter Sidebar Controls
     // ──────────────────────────────────────────────
     const filterButton = document.querySelector("#open-filter");
-    const sidebar      = document.getElementById("filter-sidebar");
-    const overlay      = document.getElementById("filter-overlay");
-    const clearButton  = document.querySelector(".text-blue-600.hover\\:underline"); // "Clear all"
+    const sidebar = document.getElementById("filter-sidebar");
+    const overlay = document.getElementById("filter-overlay");
+    const clearButton = document.querySelector(".text-blue-600.hover\\:underline"); // "Clear all"
 
     function isMobile() {
         return window.innerWidth < 991;
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (filterButton) filterButton.addEventListener("click", openSidebar);
-    if (overlay)      overlay.addEventListener("click", closeSidebar);
+    if (overlay) overlay.addEventListener("click", closeSidebar);
 
     // Resize handling for sidebar behavior
     window.addEventListener("resize", () => {
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         search.split('&').forEach(pair => {
             const [key, val] = pair.split('=');
             if (!key) return;
-            const decodedKey   = decodeURIComponent(key);
+            const decodedKey = decodeURIComponent(key);
             const decodedValue = decodeURIComponent(val || '');
 
             if (decodedKey.endsWith('[]')) {
@@ -78,9 +77,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // ──────────────────────────────────────────────
     function buildFilterURL() {
         const currentParams = getCurrentQueryParams();
-        const form         = document.getElementById("filter-form");
-        const sortOption   = document.querySelector('.sort-option.active');
-        const sortValue    = sortOption?.dataset.value || currentParams.sort || '';
+        const form = document.getElementById("filter-form");
+        const sortOption = document.querySelector('.sort-option.active');
+        const filterOption = document.querySelector('.filter-option.active');
+        const occasionOption = document.querySelector('.occasion-option.active');
+        const collectionOption = document.querySelector('.collection-option.active');
+
+        const sortValue = sortOption?.dataset.value || currentParams.sort || '';
+        const filterValue = filterOption?.dataset.value || currentParams.filter || '';
+        const occasionValue = occasionOption?.dataset.value || currentParams.occasion || '';
+        const collectionValue = collectionOption?.dataset.value || currentParams.collection || '';
 
         const finalParams = new URLSearchParams();
 
@@ -94,10 +100,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // 2. Keep / set sort
-        if (sortValue) {
-            finalParams.set('sort', sortValue);
-        }
+        // 2. Add dropdown values
+        if (sortValue) finalParams.set('sort', sortValue);
+        if (filterValue) finalParams.set('filter', filterValue);
+        if (occasionValue) finalParams.set('occasion', occasionValue);
+        if (collectionValue) finalParams.set('collection', collectionValue);
 
         // 3. Preserve page (if you add pagination later)
         if (currentParams.page) {
@@ -115,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = buildFilterURL();
     }
 
-    // Debounced filter apply (prevents too many reloads when clicking fast)
+    // Debounced filter apply
     let filterTimeout;
     document.addEventListener('change', e => {
         if (e.target.classList.contains('filter-checkbox')) {
@@ -125,70 +132,164 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // ──────────────────────────────────────────────
-    //  Sort Dropdown Logic
+    //  Track all open dropdowns
     // ──────────────────────────────────────────────
-    const sortButton = document.getElementById("sort-button");
-    const sortMenu   = document.getElementById("sort-menu");
-    const sortLabel  = document.getElementById("sort-label");
-    const chevron    = document.getElementById("chevron-icon");
-    const sortOptions = document.querySelectorAll(".sort-option");
+    let openDropdowns = [];
 
-    // Set initial label from active option (if any)
-    const initialActive = document.querySelector(".sort-option.active");
-    if (initialActive) {
-        sortLabel.textContent = initialActive.querySelector("span").textContent.trim();
-    }
-
-    // Toggle dropdown
-    if (sortButton) {
-        sortButton.addEventListener("click", e => {
-            e.stopPropagation();
-            const willBeOpen = sortMenu.classList.toggle("hidden");
-            chevron.classList.toggle("rotate-180", !willBeOpen);
-            sortButton.setAttribute("aria-expanded", !willBeOpen);
+    function closeAllDropdowns(exceptId = null) {
+        openDropdowns.forEach(dropdownId => {
+            if (dropdownId !== exceptId) {
+                const menu = document.getElementById(dropdownId);
+                const button = document.querySelector(`[aria-controls="${dropdownId}"]`) || 
+                               document.querySelector(`[aria-labelledby="${dropdownId}"]`)?.previousElementSibling;
+                const chevron = button?.querySelector('.transition-transform');
+                
+                if (menu) {
+                    menu.classList.add("hidden");
+                }
+                if (chevron) {
+                    chevron.classList.remove("rotate-180");
+                }
+                if (button) {
+                    button.setAttribute("aria-expanded", "false");
+                }
+            }
         });
-    }
-
-    // Click on sort option
-    sortOptions.forEach(option => {
-        option.addEventListener("click", () => {
-            // Update active state
-            sortOptions.forEach(opt => opt.classList.remove("active"));
-            option.classList.add("active");
-
-            // Update checkmarks
-            document.querySelectorAll(".checkmark").forEach(m => m.classList.add("opacity-0"));
-            option.querySelector(".checkmark").classList.remove("opacity-0");
-
-            // Update button label
-            sortLabel.textContent = option.querySelector("span").textContent.trim();
-
-            // Close menu
-            sortMenu.classList.add("hidden");
-            chevron.classList.remove("rotate-180");
-            sortButton.setAttribute("aria-expanded", "false");
-
-            // Apply sort + keep existing filters
-            applyFilters();
-        });
-    });
-
-    // Close sort dropdown when clicking outside
-    document.addEventListener("click", e => {
-        if (!sortButton?.contains(e.target) && !sortMenu?.contains(e.target)) {
-            sortMenu.classList.add("hidden");
-            chevron.classList.remove("rotate-180");
-            sortButton?.setAttribute("aria-expanded", "false");
+        
+        // Update openDropdowns array
+        if (exceptId) {
+            openDropdowns = [exceptId];
+        } else {
+            openDropdowns = [];
         }
-    });
+    }
 
-    // ESC key → close sort
-    document.addEventListener("keydown", e => {
-        if (e.key === "Escape" && !sortMenu.classList.contains("hidden")) {
-            sortMenu.classList.add("hidden");
-            chevron.classList.remove("rotate-180");
-            sortButton?.setAttribute("aria-expanded", "false");
-            sortButton?.focus();
+    // ──────────────────────────────────────────────
+    //  Generic Dropdown Handler Function
+    // ──────────────────────────────────────────────
+    function setupDropdown(dropdownId, menuId, buttonId, chevronId, labelId, optionClass) {
+        const dropdown = document.getElementById(dropdownId);
+        const menu = document.getElementById(menuId);
+        const button = document.getElementById(buttonId);
+        const chevron = document.getElementById(chevronId);
+        const label = document.getElementById(labelId);
+        const options = document.querySelectorAll(`.${optionClass}`);
+
+        // Set aria-controls for button to track dropdown
+        if (button && menuId) {
+            button.setAttribute('aria-controls', menuId);
+        }
+
+        // Set initial label from active option
+        const initialActive = document.querySelector(`.${optionClass}.active`);
+        if (initialActive && label) {
+            label.textContent = initialActive.querySelector("span").textContent.trim();
+        }
+
+        // Toggle dropdown
+        if (button) {
+            button.addEventListener("click", e => {
+                e.stopPropagation();
+                const isCurrentlyOpen = !menu.classList.contains("hidden");
+                
+                // Close all other dropdowns first
+                if (!isCurrentlyOpen) {
+                    closeAllDropdowns(menuId);
+                }
+                
+                // Toggle this dropdown
+                const willBeOpen = menu.classList.toggle("hidden");
+                if (chevron) chevron.classList.toggle("rotate-180", !willBeOpen);
+                button.setAttribute("aria-expanded", !willBeOpen);
+                
+                // Update tracking
+                if (!willBeOpen) {
+                    // Adding to open dropdowns
+                    if (!openDropdowns.includes(menuId)) {
+                        openDropdowns.push(menuId);
+                    }
+                } else {
+                    // Removing from open dropdowns
+                    openDropdowns = openDropdowns.filter(id => id !== menuId);
+                }
+            });
+        }
+
+        // Click on option
+        options.forEach(option => {
+            option.addEventListener("click", () => {
+                // Update active state
+                options.forEach(opt => opt.classList.remove("active"));
+                option.classList.add("active");
+
+                // Update checkmarks
+                option.parentElement.querySelectorAll(".checkmark").forEach(m => m.classList.add("opacity-0"));
+                option.querySelector(".checkmark").classList.remove("opacity-0");
+
+                // Update button label
+                if (label) {
+                    label.textContent = option.querySelector("span").textContent.trim();
+                }
+
+                // Close all dropdowns including this one
+                closeAllDropdowns();
+
+                // Apply filter
+                applyFilters();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", e => {
+            if (!button?.contains(e.target) && !menu?.contains(e.target)) {
+                menu.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-180");
+                button?.setAttribute("aria-expanded", "false");
+                
+                // Remove from open dropdowns
+                openDropdowns = openDropdowns.filter(id => id !== menuId);
+            }
+        });
+
+        // ESC key → close dropdown
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && !menu.classList.contains("hidden")) {
+                menu.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-180");
+                button?.setAttribute("aria-expanded", "false");
+                button?.focus();
+                
+                // Remove from open dropdowns
+                openDropdowns = openDropdowns.filter(id => id !== menuId);
+            }
+        });
+    }
+
+    // ──────────────────────────────────────────────
+    //  Initialize all dropdowns
+    // ──────────────────────────────────────────────
+    setupDropdown('filter-dropdown-button', 'filter-menu', 'filter-dropdown-button', 'filter-chevron', 'filter-label', 'filter-option');
+    setupDropdown('occasion-dropdown-button', 'occasion-menu', 'occasion-dropdown-button', 'occasion-chevron', 'occasion-label', 'occasion-option');
+    setupDropdown('collection-dropdown-button', 'collection-menu', 'collection-dropdown-button', 'collection-chevron', 'collection-label', 'collection-option');
+    setupDropdown('sort-button', 'sort-menu', 'sort-button', 'chevron-icon', 'sort-label', 'sort-option');
+
+    // ──────────────────────────────────────────────
+    //  Close all dropdowns when clicking anywhere outside
+    // ──────────────────────────────────────────────
+    document.addEventListener('click', function(e) {
+        // Check if click is outside any dropdown button or menu
+        const isClickInsideDropdown = 
+            e.target.closest('#filter-dropdown-button') ||
+            e.target.closest('#filter-menu') ||
+            e.target.closest('#occasion-dropdown-button') ||
+            e.target.closest('#occasion-menu') ||
+            e.target.closest('#collection-dropdown-button') ||
+            e.target.closest('#collection-menu') ||
+            e.target.closest('#sort-button') ||
+            e.target.closest('#sort-menu');
+        
+        if (!isClickInsideDropdown) {
+            closeAllDropdowns();
         }
     });
 
@@ -212,14 +313,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         accordions.forEach((wrapper, index) => {
-            const header  = wrapper.querySelector(".flex.justify-between.items-center");
+            const header = wrapper.querySelector(".flex.justify-between.items-center");
             const content = wrapper.querySelector(".accordion-content-block");
             const chevron = wrapper.querySelector(".accordion-chevron");
-            const border  = wrapper.querySelector(".line-border-block");
+            const border = wrapper.querySelector(".line-border-block");
 
             content.style.transition = "max-height 0.4s ease, padding-top 0.3s ease, padding-bottom 0.3s ease";
-            content.style.overflow   = "hidden";
-            border.style.transition  = "width 0.3s ease-in-out";
+            content.style.overflow = "hidden";
+            border.style.transition = "width 0.3s ease-in-out";
 
             // First accordion open by default
             if (index === 0) {
@@ -242,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (other !== wrapper && other.classList.contains("active")) {
                         const otherContent = other.querySelector(".accordion-content-block");
                         const otherChevron = other.querySelector(".accordion-chevron");
-                        const otherBorder  = other.querySelector(".line-border-block");
+                        const otherBorder = other.querySelector(".line-border-block");
                         other.classList.remove("active");
                         toggleContent(otherContent, false);
                         otherContent.style.opacity = "0";
@@ -279,4 +380,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Clear filters function for "No Products Found" section
+    window.clearFilters = function () {
+        document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
+        // Also reset dropdowns to "All"
+        document.querySelectorAll('.filter-option, .occasion-option, .collection-option, .sort-option').forEach(opt => {
+            opt.classList.remove('active');
+            if (opt.dataset.value === 'all' || opt.dataset.value === 'new-arrival' || opt.dataset.value === 'date-desc') {
+                opt.classList.add('active');
+                opt.querySelector(".checkmark")?.classList.remove("opacity-0");
+            } else {
+                opt.querySelector(".checkmark")?.classList.add("opacity-0");
+            }
+        });
+        window.location.href = window.location.pathname;
+    };
 });
