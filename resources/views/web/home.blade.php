@@ -744,20 +744,20 @@
             <!-- Left - Guarantee Info -->
             <div class="">
 
-            <div class="lgg:text-left text-center">
-                <div class="mb-6 ">
-                    <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Best Price Guarantee</h3>
+                <div class="lgg:text-left text-center">
+                    <div class="mb-6 ">
+                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Best Price Guarantee</h3>
 
+
+                    </div>
+
+
+                    <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
+                        We guarantee the lowest prices on premium fashion. If you find it cheaper elsewhere within 30 days, we'll match or beat it.
+                    </p>
 
                 </div>
 
-
-                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
-                    We guarantee the lowest prices on premium fashion. If you find it cheaper elsewhere within 30 days, we'll match or beat it.
-                </p>
-
-            </div>
-                
 
                 <ul class=" text-gray-700 flex flex-col gap-3 lgg:items-start items-center justify-center">
                     <li class="flex items-center">
@@ -792,13 +792,13 @@
                     </div>
 
                     <!-- Product 1 - Large & Centered (Parallelogram Shape) -->
-                    
+
 
                     <!-- Product 2 - Top Right (Rhombus Shape) -->
                     <div class="absolute top-0 right-8 w-36 h-36 transform rotate-12 hover:-rotate-6 transition-transform duration-500 cursor-pointer group z-10">
                         <div class="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-pink-500/10 rounded-xl"></div>
                         <img
-                           src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+                            src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
                             alt="Saree Collection"
                             class="w-full h-full object-cover object-top  rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300">
                         <div class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
@@ -833,7 +833,7 @@
                     <div class="absolute bottom-4 right-0 w-32 h-32 rounded-full overflow-hidden border-4 border-white hover:border-secondary transition-all duration-300 cursor-pointer group z-10 shadow-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-secondary/10 to-pink-600/10"></div>
                         <img
-                           src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}"
+                            src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}"
                             alt="Kurta Set"
                             class="w-full h-full object-cover object-top  group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -879,7 +879,7 @@
                 <h3 class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">Exclusive Deals Just for You</h3>
                 <button class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
-                    Shop Deals Now 
+                    Shop Deals Now
                 </button>
 
 

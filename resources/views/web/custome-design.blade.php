@@ -202,407 +202,9 @@
     </div>
 </section>
 
-<!-- Design Process Steps -->
-<section id="design-process" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Your Custom Design Journey
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Follow our 5-step process to create your perfect outfit from concept to creation
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Step 1 -->
-            <div class="design-process-step bg-gradient-to-br from-white to-pink-50 p-8 rounded-2xl shadow-lg border border-pink-100">
-                <div class="mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-pink-100 to-purple-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">1. Concept Consultation</h3>
-                    <p class="text-gray-600">Share your vision, occasion, and style preferences with our design team via video call or in-person meeting.</p>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Style preference discussion</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Occasion analysis</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Color palette selection</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Step 2 -->
-            <div class="design-process-step bg-gradient-to-br from-white to-purple-50 p-8 rounded-2xl shadow-lg border border-purple-100">
-                <div class="mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">2. Measurement Session</h3>
-                    <p class="text-gray-600">Our expert tailors take 25+ precise measurements for perfect fit, either in-person or via our virtual guide.</p>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">25+ precise measurements</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Fit preference analysis</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Posture assessment</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Step 3 -->
-            <div class="design-process-step bg-gradient-to-br from-white to-blue-50 p-8 rounded-2xl shadow-lg border border-blue-100">
-                <div class="mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">3. Design Sketching</h3>
-                    <p class="text-gray-600">Our designers create multiple sketches and digital mockups for your review and approval.</p>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Multiple design options</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Digital mockups</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Revision cycles</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Step 4 -->
-            <div class="design-process-step bg-gradient-to-br from-white to-emerald-50 p-8 rounded-2xl shadow-lg border border-emerald-100">
-                <div class="mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-emerald-100 to-green-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">4. Fabric & Embellishment</h3>
-                    <p class="text-gray-600">Select from 500+ fabrics, 1000+ embroidery patterns, and custom embellishments.</p>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Premium fabric library</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Custom embroidery</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Hand-selected embellishments</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Step 5 -->
-            <div class="design-process-step bg-gradient-to-br from-white to-amber-50 p-8 rounded-2xl shadow-lg border border-amber-100">
-                <div class="mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">5. Final Fitting & Delivery</h3>
-                    <p class="text-gray-600">Complete fittings with adjustments and final delivery of your perfect custom outfit.</p>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Professional fittings</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Final adjustments</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        <span class="text-sm text-gray-700">Premium packaging</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- CTA Card -->
-            <div class="lg:col-span-3 bg-gradient-to-r from-pink-600 to-purple-600 p-8 rounded-2xl shadow-xl">
-                <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
-                    <div class="text-white">
-                        <h3 class="text-2xl font-bold mb-2">Ready to Start Your Design?</h3>
-                        <p class="text-pink-100">Book a free 30-minute consultation with our lead designer</p>
-                    </div>
-                    <button onclick="openDesignModal()" 
-                            class="px-8 py-3 bg-white text-pink-600 font-bold rounded-full hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                        Book Free Consultation
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Meet Our Designers -->
-<section id="meet-designers" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Master Designers
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Meet the talented artisans who bring your vision to life with decades of combined experience
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Designer 1 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer1.jpg') }}" 
-                         alt="Aisha Khan"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            15+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Aisha Khan</h3>
-                            <p class="text-pink-600 font-medium">Lead Bridal Designer</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-pink-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-purple-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Specializes in traditional Indian bridal wear with modern interpretations. Expert in zardozi and silk work.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bridal Lehengas</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Zardozi Work</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Silk Sarees</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">250+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">150+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">12</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-pink-50 text-pink-600 font-semibold rounded-lg hover:bg-pink-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Designer 2 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer2.jpg') }}" 
-                         alt="Rahul Verma"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            12+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Rahul Verma</h3>
-                            <p class="text-blue-600 font-medium">Menswear Specialist</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-cyan-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Modern menswear designer focusing on fusion wear. Expert in sherwanis, bandhgalas, and contemporary suits.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Sherwanis</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bandhgalas</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Fusion Wear</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">180+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">120+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">8</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Designer 3 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer3.jpg') }}" 
-                         alt="Priya Sharma"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            8+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Priya Sharma</h3>
-                            <p class="text-emerald-600 font-medium">Contemporary Fusion Expert</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-green-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Specializes in Indo-western fusion wear. Creates modern silhouettes with traditional Indian elements.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Indo-Western</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Cocktail Wear</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Modern Sarees</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">200+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">100+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">6</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- View All Designers Button -->
-        <div class="text-center mt-12">
-            <a href="#" class="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-full hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
-                View All Designers
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-            </a>
-        </div>
-    </div>
-</section>
+
+
 
 <!-- Interactive Design Studio -->
 <section class="py-16 bg-white">
@@ -931,271 +533,243 @@
     </div>
 </section>
 
-<!-- Client Testimonials -->
-<section class="py-16 bg-white">
+<!-- Meet Our Designers -->
+<section id="meet-designers" class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Client Success Stories
+                Master Designers
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                See what our clients say about their custom design experience
+                Meet the talented artisans who bring your vision to life with decades of combined experience
             </p>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Testimonial 1 -->
-            <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 shadow-lg border border-pink-100">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Sarah Mehta"
-                         class="w-16 h-16 rounded-full object-cover border-4 border-white shadow">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Sarah Mehta</h4>
-                        <p class="text-sm text-gray-500">Wedding Lehenga</p>
-                        <div class="flex mt-1">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
+            <!-- Designer 1 -->
+            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
+                <div class="relative overflow-hidden">
+                    <img src="{{ asset('web/images/designers/designer1.jpg') }}" 
+                         alt="Aisha Khan"
+                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <!-- Designer Badge -->
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            15+ Years
+                        </span>
                     </div>
                 </div>
-                <p class="text-gray-700 italic mb-4">"Aisha created the most beautiful bridal lehenga for me. The attention to detail and custom embroidery was beyond my expectations!"</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-500">Aisha Khan</span>
-                    <span class="text-sm text-pink-600 font-medium">Completed in 30 days</span>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Aisha Khan</h3>
+                            <p class="text-pink-600 font-medium">Lead Bridal Designer</p>
+                        </div>
+                        <!-- Social Links -->
+                        <div class="flex gap-2">
+                            <a href="#" class="text-gray-400 hover:text-pink-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-purple-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4">Specializes in traditional Indian bridal wear with modern interpretations. Expert in zardozi and silk work.</p>
+                    
+                    <!-- Specializations -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bridal Lehengas</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Zardozi Work</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Silk Sarees</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">250+</div>
+                            <div class="text-xs text-gray-500">Designs</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">150+</div>
+                            <div class="text-xs text-gray-500">Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">12</div>
+                            <div class="text-xs text-gray-500">Awards</div>
+                        </div>
+                    </div>
+                    
+                    <!-- View Portfolio Button -->
+                    <a href="#" 
+                       class="mt-4 block text-center px-4 py-2 bg-pink-50 text-pink-600 font-semibold rounded-lg hover:bg-pink-100 transition-colors">
+                        View Portfolio
+                    </a>
                 </div>
             </div>
             
-            <!-- Testimonial 2 -->
-            <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg border border-blue-100">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Raj Malhotra"
-                         class="w-16 h-16 rounded-full object-cover border-4 border-white shadow">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Raj Malhotra</h4>
-                        <p class="text-sm text-gray-500">Wedding Sherwani</p>
-                        <div class="flex mt-1">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
+            <!-- Designer 2 -->
+            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
+                <div class="relative overflow-hidden">
+                    <img src="{{ asset('web/images/designers/designer2.jpg') }}" 
+                         alt="Rahul Verma"
+                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <!-- Designer Badge -->
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            12+ Years
+                        </span>
                     </div>
                 </div>
-                <p class="text-gray-700 italic mb-4">"Rahul designed a stunning sherwani that perfectly blended traditional and modern elements. The fit was impeccable!"</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-500">Rahul Verma</span>
-                    <span class="text-sm text-blue-600 font-medium">Completed in 25 days</span>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Rahul Verma</h3>
+                            <p class="text-blue-600 font-medium">Menswear Specialist</p>
+                        </div>
+                        <!-- Social Links -->
+                        <div class="flex gap-2">
+                            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-cyan-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4">Modern menswear designer focusing on fusion wear. Expert in sherwanis, bandhgalas, and contemporary suits.</p>
+                    
+                    <!-- Specializations -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Sherwanis</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bandhgalas</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Fusion Wear</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">180+</div>
+                            <div class="text-xs text-gray-500">Designs</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">120+</div>
+                            <div class="text-xs text-gray-500">Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">8</div>
+                            <div class="text-xs text-gray-500">Awards</div>
+                        </div>
+                    </div>
+                    
+                    <!-- View Portfolio Button -->
+                    <a href="#" 
+                       class="mt-4 block text-center px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors">
+                        View Portfolio
+                    </a>
                 </div>
             </div>
             
-            <!-- Testimonial 3 -->
-            <div class="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 shadow-lg border border-emerald-100">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Neha Gupta"
-                         class="w-16 h-16 rounded-full object-cover border-4 border-white shadow">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Neha Gupta</h4>
-                        <p class="text-sm text-gray-500">Cocktail Gown</p>
-                        <div class="flex mt-1">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
+            <!-- Designer 3 -->
+            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
+                <div class="relative overflow-hidden">
+                    <img src="{{ asset('web/images/designers/designer3.jpg') }}" 
+                         alt="Priya Sharma"
+                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <!-- Designer Badge -->
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            8+ Years
+                        </span>
                     </div>
                 </div>
-                <p class="text-gray-700 italic mb-4">"Priya created a stunning Indo-western gown for my sister's wedding. Everyone asked where I got it from!"</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-500">Priya Sharma</span>
-                    <span class="text-sm text-emerald-600 font-medium">Completed in 20 days</span>
+                
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Priya Sharma</h3>
+                            <p class="text-emerald-600 font-medium">Contemporary Fusion Expert</p>
+                        </div>
+                        <!-- Social Links -->
+                        <div class="flex gap-2">
+                            <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-green-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4">Specializes in Indo-western fusion wear. Creates modern silhouettes with traditional Indian elements.</p>
+                    
+                    <!-- Specializations -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Indo-Western</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Cocktail Wear</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Modern Sarees</span>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">200+</div>
+                            <div class="text-xs text-gray-500">Designs</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">100+</div>
+                            <div class="text-xs text-gray-500">Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900">6</div>
+                            <div class="text-xs text-gray-500">Awards</div>
+                        </div>
+                    </div>
+                    
+                    <!-- View Portfolio Button -->
+                    <a href="#" 
+                       class="mt-4 block text-center px-4 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors">
+                        View Portfolio
+                    </a>
                 </div>
             </div>
+        </div>
+        
+        <!-- View All Designers Button -->
+        <div class="text-center mt-12">
+            <a href="#" class="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-full hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
+                View All Designers
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Timeline & Process -->
-<section class="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Our Design Timeline
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                From consultation to delivery - transparent process with clear timelines
-            </p>
-        </div>
-        
-        <div class="max-w-4xl mx-auto">
-            <!-- Timeline Step 1 -->
-            <div class="timeline-step mb-12">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 1-3
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">Initial Consultation & Measurements</h3>
-                    </div>
-                    <p class="text-gray-600">Deep dive into your requirements and precise measurements</p>
-                </div>
-            </div>
-            
-            <!-- Timeline Step 2 -->
-            <div class="timeline-step mb-12">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 4-7
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">Design Sketches & Mockups</h3>
-                    </div>
-                    <p class="text-gray-600">Multiple design options presented for approval</p>
-                </div>
-            </div>
-            
-            <!-- Timeline Step 3 -->
-            <div class="timeline-step mb-12">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 8-14
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">Fabric Selection & Pattern Making</h3>
-                    </div>
-                    <p class="text-gray-600">Master pattern creation based on approved design</p>
-                </div>
-            </div>
-            
-            <!-- Timeline Step 4 -->
-            <div class="timeline-step mb-12">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-amber-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 15-25
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">Stitching & Embellishments</h3>
-                    </div>
-                    <p class="text-gray-600">Hand-stitching and custom embroidery work</p>
-                </div>
-            </div>
-            
-            <!-- Timeline Step 5 -->
-            <div class="timeline-step mb-12">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-amber-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 26-28
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">First Fitting & Adjustments</h3>
-                    </div>
-                    <p class="text-gray-600">Detailed fitting session with necessary adjustments</p>
-                </div>
-            </div>
-            
-            <!-- Timeline Step 6 -->
-            <div class="timeline-step last:mb-0">
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center text-white font-bold">
-                            Day 29-30
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900">Final Delivery</h3>
-                    </div>
-                    <p class="text-gray-600">Premium packaging and express delivery</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- FAQ Section -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Frequently Asked Questions
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Everything you need to know about our custom design process
-            </p>
-        </div>
-        
-        <div class="max-w-3xl mx-auto space-y-4">
-            <!-- FAQ 1 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">How long does the custom design process take?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">Typically 4-6 weeks from initial consultation to final delivery. Rush orders are available at an additional cost for delivery within 2-3 weeks.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 2 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">What if I need alterations after delivery?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">We offer free alterations within 30 days of delivery for all custom designs. For alterations beyond 30 days, nominal charges may apply.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 3 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Can I see fabric samples before deciding?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">Yes! We provide fabric swatch kits for Rs. 500 (deductible from your final purchase). You can also visit our studio to see and feel all fabrics in person.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 4 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">How do virtual consultations work?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">We use video calls with augmented reality tools to help visualize designs on you virtually. We'll guide you through taking measurements at home and send you fabric samples.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 5 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">What is your pricing structure?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">Pricing starts at Rs. 15,000 and varies based on fabric selection, embellishments, embroidery complexity, and design intricacy. We provide detailed quotes after the initial consultation.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Final CTA -->
 <section class="py-16 bg-gradient-to-r from-pink-600 to-purple-600">
@@ -1633,63 +1207,7 @@
     }
 </style>
 
-<!-- Hero Section -->
-<section class="relative overflow-hidden gradient-bg py-16 lg:py-24">
-    <!-- Animated background elements -->
-    <div class="absolute inset-0">
-        <div class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
-        <div class="absolute top-1/2 left-1/2 w-48 h-48 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-    </div>
-    
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="text-white text-sm font-medium">LIVE NOW</span>
-            </div>
-            
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                Live <span class="text-pink-200">Video Shopping</span>
-            </h1>
-            
-            <p class="text-xl text-pink-100 mb-8 max-w-3xl mx-auto">
-                Connect with expert stylists in real-time. Try outfits virtually, get personalized recommendations, and shop directly during your session.
-            </p>
-            
-            <div class="flex flex-wrap gap-4 justify-center">
-                <a href="#book-now" 
-                   class="px-8 py-3 bg-white text-pink-600 font-bold rounded-full hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
-                    Book Your Session
-                </a>
-                <a href="#how-it-works" 
-                   class="px-8 py-3 glass-effect text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300">
-                    How It Works
-                </a>
-            </div>
-        </div>
-        
-        <!-- Stats -->
-        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div class="text-center glass-effect rounded-2xl p-6">
-                <div class="text-3xl font-bold text-white">5000+</div>
-                <div class="text-pink-200">Live Sessions</div>
-            </div>
-            <div class="text-center glass-effect rounded-2xl p-6">
-                <div class="text-3xl font-bold text-white">4.9⭐</div>
-                <div class="text-pink-200">Customer Rating</div>
-            </div>
-            <div class="text-center glass-effect rounded-2xl p-6">
-                <div class="text-3xl font-bold text-white">30min</div>
-                <div class="text-pink-200">Average Session</div>
-            </div>
-            <div class="text-center glass-effect rounded-2xl p-6">
-                <div class="text-3xl font-bold text-white">98%</div>
-                <div class="text-pink-200">Satisfaction Rate</div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- How It Works -->
 <section id="how-it-works" class="py-16 bg-white">
