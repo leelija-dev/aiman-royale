@@ -164,7 +164,8 @@
           </button>
           <button
             id="wishlist-btn"
-            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition">
+            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
+            onclick="toggleWishlist({{ $product->id }}, event)">
             <i class="far fa-heart"></i>
           </button>
         </div>
@@ -959,6 +960,9 @@ document.addEventListener('DOMContentLoaded', function() {
             checkVariantInCart(initialVariantId);
         }
     }
+    
+    // Check if product is already in wishlist
+    checkProductInWishlist({{ $product->id }});
 });
 
 
@@ -985,6 +989,112 @@ function checkVariantInCart(variantId) {
     .catch(error => {
         console.error('Error checking cart:', error);
     });
+}
+
+// Check if product is in wishlist and update button
+function checkProductInWishlist(productId) {
+    if (!productId) return;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/wishlist/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateWishlistButton(data.in_wishlist);
+    })
+    .catch(error => {
+        console.error('Error checking wishlist:', error);
+    });
+}
+
+// Update wishlist button based on wishlist status
+function updateWishlistButton(inWishlist) {
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    if (!wishlistBtn) return;
+    
+    if (inWishlist) {
+        wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+        wishlistBtn.classList.add('border-red-500', 'text-red-500');
+        wishlistBtn.classList.remove('border-gray-300');
+    } else {
+        wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
+        wishlistBtn.classList.remove('border-red-500', 'text-red-500');
+        wishlistBtn.classList.add('border-gray-300');
+    }
+}
+
+// Toggle wishlist
+function toggleWishlist(productId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    if (!productId) {
+        alert('Product ID not found');
+        return;
+    }
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    const isInWishlist = wishlistBtn.classList.contains('text-red-500');
+    
+    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+    
+    // Show loading state
+    const originalContent = wishlistBtn.innerHTML;
+    wishlistBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    wishlistBtn.disabled = true;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message, 'success');
+            updateWishlistButton(!isInWishlist);
+            
+            // Update wishlist count if you have a counter
+            if (data.wishlist_count !== undefined) {
+                updateWishlistCount(data.wishlist_count);
+            }
+        } else {
+            showNotification(data.message || 'Failed to update wishlist', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while updating wishlist', 'error');
+    })
+    .finally(() => {
+        wishlistBtn.disabled = false;
+    });
+}
+
+// Update wishlist count (if you have a counter)
+function updateWishlistCount(count) {
+    // Update your wishlist counter element here
+    const wishlistCounter = document.getElementById('wishlist-counter');
+    if (wishlistCounter) {
+        wishlistCounter.textContent = count;
+    }
 }
 
 // Update add to cart button based on cart status

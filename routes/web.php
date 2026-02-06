@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\SingleProductController;
 use App\Http\Controllers\Web\OccasionController;
+use App\Http\Controllers\Web\WishlistController;
 
 
 // use App\Http\Controllers\Web\PageController;
@@ -70,6 +71,12 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
     Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
+
+    // Wishlist Routes
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
     //Checkout route
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
