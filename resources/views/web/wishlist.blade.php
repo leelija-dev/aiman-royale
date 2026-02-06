@@ -201,17 +201,17 @@
                                 <i class="fas fa-sliders-h"></i>
                                 Filter
                             </button>
-                            <button
+                            <!-- <button
                                 class="px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium flex items-center gap-2">
                                 <i class="fas fa-shopping-cart"></i>
                                 Add All to Cart
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Collection Tabs -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                <!-- <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div class="flex flex-wrap gap-4 mb-6">
                         <button
                             class="collection-tab active px-4 py-2 text-gray-700 hover:text-purple-600 transition">
@@ -235,7 +235,6 @@
                         </button>
                     </div>
 
-                    <!-- Quick Filters -->
                     <div class="flex flex-wrap gap-2">
                         <button
                             class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">
@@ -258,13 +257,36 @@
                             Price: Low to High
                         </button>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Wishlist Items Grid -->
                 <div
                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <!-- Wishlist Item 1 -->
 
+                    @if($wishlistItems->isEmpty())
+                    <div class="col-span-full">
+                        <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+                            <div
+                                class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-heart text-purple-600 text-3xl"></i>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">
+                                Your wishlist is empty
+                            </h3>
+
+                            <p class="text-gray-600 mb-6">
+                                Start adding items you love to your wishlist
+                            </p>
+
+                            <a href="{{ url('/') }}"
+                                class="inline-block px-8 py-3 fashion-gradient text-white rounded-xl hover:shadow-lg transition font-medium">
+                                Start Shopping
+                            </a>
+                        </div>
+                    </div>
+                    @else
                     @foreach($wishlistItems as $wishlist)
 
                     <div
@@ -341,7 +363,7 @@
                         </div>
                     </div>
                     @endforeach
-
+                    @endif
                 </div>
 
                 <!-- Empty State (Hidden by default) -->
