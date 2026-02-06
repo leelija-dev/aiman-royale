@@ -165,7 +165,7 @@
           <button
             id="wishlist-btn"
             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
-            onclick="toggleWishlist({{ $product->id }}, event)">
+            onclick="toggleWishlist({{ $product->id }}, event);">
             <i class="far fa-heart"></i>
           </button>
         </div>

@@ -19,7 +19,6 @@ class WishlistController extends Controller
         $wishlistItems = Wishlist::with(['product.images', 'variant'])
             ->forCurrentUser()
             ->get();
-
         return view('web.wishlist', compact('wishlistItems'));
     }
 
