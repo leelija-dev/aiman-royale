@@ -896,9 +896,9 @@
 
             <div
                 class="lgg:absolute lgg:top-0 lgg:left-0 lgg:w-full lgg:flex lgg:justify-center lgg:items-center lgg:pointer-events-none">
-                <a href="/">
-                    <img class="xxs:h-[42px] xxs:max-h-max max-h-[40px] h-auto w-auto pointer-events-auto"
-                        src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}" alt="">
+                <a href="/" >
+                    <img class="xxs:h-[37px] xxs:max-h-max max-h-[35px] h-auto w-auto pointer-events-auto"
+                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.webp') }}" alt="">
                 </a>
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
@@ -1187,7 +1187,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b">
         <div class="flex items-center gap-3">
-            <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}"
+            <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-navbar-logo.webp') }}"
                 alt="Aiman Royal">
         </div>
         <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors">

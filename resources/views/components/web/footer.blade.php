@@ -122,14 +122,14 @@
     </div>
 
     <!-- Brand & Links Section -->
-    <div class="py-12 lg:py-16">
+    <div class="py-6 lg:py-8">
       <!-- Brand Logo -->
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12 lg:mb-16">
         <div class="mb-8 lg:mb-0">
           <div class="flex items-center gap-3 mb-4">
             <a href="/">
-              <img class="xxs:h-[60px] xxs:max-h-max max-h-[40px] h-auto w-auto pointer-events-auto"
-                src="{{ asset('web/images/company-logo/aiman-royal-logo.png') }}" alt="">
+              <img class="max-h-[100px] h-auto w-auto pointer-events-auto"
+                src="{{ asset('web/images/company-logo/aiman-footer-logo.webp') }}" alt="">
             </a>
           </div>
           <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed">
@@ -164,7 +164,7 @@
       </div>
 
       <!-- Links Section with Accordion -->
-      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6">
         <!-- Quick Links -->
         <div class="lg:col-span-1">
           <div class="accordion-header lg:cursor-default group" data-target="quick-links">
@@ -353,7 +353,7 @@
               </div>
               <div>
                 <p class="font-medium text-gray-900">Email Us</p>
-                <p class="text-sm text-gray-600 mt-1">support@aimanfashion.com</p>
+                <p class="text-sm text-gray-600 mt-1 break-all">support@aimanfashion.com</p>
               </div>
             </div>
           </div>
