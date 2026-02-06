@@ -23,15 +23,15 @@
     </div>
 
     <!-- Enhanced Header with Animation -->
-    <div class="relative text-center mb-3 md:mb-6">
+    <div class="relative text-center mb-0 px-2">
         <div class="inline-block mb-3">
-            <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-4"></div>
-            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+            <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[2px]"></div>
+            <!-- <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
                 Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
-            </h3>
-            <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
+            </h3> -->
+            <!-- <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
                 Curated styles for every occasion. Discover your perfect look.
-            </p>
+            </p> -->
         </div>
     </div>
 
@@ -45,10 +45,10 @@
 
             <!-- Category Items with Enhanced Cards -->
             <!-- Bestsellers -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                             alt="Bestsellers"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
@@ -60,10 +60,10 @@
             </a>
 
             <!-- Saree -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
                             alt="Saree"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
@@ -74,10 +74,10 @@
             </a>
 
             <!-- Salwar Kameez -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
                             alt="Salwar Kameez"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
@@ -88,10 +88,10 @@
             </a>
 
             <!-- Lehenga -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}"
                             alt="Lehenga"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
@@ -104,10 +104,10 @@
             </a>
 
             <!-- Indo Western -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
                             alt="Indo Western"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
@@ -118,13 +118,13 @@
             </a>
 
             <!-- Blouses -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
                             alt="Blouses"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
                     </div>
                 </div>
                 <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
@@ -132,13 +132,13 @@
             </a>
 
             <!-- Menswear -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
                             alt="Menswear"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
                     </div>
                 </div>
                 <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
@@ -146,13 +146,13 @@
             </a>
 
             <!-- Bridal Edit -->
-            <a href="/" class="group flex flex-col items-center min-w-[110px] sm:min-w-[130px] snap-center">
+            <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500"></div>
-                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
                             alt="Bridal Edit"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                 </div>
