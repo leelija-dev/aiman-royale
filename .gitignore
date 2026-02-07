@@ -23,5 +23,6 @@ yarn-error.log
 /.vscode
 /.zed
 /public/upload_image
+/public/uploads
 robots.txt
 /testsprite_tests
