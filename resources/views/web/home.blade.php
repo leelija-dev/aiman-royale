@@ -692,9 +692,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist({{ $product->id }}, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-{{ $product->id }}">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -1230,9 +1231,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist({{ $product->id }}, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-{{ $product->id }}">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -1561,9 +1563,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -1623,9 +1626,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -1685,9 +1689,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -1747,9 +1752,10 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
@@ -2231,6 +2237,142 @@
 
 <!-- Cart Functionality -->
 <script>
+    // Wishlist functionality
+    function toggleHomeWishlist(productId, event) {
+        console.log('toggleHomeWishlist called with productId:', productId);
+
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
+
+        console.log('Heart icon element:', heartIcon);
+
+        if (!heartIcon) {
+            console.error('Heart icon not found for product:', productId);
+            return;
+        }
+
+        // Check if already in wishlist by checking if it's an SVG (empty) or FontAwesome (filled)
+        const isSVG = heartIcon.tagName === 'svg';
+        const isInWishlist = isSVG ? false : heartIcon.classList.contains('fas');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+        console.log('Is SVG element:', isSVG);
+        console.log('Current wishlist state:', isInWishlist);
+        console.log('Calling URL:', url);
+
+        // Show loading state
+        const originalContent = heartIcon.innerHTML;
+        heartIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                product_id: productId
+            })
+        })
+        .then(response => {
+            console.log('Raw response:', response);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Parsed data:', data);
+            if (data.success) {
+                showNotification(data.message, 'success');
+                
+                // Update heart icon using innerHTML like single-product
+                if (isInWishlist) {
+                    // Was in wishlist, now removed
+                    heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
+                } else {
+                    // Was not in wishlist, now added
+                    heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                }
+                
+                // Update wishlist count if you have a counter
+                if (data.wishlist_count !== undefined) {
+                    updateWishlistCount(data.wishlist_count);
+                }
+            } else {
+                // Handle case where product is already in wishlist
+                if (data.message && data.message.includes('already in wishlist')) {
+                    showNotification('Product is already in wishlist!', 'info');
+                    // Don't change the heart icon if already in wishlist
+                    if (isSVG && !isInWishlist) {
+                        heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                    }
+                } else {
+                    showNotification(data.message || 'Failed to update wishlist', 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            showNotification('An error occurred while updating wishlist', 'error');
+        })
+        .finally(() => {
+            // Restore original content if error occurred
+            if (heartIcon.innerHTML.includes('fa-spinner')) {
+                heartIcon.innerHTML = originalContent;
+            }
+        });
+    }
+    
+    // Check if product is in wishlist
+    function checkHomeProductWishlist(productId) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
+        
+        if (!heartIcon) return;
+        
+        fetch('/wishlist/check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                product_id: productId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Wishlist check response:', data);
+            const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
+            if (heartIcon) {
+                if (data.in_wishlist) {
+                    heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                } else {
+                    heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error checking wishlist:', error);
+        });
+    }
+    
+    // Update wishlist count (if you have a counter)
+    function updateWishlistCount(count) {
+        const wishlistCounter = document.getElementById('wishlist-counter');
+        if (wishlistCounter) {
+            wishlistCounter.textContent = count;
+        }
+    }
+    
     function addToCart(variantId, event) {
         // Show loading state
         const button = event.target;
