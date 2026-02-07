@@ -16,7 +16,7 @@
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
         <!-- Show "Read more" when closed, "Show less" when open -->
         <span class="group-open:hidden">Read more about Aiman Royale</span>
-        <span class="hidden absolute -bottom-9 right-0 group-open:inline">Show less</span>
+        <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline">Show less</span>
         
       </summary>
 
