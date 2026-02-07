@@ -1,5 +1,5 @@
 <section class="w-full bg-white py-12 lg:py-20">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Main Heading -->
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
@@ -7,7 +7,7 @@
     </h2>
 
     <!-- Intro Paragraph (Always Visible) -->
-    <p class="mb-6 leading-relaxed text-base md:text-lg">
+    <p class="mb-3 leading-relaxed text-base md:text-lg">
       Founded in 2007 in New Delhi, Aiman Royale embodies timeless elegance with a contemporary vision. Our brand celebrates the rich heritage of Indian craftsmanship while embracing modern aesthetics. Specializing in exquisite women's ethnic wear including designer sarees, lehengas, salwar suits, palazzo sets, and fusion ensembles, we bring you premium collections that blend tradition with contemporary style...
     </p>
 
@@ -16,10 +16,8 @@
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
         <!-- Show "Read more" when closed, "Show less" when open -->
         <span class="group-open:hidden">Read more about Aiman Royale</span>
-        <span class="hidden group-open:inline">Show less</span>
-        <svg class="w-4 h-4 transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
+        <span class="hidden absolute -bottom-9 right-0 group-open:inline">Show less</span>
+        
       </summary>
 
       <div class="mt-4 space-y-6">
