@@ -209,22 +209,22 @@
     <!-- Brand & Links Section -->
     <div class="py-6 lg:py-8">
       <!-- Brand Logo -->
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12 lg:mb-16">
+      <div class="flex flex-col lgg:flex-row lgg:items-center lgg:justify-between mb-12 lgg:mb-16">
         <div class="mb-8 lg:mb-0">
-          <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center gap-3 mb-4 md:justify-start justify-center">
             <a href="/">
               <img class="max-h-[100px] h-auto w-auto pointer-events-auto"
                 src="{{ asset('web/images/company-logo/aiman-footer.webp') }}" alt="">
             </a>
           </div>
-          <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed">
+          <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed md:mx-0 mx-auto md:text-left text-center">
             We are a fashion brand that offers the best of contemporary, ethnic Indian fashion,
             and fusion-wear styles. Redefining elegance with every stitch.
           </p>
         </div>
 
         <!-- Social Media Icons -->
-        <div class="flex gap-4">
+        <div class="flex gap-4 lgg:justify-end md:justify-start justify-center items-center">
           <a href="#" class="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-[#EC4899]/30 flex items-center justify-center hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all duration-300 group">
             <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
