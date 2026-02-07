@@ -1,3 +1,90 @@
+<section class="w-full bg-white py-12 lg:py-20">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800">
+
+    <!-- Main Heading -->
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+      Aiman Royale - Buy Premium Traditional Indian Clothing and Ethnic Wear Online in India
+    </h2>
+
+    <!-- Intro Paragraph (Always Visible) -->
+    <p class="mb-6 leading-relaxed text-base md:text-lg">
+      Founded in 2007 in New Delhi, Aiman Royale embodies timeless elegance with a contemporary vision. Our brand celebrates the rich heritage of Indian craftsmanship while embracing modern aesthetics. Specializing in exquisite women's ethnic wear including designer sarees, lehengas, salwar suits, palazzo sets, and fusion ensembles, we bring you premium collections that blend tradition with contemporary style...
+    </p>
+
+    <!-- Expandable Details Section -->
+    <details class="mt-2 group">
+      <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
+        <!-- Show "Read more" when closed, "Show less" when open -->
+        <span class="group-open:hidden">Read more about Aiman Royale</span>
+        <span class="hidden group-open:inline">Show less</span>
+        <svg class="w-4 h-4 transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </summary>
+
+      <div class="mt-4 space-y-6">
+        <!-- Continued Intro Content -->
+        <p class="leading-relaxed text-base md:text-lg">
+          Aiman Royale has gained recognition for its impeccable craftsmanship and attention to detail. Each piece in our collection features intricate embroidery, luxurious fabrics, and contemporary silhouettes that redefine ethnic fashion. From bridal lehengas that make every bride feel like royalty to ready-to-wear sarees for modern women on-the-go, our designs cater to diverse tastes while maintaining the essence of Indian tradition.
+        </p>
+
+        <!-- Subheading -->
+        <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
+          Premium Ethnic Wear Collection for Women
+        </h3>
+
+        <p class="leading-relaxed text-base md:text-lg">
+          At Aiman Royale, we understand that today's woman seeks clothing that reflects her personality while honoring her cultural roots. Our collection includes:
+        </p>
+
+        <ul class="list-disc pl-6 space-y-3 text-base md:text-lg leading-relaxed">
+          <li><span class="font-medium">Designer Sarees:</span> Silk, Georgette, Chiffon, and Banarasi sarees with contemporary blouse designs</li>
+          <li><span class="font-medium">Lehenga Cholis:</span> Bridal and festive lehengas with intricate embroidery and modern cuts</li>
+          <li><span class="font-medium">Salwar Suits:</span> Anarkalis, straight-cut suits, and fusion styles for everyday elegance</li>
+          <li><span class="font-medium">Palazzo Sets:</span> Comfortable yet stylish ensembles perfect for modern occasions</li>
+          <li><span class="font-medium">Indo-Western Fusion:</span> Contemporary takes on traditional silhouettes</li>
+        </ul>
+
+        <!-- Subheading -->
+        <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
+          Why Choose Aiman Royale for Your Ethnic Wardrobe?
+        </h3>
+
+        <p class="leading-relaxed text-base md:text-lg">
+          In an era where fast fashion dominates, Aiman Royale stands apart by offering heirloom-quality pieces that celebrate India's textile heritage. Our commitment to quality ensures that every garment:
+        </p>
+
+        <!-- Bullet Points -->
+        <ul class="list-disc pl-6 space-y-4 text-base md:text-lg leading-relaxed mb-4">
+          <li>
+            Features authentic craftsmanship by skilled artisans from across India, preserving traditional techniques while incorporating modern design elements
+          </li>
+          <li>
+            Uses premium fabrics including pure silks, organic cottons, and luxurious blends that ensure comfort without compromising on elegance
+          </li>
+          <li>
+            Offers versatile styling options - our pieces transition seamlessly from formal weddings to casual gatherings with simple accessory changes
+          </li>
+          <li>
+            Provides perfect fits with our tailored sizing options and customization services for special occasions
+          </li>
+          <li>
+            Delivers exceptional value through timeless designs that remain fashionable season after season
+          </li>
+        </ul>
+
+        <!-- Closing Paragraph -->
+        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+          <p class="leading-relaxed text-base md:text-lg text-gray-700">
+            Whether you're preparing for your wedding day, attending a festive celebration, or seeking elegant everyday ethnic wear, Aiman Royale offers curated collections that blend tradition with contemporary style. Experience the perfect harmony of heritage and modernity with every piece from our collection.
+          </p>
+        </div>
+      </div>
+    </details>
+
+  </div>
+</section>
+
 <footer class="bg-gradient-to-b from-[#FCE7F3] to-[#FCE7F3]/80">
   <div class="container mx-auto px-4 lg:px-8 pt-6">
 
@@ -129,7 +216,7 @@
           <div class="flex items-center gap-3 mb-4">
             <a href="/">
               <img class="max-h-[100px] h-auto w-auto pointer-events-auto"
-                src="{{ asset('web/images/company-logo/aiman-footer-logo.webp') }}" alt="">
+                src="{{ asset('web/images/company-logo/aiman-footer.webp') }}" alt="">
             </a>
           </div>
           <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed">
