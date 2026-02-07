@@ -297,7 +297,7 @@
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <h2
-                class="text-3xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-purple-900 to-pink-900 bg-clip-text text-transparent">
+                class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl  font-bold mb-4 bg-gradient-to-r from-secondary via-primary to-secondary-light bg-clip-text text-transparent">
                 Shop By Category
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
