@@ -736,10 +736,10 @@
     </div>
 </section>
 
-<section class="w-full  py-16 md:py-20 lg:py-24 px-4">
+<section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto lgg:py-12 lgg:px-12 py-12  px-4 relative rounded-[10px] overflow-hidden">
         <span class="absolute z-[1] top-[8px] right-[30px] text-secondary/30 text-[100px]">%</span>
-        <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-50 z-[-1]"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-100 z-[-1]"></div>
         <div class="grid lgg:grid-cols-3 lgg:gap-4 gap-8 xl:gap-16 items-center">
 
             <!-- Left - Guarantee Info -->

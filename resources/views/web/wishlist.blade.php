@@ -11,6 +11,7 @@
 <style>
     body {
         font-family: "Inter", sans-serif;
+        background-color: #F9FAFB;
     }
 
     .fashion-gradient {
@@ -95,92 +96,7 @@
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
             <div class="lg:w-1/4">
-                <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
-                    <!-- User Profile Summary -->
-                    <div class="text-center mb-8">
-                        <div class="relative inline-block mb-4">
-                            <div
-                                class="w-20 h-20 rounded-full fashion-gradient flex items-center justify-center text-white text-xl font-bold mx-auto">
-                                AJ
-                            </div>
-                        </div>
-                        <h2 class="text-lg font-bold text-gray-900">Alex Johnson</h2>
-                        <p class="text-gray-600 text-sm">Fashion Enthusiast</p>
-                    </div>
-
-                    <!-- Navigation Menu -->
-                    <nav class="space-y-2">
-                        <a
-                            href="profile.html"
-                            class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                            <i class="fas fa-user w-5 text-center"></i>
-                            <span>Profile Information</span>
-                        </a>
-                        <a
-                            href="orders.html"
-                            class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                            <i class="fas fa-shopping-bag w-5 text-center"></i>
-                            <span>Order History</span>
-                        </a>
-                        <a
-                            href="addresses.html"
-                            class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                            <i class="fas fa-map-marker-alt w-5 text-center"></i>
-                            <span>My Addresses</span>
-                        </a>
-                        <a
-                            href="wishlist.html"
-                            class="sidebar-item active flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                            <i class="fas fa-heart w-5 text-center"></i>
-                            <span>My Wishlist</span>
-                            <span
-                                class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">16</span>
-                        </a>
-                        <a
-                            href="#"
-                            class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                            <i class="fas fa-star w-5 text-center"></i>
-                            <span>Reviews</span>
-                        </a>
-                    </nav>
-
-                    <!-- Wishlist Stats -->
-                    <div class="mt-8 pt-6 border-t border-gray-200">
-                        <h3 class="font-medium text-gray-900 mb-4">Wishlist Summary</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Total Items</span>
-                                <span class="font-medium">16</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Collections</span>
-                                <span class="font-medium">4</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">On Sale</span>
-                                <span class="font-medium text-purple-600">5 items</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Total Value</span>
-                                <span class="font-medium">$1,247.50</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="mt-6">
-                        <button
-                            class="w-full py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium flex items-center justify-center gap-2 mb-3">
-                            <i class="fas fa-share"></i>
-                            Share Wishlist
-                        </button>
-                        <button
-                            class="w-full py-3 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition font-medium flex items-center justify-center gap-2">
-                            <i class="fas fa-plus"></i>
-                            Create New Collection
-                        </button>
-                    </div>
-                </div>
+               <x-web.profile-sidebar />
             </div>
 
             <!-- Main Content -->
@@ -411,5 +327,170 @@
         </div>
     </div>
 </section>
+
+
+
+@endsection
+
+@section('scripts')
+<script>
+        // Wishlist functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Collection tabs
+            const collectionTabs = document.querySelectorAll('.collection-tab');
+            collectionTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    collectionTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const collectionName = this.textContent;
+                    showNotification(`Showing ${collectionName}`);
+                });
+            });
+
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.bg-gray-100.text-gray-700.rounded-xl');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active state from all buttons
+                    document.querySelectorAll('.bg-gray-100.text-gray-700.rounded-xl, .filter-active').forEach(btn => {
+                        btn.classList.remove('filter-active');
+                        btn.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    // Add active state to clicked button
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('filter-active');
+                    
+                    const filterText = this.textContent.trim();
+                    showNotification(`Filtering by: ${filterText}`);
+                });
+            });
+
+            // Remove from wishlist
+            const removeButtons = document.querySelectorAll('.w-10.h-10.bg-white.rounded-full');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    
+                    // Animation for removal
+                    productCard.style.opacity = '0';
+                    productCard.style.transform = 'scale(0.9)';
+                    
+                    setTimeout(() => {
+                        productCard.remove();
+                        showNotification(`${productName} removed from wishlist`, 'success');
+                        
+                        // Check if wishlist is empty
+                        const remainingItems = document.querySelectorAll('.product-card').length;
+                        if (remainingItems === 0) {
+                            document.querySelector('.grid').classList.add('hidden');
+                            document.querySelector('.hidden.bg-white').classList.remove('hidden');
+                        }
+                    }, 300);
+                });
+            });
+
+            // Add to cart buttons
+            const addToCartButtons = document.querySelectorAll('button:contains("Add to Cart")');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    showNotification(`${productName} added to cart!`, 'success');
+                });
+            });
+
+            // Notify me buttons
+            const notifyButtons = document.querySelectorAll('button:contains("Notify Me")');
+            notifyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    showNotification(`You'll be notified when ${productName} is back in stock`, 'info');
+                });
+            });
+
+            // Share wishlist
+            document.querySelector('button:contains("Share Wishlist")').addEventListener('click', function() {
+                showNotification('Wishlist sharing options would appear here', 'info');
+            });
+
+            // Create collection
+            document.querySelector('button:contains("Create New Collection")').addEventListener('click', function() {
+                showNotification('Collection creation modal would open here', 'info');
+            });
+
+            // Add all to cart
+            document.querySelector('button:contains("Add All to Cart")').addEventListener('click', function() {
+                const inStockItems = document.querySelectorAll('.product-card:not(.out-of-stock)');
+                showNotification(`${inStockItems.length} items added to cart!`, 'success');
+            });
+
+            // Filter button
+            document.querySelector('button:contains("Filter")').addEventListener('click', function() {
+                showNotification('Advanced filter options would appear here', 'info');
+            });
+        });
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.custom-notification');
+            existingNotifications.forEach(notification => {
+                document.body.removeChild(notification);
+            });
+
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `custom-notification fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 ${
+                type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' : 
+                type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+                'bg-blue-50 text-blue-800 border border-blue-200'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fas ${
+                        type === 'error' ? 'fa-exclamation-circle text-red-500' : 
+                        type === 'success' ? 'fa-check-circle text-green-500' :
+                        'fa-info-circle text-blue-500'
+                    }"></i>
+                    <span class="font-medium">${message}</span>
+                    <button class="ml-4 text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 4000);
+        }
+
+        // Add contains polyfill for older browsers
+        if (!String.prototype.includes) {
+            String.prototype.includes = function(search, start) {
+                if (typeof start !== 'number') {
+                    start = 0;
+                }
+                if (start + search.length > this.length) {
+                    return false;
+                }
+                return this.indexOf(search, start) !== -1;
+            };
+        }
+    </script>
 
 @endsection

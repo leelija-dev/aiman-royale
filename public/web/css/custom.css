@@ -353,3 +353,7 @@ html::-webkit-scrollbar-corner {
   
 }
 
+.owl-stage-outer{
+  padding:20px 0 !important ;
+}
+
