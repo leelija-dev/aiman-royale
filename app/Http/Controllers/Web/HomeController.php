@@ -58,6 +58,7 @@ class HomeController extends Controller
                 'products.fit',
                 'products.status',
                 'products.is_featured',
+                'products.slug',
                 'products.created_at',
                 'product_variants.id as variant_id',
                 'product_variants.size',
@@ -215,6 +216,7 @@ class HomeController extends Controller
                     'category_id' => $product->category_id,
                     'ocassion_id' => $product->ocassion_id,
                     'name' => $product->name,
+                    'slug' => $product->slug,
                     'description' => $product->description,
                     'brand' => $product->brand,
                     'fabric' => $product->fabric,
@@ -270,19 +272,10 @@ class HomeController extends Controller
         return view('web.multi-product', compact('products', 'filterOptions', 'priceRange'));
     }
 
-    public function ShowSingleProduct($id)
+    public function ShowSingleProduct($slug)
     {
-        // dd($id);
-        $product = Product::with([
-            'variants' => function ($query) {
-                $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');
-            },
-            'images' => function ($query) {
-                $query->select('product_id', 'image');
-            }
-        ])
-            ->where('is_active', 1)
-            ->where('id', $id)
+        $product = Product::with(['images', 'variants'])
+            ->where('slug', $slug)
             ->firstOrFail();
 
         // dd($product);

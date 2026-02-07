@@ -860,7 +860,7 @@
         @if($products->count() > 0)
           @foreach($products as $product)
           <div class="item flex justify-center items-center">
-            <a href="/single-product/{{ $product['id'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
+            <a href="/products/{{ $product['slug'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
               <!-- Image Wrapper -->
               <div class="relative rounded-xl overflow-hidden">
                 <img

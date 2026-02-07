@@ -673,7 +673,7 @@
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                    onclick="window.location.href='{{ route('page.single-product', $product->id) }}';">
+                    onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"

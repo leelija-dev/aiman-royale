@@ -2092,7 +2092,7 @@
                 productElement.addEventListener('click', () => {
                     // Navigate to product detail page
                     if (product.id) {
-                        window.location.href = `/single-product/${product.id}`;
+                        window.location.href = `/products/${product.id}`;
                     } else {
                         // If no ID, perform search with product title
                         performComprehensiveSearch(product.title);

@@ -59,8 +59,8 @@ Route::middleware(['guest'])->group(function () {
         return 'Test route is working!';
     });
 
-    Route::get('/single-product/{id}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
-    Route::get('/all-product', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
+    Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
+    Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 
     // Auth Routes
     Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');

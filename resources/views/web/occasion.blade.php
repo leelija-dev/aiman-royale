@@ -23,7 +23,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($products as $product)
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                        <a href="{{ route('page.single-product', $product->id) }}" class="block aspect-square bg-gray-200 relative overflow-hidden">
+                        <a href="{{ route('page.single-product', $product->slug) }}" class="block aspect-square bg-gray-200 relative overflow-hidden">
                             @if($product->images->first())
                                 <img src="{{ asset($product->images->first()->image) }}" 
                                      alt="{{ $product->name }}" 
@@ -36,7 +36,7 @@
                         </a>
                         <div class="p-4">
                             <h3 class="font-semibold text-gray-800 mb-2">
-                                <a href="{{ route('page.single-product', $product->id) }}" class="hover:text-black transition-colors">
+                                <a href="{{ route('page.single-product', $product->slug) }}" class="hover:text-black transition-colors">
                                     {{ $product->name }}
                                 </a>
                             </h3>
