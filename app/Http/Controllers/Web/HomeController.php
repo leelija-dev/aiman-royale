@@ -77,10 +77,15 @@ class HomeController extends Controller
 
         $categories = Category::withCount('products')->get();
         $occasions = \App\Models\Occasion::active()->get();
+        $homeCategories = Category::where('is_home', 1)
+        ->whereNotNull('home_position')
+        ->get()
+        ->groupBy('home_position');
+
 
         $testimonials = [];
 
-        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions'));
+        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions','homeCategories'));
     }
 
     public function ShowAllProduct(Request $request)
