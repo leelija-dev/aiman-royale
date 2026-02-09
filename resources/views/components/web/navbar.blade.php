@@ -1997,24 +1997,42 @@
                 };
             }
 
-            // Filter categories
-            const filteredCategories = searchData.categories.filter(category =>
-                category.toLowerCase().includes(term)
-            ).slice(0, 3);
+            // Filter categories - exact word matching
+            const filteredCategories = searchData.categories.filter(category => {
+                const categoryLower = category.toLowerCase();
+                // Check if category starts with or contains the search term as a whole word
+                return categoryLower === term || 
+                       categoryLower.includes(' ' + term) || 
+                       categoryLower.startsWith(term) ||
+                       term.includes(' ' + categoryLower);
+            }).slice(0, 3);
 
-            // Filter trending searches
-            const filteredTrending = searchData.trending.filter(trend =>
-                trend.toLowerCase().includes(term)
-            ).slice(0, 7);
+            // Filter trending searches - exact word matching
+            const filteredTrending = searchData.trending.filter(trend => {
+                const trendLower = trend.toLowerCase();
+                // Check if trend starts with or contains the search term as a whole word
+                return trendLower === term || 
+                       trendLower.includes(' ' + term) || 
+                       trendLower.startsWith(term) ||
+                       term.includes(' ' + trendLower);
+            }).slice(0, 7);
 
-            // Filter products
+            // Filter products - more precise matching
             const filteredProducts = searchData.products.filter(product => {
-                // Search in title
-                if (product.title.toLowerCase().includes(term)) return true;
-
-                // Search in tags
-                if (product.tags.some(tag => tag.toLowerCase().includes(term))) return true;
-
+                const titleLower = product.title.toLowerCase();
+                
+                // Exact match or starts with search term
+                if (titleLower === term || titleLower.startsWith(term)) return true;
+                
+                // Contains search term as whole word (not partial)
+                const words = titleLower.split(' ');
+                for (let word of words) {
+                    if (word === term) return true;
+                }
+                
+                // Search in tags - exact matching
+                if (product.tags.some(tag => tag.toLowerCase() === term)) return true;
+                
                 return false;
             }).slice(0, 8);
 
@@ -2103,7 +2121,7 @@
 
             // Update view more link
             if (searchTerm) {
-                viewMore.href = `/collections?search=${encodeURIComponent(searchTerm)}`;
+                viewMore.href = `/products?search=${encodeURIComponent(searchTerm)}`;
                 viewMore.textContent = `View all results for "${searchTerm}" →`;
             } else {
                 viewMore.href = '#';
@@ -2390,7 +2408,7 @@
             function performComprehensiveSearch(searchTerm) {
                 // Navigate to all-product page with search parameter
                 // This will search across product names, categories, occasions, etc.
-                window.location.href = `/collections?search=${encodeURIComponent(searchTerm)}`;
+                window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
             }
 
             // Close search button (desktop)
