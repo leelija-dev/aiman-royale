@@ -1,3 +1,611 @@
+<div id="sizeGuideModal" class="fixed inset-0 bg-black/60 z-[30000] hidden items-start justify-center p-4 overflow-y-auto modal-overlay">
+  <div class="bg-white w-full container rounded-xl shadow-2xl relative modal-container my-8">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 sm:px-8 py-5 border-b gap-4">
+      <h2 class="text-xl sm:text-2xl font-bold">Size Guide</h2>
+
+      <div class="flex items-center gap-4 w-full sm:w-auto">
+        <!-- Unit Toggle -->
+        <div class="flex bg-gray-100 rounded-full p-1 text-sm font-medium flex-1 sm:flex-none">
+          <button class="px-3 sm:px-4 py-1.5 rounded-full bg-black text-white transition-all active:scale-95 unit-btn active" data-unit="inches">Inches</button>
+          <button class="px-3 sm:px-4 py-1.5 rounded-full text-gray-600 transition-all active:scale-95 unit-btn" data-unit="cm">cm</button>
+        </div>
+
+        <!-- Close Button -->
+        <button class="text-2xl text-gray-500 hover:text-black transition-colors close-btn">&times;</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="grid lg:grid-cols-2 gap-8 p-6 sm:p-8">
+
+      <!-- LEFT — SIZE TABLE -->
+      <div class="overflow-x-auto">
+        <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-gray-50 text-gray-700">
+              <tr>
+                <th class="p-3 border-b border-r min-w-[80px]">SIZE</th>
+                <th class="p-3 border-b border-r min-w-[80px]">Bust</th>
+                <th class="p-3 border-b border-r min-w-[80px]">Waist</th>
+                <th class="p-3 border-b border-r min-w-[80px]">Hip</th>
+                <th class="p-3 border-b border-r min-w-[80px]">Armhole</th>
+                <th class="p-3 border-b border-r min-w-[80px]">Size</th>
+                <th class="p-3 border-b min-w-[80px]">UK</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 0</td>
+                <td class="p-3 border-b border-r" data-inches="33" data-cm="83.8">33</td>
+                <td class="p-3 border-b border-r" data-inches="27" data-cm="68.6">27</td>
+                <td class="p-3 border-b border-r" data-inches="37" data-cm="94.0">37</td>
+                <td class="p-3 border-b border-r" data-inches="15" data-cm="38.1">15</td>
+                <td class="p-3 border-b border-r">XS</td>
+                <td class="p-3 border-b">4</td>
+              </tr>
+              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 2</td>
+                <td class="p-3 border-b border-r" data-inches="34" data-cm="86.4">34</td>
+                <td class="p-3 border-b border-r" data-inches="28" data-cm="71.1">28</td>
+                <td class="p-3 border-b border-r" data-inches="38.5" data-cm="97.8">38.5</td>
+                <td class="p-3 border-b border-r" data-inches="15.5" data-cm="39.4">15.5</td>
+                <td class="p-3 border-b border-r">XS</td>
+                <td class="p-3 border-b">6</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 4</td>
+                <td class="p-3 border-b border-r" data-inches="35" data-cm="88.9">35</td>
+                <td class="p-3 border-b border-r" data-inches="29" data-cm="73.7">29</td>
+                <td class="p-3 border-b border-r" data-inches="39" data-cm="99.1">39</td>
+                <td class="p-3 border-b border-r" data-inches="16" data-cm="40.6">16</td>
+                <td class="p-3 border-b border-r">S</td>
+                <td class="p-3 border-b">8</td>
+              </tr>
+              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 6</td>
+                <td class="p-3 border-b border-r" data-inches="36" data-cm="91.4">36</td>
+                <td class="p-3 border-b border-r" data-inches="30" data-cm="76.2">30</td>
+                <td class="p-3 border-b border-r" data-inches="40" data-cm="101.6">40</td>
+                <td class="p-3 border-b border-r" data-inches="16.5" data-cm="41.9">16.5</td>
+                <td class="p-3 border-b border-r">S</td>
+                <td class="p-3 border-b">10</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 8</td>
+                <td class="p-3 border-b border-r" data-inches="37" data-cm="94.0">37</td>
+                <td class="p-3 border-b border-r" data-inches="31" data-cm="78.7">31</td>
+                <td class="p-3 border-b border-r" data-inches="42" data-cm="106.7">42</td>
+                <td class="p-3 border-b border-r" data-inches="17" data-cm="43.2">17</td>
+                <td class="p-3 border-b border-r">M</td>
+                <td class="p-3 border-b">12</td>
+              </tr>
+              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 10</td>
+                <td class="p-3 border-b border-r" data-inches="38" data-cm="96.5">38</td>
+                <td class="p-3 border-b border-r" data-inches="32" data-cm="81.3">32</td>
+                <td class="p-3 border-b border-r" data-inches="44" data-cm="111.8">44</td>
+                <td class="p-3 border-b border-r" data-inches="18" data-cm="45.7">18</td>
+                <td class="p-3 border-b border-r">M</td>
+                <td class="p-3 border-b">14</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 12</td>
+                <td class="p-3 border-b border-r" data-inches="39.5" data-cm="100.3">39.5</td>
+                <td class="p-3 border-b border-r" data-inches="33.5" data-cm="85.1">33.5</td>
+                <td class="p-3 border-b border-r" data-inches="45" data-cm="114.3">45</td>
+                <td class="p-3 border-b border-r" data-inches="18.5" data-cm="47.0">18.5</td>
+                <td class="p-3 border-b border-r">L</td>
+                <td class="p-3 border-b">16</td>
+              </tr>
+              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 14</td>
+                <td class="p-3 border-b border-r" data-inches="41" data-cm="104.1">41</td>
+                <td class="p-3 border-b border-r" data-inches="35" data-cm="88.9">35</td>
+                <td class="p-3 border-b border-r" data-inches="46" data-cm="116.8">46</td>
+                <td class="p-3 border-b border-r" data-inches="19" data-cm="48.3">19</td>
+                <td class="p-3 border-b border-r">L</td>
+                <td class="p-3 border-b">18</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 16</td>
+                <td class="p-3 border-b border-r" data-inches="42" data-cm="106.7">42</td>
+                <td class="p-3 border-b border-r" data-inches="36" data-cm="91.4">36</td>
+                <td class="p-3 border-b border-r" data-inches="48" data-cm="121.9">48</td>
+                <td class="p-3 border-b border-r" data-inches="20" data-cm="50.8">20</td>
+                <td class="p-3 border-b border-r">XL</td>
+                <td class="p-3 border-b">20</td>
+              </tr>
+              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
+                <td class="p-3 border-b border-r font-medium">US 18</td>
+                <td class="p-3 border-b border-r" data-inches="44" data-cm="111.8">44</td>
+                <td class="p-3 border-b border-r" data-inches="39" data-cm="99.1">39</td>
+                <td class="p-3 border-b border-r" data-inches="50" data-cm="127.0">50</td>
+                <td class="p-3 border-b border-r" data-inches="21" data-cm="53.3">21</td>
+                <td class="p-3 border-b border-r">XXL</td>
+                <td class="p-3 border-b">24</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3 border-r font-medium">US 20</td>
+                <td class="p-3 border-r" data-inches="47" data-cm="119.4">47</td>
+                <td class="p-3 border-r" data-inches="42" data-cm="106.7">42</td>
+                <td class="p-3 border-r" data-inches="50" data-cm="127.0">50</td>
+                <td class="p-3 border-r" data-inches="21.5" data-cm="54.6">21.5</td>
+                <td class="p-3 border-r">XXXL</td>
+                <td class="p-3">28</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Legend -->
+        <div class="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-white border border-gray-300"></div>
+            <span>Standard sizes</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-gray-50/50 border border-gray-300"></div>
+            <span>Alternate sizes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — MEASURE GUIDE WITH SCROLLABLE CONTENT -->
+      <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4">
+        <div class="sticky top-0 bg-white pt-2 pb-4 z-10">
+          <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">How to Measure Yourself</h3>
+        </div>
+
+        <div class="space-y-6 pb-4">
+          <!-- Image 1 -->
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+              <h4 class="font-semibold text-gray-800 text-base">Bust Measurement</h4>
+            </div>
+            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
+              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                alt="Bust measurement guide"
+                class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
+          </div>
+
+          <!-- Image 2 -->
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
+              <h4 class="font-semibold text-gray-800 text-base">Waist Measurement</h4>
+            </div>
+            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
+              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                alt="Waist measurement guide"
+                class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <p class="text-sm text-gray-600 px-1">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
+          </div>
+
+          <!-- Image 3 -->
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
+              <h4 class="font-semibold text-gray-800 text-base">Hip Measurement</h4>
+            </div>
+            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
+              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                alt="Hip measurement guide"
+                class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
+          </div>
+
+          <!-- Image 4 -->
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
+              <h4 class="font-semibold text-gray-800 text-base">Armhole Measurement</h4>
+            </div>
+            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
+              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                alt="Armhole measurement guide"
+                class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <p class="text-sm text-gray-600 px-1">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
+          </div>
+
+          <!-- Image 5 -->
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
+              <h4 class="font-semibold text-gray-800 text-base">Shoulder Measurement</h4>
+            </div>
+            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
+              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                alt="Shoulder measurement guide"
+                class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+          </div>
+
+          <!-- Tips Section -->
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <h5 class="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+              </svg>
+              Measurement Tips
+            </h5>
+            <ul class="text-sm text-blue-700 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-blue-800 mt-0.5">•</span>
+                <span><strong>Stand naturally:</strong> Feet together, stand straight but relaxed</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-blue-800 mt-0.5">•</span>
+                <span><strong>Proper tape:</strong> Use a soft, non-stretch measuring tape</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-blue-800 mt-0.5">•</span>
+                <span><strong>Tension:</strong> Keep tape snug but not tight - don't compress skin</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-blue-800 mt-0.5">•</span>
+                <span><strong>Clothing:</strong> Wear form-fitting clothes or just undergarments</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-blue-800 mt-0.5">•</span>
+                <span><strong>Repeat:</strong> Take each measurement 2-3 times for accuracy</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Size Selection Help -->
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
+            <h5 class="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+              </svg>
+              Choosing Your Size
+            </h5>
+            <p class="text-sm text-amber-700 mb-2">If your measurements fall between two sizes:</p>
+            <ul class="text-sm text-amber-700 space-y-1 ml-2">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 mt-0.5">→</span>
+                <span>For fitted styles: Choose the larger size</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 mt-0.5">→</span>
+                <span>For loose styles: Choose the smaller size</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-800 mt-0.5">→</span>
+                <span>Focus on your largest measurement when deciding</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Note -->
+    <div class="px-6 sm:px-8 py-4 border-t bg-gray-50 text-xs sm:text-sm text-gray-500">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <p>This is a standard size guide for basic body measurements. There may be slight variations depending on the garment type and fit.</p>
+        <button class="text-blue-600 hover:text-blue-800 font-medium transition-colors flex items-center gap-2 sm:self-end">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Download Size Chart (PDF)</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .measurement-step {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .measurement-step:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* Custom scrollbar for right section */
+  #sizeGuideModal .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #sizeGuideModal .overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  #sizeGuideModal .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+
+  #sizeGuideModal .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1023px) {
+    .lg\:border-l {
+      border-left: none;
+    }
+
+    .lg\:pl-8 {
+      padding-left: 0;
+    }
+
+    .lg\:pr-4 {
+      padding-right: 0;
+    }
+
+    .lg\:h-auto {
+      height: auto;
+      max-height: 500px;
+    }
+  }
+</style>
+
+<style>
+  .measurement-step {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .measurement-step:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+</style>
+
+<style>
+  /* Modal Animations */
+  .modal-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-overlay.show .modal-container {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .modal-container {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 0.1s;
+  }
+
+  /* Modal closing animation */
+  .modal-overlay.closing .modal-container {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+
+  /* Fade in for content */
+  .modal-container>* {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-out;
+    transition-delay: 0.2s;
+  }
+
+  .modal-overlay.show .modal-container>* {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered animation for children */
+  .modal-overlay.show .modal-container>*:nth-child(1) {
+    transition-delay: 0.2s;
+  }
+
+  .modal-overlay.show .modal-container>*:nth-child(2) {
+    transition-delay: 0.25s;
+  }
+
+  .modal-overlay.show .modal-container>*:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+
+  .modal-overlay.show .modal-container>*:nth-child(4) {
+    transition-delay: 0.35s;
+  }
+
+  /* Prevent body scroll when modal is open */
+  body.modal-open {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  // Size Guide Modal System - Supports Multiple Triggers
+  class SizeGuideModal {
+    constructor() {
+      this.modal = null;
+      this.overlay = null;
+      this.container = null;
+      this.isAnimating = false;
+      this.init();
+    }
+
+    init() {
+      // Create modal if it doesn't exist
+      if (!document.getElementById('sizeGuideModal')) {
+        this.createModal();
+      }
+
+      this.modal = document.getElementById('sizeGuideModal');
+      this.overlay = this.modal;
+      this.container = this.modal.querySelector('.modal-container');
+      this.setupEventListeners();
+    }
+
+    createModal() {
+      const modalHTML = `
+      <div id="sizeGuideModal" class="fixed inset-0 bg-black/60 z-50 hidden items-start justify-center p-4 overflow-y-auto modal-overlay">
+        <div class="bg-white w-full max-w-6xl rounded-xl shadow-2xl relative modal-container my-8">
+          <!-- Your existing modal content here -->
+        </div>
+      </div>
+    `;
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    setupEventListeners() {
+      // Delegate click events for all size guide triggers
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-size-guide-trigger]');
+        if (trigger && !this.isAnimating) {
+          this.openModal();
+          e.preventDefault();
+        }
+      });
+
+      // Close button
+      document.addEventListener('click', (e) => {
+        if ((e.target.closest('.close-btn') ||
+            e.target.classList.contains('close-btn')) &&
+          !this.isAnimating) {
+          this.closeModal();
+        }
+      });
+
+      // Close when clicking overlay (outside modal)
+      this.overlay.addEventListener('click', (e) => {
+        if (e.target === this.overlay && !this.isAnimating) {
+          this.closeModal();
+        }
+      });
+
+      // Close with Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' &&
+          this.modal.classList.contains('show') &&
+          !this.isAnimating) {
+          this.closeModal();
+        }
+      });
+
+      // Unit toggle functionality
+      document.addEventListener('click', (e) => {
+        const unitBtn = e.target.closest('.unit-btn');
+        if (unitBtn && this.modal.contains(unitBtn)) {
+          this.handleUnitToggle(unitBtn);
+        }
+      });
+    }
+
+    async openModal() {
+      if (this.isAnimating) return;
+
+      this.isAnimating = true;
+
+      // Show modal
+      this.modal.classList.remove('hidden');
+      this.modal.classList.add('flex');
+      document.body.classList.add('modal-open');
+
+      // Trigger reflow to enable animation
+      void this.modal.offsetWidth;
+
+      // Start opening animation
+      this.modal.classList.add('show');
+
+      // Wait for animation to complete
+      await new Promise(resolve => setTimeout(resolve, 400));
+
+      this.isAnimating = false;
+    }
+
+    async closeModal() {
+      if (this.isAnimating) return;
+
+      this.isAnimating = true;
+
+      // Start closing animation
+      this.overlay.classList.add('closing');
+
+      // Wait for animation to complete
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Hide modal
+      this.modal.classList.remove('show', 'closing', 'flex');
+      this.modal.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+
+      this.isAnimating = false;
+    }
+
+    handleUnitToggle(clickedBtn) {
+      const unitButtons = this.modal.querySelectorAll('.unit-btn');
+      const measurementCells = this.modal.querySelectorAll('td[data-inches]');
+
+      // Remove active class from all buttons
+      unitButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-black', 'text-white');
+        btn.classList.add('text-gray-600');
+      });
+
+      // Add active class to clicked button
+      clickedBtn.classList.add('active', 'bg-black', 'text-white');
+      clickedBtn.classList.remove('text-gray-600');
+
+      // Get selected unit
+      const unit = clickedBtn.getAttribute('data-unit');
+
+      // Animate measurement changes
+      measurementCells.forEach((cell, index) => {
+        setTimeout(() => {
+          const value = cell.getAttribute(`data-${unit}`);
+          // Add fade animation
+          cell.style.opacity = '0.5';
+          cell.style.transform = 'translateY(-2px)';
+
+          setTimeout(() => {
+            cell.textContent = unit === 'cm' ? `${value} cm` : value;
+            cell.style.opacity = '1';
+            cell.style.transform = 'translateY(0)';
+          }, 100);
+        }, index * 20); // Stagger the animations
+      });
+    }
+  }
+
+  // Initialize modal system when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    window.sizeGuideModal = new SizeGuideModal();
+  });
+</script>
+
+<button type="button" data-size-guide-trigger class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all active:scale-95">
+  View Size Guide
+</button>
+
+
+
+
+
 <section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
@@ -774,25 +1382,25 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const redirectButton = document.getElementById('redi-sec-dyna');
-  const targetSection = document.getElementById('dynamic-content-sec');
+  document.addEventListener('DOMContentLoaded', function() {
+    const redirectButton = document.getElementById('redi-sec-dyna');
+    const targetSection = document.getElementById('dynamic-content-sec');
 
-  if (redirectButton && targetSection) {
-    redirectButton.addEventListener('click', function (e) {
-      // e.preventDefault();
+    if (redirectButton && targetSection) {
+      redirectButton.addEventListener('click', function(e) {
+        // e.preventDefault();
 
-      const headerOffset = 80; // height of your fixed header
-      const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - headerOffset;
+        const headerOffset = 80; // height of your fixed header
+        const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerOffset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
       });
-    });
-  }
-});
+    }
+  });
 </script>
 
 
