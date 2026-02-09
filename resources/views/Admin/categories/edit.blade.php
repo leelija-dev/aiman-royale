@@ -90,6 +90,43 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary text-uppercase">Show Home Page</label>
+
+                <div class="form-check form-switch">
+                    <input type="hidden" name="is_home" value="0">
+
+                    <input class="form-check-input"
+                          type="checkbox"
+                          name="is_home"
+                          id="is_home"
+                          value="1"
+                          {{ old('is_home', $category->is_home) ? 'checked' : '' }}>
+
+                    <label class="form-check-label" for="is_home">Yes</label>
+                </div>
+
+                @error('is_home')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Dropdown (Hidden by default) -->
+            <div class="mb-3" id="homeDropdownWrapper" style="display: none;">
+                <label class="form-label text-secondary text-uppercase">Select Position</label>
+                <select name="home_position" class="form-select">
+                    <option value="" selected hidden>Select Position</option>
+                    <option value="top" {{$category->home_position == 'top' ? 'selected' : ''}}>Top</option>
+                    <option value="bottom" {{$category->home_position == 'bottom' ? 'selected' : ''}}>Bottom</option>
+                    <option value="left" {{$category->home_position == 'left' ? 'selected' : ''}}>Left</option>
+                    <option value="right" {{$category->home_position == 'right' ? 'selected' : ''}}>Right</option>
+
+                </select>
+                @error('home_position')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
             <div class=" d-flex justify-content-end gap-2 flex-sm-nowrap flex-wrap">
               <a href="{{ route('admin.categories.index') }}" class="btn btn-danger mb-sm-2 mb-0">Cancel</a>
               <button class="btn btn-primary mb-sm-2 mb-0">Update</button>
@@ -127,6 +164,22 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkbox = document.getElementById('is_home');
+    const dropdown = document.getElementById('homeDropdownWrapper');
+
+    function toggleDropdown() {
+        dropdown.style.display = checkbox.checked ? 'block' : 'none';
+    }
+
+    // Initial state (important for edit page)
+    toggleDropdown();
+
+    // On change
+    checkbox.addEventListener('change', toggleDropdown);
+});
 </script>
 
 @endsection

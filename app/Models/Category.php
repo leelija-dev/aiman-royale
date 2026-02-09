@@ -30,7 +30,9 @@ class Category extends Model
         'description',
         'parent_id',
         'image',
-        'is_active'
+        'is_active',
+        'is_home',
+        'home_position'
     ];
 
     /**
