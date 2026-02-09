@@ -172,10 +172,27 @@
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
             <!-- Left Image Column -->
+            @php
+                $leftCategories = $homeCategories['left'] ?? collect();
+            @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-xl shadow-xl">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
-                        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Light Pink Salwar" />
+                    
+                @if($leftCategories->count())
+                        @foreach($leftCategories as $index => $cat)
+                            <img
+                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                src="{{ asset('uploads/category/'.$cat->image) }}"
+                                alt="{{ $cat->name }}">
+                        @endforeach
+                @else
+                        <!-- Default Image -->
+                    <img class="object-cover h-full w-full"
+                        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}"
+                        alt="Light Pink Salwar">
+                @endif
+                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
+                        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Light Pink Salwar" /> --}}
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -191,10 +208,26 @@
             <!-- Middle Content Column -->
             <div class="xl:min-w-[600px] lgg:min-w-[350px] min-w-[250px] md:w-auto w-full flex flex-col gap-3 lg:gap-6">
                 <!-- Top Image -->
+                @php
+                 $topCategories = $homeCategories['top'] ?? collect();
+                @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-xl shadow-lg">
                     <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10"></div>
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" />
+                        @if($topCategories->count())
+                            @foreach($topCategories as $index => $cat)
+                                <img
+                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                src="{{ asset('uploads/category/'.$cat->image) }}"
+                                alt="{{ $cat->name }}">
+                            @endforeach
+                        @else
+                                <!-- Default Image -->
+                            <img class="object-cover h-full w-full"
+                                src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
+                                alt="Glow Pink Dress">
+                        @endif
+                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" /> --}}
                     <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                         <span
                             class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">NEW</span>
@@ -254,10 +287,26 @@
                 </div>
 
                 <!-- Bottom Image -->
+                 @php
+                 $bottomCategories = $homeCategories['bottom'] ?? collect();
+                @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-xl shadow-lg">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                        alt="Gray Lahenga" />
+                        alt="Gray Lahenga" /> --}}
+                         @if($bottomCategories->count())
+                            @foreach($bottomCategories as $index => $cat)
+                                <img
+                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                src="{{ asset('uploads/category/'.$cat->image) }}"
+                                alt="{{ $cat->name }}">
+                            @endforeach
+                        @else
+                                <!-- Default Image -->
+                            <img class="object-cover h-full w-full"
+                                src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
+                                alt="Gray Lahenga">
+                        @endif
                     <div
                         class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
                         <span
@@ -267,10 +316,26 @@
             </div>
 
             <!-- Right Image Column -->
+            @php
+                 $rightCategories = $homeCategories['right'] ?? collect();
+                @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-xl shadow-xl">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
-                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo" />
+                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
+                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo" /> --}}
+                         @if($rightCategories->count())
+                            @foreach($rightCategories as $index => $cat)
+                                <img
+                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                src="{{ asset('uploads/category/'.$cat->image) }}"
+                                alt="{{ $cat->name }}">
+                            @endforeach
+                        @else
+                                <!-- Default Image -->
+                            <img class="object-cover h-full w-full"
+                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                                alt="Red Plazo">
+                        @endif
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -2467,6 +2532,30 @@
     window.addEventListener("scroll", updateParallax);
     window.addEventListener("resize", updateParallax);
     updateParallax();
+</script>
+<script>
+function autoSlider(className, interval = 3000) {
+    const slides = document.querySelectorAll('.' + className);
+    if (slides.length <= 1) return;
+
+    let index = 0;
+
+    setInterval(() => {
+        slides[index].classList.remove('opacity-100');
+        slides[index].classList.add('opacity-0');
+
+        index = (index + 1) % slides.length;
+
+        slides[index].classList.remove('opacity-0');
+        slides[index].classList.add('opacity-100');
+    }, interval);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    autoSlider('slide-left', 4000);
+    autoSlider('slide-top', 3500);
+    autoSlider('slide-right', 4500);
+});
 </script>
 
 

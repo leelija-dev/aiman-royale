@@ -21,6 +21,9 @@ class CategoryRequest extends FormRequest
             'parent_id' => ['nullable', 'exists:categories,id'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:1024'],
             'is_active' => ['boolean'],
+            'is_home' => ['boolean'],
+            //'home_position' => ['nullable', 'string'],
+             'home_position' => ['required_if:is_home,1', 'nullable', 'string'],
         ];
     }
     public function messages(): array
@@ -32,6 +35,7 @@ class CategoryRequest extends FormRequest
             'slug.unique'   => 'Slug already exists!',
             'parent_id.exists' => 'Selected parent category does not exist.',
             'image.image' => 'image size should be less than 1MB',
+            'home_position.required_if' => 'Please select a home position.',
         ];
     }
 }

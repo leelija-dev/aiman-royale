@@ -244,6 +244,9 @@ class CategoryController extends Controller
 
             $data['image'] = $filename;
         }
+            if ($data['is_home'] == 0) {
+                $data['home_position'] = null;
+            }
 
             $category->update($data);
 
