@@ -1,4 +1,4 @@
-<section class="w-full bg-white py-12 lg:py-20">
+<section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Main Heading -->
@@ -15,9 +15,9 @@
     <details class="mt-2 group">
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
         <!-- Show "Read more" when closed, "Show less" when open -->
-        <span class="group-open:hidden">Read more about Aiman Royale</span>
-        <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline">Show less</span>
-        
+        <span class="group-open:hidden">Read more</span>
+        <span id="redi-sec-dyna" class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline">Show less</span>
+
       </summary>
 
       <div class="mt-4 space-y-6">
@@ -138,7 +138,7 @@
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                 </svg>
               </div>
-              <span class="text-lg font-bold text-gray-900">@AimanFashion</span>
+              <span class="text-lg font-bold text-gray-900">@AimanRoyale</span>
             </div>
             <h3 class="text-xl lg:text-2xl font-bold text-gray-900 mb-6 lg:mb-8">
               Follow Our
@@ -209,22 +209,22 @@
     <!-- Brand & Links Section -->
     <div class="py-6 lg:py-8">
       <!-- Brand Logo -->
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12 lg:mb-16">
+      <div class="flex flex-col lgg:flex-row lgg:items-center lgg:justify-between mb-12 lgg:mb-16">
         <div class="mb-8 lg:mb-0">
-          <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center gap-3 mb-4 md:justify-start justify-center">
             <a href="/">
               <img class="max-h-[100px] h-auto w-auto pointer-events-auto"
                 src="{{ asset('web/images/company-logo/aiman-footer.webp') }}" alt="">
             </a>
           </div>
-          <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed">
+          <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed md:mx-0 mx-auto md:text-left text-center">
             We are a fashion brand that offers the best of contemporary, ethnic Indian fashion,
             and fusion-wear styles. Redefining elegance with every stitch.
           </p>
         </div>
 
         <!-- Social Media Icons -->
-        <div class="flex gap-4">
+        <div class="flex gap-4 lgg:justify-end md:justify-start justify-center items-center">
           <a href="#" class="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-[#EC4899]/30 flex items-center justify-center hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all duration-300 group">
             <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -496,7 +496,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="currentColor" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-width="0.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+              <path stroke="currentColor" stroke-width="0.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">Cash on Delivery</p>
@@ -506,7 +506,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">Express Delivery</p>
@@ -516,7 +516,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">Quality Checked</p>
@@ -526,7 +526,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">EMI Options</p>
@@ -536,7 +536,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">Bulk Orders</p>
@@ -546,7 +546,7 @@
         <div class="text-center group">
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-white to-[#FCE7F3] border border-[#EC4899]/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
             <svg class="w-6 h-6 text-[#A10000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
           <p class="font-semibold text-gray-900 text-sm">Easy Returns</p>
@@ -773,7 +773,30 @@
   });
 </script>
 
-<!-- Add CSS for smooth animations -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const redirectButton = document.getElementById('redi-sec-dyna');
+  const targetSection = document.getElementById('dynamic-content-sec');
+
+  if (redirectButton && targetSection) {
+    redirectButton.addEventListener('click', function (e) {
+      // e.preventDefault();
+
+      const headerOffset = 80; // height of your fixed header
+      const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    });
+  }
+});
+</script>
+
+
+
 <style>
   .accordion-content {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
