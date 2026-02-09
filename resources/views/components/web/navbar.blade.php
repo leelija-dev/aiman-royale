@@ -283,6 +283,64 @@
         border-left-color: #d4a574;
     }
 
+    /* ==================== BREADCRUMBS STYLES ==================== */
+    .breadcrumbs-wrapper {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .breadcrumbs__list {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumbs__item {
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumbs__link {
+        color: #6b7280;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .breadcrumbs__link:hover {
+        color: #d4a574;
+        background: #f3f4f6;
+    }
+
+    .breadcrumbs__link[aria-current="page"] {
+        color: #1f2937;
+        background: #e5e7eb;
+        font-weight: 500;
+        cursor: default;
+    }
+
+    .breadcrumbs__link:not(:last-child)::after {
+        content: '/';
+        margin-left: 8px;
+        color: #9ca3af;
+    }
+
+    /* Responsive breadcrumbs */
+    @media (max-width: 768px) {
+        .breadcrumbs__list {
+            font-size: 12px;
+        }
+        
+        .breadcrumbs__link {
+            padding: 2px 4px;
+        }
+    }
+
     /* ==================== DESKTOP SEARCH DROPDOWN STYLES ==================== */
     #search-dropdown {
         position: fixed;
@@ -1138,6 +1196,15 @@
         </div>
     </div>
 </header>
+
+<!-- ==================== BREADCRUMBS ==================== -->
+<div class="breadcrumbs-wrapper" id="breadcrumbs-container">
+    <div class="container mx-auto px-4 py-3">
+        <ol class="breadcrumbs__list" itemscope="" itemtype="https://schema.org/BreadcrumbList" id="breadcrumbs-list">
+            <!-- Default breadcrumbs will be populated here -->
+        </ol>
+    </div>
+</div>
 
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
@@ -2588,6 +2655,185 @@
                 }
             });
         }
+
+        // ==================== BREADCRUMBS FUNCTIONALITY ====================
+        function updateBreadcrumbs(breadcrumbs) {
+            console.log('Updating breadcrumbs:', breadcrumbs);
+            const breadcrumbsContainer = document.getElementById('breadcrumbs-container');
+            const breadcrumbsList = document.getElementById('breadcrumbs-list');
+            
+            if (!breadcrumbsContainer || !breadcrumbsList) {
+                console.error('Breadcrumb elements not found');
+                return;
+            }
+            
+            // Clear existing breadcrumbs
+            breadcrumbsList.innerHTML = '';
+            
+            // Hide breadcrumbs if empty
+            if (!breadcrumbs || breadcrumbs.length === 0) {
+                breadcrumbsContainer.style.display = 'none';
+                return;
+            }
+            
+            // Show breadcrumbs container
+            breadcrumbsContainer.style.display = 'block';
+            
+            // Add breadcrumbs
+            breadcrumbs.forEach((breadcrumb, index) => {
+                const li = document.createElement('li');
+                li.className = 'breadcrumbs__item';
+                li.setAttribute('itemscope', '');
+                li.setAttribute('itemtype', 'https://schema.org/ListItem');
+                li.setAttribute('itemprop', 'itemListElement');
+                
+                if (breadcrumb.url) {
+                    const a = document.createElement('a');
+                    a.className = 'breadcrumbs__link';
+                    a.href = breadcrumb.url;
+                    a.setAttribute('itemscope', '');
+                    a.setAttribute('itemtype', 'https://schema.org/WebPage');
+                    a.setAttribute('itemprop', 'item');
+                    a.setAttribute('itemid', breadcrumb.url);
+                    
+                    const span = document.createElement('span');
+                    span.setAttribute('itemprop', 'name');
+                    span.textContent = breadcrumb.name;
+                    
+                    a.appendChild(span);
+                    li.appendChild(a);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'breadcrumbs__link';
+                    span.setAttribute('aria-current', 'page');
+                    span.setAttribute('itemprop', 'name');
+                    span.textContent = breadcrumb.name;
+                    
+                    li.appendChild(span);
+                }
+                
+                // Add position meta
+                const meta = document.createElement('meta');
+                meta.setAttribute('itemprop', 'position');
+                meta.setAttribute('content', index + 1);
+                li.appendChild(meta);
+                
+                breadcrumbsList.appendChild(li);
+            });
+            
+            console.log('Breadcrumbs updated successfully');
+        }
+
+        function generateBreadcrumbsFromCurrentPage() {
+            const currentPath = window.location.pathname;
+            console.log('Current path:', currentPath);
+            const breadcrumbs = [];
+            
+            // Home
+            breadcrumbs.push({ name: 'Home', url: '/' });
+            
+            if (currentPath === '/' || currentPath === '') {
+                return breadcrumbs;
+            }
+            
+            // Parse path and generate breadcrumbs
+            const pathSegments = currentPath.split('/').filter(segment => segment);
+            console.log('Path segments:', pathSegments);
+            
+            if (pathSegments.length > 0) {
+                if (pathSegments[0] === 'category' || pathSegments[0] === 'collections') {
+                    if (pathSegments.length === 1) {
+                        // Base category or collections page
+                        const pageName = pathSegments[0] === 'category' ? 'Categories' : 'Collections';
+                        breadcrumbs.push({ 
+                            name: pageName, 
+                            url: null 
+                        });
+                    } else {
+                        // Specific category or collections page
+                        const categoryName = pathSegments[1]?.replace(/-/g, ' ');
+                        if (categoryName) {
+                            breadcrumbs.push({ 
+                                name: categoryName.charAt(0).toUpperCase() + categoryName.slice(1), 
+                                url: `/${pathSegments[0]}/${pathSegments[1]}` 
+                            });
+                        }
+                    }
+                } else if (pathSegments[0] === 'occasion') {
+                    // Occasion page
+                    const occasionName = pathSegments[1]?.replace(/-/g, ' ');
+                    if (occasionName) {
+                        breadcrumbs.push({ 
+                            name: occasionName.charAt(0).toUpperCase() + occasionName.slice(1), 
+                            url: `/occasion/${pathSegments[1]}` 
+                        });
+                    }
+                } else if (pathSegments[0] === 'products') {
+                    // Single product page
+                    breadcrumbs.push({ 
+                        name: 'Products', 
+                        url: '/products' 
+                    });
+                    
+                    // Try to get product name from page title or meta
+                    const pageTitle = document.title;
+                    if (pageTitle && pageTitle !== 'Aiman') {
+                        breadcrumbs.push({ 
+                            name: pageTitle.replace(' - Aiman', ''), 
+                            url: null 
+                        });
+                    }
+                } else if (pathSegments[0] === 'products' && pathSegments.length === 1) {
+                    // All products page
+                    breadcrumbs.push({ 
+                        name: 'Products', 
+                        url: null 
+                    });
+                } else if (pathSegments[0] === 'cart') {
+                    breadcrumbs.push({ 
+                        name: 'Cart', 
+                        url: null 
+                    });
+                } else if (pathSegments[0] === 'wishlist') {
+                    breadcrumbs.push({ 
+                        name: 'Wishlist', 
+                        url: null 
+                    });
+                } else if (pathSegments[0] === 'checkout') {
+                    breadcrumbs.push({ 
+                        name: 'Checkout', 
+                        url: null 
+                    });
+                }
+            }
+            
+            console.log('Generated breadcrumbs:', breadcrumbs);
+            return breadcrumbs;
+        }
+
+        // Initialize breadcrumbs immediately
+        function initBreadcrumbs() {
+            console.log('Initializing breadcrumbs...');
+            const breadcrumbs = generateBreadcrumbsFromCurrentPage();
+            updateBreadcrumbs(breadcrumbs);
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initBreadcrumbs);
+        } else {
+            initBreadcrumbs();
+        }
+
+        // Update breadcrumbs when navigation happens (for SPA-like behavior)
+        let lastPath = window.location.pathname;
+        window.addEventListener('popstate', function() {
+            if (window.location.pathname !== lastPath) {
+                const breadcrumbs = generateBreadcrumbsFromCurrentPage();
+                updateBreadcrumbs(breadcrumbs);
+                lastPath = window.location.pathname;
+            }
+        });
 
         // Initialize search functionality
         initSearch();
