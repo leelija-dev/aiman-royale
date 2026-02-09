@@ -49,7 +49,8 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 
     // Category Routes
-    Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
+    Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
+    Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
 
     // Occasion Routes
     Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');

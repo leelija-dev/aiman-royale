@@ -34,4 +34,9 @@ class CategoryController extends Controller
 
         return view('web.category_product', compact('category', 'products', 'occasions'));
     }
+
+    public function collection(){
+        $categories = Category::where('is_active', 1)->get();
+        return view('web.collection', compact('categories'));
+    }
 }

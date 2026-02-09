@@ -2103,7 +2103,7 @@
 
             // Update view more link
             if (searchTerm) {
-                viewMore.href = `/all-product?search=${encodeURIComponent(searchTerm)}`;
+                viewMore.href = `/collections?search=${encodeURIComponent(searchTerm)}`;
                 viewMore.textContent = `View all results for "${searchTerm}" →`;
             } else {
                 viewMore.href = '#';
@@ -2390,7 +2390,7 @@
             function performComprehensiveSearch(searchTerm) {
                 // Navigate to all-product page with search parameter
                 // This will search across product names, categories, occasions, etc.
-                window.location.href = `/all-product?search=${encodeURIComponent(searchTerm)}`;
+                window.location.href = `/collections?search=${encodeURIComponent(searchTerm)}`;
             }
 
             // Close search button (desktop)
