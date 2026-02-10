@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'date_of_birth',
+        'profile_image',
     ];
 
     /**
@@ -43,6 +46,24 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'date_of_birth' => 'date',
         ];
+    }
+
+    /**
+     * Get the orders for the user.
+     */
+    public function orders()
+    {
+        // Return empty collection for now since proper Order model doesn't exist
+        return collect([]);
+    }
+
+    /**
+     * Get the wishlists for the user.
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(\App\Models\Wishlist::class);
     }
 }

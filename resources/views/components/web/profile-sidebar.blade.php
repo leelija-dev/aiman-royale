@@ -24,7 +24,7 @@ $user = $user ?? auth()->user();
         <!-- Navigation Menu -->
         <nav class="space-y-2">
             <a
-                href="profile.html"
+                href="{{route('web.profile')}}"
                 class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-user w-5 text-center"></i>
                 <span>Profile Information</span>
@@ -42,7 +42,7 @@ $user = $user ?? auth()->user();
                 <span>My Addresses</span>
             </a>
             <a
-                href="wishlist.html"
+                href="{{route('wishlist.index')}}"
                 class="sidebar-item active flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-heart w-5 text-center"></i>
                 <span>My Wishlist</span>
