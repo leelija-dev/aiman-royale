@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 use App\Models\Notification;
 use App\Models\Category;
-
+use App\Models\Size;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,7 +34,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
         $notifications = Notification::where('viewed', 0)->latest()->get();
         $categories = Category::where('is_active', 1)->orderBy('name')->get();
-        $view->with('notifications', $notifications)->with('categories', $categories);
+        $sizes=Size::OrderBy('sort_order')->get();
+        $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes);
     });
    }
 }

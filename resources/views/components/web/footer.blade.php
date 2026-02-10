@@ -28,115 +28,33 @@
           <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 text-gray-700">
               <tr>
-                <th class="p-3 border-b border-r min-w-[80px]">SIZE</th>
-                <th class="p-3 border-b border-r min-w-[80px]">Bust</th>
-                <th class="p-3 border-b border-r min-w-[80px]">Waist</th>
-                <th class="p-3 border-b border-r min-w-[80px]">Hip</th>
-                <th class="p-3 border-b border-r min-w-[80px]">Armhole</th>
-                <th class="p-3 border-b border-r min-w-[80px]">Size</th>
-                <th class="p-3 border-b min-w-[80px]">UK</th>
+                <th class="p-3 border-b border-r min-w-[80px] text-center">SIZE</th>
+                <th class="p-3 border-b border-r min-w-[80px] text-center">Chest</th>
+                <th class="p-3 border-b border-r min-w-[80px] text-center">Waist</th>
+                <th class="p-3 border-b border-r min-w-[80px] text-center">Neck</th>
+                
               </tr>
             </thead>
+
             <tbody class="text-gray-700">
+              @foreach($sizes as $size)
               <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 0</td>
-                <td class="p-3 border-b border-r" data-inches="33" data-cm="83.8">33</td>
-                <td class="p-3 border-b border-r" data-inches="27" data-cm="68.6">27</td>
-                <td class="p-3 border-b border-r" data-inches="37" data-cm="94.0">37</td>
-                <td class="p-3 border-b border-r" data-inches="15" data-cm="38.1">15</td>
-                <td class="p-3 border-b border-r">XS</td>
-                <td class="p-3 border-b">4</td>
+                <td class="p-3 border-b border-r font-medium text-center">{{$size->code}} ({{$size->chest_size ? floor($size->chest_size) == $size->chest_size 
+                   ? (int) $size->chest_size : $size->chest_size : ''}}) </td>
+                <td class="p-3 border-b border-r text-center" data-inches="37" data-cm="94.0">{{ floor($size->chest_size) == $size->chest_size 
+                   ? (int) $size->chest_size : $size->chest_size }}
+                </td>
+                <td class="p-3 border-b border-r text-center" data-inches="33" data-cm="83.8">{{ floor($size->waist_size) == $size->waist_size 
+                  ? (int) $size->waist_size : $size->waist_size }}
+                </td>
+                <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->neck_size) == $size->neck_size 
+                  ? (int) $size->neck_size : $size->neck_size }}</td>
+                
+                
+              
               </tr>
-              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 2</td>
-                <td class="p-3 border-b border-r" data-inches="34" data-cm="86.4">34</td>
-                <td class="p-3 border-b border-r" data-inches="28" data-cm="71.1">28</td>
-                <td class="p-3 border-b border-r" data-inches="38.5" data-cm="97.8">38.5</td>
-                <td class="p-3 border-b border-r" data-inches="15.5" data-cm="39.4">15.5</td>
-                <td class="p-3 border-b border-r">XS</td>
-                <td class="p-3 border-b">6</td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 4</td>
-                <td class="p-3 border-b border-r" data-inches="35" data-cm="88.9">35</td>
-                <td class="p-3 border-b border-r" data-inches="29" data-cm="73.7">29</td>
-                <td class="p-3 border-b border-r" data-inches="39" data-cm="99.1">39</td>
-                <td class="p-3 border-b border-r" data-inches="16" data-cm="40.6">16</td>
-                <td class="p-3 border-b border-r">S</td>
-                <td class="p-3 border-b">8</td>
-              </tr>
-              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 6</td>
-                <td class="p-3 border-b border-r" data-inches="36" data-cm="91.4">36</td>
-                <td class="p-3 border-b border-r" data-inches="30" data-cm="76.2">30</td>
-                <td class="p-3 border-b border-r" data-inches="40" data-cm="101.6">40</td>
-                <td class="p-3 border-b border-r" data-inches="16.5" data-cm="41.9">16.5</td>
-                <td class="p-3 border-b border-r">S</td>
-                <td class="p-3 border-b">10</td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 8</td>
-                <td class="p-3 border-b border-r" data-inches="37" data-cm="94.0">37</td>
-                <td class="p-3 border-b border-r" data-inches="31" data-cm="78.7">31</td>
-                <td class="p-3 border-b border-r" data-inches="42" data-cm="106.7">42</td>
-                <td class="p-3 border-b border-r" data-inches="17" data-cm="43.2">17</td>
-                <td class="p-3 border-b border-r">M</td>
-                <td class="p-3 border-b">12</td>
-              </tr>
-              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 10</td>
-                <td class="p-3 border-b border-r" data-inches="38" data-cm="96.5">38</td>
-                <td class="p-3 border-b border-r" data-inches="32" data-cm="81.3">32</td>
-                <td class="p-3 border-b border-r" data-inches="44" data-cm="111.8">44</td>
-                <td class="p-3 border-b border-r" data-inches="18" data-cm="45.7">18</td>
-                <td class="p-3 border-b border-r">M</td>
-                <td class="p-3 border-b">14</td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 12</td>
-                <td class="p-3 border-b border-r" data-inches="39.5" data-cm="100.3">39.5</td>
-                <td class="p-3 border-b border-r" data-inches="33.5" data-cm="85.1">33.5</td>
-                <td class="p-3 border-b border-r" data-inches="45" data-cm="114.3">45</td>
-                <td class="p-3 border-b border-r" data-inches="18.5" data-cm="47.0">18.5</td>
-                <td class="p-3 border-b border-r">L</td>
-                <td class="p-3 border-b">16</td>
-              </tr>
-              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 14</td>
-                <td class="p-3 border-b border-r" data-inches="41" data-cm="104.1">41</td>
-                <td class="p-3 border-b border-r" data-inches="35" data-cm="88.9">35</td>
-                <td class="p-3 border-b border-r" data-inches="46" data-cm="116.8">46</td>
-                <td class="p-3 border-b border-r" data-inches="19" data-cm="48.3">19</td>
-                <td class="p-3 border-b border-r">L</td>
-                <td class="p-3 border-b">18</td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 16</td>
-                <td class="p-3 border-b border-r" data-inches="42" data-cm="106.7">42</td>
-                <td class="p-3 border-b border-r" data-inches="36" data-cm="91.4">36</td>
-                <td class="p-3 border-b border-r" data-inches="48" data-cm="121.9">48</td>
-                <td class="p-3 border-b border-r" data-inches="20" data-cm="50.8">20</td>
-                <td class="p-3 border-b border-r">XL</td>
-                <td class="p-3 border-b">20</td>
-              </tr>
-              <tr class="bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                <td class="p-3 border-b border-r font-medium">US 18</td>
-                <td class="p-3 border-b border-r" data-inches="44" data-cm="111.8">44</td>
-                <td class="p-3 border-b border-r" data-inches="39" data-cm="99.1">39</td>
-                <td class="p-3 border-b border-r" data-inches="50" data-cm="127.0">50</td>
-                <td class="p-3 border-b border-r" data-inches="21" data-cm="53.3">21</td>
-                <td class="p-3 border-b border-r">XXL</td>
-                <td class="p-3 border-b">24</td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-r font-medium">US 20</td>
-                <td class="p-3 border-r" data-inches="47" data-cm="119.4">47</td>
-                <td class="p-3 border-r" data-inches="42" data-cm="106.7">42</td>
-                <td class="p-3 border-r" data-inches="50" data-cm="127.0">50</td>
-                <td class="p-3 border-r" data-inches="21.5" data-cm="54.6">21.5</td>
-                <td class="p-3 border-r">XXXL</td>
-                <td class="p-3">28</td>
-              </tr>
+              @endforeach
+              
             </tbody>
           </table>
         </div>

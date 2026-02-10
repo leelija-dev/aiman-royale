@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Size;
 
 class HomeController extends Controller
 {
@@ -282,8 +283,8 @@ class HomeController extends Controller
         $product = Product::with(['images', 'variants'])
             ->where('slug', $slug)
             ->firstOrFail();
-
+        $sizes=Size::OrderBy('sort_order')->get();
         // dd($product);
-        return view('web.single-product', compact('product'));
+        return view('web.single-product', compact('product','sizes'));
     }
 }
