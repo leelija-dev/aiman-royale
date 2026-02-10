@@ -44,7 +44,10 @@ class SizeController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:20|unique:sizes,name',
             'code' => 'required|string|max:10|unique:sizes,code',
-            'sort_order' => 'nullable|integer|min:0',
+            'sort_order' => 'required|integer|unique:sizes,sort_order',
+            'chest_size'=>'required|numeric|min:0',
+            'neck_size'=>'required|numeric|min:0',
+            'waist_size'=>'required|numeric|min:0',
         ]);
 
         Size::create($data);
@@ -68,7 +71,10 @@ class SizeController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:20|unique:sizes,name,'.$size->id,
             'code' => 'required|string|max:10|unique:sizes,code,'.$size->id,
-            'sort_order' => 'nullable|integer|min:0',
+            'sort_order' => 'required|integer|unique:sizes,sort_order,'.$size->id,
+            'chest_size'=>'required|numeric|min:0',
+            'neck_size'=>'required|numeric|min:0',
+            'waist_size'=>'required|numeric|min:0',
         ]);
 
         $size->update($data);

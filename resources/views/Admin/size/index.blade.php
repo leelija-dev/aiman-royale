@@ -9,7 +9,7 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
-        <div class="card mb-4">
+        <div class="card mb-4 ty-4 tx-4 ">
             <div class="card-header pb-0 d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-center">
                 <!-- Search Form -->
                 <form method="GET" action="{{ route('admin.sizes') }}" class="mb-2 mb-md-0 d-flex w-100 w-lg-50">
@@ -27,38 +27,63 @@
                     </a>
                 </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
+            <div class="card-body px-4 pt-2 pb-2">
                 <div class="table-responsive p-0">
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Size Name</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Code</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Chest Size</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Neck Size</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Waist Size</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sort Order</th>
+
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($data as $size)
                             <tr>
-                                <td>
+                                <td class="text-center">
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">{{ $size->name }}</h6>
+                                            <h6 class="mb-0 text-sm">{{ $size->name ?? ''}}</h6>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <span class="badge bg-info text-white">{{ $size->code }}</span>
+                                            <span class="badge bg-info text-white">{{ $size->code ?? '' }}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center text-center">
+                                            <span class="text-sm">{{ $size->chest_size ?? '' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-sm">{{ $size->sort_order }}</span>
+                                            <span class="text-sm">{{ $size->neck_size ?? ''}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <span class="text-sm">{{ $size->waist_size ?? '' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <span class="text-sm">{{ $size->sort_order ?? ''}}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -91,24 +116,57 @@
                                         </div>
                                         <form id="editForm{{ $size->id }}"
                                               action="{{ route('admin.sizes.update', $size->id) }}"
-                                              method="POST">
+                                              method="POST" enctype="multipart/form-data" novalidate>
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-body text-start">
                                                 <div class="mb-3">
                                                     <label for="edit_name_{{ $size->id }}" class="form-label">Size Name <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" id="edit_name_{{ $size->id }}" name="name" 
-                                                           value="{{ $size->name }}" maxlength="20" required>
+                                                           value="{{ old('name') ?? $size->name }}" maxlength="20" required>
+                                                           @error('name')
+                                                           <div class="text-danger small">{{ $message }}</div>
+                                                           @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="edit_code_{{ $size->id }}" class="form-label">Size Code <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" id="edit_code_{{ $size->id }}" name="code" 
-                                                           value="{{ $size->code }}" maxlength="10" required>
+                                                           value="{{ old('code') ?? $size->code }}" maxlength="10" required>
+                                                    @error('code')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="chest_size" class="form-label">Chest Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="chest_size" name="chest_size" 
+                                                        value="{{ old('chest_size') ?? $size->chest_size }}"  required>
+                                                    @error('chest_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="neck_size" class="form-label">Neck Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="neck_size" name="neck_size" 
+                                                        value="{{ old('neck_size') ?? $size->neck_size }}" required>
+                                                    @error('neck_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="waist_size" class="form-label">Waist Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="waist_size" name="waist_size" 
+                                                        value="{{ old('waist_size') ?? $size->waist_size }}" required>
+                                                    @error('waist_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="edit_sort_order_{{ $size->id }}" class="form-label">Sort Order</label>
                                                     <input type="number" class="form-control" id="edit_sort_order_{{ $size->id }}" name="sort_order" 
-                                                           value="{{ $size->sort_order }}" min="0">
+                                                           value="{{ old('sort_order') ?? $size->sort_order }}" >
+                                                    @error('sort_order')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
