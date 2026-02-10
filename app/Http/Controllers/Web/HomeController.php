@@ -72,6 +72,12 @@ class HomeController extends Controller
             ->take(12)
             ->get();
 
+        $mostWishlisted = Product::with('wishlists', 'images')
+            ->withCount('wishlists')
+            ->orderByDesc('wishlists_count')
+            ->take(12)
+            ->get();
+        // dd($mostWishlisted);
 
         // dd($products);
 
@@ -85,7 +91,7 @@ class HomeController extends Controller
 
         $testimonials = [];
 
-        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions','homeCategories'));
+        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions','homeCategories', 'mostWishlisted'));
     }
 
     public function ShowAllProduct(Request $request)

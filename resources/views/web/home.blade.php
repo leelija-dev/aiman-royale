@@ -173,24 +173,24 @@
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
             <!-- Left Image Column -->
             @php
-                $leftCategories = $homeCategories['left'] ?? collect();
+            $leftCategories = $homeCategories['left'] ?? collect();
             @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-xl shadow-xl">
-                    
-                @if($leftCategories->count())
-                        @foreach($leftCategories as $index => $cat)
-                            <img
-                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                src="{{ asset('uploads/category/'.$cat->image) }}"
-                                alt="{{ $cat->name }}">
-                        @endforeach
-                @else
-                        <!-- Default Image -->
+
+                    @if($leftCategories->count())
+                    @foreach($leftCategories as $index => $cat)
+                    <img
+                        class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                        src="{{ asset('uploads/category/'.$cat->image) }}"
+                        alt="{{ $cat->name }}">
+                    @endforeach
+                    @else
+                    <!-- Default Image -->
                     <img class="object-cover h-full w-full"
                         src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}"
                         alt="Light Pink Salwar">
-                @endif
+                    @endif
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
                         src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Light Pink Salwar" /> --}}
                     <div
@@ -209,23 +209,23 @@
             <div class="xl:min-w-[600px] lgg:min-w-[350px] min-w-[250px] md:w-auto w-full flex flex-col gap-3 lg:gap-6">
                 <!-- Top Image -->
                 @php
-                 $topCategories = $homeCategories['top'] ?? collect();
+                $topCategories = $homeCategories['top'] ?? collect();
                 @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-xl shadow-lg">
                     <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10"></div>
-                        @if($topCategories->count())
-                            @foreach($topCategories as $index => $cat)
-                                <img
-                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                src="{{ asset('uploads/category/'.$cat->image) }}"
-                                alt="{{ $cat->name }}">
-                            @endforeach
-                        @else
-                                <!-- Default Image -->
-                            <img class="object-cover h-full w-full"
-                                src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
-                                alt="Glow Pink Dress">
-                        @endif
+                    @if($topCategories->count())
+                    @foreach($topCategories as $index => $cat)
+                    <img
+                        class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                        src="{{ asset('uploads/category/'.$cat->image) }}"
+                        alt="{{ $cat->name }}">
+                    @endforeach
+                    @else
+                    <!-- Default Image -->
+                    <img class="object-cover h-full w-full"
+                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
+                        alt="Glow Pink Dress">
+                    @endif
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" /> --}}
                     <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
@@ -287,26 +287,26 @@
                 </div>
 
                 <!-- Bottom Image -->
-                 @php
-                 $bottomCategories = $homeCategories['bottom'] ?? collect();
+                @php
+                $bottomCategories = $homeCategories['bottom'] ?? collect();
                 @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-xl shadow-lg">
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                        alt="Gray Lahenga" /> --}}
-                         @if($bottomCategories->count())
-                            @foreach($bottomCategories as $index => $cat)
-                                <img
-                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                src="{{ asset('uploads/category/'.$cat->image) }}"
-                                alt="{{ $cat->name }}">
-                            @endforeach
-                        @else
-                                <!-- Default Image -->
-                            <img class="object-cover h-full w-full"
-                                src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                                alt="Gray Lahenga">
-                        @endif
+                    alt="Gray Lahenga" /> --}}
+                    @if($bottomCategories->count())
+                    @foreach($bottomCategories as $index => $cat)
+                    <img
+                        class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                        src="{{ asset('uploads/category/'.$cat->image) }}"
+                        alt="{{ $cat->name }}">
+                    @endforeach
+                    @else
+                    <!-- Default Image -->
+                    <img class="object-cover h-full w-full"
+                        src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
+                        alt="Gray Lahenga">
+                    @endif
                     <div
                         class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
                         <span
@@ -317,25 +317,25 @@
 
             <!-- Right Image Column -->
             @php
-                 $rightCategories = $homeCategories['right'] ?? collect();
-                @endphp
+            $rightCategories = $homeCategories['right'] ?? collect();
+            @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-xl shadow-xl">
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
                         src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo" /> --}}
-                         @if($rightCategories->count())
-                            @foreach($rightCategories as $index => $cat)
-                                <img
-                                class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                                src="{{ asset('uploads/category/'.$cat->image) }}"
-                                alt="{{ $cat->name }}">
-                            @endforeach
-                        @else
-                                <!-- Default Image -->
-                            <img class="object-cover h-full w-full"
-                                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                alt="Red Plazo">
-                        @endif
+                    @if($rightCategories->count())
+                    @foreach($rightCategories as $index => $cat)
+                    <img
+                        class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
+                        src="{{ asset('uploads/category/'.$cat->image) }}"
+                        alt="{{ $cat->name }}">
+                    @endforeach
+                    @else
+                    <!-- Default Image -->
+                    <img class="object-cover h-full w-full"
+                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                        alt="Red Plazo">
+                    @endif
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -1249,7 +1249,7 @@
     </div>
 </section>
 
-
+{{--
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -1348,7 +1348,7 @@
         </div>
     </div>
 </section>
-
+--}}
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
@@ -1608,261 +1608,83 @@
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
+            @forelse($mostWishlisted as $index => $product)
+
             <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
+                    <a href="{{ route('page.single-product', $product->slug) }}" class="block">
+                        <div class="relative rounded-xl overflow-hidden">
+                            <img src="{{ $product->images->first()->image ? asset($product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
+                                alt="{{ $product->name }}" class="w-full h-[340px] object-cover object-top object-center" />
 
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                @if($product->wishlists_count > 0)
+                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                                    Trending
+                                </span>
+                                @endif
+                                @if($product->discount_price && $product->discount_price < $product->price)
+                                    <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                                        -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
+                                    </span>
+                                    @endif
+                            </div>
 
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
+                            <!-- Wishlist Heart Icon (Top Right) -->
+                            <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                                onclick="toggleHomeWishlist({{ $product->id }}, event)">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-{{ $product->id }}">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
                             </button>
-                        </div>
+                </a>
+
+                            <!-- Add To Cart (Hidden → Hover Show) -->
+                            {{-- <div class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+                            <button onclick="addToCart({{ $product->id }}, event)"
+                            class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            Add To Cart
+                            </button>
+                        </div> --}}
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 space-y-1">
+                    <h3 class="text-[15px] font-semibold text-gray-900">
+                        {{ $product->name }}
+                    </h3>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span>{{ $product->brand_name ?? 'Brand Name' }}</span>
+                        <span class="flex items-center gap-1 text-gray-700">
+                            <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
+                        </span>
                     </div>
 
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Red Plazo
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                        </div>
+                    <div class="flex items-center gap-2 mt-2 flex-wrap">
+                        <span class="text-lg font-bold text-gray-900">Rs. {{ $product->price }}</span>
+                        @if($product->discount_price && $product->discount_price < $product->price)
+                            <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
+                            @endif
+                    </div>
+                    <div class="lgg:hidden block">
+                        <button onclick="addToCart({{ $product->id }}, event)"
+                            class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                     </div>
                 </div>
             </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Light Pink Plazo
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Cherry Plazo Light
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500" id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Cherry Plazo
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add more product items as needed -->
         </div>
+        @empty
+        <div class="text-center py-8">
+            <p class="text-gray-500">No wishlisted products found.</p>
+        </div>
+        @endforelse
+    </div>
     </div>
 </section>
 
@@ -2340,96 +2162,96 @@
         heartIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                product_id: productId
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
             })
-        })
-        .then(response => {
-            console.log('Raw response:', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Parsed data:', data);
-            if (data.success) {
-                showNotification(data.message, 'success');
-                
-                // Update heart icon using innerHTML like single-product
-                if (isInWishlist) {
-                    // Was in wishlist, now removed
-                    heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
-                } else {
-                    // Was not in wishlist, now added
-                    heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
-                }
-                
-                // Update wishlist count if you have a counter
-                if (data.wishlist_count !== undefined) {
-                    updateWishlistCount(data.wishlist_count);
-                }
-            } else {
-                // Handle case where product is already in wishlist
-                if (data.message && data.message.includes('already in wishlist')) {
-                    showNotification('Product is already in wishlist!', 'info');
-                    // Don't change the heart icon if already in wishlist
-                    if (isSVG && !isInWishlist) {
+            .then(response => {
+                console.log('Raw response:', response);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Parsed data:', data);
+                if (data.success) {
+                    showNotification(data.message, 'success');
+
+                    // Update heart icon using innerHTML like single-product
+                    if (isInWishlist) {
+                        // Was in wishlist, now removed
+                        heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
+                    } else {
+                        // Was not in wishlist, now added
                         heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
                     }
+
+                    // Update wishlist count if you have a counter
+                    if (data.wishlist_count !== undefined) {
+                        updateWishlistCount(data.wishlist_count);
+                    }
                 } else {
-                    showNotification(data.message || 'Failed to update wishlist', 'error');
+                    // Handle case where product is already in wishlist
+                    if (data.message && data.message.includes('already in wishlist')) {
+                        showNotification('Product is already in wishlist!', 'info');
+                        // Don't change the heart icon if already in wishlist
+                        if (isSVG && !isInWishlist) {
+                            heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                        }
+                    } else {
+                        showNotification(data.message || 'Failed to update wishlist', 'error');
+                    }
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            showNotification('An error occurred while updating wishlist', 'error');
-        })
-        .finally(() => {
-            // Restore original content if error occurred
-            if (heartIcon.innerHTML.includes('fa-spinner')) {
-                heartIcon.innerHTML = originalContent;
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                showNotification('An error occurred while updating wishlist', 'error');
+            })
+            .finally(() => {
+                // Restore original content if error occurred
+                if (heartIcon.innerHTML.includes('fa-spinner')) {
+                    heartIcon.innerHTML = originalContent;
+                }
+            });
     }
-    
+
     // Check if product is in wishlist
     function checkHomeProductWishlist(productId) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
-        
+
         if (!heartIcon) return;
-        
+
         fetch('/wishlist/check', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                product_id: productId
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Wishlist check response:', data);
-            const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
-            if (heartIcon) {
-                if (data.in_wishlist) {
-                    heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
-                } else {
-                    heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
+            .then(response => response.json())
+            .then(data => {
+                console.log('Wishlist check response:', data);
+                const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
+                if (heartIcon) {
+                    if (data.in_wishlist) {
+                        heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                    } else {
+                        heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
+                    }
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error checking wishlist:', error);
-        });
+            })
+            .catch(error => {
+                console.error('Error checking wishlist:', error);
+            });
     }
-    
+
     // Update wishlist count (if you have a counter)
     function updateWishlistCount(count) {
         const wishlistCounter = document.getElementById('wishlist-counter');
@@ -2437,7 +2259,7 @@
             wishlistCounter.textContent = count;
         }
     }
-    
+
     function addToCart(variantId, event) {
         // Show loading state
         const button = event.target;
@@ -2534,28 +2356,28 @@
     updateParallax();
 </script>
 <script>
-function autoSlider(className, interval = 3000) {
-    const slides = document.querySelectorAll('.' + className);
-    if (slides.length <= 1) return;
+    function autoSlider(className, interval = 3000) {
+        const slides = document.querySelectorAll('.' + className);
+        if (slides.length <= 1) return;
 
-    let index = 0;
+        let index = 0;
 
-    setInterval(() => {
-        slides[index].classList.remove('opacity-100');
-        slides[index].classList.add('opacity-0');
+        setInterval(() => {
+            slides[index].classList.remove('opacity-100');
+            slides[index].classList.add('opacity-0');
 
-        index = (index + 1) % slides.length;
+            index = (index + 1) % slides.length;
 
-        slides[index].classList.remove('opacity-0');
-        slides[index].classList.add('opacity-100');
-    }, interval);
-}
+            slides[index].classList.remove('opacity-0');
+            slides[index].classList.add('opacity-100');
+        }, interval);
+    }
 
-document.addEventListener('DOMContentLoaded', function () {
-    autoSlider('slide-left', 4000);
-    autoSlider('slide-top', 3500);
-    autoSlider('slide-right', 4500);
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        autoSlider('slide-left', 4000);
+        autoSlider('slide-top', 3500);
+        autoSlider('slide-right', 4500);
+    });
 </script>
 
 
