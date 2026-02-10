@@ -1,5 +1,6 @@
 <?php
 $user = $user ?? auth()->user();
+$currentRoute = request()->route()->getName();
 ?>
 
 <aside>
@@ -25,33 +26,31 @@ $user = $user ?? auth()->user();
         <nav class="space-y-2">
             <a
                 href="{{route('web.profile')}}"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'web.profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fas fa-user w-5 text-center"></i>
                 <span>Profile Information</span>
             </a>
             <a
-                href="orders.html"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                href="{{ route('page.multi-product') }}"
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'page.multi-product' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fas fa-shopping-bag w-5 text-center"></i>
                 <span>Order History</span>
             </a>
             <a
-                href="addresses.html"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                href="#"
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-gray-50">
                 <i class="fas fa-map-marker-alt w-5 text-center"></i>
                 <span>My Addresses</span>
             </a>
             <a
                 href="{{route('wishlist.index')}}"
-                class="sidebar-item active flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'wishlist.index' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fas fa-heart w-5 text-center"></i>
                 <span>My Wishlist</span>
-                <span
-                    class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">16</span>
             </a>
             <a
                 href="#"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-gray-50">
                 <i class="fas fa-star w-5 text-center"></i>
                 <span>Reviews</span>
             </a>

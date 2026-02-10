@@ -76,7 +76,7 @@
                   </div>
                 </td>
 
-                <td class="px-6 py-6 text-center">${{ number_format($item->price, 2) }}</td>
+                <td class="px-6 py-6 text-center">${{ number_format($item->variant->discount_price, 2) }}</td>
 
                 <td class="px-6 py-6 text-center">
                   <div
@@ -102,7 +102,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-center font-medium">
-                  ${{ number_format($item->price * $item->count, 2) }}
+                  ${{ number_format($item->variant->discount_price * $item->count, 2) }}
                 </td>
 
                 <td class="px-6 py-6 text-center">
