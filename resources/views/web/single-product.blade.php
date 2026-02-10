@@ -1236,7 +1236,7 @@
         product_id: {{ $product->id }},
         custom_dimensions: JSON.parse(customDimensionsAttr),
         type: selectedType,
-        quantity: 1
+        count: 1
       };
     } else {
       // Add standard variant to cart
@@ -1252,7 +1252,7 @@
       requestData = {
         variant_id: variantId,
         type: selectedType,
-        quantity: 1
+        count: 1
       };
     }
 

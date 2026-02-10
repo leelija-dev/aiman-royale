@@ -137,4 +137,9 @@ class Product extends Model
     {
         return $this->hasMany('App\\Models\\ProductVariant', 'product_id');
     }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany('App\\Models\\Wishlist', 'product_id');
+    }
 }
