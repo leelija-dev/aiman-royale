@@ -5,16 +5,21 @@
 @section('title')
 {{ config('app.name') }} - Add Product
 @endsection
-
+<style>
+.hr-line {
+    border-top: 2px solid #0408382d !important;
+    opacity: 1 !important;
+}
+</style>
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
         <div class="card mb-4">
-            <div class="card-header pb-0">
+            <div class="card-header px-5 pb-0">
                 <h6>Add New Product</h6>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+            <div class="card px-5 pt-2 pb-3">
+                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -71,6 +76,54 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
+                                <div class="mb-3 d-flex align-items-center">
+                                    <hr class="flex-grow-1 hr-line">
+                                    <span class="px-2 text-muted fw-bold">SEO</span>
+                                    <hr class="flex-grow-1 hr-line">
+                                </div>
+
+                            <div class="mb-3">
+                                <label for="fabric" class="form-label">Meta Title<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="meta_title" name="meta_title" 
+                                       value="{{ old('meta_title') }}">
+                                @error('meta_title')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label for="keywords" class="form-label">Keywords<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="keywords" name="keywords" 
+                                       value="{{ old('keywords') }}" required>
+                                @error('keywords')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="tags" name="tags" 
+                                       value="{{ old('tags') }}" required>
+                                @error('tags')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!-- Meta Description -->
+                            
+                                    <div class="mb-3">
+                                        <label for="meta_description" class="form-label">Meta Description<sup class="text-danger">*</sup></label>
+                                        <textarea class="form-control" id="meta_description" name="meta_description" rows="4" required>{{ old('meta_description') }}</textarea>
+                                        @error('meta_description')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="schema_markup" class="form-label">Schema Markup</label>
+                                        <textarea class="form-control" id="schema_markup" name="schema_markup" rows="4">{{ old('schema_markup') }}</textarea>
+                                        @error('schema_markup')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                
                         </div>
 
                         <div class="col-md-6">
@@ -168,21 +221,24 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="4">{{ old('description') }}</textarea>
-                                @error('description')
-                                <div class="text-danger small">{{ $message }}</div>
-                                @enderror
+                            <!-- Description -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4">{{ old('description') }}</textarea>
+                                        @error('description')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
+
+                    
 
                     <!-- Submit Buttons -->
                     <div class="row">

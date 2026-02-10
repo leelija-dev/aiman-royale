@@ -57,6 +57,11 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
             'is_featured' => 'required|boolean',
+            'meta_title'=>'required|string',
+            'keywords'=>'required|string',
+            'tags'=>'required|string',
+            'meta_description'=>'required|string',
+            'schema_markup'=>'nullable|string',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
@@ -130,6 +135,11 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
             'is_featured' => 'required|boolean',
+            'meta_title'=>'required|string',
+            'keywords'=>'required|string',
+            'tags'=>'required|string',
+            'meta_description'=>'required|string',
+            'schema_markup'=>'nullable|string',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
