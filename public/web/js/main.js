@@ -414,8 +414,9 @@ $(document).ready(function () {
           0: { items: 1, margin: 10 },
           450: { items: 2, margin: 16 },
           768: { items: 3, margin: 20 },
-          1024: { items: 4 },
-          1280: { items: 5 }
+          1024: { items: 4, margin: 30 },
+          1280: { items: 4 ,margin: 35 },
+          1500: { items: 5 ,margin: 35 }
         }
       }
     },

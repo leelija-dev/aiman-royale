@@ -4,2691 +4,2779 @@
 @section('meta-description', 'Work with our expert designers to create custom-made outfits tailored to your style, measurements, and occasion.')
 
 @section('content')
-
 <style>
-    /* Custom Design Studio Styles */
-    .design-process-step {
-        position: relative;
-        counter-increment: step-counter;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    
-    .design-process-step::before {
-        content: counter(step-counter);
-        position: absolute;
-        top: -20px;
-        left: -20px;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 1.2rem;
-        z-index: 2;
+
+    body {
+        font-family: 'Raleway', sans-serif;
+        overflow-x: hidden;
+        background-color: #fef7f9;
+        color: #5a3d5c;
     }
-    
-    .fabric-swatch:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
     }
-    
-    .designer-card {
+
+    /* Hero Section */
+    .hero-bg {
+        background-image: linear-gradient(rgba(20, 15, 35, 0.75), rgba(40, 25, 60, 0.85)), url('https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+        background-size: cover;
+        background-position: center 30%;
+        background-repeat: no-repeat;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #d4a5c3 0%, #b76e79 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(183, 110, 121, 0.4);
+    }
+
+    .btn-outline {
+        border-color: #f8e1e7;
+        color: #f8e1e7;
         transition: all 0.3s ease;
     }
-    
-    .designer-card:hover {
+
+    .btn-outline:hover {
+        background-color: rgba(248, 225, 231, 0.1);
+        transform: translateY(-3px);
+    }
+
+
+      .step-badge {
+            background: linear-gradient(135deg, #f8c8dc 0%, #e6b0d2 100%);
+            box-shadow: 0 6px 20px rgba(230, 176, 210, 0.3);
+            width: 70px;
+            height: 70px;
+            
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #7a4a76;
+            border: 3px solid white;
+        }
+        
+        .step-card {
+            background-color: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(168, 129, 163, 0.08);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            border: 1px solid rgba(245, 220, 240, 0.5);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(168, 129, 163, 0.15);
+        }
+        
+        .step-image {
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .step-card:hover .step-image {
+            transform: scale(1.05);
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e6b0d2, transparent);
+            margin: 2rem 0;
+        }
+        
+        .vertical-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #f8c8dc, #d89fc1, #f8c8dc);
+            transform: translateX(-50%);
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .vertical-line {
+                display: block;
+            }
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #9a6b8c, #d89fc1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .step-title {
+            color: #7a4a76;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .step-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #f8c8dc, #e6b0d2);
+            border-radius: 2px;
+        }
+        
+        .process-description {
+            color: #6b556b;
+            line-height: 1.7;
+        }
+
+
+
+    /* Gallery Section */
+    .gallery-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(175, 135, 155, 0.08);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        position: relative;
+        height: 100%;
+    }
+
+    .gallery-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        box-shadow: 0 15px 40px rgba(175, 135, 155, 0.15);
     }
-    
-    .customization-option {
-        border: 2px solid transparent;
-        transition: all 0.3s ease;
-    }
-    
-    .customization-option.selected {
-        border-color: #ec4899;
-        box-shadow: 0 5px 15px rgba(236, 72, 153, 0.2);
-    }
-    
-    .timeline-step {
-        position: relative;
-        padding-left: 60px;
-    }
-    
-    .timeline-step::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 40px;
-        height: 40px;
-        border: 3px solid #ec4899;
-        border-radius: 50%;
-        background: white;
-    }
-    
-    .timeline-step::after {
-        content: '';
-        position: absolute;
-        left: 19px;
-        top: 40px;
-        width: 2px;
-        height: calc(100% + 20px);
-        background: #e5e7eb;
-    }
-    
-    .timeline-step:last-child::after {
-        display: none;
-    }
-    
-    .embroidery-preview {
-        background: linear-gradient(45deg, #f9fafb, #f3f4f6);
-        background-size: 400% 400%;
-        animation: gradientShift 15s ease infinite;
-    }
-    
-    @keyframes gradientShift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-    }
-    
-    .design-canvas {
-        background: repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            #f0f0f0 10px,
-            #f0f0f0 20px
-        );
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .design-canvas img {
-        transition: all 0.5s ease;
-    }
-    
-    /* Custom scrollbar for fabric selection */
-    .fabric-scroll::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    
-    .fabric-scroll::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-    
-    .fabric-scroll::-webkit-scrollbar-thumb {
-        background: #ec4899;
-        border-radius: 10px;
-    }
-    
-    /* Floating action button for design summary */
-    .design-summary-fab {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 100;
-        animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-    
-    /* Color swatch selected indicator */
-    .color-swatch.selected .selected-indicator {
-        display: flex !important;
-    }
-    
-    /* Zoom effect on hover for embroidery */
-    .embroidery-pattern:hover img {
-        transform: scale(1.1);
-    }
-</style>
 
-<!-- Hero Section -->
-<section class="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-white py-16 lg:py-24">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-0 w-72 h-72 bg-purple-300 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-300 rounded-full translate-x-1/2 translate-y-1/2"></div>
-    </div>
-    
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Create Your <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Dream Outfit</span>
-            </h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Work directly with our master designers to create custom-made clothing that fits perfectly and reflects your unique style.
-            </p>
-            <div class="flex flex-wrap gap-4 justify-center">
-                <a href="#design-process" 
-                   class="px-8 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                    Start Your Design
-                </a>
-                <a href="#meet-designers" 
-                   class="px-8 py-3 bg-white text-gray-800 font-semibold rounded-full border border-gray-300 hover:border-pink-500 hover:shadow-lg transition-all duration-300">
-                    Meet Our Designers
-                </a>
-            </div>
-        </div>
-        
-        <!-- Hero Stats -->
-        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div class="text-center">
-                <div class="text-3xl font-bold text-pink-600">500+</div>
-                <div class="text-gray-600">Fabrics</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-purple-600">50+</div>
-                <div class="text-gray-600">Master Designers</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-pink-600">4-6</div>
-                <div class="text-gray-600">Weeks Timeline</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-purple-600">1000+</div>
-                <div class="text-gray-600">Happy Clients</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-
-<!-- Interactive Design Studio -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Virtual Design Studio
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Explore our interactive tools to visualize your custom design
-            </p>
-        </div>
-        
-        <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <!-- Design Canvas -->
-            <div class="bg-gray-50 rounded-2xl p-6 shadow-lg">
-                <h3 class="text-xl font-bold text-gray-900 mb-6">Design Preview</h3>
-                <div class="design-canvas rounded-xl overflow-hidden h-[400px] relative">
-                    <!-- Base Outfit -->
-                    <img id="base-outfit" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Base Outfit" class="absolute inset-0 w-full h-full object-cover">
-                    
-                    <!-- Fabric Overlay -->
-                    <div id="fabric-overlay" class="absolute inset-0 opacity-30 mix-blend-multiply"></div>
-                    
-                    <!-- Color Overlay -->
-                    <div id="color-overlay" class="absolute inset-0 mix-blend-overlay opacity-40"></div>
-                    
-                    <!-- Embellishment Layer -->
-                    <div id="embellishment-layer" class="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-70"></div>
-                </div>
-                
-                <div class="mt-6 grid grid-cols-2 gap-4">
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Selected Options</h4>
-                        <div id="selected-options" class="space-y-2 text-sm">
-                            <div id="selected-fabric" class="text-gray-600">No fabric selected</div>
-                            <div id="selected-color" class="text-gray-600">No color selected</div>
-                            <div id="selected-embroidery" class="text-gray-600">No embroidery selected</div>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-gray-900" id="design-price">Rs. 15,000</div>
-                        <div class="text-sm text-gray-500">Base Price</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Customization Options -->
-            <div class="space-y-6">
-                <!-- Fabric Selection -->
-                <div class="bg-gray-50 rounded-xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Select Fabric</h3>
-                    <div class="fabric-scroll overflow-x-auto pb-4">
-                        <div class="flex gap-4">
-                            <!-- Fabric 1 -->
-                            <div class="fabric-swatch customization-option flex-shrink-0 w-24 cursor-pointer" 
-                                 data-fabric-id="1"
-                                 data-fabric-name="Pure Silk"
-                                 data-fabric-price="5000"
-                                 data-fabric-image="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                 data-fabric-color="#f472b6"
-                                 onclick="selectFabric(this)">
-                                <div class="aspect-square rounded-lg overflow-hidden mb-2 border-2 border-gray-300">
-                                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                         alt="Pure Silk" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-sm font-medium text-gray-900">Pure Silk</div>
-                                    <div class="text-xs text-gray-500">Rs. 5,000</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Fabric 2 -->
-                            <div class="fabric-swatch customization-option flex-shrink-0 w-24 cursor-pointer" 
-                                 data-fabric-id="2"
-                                 data-fabric-name="Banarasi Brocade"
-                                 data-fabric-price="8000"
-                                 data-fabric-image="https://images.unsplash.com/photo-1558769132-cb1f458a43b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                 data-fabric-color="#7c3aed"
-                                 onclick="selectFabric(this)">
-                                <div class="aspect-square rounded-lg overflow-hidden mb-2 border-2 border-gray-300">
-                                    <img src="https://images.unsplash.com/photo-1558769132-cb1f458a43b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                         alt="Banarasi Brocade" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-sm font-medium text-gray-900">Banarasi</div>
-                                    <div class="text-xs text-gray-500">Rs. 8,000</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Fabric 3 -->
-                            <div class="fabric-swatch customization-option flex-shrink-0 w-24 cursor-pointer" 
-                                 data-fabric-id="3"
-                                 data-fabric-name="Georgette"
-                                 data-fabric-price="3000"
-                                 data-fabric-image="https://images.unsplash.com/photo-1558769132-cb1f458a43b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                 data-fabric-color="#60a5fa"
-                                 onclick="selectFabric(this)">
-                                <div class="aspect-square rounded-lg overflow-hidden mb-2 border-2 border-gray-300">
-                                    <img src="https://images.unsplash.com/photo-1558769132-cb1f458a43b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                         alt="Georgette" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-sm font-medium text-gray-900">Georgette</div>
-                                    <div class="text-xs text-gray-500">Rs. 3,000</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Fabric 4 -->
-                            <div class="fabric-swatch customization-option flex-shrink-0 w-24 cursor-pointer" 
-                                 data-fabric-id="4"
-                                 data-fabric-name="Velvet"
-                                 data-fabric-price="6000"
-                                 data-fabric-image="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                 data-fabric-color="#dc2626"
-                                 onclick="selectFabric(this)">
-                                <div class="aspect-square rounded-lg overflow-hidden mb-2 border-2 border-gray-300">
-                                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                         alt="Velvet" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-sm font-medium text-gray-900">Velvet</div>
-                                    <div class="text-xs text-gray-500">Rs. 6,000</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Color Selection -->
-                <div class="bg-gray-50 rounded-xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Choose Color</h3>
-                    <div class="flex flex-wrap gap-3">
-                        @foreach(['#FF6B8B', '#FF9E80', '#FFD166', '#06D6A0', '#118AB2', '#073B4C', '#7209B7', '#F72585', '#FF9E00', '#4CC9F0'] as $index => $color)
-                        <div class="color-swatch customization-option w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300 relative"
-                             style="background-color: {{ $color }}"
-                             data-color="{{ $color }}"
-                             onclick="selectColor(this)">
-                            <div class="selected-indicator hidden absolute inset-0 rounded-full border-4 border-white"></div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                
-                <!-- Embroidery Patterns -->
-                <div class="bg-gray-50 rounded-xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Add Embroidery</h3>
-                    <div class="grid grid-cols-4 gap-3">
-                        <!-- Pattern 1 -->
-                        <div class="embroidery-pattern customization-option aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-gray-300"
-                             data-pattern-id="1"
-                             data-pattern-name="Zardozi Work"
-                             data-pattern-price="7000"
-                             data-pattern-image="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                             onclick="selectEmbroidery(this)">
-                            <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                 alt="Zardozi Work"
-                                 class="w-full h-full object-cover transition-transform duration-300">
-                        </div>
-                        
-                        <!-- Pattern 2 -->
-                        <div class="embroidery-pattern customization-option aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-gray-300"
-                             data-pattern-id="2"
-                             data-pattern-name="Sequins Border"
-                             data-pattern-price="4000"
-                             data-pattern-image="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                             onclick="selectEmbroidery(this)">
-                            <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                 alt="Sequins Border"
-                                 class="w-full h-full object-cover transition-transform duration-300">
-                        </div>
-                        
-                        <!-- Pattern 3 -->
-                        <div class="embroidery-pattern customization-option aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-gray-300"
-                             data-pattern-id="3"
-                             data-pattern-name="Mirror Work"
-                             data-pattern-price="3500"
-                             data-pattern-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                             onclick="selectEmbroidery(this)">
-                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                 alt="Mirror Work"
-                                 class="w-full h-full object-cover transition-transform duration-300">
-                        </div>
-                        
-                        <!-- Pattern 4 -->
-                        <div class="embroidery-pattern customization-option aspect-square rounded-lg overflow-hidden cursor-pointer border-2 border-gray-300"
-                             data-pattern-id="4"
-                             data-pattern-name="Thread Embroidery"
-                             data-pattern-price="2500"
-                             data-pattern-image="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                             onclick="selectEmbroidery(this)">
-                            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                                 alt="Thread Embroidery"
-                                 class="w-full h-full object-cover transition-transform duration-300">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Save Design Button -->
-                <button onclick="saveDesign()" 
-                        class="w-full px-6 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                    Save This Design
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Fabric & Materials Library -->
-<section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Premium Materials Library
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Choose from our curated collection of premium fabrics, threads, and embellishments
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Fabrics -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 bg-gradient-to-r from-pink-100 to-pink-200 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">Premium Fabrics</h3>
-                        <p class="text-sm text-gray-500">500+ varieties</p>
-                    </div>
-                </div>
-                <ul class="space-y-3">
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Silk & Banarasi</span>
-                        <span class="text-pink-600 font-medium">From Rs. 3,000</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Georgette & Chiffon</span>
-                        <span class="text-pink-600 font-medium">From Rs. 1,500</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Velvet & Brocade</span>
-                        <span class="text-pink-600 font-medium">From Rs. 2,500</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Cotton & Linen</span>
-                        <span class="text-pink-600 font-medium">From Rs. 800</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Embellishments -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 bg-gradient-to-r from-purple-100 to-purple-200 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">Embellishments</h3>
-                        <p class="text-sm text-gray-500">1000+ patterns</p>
-                    </div>
-                </div>
-                <ul class="space-y-3">
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Zardozi Work</span>
-                        <span class="text-purple-600 font-medium">From Rs. 5,000</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Sequins & Beads</span>
-                        <span class="text-purple-600 font-medium">From Rs. 2,000</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Mirror Work</span>
-                        <span class="text-purple-600 font-medium">From Rs. 1,500</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Thread Embroidery</span>
-                        <span class="text-purple-600 font-medium">From Rs. 800</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Accessories -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">Accessories</h3>
-                        <p class="text-sm text-gray-500">Complete the look</p>
-                    </div>
-                </div>
-                <ul class="space-y-3">
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Custom Dupattas</span>
-                        <span class="text-blue-600 font-medium">From Rs. 1,000</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Belt & Kamarbandh</span>
-                        <span class="text-blue-600 font-medium">From Rs. 500</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Neckline Designs</span>
-                        <span class="text-blue-600 font-medium">From Rs. 800</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-700">Sleeve Variations</span>
-                        <span class="text-blue-600 font-medium">From Rs. 600</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Meet Our Designers -->
-<section id="meet-designers" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Master Designers
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Meet the talented artisans who bring your vision to life with decades of combined experience
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Designer 1 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer1.jpg') }}" 
-                         alt="Aisha Khan"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            15+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Aisha Khan</h3>
-                            <p class="text-pink-600 font-medium">Lead Bridal Designer</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-pink-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-purple-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Specializes in traditional Indian bridal wear with modern interpretations. Expert in zardozi and silk work.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bridal Lehengas</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Zardozi Work</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Silk Sarees</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">250+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">150+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">12</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-pink-50 text-pink-600 font-semibold rounded-lg hover:bg-pink-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Designer 2 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer2.jpg') }}" 
-                         alt="Rahul Verma"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            12+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Rahul Verma</h3>
-                            <p class="text-blue-600 font-medium">Menswear Specialist</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-cyan-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Modern menswear designer focusing on fusion wear. Expert in sherwanis, bandhgalas, and contemporary suits.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Sherwanis</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Bandhgalas</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Fusion Wear</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">180+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">120+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">8</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Designer 3 -->
-            <div class="designer-card bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ asset('web/images/designers/designer3.jpg') }}" 
-                         alt="Priya Sharma"
-                         class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <!-- Designer Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            8+ Years
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">Priya Sharma</h3>
-                            <p class="text-emerald-600 font-medium">Contemporary Fusion Expert</p>
-                        </div>
-                        <!-- Social Links -->
-                        <div class="flex gap-2">
-                            <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-green-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-4">Specializes in Indo-western fusion wear. Creates modern silhouettes with traditional Indian elements.</p>
-                    
-                    <!-- Specializations -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Indo-Western</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Cocktail Wear</span>
-                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Modern Sarees</span>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">200+</div>
-                            <div class="text-xs text-gray-500">Designs</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">100+</div>
-                            <div class="text-xs text-gray-500">Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-gray-900">6</div>
-                            <div class="text-xs text-gray-500">Awards</div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Portfolio Button -->
-                    <a href="#" 
-                       class="mt-4 block text-center px-4 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors">
-                        View Portfolio
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- View All Designers Button -->
-        <div class="text-center mt-12">
-            <a href="#" class="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-full hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
-                View All Designers
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-            </a>
-        </div>
-    </div>
-</section>
-
-
-
-<!-- Final CTA -->
-<section class="py-16 bg-gradient-to-r from-pink-600 to-purple-600">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Create Your Dream Outfit?
-        </h2>
-        <p class="text-pink-100 text-xl mb-8 max-w-2xl mx-auto">
-            Schedule your free consultation with our master designers today
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-            <button onclick="openDesignModal()" 
-                    class="px-8 py-3 bg-white text-pink-600 font-bold rounded-full hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                Book Free Consultation
-            </button>
-            <a href="tel:+911234567890" 
-               class="px-8 py-3 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300">
-                Call: +91 1234567890
-            </a>
-        </div>
-        <p class="text-pink-200 mt-6">
-            Monday - Saturday: 10 AM - 7 PM | Sunday: 11 AM - 5 PM
-        </p>
-    </div>
-</section>
-
-<!-- Design Consultation Modal -->
-<div id="designModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-900">Book Design Consultation</h3>
-                <button onclick="closeDesignModal()" class="text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <form id="consultationForm" class="space-y-4">
-                @csrf
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Enter your name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Enter your email">
-                    </div>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="tel" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Enter your phone number">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Designer</label>
-                        <select name="designer_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                            <option value="">Any Available Designer</option>
-                            <option value="1">Aisha Khan - Bridal Specialist</option>
-                            <option value="2">Rahul Verma - Menswear Expert</option>
-                            <option value="3">Priya Sharma - Fusion Designer</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Occasion</label>
-                    <select name="occasion" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                        <option value="">Select Occasion</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="reception">Reception</option>
-                        <option value="engagement">Engagement</option>
-                        <option value="festival">Festival</option>
-                        <option value="party">Party</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Design Ideas & Requirements</label>
-                    <textarea name="requirements" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Describe your vision, preferred colors, style, and any specific requirements..."></textarea>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                        <input type="date" name="preferred_date" min="{{ date('Y-m-d', strtotime('+2 days')) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
-                        <select name="preferred_time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                            <option value="">Any Time</option>
-                            <option value="morning">Morning (9 AM - 12 PM)</option>
-                            <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
-                            <option value="evening">Evening (4 PM - 7 PM)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" id="virtual" name="virtual" class="w-4 h-4 text-pink-600 rounded focus:ring-pink-500">
-                    <label for="virtual" class="text-sm text-gray-700">Virtual Consultation (Video Call)</label>
-                </div>
-                
-                <div class="pt-4">
-                    <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                        Book Free Consultation
-                    </button>
-                    <p class="text-xs text-gray-500 text-center mt-2">Our team will contact you within 24 hours to confirm your appointment</p>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Floating Design Summary -->
-<div class="design-summary-fab hidden" id="designSummary">
-    <div class="bg-white rounded-xl shadow-2xl p-4 min-w-[300px] border border-gray-200">
-        <div class="flex justify-between items-center mb-3">
-            <h4 class="font-bold text-gray-900">Your Design Summary</h4>
-            <button onclick="closeSummary()" class="text-gray-500 hover:text-gray-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="space-y-2 mb-4">
-            <div id="summary-fabric" class="text-sm text-gray-600">No fabric selected</div>
-            <div id="summary-color" class="text-sm text-gray-600">No color selected</div>
-            <div id="summary-embroidery" class="text-sm text-gray-600">No embroidery selected</div>
-        </div>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-lg font-bold text-gray-900" id="summary-price">Rs. 15,000</div>
-                <div class="text-xs text-gray-500">Estimated Total</div>
-            </div>
-            <button onclick="saveDesign()" 
-                    class="px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-lg hover:bg-pink-700 transition-colors">
-                Save Design
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- second page code  -->
-
-<style>
-    /* Live Video Shopping Calendar Styles */
-    .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 8px;
-        margin-top: 20px;
+    .gallery-image {
+        height: 320px;
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.7s ease;
     }
-    
-    .calendar-day {
-        aspect-ratio: 1;
-        border: 2px solid transparent;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: linear-gradient(145deg, #ffffff, #f9fafb);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    .calendar-day:hover:not(.disabled):not(.today) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(236, 72, 153, 0.2);
-        border-color: #f472b6;
-    }
-    
-    .calendar-day.selected {
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-        color: white;
-        border-color: #ec4899;
-        box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
+
+    .gallery-card:hover .gallery-image {
         transform: scale(1.05);
     }
-    
-    .calendar-day.today {
-        border-color: #f472b6;
-        background: linear-gradient(135deg, #fce7f3, #fae8ff);
-    }
-    
-    .calendar-day.disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        background: #f3f4f6;
-    }
-    
-    .calendar-day-number {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 4px;
-    }
-    
-    .calendar-day-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .time-slot {
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    
-    .time-slot:hover:not(.booked) {
-        border-color: #ec4899;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(236, 72, 153, 0.1);
-    }
-    
-    .time-slot.selected {
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-        color: white;
-        border-color: transparent;
-        box-shadow: 0 8px 16px rgba(236, 72, 153, 0.2);
-    }
-    
-    .time-slot.booked {
-        background: #f3f4f6;
-        color: #9ca3af;
-        cursor: not-allowed;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .time-slot.booked::after {
-        content: "BOOKED";
+
+    .custom-label {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        background: rgba(239, 68, 68, 0.9);
-        color: white;
-        padding: 2px 20px;
-        font-size: 0.7rem;
-        font-weight: bold;
+        top: 20px;
+        right: -100px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #9a6b8c;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
         letter-spacing: 1px;
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
     }
-    
-    .stylist-card {
-        border: 2px solid transparent;
-        border-radius: 16px;
-        overflow: hidden;
-        transition: all 0.3s ease;
+
+    .gallery-card:hover .custom-label {
+        right: -30px;
+    }
+
+    .overlay-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(90, 61, 92, 0.9), transparent);
+        color: white;
+        padding: 25px 20px 20px;
+        transform: translateY(100%);
+        transition: transform 0.5s ease;
+    }
+
+    .gallery-card:hover .overlay-content {
+        transform: translateY(0);
+    }
+
+    /* Features Section */
+    .feature-card {
         background: white;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stylist-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        border-color: #ec4899;
-    }
-    
-    .stylist-card.selected {
-        border-color: #ec4899;
-        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
-    }
-    
-    .availability-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 6px;
-    }
-    
-    .availability-indicator.available {
-        background: #10b981;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-    }
-    
-    .availability-indicator.busy {
-        background: #ef4444;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
-    }
-    
-    .availability-indicator.away {
-        background: #f59e0b;
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-    }
-    
-    .video-call-preview {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 16px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(218, 165, 185, 0.08);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        height: 100%;
+        border: 1px solid rgba(255, 240, 245, 0.8);
         overflow: hidden;
         position: relative;
     }
-    
-    .video-call-preview::before {
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(218, 165, 185, 0.15);
+        border-color: rgba(255, 200, 221, 0.5);
+    }
+
+    .feature-card:before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-        animation: shine 3s infinite linear;
-    }
-    
-    @keyframes shine {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-    
-    .floating-cta {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 100;
-        animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-    }
-    
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    
-    .glass-effect {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .session-type-card {
-        border: 2px solid transparent;
-        border-radius: 16px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        background: white;
-    }
-    
-    .session-type-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .session-type-card.selected {
-        border-color: #ec4899;
-        background: linear-gradient(135deg, #fdf2f8, #faf5ff);
-        box-shadow: 0 10px 20px rgba(236, 72, 153, 0.1);
-    }
-    
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: #ec4899;
-        border-radius: 50%;
+        height: 4px;
+        background: linear-gradient(90deg, #f8c8dc, #e6b0d2);
         opacity: 0;
-        z-index: 9999;
-        pointer-events: none;
+        transition: opacity 0.3s ease;
     }
-    
-    /* Calendar navigation */
-    .calendar-nav-btn {
-        width: 40px;
-        height: 40px;
+
+    .feature-card:hover:before {
+        opacity: 1;
+    }
+
+    .icon-circle {
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
-        border: 2px solid #e5e7eb;
-        background: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        margin: 0 auto;
+        transition: all 0.4s ease;
+        background: linear-gradient(135deg, #fff5f9, #fff0f6);
+        box-shadow: 0 8px 25px rgba(218, 165, 185, 0.12);
+        border: 2px solid rgba(255, 255, 255, 0.9);
     }
-    
-    .calendar-nav-btn:hover {
-        border-color: #ec4899;
-        background: #fdf2f8;
+
+    .feature-card:hover .icon-circle {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, #f8c8dc, #e6b0d2);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        color: #9a6b8c;
+        transition: all 0.4s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        color: white;
         transform: scale(1.1);
     }
-    
-    /* Pulse animation for selected time */
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+
+    /* Craftsmanship Section */
+    .image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(175, 135, 155, 0.25);
     }
-    
-    .pulse-animation {
-        animation: pulse 2s infinite;
+
+    .image-container img {
+        transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+        width: 100%;
+        height: auto;
     }
-    
-    /* Gradient text */
-    .gradient-text {
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+
+    .image-container:hover img {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(90, 61, 92, 0.9), transparent);
+        color: white;
+        padding: 30px;
+        transform: translateY(100%);
+        transition: transform 0.6s ease;
+    }
+
+    .image-container:hover .image-overlay {
+        transform: translateY(0);
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 24px;
+        padding: 60px;
+        box-shadow: 0 20px 40px rgba(175, 135, 155, 0.1);
+        border: 1px solid rgba(245, 220, 240, 0.5);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .content-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #f8c8dc, #e6b0d2, #f8c8dc);
+    }
+
+    .craftsmanship-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(245, 220, 240, 0.5);
+    }
+
+    .craftsmanship-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .item-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #fff5f9, #fff0f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        flex-shrink: 0;
+        border: 2px solid white;
+        box-shadow: 0 8px 20px rgba(218, 165, 185, 0.15);
+    }
+
+    .item-icon i {
+        font-size: 1.5rem;
+        color: #9a6b8c;
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 15px 40px rgba(175, 135, 155, 0.1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        overflow: hidden;
+        border: 1px solid rgba(245, 220, 240, 0.5);
+        height: 100%;
+        position: relative;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(175, 135, 155, 0.2);
+        border-color: rgba(255, 200, 221, 0.5);
+    }
+
+    .customer-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 5px solid white;
+        box-shadow: 0 8px 25px rgba(218, 165, 185, 0.2);
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+        transition: all 0.4s ease;
+    }
+
+    .testimonial-card:hover .customer-photo {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(218, 165, 185, 0.3);
+    }
+
+    .customer-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .stars {
+        color: #FFC107;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+    }
+
+    /* Form Section */
+    .form-section {
+        background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+    }
+
+    .form-container {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f0f0f5;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-title {
+        color: #222233;
+        position: relative;
+        display: inline-block;
+    }
+
+    .form-title:after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff6b9d, #ff8fab);
+        border-radius: 2px;
+    }
+
+    .form-input {
+        background: #f9f9fb;
+        border: 2px solid #e8e8f0;
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        color: #333344;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #ff8fab;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255, 143, 171, 0.1);
+    }
+
+    .form-input:hover {
+        border-color: #d8d8e5;
+    }
+
+    .form-label {
+        color: #555566;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .required-star {
+        color: #ff6b9d;
+    }
+
+    .measurement-card {
+        background: #f9f9fb;
+        border-radius: 16px;
+        padding: 20px;
+        border: 2px solid #e8e8f0;
+        transition: all 0.2s ease;
+    }
+
+    .measurement-card:hover {
+        border-color: #ff8fab;
+        background: white;
+    }
+
+    .measurement-unit {
+        color: #777788;
+        font-size: 0.85rem;
+        margin-left: 4px;
+    }
+
+    .form-select {
+        appearance: none;
+        background: #f9f9fb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777788' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 18px center;
+        border: 2px solid #e8e8f0;
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        color: #333344;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: #ff8fab;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(255, 143, 171, 0.1);
+    }
+
+    .form-checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 2px solid #d8d8e5;
+        background: white;
+        appearance: none;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    .form-checkbox:checked {
+        background: #ff6b9d;
+        border-color: #ff6b9d;
+    }
+
+    .form-checkbox:checked:after {
+        content: '✓';
+        position: absolute;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .form-checkbox:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+    }
+
+    .form-radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #d8d8e5;
+        background: white;
+        appearance: none;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    .form-radio:checked {
+        border-color: #ff6b9d;
+    }
+
+    .form-radio:checked:after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ff6b9d;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .submit-button {
+        background: linear-gradient(90deg, #ff6b9d, #ff8fab);
+        color: white;
+        border: none;
+        padding: 16px 36px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(255, 107, 157, 0.25);
+        cursor: pointer;
+    }
+
+    .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(255, 107, 157, 0.35);
+    }
+
+    .help-tooltip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #e8e8f0;
+        color: #777788;
+        font-size: 0.7rem;
+        margin-left: 6px;
+        cursor: help;
+    }
+
+    .step-indicator {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #ff6b9d, #ff8fab);
+        color: white;
+        font-weight: 600;
+        margin-right: 12px;
+        flex-shrink: 0;
+        font-size: 0.9rem;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card {
+        border: 2px solid #e8e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: white;
+    }
+
+    .product-card:hover {
+        border-color: #ff8fab;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-card.selected {
+        border-color: #ff6b9d;
+        border-width: 3px;
+        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+    }
+
+    .inspiration-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .inspiration-image {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+    }
+
+    .inspiration-image:hover {
+        transform: scale(1.03);
+        border-color: #ff8fab;
+    }
+
+    .inspiration-image.selected {
+        border-color: #ff6b9d;
+        border-width: 3px;
+        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
+    }
+
+    .fabrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+
+    .fabric-card {
+        padding: 12px;
+        border: 2px solid #e8e8f0;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: white;
+    }
+
+    .fabric-card:hover {
+        border-color: #ff8fab;
+        transform: translateY(-2px);
+    }
+
+    .fabric-card.selected {
+        border-color: #ff6b9d;
+        background: rgba(255, 107, 157, 0.05);
+        border-width: 3px;
+    }
+
+    .fabric-sample {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        margin: 0 auto 8px;
+        background: #e8e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #777788;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #e8e8f0, transparent);
+        margin: 32px 0;
+    }
+
+    /* Common Styles */
+    .section-title {
+        background: linear-gradient(135deg, #9a6b8c, #d89fc1);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
-    
-    /* Loading animation */
-    .loading-dots {
-        display: inline-flex;
-        gap: 4px;
+
+    .fade-in {
+        animation: fadeIn 1s ease-out;
     }
-    
-    .loading-dots span {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #ec4899;
-        animation: bounce 1.4s infinite ease-in-out both;
+
+    .slide-up {
+        animation: slideUp 0.8s ease-out 0.2s both;
     }
-    
-    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-    
-    @keyframes bounce {
-        0%, 80%, 100% { transform: scale(0); }
-        40% { transform: scale(1.0); }
+
+    .slide-up-delayed {
+        animation: slideUp 0.8s ease-out 0.5s both;
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    .badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #f8c8dc, #e6b0d2);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 3px 10px rgba(218, 165, 185, 0.2);
+    }
+
+    .design-type {
+        display: inline-block;
+        background: linear-gradient(135deg, #fff5f9, #fff0f6);
+        color: #9a6b8c;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 10px;
+        border: 1px solid rgba(248, 200, 220, 0.5);
+    }
+
+    .filter-btn {
+        background: white;
+        color: #7a4a76;
+        border: 1px solid #f0d8e8;
+        transition: all 0.3s ease;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: linear-gradient(135deg, #f8c8dc 0%, #e6b0d2 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .category-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
+    .quote-icon {
+        color: #f8c8dc;
+        font-size: 2.5rem;
+        opacity: 0.7;
+        line-height: 1;
+        margin-bottom: -0.5rem;
+    }
+
+    .quote-mark {
+        font-size: 5rem;
+        color: #f8c8dc;
+        line-height: 1;
+        margin-bottom: -1.5rem;
+        opacity: 0.7;
+    }
+
+    .testimonial-text {
+        position: relative;
+        line-height: 1.7;
+    }
+
+    .testimonial-text:before {
+        content: '"';
+        position: absolute;
+        top: -10px;
+        left: -5px;
+        font-size: 4rem;
+        color: #f8c8dc;
+        opacity: 0.3;
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 </style>
 
+<!-- Hero Section -->
+<section class="hero-bg min-h-screen flex items-center justify-center relative px-4 py-16">
+    <div class="container mx-auto ">
+        <div class="text-center text-white fade-in">
+            <!-- Decorative elements -->
+            <div class="absolute top-10 left-5 md:left-10 opacity-20">
+                <i class="fas fa-heart text-3xl text-pink-200"></i>
+            </div>
+            <div class="absolute bottom-20 right-5 md:right-10 opacity-20">
+                <i class="fas fa-feather-alt text-3xl text-pink-200"></i>
+            </div>
+            <div class="absolute top-1/3 left-10 md:left-20 opacity-10">
+                <i class="fas fa-spool text-4xl text-pink-100"></i>
+            </div>
+            <div class="absolute bottom-1/3 right-10 md:right-20 opacity-10">
+                <i class="fas fa-scissors text-4xl text-pink-100"></i>
+            </div>
 
+            <!-- Main Content -->
+            <div class="mb-8 slide-up">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-wide">
+                    Design Your <span class="text-pink-200">Dream Outfit</span>
+                </h1>
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-300 to-purple-300 mx-auto mb-8"></div>
+            </div>
 
-<!-- How It Works -->
-<section id="how-it-works" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                How Live Video Shopping Works
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Experience the future of fashion shopping from the comfort of your home
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <!-- Step 1 -->
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div class="absolute -top-2 -left-2 w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                        1
-                    </div>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Book Your Slot</h3>
-                <p class="text-gray-600 text-sm">Choose your preferred date, time, and stylist</p>
+            <div class="max-w-3xl mx-auto mb-12 slide-up">
+                <p class="text-xl md:text-2xl font-light leading-relaxed">
+                    Transform your vision into a <span class="font-medium text-pink-100">one-of-a-kind creation</span>. Our master designers work with you to craft custom outfits that reflect your unique style, personality, and fit perfectly.
+                </p>
             </div>
-            
-            <!-- Step 2 -->
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div class="absolute -top-2 -left-2 w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                        2
-                    </div>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Join Live Session</h3>
-                <p class="text-gray-600 text-sm">Connect via video call at your scheduled time</p>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6 slide-up-delayed">
+                <a href="#custom-form" class="btn-primary text-white font-medium py-4 px-10 rounded-full text-lg flex items-center justify-center gap-3 pulse">
+                    <i class="fas fa-pen-fancy"></i>
+                    Start Your Custom Design
+                </a>
+                <a href="#gallery" class="btn-outline border-2 font-medium py-4 px-10 rounded-full text-lg flex items-center justify-center gap-3">
+                    <i class="fas fa-images"></i>
+                    View Design Gallery
+                </a>
             </div>
-            
-            <!-- Step 3 -->
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+
+            <!-- Additional Info -->
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left slide-up-delayed">
+                <div class="flex flex-col items-center md:items-start">
+                    <div class="bg-white/10 p-4 rounded-full mb-4">
+                        <i class="fas fa-ruler-combined text-2xl text-pink-200"></i>
                     </div>
-                    <div class="absolute -top-2 -left-2 w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                        3
-                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Perfect Fit Guarantee</h3>
+                    <p class="text-pink-100">Custom measurements ensure your outfit fits perfectly</p>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Try Outfits Virtually</h3>
-                <p class="text-gray-600 text-sm">See outfits on models and get styling advice</p>
+
+                <div class="flex flex-col items-center md:items-start">
+                    <div class="bg-white/10 p-4 rounded-full mb-4">
+                        <i class="fas fa-palette text-2xl text-pink-200"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Endless Customization</h3>
+                    <p class="text-pink-100">Choose from fabrics, colors, and designs that match your style</p>
+                </div>
+
+                <div class="flex flex-col items-center md:items-start">
+                    <div class="bg-white/10 p-4 rounded-full mb-4">
+                        <i class="fas fa-award text-2xl text-pink-200"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
+                    <p class="text-pink-100">Handcrafted with luxury materials and expert attention to detail</p>
+                </div>
             </div>
-            
-            <!-- Step 4 -->
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto">
-                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                        </svg>
-                    </div>
-                    <div class="absolute -top-2 -left-2 w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                        4
-                    </div>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Shop Instantly</h3>
-                <p class="text-gray-600 text-sm">Purchase selected items with exclusive live discounts</p>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <a href="#process" class="text-pink-200 animate-bounce">
+                    <i class="fas fa-chevron-down text-3xl"></i>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Main Booking Section -->
-<section id="book-now" class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Book Your Live Shopping Session
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Select your preferred date, time, and stylist for a personalized virtual shopping experience
-            </p>
+<!-- How Custom Design Works Section -->
+    <section class="py-16 md:py-24 px-4 md:px-8">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Section Header -->
+            <div class="text-center mb-16 md:mb-24">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">How Custom Design Works</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto process-description">
+                    Our personalized process transforms your vision into a one-of-a-kind creation, crafted exclusively for you.
+                </p>
+                <div class="flex justify-center mt-8">
+                    <div class="w-24 h-1 bg-gradient-to-r from-pink-200 to-purple-300 rounded-full"></div>
+                </div>
+            </div>
+            
+            <!-- Process Steps -->
+            <div class="relative">
+                <!-- Vertical connecting line for desktop -->
+                <div class="vertical-line hidden md:block"></div>
+                
+                <!-- Step 1: Share Your Idea -->
+                <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
+                    <!-- Step Badge (Mobile) -->
+                    <div class="md:hidden step-badge rounded-full mb-8">
+                        <span>1</span>
+                    </div>
+                    
+                    <!-- Image for Step 1 -->
+                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
+                        <div class="step-card overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                                alt="Woman discussing fashion design with a designer"
+                                class="w-full step-image"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Content for Step 1 -->
+                    <div class="w-full md:w-1/2 md:pl-12 relative">
+                        <!-- Step Badge (Desktop) -->
+                        <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
+                            <span>1</span>
+                        </div>
+                        
+                        <div class="md:pl-8">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Share Your Idea</h2>
+                            <p class="text-lg md:text-xl mb-6 process-description">
+                                Begin by sharing your vision with our design consultants. Whether you have a clear concept or just a feeling, we'll help translate your ideas into a tangible design direction.
+                            </p>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">One-on-one consultation with our design experts</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">Share inspiration images, sketches, or fabric swatches</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">Discuss occasion, style preferences, and personal aesthetic</span>
+                                </li>
+                            </ul>
+                            <div class="inline-flex items-center text-pink-500 font-medium">
+                                <span>Estimated time: 1-2 weeks</span>
+                                <i class="fas fa-arrow-right ml-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Divider -->
+                <div class="divider"></div>
+                
+                <!-- Step 2: We Sketch Your Design -->
+                <div class="flex flex-col md:flex-row-reverse items-center mb-20 md:mb-32">
+                    <!-- Step Badge (Mobile) -->
+                    <div class="md:hidden step-badge rounded-full mb-8">
+                        <span>2</span>
+                    </div>
+                    
+                    <!-- Image for Step 2 -->
+                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
+                        <div class="step-card overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1138&q=80" 
+                                alt="Fashion designer sketching a dress design"
+                                class="w-full step-image"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Content for Step 2 -->
+                    <div class="w-full md:w-1/2 md:pr-12 relative">
+                        <!-- Step Badge (Desktop) -->
+                        <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
+                            <span>2</span>
+                        </div>
+                        
+                        <div class="md:pr-8 text-right">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">We Sketch Your Design</h2>
+                            <p class="text-lg md:text-xl mb-6 process-description">
+                                Our designers create detailed sketches based on your consultation. You'll receive multiple design options to choose from, with revisions until it's perfect.
+                            </p>
+                            <ul class="space-y-3 mb-8 text-right">
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Custom sketches with multiple design variations</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Digital renderings to visualize the final look</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Collaborative refinement until you're completely satisfied</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                            </ul>
+                            <div class="inline-flex items-center text-pink-500 font-medium">
+                                <i class="fas fa-arrow-left mr-3"></i>
+                                <span>Estimated time: 2-3 weeks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Divider -->
+                <div class="divider"></div>
+                
+                <!-- Step 3: Fabric & Detail Selection -->
+                <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
+                    <!-- Step Badge (Mobile) -->
+                    <div class="md:hidden step-badge rounded-full mb-8">
+                        <span>3</span>
+                    </div>
+                    
+                    <!-- Image for Step 3 -->
+                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
+                        <div class="step-card overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1558769132-cb1f458e43b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" 
+                                alt="Assortment of luxury fabrics and materials"
+                                class="w-full step-image"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Content for Step 3 -->
+                    <div class="w-full md:w-1/2 md:pl-12 relative">
+                        <!-- Step Badge (Desktop) -->
+                        <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
+                            <span>3</span>
+                        </div>
+                        
+                        <div class="md:pl-8">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Fabric & Detail Selection</h2>
+                            <p class="text-lg md:text-xl mb-6 process-description">
+                                Choose from our curated collection of premium fabrics, trims, and embellishments. We'll guide you in selecting materials that bring your design to life.
+                            </p>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">Touch and feel actual fabric samples</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">Select buttons, zippers, lace, and other details</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                    <span class="process-description">See how different materials drape and move</span>
+                                </li>
+                            </ul>
+                            <div class="inline-flex items-center text-pink-500 font-medium">
+                                <span>Estimated time: 1-2 weeks</span>
+                                <i class="fas fa-arrow-right ml-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Divider -->
+                <div class="divider"></div>
+                
+                <!-- Step 4: Tailoring & Delivery -->
+                <div class="flex flex-col md:flex-row-reverse items-center">
+                    <!-- Step Badge (Mobile) -->
+                    <div class="md:hidden step-badge rounded-full mb-8">
+                        <span>4</span>
+                    </div>
+                    
+                    <!-- Image for Step 4 -->
+                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
+                        <div class="step-card overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" 
+                                alt="Finished custom dress on a mannequin"
+                                class="w-full step-image"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Content for Step 4 -->
+                    <div class="w-full md:w-1/2 md:pr-12 relative">
+                        <!-- Step Badge (Desktop) -->
+                        <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
+                            <span>4</span>
+                        </div>
+                        
+                        <div class="md:pr-8 text-right">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Tailoring & Delivery</h2>
+                            <p class="text-lg md:text-xl mb-6 process-description">
+                                Our master tailors bring your design to life with precision craftsmanship. After final fittings and adjustments, your custom creation is delivered to you.
+                            </p>
+                            <ul class="space-y-3 mb-8 text-right">
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Multiple fittings to ensure perfect fit</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Hand-finishing and quality inspection</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                                <li class="flex items-start justify-end">
+                                    <span class="process-description">Personalized packaging and delivery</span>
+                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                                </li>
+                            </ul>
+                            <div class="inline-flex items-center text-pink-500 font-medium">
+                                <i class="fas fa-arrow-left mr-3"></i>
+                                <span>Estimated time: 4-6 weeks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="mt-24 text-center">
+                <div class="max-w-2xl mx-auto bg-gradient-to-br from-pink-50 to-purple-50 rounded-3xl p-10 md:p-12 shadow-lg">
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-purple-800">Ready to Begin Your Design Journey?</h3>
+                    <p class="text-xl mb-10 text-purple-700">
+                        Schedule a consultation with our design team to start creating your dream outfit.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-6">
+                        <a href="#" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                            <i class="fas fa-calendar-check mr-3"></i>
+                            Book a Consultation
+                        </a>
+                        <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                            <i class="fas fa-images mr-3"></i>
+                            View Portfolio
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
+    
+    <script>
+        // Add hover effect for step cards
+        document.querySelectorAll('.step-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = '0 20px 40px rgba(168, 129, 163, 0.2)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 10px 30px rgba(168, 129, 163, 0.08)';
+            });
+        });
         
-        <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Left Column - Session Type & Stylists -->
-            <div class="space-y-8">
-                <!-- Session Type Selection -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Session Type</h3>
-                    <div class="space-y-3">
-                        <!-- Personal Styling -->
-                        <div class="session-type-card p-4" onclick="selectSessionType('personal')" id="personal-session">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-pink-100 to-purple-100 rounded-xl flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Personal Styling</h4>
-                                        <p class="text-sm text-gray-500">30 mins • 1-on-1</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-gray-900">Rs. 999</div>
-                                    <div class="text-xs text-gray-500">Free on first booking</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Group Shopping -->
-                        <div class="session-type-card p-4" onclick="selectSessionType('group')" id="group-session">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Group Shopping</h4>
-                                        <p class="text-sm text-gray-500">60 mins • Up to 5 people</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-gray-900">Rs. 1,999</div>
-                                    <div class="text-xs text-green-600">Save Rs. 500 per person</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Bridal Consultation -->
-                        <div class="session-type-card p-4" onclick="selectSessionType('bridal')" id="bridal-session">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-rose-100 to-pink-100 rounded-xl flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Bridal Consultation</h4>
-                                        <p class="text-sm text-gray-500">90 mins • Complete look</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-gray-900">Rs. 2,999</div>
-                                    <div class="text-xs text-gray-500">Includes accessory styling</div>
-                                </div>
-                            </div>
-                        </div>
+        // Add scroll animation for step cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe step cards for animation
+        document.querySelectorAll('.step-card').forEach(card => {
+            card.style.opacity = '0.7';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+
+<!-- Gallery Section -->
+<section id="gallery" class="py-16 md:py-24 px-4 md:px-8 bg-gray-50">
+    <div class="container mx-auto max-w-7xl">
+        <!-- Section Header -->
+        <div class="text-center mb-16 fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">Our Custom Creations</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+                Each piece is a unique story, crafted with precision and passion. Explore our gallery of custom-designed outfits created for special moments.
+            </p>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+                <button class="filter-btn py-3 px-6 rounded-full text-sm md:text-base font-medium active" data-filter="all">
+                    <i class="fas fa-star mr-2"></i>All Designs
+                </button>
+                <button class="filter-btn py-3 px-6 rounded-full text-sm md:text-base font-medium" data-filter="wedding">
+                    <i class="fas fa-heart mr-2"></i>Wedding
+                </button>
+                <button class="filter-btn py-3 px-6 rounded-full text-sm md:text-base font-medium" data-filter="evening">
+                    <i class="fas fa-moon mr-2"></i>Evening Gowns
+                </button>
+                <button class="filter-btn py-3 px-6 rounded-full text-sm md:text-base font-medium" data-filter="casual">
+                    <i class="fas fa-sun mr-2"></i>Casual Wear
+                </button>
+                <button class="filter-btn py-3 px-6 rounded-full text-sm md:text-base font-medium" data-filter="accessories">
+                    <i class="fas fa-gem mr-2"></i>Accessories
+                </button>
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <!-- Item 1 -->
+            <div class="gallery-card fade-in" data-category="wedding">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Elegant wedding gown with lace details"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Wedding Gown</span>
+                        <h3 class="text-xl font-bold mb-2">Ivory Lace Illusion</h3>
+                        <p class="text-sm opacity-90">Hand-beaded lace with silk underlay</p>
                     </div>
                 </div>
-                
-                <!-- Available Stylists -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Available Stylists</h3>
-                    <div class="space-y-3">
-                        <!-- Stylist 1 -->
-                        <div class="stylist-card p-3" onclick="selectStylist(1)" id="stylist-1">
-                            <div class="flex items-center gap-3">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                                         alt="Aisha Khan" 
-                                         class="w-14 h-14 rounded-xl object-cover">
-                                    <span class="availability-indicator available absolute -bottom-1 -right-1"></span>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-gray-900">Aisha Khan</h4>
-                                    <div class="flex items-center gap-2">
-                                        <div class="text-sm text-gray-500">Bridal Specialist</div>
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            <span class="text-xs text-gray-600 ml-1">4.9</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm font-medium text-gray-900">Available</div>
-                                    <div class="text-xs text-green-600">5 slots today</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Stylist 2 -->
-                        <div class="stylist-card p-3" onclick="selectStylist(2)" id="stylist-2">
-                            <div class="flex items-center gap-3">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                                         alt="Rahul Verma" 
-                                         class="w-14 h-14 rounded-xl object-cover">
-                                    <span class="availability-indicator busy absolute -bottom-1 -right-1"></span>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-gray-900">Rahul Verma</h4>
-                                    <div class="flex items-center gap-2">
-                                        <div class="text-sm text-gray-500">Menswear Expert</div>
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            <span class="text-xs text-gray-600 ml-1">4.8</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm font-medium text-gray-900">Limited</div>
-                                    <div class="text-xs text-yellow-600">2 slots left</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Stylist 3 -->
-                        <div class="stylist-card p-3" onclick="selectStylist(3)" id="stylist-3">
-                            <div class="flex items-center gap-3">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                                         alt="Priya Sharma" 
-                                         class="w-14 h-14 rounded-xl object-cover">
-                                    <span class="availability-indicator available absolute -bottom-1 -right-1"></span>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-gray-900">Priya Sharma</h4>
-                                    <div class="flex items-center gap-2">
-                                        <div class="text-sm text-gray-500">Fusion Fashion</div>
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            <span class="text-xs text-gray-600 ml-1">4.9</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm font-medium text-gray-900">Available</div>
-                                    <div class="text-xs text-green-600">8 slots today</div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Ivory Lace Illusion</h3>
+                        <span class="text-pink-600 font-bold">$$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Custom designed for Sarah's vineyard wedding with French lace and silk details.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: June 2023</span>
                     </div>
                 </div>
             </div>
-            
-            <!-- Center Column - Calendar -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center justify-between mb-6">
+
+            <!-- Item 2 -->
+            <div class="gallery-card fade-in" data-category="evening">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80"
+                        alt="Red evening gown with dramatic silhouette"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Evening Gown</span>
+                        <h3 class="text-xl font-bold mb-2">Scarlet Mermaid</h3>
+                        <p class="text-sm opacity-90">Silk satin with draped neckline</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Scarlet Mermaid</h3>
+                        <span class="text-pink-600 font-bold">$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Designed for a gala event with custom draping and silk satin fabric.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: March 2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="gallery-card fade-in" data-category="casual">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Floral print dress with flutter sleeves"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Day Dress</span>
+                        <h3 class="text-xl font-bold mb-2">Garden Party Flutter</h3>
+                        <p class="text-sm opacity-90">Floral chiffon with flutter sleeves</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Garden Party Flutter</h3>
+                        <span class="text-pink-600 font-bold">$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Lightweight chiffon dress for spring garden parties with custom floral print.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: May 2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="gallery-card fade-in" data-category="wedding">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1138&q=80"
+                        alt="Bohemian wedding dress with floral embroidery"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Wedding Gown</span>
+                        <h3 class="text-xl font-bold mb-2">Bohemian Dream</h3>
+                        <p class="text-sm opacity-90">Hand-embroidered with silk flowers</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Bohemian Dream</h3>
+                        <span class="text-pink-600 font-bold">$$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Beach wedding gown with hand-embroidered floral details and flowing silhouette.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: August 2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="gallery-card fade-in" data-category="evening">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1134&q=80"
+                        alt="Black velvet evening gown"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Evening Gown</span>
+                        <h3 class="text-xl font-bold mb-2">Midnight Velvet</h3>
+                        <p class="text-sm opacity-90">Italian velvet with pearl beading</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Midnight Velvet</h3>
+                        <span class="text-pink-600 font-bold">$$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Dramatic velvet gown with hand-sewn pearl beading for winter galas.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: December 2022</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="gallery-card fade-in" data-category="casual">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Tailored linen suit for women"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Tailored Suit</span>
+                        <h3 class="text-xl font-bold mb-2">Executive Linen</h3>
+                        <p class="text-sm opacity-90">Italian linen with silk lining</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Executive Linen</h3>
+                        <span class="text-pink-600 font-bold">$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Tailored linen suit for professional settings with custom-fit trousers.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: April 2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 7 -->
+            <div class="gallery-card fade-in" data-category="accessories">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1590649887896-6c8e6668407f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1130&q=80"
+                        alt="Hand-beaded clutch purse"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Accessory</span>
+                        <h3 class="text-xl font-bold mb-2">Crystal Clutch</h3>
+                        <p class="text-sm opacity-90">Hand-beaded with Swarovski crystals</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Crystal Clutch</h3>
+                        <span class="text-pink-600 font-bold">$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Evening clutch with hand-sewn crystals to match a custom gown.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: February 2023</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 8 -->
+            <div class="gallery-card fade-in" data-category="wedding">
+                <div class="relative overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Modern minimalist wedding dress"
+                        class="gallery-image">
+                    <div class="custom-label">CUSTOM MADE</div>
+                    <div class="overlay-content">
+                        <span class="category-tag">Wedding Gown</span>
+                        <h3 class="text-xl font-bold mb-2">Modern Minimalist</h3>
+                        <p class="text-sm opacity-90">Crepe fabric with architectural lines</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">Modern Minimalist</h3>
+                        <span class="text-pink-600 font-bold">$$</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Architectural wedding gown with clean lines and minimalist aesthetic.</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        <span>Completed: July 2023</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center mt-16 fade-in">
+            <p class="text-lg md:text-xl text-gray-600 mb-10">
+                See something you love? Each design can be adapted to your personal style and measurements.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="#custom-form" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <i class="fas fa-pen-fancy mr-3"></i>
+                    Start Your Custom Design
+                </a>
+                <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                    <i class="fas fa-images mr-3"></i>
+                    View Full Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Our Custom Design Section -->
+<section class="py-16 md:py-24 px-4 md:px-8" style="background: linear-gradient(135deg, #fff5f9 0%, #fff0f6 100%);">
+    <div class="container mx-auto max-w-7xl">
+        <!-- Section Header -->
+        <div class="text-center mb-16 fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">Why Choose Our Custom Design</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+                Experience the difference of truly personalized fashion. Every piece is created with exceptional care, quality, and attention to your unique style.
+            </p>
+            <div class="flex justify-center mt-8">
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-200 to-purple-300 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            <!-- Feature 1: Perfect Fit Guarantee -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-ruler-combined feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Perfect Fit Guarantee</h3>
+                    <p class="text-gray-600 mb-6">
+                        Every garment is tailored to your exact measurements, ensuring a flawless fit that complements your unique body shape.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>Included with every design</span>
+                        <i class="fas fa-check-circle ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Guaranteed</div>
+            </div>
+
+            <!-- Feature 2: Premium Fabrics -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-spool feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Premium Fabrics</h3>
+                    <p class="text-gray-600 mb-6">
+                        Select from our curated collection of luxurious fabrics including silks, fine wools, organic cottons, and imported lace.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>200+ fabric options</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Luxury</div>
+            </div>
+
+            <!-- Feature 3: Handmade Detailing -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-hand-sparkles feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Handmade Detailing</h3>
+                    <p class="text-gray-600 mb-6">
+                        Each piece features exquisite hand-finishing, from delicate embroidery to carefully placed beading and custom buttons.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>Artisan craftsmanship</span>
+                        <i class="fas fa-gem ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Artisanal</div>
+            </div>
+
+            <!-- Feature 4: Personal Designer Support -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-user-cog feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Personal Designer Support</h3>
+                    <p class="text-gray-600 mb-6">
+                        Work one-on-one with an experienced designer who guides you through every step, from concept to final fitting.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>Dedicated expert</span>
+                        <i class="fas fa-star ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Exclusive</div>
+            </div>
+
+            <!-- Feature 5: Custom Measurements -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-vest feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Custom Measurements</h3>
+                    <p class="text-gray-600 mb-6">
+                        Our detailed measurement process captures 20+ points for precision tailoring that standard sizes can't achieve.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>20+ measurement points</span>
+                        <i class="fas fa-ruler ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Precision</div>
+            </div>
+
+            <!-- Feature 6: Worldwide Shipping -->
+            <div class="feature-card fade-in">
+                <div class="p-8 text-center">
+                    <div class="icon-circle mb-8">
+                        <i class="fas fa-globe-americas feature-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Worldwide Shipping</h3>
+                    <p class="text-gray-600 mb-6">
+                        We deliver your custom creations anywhere in the world with premium packaging and careful handling.
+                    </p>
+                    <div class="inline-flex items-center text-pink-600 font-medium text-sm">
+                        <span>100+ countries served</span>
+                        <i class="fas fa-shipping-fast ml-2"></i>
+                    </div>
+                </div>
+                <div class="badge">Global</div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="stat1">0</div>
+                <div class="text-gray-600 font-medium">Custom Designs</div>
+                <div class="text-xs text-gray-500 mt-1">Created with love</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="stat2">0</div>
+                <div class="text-gray-600 font-medium">Happy Clients</div>
+                <div class="text-xs text-gray-500 mt-1">Across the globe</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="stat3">0</div>
+                <div class="text-gray-600 font-medium">Fabric Options</div>
+                <div class="text-xs text-gray-500 mt-1">Luxury materials</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="stat4">0</div>
+                <div class="text-gray-600 font-medium">Countries Served</div>
+                <div class="text-xs text-gray-500 mt-1">Worldwide delivery</div>
+            </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="mt-20 max-w-3xl mx-auto fade-in">
+            <div class="bg-white rounded-2xl p-8 md:p-10 shadow-lg border border-pink-100">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 rounded-full overflow-hidden mr-6 border-4 border-pink-100">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80" alt="Sarah Johnson" class="w-full h-full object-cover">
+                    </div>
                     <div>
-                        <h3 class="text-xl font-bold text-gray-900">Select Date</h3>
-                        <p class="text-gray-500 text-sm" id="current-month">February 2024</p>
+                        <h4 class="text-xl font-bold text-gray-800">Sarah Johnson</h4>
+                        <p class="text-gray-600">Bride & Custom Gown Client</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button class="calendar-nav-btn" onclick="changeMonth(-1)">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <button class="calendar-nav-btn" onclick="changeMonth(1)">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
+                    <div class="ml-auto text-amber-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
                     </div>
                 </div>
-                
-                <!-- Day Headers -->
-                <div class="grid grid-cols-7 gap-2 mb-4">
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">SUN</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">MON</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">TUE</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">WED</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">THU</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">FRI</div>
-                    <div class="text-center text-sm font-semibold text-gray-500 py-2">SAT</div>
+                <p class="text-gray-700 text-lg italic">
+                    "Working with Boutique Couture was a dream. My custom wedding gown fit perfectly without a single alteration. The attention to detail and personal designer support made me feel like a true collaborator in creating my dream dress. The quality is unmatched!"
+                </p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center mt-16 fade-in">
+            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200 pulse">
+                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready to Experience Custom Design?</h3>
+                <p class="text-xl mb-10 text-gray-600">
+                    Begin your journey to a perfectly fitted, one-of-a-kind creation made just for you.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#custom-form" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        Book a Consultation
+                    </a>
+                    <a href="#contact" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-phone-alt mr-3"></i>
+                        Contact Our Designers
+                    </a>
                 </div>
-                
-                <!-- Calendar Grid -->
-                <div class="calendar-grid" id="calendar-grid">
-                    <!-- Calendar days will be generated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Crafted With Passion Section -->
+<section class="py-16 md:py-24 px-4 md:px-8">
+    <div class="container mx-auto max-w-7xl">
+        <!-- Split Layout -->
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+            <!-- Left Side: Image -->
+            <div class="w-full lg:w-1/2 fade-in">
+                <div class="image-container">
+                    <img
+                        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Fashion designer working on a dress in her studio"
+                        class="w-full h-auto">
+                    <div class="image-overlay">
+                        <h4 class="text-xl font-bold mb-2">Master Craftswoman at Work</h4>
+                        <p class="text-sm opacity-90">Designer Elena carefully hand-finishes a custom gown</p>
+                    </div>
                 </div>
-                
-                <!-- Legend -->
-                <div class="mt-8 flex flex-wrap gap-4 justify-center">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500"></div>
-                        <span class="text-xs text-gray-600">Selected</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full border-2 border-pink-300 bg-pink-50"></div>
-                        <span class="text-xs text-gray-600">Today</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-gray-200"></div>
-                        <span class="text-xs text-gray-600">Unavailable</span>
+
+                <!-- Image Caption -->
+                <div class="flex items-center justify-center mt-8">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden border-4 border-pink-100 mr-4">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1061&q=80" alt="Designer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-gray-800">Elena Martinez</h5>
+                            <p class="text-sm text-gray-600">Lead Designer & Founder</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Right Column - Time Slots & Booking Summary -->
-            <div class="space-y-8">
-                <!-- Time Slots -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold text-gray-900">Available Time Slots</h3>
-                        <span class="text-sm text-gray-500" id="selected-date-display">Select a date</span>
+
+            <!-- Right Side: Content -->
+            <div class="w-full lg:w-1/2 fade-in">
+                <div class="content-card relative">
+                    <!-- Content -->
+                    <div class="mb-10">
+                        <div class="quote-mark">"</div>
+                        <h2 class="text-4xl md:text-5xl font-bold mb-8 section-title">Crafted With Passion</h2>
                     </div>
-                    
-                    <div class="space-y-3" id="time-slots-container">
-                        <!-- Time slots will be generated by JavaScript -->
-                        <div class="text-center py-8 text-gray-500">
-                            <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <p>Select a date to view available time slots</p>
+
+                    <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
+                        Every stitch tells a story in our atelier. We believe that true luxury lies in the details—the careful hand-stitching, the precise draping, the thoughtful selection of materials that transform your vision into a wearable work of art.
+                    </p>
+
+                    <p class="text-gray-600 mb-12 leading-relaxed">
+                        Our designs are born from a collaboration between your imagination and our expertise. From the initial sketch to the final fitting, we pour our passion into creating garments that don't just fit your body, but also reflect your personality and style. Each piece is a testament to the timeless art of couture craftsmanship.
+                    </p>
+
+                    <!-- Craftsmanship Highlights -->
+                    <div class="mb-12">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-8">Our Craftsmanship Principles</h4>
+
+                        <div class="craftsmanship-item">
+                            <div class="item-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xl font-bold text-gray-800 mb-2">Intentional Design</h5>
+                                <p class="text-gray-600">Every element is thoughtfully considered, from silhouette to stitch type, to ensure harmony and purpose in the final creation.</p>
+                            </div>
+                        </div>
+
+                        <div class="craftsmanship-item">
+                            <div class="item-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xl font-bold text-gray-800 mb-2">Exceptional Quality</h5>
+                                <p class="text-gray-600">We source only the finest materials and employ traditional techniques that stand the test of time and wear.</p>
+                            </div>
+                        </div>
+
+                        <div class="craftsmanship-item">
+                            <div class="item-icon">
+                                <i class="fas fa-user-edit"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xl font-bold text-gray-800 mb-2">Personal Connection</h5>
+                                <p class="text-gray-600">Your journey with us is collaborative and personal, ensuring the final piece is a true reflection of you.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signature -->
+                    <div class="flex items-center justify-between pt-8 border-t border-pink-100">
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">A message from our founder</p>
+                            <p class="font-bold text-gray-800">"We don't just make clothes, we create heirlooms."</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-800">Elena Martinez</p>
+                            <p class="text-sm text-gray-600">Founder & Creative Director</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Booking Summary -->
-                <div class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl p-6 shadow-lg">
-                    <h3 class="text-xl font-bold text-white mb-4">Booking Summary</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-pink-100">Session Type:</span>
-                            <span class="font-semibold text-white" id="summary-session-type">Not selected</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-pink-100">Stylist:</span>
-                            <span class="font-semibold text-white" id="summary-stylist">Not selected</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-pink-100">Date:</span>
-                            <span class="font-semibold text-white" id="summary-date">Not selected</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-pink-100">Time:</span>
-                            <span class="font-semibold text-white" id="summary-time">Not selected</span>
-                        </div>
-                        
-                        <div class="border-t border-pink-300 pt-4 mt-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-pink-100 text-lg">Total:</span>
-                                <span class="text-2xl font-bold text-white" id="summary-total">Rs. 0</span>
-                            </div>
-                        </div>
-                        
-                        <button onclick="confirmBooking()" 
-                                id="confirm-booking-btn"
-                                disabled
-                                class="w-full mt-6 py-3 bg-white text-pink-600 font-bold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
-                            Confirm Booking
-                        </button>
-                        
-                        <p class="text-pink-200 text-xs text-center mt-4">
-                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            Secure payment • Free cancellation within 24 hours
+            </div>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-20 text-center fade-in">
+            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
+                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Experience True Craftsmanship</h3>
+                <p class="text-xl mb-10 text-gray-600">
+                    Begin your journey to a one-of-a-kind creation made with passion and precision.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#custom-form" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-pen-fancy mr-3"></i>
+                        Start Your Design
+                    </a>
+                    <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-video mr-3"></i>
+                        Virtual Studio Tour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-16 md:py-24 px-4 md:px-8 bg-gray-50">
+    <div class="container mx-auto max-w-7xl">
+        <!-- Section Header -->
+        <div class="text-center mb-16 fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">Client Stories</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+                Hear from our clients about their experience creating custom outfits that tell their unique stories.
+            </p>
+            <div class="flex justify-center mt-8">
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-200 to-purple-300 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Testimonials Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card fade-in">
+                <div class="p-8 text-center">
+                    <!-- Customer Photo -->
+                    <div class="customer-photo mb-8">
+                        <img
+                            src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
+                            alt="Sarah Johnson">
+                    </div>
+
+                    <!-- Stars Rating -->
+                    <div class="stars mb-6">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+
+                    <!-- Testimonial Text -->
+                    <div class="testimonial-text mb-8">
+                        <p class="text-gray-700 italic">
+                            "My custom wedding gown was beyond anything I could have imagined. The attention to detail and personal care made me feel so special. It fit perfectly without a single alteration needed!"
                         </p>
                     </div>
+
+                    <!-- Customer Info -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Sarah Johnson</h3>
+                        <p class="text-gray-600 mb-3">Bride & Custom Gown Client</p>
+                        <div class="design-type">Wedding Gown</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card fade-in">
+                <div class="p-8 text-center">
+                    <!-- Customer Photo -->
+                    <div class="customer-photo mb-8">
+                        <img
+                            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                            alt="Maya Rodriguez">
+                    </div>
+
+                    <!-- Stars Rating -->
+                    <div class="stars mb-6">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+
+                    <!-- Testimonial Text -->
+                    <div class="testimonial-text mb-8">
+                        <p class="text-gray-700 italic">
+                            "As a CEO, I needed a power suit that was both professional and feminine. The team created a custom suit that fits my body perfectly and makes me feel confident in every meeting."
+                        </p>
+                    </div>
+
+                    <!-- Customer Info -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Maya Rodriguez</h3>
+                        <p class="text-gray-600 mb-3">CEO & Business Client</p>
+                        <div class="design-type">Executive Suit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card fade-in">
+                <div class="p-8 text-center">
+                    <!-- Customer Photo -->
+                    <div class="customer-photo mb-8">
+                        <img
+                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80"
+                            alt="Chloe Bennett">
+                    </div>
+
+                    <!-- Stars Rating -->
+                    <div class="stars mb-6">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+
+                    <!-- Testimonial Text -->
+                    <div class="testimonial-text mb-8">
+                        <p class="text-gray-700 italic">
+                            "I've never found clothes that fit my petite frame properly until I discovered custom design. My entire wardrobe is now tailored to me, and I feel amazing in every piece."
+                        </p>
+                    </div>
+
+                    <!-- Customer Info -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Chloe Bennett</h3>
+                        <p class="text-gray-600 mb-3">Fashion Blogger</p>
+                        <div class="design-type">Capsule Wardrobe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Testimonial -->
+        <div class="mt-12 fade-in">
+            <div class="testimonial-card">
+                <div class="p-10">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <!-- Customer Photo -->
+                        <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
+                            <div class="customer-photo">
+                                <img
+                                    src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
+                                    alt="Isabella Chen">
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-grow text-center md:text-left">
+                            <div class="stars mb-4">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+
+                            <div class="testimonial-text mb-6">
+                                <p class="text-gray-700 italic text-lg">
+                                    "After having my second child, none of my old clothes fit right. The custom design process helped me create a wardrobe that celebrates my new body. The personal designer was so understanding and created pieces that make me feel beautiful again."
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-1">Isabella Chen</h3>
+                                <p class="text-gray-600">Mother & Returning Client</p>
+                                <div class="design-type mt-3">Postpartum Wardrobe</div>
+                            </div>
+                        </div>
+
+                        <!-- Quote Icon -->
+                        <div class="flex-shrink-0 mt-6 md:mt-0 md:ml-8">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="testimonial-stat1">98%</div>
+                <div class="text-gray-600 font-medium">Client Satisfaction</div>
+                <div class="text-xs text-gray-500 mt-1">Based on post-design surveys</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="testimonial-stat2">1500+</div>
+                <div class="text-gray-600 font-medium">Custom Designs</div>
+                <div class="text-xs text-gray-500 mt-1">Created with passion</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="testimonial-stat3">72%</div>
+                <div class="text-gray-600 font-medium">Return Clients</div>
+                <div class="text-xs text-gray-500 mt-1">Come back for more designs</div>
+            </div>
+
+            <div class="text-center fade-in">
+                <div class="text-4xl md:text-5xl font-bold text-gray-800 mb-2" id="testimonial-stat4">4.9</div>
+                <div class="text-gray-600 font-medium">Average Rating</div>
+                <div class="text-xs text-gray-500 mt-1">Out of 5 stars</div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center mt-16 fade-in">
+            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
+                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready for Your Custom Experience?</h3>
+                <p class="text-xl mb-10 text-gray-600">
+                    Join our community of satisfied clients and create a piece that's uniquely yours.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#custom-form" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-pen-fancy mr-3"></i>
+                        Start Your Design Journey
+                    </a>
+                    <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-comments mr-3"></i>
+                        Read More Stories
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Video Call Preview -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="video-call-preview rounded-2xl overflow-hidden">
-            <div class="p-8 md:p-12 text-white text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">Experience Live Video Shopping</h2>
-                <p class="text-xl text-pink-100 mb-8 max-w-2xl mx-auto">
-                    See how our virtual styling sessions work with this interactive preview
+<!-- Custom Design Form Section -->
+<section id="custom-form" class="form-section py-16 px-4 md:px-8">
+    <div class="container mx-auto ">
+        <!-- Header with Image -->
+        <div class="flex flex-col lg:flex-row items-center gap-10 mb-12">
+            <div class="lg:w-2/5">
+                <div class="overflow-hidden rounded-2xl shadow-xl">
+                    <img
+                        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        alt="Custom Design Process"
+                        class="w-full h-64 md:h-80 object-cover">
+                </div>
+            </div>
+            <div class="lg:w-3/5 text-center lg:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4 form-title">Custom Design Request</h1>
+                <p class="text-lg text-gray-600 mb-6">
+                    Share your vision and measurements for a perfectly tailored creation. Our designers will bring your dream outfit to life.
                 </p>
-                
-                <div class="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
-                    <!-- Video Preview -->
-                    <div class="relative">
-                        <div class="aspect-video bg-black/30 rounded-2xl overflow-hidden border-4 border-white/20">
-                            <!-- Mock video interface -->
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="text-center">
-                                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
-                                    <p class="text-white/80">Live video connection</p>
+                <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full bg-pink-500 mr-2"></div>
+                        <span class="text-sm font-medium">Perfect Fit Guaranteed</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full bg-pink-500 mr-2"></div>
+                        <span class="text-sm font-medium">Premium Materials</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full bg-pink-500 mr-2"></div>
+                        <span class="text-sm font-medium">Expert Craftsmanship</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Form Container -->
+        <div class="form-container p-6 md:p-10">
+            <form id="design-form" class="space-y-12">
+                <!-- Step 1: Design Inspiration -->
+                <div class="space-y-8">
+                    <div class="flex items-center">
+                        <div class="step-indicator">1</div>
+                        <h2 class="text-2xl font-bold text-gray-800">Design Inspiration</h2>
+                    </div>
+
+                    <div>
+                        <label class="form-label mb-4">
+                            Select a Design Category
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <!-- Product Cards -->
+                            <div class="product-card" data-category="dress">
+                                <img
+                                    src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                    alt="Evening Dress"
+                                    class="product-image">
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-gray-800">Evening Dress</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Elegant & Formal</p>
                                 </div>
                             </div>
-                            
-                            <!-- Mock controls -->
-                            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                <button class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
+
+                            <div class="product-card" data-category="suit">
+                                <img
+                                    src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                    alt="Tailored Suit"
+                                    class="product-image">
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-gray-800">Tailored Suit</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Professional & Modern</p>
+                                </div>
+                            </div>
+
+                            <div class="product-card" data-category="casual">
+                                <img
+                                    src="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                    alt="Casual Wear"
+                                    class="product-image">
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-gray-800">Casual Wear</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Everyday Comfort</p>
+                                </div>
+                            </div>
+
+                            <div class="product-card" data-category="gown">
+                                <img
+                                    src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80"
+                                    alt="Wedding Gown"
+                                    class="product-image">
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-gray-800">Wedding Gown</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Special Occasion</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Features -->
-                    <div class="space-y-6 text-left">
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
+
+                    <div>
+                        <label class="form-label mb-4">
+                            Upload Inspiration Images <span class="text-sm font-normal text-gray-500">(Optional)</span>
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center">
+                            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-gray-400"></i>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-white mb-1">Secure Connection</h4>
-                                <p class="text-pink-100 text-sm">End-to-end encrypted video calls for complete privacy</p>
+                            <p class="text-gray-600 mb-2">Drag & drop images here or click to browse</p>
+                            <p class="text-sm text-gray-500 mb-4">JPEG, PNG up to 5MB each</p>
+                            <button type="button" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-medium transition-colors">
+                                Browse Files
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label mb-4">
+                            Design Description <span class="required-star">*</span>
+                        </label>
+                        <textarea class="form-input min-h-[120px]" placeholder="Describe your vision, style preferences, and any specific details..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Step 2: Measurements -->
+                <div class="space-y-8">
+                    <div class="flex items-center">
+                        <div class="step-indicator">2</div>
+                        <h2 class="text-2xl font-bold text-gray-800">Your Measurements</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Bust</label>
+                                <span class="text-xs text-gray-500">Required</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="36.5" required>
+                                <span class="measurement-unit">inches</span>
                             </div>
                         </div>
-                        
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                                </svg>
+
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Waist</label>
+                                <span class="text-xs text-gray-500">Required</span>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-white mb-1">Screen Sharing</h4>
-                                <p class="text-pink-100 text-sm">Stylist can share outfit catalog and styling tips</p>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="28.0" required>
+                                <span class="measurement-unit">inches</span>
                             </div>
                         </div>
-                        
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                </svg>
+
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Hips</label>
+                                <span class="text-xs text-gray-500">Required</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="38.5" required>
+                                <span class="measurement-unit">inches</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Shoulder Width</label>
+                                <span class="text-xs text-gray-500">Optional</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="15.0">
+                                <span class="measurement-unit">inches</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Arm Length</label>
+                                <span class="text-xs text-gray-500">Optional</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="23.5">
+                                <span class="measurement-unit">inches</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">Height</label>
+                                <span class="text-xs text-gray-500">Optional</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" step="0.5" class="form-input" placeholder="65.0">
+                                <span class="measurement-unit">inches</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+                        <div class="flex items-start">
+                            <div class="mr-4 text-blue-500">
+                                <i class="fas fa-ruler-combined text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white mb-1">Instant Checkout</h4>
-                                <p class="text-pink-100 text-sm">Purchase selected items directly during the session</p>
+                                <h4 class="font-bold text-gray-800 mb-2">Measurement Tips</h4>
+                                <p class="text-gray-600 text-sm">For best results, wear fitted clothing and have someone help you measure. Don't worry about perfection—we'll verify all measurements during your consultation.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-12">
-                    <button onclick="scrollToBooking()" 
-                            class="px-8 py-3 bg-white text-purple-600 font-bold rounded-full hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
-                        Book Your Session Now
+
+                <div class="section-divider"></div>
+
+                <!-- Step 3: Fabric & Details -->
+                <div class="space-y-8">
+                    <div class="flex items-center">
+                        <div class="step-indicator">3</div>
+                        <h2 class="text-2xl font-bold text-gray-800">Fabric & Details</h2>
+                    </div>
+
+                    <div>
+                        <label class="form-label mb-4">Select Preferred Fabrics</label>
+                        <div class="fabrics-grid">
+                            <div class="fabric-card" data-fabric="silk">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #fff0f6, #ffd6e7)">
+                                    <i class="fas fa-feather-alt"></i>
+                                </div>
+                                <span class="text-sm font-medium">Silk</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="linen">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #f5f5f0, #e8e8d8)">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <span class="text-sm font-medium">Linen</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="wool">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #f0f0f0, #d8d8d8)">
+                                    <i class="fas fa-cloud"></i>
+                                </div>
+                                <span class="text-sm font-medium">Wool</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="cotton">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #f8f8ff, #e8e8ff)">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <span class="text-sm font-medium">Cotton</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="chiffon">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #fff8ff, #f0e8f0)">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <span class="text-sm font-medium">Chiffon</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="lace">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #ffffff, #f8f8f8)">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <span class="text-sm font-medium">Lace</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="velvet">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #2d1b3d, #4a2c5d)">
+                                    <i class="fas fa-crown text-white"></i>
+                                </div>
+                                <span class="text-sm font-medium">Velvet</span>
+                            </div>
+
+                            <div class="fabric-card" data-fabric="satin">
+                                <div class="fabric-sample" style="background: linear-gradient(45deg, #fffaf0, #ffe8d6)">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="text-sm font-medium">Satin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="form-label">
+                                Color Preference <span class="required-star">*</span>
+                            </label>
+                            <div class="flex flex-wrap gap-3 mt-2">
+                                <div class="w-8 h-8 rounded-full bg-black cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-white cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-red-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-green-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-yellow-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-purple-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-pink-500 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                                <div class="w-8 h-8 rounded-full bg-gray-300 cursor-pointer border-2 border-gray-300 hover:scale-110 transition-transform"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label">
+                                Desired Completion Date
+                            </label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Step 4: Contact & Submit -->
+                <div class="space-y-8">
+                    <div class="flex items-center">
+                        <div class="step-indicator">4</div>
+                        <h2 class="text-2xl font-bold text-gray-800">Contact & Submit</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="form-label">
+                                Your Name <span class="required-star">*</span>
+                            </label>
+                            <input type="text" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div>
+                            <label class="form-label">
+                                Email Address <span class="required-star">*</span>
+                            </label>
+                            <input type="email" class="form-input" placeholder="your.email@example.com" required>
+                        </div>
+
+                        <div>
+                            <label class="form-label">
+                                Phone Number
+                            </label>
+                            <input type="tel" class="form-input" placeholder="(123) 456-7890">
+                        </div>
+
+                        <div>
+                            <label class="form-label">
+                                Budget Range <span class="required-star">*</span>
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">Select budget</option>
+                                <option value="500-1500">$500 - $1,500</option>
+                                <option value="1500-3000">$1,500 - $3,000</option>
+                                <option value="3000-5000">$3,000 - $5,000</option>
+                                <option value="5000-10000">$5,000 - $10,000</option>
+                                <option value="10000+">$10,000+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" class="form-checkbox mt-1" required>
+                            <div>
+                                <span class="font-medium text-gray-800">I agree to the terms and privacy policy</span>
+                                <p class="text-sm text-gray-600 mt-1">By submitting this form, I consent to being contacted about my custom design request.</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-8 border-t border-gray-200 text-center">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-paper-plane mr-3"></i>
+                        Submit Design Request
                     </button>
+                    <p class="text-gray-500 mt-6 text-sm">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        Secure & confidential. Response within 24 hours.
+                    </p>
                 </div>
+            </form>
+        </div>
+
+        <!-- Process Steps -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="text-center p-6 bg-white rounded-2xl border border-gray-200">
+                <div class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lightbulb text-pink-500 text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">Share Vision</h4>
+                <p class="text-sm text-gray-600">Tell us about your design ideas</p>
+            </div>
+
+            <div class="text-center p-6 bg-white rounded-2xl border border-gray-200">
+                <div class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-ruler-combined text-pink-500 text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">Add Measurements</h4>
+                <p class="text-sm text-gray-600">Provide your sizing details</p>
+            </div>
+
+            <div class="text-center p-6 bg-white rounded-2xl border border-gray-200">
+                <div class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-palette text-pink-500 text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">Select Materials</h4>
+                <p class="text-sm text-gray-600">Choose fabrics and colors</p>
+            </div>
+
+            <div class="text-center p-6 bg-white rounded-2xl border border-gray-200">
+                <div class="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-calendar-check text-pink-500 text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-gray-800 mb-2">Consultation</h4>
+                <p class="text-sm text-gray-600">Finalize details with designer</p>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Testimonials -->
-<section class="py-16 bg-gradient-to-br from-gray-50 to-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                What Our Customers Say
-            </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Join thousands of happy customers who transformed their shopping experience
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Testimonial 1 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Neha Sharma"
-                         class="w-12 h-12 rounded-full object-cover">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Neha Sharma</h4>
-                        <div class="flex items-center">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gray-600 italic mb-4">"The live video session with Aisha was amazing! She understood my style perfectly and showed me outfits I would have never picked myself."</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-medium">Session:</span> Personal Styling • 30 mins
-                </div>
-            </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Raj Malhotra"
-                         class="w-12 h-12 rounded-full object-cover">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Raj Malhotra</h4>
-                        <div class="flex items-center">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gray-600 italic mb-4">"As someone who hates shopping, this was a game-changer! Rahul helped me pick 3 perfect sherwanis for my brother's wedding."</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-medium">Session:</span> Group Shopping • 60 mins
-                </div>
-            </div>
-            
-            <!-- Testimonial 3 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Anjali Patel"
-                         class="w-12 h-12 rounded-full object-cover">
-                    <div>
-                        <h4 class="font-bold text-gray-900">Anjali Patel</h4>
-                        <div class="flex items-center">
-                            @for($i = 0; $i < 5; $i++)
-                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            @endfor
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gray-600 italic mb-4">"The bridal consultation was worth every penny! Priya created my complete wedding look including accessories."</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-medium">Session:</span> Bridal Consultation • 90 mins
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Frequently Asked Questions
-            </h2>
-        </div>
-        
-        <div class="max-w-3xl mx-auto space-y-4">
-            <!-- FAQ 1 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">What do I need for the video session?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">You'll need a smartphone, tablet, or computer with a camera and microphone. We recommend using Chrome or Safari browsers for the best experience.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 2 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Can I cancel or reschedule my session?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">Yes! You can cancel or reschedule up to 24 hours before your session without any charges. Late cancellations may incur a small fee.</p>
-                </div>
-            </div>
-            
-            <!-- FAQ 3 -->
-            <div class="faq-item bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Do you offer discounts for group sessions?</span>
-                    <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div class="faq-answer px-6 py-4 hidden border-t border-gray-200">
-                    <p class="text-gray-600">Absolutely! Group sessions (2-5 people) offer significant savings per person. You also get exclusive group-only discounts on purchases made during the session.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Floating Booking CTA -->
-<div class="floating-cta hidden" id="floatingBookingCTA">
-    <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full px-6 py-3 shadow-2xl flex items-center gap-3">
-        <div class="loading-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <span class="font-bold">Complete your booking!</span>
-        <button onclick="scrollToBooking()" class="bg-white text-pink-600 px-3 py-1 rounded-full text-sm font-bold hover:bg-gray-100 transition-colors">
-            Book Now
-        </button>
-    </div>
-</div>
-
-<!-- Success Modal -->
-<div id="successModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center">
-        <div class="w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-        </div>
-        
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
-        <p class="text-gray-600 mb-6">Your live video shopping session has been scheduled successfully.</p>
-        
-        <div class="space-y-3 mb-8">
-            <div class="flex justify-between items-center">
-                <span class="text-gray-600">Session ID:</span>
-                <span class="font-semibold text-gray-900">#LVS2024-001</span>
-            </div>
-            <div class="flex justify-between items-center">
-                <span class="text-gray-600">Date & Time:</span>
-                <span class="font-semibold text-gray-900" id="confirmation-datetime"></span>
-            </div>
-            <div class="flex justify-between items-center">
-                <span class="text-gray-600">Stylist:</span>
-                <span class="font-semibold text-gray-900" id="confirmation-stylist"></span>
-            </div>
-        </div>
-        
-        <div class="space-y-3">
-            <button onclick="closeSuccessModal()" 
-                    class="w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                Add to Calendar
-            </button>
-            <button onclick="closeSuccessModal()" 
-                    class="w-full px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
-                Close
-            </button>
-        </div>
-    </div>
-</div>
 
 @endsection
 
 @section('scripts')
 <script>
-    // Design Studio Functionality
-    let currentDesign = {
-        fabric: null,
-        color: null,
-        embroidery: null,
-        basePrice: 15000
-    };
-    
-    // Modal Functions
-    function openDesignModal() {
-        document.getElementById('designModal').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeDesignModal() {
-        document.getElementById('designModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-    
-    // Selection Functions
-    function selectFabric(element) {
-        // Remove selected class from all fabric swatches
-        document.querySelectorAll('.fabric-swatch').forEach(el => el.classList.remove('selected'));
-        
-        // Add selected class to clicked element
-        element.classList.add('selected');
-        
-        // Update current design
-        currentDesign.fabric = {
-            id: element.dataset.fabricId,
-            name: element.dataset.fabricName,
-            price: parseInt(element.dataset.fabricPrice),
-            image: element.dataset.fabricImage,
-            color: element.dataset.fabricColor
-        };
-        
-        // Update fabric overlay in design canvas
-        const fabricOverlay = document.getElementById('fabric-overlay');
-        fabricOverlay.style.backgroundImage = `url('${currentDesign.fabric.image}')`;
-        fabricOverlay.style.backgroundSize = 'cover';
-        
-        updateDesignSummary();
-        calculatePrice();
-    }
-    
-    function selectColor(element) {
-        // Remove selected class from all color swatches
-        document.querySelectorAll('.color-swatch').forEach(el => {
-            el.classList.remove('selected');
-        });
-        
-        // Add selected class to clicked element
-        element.classList.add('selected');
-        
-        // Update current design
-        currentDesign.color = element.dataset.color;
-        
-        // Update color overlay in design canvas
-        const colorOverlay = document.getElementById('color-overlay');
-        colorOverlay.style.backgroundColor = currentDesign.color;
-        
-        updateDesignSummary();
-    }
-    
-    function selectEmbroidery(element) {
-        // Remove selected class from all embroidery patterns
-        document.querySelectorAll('.embroidery-pattern').forEach(el => el.classList.remove('selected'));
-        
-        // Add selected class to clicked element
-        element.classList.add('selected');
-        
-        // Update current design
-        currentDesign.embroidery = {
-            id: element.dataset.patternId,
-            name: element.dataset.patternName,
-            price: parseInt(element.dataset.patternPrice),
-            image: element.dataset.patternImage
-        };
-        
-        // Update embroidery layer in design canvas
-        const embLayer = document.getElementById('embellishment-layer');
-        embLayer.style.backgroundImage = `url('${currentDesign.embroidery.image}')`;
-        embLayer.style.backgroundSize = 'contain';
-        embLayer.style.backgroundPosition = 'center';
-        embLayer.style.backgroundRepeat = 'no-repeat';
-        
-        updateDesignSummary();
-        calculatePrice();
-    }
-    
-    // Price Calculation
-    function calculatePrice() {
-        let total = currentDesign.basePrice;
-        
-        if (currentDesign.fabric) {
-            total += currentDesign.fabric.price;
-        }
-        
-        if (currentDesign.embroidery) {
-            total += currentDesign.embroidery.price;
-        }
-        
-        // Update price display
-        document.getElementById('design-price').textContent = `Rs. ${total.toLocaleString()}`;
-        document.getElementById('summary-price').textContent = `Rs. ${total.toLocaleString()}`;
-        
-        // Show summary FAB if any selection is made
-        if (currentDesign.fabric || currentDesign.color || currentDesign.embroidery) {
-            document.getElementById('designSummary').classList.remove('hidden');
-        }
-    }
-    
-    // Update Summary
-    function updateDesignSummary() {
-        const fabricEl = document.getElementById('summary-fabric');
-        const colorEl = document.getElementById('summary-color');
-        const embroideryEl = document.getElementById('summary-embroidery');
-        
-        // Update fabric summary
-        if (currentDesign.fabric) {
-            fabricEl.innerHTML = `<span class="font-medium">Fabric:</span> ${currentDesign.fabric.name} <span class="text-pink-600">(+Rs. ${currentDesign.fabric.price.toLocaleString()})</span>`;
-        } else {
-            fabricEl.textContent = 'No fabric selected';
-        }
-        
-        // Update color summary
-        if (currentDesign.color) {
-            colorEl.innerHTML = `<span class="font-medium">Color:</span> <span class="inline-block w-3 h-3 rounded-full mr-1 align-middle" style="background-color:${currentDesign.color}"></span> ${currentDesign.color}`;
-        } else {
-            colorEl.textContent = 'No color selected';
-        }
-        
-        // Update embroidery summary
-        if (currentDesign.embroidery) {
-            embroideryEl.innerHTML = `<span class="font-medium">Embroidery:</span> ${currentDesign.embroidery.name} <span class="text-pink-600">(+Rs. ${currentDesign.embroidery.price.toLocaleString()})</span>`;
-        } else {
-            embroideryEl.textContent = 'No embroidery selected';
-        }
-        
-        // Also update selected options in design canvas section
-        const selectedFabricEl = document.getElementById('selected-fabric');
-        const selectedColorEl = document.getElementById('selected-color');
-        const selectedEmbroideryEl = document.getElementById('selected-embroidery');
-        
-        if (currentDesign.fabric) {
-            selectedFabricEl.innerHTML = `<span class="font-medium">Fabric:</span> ${currentDesign.fabric.name}`;
-        } else {
-            selectedFabricEl.textContent = 'No fabric selected';
-        }
-        
-        if (currentDesign.color) {
-            selectedColorEl.innerHTML = `<span class="font-medium">Color:</span> ${currentDesign.color}`;
-        } else {
-            selectedColorEl.textContent = 'No color selected';
-        }
-        
-        if (currentDesign.embroidery) {
-            selectedEmbroideryEl.innerHTML = `<span class="font-medium">Embroidery:</span> ${currentDesign.embroidery.name}`;
-        } else {
-            selectedEmbroideryEl.textContent = 'No embroidery selected';
-        }
-    }
-    
-    function closeSummary() {
-        document.getElementById('designSummary').classList.add('hidden');
-    }
-    
-    // Save Design
-    function saveDesign() {
-        if (!currentDesign.fabric) {
-            showNotification('Please select a fabric first', 'error');
-            return;
-        }
-        
-        // Show loading
-        showNotification('Saving your design...', 'info');
-        
-        // In a real implementation, this would send to server
-        // For now, simulate saving
-        setTimeout(() => {
-            showNotification('Design saved successfully! Our designer will contact you for consultation.', 'success');
-            
-            // Reset selections after saving
-            resetDesign();
-        }, 1500);
-    }
-    
-    function resetDesign() {
-        // Reset current design
-        currentDesign = {
-            fabric: null,
-            color: null,
-            embroidery: null,
-            basePrice: 15000
-        };
-        
-        // Reset UI
-        document.querySelectorAll('.customization-option').forEach(el => el.classList.remove('selected'));
-        document.getElementById('fabric-overlay').style.backgroundImage = 'none';
-        document.getElementById('color-overlay').style.backgroundColor = 'transparent';
-        document.getElementById('embellishment-layer').style.backgroundImage = 'none';
-        document.getElementById('designSummary').classList.add('hidden');
-        document.getElementById('design-price').textContent = 'Rs. 15,000';
-        updateDesignSummary();
-    }
-    
-    // FAQ Toggle
-    document.querySelectorAll('.faq-question').forEach(button => {
-        button.addEventListener('click', () => {
-            const answer = button.nextElementSibling;
-            const icon = button.querySelector('svg');
-            
-            answer.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        });
-    });
-    
-    // Consultation Form Submission
-    document.getElementById('consultationForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const button = this.querySelector('button[type="submit"]');
-        const originalText = button.textContent;
-        
-        button.textContent = 'Booking...';
-        button.disabled = true;
-        
-        // Simulate API call
-        setTimeout(() => {
-            showNotification('Consultation booked successfully! Our team will contact you within 24 hours.', 'success');
-            closeDesignModal();
-            button.textContent = originalText;
-            button.disabled = false;
-            this.reset();
-        }, 2000);
-    });
-    
-    // Notification Function
-    function showNotification(message, type) {
-        // Remove existing notifications
-        const existingNotifications = document.querySelectorAll('.custom-notification');
-        existingNotifications.forEach(notification => {
-            notification.remove();
-        });
-        
-        const notification = document.createElement('div');
-        notification.className = `custom-notification fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-all duration-300 translate-x-full ${
-            type === 'success' ? 'bg-green-500' : 
-            type === 'error' ? 'bg-red-500' : 
-            'bg-blue-500'
-        }`;
-        notification.textContent = message;
-        
-        // Add close button
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '&times;';
-        closeBtn.className = 'ml-4 text-white hover:text-gray-200';
-        closeBtn.onclick = () => notification.remove();
-        notification.appendChild(closeBtn);
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.classList.remove('translate-x-full');
-        }, 100);
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            notification.classList.add('translate-x-full');
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    notification.remove();
-                }
-            }, 300);
-        }, 5000);
-    }
-    
-    // Close modal on outside click
-    document.getElementById('designModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeDesignModal();
-        }
-    });
-    
-    // Close summary when clicking outside
-    document.addEventListener('click', function(e) {
-        const summary = document.getElementById('designSummary');
-        if (!summary.contains(e.target) && !e.target.closest('.customization-option')) {
-            if (currentDesign.fabric || currentDesign.color || currentDesign.embroidery) {
-                // Don't close if we have selections
-                return;
-            }
-        }
-    });
-</script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
 
-<!-- Add some demo data initialization -->
-<script>
-    // Initialize with some default selections for demo
-    document.addEventListener('DOMContentLoaded', function() {
-        // You can add any initialization here
-        // For example, select first fabric by default
-        // const firstFabric = document.querySelector('.fabric-swatch');
-        // if (firstFabric) selectFabric(firstFabric);
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
-</script>
 
-<script>
-    // Global booking state
-    const bookingState = {
-        sessionType: null,
-        stylist: null,
-        date: null,
-        time: null,
-        price: 0
-    };
-    
-    // Calendar state
-    let currentMonth = new Date().getMonth();
-    let currentYear = new Date().getFullYear();
-    
-    // Initialize calendar
+    // Gallery filter functionality
     document.addEventListener('DOMContentLoaded', function() {
-        generateCalendar(currentMonth, currentYear);
-        updateMonthDisplay();
-        
-        // Show floating CTA after 10 seconds
-        setTimeout(() => {
-            document.getElementById('floatingBookingCTA').classList.remove('hidden');
-        }, 10000);
-    });
-    
-    // Generate calendar grid
-    function generateCalendar(month, year) {
-        const calendarGrid = document.getElementById('calendar-grid');
-        calendarGrid.innerHTML = '';
-        
-        const firstDay = new Date(year, month, 1);
-        const lastDay = new Date(year, month + 1, 0);
-        const daysInMonth = lastDay.getDate();
-        const startingDay = firstDay.getDay();
-        
-        const today = new Date();
-        const isToday = (day) => {
-            return day === today.getDate() && 
-                   month === today.getMonth() && 
-                   year === today.getFullYear();
-        };
-        
-        // Add empty cells for days before the first day of month
-        for (let i = 0; i < startingDay; i++) {
-            const emptyDay = document.createElement('div');
-            emptyDay.className = 'calendar-day disabled';
-            calendarGrid.appendChild(emptyDay);
-        }
-        
-        // Add days of the month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.className = 'calendar-day';
-            
-            // Check if date is in the past
-            const date = new Date(year, month, day);
-            const isPast = date < today.setHours(0, 0, 0, 0);
-            
-            // Check if date is weekend (Saturday or Sunday)
-            const dayOfWeek = date.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            
-            // Check if date has available slots (simulated)
-            const hasSlots = Math.random() > 0.3; // 70% chance of having slots
-            
-            if (isPast) {
-                dayElement.classList.add('disabled');
-            } else if (isToday(day)) {
-                dayElement.classList.add('today');
-            } else if (!hasSlots || isWeekend) {
-                dayElement.classList.add('disabled');
-            }
-            
-            dayElement.innerHTML = `
-                <div class="calendar-day-number">${day}</div>
-                <div class="calendar-day-label">${getDayLabel(dayOfWeek)}</div>
-            `;
-            
-            if (!isPast && hasSlots && !isWeekend) {
-                dayElement.onclick = () => selectDate(year, month, day);
-            }
-            
-            // Mark as selected if matches current booking
-            if (bookingState.date && 
-                bookingState.date.getDate() === day && 
-                bookingState.date.getMonth() === month && 
-                bookingState.date.getFullYear() === year) {
-                dayElement.classList.add('selected');
-            }
-            
-            calendarGrid.appendChild(dayElement);
-        }
-    }
-    
-    function getDayLabel(dayIndex) {
-        const labels = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        return labels[dayIndex];
-    }
-    
-    function changeMonth(direction) {
-        currentMonth += direction;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        generateCalendar(currentMonth, currentYear);
-        updateMonthDisplay();
-    }
-    
-    function updateMonthDisplay() {
-        const monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        document.getElementById('current-month').textContent = 
-            `${monthNames[currentMonth]} ${currentYear}`;
-    }
-    
-    function selectDate(year, month, day) {
-        bookingState.date = new Date(year, month, day);
-        
-        // Update calendar selection
-        document.querySelectorAll('.calendar-day').forEach(dayEl => {
-            dayEl.classList.remove('selected');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filterValue = this.getAttribute('data-filter');
+
+                // Filter gallery items
+                galleryItems.forEach(item => {
+                    if (filterValue === 'all') {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        if (item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 400);
+                        }
+                    }
+                });
+            });
         });
-        
-        event.target.closest('.calendar-day').classList.add('selected');
-        
-        // Update date display
-        const dateStr = bookingState.date.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+
+        // Product card selection
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            card.addEventListener('click', function() {
+                productCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+
+                const category = this.getAttribute('data-category');
+                console.log('Selected category:', category);
+            });
         });
-        document.getElementById('selected-date-display').textContent = dateStr;
-        document.getElementById('summary-date').textContent = 
-            bookingState.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        
-        // Generate time slots
-        generateTimeSlots();
-        
-        updateBookingSummary();
-        checkBookingComplete();
-    }
-    
-    function generateTimeSlots() {
-        const container = document.getElementById('time-slots-container');
-        container.innerHTML = '';
-        
-        // Generate time slots from 10 AM to 8 PM
-        const timeSlots = [];
-        for (let hour = 10; hour <= 20; hour++) {
-            // Create slots every 30 minutes
-            for (let minute of [0, 30]) {
-                // Skip some slots randomly to simulate booked slots
-                if (Math.random() > 0.6) continue;
-                
-                const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                const displayTime = `${hour > 12 ? hour - 12 : hour}:${minute.toString().padStart(2, '0')} ${hour >= 12 ? 'PM' : 'AM'}`;
-                
-                const slot = document.createElement('div');
-                slot.className = 'time-slot';
-                slot.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span class="font-medium">${displayTime}</span>
-                    </div>
-                    <div class="text-sm text-gray-500">30 min session</div>
-                `;
-                
-                slot.onclick = () => selectTimeSlot(slot, timeStr, displayTime);
-                
-                // Mark some slots as booked
-                if (Math.random() > 0.7) {
-                    slot.classList.add('booked');
-                    slot.onclick = null;
+
+        // Fabric card selection
+        const fabricCards = document.querySelectorAll('.fabric-card');
+        fabricCards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+
+                const fabric = this.getAttribute('data-fabric');
+                console.log('Toggled fabric:', fabric, this.classList.contains('selected'));
+            });
+        });
+
+        // Color selection
+        const colorCircles = document.querySelectorAll('.w-8.h-8.rounded-full');
+        colorCircles.forEach(circle => {
+            circle.addEventListener('click', function() {
+                colorCircles.forEach(c => {
+                    c.style.borderColor = '#d1d5db';
+                    c.style.borderWidth = '2px';
+                });
+                this.style.borderColor = '#ff6b9d';
+                this.style.borderWidth = '3px';
+            });
+        });
+
+        // Form submission
+        const designForm = document.getElementById('design-form');
+        if (designForm) {
+            designForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Simple validation
+                let isValid = true;
+                const requiredFields = designForm.querySelectorAll('[required]');
+
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = '#ff6b9d';
+                        field.style.backgroundColor = '#fff5f7';
+
+                        // Add error message if not present
+                        if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('error-msg')) {
+                            const errorMsg = document.createElement('p');
+                            errorMsg.className = 'error-msg text-pink-500 text-xs mt-2';
+                            errorMsg.textContent = 'This field is required';
+                            field.parentElement.appendChild(errorMsg);
+                        }
+                    } else {
+                        field.style.borderColor = '';
+                        field.style.backgroundColor = '';
+                        const errorMsg = field.parentElement.querySelector('.error-msg');
+                        if (errorMsg) {
+                            errorMsg.remove();
+                        }
+                    }
+                });
+
+                // Validate checkbox
+                const requiredCheckbox = designForm.querySelector('[required][type="checkbox"]');
+                if (requiredCheckbox && !requiredCheckbox.checked) {
+                    isValid = false;
+                    requiredCheckbox.style.borderColor = '#ff6b9d';
                 }
-                
-                container.appendChild(slot);
-            }
+
+                if (isValid) {
+                    // Show success state
+                    const submitBtn = designForm.querySelector('.submit-button');
+                    const originalText = submitBtn.innerHTML;
+
+                    submitBtn.innerHTML = '<i class="fas fa-check mr-3"></i> Request Submitted!';
+                    submitBtn.disabled = true;
+                    submitBtn.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+
+                    // Create success message
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'mt-8 p-6 bg-green-50 rounded-2xl border border-green-200';
+                    successDiv.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-check text-green-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg mb-1">Design Request Submitted!</h4>
+                                <p class="text-gray-600">Thank you for your submission. Our design team will contact you within 24 hours.</p>
+                            </div>
+                        </div>
+                    `;
+
+                    designForm.appendChild(successDiv);
+
+                    // Scroll to success message
+                    setTimeout(() => {
+                        successDiv.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }, 500);
+                }
+            });
         }
-        
-        if (container.children.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-8 text-gray-500">
-                    <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p>No slots available for this date</p>
-                    <p class="text-sm mt-1">Please select another date</p>
-                </div>
-            `;
+
+        // File upload interaction
+        const uploadArea = document.querySelector('.border-dashed');
+        if (uploadArea) {
+            uploadArea.addEventListener('click', function() {
+                console.log('Upload area clicked - would open file dialog');
+            });
         }
-    }
-    
-    function selectTimeSlot(slotElement, timeValue, displayTime) {
-        // Remove selected class from all slots
-        document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.classList.remove('selected', 'pulse-animation');
-        });
-        
-        // Add selected class to clicked slot
-        slotElement.classList.add('selected', 'pulse-animation');
-        
-        // Remove pulse animation after 2 seconds
-        setTimeout(() => {
-            slotElement.classList.remove('pulse-animation');
-        }, 2000);
-        
-        bookingState.time = timeValue;
-        document.getElementById('summary-time').textContent = displayTime;
-        
-        updateBookingSummary();
-        checkBookingComplete();
-    }
-    
-    function selectSessionType(type) {
-        bookingState.sessionType = type;
-        
-        // Remove selected class from all session cards
-        document.querySelectorAll('.session-type-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        
-        // Add selected class to clicked card
-        document.getElementById(`${type}-session`).classList.add('selected');
-        
-        // Update price based on session type
-        switch(type) {
-            case 'personal':
-                bookingState.price = 999;
-                break;
-            case 'group':
-                bookingState.price = 1999;
-                break;
-            case 'bridal':
-                bookingState.price = 2999;
-                break;
-        }
-        
-        document.getElementById('summary-session-type').textContent = 
-            type === 'personal' ? 'Personal Styling' :
-            type === 'group' ? 'Group Shopping' : 'Bridal Consultation';
-        
-        updateBookingSummary();
-        checkBookingComplete();
-    }
-    
-    function selectStylist(id) {
-        bookingState.stylist = id;
-        
-        // Remove selected class from all stylist cards
-        document.querySelectorAll('.stylist-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        
-        // Add selected class to clicked card
-        document.getElementById(`stylist-${id}`).classList.add('selected');
-        
-        // Update stylist name in summary
-        const stylistNames = {
-            1: 'Aisha Khan',
-            2: 'Rahul Verma',
-            3: 'Priya Sharma'
-        };
-        document.getElementById('summary-stylist').textContent = stylistNames[id];
-        
-        updateBookingSummary();
-        checkBookingComplete();
-    }
-    
-    function updateBookingSummary() {
-        // Update total price
-        if (bookingState.price > 0) {
-            document.getElementById('summary-total').textContent = `Rs. ${bookingState.price}`;
-        }
-        
-        // Show floating CTA if at least one selection is made
-        if (bookingState.sessionType || bookingState.stylist || bookingState.date) {
-            document.getElementById('floatingBookingCTA').classList.remove('hidden');
-        }
-    }
-    
-    function checkBookingComplete() {
-        const isComplete = bookingState.sessionType && 
-                          bookingState.stylist && 
-                          bookingState.date && 
-                          bookingState.time;
-        
-        const confirmBtn = document.getElementById('confirm-booking-btn');
-        if (isComplete) {
-            confirmBtn.disabled = false;
-            confirmBtn.innerHTML = 'Confirm Booking';
-        } else {
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = 'Complete Selection';
-        }
-    }
-    
-    function confirmBooking() {
-        if (!bookingState.sessionType || !bookingState.stylist || !bookingState.date || !bookingState.time) {
-            showNotification('Please complete all selections before booking', 'error');
-            return;
-        }
-        
-        // Show loading state
-        const confirmBtn = document.getElementById('confirm-booking-btn');
-        confirmBtn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
-        confirmBtn.disabled = true;
-        
-        // Simulate API call
-        setTimeout(() => {
-            // Show success modal
-            const modal = document.getElementById('successModal');
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            
-            // Update confirmation details
-            const stylistNames = {
-                1: 'Aisha Khan',
-                2: 'Rahul Verma',
-                3: 'Priya Sharma'
+
+        // Animated counter for stats
+        function animateCounter(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            if (!obj) return;
+
+            let startTime = null;
+            const step = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = value.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
             };
-            
-            const dateStr = bookingState.date.toLocaleDateString('en-US', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric'
-            });
-            
-            const timeStr = bookingState.time;
-            const [hours, minutes] = timeStr.split(':');
-            const displayTime = `${hours > 12 ? hours - 12 : hours}:${minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
-            
-            document.getElementById('confirmation-datetime').textContent = 
-                `${dateStr} • ${displayTime}`;
-            document.getElementById('confirmation-stylist').textContent = 
-                stylistNames[bookingState.stylist];
-            
-            // Reset booking state
-            resetBooking();
-            
-            // Create confetti effect
-            createConfetti();
-            
-        }, 1500);
-    }
-    
-    function resetBooking() {
-        // Reset state
-        bookingState.sessionType = null;
-        bookingState.stylist = null;
-        bookingState.date = null;
-        bookingState.time = null;
-        bookingState.price = 0;
-        
-        // Reset UI
-        document.querySelectorAll('.session-type-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        document.querySelectorAll('.stylist-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        document.querySelectorAll('.calendar-day').forEach(day => {
-            day.classList.remove('selected');
-        });
-        document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.classList.remove('selected');
-        });
-        
-        // Reset summary
-        document.getElementById('summary-session-type').textContent = 'Not selected';
-        document.getElementById('summary-stylist').textContent = 'Not selected';
-        document.getElementById('summary-date').textContent = 'Not selected';
-        document.getElementById('summary-time').textContent = 'Not selected';
-        document.getElementById('summary-total').textContent = 'Rs. 0';
-        document.getElementById('selected-date-display').textContent = 'Select a date';
-        
-        // Reset time slots container
-        document.getElementById('time-slots-container').innerHTML = `
-            <div class="text-center py-8 text-gray-500">
-                <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p>Select a date to view available time slots</p>
-            </div>
-        `;
-        
-        // Hide floating CTA
-        document.getElementById('floatingBookingCTA').classList.add('hidden');
-    }
-    
-    function closeSuccessModal() {
-        const modal = document.getElementById('successModal');
-        modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-        
-        // Reset confirm button
-        const confirmBtn = document.getElementById('confirm-booking-btn');
-        confirmBtn.innerHTML = 'Confirm Booking';
-        confirmBtn.disabled = true;
-    }
-    
-    function scrollToBooking() {
-        document.getElementById('book-now').scrollIntoView({ 
-            behavior: 'smooth' 
-        });
-    }
-    
-    function createConfetti() {
-        const colors = ['#ec4899', '#8b5cf6', '#f472b6', '#a855f7', '#d946ef'];
-        
-        for (let i = 0; i < 100; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = `${Math.random() * 100}vw`;
-            confetti.style.top = '-10px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-            confetti.style.width = `${Math.random() * 10 + 5}px`;
-            confetti.style.height = confetti.style.width;
-            
-            document.body.appendChild(confetti);
-            
-            // Animate confetti
-            const animation = confetti.animate([
-                { 
-                    top: '-10px', 
-                    opacity: 1, 
-                    transform: `rotate(0deg) translateX(0)` 
-                },
-                { 
-                    top: `${Math.random() * 100 + 100}vh`, 
-                    opacity: 0, 
-                    transform: `rotate(${Math.random() * 720}deg) translateX(${Math.random() * 200 - 100}px)` 
-                }
-            ], {
-                duration: Math.random() * 3000 + 2000,
-                easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
-            });
-            
-            animation.onfinish = () => confetti.remove();
+            window.requestAnimationFrame(step);
         }
-    }
-    
-    // FAQ functionality
-    document.querySelectorAll('.faq-question').forEach(button => {
-        button.addEventListener('click', () => {
-            const answer = button.nextElementSibling;
-            const icon = button.querySelector('svg');
-            
-            answer.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        });
-    });
-    
-    // Notification function
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-all duration-300 translate-x-full ${
-            type === 'error' ? 'bg-red-500' : 'bg-green-500'
-        }`;
-        notification.textContent = message;
-        
-        // Add close button
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '&times;';
-        closeBtn.className = 'ml-4 text-white hover:text-gray-200';
-        closeBtn.onclick = () => notification.remove();
-        notification.appendChild(closeBtn);
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.classList.remove('translate-x-full');
-        }, 100);
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            notification.classList.add('translate-x-full');
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    notification.remove();
+
+        // Animate testimonial stats
+        function animateTestimonialCounter(id, start, end, duration, suffix = '') {
+            let obj = document.getElementById(id);
+            if (!obj) return;
+
+            let startTime = null;
+            const step = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+
+                if (suffix === '%') {
+                    obj.innerHTML = value + '%';
+                } else if (suffix === '.') {
+                    obj.innerHTML = (start + (end - start) * progress).toFixed(1);
+                } else {
+                    obj.innerHTML = value.toLocaleString() + suffix;
                 }
-            }, 300);
-        }, 5000);
-    }
-    
-    // Close success modal on outside click
-    document.getElementById('successModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeSuccessModal();
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
         }
+
+        // Start counters when page loads
+        setTimeout(() => {
+            // Main stats
+            animateCounter('stat1', 0, 1247, 2000);
+            animateCounter('stat2', 0, 892, 2000);
+            animateCounter('stat3', 0, 243, 2000);
+            animateCounter('stat4', 0, 67, 2000);
+
+            // Testimonial stats
+            animateTestimonialCounter('testimonial-stat1', 0, 98, 1500, '%');
+            animateTestimonialCounter('testimonial-stat2', 0, 1500, 1500, '+');
+            animateTestimonialCounter('testimonial-stat3', 0, 72, 1500, '%');
+            animateTestimonialCounter('testimonial-stat4', 0, 4.9, 1500, '');
+        }, 1000);
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.fade-in').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(element);
+        });
+
+        // Add hover effect for feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add hover effect for gallery cards
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add hover effect for testimonial cards
+        document.querySelectorAll('.testimonial-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
     });
 </script>
 @endsection
-
