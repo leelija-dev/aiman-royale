@@ -1,15 +1,24 @@
+<?php
+$user = $user ?? auth()->user();
+?>
+
 <aside>
     <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
         <!-- User Profile Summary -->
         <div class="text-center mb-8">
             <div class="relative inline-block mb-4">
-                <div
-                    class="w-20 h-20 rounded-full fashion-gradient flex items-center justify-center text-white text-xl font-bold mx-auto">
-                    AJ
-                </div>
+                @if($user && $user->profile_image && file_exists(public_path($user->profile_image)))
+                    <img src="{{ asset($user->profile_image) }}" 
+                         alt="{{ $user->name }}" 
+                         class="w-20 h-20 rounded-full object-cover mx-auto">
+                @else
+                    <div class="w-20 h-20 rounded-full fashion-gradient flex items-center justify-center text-white text-xl font-bold mx-auto">
+                        {{ $user ? strtoupper(substr(trim($user->name), 0, 2)) : 'GU' }}
+                    </div>
+                @endif
             </div>
-            <h2 class="text-lg font-bold text-gray-900">Alex Johnson</h2>
-            <p class="text-gray-600 text-sm">Fashion Enthusiast</p>
+            <h2 class="text-lg font-bold text-gray-900">{{ $user ? $user->name : 'Guest User' }}</h2>
+            <p class="text-gray-600 text-sm">{{ $user ? $user->email : 'guest@example.com' }}</p>
         </div>
 
         <!-- Navigation Menu -->

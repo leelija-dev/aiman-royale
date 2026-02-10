@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -29,6 +30,7 @@ class HomeController extends Controller
         // ->latest()
         // ->take(10)
         // ->get();
+        
 
         $products = DB::table('products')
             ->leftJoin('product_variants', function($join) {

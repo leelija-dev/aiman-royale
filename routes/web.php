@@ -11,28 +11,6 @@ use App\Http\Controllers\Web\OccasionController;
 use App\Http\Controllers\Web\WishlistController;
 
 
-// use App\Http\Controllers\Web\PageController;
-// use App\Http\Controllers\Web\ContactController;
-// use App\Http\Controllers\Web\AboutController;
-// use App\Http\Controllers\Web\BlogController;
-// use App\Http\Controllers\Web\CareerController;
-// use App\Http\Controllers\Web\ServiceController;
-// use App\Http\Controllers\Web\ApplicationController;
-
-// use App\Http\Controllers\Web\DigitalM☻arketing;
-// use App\Http\Controllers\Web\BestSeo;
-// use App\Http\Controllers\Web\Ecommerce;
-
-
-// Route::get('/l1', function () {
-//     return view('web.L1');
-// });
-// Route::get('/l2', function () {
-//     return view('web.L2');
-// });
-// Route::get('/l3', function () {
-//     return view('web.L3');
-// });
 
 
 // Public routes (accessible without authentication)
@@ -41,6 +19,10 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::view('/profile', 'web.profile');
 });
 
 // Authenticated routes (require login)

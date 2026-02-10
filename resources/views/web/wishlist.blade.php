@@ -96,7 +96,7 @@
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
             <div class="lg:w-1/4">
-               <x-web.profile-sidebar />
+               @include('components.web.profile-sidebar', ['user' => auth()->user()])
             </div>
 
             <!-- Main Content -->
