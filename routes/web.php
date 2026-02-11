@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\SingleProductController;
 use App\Http\Controllers\Web\OccasionController;
 use App\Http\Controllers\Web\WishlistController;
+use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Admin\UserController;
 
 
@@ -22,57 +23,57 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::view('/profile', 'web.profile');
+    Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
+    Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 });
 
 // Authenticated routes (require login)
 // Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'home'])->name('page.index');
-    Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
+Route::get('/', [HomeController::class, 'home'])->name('page.index');
+Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 
-    // Category Routes
-    Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
-    Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
+// Category Routes
+Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
 
-    // Occasion Routes
-    Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
+// Occasion Routes
+Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
-    // Test route
-    Route::get('/test-occasion', function() {
-        return 'Test route is working!';
-    });
+// Test route
+Route::get('/test-occasion', function () {
+    return 'Test route is working!';
+});
 
-    Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
-    Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
+Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
+Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 
-    // Auth Routes
-    Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
+// Auth Routes
+Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
 
-    // Cart Routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
-    Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
+// Cart Routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
 
-    // Wishlist Routes
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
-    Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
-    
-    //Checkout route
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
-    Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
-    Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
-    Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
-    Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
-    Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
+// Wishlist Routes
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
-    // Cashfree Webhook Route
-    Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
+//Checkout route
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
+Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
+Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
+Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
+
+// Cashfree Webhook Route
+Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
    
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
 // });
-
