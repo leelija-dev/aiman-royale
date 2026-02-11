@@ -50,18 +50,43 @@
         background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
     }
 
-    .modal-overlay {
+    .overlay-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
     }
 
-    .modal-content {
+    .container-model {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100000;
+    }
+
+    .container-model.active {
+        display: block;
+    }
+
+    .content-modal {
         transform: scale(0.9);
         opacity: 0;
         transition: all 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
-    .modal-content.active {
+    .content-modal.active {
         transform: scale(1);
         opacity: 1;
     }
@@ -323,9 +348,9 @@
 </section>
 
 <!-- Add/Edit Address Modal -->
-<div id="addressModal" class="fixed inset-0 z-[100000] hidden">
-    <div class="modal-overlay absolute inset-0 flex items-center justify-center p-4">
-        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+<div id="addressModalContainer" class="container-model z-[100000]">
+    <div class="overlay-modal">
+        <div class="content-modal bg-white rounded-2xl shadow-2xl w-full max-w-5xl" id="addressModalContent">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-bold text-gray-900" id="modalTitle">Add New Address</h2>
@@ -339,7 +364,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Address Label</label>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus">
+                        <select id="addressLabel" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus">
                             <option value="">Select Label</option>
                             <option value="home">Home</option>
                             <option value="work">Work</option>
@@ -349,39 +374,39 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Custom Label</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Enter custom label">
+                        <input type="text" id="customLabel" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Enter custom label">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="Alex" required>
+                        <input type="text" id="firstName" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="Alex" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="Johnson" required>
+                        <input type="text" id="lastName" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="Johnson" required>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
-                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="123 Main Street" required>
+                    <input type="text" id="streetAddress" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="123 Main Street" required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Apartment, Suite, Unit (Optional)</label>
-                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Apt 4B">
+                    <input type="text" id="apartment" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Apt 4B">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="New York" required>
+                        <input type="text" id="city" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="New York" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" required>
+                        <select id="state" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" required>
                             <option value="NY" selected>New York</option>
                             <option value="CA">California</option>
                             <option value="TX">Texas</option>
@@ -390,13 +415,13 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="10001" required>
+                        <input type="text" id="zipCode" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="10001" required>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
-                    <select class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" required>
+                    <select id="country" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" required>
                         <option value="US" selected>United States</option>
                         <option value="CA">Canada</option>
                         <option value="UK">United Kingdom</option>
@@ -406,7 +431,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                    <input type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="+1 (555) 123-4567" required>
+                    <input type="tel" id="phoneNumber" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" value="+1 (555) 123-4567" required>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -434,10 +459,11 @@
 @section('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Modal functionality
+    // Address Modal functionality
     document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('addressModal');
-        const modalContent = document.querySelector('.modal-content');
+        // Get modal elements
+        const modalContainer = document.getElementById('addressModalContainer');
+        const modalContent = document.getElementById('addressModalContent');
         const addAddressBtn = document.getElementById('addAddressBtn');
         const addNewAddressCard = document.getElementById('addNewAddressCard');
         const closeModal = document.getElementById('closeModal');
@@ -448,26 +474,50 @@
         const modalTitle = document.getElementById('modalTitle');
         const removeButtons = document.querySelectorAll('.remove-address-btn');
 
+        // Form fields
+        const addressLabel = document.getElementById('addressLabel');
+        const customLabel = document.getElementById('customLabel');
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        const streetAddress = document.getElementById('streetAddress');
+        const apartment = document.getElementById('apartment');
+        const city = document.getElementById('city');
+        const state = document.getElementById('state');
+        const zipCode = document.getElementById('zipCode');
+        const country = document.getElementById('country');
+        const phoneNumber = document.getElementById('phoneNumber');
+        const setDefaultCheckbox = document.getElementById('setDefault');
+
         // Open modal for adding new address
         function openModal() {
-            modal.classList.remove('hidden');
+            modalContainer.classList.add('active');
             setTimeout(() => {
                 modalContent.classList.add('active');
             }, 10);
             modalTitle.textContent = 'Add New Address';
-            // Reset form to default values
+            resetForm();
+        }
+
+        // Reset form to default values
+        function resetForm() {
             addressForm.reset();
-            // Set default values
-            addressForm.querySelector('input[type="text"][value="Alex"]').value = "Alex";
-            addressForm.querySelector('input[type="text"][value="Johnson"]').value = "Johnson";
-            addressForm.querySelector('input[type="text"][value="New York"]').value = "New York";
-            addressForm.querySelector('input[type="text"][value="10001"]').value = "10001";
-            addressForm.querySelector('input[type="tel"][value="+1 (555) 123-4567"]').value = "+1 (555) 123-4567";
+            addressLabel.value = '';
+            customLabel.value = '';
+            firstName.value = 'Alex';
+            lastName.value = 'Johnson';
+            streetAddress.value = '';
+            apartment.value = '';
+            city.value = 'New York';
+            state.value = 'NY';
+            zipCode.value = '10001';
+            country.value = 'US';
+            phoneNumber.value = '+1 (555) 123-4567';
+            setDefaultCheckbox.checked = false;
         }
 
         // Open modal for editing address
         function openEditModal(addressType) {
-            modal.classList.remove('hidden');
+            modalContainer.classList.add('active');
             setTimeout(() => {
                 modalContent.classList.add('active');
             }, 10);
@@ -475,38 +525,44 @@
             
             // Populate form with sample data based on address type
             if (addressType === 'home') {
-                document.querySelector('select').value = 'home';
-                addressForm.querySelector('input[type="text"][value="Alex"]').value = "Alex";
-                addressForm.querySelector('input[type="text"][value="Johnson"]').value = "Johnson";
-                addressForm.querySelector('input[placeholder="123 Main Street"]').value = "123 Fashion Avenue";
-                addressForm.querySelector('input[placeholder="Apt 4B"]').value = "Apartment 4B";
-                addressForm.querySelector('input[type="text"][value="New York"]').value = "New York";
-                document.querySelector('select[required]').value = "NY";
-                addressForm.querySelector('input[type="text"][value="10001"]').value = "10001";
-                addressForm.querySelector('input[type="tel"][value="+1 (555) 123-4567"]').value = "+1 (555) 123-4567";
-                document.getElementById('setDefault').checked = true;
+                addressLabel.value = 'home';
+                customLabel.value = '';
+                firstName.value = 'Alex';
+                lastName.value = 'Johnson';
+                streetAddress.value = '123 Fashion Avenue';
+                apartment.value = 'Apartment 4B';
+                city.value = 'New York';
+                state.value = 'NY';
+                zipCode.value = '10001';
+                country.value = 'US';
+                phoneNumber.value = '+1 (555) 123-4567';
+                setDefaultCheckbox.checked = true;
             } else if (addressType === 'work') {
-                document.querySelector('select').value = 'work';
-                addressForm.querySelector('input[type="text"][value="Alex"]').value = "Alex";
-                addressForm.querySelector('input[type="text"][value="Johnson"]').value = "Johnson";
-                addressForm.querySelector('input[placeholder="123 Main Street"]').value = "456 Business District";
-                addressForm.querySelector('input[placeholder="Apt 4B"]').value = "Floor 15, Suite 1502";
-                addressForm.querySelector('input[type="text"][value="New York"]').value = "New York";
-                document.querySelector('select[required]').value = "NY";
-                addressForm.querySelector('input[type="text"][value="10001"]').value = "10005";
-                addressForm.querySelector('input[type="tel"][value="+1 (555) 123-4567"]').value = "+1 (555) 987-6543";
-                document.getElementById('setDefault').checked = false;
+                addressLabel.value = 'work';
+                customLabel.value = '';
+                firstName.value = 'Alex';
+                lastName.value = 'Johnson';
+                streetAddress.value = '456 Business District';
+                apartment.value = 'Floor 15, Suite 1502';
+                city.value = 'New York';
+                state.value = 'NY';
+                zipCode.value = '10005';
+                country.value = 'US';
+                phoneNumber.value = '+1 (555) 987-6543';
+                setDefaultCheckbox.checked = false;
             } else if (addressType === 'parents') {
-                document.querySelector('select').value = 'parents';
-                addressForm.querySelector('input[type="text"][value="Alex"]').value = "Alex";
-                addressForm.querySelector('input[type="text"][value="Johnson"]').value = "Johnson";
-                addressForm.querySelector('input[placeholder="123 Main Street"]').value = "789 Suburban Lane";
-                addressForm.querySelector('input[placeholder="Apt 4B"]').value = "Hillside Residence";
-                addressForm.querySelector('input[type="text"][value="New York"]').value = "Brooklyn";
-                document.querySelector('select[required]').value = "NY";
-                addressForm.querySelector('input[type="text"][value="10001"]').value = "11201";
-                addressForm.querySelector('input[type="tel"][value="+1 (555) 123-4567"]').value = "+1 (555) 456-7890";
-                document.getElementById('setDefault').checked = false;
+                addressLabel.value = 'parents';
+                customLabel.value = '';
+                firstName.value = 'Alex';
+                lastName.value = 'Johnson';
+                streetAddress.value = '789 Suburban Lane';
+                apartment.value = 'Hillside Residence';
+                city.value = 'Brooklyn';
+                state.value = 'NY';
+                zipCode.value = '11201';
+                country.value = 'US';
+                phoneNumber.value = '+1 (555) 456-7890';
+                setDefaultCheckbox.checked = false;
             }
         }
 
@@ -514,26 +570,29 @@
         function closeModalFunc() {
             modalContent.classList.remove('active');
             setTimeout(() => {
-                modal.classList.add('hidden');
+                modalContainer.classList.remove('active');
             }, 300);
         }
 
-        // Event listeners
+        // Event listeners for opening modal
         addAddressBtn.addEventListener('click', openModal);
         addNewAddressCard.addEventListener('click', openModal);
+        
+        // Event listeners for closing modal
         closeModal.addEventListener('click', closeModalFunc);
         cancelBtn.addEventListener('click', closeModalFunc);
 
         // Close modal when clicking outside
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
+        modalContainer.addEventListener('click', function(e) {
+            if (e.target === modalContainer || e.target.classList.contains('overlay-modal')) {
                 closeModalFunc();
             }
         });
 
         // Edit address buttons
         editButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
                 const addressType = this.getAttribute('data-address');
                 openEditModal(addressType);
             });
@@ -556,7 +615,16 @@
                 
                 // Add default to clicked card
                 addressCard.classList.add('default');
-                addressCard.querySelector('.absolute.top-4.right-4').innerHTML = 
+                
+                // Check if badge container exists, if not create it
+                let badgeContainer = addressCard.querySelector('.absolute.top-4.right-4');
+                if (!badgeContainer) {
+                    badgeContainer = document.createElement('div');
+                    badgeContainer.className = 'absolute top-4 right-4';
+                    addressCard.appendChild(badgeContainer);
+                }
+                
+                badgeContainer.innerHTML = 
                     '<span class="default-badge text-white text-xs px-3 py-1 rounded-full font-medium">' +
                     '<i class="fas fa-star mr-1"></i>Default</span>';
                 
@@ -588,6 +656,13 @@
                 }
             });
         });
+
+        // Prevent body scroll when modal is open
+        document.addEventListener('keydown', function(e) {
+            if (modalContainer.classList.contains('active') && e.key === 'Escape') {
+                closeModalFunc();
+            }
+        });
     });
 
     // Notification function
@@ -600,7 +675,7 @@
 
         // Create notification element
         const notification = document.createElement('div');
-        notification.className = `custom-notification fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 ${
+        notification.className = `custom-notification fixed top-4 right-4 z-[10000] p-4 rounded-xl shadow-lg transform transition-all duration-300 ${
             type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' : 
             type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
             'bg-blue-50 text-blue-800 border border-blue-200'
@@ -652,13 +727,5 @@
             }
         }, 4000);
     }
-
-    // Prevent body scroll when modal is open
-    document.addEventListener('keydown', function(e) {
-        const modal = document.getElementById('addressModal');
-        if (!modal.classList.contains('hidden') && e.key === 'Escape') {
-            modal.querySelector('#closeModal').click();
-        }
-    });
 </script>
 @endsection
