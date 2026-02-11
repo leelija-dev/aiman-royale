@@ -20,9 +20,9 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
-    Route::view('/addresses', 'web.addresses');
+    
 });
-
+Route::view('/addresses', 'web.addresses');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
