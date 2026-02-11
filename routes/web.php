@@ -20,17 +20,21 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
+    
 });
-
+Route::view('/addresses', 'web.addresses');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 });
 
+
+
 // Authenticated routes (require login)
 // Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
+Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
