@@ -116,10 +116,10 @@
                                 <small class="text-muted">Select a size for this variant</small>
                             </div>
                             <div class="mb-3">
-                                <label for="discount_price" class="form-label">Discount Price</label>
-                                <input type="number" class="form-control" id="discount_price" name="discount_price" 
-                                       value="{{ old('discount_price') }}" step="0.01" min="0">
-                                @error('discount_price')
+                                <label for="discount" class="form-label">Discount(%)</label>
+                                <input type="number" class="form-control" id="discount" name="discount" 
+                                       value="0" step="0.01" min="0">
+                                @error('discount')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                                 <small class="text-muted">Optional - leave empty for regular price</small>

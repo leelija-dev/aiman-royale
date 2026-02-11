@@ -20,6 +20,7 @@ class ProductVariant extends Model
         'color',
         'sku',
         'price',
+        'discount',
         'discount_price',
         'stock',
         'video_url',

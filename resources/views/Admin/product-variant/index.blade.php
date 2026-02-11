@@ -306,9 +306,12 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="edit_discount_price_{{ $variant->id }}" class="form-label">Discount Price</label>
-                                                            <input type="number" class="form-control" id="edit_discount_price_{{ $variant->id }}" name="discount_price" 
-                                                                   value="{{ $variant->discount_price }}" step="0.01" min="0">
+                                                            <label for="edit_discount_{{ $variant->id }}" class="form-label">Discount (%)</label>
+                                                            <input type="number" class="form-control" id="edit_discount_{{ $variant->id }}" name="discount" 
+                                                                   value="{{ $variant->discount }}" step="0.01" min="0">
+                                                            @error('discount')
+                                                            <div class="text-danger small">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="edit_stock_{{ $variant->id }}" class="form-label">Stock <span class="text-danger">*</span></label>
