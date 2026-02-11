@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 });
 
+Route::view('/addresses', 'web.addresses');
+
 // Authenticated routes (require login)
 // Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
