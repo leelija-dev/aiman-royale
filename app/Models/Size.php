@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Type\Decimal;
 
 class Size extends Model
 {
@@ -18,6 +19,10 @@ class Size extends Model
         'name',
         'code',
         'sort_order',
+        'chest_size',
+        'neck_size',
+        'waist_size'
+        
     ];
 
     /**
@@ -29,6 +34,9 @@ class Size extends Model
         'name' => 'string',
         'code' => 'string',
         'sort_order' => 'integer',
+        'chest_size'=>'decimal:2',
+        'neck_size'=>'decimal:2',
+        'waist_size'=>'decimal:2'
     ];
 
     /**

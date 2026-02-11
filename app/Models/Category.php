@@ -32,7 +32,12 @@ class Category extends Model
         'image',
         'is_active',
         'is_home',
-        'home_position'
+        'home_position',
+        'meta_title',
+        'keywords',
+        'tags',
+        'meta_description',
+        'schema_markup',
     ];
 
     /**

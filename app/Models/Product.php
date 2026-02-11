@@ -35,6 +35,11 @@ class Product extends Model
         'stock',
         'status',
         'is_featured',
+        'meta_title',
+        'keywords',
+        'tags',
+        'meta_description',
+        'schema_markup',
     ];
 
     /**

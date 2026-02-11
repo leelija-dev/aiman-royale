@@ -6,7 +6,12 @@
 {{config('app.name')}} - Edit Category
 @endsection
 {{-- @section('title','Edit Product Category') --}}
-
+<style>
+.hr-line {
+    border-top: 2px solid #0408382d !important;
+    opacity: 1 !important;
+}
+</style>
 @section('content')
 <div class="container-fluid py-4">
   <div class="card">
@@ -126,6 +131,66 @@
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="col-lg-12 ">
+                            <div class="row">
+                            
+                             <div class="mb-3 d-flex align-items-center">
+                                    <hr class="flex-grow-1 hr-line">
+                                    <span class="px-2 text-muted fw-bold">SEO</span>
+                                    <hr class="flex-grow-1 hr-line">
+                                </div>
+                            <div class="col-6">
+                            <div class="mb-3">
+                                <label for="fabric" class="form-label">Meta Title<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="meta_title" name="meta_title" 
+                                       value="{{ $category->meta_title }}" required>
+                                <div class="invalid-feedback">Meta title cannot be blank!</div>
+                                @error('meta_title')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label for="keywords" class="form-label">Keywords<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="keywords" name="keywords" 
+                                       value="{{ $category->keywords }}" required>
+                                <div class="invalid-feedback">Keywords cannot be blank!</div>
+                                @error('keywords')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                           
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags<sup class="text-danger">*</sup></label>
+                                <input type="text" class="form-control" id="tags" name="tags" 
+                                       value="{{$category->tags }}" required>
+                                       <div class="invalid-feedback">Tags cannot be blank!</div>
+                                @error('tags')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                             </div>
+                            <div class="col-6">
+                            <!-- Meta Description -->
+                            
+                                    <div class="mb-3">
+                                        <label for="meta_description" class="form-label">Meta Description<sup class="text-danger">*</sup></label>
+                                        <textarea class="form-control" id="meta_description" name="meta_description" rows="4" required>{{ $category->meta_description }}</textarea>
+                                        <div class="invalid-feedback">Meta description cannot be blank!</div>
+                                        @error('meta_description')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="schema_markup" class="form-label">Schema Markup</label>
+                                        <textarea class="form-control" id="schema_markup" name="schema_markup" rows="4">{{ $category->schema_markup }}</textarea>
+                                        @error('schema_markup')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                            </div>
+                            </div>
+                            </div>
 
             <div class=" d-flex justify-content-end gap-2 flex-sm-nowrap flex-wrap">
               <a href="{{ route('admin.categories.index') }}" class="btn btn-danger mb-sm-2 mb-0">Cancel</a>

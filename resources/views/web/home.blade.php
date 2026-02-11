@@ -2394,33 +2394,33 @@
             event.stopPropagation();
         }
 
-        if (!productId) {
-            alert('Product ID not found');
-            return;
-        }
+            if (!productId) {
+                alert('Product ID not found');
+                return;
+            }
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
 
-        console.log('Heart icon element:', heartIcon);
+            console.log('Heart icon element:', heartIcon);
 
-        if (!heartIcon) {
-            console.error('Heart icon not found for product:', productId);
-            return;
-        }
+            if (!heartIcon) {
+                console.error('Heart icon not found for product:', productId);
+                return;
+            }
 
-        // Check if already in wishlist by checking if it's an SVG (empty) or FontAwesome (filled)
-        const isSVG = heartIcon.tagName === 'svg';
-        const isInWishlist = isSVG ? false : heartIcon.classList.contains('fas');
-        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+            // Check if already in wishlist by checking if it's an SVG (empty) or FontAwesome (filled)
+            const isSVG = heartIcon.tagName === 'svg';
+            const isInWishlist = isSVG ? false : heartIcon.classList.contains('fas');
+            const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
-        console.log('Is SVG element:', isSVG);
-        console.log('Current wishlist state:', isInWishlist);
-        console.log('Calling URL:', url);
+            console.log('Is SVG element:', isSVG);
+            console.log('Current wishlist state:', isInWishlist);
+            console.log('Calling URL:', url);
 
-        // Show loading state
-        const originalContent = heartIcon.innerHTML;
-        heartIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            // Show loading state
+            const originalContent = heartIcon.innerHTML;
+            heartIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         fetch(url, {
                 method: 'POST',

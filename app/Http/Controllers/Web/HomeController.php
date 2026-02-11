@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Size;
 
 class HomeController extends Controller
 {
@@ -30,7 +31,6 @@ class HomeController extends Controller
         // ->latest()
         // ->take(10)
         // ->get();
-        
 
         $products = DB::table('products')
             ->leftJoin('product_variants', function($join) {
@@ -290,8 +290,8 @@ class HomeController extends Controller
         $product = Product::with(['images', 'variants'])
             ->where('slug', $slug)
             ->firstOrFail();
-
+        $sizes=Size::OrderBy('sort_order')->get();
         // dd($product);
-        return view('web.single-product', compact('product'));
+        return view('web.single-product', compact('product','sizes'));
     }
 }

@@ -31,8 +31,8 @@ $currentRoute = request()->route()->getName();
                 <span>Profile Information</span>
             </a>
             <a
-                href="{{ route('page.multi-product') }}"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'page.multi-product' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
+                href="{{route('user.order-history',$user->id)}}"
+                class="sidebar-item {{ request()->routeIs('user.order-history') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-shopping-bag w-5 text-center"></i>
                 <span>Order History</span>
             </a>

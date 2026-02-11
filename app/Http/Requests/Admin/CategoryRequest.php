@@ -24,6 +24,11 @@ class CategoryRequest extends FormRequest
             'is_home' => ['boolean'],
             //'home_position' => ['nullable', 'string'],
              'home_position' => ['required_if:is_home,1', 'nullable', 'string'],
+            'meta_title'=>['required','string'],
+            'keywords'=>['required','string'],
+            'tags'=>['required','string'],
+            'meta_description'=>['required','string'],
+            'schema_markup'=>['nullable','string'],
         ];
     }
     public function messages(): array
@@ -36,6 +41,10 @@ class CategoryRequest extends FormRequest
             'parent_id.exists' => 'Selected parent category does not exist.',
             'image.image' => 'image size should be less than 1MB',
             'home_position.required_if' => 'Please select a home position.',
+            'meta_title.required' => 'Please enter a meta title.',
+            'keywords.required' => 'Please enter keywords.',
+            'tags.required' => 'Please enter tags.',
+            'meta_description.required' => 'Please enter a meta description.',
         ];
     }
 }

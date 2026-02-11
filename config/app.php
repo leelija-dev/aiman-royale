@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kolkata',//'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -126,6 +126,7 @@ return [
     'rupees' => env('RUPEES', '₹'),
     'business_mail' => env('BUSINESS_MAIL','support@businessname.com'),
     'business_contact'=> env('BUSINESS_CONTACT','91-123-456-7890'),
-    'business_website'=> env('BUSINESS_WEBSITE','www.businessname.com')
+    'business_website'=> env('BUSINESS_WEBSITE','www.businessname.com'),
+    'currency' => env('CURRENCY', '₹'),
 
 ];

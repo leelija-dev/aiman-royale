@@ -297,10 +297,10 @@
                                                         <div class="mb-3">
                                                             <label for="edit_size_{{ $variant->id }}" class="form-label">Size</label>
                                                             <select class="form-control" id="edit_size_{{ $variant->id }}" name="size">
-                                                                <option value="">No Size</option>
+                                                                <option value="" selected hidden>Select Size</option>
                                                                 @foreach($sizes as $size)
-                                                                <option value="{{ $size }}" {{ $variant->size == $size ? 'selected' : '' }}>
-                                                                    {{ $size }}
+                                                                <option value="{{ $size->code }}" {{ $variant->size == $size ? 'selected' : '' }}>
+                                                                    {{ $size->name }}({{$size->code}})
                                                                 </option>
                                                                 @endforeach
                                                             </select>

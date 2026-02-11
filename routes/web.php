@@ -10,7 +10,7 @@ use App\Http\Controllers\Web\SingleProductController;
 use App\Http\Controllers\Web\OccasionController;
 use App\Http\Controllers\Web\WishlistController;
 use App\Http\Controllers\Web\Profile;
-
+use App\Http\Controllers\Admin\UserController;
 
 
 
@@ -77,5 +77,5 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 // Cashfree Webhook Route
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
    
-    
+    Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
 // });

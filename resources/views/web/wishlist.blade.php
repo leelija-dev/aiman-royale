@@ -2,11 +2,6 @@
 
 
 
-
-
-
-
-
 @section('content')
 <style>
     body {

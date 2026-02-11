@@ -13,11 +13,13 @@
             <div class="card-header pb-0">
                 <h6>Add New Size</h6>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-                <form action="{{ route('admin.sizes.store') }}" method="POST">
+            <div class="card px-4 pt-2 pb-2">
+                <form action="{{ route('admin.sizes.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
-                    <div class="row">
-                        <div class="col-md-4">
+                    
+                        <div class="col-md-12">
+                            <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Size Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="name" name="name" 
@@ -26,9 +28,35 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3">
+                                <label for="chest_size" class="form-label">Chest Size <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="chest_size" name="chest_size" 
+                                       value="{{ old('chest_size') }}"  required>
+                                @error('chest_size')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="neck_size" class="form-label">Neck Size <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="neck_size" name="neck_size" 
+                                       value="{{ old('neck_size') }}" required>
+                                @error('neck_size')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="waist_size" class="form-label">Waist Size <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="waist_size" name="waist_size" 
+                                       value="{{ old('waist_size') }}" maxlength="20" required>
+                                @error('waist_size')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        
+                        
+                            
                         </div>
-
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="code" class="form-label">Size Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="code" name="code" 
@@ -38,18 +66,17 @@
                                 @enderror
                                 <small class="text-muted">Enter size code (e.g., S, M, L, XL)</small>
                             </div>
-                        </div>
-
-                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="sort_order" class="form-label">Sort Order</label>
                                 <input type="number" class="form-control" id="sort_order" name="sort_order" 
-                                       value="{{ old('sort_order') }}" min="0">
+                                       value="{{ old('sort_order') }}" min="0" required>
                                 @error('sort_order')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                                 <small class="text-muted">Lower numbers appear first</small>
                             </div>
+                        </div>
+                        
                         </div>
                     </div>
 
