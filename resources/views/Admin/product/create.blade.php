@@ -46,8 +46,16 @@
                             <!-- Brand -->
                             <div class="mb-3">
                                 <label for="brand" class="form-label">Brand</label>
-                                <input type="text" class="form-control" id="brand" name="brand" 
-                                       value="{{ old('brand') }}" maxlength="100">
+                                {{-- <input type="text" class="form-control" id="brand" name="brand" 
+                                       value="{{ old('brand') }}" maxlength="100"> --}}
+                                <select class="form-control" id="brand" name="brand">
+                                    <option value="" selected hidden>Select Brand</option>
+                                    @foreach ($brands as $brand)
+                                    <option value="{{ $brand->name }}" {{ old('brand') == $brand->name ? 'selected' : '' }}>
+                                        {{ $brand->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
                                 @error('brand')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror

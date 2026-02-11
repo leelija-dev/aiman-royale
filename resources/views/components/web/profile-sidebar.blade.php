@@ -62,20 +62,22 @@ $currentRoute = request()->route()->getName();
             <div class="space-y-3">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Total Items</span>
-                    <span class="font-medium">16</span>
+                    <span class="font-medium">{{$wishlists->count()}}</span>
                 </div>
-                <div class="flex justify-between text-sm">
+                {{-- <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Collections</span>
                     <span class="font-medium">4</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-600">On Sale</span>
                     <span class="font-medium text-purple-600">5 items</span>
-                </div>
-                <div class="flex justify-between text-sm">
+                </div> --}}
+               
+                {{-- <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Total Value</span>
-                    <span class="font-medium">$1,247.50</span>
-                </div>
+                    <span class="font-medium">{{ config('app.currency') }} {{ $wishlists->sum(fn($item) => $item->variant?->price ?? 0) }}</span>
+
+                </div> --}}
             </div>
         </div>
 

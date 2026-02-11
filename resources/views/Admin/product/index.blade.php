@@ -197,10 +197,18 @@
                                                                 <div class="mb-3">
                                                                     <label for="edit_brand_{{ $product->id }}"
                                                                         class="form-label">Brand</label>
-                                                                    <input type="text" class="form-control"
+                                                                    {{-- <input type="text" class="form-control"
                                                                         id="edit_brand_{{ $product->id }}"
                                                                         name="brand" value="{{ $product->brand }}"
-                                                                        maxlength="100">
+                                                                        maxlength="100"> --}}
+                                                                        <select class="form-control" id="brand" name="brand">
+                                                                            <option value="" selected hidden>Select Brand</option>
+                                                                            @foreach ($brands as $brand)
+                                                                            <option value="{{ $brand->name }}" {{$brand->name == $product->brand ? 'selected' : '' }}>
+                                                                                {{ $brand->name }}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
                                                                 </div>
 
                                                                 <div class="mb-3">

@@ -9,6 +9,7 @@ use App\Models\Occasion;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Brand;
 
 class ProductController extends Controller
 {
@@ -30,16 +31,17 @@ class ProductController extends Controller
         $data = $query->paginate(15);
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
-
-        return view('Admin.product.index', compact('data', 'categories', 'occasions'));
+        $brands = Brand::select('id', 'name')->orderBy('name')->get();
+        return view('Admin.product.index', compact('data', 'categories', 'occasions','brands'));
     }
 
     public function create()
     {
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
+        $brands = Brand::select('id', 'name')->orderBy('name')->get();
 
-        return view('Admin.product.create', compact('categories', 'occasions'));
+        return view('Admin.product.create', compact('categories', 'occasions','brands'));
     }
     public function store(Request $request)
     {
