@@ -980,7 +980,7 @@
                 <!-- Step 1: Share Your Idea -->
                 <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
                     <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden step-badge rounded-full mb-8">
+                    <div class="md:hidden flex step-badge rounded-full mb-8">
                         <span>1</span>
                     </div>
                     
@@ -1035,7 +1035,7 @@
                 <!-- Step 2: We Sketch Your Design -->
                 <div class="flex flex-col md:flex-row-reverse items-center mb-20 md:mb-32">
                     <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden step-badge rounded-full mb-8">
+                    <div class="md:hidden flex step-badge rounded-full mb-8">
                         <span>2</span>
                     </div>
                     
@@ -1090,7 +1090,7 @@
                 <!-- Step 3: Fabric & Detail Selection -->
                 <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
                     <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden step-badge rounded-full mb-8">
+                    <div class="md:hidden flex step-badge rounded-full mb-8">
                         <span>3</span>
                     </div>
                     
@@ -1145,7 +1145,7 @@
                 <!-- Step 4: Tailoring & Delivery -->
                 <div class="flex flex-col md:flex-row-reverse items-center">
                     <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden step-badge rounded-full mb-8">
+                    <div class="md:hidden flex step-badge rounded-full mb-8">
                         <span>4</span>
                     </div>
                     
