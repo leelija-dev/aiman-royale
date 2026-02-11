@@ -652,7 +652,7 @@
           <!-- ==================== Brand Accordion ==================== -->
           <div class="accordion-wrapper active">
             <div class="flex justify-between items-center cursor-pointer">
-              <h3 class="font-semibold text-gray-900">Brand</h3>
+              <h3 class="font-semibold text-gray-900">Category</h3>
               <svg
                 class="w-5 h-5 text-gray-600 accordion-chevron transition-transform"
                 fill="none"
@@ -670,28 +670,29 @@
 
             <div class="accordion-content-block">
               <div class="space-y-2 text-sm mt-4">
-                @foreach($filterOptions['brands'] as $brand)
+                {{-- @dd($filterOptions['sizes']) --}}
+                @foreach($filterOptions['categories'] as $category)
                   <label class="flex items-center gap-2">
                     <input type="checkbox" 
-                           name="brands[]" 
-                           value="{{ $brand }}" 
+                           name="category[]" 
+                           value="{{ $category }}" 
                            class="accent-gray-800 filter-checkbox"
-                           @if(in_array($brand, request('brands', []))) checked @endif>
-                    {{ ucfirst($brand) }} <span class="text-gray-500">({{ DB::table('products')->where('brand', $brand)->where('is_active', 1)->count() }})</span>
+                           @if(in_array($category, $selectedFilters['categories'] ?? [])) checked @endif>
+                    {{ ucfirst($category) }} <span class="text-gray-500"></span> {{--({{ DB::table('products')->where('brand', $category)->where('is_active', 1)->count() }})</span> --}}
                   </label>
                 @endforeach
               </div>
 
-              <button class="text-sm text-blue-600 hover:underline mt-3">
+              {{-- <button class="text-sm text-blue-600 hover:underline mt-3">
                 + 40 more
-              </button>
+              </button> --}}
             </div>
           </div>
 
-          <!-- ==================== Price Accordion ==================== -->
+          <!-- ==================== Occasion Accordion ==================== -->
           <div class="accordion-wrapper">
             <div class="flex justify-between items-center cursor-pointer">
-              <h3 class="font-semibold text-gray-900">Price</h3>
+              <h3 class="font-semibold text-gray-900">Occasion</h3>
               <svg
                 class="w-5 h-5 text-gray-600 accordion-chevron transition-transform"
                 fill="none"
@@ -709,18 +710,25 @@
 
             <div class="accordion-content-block">
               <div class="space-y-2 text-sm mt-4">
+                @foreach($filterOptions['occasions'] as $occasion)
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
-                  Rs 350 to Rs 500 <span class="text-gray-500">(206)</span>
+                  <input type="checkbox"
+                      name="occasions[]"
+                      value="{{ $occasion}}"
+                      class="accent-gray-800 filter-checkbox"
+                      @if(in_array($occasion, $selectedFilters['occasions'] ?? [])) checked @endif>
+
+                {{ $occasion}}<span class="text-gray-500"></span>
                 </label>
-                <label class="flex items-center gap-2">
-                  <input type="checkbox" checked class="accent-gray-800" />
+                @endforeach
+                {{-- <label class="flex items-center gap-2">
+                  <input type="checkbox" name="price[]" value="500" checked class="accent-gray-800" >
                   Rs 500 to Rs 700 <span class="text-gray-500">(100)</span>
                 </label>
                 <label class="flex items-center gap-2">
-                  <input type="checkbox" class="accent-gray-800" />
+                  <input type="checkbox" name="price[]" value="700" class="accent-gray-800" >
                   Rs 700 to Rs 900 <span class="text-gray-500">(206)</span>
-                </label>
+                </label> --}}
               </div>
             </div>
           </div>
@@ -752,7 +760,7 @@
                            name="colors[]" 
                            value="{{ $color }}" 
                            class="accent-gray-800 filter-checkbox"
-                           @if(in_array($color, request('colors', []))) checked @endif>
+                           @if(in_array($color, $selectedFilters['colors'] ?? [])) checked @endif>
                     {{ ucfirst($color) }} <span class="text-gray-500">({{ DB::table('product_variants')->where('color', $color)->count() }})</span>
                   </label>
                 @endforeach
@@ -761,7 +769,7 @@
           </div>
 
           <!-- ==================== Discount Accordion ================= -->
-          <div class="accordion-wrapper">
+          {{-- <div class="accordion-wrapper">
             <div class="flex justify-between items-center cursor-pointer">
               <h3 class="font-semibold text-gray-900">Discount Range</h3>
               <svg
@@ -815,7 +823,7 @@
                 </label>
               </div>
             </div>
-          </div>
+          </div> --}}
 
           <!-- ==================== Size Accordion ================= -->
           <div class="accordion-wrapper">
@@ -844,13 +852,72 @@
                            name="sizes[]" 
                            value="{{ $size }}" 
                            class="accent-gray-800 filter-checkbox"
-                           @if(in_array($size, request('sizes', []))) checked @endif>
+                           @if(in_array($size, $selectedFilters['sizes'] ?? [])) checked @endif>
                     {{ strtoupper($size) }} <span class="text-gray-500">({{ DB::table('product_variants')->where('size', $size)->count() }})</span>
                   </label>
                 @endforeach
               </div>
             </div>
           </div>
+
+           {{-- Price Range Accordion --}}
+           <div class="accordion-wrapper">
+            <div class="flex justify-between items-center cursor-pointer">
+              <h3 class="font-semibold text-gray-900">Price</h3>
+              <svg
+                class="w-5 h-5 text-gray-600 accordion-chevron transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div class="line-border-block bg-gray-300 h-0.5 mt-3"></div>
+
+            <div class="accordion-content-block">
+              <div class="space-y-2 text-sm mt-4">
+                <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="0-200" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('0-200', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                    Below < {{config('app.currency')}}200
+                </label>
+                 <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="200-300" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('200-300', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                    {{config('app.currency')}}200 - {{config('app.currency')}}300
+                </label>
+                <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="300-400" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('300-400', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                    {{config('app.currency')}}300 - {{config('app.currency')}}400
+                </label>
+                <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="400-500" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('400-500', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                    {{config('app.currency')}}400 - {{config('app.currency')}}500
+                </label>
+               <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="500-600" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('500-600', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                    {{config('app.currency')}}500 - {{config('app.currency')}}600
+                </label>
+                <label class="flex items-center gap-2">
+                <input type="checkbox" name="price_ranges[]" value="600-5000" class="accent-gray-800 filter-checkbox"
+                    @if(in_array('600-5000', $selectedFilters['price_ranges'] ?? [])) checked @endif>
+                   {{config('app.currency')}}600  < Above 
+                </label>
+                   
+                
+              </div>
+            </div>
+          </div>
+
+          
         </div>
         </form>
       </div>
@@ -877,6 +944,7 @@
                   @if($product['discount_price'] && $product['discount_price'] < $product['price'])
                   <span
                     class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                    {{-- {{$product['discount']}} --}}
                     -{{ round((($product['price'] - $product['discount_price']) / $product['price']) * 100) }}%
                   </span>
                   @endif

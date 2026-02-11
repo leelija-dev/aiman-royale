@@ -98,9 +98,9 @@ class Product extends Model
     /**
      * Get the category that owns the product.
      */
-    public function category(): BelongsTo
+    public function category(): HasMany
     {
-        return $this->belongsTo('App\\Models\\Category', 'category_id');
+        return $this->hasMany('App\\Models\\Category', 'category_id');
     }
 
     /**
