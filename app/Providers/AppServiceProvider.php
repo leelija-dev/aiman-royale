@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Notification;
 use App\Models\Category;
 use App\Models\Size;
+use App\Models\Wishlist;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,7 +36,11 @@ class AppServiceProvider extends ServiceProvider
         $notifications = Notification::where('viewed', 0)->latest()->get();
         $categories = Category::where('is_active', 1)->orderBy('name')->get();
         $sizes=Size::OrderBy('sort_order')->get();
-        $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes);
+        // $wishlists = Wishlist::where('user_id', auth()->user()->id)->with('product')->get();
+        $wishlists = Wishlist::where('user_id', auth()->user()->id)->with(['product.images', 'variant'])
+                        ->get();
+        $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes)
+        ->with('wishlists', $wishlists);
     });
    }
 }
