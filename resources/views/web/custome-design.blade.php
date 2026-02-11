@@ -11,7 +11,7 @@
         box-sizing: border-box;
     }
 
-    
+
 
     /* Hero Section */
     .hero-bg {
@@ -44,95 +44,95 @@
     }
 
 
-      .step-badge {
-            background: linear-gradient(135deg, #f8c8dc 0%, #e6b0d2 100%);
-            box-shadow: 0 6px 20px rgba(230, 176, 210, 0.3);
-            width: 70px;
-            height: 70px;
-            
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #7a4a76;
-            border: 3px solid white;
-        }
-        
-        .step-card {
-            background-color: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(168, 129, 163, 0.08);
-            transition: all 0.4s ease;
-            overflow: hidden;
-            border: 1px solid rgba(245, 220, 240, 0.5);
-        }
-        
-        .step-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(168, 129, 163, 0.15);
-        }
-        
-        .step-image {
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        
-        .step-card:hover .step-image {
-            transform: scale(1.05);
-        }
-        
-        .divider {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #e6b0d2, transparent);
-            margin: 2rem 0;
-        }
-        
+    .step-badge {
+        background: linear-gradient(135deg, #f8c8dc 0%, #e6b0d2 100%);
+        box-shadow: 0 6px 20px rgba(230, 176, 210, 0.3);
+        width: 70px;
+        height: 70px;
+
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #7a4a76;
+        border: 3px solid white;
+    }
+
+    .step-card {
+        background-color: white;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(168, 129, 163, 0.08);
+        transition: all 0.4s ease;
+        overflow: hidden;
+        border: 1px solid rgba(245, 220, 240, 0.5);
+    }
+
+    .step-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(168, 129, 163, 0.15);
+    }
+
+    .step-image {
+        height: 300px;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .step-card:hover .step-image {
+        transform: scale(1.05);
+    }
+
+    .divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #e6b0d2, transparent);
+        margin: 2rem 0;
+    }
+
+    .vertical-line {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, #f8c8dc, #d89fc1, #f8c8dc);
+        transform: translateX(-50%);
+        display: none;
+    }
+
+    @media (min-width: 768px) {
         .vertical-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, #f8c8dc, #d89fc1, #f8c8dc);
-            transform: translateX(-50%);
-            display: none;
+            display: block;
         }
-        
-        @media (min-width: 768px) {
-            .vertical-line {
-                display: block;
-            }
-        }
-        
-        .section-title {
-            background: linear-gradient(135deg, #9a6b8c, #d89fc1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .step-title {
-            color: #7a4a76;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .step-title:after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #f8c8dc, #e6b0d2);
-            border-radius: 2px;
-        }
-        
-        .process-description {
-            color: #6b556b;
-            line-height: 1.7;
-        }
+    }
+
+    .section-title {
+        background: linear-gradient(135deg, #9a6b8c, #d89fc1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .step-title {
+        color: #7a4a76;
+        position: relative;
+        display: inline-block;
+    }
+
+    .step-title:after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #f8c8dc, #e6b0d2);
+        border-radius: 2px;
+    }
+
+    .process-description {
+        color: #6b556b;
+        line-height: 1.7;
+    }
 
 
 
@@ -864,383 +864,497 @@
     }
 </style>
 
-<!-- Hero Section -->
-<section class="hero-bg min-h-screen flex items-center justify-center relative px-4 py-16">
-    <div class="container mx-auto ">
-        <div class="text-center text-white fade-in">
-            <!-- Decorative elements -->
-            <div class="absolute top-10 left-5 md:left-10 opacity-20">
-                <i class="fas fa-heart text-3xl text-pink-200"></i>
+<section class="relative min-h-screen flex items-center justify-center px-4 py-16 overflow-hidden">
+    <!-- Premium Fashion Background - Modern & Sophisticated -->
+    <div class="absolute inset-0 z-0">
+        <!-- Clean, modern gradient overlay - from charcoal to slate -->
+        <div class="absolute inset-0 bg-gradient-to-br from-neutral-900/85 via-neutral-800/75 to-neutral-900/85 z-10"></div>
+        
+        <!-- Background Image - High fashion studio aesthetic -->
+        <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Minimalist fashion studio with mannequin and drafting tools"
+            class="w-full h-full object-cover opacity-40">
+        
+        <!-- Subtle geometric pattern - modern & architectural -->
+        <div class="absolute inset-0 opacity-10 z-20" 
+             style="background-image: linear-gradient(45deg, #fff 1px, transparent 1px), linear-gradient(-45deg, #fff 1px, transparent 1px); 
+                    background-size: 30px 30px;">
+        </div>
+    </div>
+    
+    <!-- Clean Animated Elements - Minimal & Architectural -->
+    <div class="absolute top-20 left-10 md:left-20 z-30 opacity-20">
+        <i class="fas fa-minus text-4xl text-white rotate-45 floating"></i>
+    </div>
+    
+    <div class="absolute bottom-32 right-10 md:right-20 z-30 opacity-20">
+        <i class="fas fa-plus text-4xl text-white floating-delayed"></i>
+    </div>
+    
+    <div class="absolute top-1/3 left-1/4 z-20 opacity-10 hidden md:block">
+        <i class="fas fa-circle text-3xl text-white"></i>
+    </div>
+    
+    <div class="absolute bottom-1/3 right-1/4 z-20 opacity-10 hidden md:block">
+        <i class="fas fa-square text-3xl text-white"></i>
+    </div>
+    
+    <!-- Sophisticated gradient orbs - muted tones -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-neutral-600 rounded-full mix-blend-soft-light filter blur-3xl opacity-20 animate-blob z-20"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-stone-700 rounded-full mix-blend-soft-light filter blur-3xl opacity-20 animate-blob animation-delay-2000 z-20"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gray-600 rounded-full mix-blend-soft-light filter blur-3xl opacity-10 animate-blob animation-delay-4000 z-20"></div>
+    
+    <!-- Main Content Container -->
+    <div class="container mx-auto relative z-40">
+        <div class="text-center text-white fade-in max-w-6xl mx-auto">
+            
+            <!-- Minimal Badge - Clean typography -->
+            <div class="mb-6 slide-up">
+                <span class="inline-flex items-center gap-3 px-5 py-2.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-xs md:text-sm font-light tracking-[0.2em] uppercase">
+                    <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+                    <span>Atelier Exclusive</span>
+                    <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+                </span>
             </div>
-            <div class="absolute bottom-20 right-5 md:right-10 opacity-20">
-                <i class="fas fa-feather-alt text-3xl text-pink-200"></i>
-            </div>
-            <div class="absolute top-1/3 left-10 md:left-20 opacity-10">
-                <i class="fas fa-spool text-4xl text-pink-100"></i>
-            </div>
-            <div class="absolute bottom-1/3 right-10 md:right-20 opacity-10">
-                <i class="fas fa-scissors text-4xl text-pink-100"></i>
-            </div>
-
-            <!-- Main Content -->
+            
+            <!-- Main Heading - Modern typography, reduced gradient -->
             <div class="mb-8 slide-up">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-wide">
-                    Design Your <span class="text-pink-200">Dream Outfit</span>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-light mb-6 tracking-tight leading-[1.1]">
+                    <span class="block font-extralight text-white/90">Design Your</span>
+                    <span class="font-medium bg-gradient-to-r from-white via-neutral-200 to-white bg-clip-text text-transparent">
+                        Dream Outfit
+                    </span>
                 </h1>
-                <div class="w-24 h-1 bg-gradient-to-r from-pink-300 to-purple-300 mx-auto mb-8"></div>
+                
+                <!-- Minimal Divider -->
+                <div class="flex items-center justify-center gap-2 mb-8">
+                    <div class="w-8 h-px bg-white/20"></div>
+                    <div class="w-1 h-1 bg-white/40 rounded-full"></div>
+                    <div class="w-8 h-px bg-white/20"></div>
+                </div>
             </div>
-
-            <div class="max-w-3xl mx-auto mb-12 slide-up">
-                <p class="text-xl md:text-2xl font-light leading-relaxed">
-                    Transform your vision into a <span class="font-medium text-pink-100">one-of-a-kind creation</span>. Our master designers work with you to craft custom outfits that reflect your unique style, personality, and fit perfectly.
+            
+            <!-- Descriptive Text - Clean, editorial style -->
+            <div class="max-w-2xl mx-auto mb-12 slide-up">
+                <p class="text-base md:text-lg lg:text-xl font-light leading-relaxed text-white/80">
+                    <span class="text-white font-normal">From sketch to silhouette.</span>
+                    Work with our master artisans to create a 
+                    <span class="italic text-white/90">singular piece</span> 
+                    that exists only for you.
                 </p>
             </div>
-
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-6 slide-up-delayed">
-                <a href="#custom-form" class="btn-primary text-white font-medium py-4 px-10 rounded-full text-lg flex items-center justify-center gap-3 pulse">
-                    <i class="fas fa-pen-fancy"></i>
-                    Start Your Custom Design
+            
+            <!-- CTA Buttons - Refined, minimal -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 slide-up-delayed">
+                <a href="#design-process" class="group relative inline-flex items-center justify-center gap-3 bg-white text-neutral-900 hover:bg-neutral-100 font-medium py-3.5 px-10 text-sm tracking-wide transition-all duration-300">
+                    <span class="relative z-10">Begin Creation</span>
+                    <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform relative z-10"></i>
+                    <div class="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 -z-0"></div>
                 </a>
-                <a href="#gallery" class="btn-outline border-2 font-medium py-4 px-10 rounded-full text-lg flex items-center justify-center gap-3">
-                    <i class="fas fa-images"></i>
-                    View Design Gallery
+                
+                <a href="#design-gallery" class="inline-flex items-center justify-center gap-2 text-white/80 hover:text-white font-light py-3.5 px-10 text-sm tracking-wide border border-white/20 hover:border-white/50 transition-all duration-300">
+                    <span>View Archive</span>
                 </a>
             </div>
-
-            <!-- Additional Info -->
-            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left slide-up-delayed">
-                <div class="flex flex-col items-center md:items-start">
-                    <div class="bg-white/10 p-4 rounded-full mb-4">
-                        <i class="fas fa-ruler-combined text-2xl text-pink-200"></i>
+            
+            <!-- Design Features - Clean cards, no background blur -->
+            <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 text-left slide-up-delayed">
+                <!-- Feature 1: Minimal -->
+                <div class="group border-t border-white/10 pt-6 transition-all duration-300">
+                    <div class="flex flex-col">
+                        <div class="mb-4">
+                            <span class="text-4xl font-thin text-white/40 group-hover:text-white/80 transition-colors">01</span>
+                        </div>
+                        <h3 class="text-lg font-medium mb-3 text-white tracking-wide">Sketch to Sample</h3>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">Iterative development from concept to prototype, refined to your specifications</p>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Perfect Fit Guarantee</h3>
-                    <p class="text-pink-100">Custom measurements ensure your outfit fits perfectly</p>
                 </div>
-
-                <div class="flex flex-col items-center md:items-start">
-                    <div class="bg-white/10 p-4 rounded-full mb-4">
-                        <i class="fas fa-palette text-2xl text-pink-200"></i>
+                
+                <!-- Feature 2: Minimal -->
+                <div class="group border-t border-white/10 pt-6 transition-all duration-300">
+                    <div class="flex flex-col">
+                        <div class="mb-4">
+                            <span class="text-4xl font-thin text-white/40 group-hover:text-white/80 transition-colors">02</span>
+                        </div>
+                        <h3 class="text-lg font-medium mb-3 text-white tracking-wide">Material Curation</h3>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">Access to exclusive mills—Italian wools, Japanese cottons, French laces</p>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Endless Customization</h3>
-                    <p class="text-pink-100">Choose from fabrics, colors, and designs that match your style</p>
                 </div>
-
-                <div class="flex flex-col items-center md:items-start">
-                    <div class="bg-white/10 p-4 rounded-full mb-4">
-                        <i class="fas fa-award text-2xl text-pink-200"></i>
+                
+                <!-- Feature 3: Minimal -->
+                <div class="group border-t border-white/10 pt-6 transition-all duration-300">
+                    <div class="flex flex-col">
+                        <div class="mb-4">
+                            <span class="text-4xl font-thin text-white/40 group-hover:text-white/80 transition-colors">03</span>
+                        </div>
+                        <h3 class="text-lg font-medium mb-3 text-white tracking-wide">Precision Fit</h3>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">Digital measurement + hand-finishing for architectural drape and movement</p>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
-                    <p class="text-pink-100">Handcrafted with luxury materials and expert attention to detail</p>
                 </div>
             </div>
-
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-                <a href="#process" class="text-pink-200 animate-bounce">
-                    <i class="fas fa-chevron-down text-3xl"></i>
+            
+            <!-- Trust Indicators - Clean stats -->
+            <div class="mt-16 flex flex-wrap justify-center items-center gap-8 slide-up-delayed">
+                <div class="flex items-center gap-3">
+                    <div class="flex -space-x-2">
+                        <img class="w-7 h-7 rounded-full border border-white/30" src="https://randomuser.me/api/portraits/women/33.jpg" alt="Designer">
+                        <img class="w-7 h-7 rounded-full border border-white/30" src="https://randomuser.me/api/portraits/men/46.jpg" alt="Designer">
+                        <img class="w-7 h-7 rounded-full border border-white/30" src="https://randomuser.me/api/portraits/women/55.jpg" alt="Designer">
+                    </div>
+                    <span class="text-white/60 text-sm"><span class="text-white font-medium">15</span> designers</span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-white/40 text-xl font-thin">—</span>
+                    <span class="text-white/60 text-sm"><span class="text-white font-medium">500+</span> pieces</span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-white/40 text-xl font-thin">—</span>
+                    <span class="text-white/60 text-sm"><span class="text-white font-medium">4.98</span> / 5.0</span>
+                </div>
+            </div>
+            
+            <!-- Minimal Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                <a href="#design-process" class="group flex flex-col items-center gap-2">
+                    <span class="text-white/30 text-[10px] uppercase tracking-[0.3em] group-hover:text-white/60 transition-colors">Scroll</span>
+                    <div class="w-[1px] h-10 bg-gradient-to-b from-white/30 to-transparent"></div>
                 </a>
             </div>
         </div>
     </div>
 </section>
 
+<style>
+    @keyframes blob {
+        0%, 100% { transform: scale(1) translate(0, 0); }
+        33% { transform: scale(1.05) translate(20px, -20px); }
+        66% { transform: scale(0.95) translate(-20px, 20px); }
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(45deg); }
+        50% { transform: translateY(-20px) rotate(45deg); }
+    }
+    
+    @keyframes float-delayed {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(0deg); }
+    }
+    
+    .animate-blob {
+        animation: blob 15s infinite;
+    }
+    
+    .floating {
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .floating-delayed {
+        animation: float-delayed 10s ease-in-out infinite;
+    }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+    
+    .fade-in {
+        animation: fadeIn 1s ease-out;
+    }
+    
+    .slide-up {
+        animation: slideUp 0.8s ease-out;
+    }
+    
+    .slide-up-delayed {
+        animation: slideUp 0.8s ease-out 0.2s both;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+    
+    /* Smooth transitions */
+    * {
+        transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
+</style>
+
 <!-- How Custom Design Works Section -->
-    <section class="py-16 md:py-24 px-4 md:px-8">
-        <div class="container mx-auto max-w-6xl">
-            <!-- Section Header -->
-            <div class="text-center mb-16 md:mb-24">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">How Custom Design Works</h1>
-                <p class="text-xl md:text-2xl max-w-3xl mx-auto process-description">
-                    Our personalized process transforms your vision into a one-of-a-kind creation, crafted exclusively for you.
-                </p>
-                <div class="flex justify-center mt-8">
-                    <div class="w-24 h-1 bg-gradient-to-r from-pink-200 to-purple-300 rounded-full"></div>
-                </div>
+<section class="py-16 md:py-24 px-4 md:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <!-- Section Header -->
+        <div class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 section-title">How Custom Design Works</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto process-description">
+                Our personalized process transforms your vision into a one-of-a-kind creation, crafted exclusively for you.
+            </p>
+            <div class="flex justify-center mt-8">
+                <div class="w-24 h-1 bg-gradient-to-r from-pink-200 to-purple-300 rounded-full"></div>
             </div>
-            
-            <!-- Process Steps -->
-            <div class="relative">
-                <!-- Vertical connecting line for desktop -->
-                <div class="vertical-line hidden md:block"></div>
-                
-                <!-- Step 1: Share Your Idea -->
-                <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
-                    <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden flex step-badge rounded-full mb-8">
+        </div>
+
+        <!-- Process Steps -->
+        <div class="relative">
+            <!-- Vertical connecting line for desktop -->
+            <div class="vertical-line hidden md:block"></div>
+
+            <!-- Step 1: Share Your Idea -->
+            <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
+                <!-- Step Badge (Mobile) -->
+                <div class="md:hidden flex step-badge rounded-full mb-8">
+                    <span>1</span>
+                </div>
+
+                <!-- Image for Step 1 -->
+                <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
+                    <div class="step-card overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                            alt="Woman discussing fashion design with a designer"
+                            class="w-full step-image">
+                    </div>
+                </div>
+
+                <!-- Content for Step 1 -->
+                <div class="w-full md:w-1/2 md:pl-12 relative">
+                    <!-- Step Badge (Desktop) -->
+                    <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
                         <span>1</span>
                     </div>
-                    
-                    <!-- Image for Step 1 -->
-                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
-                        <div class="step-card overflow-hidden">
-                            <img 
-                                src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
-                                alt="Woman discussing fashion design with a designer"
-                                class="w-full step-image"
-                            >
-                        </div>
-                    </div>
-                    
-                    <!-- Content for Step 1 -->
-                    <div class="w-full md:w-1/2 md:pl-12 relative">
-                        <!-- Step Badge (Desktop) -->
-                        <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
-                            <span>1</span>
-                        </div>
-                        
-                        <div class="md:pl-8">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Share Your Idea</h2>
-                            <p class="text-lg md:text-xl mb-6 process-description">
-                                Begin by sharing your vision with our design consultants. Whether you have a clear concept or just a feeling, we'll help translate your ideas into a tangible design direction.
-                            </p>
-                            <ul class="space-y-3 mb-8">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">One-on-one consultation with our design experts</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">Share inspiration images, sketches, or fabric swatches</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">Discuss occasion, style preferences, and personal aesthetic</span>
-                                </li>
-                            </ul>
-                            <div class="inline-flex items-center text-pink-500 font-medium">
-                                <span>Estimated time: 1-2 weeks</span>
-                                <i class="fas fa-arrow-right ml-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Divider -->
-                <div class="divider"></div>
-                
-                <!-- Step 2: We Sketch Your Design -->
-                <div class="flex flex-col md:flex-row-reverse items-center mb-20 md:mb-32">
-                    <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden flex step-badge rounded-full mb-8">
-                        <span>2</span>
-                    </div>
-                    
-                    <!-- Image for Step 2 -->
-                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
-                        <div class="step-card overflow-hidden">
-                            <img 
-                                src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1138&q=80" 
-                                alt="Fashion designer sketching a dress design"
-                                class="w-full step-image"
-                            >
-                        </div>
-                    </div>
-                    
-                    <!-- Content for Step 2 -->
-                    <div class="w-full md:w-1/2 md:pr-12 relative">
-                        <!-- Step Badge (Desktop) -->
-                        <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
-                            <span>2</span>
-                        </div>
-                        
-                        <div class="md:pr-8 text-right">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">We Sketch Your Design</h2>
-                            <p class="text-lg md:text-xl mb-6 process-description">
-                                Our designers create detailed sketches based on your consultation. You'll receive multiple design options to choose from, with revisions until it's perfect.
-                            </p>
-                            <ul class="space-y-3 mb-8 text-right">
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Custom sketches with multiple design variations</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Digital renderings to visualize the final look</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Collaborative refinement until you're completely satisfied</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                            </ul>
-                            <div class="inline-flex items-center text-pink-500 font-medium">
-                                <i class="fas fa-arrow-left mr-3"></i>
-                                <span>Estimated time: 2-3 weeks</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Divider -->
-                <div class="divider"></div>
-                
-                <!-- Step 3: Fabric & Detail Selection -->
-                <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
-                    <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden flex step-badge rounded-full mb-8">
-                        <span>3</span>
-                    </div>
-                    
-                    <!-- Image for Step 3 -->
-                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
-                        <div class="step-card overflow-hidden">
-                            <img 
-                                src="https://images.unsplash.com/photo-1558769132-cb1f458e43b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" 
-                                alt="Assortment of luxury fabrics and materials"
-                                class="w-full step-image"
-                            >
-                        </div>
-                    </div>
-                    
-                    <!-- Content for Step 3 -->
-                    <div class="w-full md:w-1/2 md:pl-12 relative">
-                        <!-- Step Badge (Desktop) -->
-                        <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
-                            <span>3</span>
-                        </div>
-                        
-                        <div class="md:pl-8">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Fabric & Detail Selection</h2>
-                            <p class="text-lg md:text-xl mb-6 process-description">
-                                Choose from our curated collection of premium fabrics, trims, and embellishments. We'll guide you in selecting materials that bring your design to life.
-                            </p>
-                            <ul class="space-y-3 mb-8">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">Touch and feel actual fabric samples</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">Select buttons, zippers, lace, and other details</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
-                                    <span class="process-description">See how different materials drape and move</span>
-                                </li>
-                            </ul>
-                            <div class="inline-flex items-center text-pink-500 font-medium">
-                                <span>Estimated time: 1-2 weeks</span>
-                                <i class="fas fa-arrow-right ml-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Divider -->
-                <div class="divider"></div>
-                
-                <!-- Step 4: Tailoring & Delivery -->
-                <div class="flex flex-col md:flex-row-reverse items-center">
-                    <!-- Step Badge (Mobile) -->
-                    <div class="md:hidden flex step-badge rounded-full mb-8">
-                        <span>4</span>
-                    </div>
-                    
-                    <!-- Image for Step 4 -->
-                    <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
-                        <div class="step-card overflow-hidden">
-                            <img 
-                                src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" 
-                                alt="Finished custom dress on a mannequin"
-                                class="w-full step-image"
-                            >
-                        </div>
-                    </div>
-                    
-                    <!-- Content for Step 4 -->
-                    <div class="w-full md:w-1/2 md:pr-12 relative">
-                        <!-- Step Badge (Desktop) -->
-                        <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
-                            <span>4</span>
-                        </div>
-                        
-                        <div class="md:pr-8 text-right">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Tailoring & Delivery</h2>
-                            <p class="text-lg md:text-xl mb-6 process-description">
-                                Our master tailors bring your design to life with precision craftsmanship. After final fittings and adjustments, your custom creation is delivered to you.
-                            </p>
-                            <ul class="space-y-3 mb-8 text-right">
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Multiple fittings to ensure perfect fit</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Hand-finishing and quality inspection</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                                <li class="flex items-start justify-end">
-                                    <span class="process-description">Personalized packaging and delivery</span>
-                                    <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
-                                </li>
-                            </ul>
-                            <div class="inline-flex items-center text-pink-500 font-medium">
-                                <i class="fas fa-arrow-left mr-3"></i>
-                                <span>Estimated time: 4-6 weeks</span>
-                            </div>
+
+                    <div class="md:pl-8">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Share Your Idea</h2>
+                        <p class="text-lg md:text-xl mb-6 process-description">
+                            Begin by sharing your vision with our design consultants. Whether you have a clear concept or just a feeling, we'll help translate your ideas into a tangible design direction.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">One-on-one consultation with our design experts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">Share inspiration images, sketches, or fabric swatches</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">Discuss occasion, style preferences, and personal aesthetic</span>
+                            </li>
+                        </ul>
+                        <div class="inline-flex items-center text-pink-500 font-medium">
+                            <span>Estimated time: 1-2 weeks</span>
+                            <i class="fas fa-arrow-right ml-3"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- CTA Section -->
-            <div class="mt-24 text-center">
-                <div class="max-w-2xl mx-auto bg-gradient-to-br from-pink-50 to-purple-50 rounded-3xl p-10 md:p-12 shadow-lg">
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-purple-800">Ready to Begin Your Design Journey?</h3>
-                    <p class="text-xl mb-10 text-purple-700">
-                        Schedule a consultation with our design team to start creating your dream outfit.
-                    </p>
-                    <div class="flex flex-col sm:flex-row justify-center gap-6">
-                        <a href="#" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <i class="fas fa-calendar-check mr-3"></i>
-                            Book a Consultation
-                        </a>
-                        <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
-                            <i class="fas fa-images mr-3"></i>
-                            View Portfolio
-                        </a>
+
+            <!-- Divider -->
+            <div class="divider"></div>
+
+            <!-- Step 2: We Sketch Your Design -->
+            <div class="flex flex-col md:flex-row-reverse items-center mb-20 md:mb-32">
+                <!-- Step Badge (Mobile) -->
+                <div class="md:hidden flex step-badge rounded-full mb-8">
+                    <span>2</span>
+                </div>
+
+                <!-- Image for Step 2 -->
+                <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
+                    <div class="step-card overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1138&q=80"
+                            alt="Fashion designer sketching a dress design"
+                            class="w-full step-image">
+                    </div>
+                </div>
+
+                <!-- Content for Step 2 -->
+                <div class="w-full md:w-1/2 md:pr-12 relative">
+                    <!-- Step Badge (Desktop) -->
+                    <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
+                        <span>2</span>
+                    </div>
+
+                    <div class="md:pr-8 text-right">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">We Sketch Your Design</h2>
+                        <p class="text-lg md:text-xl mb-6 process-description">
+                            Our designers create detailed sketches based on your consultation. You'll receive multiple design options to choose from, with revisions until it's perfect.
+                        </p>
+                        <ul class="space-y-3 mb-8 text-right">
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Custom sketches with multiple design variations</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Digital renderings to visualize the final look</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Collaborative refinement until you're completely satisfied</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                        </ul>
+                        <div class="inline-flex items-center text-pink-500 font-medium">
+                            <i class="fas fa-arrow-left mr-3"></i>
+                            <span>Estimated time: 2-3 weeks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider"></div>
+
+            <!-- Step 3: Fabric & Detail Selection -->
+            <div class="flex flex-col md:flex-row items-center mb-20 md:mb-32">
+                <!-- Step Badge (Mobile) -->
+                <div class="md:hidden flex step-badge rounded-full mb-8">
+                    <span>3</span>
+                </div>
+
+                <!-- Image for Step 3 -->
+                <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
+                    <div class="step-card overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1558769132-cb1f458e43b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+                            alt="Assortment of luxury fabrics and materials"
+                            class="w-full step-image">
+                    </div>
+                </div>
+
+                <!-- Content for Step 3 -->
+                <div class="w-full md:w-1/2 md:pl-12 relative">
+                    <!-- Step Badge (Desktop) -->
+                    <div class="hidden md:flex step-badge rounded-full absolute -left-10 top-6 z-10">
+                        <span>3</span>
+                    </div>
+
+                    <div class="md:pl-8">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Fabric & Detail Selection</h2>
+                        <p class="text-lg md:text-xl mb-6 process-description">
+                            Choose from our curated collection of premium fabrics, trims, and embellishments. We'll guide you in selecting materials that bring your design to life.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">Touch and feel actual fabric samples</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">Select buttons, zippers, lace, and other details</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-pink-400 mt-1 mr-3"></i>
+                                <span class="process-description">See how different materials drape and move</span>
+                            </li>
+                        </ul>
+                        <div class="inline-flex items-center text-pink-500 font-medium">
+                            <span>Estimated time: 1-2 weeks</span>
+                            <i class="fas fa-arrow-right ml-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider"></div>
+
+            <!-- Step 4: Tailoring & Delivery -->
+            <div class="flex flex-col md:flex-row-reverse items-center">
+                <!-- Step Badge (Mobile) -->
+                <div class="md:hidden flex step-badge rounded-full mb-8">
+                    <span>4</span>
+                </div>
+
+                <!-- Image for Step 4 -->
+                <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pl-12">
+                    <div class="step-card overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+                            alt="Finished custom dress on a mannequin"
+                            class="w-full step-image">
+                    </div>
+                </div>
+
+                <!-- Content for Step 4 -->
+                <div class="w-full md:w-1/2 md:pr-12 relative">
+                    <!-- Step Badge (Desktop) -->
+                    <div class="hidden md:flex step-badge rounded-full absolute -right-10 top-6 z-10">
+                        <span>4</span>
+                    </div>
+
+                    <div class="md:pr-8 text-right">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 step-title">Tailoring & Delivery</h2>
+                        <p class="text-lg md:text-xl mb-6 process-description">
+                            Our master tailors bring your design to life with precision craftsmanship. After final fittings and adjustments, your custom creation is delivered to you.
+                        </p>
+                        <ul class="space-y-3 mb-8 text-right">
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Multiple fittings to ensure perfect fit</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Hand-finishing and quality inspection</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                            <li class="flex items-start justify-end">
+                                <span class="process-description">Personalized packaging and delivery</span>
+                                <i class="fas fa-check-circle text-pink-400 mt-1 ml-3"></i>
+                            </li>
+                        </ul>
+                        <div class="inline-flex items-center text-pink-500 font-medium">
+                            <i class="fas fa-arrow-left mr-3"></i>
+                            <span>Estimated time: 4-6 weeks</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    
-    <script>
-        // Add hover effect for step cards
-        document.querySelectorAll('.step-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px)';
-                this.style.boxShadow = '0 20px 40px rgba(168, 129, 163, 0.2)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 10px 30px rgba(168, 129, 163, 0.08)';
-            });
-        });
-        
-        // Add scroll animation for step cards
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        // Observe step cards for animation
-        document.querySelectorAll('.step-card').forEach(card => {
-            card.style.opacity = '0.7';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-    </script>
+
+        <!-- CTA Section -->
+        <div class="mt-24 text-center">
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-pink-50 to-purple-50 rounded-3xl p-10 md:p-12 shadow-lg">
+                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-purple-800">Ready to Begin Your Design Journey?</h3>
+                <p class="text-xl mb-10 text-purple-700">
+                    Schedule a consultation with our design team to start creating your dream outfit.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        Book a Consultation
+                    </a>
+                    <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-images mr-3"></i>
+                        View Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
 <!-- Gallery Section -->
 <section id="gallery" class="py-16 md:py-24 px-4 md:px-8 bg-gray-50">
@@ -1689,7 +1803,7 @@
 
         <!-- CTA Section -->
         <div class="text-center mt-16 fade-in">
-            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200 pulse">
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200 pulse">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready to Experience Custom Design?</h3>
                 <p class="text-xl mb-10 text-gray-600">
                     Begin your journey to a perfectly fitted, one-of-a-kind creation made just for you.
@@ -1810,7 +1924,7 @@
 
         <!-- Bottom CTA -->
         <div class="mt-20 text-center fade-in">
-            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Experience True Craftsmanship</h3>
                 <p class="text-xl mb-10 text-gray-600">
                     Begin your journey to a one-of-a-kind creation made with passion and precision.
@@ -2029,7 +2143,7 @@
 
         <!-- CTA Section -->
         <div class="text-center mt-16 fade-in">
-            <div class="max-w-2xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready for Your Custom Experience?</h3>
                 <p class="text-xl mb-10 text-gray-600">
                     Join our community of satisfied clients and create a piece that's uniquely yours.
@@ -2764,6 +2878,43 @@
                 this.style.transform = 'translateY(0)';
             });
         });
+    });
+</script>
+<script>
+    // Add hover effect for step cards
+    document.querySelectorAll('.step-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+            this.style.boxShadow = '0 20px 40px rgba(168, 129, 163, 0.2)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 10px 30px rgba(168, 129, 163, 0.08)';
+        });
+    });
+
+    // Add scroll animation for step cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe step cards for animation
+    document.querySelectorAll('.step-card').forEach(card => {
+        card.style.opacity = '0.7';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
     });
 </script>
 @endsection
