@@ -57,7 +57,7 @@ class CheckoutController extends Controller
             ->join('products', 'carts.product_id', '=', 'products.id')
             ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
             ->where('user_id', $user_id)
-            ->select('carts.*', 'products.name','product_variants.price as variant_price','product_variants.discount_price')
+            ->select('carts.*', 'products.name','product_variants.price as variant_price','product_variants.discount as discount','product_variants.discount_price')
             ->get();
 
         if($carts->isEmpty()) {
@@ -67,7 +67,7 @@ class CheckoutController extends Controller
         // Calculate total
         $subtotal = $carts->sum(function($cart) { 
             // dd($cart->variant_price - $cart->discount_price);
-            return ($cart->variant_price - $cart->discount_price) * $cart->count; 
+            return (($cart->variant_price - (($cart->variant_price * $cart->discount)/100)) * $cart->count); 
         });
         // $shipping = 7.00;
         // $tax = $subtotal * 0.05;
@@ -104,7 +104,7 @@ class CheckoutController extends Controller
                 'variant_id' => $cart->variant_id,
                 'quantity' => $cart->count,
                 'price' => $cart->discount_price,
-                'total' => ($cart->variant_price - $cart->discount_price) * $cart->count,
+                'total' => (($cart->variant_price - (($cart->variant_price * $cart->discount)/100)) * $cart->count),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

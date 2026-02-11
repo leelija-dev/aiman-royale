@@ -168,7 +168,7 @@
                       <p class="text-sm text-gray-500">{{ $cart->size ?? 'One Size' }}, {{ $cart->color ?? 'Default' }}</p>
                       <p class="text-sm text-gray-500">Qty: {{ $cart->count }}</p>
                     </div>
-                    <p class="font-medium">{{config('app.currency')}}{{ number_format(($cart->price - $cart->discount_price) * $cart->count, 2) }}</p>
+                    <p class="font-medium">{{config('app.currency')}}{{ number_format(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count), 2 }}</p>
                   </div>
                   @endforeach
                 @else
@@ -193,7 +193,7 @@
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-gray-600">Subtotal</span>
-                    <span>{{config('app.currency')}}{{ number_format($carts->sum(function($cart) { return ($cart->price - $cart->discount_price) * $cart->count; }), 2) }}</span>
+                    <span>{{config('app.currency')}}{{ number_format(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count), 2 }}</span>
                   </div>
                   {{-- <div class="flex justify-between">
                     <span class="text-gray-600">Shipping</span>
@@ -207,7 +207,7 @@
                     class="flex justify-between font-semibold text-base pt-2 border-t"
                   >
                     <span>Total</span>
-                  <span>{{config('app.currency')}}{{ number_format($carts->sum(function($cart) { return ($cart->price - $cart->discount_price) * $cart->count; }), 2) }}</span>
+                  <span>{{config('app.currency')}}{{ number_format(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count), 2 }}</span>
                   </div>
                 </div>
 

@@ -78,7 +78,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</td>
-                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - $item->variant->discount_price, 2) }}</td>
+                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
 
                 <td class="px-6 py-6 text-center">
                   <div
@@ -104,7 +104,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-center font-medium">
-                  {{config('app.currency')}}{{ number_format(($item->variant->price - $item->variant->discount_price) * $item->count, 2) }}
+                  {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
                 </td>
 
                 <td class="px-6 py-6 text-center">
