@@ -26,6 +26,7 @@ class CartController extends Controller
                 }
             })
             ->get();
+       
 
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->count;

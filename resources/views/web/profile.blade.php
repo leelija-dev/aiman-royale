@@ -1,16 +1,27 @@
     @extends('layout.web.main-layout')
-    <?php
-    $user = $user ?? auth()->user();
-
-    ?>
-
-
-
-
-
-
 
     @section('content')
+
+    @if(session('success'))
+    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 flex items-center">
+        <i class="fas fa-check-circle mr-2"></i>
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+        <div class="flex items-center mb-2">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <strong>Please fix the following errors:</strong>
+        </div>
+        <ul class="list-disc list-inside space-y-1">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
     <style>
         .fashion-gradient {
@@ -81,8 +92,10 @@
         <div class="container mx-auto">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Sidebar Navigation -->
-
-                <div id="user-panel-sidebar" class="bg-white rounded-2xl shadow-sm p-6 sticky top-24 min-w-[300px] h-fit">
+                <div class="lg:w-1/4">
+                    @include('components.web.profile-sidebar', ['user' => auth()->user()])
+                </div>
+                {{--<div id="user-panel-sidebar" class="bg-white rounded-2xl shadow-sm p-6 sticky top-24 min-w-[300px] h-fit">
                     <!-- User Profile Summary -->
                     <div class="text-center mb-8">
                         <div class="relative inline-block mb-4">
@@ -108,20 +121,24 @@
                             <span>Profile Information</span>
                         </a>
                         <a
-                            href="{{route('user.order-history', $user->id)}}"
+                            href="{{ route('page.multi-product') }}"
                             class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                             <i class="fas fa-shopping-bag w-5 text-center"></i>
                             <span>Order History</span>
+                            @if($orderCount > 0)
                             <span
-                                class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">3</span>
+                                class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">{{ $orderCount }}</span>
+                            @endif
                         </a>
                         <a
-                            href="#"
+                            href="{{ route('wishlist.index') }}"
                             class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                             <i class="fas fa-heart w-5 text-center"></i>
                             <span>Wishlist</span>
+                            @if($wishlistCount > 0)
                             <span
-                                class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">12</span>
+                                class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">{{ $wishlistCount }}</span>
+                            @endif
                         </a>
                         <a
                             href="#"
@@ -146,7 +163,7 @@
                     </nav>
 
 
-                </div>
+                </div>--}}
 
 
 
@@ -160,7 +177,7 @@
               >
                 <div>
                   <h1 class="text-2xl font-bold text-gray-900">
-                    Welcome back, Alex!
+                    Welcome back, {{ $user ? $user->name : 'User' }}!
                   </h1>
                   <p class="text-gray-600 mt-1">
                     Here's what's happening with your StyleHub account today.
@@ -237,6 +254,7 @@
                                 Profile Information
                             </h2>
                             <button
+                                onclick="openEditProfileModal()"
                                 class="text-purple-600 hover:text-purple-700 font-medium text-sm">
                                 <i class="fas fa-edit mr-1"></i>Edit Profile
                             </button>
@@ -246,25 +264,25 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                                 <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
-                                    Alex Johnson
+                                    {{ $user ? $user->name : 'Not Available' }}
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                                 <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
-                                    alex.johnson@example.com
+                                    {{ $user ? $user->email : 'Not Available' }}
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                                 <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
-                                    +1 (555) 123-4567
+                                    {{ $user ? ($user->phone ?? 'Not Provided') : 'Not Available' }}
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
                                 <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
-                                    March 15, 1990
+                                    {{ $user ? ($user->date_of_birth ? $user->date_of_birth->format('M d, Y') : 'Not Provided') : 'Not Available' }}
                                 </div>
                             </div>
                         </div>
@@ -355,5 +373,70 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-900">Edit Profile</h3>
+                <button onclick="closeEditProfileModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form action="{{ route('web.profile.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" name="name" value="{{ $user->name }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input type="email" name="email" value="{{ $user->email }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <input type="tel" name="phone" value="{{ $user->phone ?? '' }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                    <input type="date" name="date_of_birth" value="{{ $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '' }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition">
+                        Save Changes
+                    </button>
+                    <button type="button" onclick="closeEditProfileModal()" class="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.remove('hidden');
+        }
+
+        function closeEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('edit-profile-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditProfileModal();
+            }
+        });
+    </script>
+
     @endsection
