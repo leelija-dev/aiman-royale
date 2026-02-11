@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
 // Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
+Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
