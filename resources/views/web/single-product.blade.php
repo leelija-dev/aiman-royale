@@ -79,7 +79,7 @@
 
         <div>
   <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
-  <div class="flex gap-3">
+  <div class="flex gap-3 xxs:flex-row flex-col">
     <button
       class="type-btn px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:border-secondary transition-all"
       data-type="stitched">
@@ -160,7 +160,7 @@
             <button
               type="button"
               data-size-guide-trigger
-              class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2">
+              class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
               <i class="fas fa-ruler-combined"></i>
               View Size Guide
             </button>
@@ -190,7 +190,7 @@
         <!-- Color Selection -->
         <div id="color-selection-section">
           <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
-          <div class="flex gap-3" id="color-selection">
+          <div class="flex gap-3 " id="color-selection">
             @php
             $selectedSize = $product->variants->first()->size ?? 'M';
             $colorsForSize = $product->variants->where('size', $selectedSize)->pluck('color')->unique()->filter();
