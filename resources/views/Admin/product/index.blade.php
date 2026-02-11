@@ -35,7 +35,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="card-body px-0 pt-0 pb-2">
+                <div class="card-body px-4 pt-2 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead>
@@ -359,8 +359,8 @@
                                                                             class="text-danger">*</span></label>
                                                                     <input type="number" class="form-control"
                                                                         id="edit_stock_{{ $product->id }}"
-                                                                        name="stock" value="{{ $product->stock }}"
-                                                                        min="0" required>
+                                                                        name="stock" value="{{ $product->stock ?? 0 }}"
+                                                                        min="0" required readonly>
                                                                 </div>
 
                                                                 <div class="mb-3">

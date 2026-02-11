@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.categories.create','admin.sizes') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*','admin.unit','admin.add-unit','admin.colors', 'admin.products.*','admin.products-trashed','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash','admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.product-variants','admin.categories.create','admin.sizes') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp
@@ -272,7 +272,7 @@ $isEmailActive = false;
                     data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.products.*','admin.products','admin.add-product') ? 'active' : '' }}"
+                            <a class="submenu-link {{ request()->routeIs('admin.products.*','admin.products','admin.add-product','admin.products-trashed') ? 'active' : '' }}"
                                 href="{{ route('admin.products') }}">Products</a>
                         </li>
                     </ul>
@@ -292,7 +292,7 @@ $isEmailActive = false;
                     data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.occasions.*') ? 'active' : '' }} "
+                            <a class="submenu-link {{ request()->routeIs('admin.occasions.*','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash') ? 'active' : '' }} "
                                 href="{{ route('admin.occasions.index') }}">Ocassions</a>
                         </li>
                     </ul>
@@ -306,7 +306,7 @@ $isEmailActive = false;
                                 href="{{ route('admin.brands.index') }}">Brands</a>
                         </li>
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.colors.*') ? 'active' : '' }} "
+                            <a class="submenu-link {{ request()->routeIs('admin.colors','admin.colors.create') ? 'active' : '' }} "
                                 href="{{ route('admin.colors') }}">Colors</a>
                         </li>
                         <li class="submenu-item">
@@ -314,7 +314,7 @@ $isEmailActive = false;
                                 href="{{ route('admin.sizes') }}">Sizes</a>
                         </li>
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.categories.create') ? 'active' : '' }} "
+                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.product-variants','admin.categories.create') ? 'active' : '' }} "
                                 href="{{ route('admin.product-variants') }}">Product Variants</a>
                         </li>
                     </ul>

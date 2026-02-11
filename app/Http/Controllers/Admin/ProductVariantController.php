@@ -99,6 +99,10 @@ class ProductVariantController extends Controller
         }
 
         $variant = ProductVariant::create($data);
+        $product = Product::find($data['product_id']);
+        $product->update([
+            'stock' => $data['stock'],
+        ]);
         if($variant){
                     if ($request->hasFile('images')) {
 

@@ -393,7 +393,7 @@ class StockController extends Controller
         ]);
 
         $variant = ProductVariant::findOrFail($request->variant_id);
-        
+        $product=Product::findOrFail($variant->product_id);
         // Calculate new total stock (current stock + added stock)
         $currentStock = $variant->stock;
         $addedStock = $request->stock;
@@ -407,6 +407,7 @@ class StockController extends Controller
 
         // Update variant stock with the new total
         $variant->update(['stock' => $newTotalStock]);
+        $product->update(['stock' => $newTotalStock]);
 
         return redirect()->route('admin.product-variants')
             ->with('success', "Stock updated successfully for {$variant->sku}! Added {$addedStock} units to previous {$currentStock} units. New total: {$newTotalStock} units.");
