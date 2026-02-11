@@ -57,20 +57,21 @@ class CheckoutController extends Controller
             ->join('products', 'carts.product_id', '=', 'products.id')
             ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
             ->where('user_id', $user_id)
-            ->select('carts.*', 'products.name', 'product_variants.discount_price')
+            ->select('carts.*', 'products.name','product_variants.price as variant_price','product_variants.discount_price')
             ->get();
 
         if($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
-
+        // print_r($carts->variant_price);die;
         // Calculate total
         $subtotal = $carts->sum(function($cart) { 
-            return $cart->discount_price * $cart->count; 
+            // dd($cart->variant_price - $cart->discount_price);
+            return ($cart->variant_price - $cart->discount_price) * $cart->count; 
         });
-        $shipping = 7.00;
-        $tax = $subtotal * 0.05;
-        $total = $subtotal + $shipping + $tax;
+        // $shipping = 7.00;
+        // $tax = $subtotal * 0.05;
+         $total = $subtotal ; //+ $shipping + $tax;
 
         // Create order
         $order_id = DB::table('orders')->insertGetId([
@@ -103,7 +104,7 @@ class CheckoutController extends Controller
                 'variant_id' => $cart->variant_id,
                 'quantity' => $cart->count,
                 'price' => $cart->discount_price,
-                'total' => $cart->discount_price * $cart->count,
+                'total' => ($cart->variant_price - $cart->discount_price) * $cart->count,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

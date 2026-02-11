@@ -168,7 +168,7 @@
                       <p class="text-sm text-gray-500">{{ $cart->size ?? 'One Size' }}, {{ $cart->color ?? 'Default' }}</p>
                       <p class="text-sm text-gray-500">Qty: {{ $cart->count }}</p>
                     </div>
-                    <p class="font-medium">${{ number_format($cart->discount_price * $cart->count, 2) }}</p>
+                    <p class="font-medium">{{config('app.currency')}}{{ number_format(($cart->price - $cart->discount_price) * $cart->count, 2) }}</p>
                   </div>
                   @endforeach
                 @else
@@ -193,21 +193,21 @@
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
                     <span class="text-gray-600">Subtotal</span>
-                    <span>${{ number_format($carts->sum(function($cart) { return $cart->discount_price * $cart->count; }), 2) }}</span>
+                    <span>{{config('app.currency')}}{{ number_format($carts->sum(function($cart) { return ($cart->price - $cart->discount_price) * $cart->count; }), 2) }}</span>
                   </div>
-                  <div class="flex justify-between">
+                  {{-- <div class="flex justify-between">
                     <span class="text-gray-600">Shipping</span>
                     <span>${{ number_format($carts->count() > 0 ? 7.00 : 0, 2) }}</span>
-                  </div>
-                  <div class="flex justify-between">
+                  </div> --}}
+                  {{-- <div class="flex justify-between">
                     <span class="text-gray-600">Estimated taxes</span>
                     <span>${{ number_format($carts->sum(function($cart) { return $cart->discount_price * $cart->count; }) * 0.05, 2) }}</span>
-                  </div>
+                  </div> --}}
                   <div
                     class="flex justify-between font-semibold text-base pt-2 border-t"
                   >
                     <span>Total</span>
-                    <span>${{ number_format($carts->sum(function($cart) { return $cart->discount_price * $cart->count; }) + ($carts->count() > 0 ? 7.00 : 0) + ($carts->sum(function($cart) { return $cart->discount_price * $cart->count; }) * 0.05), 2) }}</span>
+                  <span>{{config('app.currency')}}{{ number_format($carts->sum(function($cart) { return ($cart->price - $cart->discount_price) * $cart->count; }), 2) }}</span>
                   </div>
                 </div>
 
