@@ -11,20 +11,7 @@
         box-sizing: border-box;
     }
 
-    body {
-        font-family: 'Raleway', sans-serif;
-        overflow-x: hidden;
-        background-color: #fef7f9;
-        color: #5a3d5c;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 600;
-    }
+    
 
     /* Hero Section */
     .hero-bg {
