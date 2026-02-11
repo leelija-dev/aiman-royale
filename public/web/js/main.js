@@ -391,9 +391,10 @@ $(document).ready(function () {
           450: { items: 2, margin: 10 },
           640: { items: 2, margin: 10 },
           768: { items: 3, margin: 10 },
-          1024: { items: 4, margin: 10 },
-          1280: { items: 5, margin: 10 },
-          1366: { items: 6, margin: 10 }
+          1024: { items: 3, margin: 25 },
+          1280: { items: 4, margin: 25 },
+          1500: { items: 5, margin: 25 }
+
         }
       },
       customNav: {

@@ -14,6 +14,7 @@
 
 
 
+
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
     <!-- Animated Gradient Background Decoration -->
@@ -419,342 +420,259 @@
 
 
 
-<section class="px-4 lgg:py-12 py-6 ">
+<section class="px-4 py-12 bg-gradient-to-b from-white to-gray-50/50">
     <div class="container mx-auto">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-16">
-            <h2
-                class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl  font-bold mb-4 bg-gradient-to-r from-secondary via-primary to-secondary-light bg-clip-text text-transparent">
-                Shop By Category
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                <span class="bg-gradient-to-r from-primary via-secondary to-black bg-clip-text text-transparent">
+                    Shop By Category
+                </span>
             </h2>
-            <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-                Explore our exclusive collections curated just for you
+            <p class="text-gray-600 max-w-xl mx-auto">
+                Discover our curated collections
             </p>
         </div>
 
         <!-- Owl Carousel Container -->
-        <div class="relative">
-            <div id="categories-carousel" class="owl-carousel owl-theme">
+        <div class="relative px-2">
+    <div id="categories-carousel" class="owl-carousel owl-theme">
+        @if (!isset($categories))
+        <!-- Category 1 -->
+        <div class="item p-2">
+            <a href="#" class="group block relative overflow-hidden rounded-3xl">
+                <!-- Main Image Container -->
+                <div class="relative h-96 overflow-hidden rounded-3xl">
+                    <!-- Image with zoom effect -->
+                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
+                        alt="Salwar Kameez"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
 
-                @if (!isset($categories))
-                :
-                <!-- Category 1 -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-pink-100 to-purple-100">
-                            <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                alt="Salwar Kameez"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
+                    <!-- Transparent Overlay Content - Shows on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+
+                        <!-- Floating Badge -->
+                        <div class="absolute top-6 left-6">
+                            <span class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                <span class="flex items-center">
+                                    <svg class="w-3 h-3 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                    Popular
+                                </span>
+                            </span>
                         </div>
 
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Salwar Kameez
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        <!-- Category Name -->
+                        <h3 class="text-3xl font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            Salwar Kameez
+                        </h3>
+
+                        <!-- Description -->
+                        <p class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                            Traditional elegance with modern designs
+                        </p>
+
+                        <!-- Styles Count -->
+                        <div class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                            <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
                                 120+ Designs
-                            </p>
+                            </span>
                         </div>
 
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Popular
+                        <!-- Shop Now Button -->
+                        <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                            <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                Shop Now
+                                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Content Visible Before Hover -->
+                    <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">Salwar Kameez</h3>
+                        <div class="flex items-center">
+                            <span class="flex items-center text-sm text-white/90">
+                                <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                120+ Designs
                             </span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Category 2 -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-blue-100 to-cyan-100">
-                            <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
-                                alt="Lehengas"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Lehengas
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                80+ Collections
-                            </p>
-                        </div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Bridal
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 3 -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-amber-100 to-orange-100">
-                            <img src="{{ asset('web/images/product-images/red-plazo-2_88_11zon.webp') }}"
-                                alt="Sarees"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Sarees
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                200+ Styles
-                            </p>
-                        </div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Traditional
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 4 -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-emerald-100 to-green-100">
-                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
-                                alt="Plazo Suits"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-emerald-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Plazo Suits
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                150+ Designs
-                            </p>
-                        </div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Modern
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 5 -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-purple-100 to-violet-100">
-                            <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
-                                alt="Party Wear"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-purple-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Party Wear
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                90+ Outfits
-                            </p>
-                        </div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Trending
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add more categories as needed -->
-                <!-- Category 6 - Example -->
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
-                                alt="Kurtis"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-red-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                    Kurtis
-                                </h3>
-                                <span class="text-white/80 group-hover:text-white transition-colors">
-                                    →
-                                </span>
-                            </div>
-                            <p
-                                class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                100+ Styles
-                            </p>
-                        </div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Casual
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @else
-                @foreach ($categories as $category)
-                <div class="item flex justify-center items-center">
-                    <div
-                        class="group relative w-fit  transition-all duration-500 transform hover:-translate-y-2 mx-2">
-                        <div
-                            class="aspect-square overflow-hidden rounded-t-full max-h-[250px] bg-gradient-to-br from-red-100 to-pink-100">
-                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                                alt="Kurtis"
-                                class="object-cover object-top w-full h-full transform group-hover:scale-110 transition-transform duration-700" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-red-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            </div>
-                        </div>
-
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <a href="{{ route('category.show', $category->slug) }}" class="block">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-xl lg:text-2xl font-bold tracking-tight drop-shadow-lg">
-                                        {{ $category->name }}
-                                    </h3>
-                                    <span class="text-white/80 group-hover:text-white transition-colors">
-                                        →
-                                    </span>
-                                </div>
-                                <p
-                                    class="text-sm lg:text-base text-white/90 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                    100+ Styles
-                                </p>
-                        </div>
-                        </a>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                            <span
-                                class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                Casual
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @endif
-
-            </div>
-
-            <!-- Custom Navigation Arrows -->
-            <div
-                class="owl-nav custom-nav hidden lg:flex w-full absolute left-0 top-[50%]  justify-between items-center px-0">
-                <button
-                    class="owl-prev ml-[-10px] bg-white/80 hover:bg-white text-gray-800 hover:text-black w-10 h-10 lg:w-12 lg:h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:shadow-xl z-10">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <button
-                    class="owl-next  mr-[-10px] bg-white/80 hover:bg-white text-gray-800 hover:text-black w-10 h-10 lg:w-12 lg:h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:shadow-xl z-10">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-            </div>
+            </a>
         </div>
 
-        {{-- <!-- View All Button -->
-            <div class="text-center mt-6">
-                <a href="#"
-                    class="inline-flex items-center gap-2 px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-gray-900 to-black rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group">
-                    <span>View All Categories</span>
-                    <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                </a>
-            </div> --}}
+        <!-- Category 2 -->
+        <div class="item p-2">
+            <a href="#" class="group block relative overflow-hidden rounded-3xl">
+                <div class="relative h-96 overflow-hidden rounded-3xl">
+                    <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
+                        alt="Lehengas"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+
+                        <div class="absolute top-6 left-6">
+                            <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                <span class="flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                                    </svg>
+                                    Bridal
+                                </span>
+                            </span>
+                        </div>
+
+                        <h3 class="text-3xl font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            Lehengas
+                        </h3>
+
+                        <p class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                            Royal bridal collections
+                        </p>
+
+                        <div class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                            <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                80+ Collections
+                            </span>
+                        </div>
+
+                        <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                            <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                Shop Now
+                                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Content Before Hover -->
+                    <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">Lehengas</h3>
+                        <div class="flex items-center">
+                            <span class="flex items-center text-sm text-white/90">
+                                <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                80+ Collections
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Continue with similar structure for categories 3-6 -->
+        <!-- ... -->
+
+        @else
+        <!-- Dynamic Categories -->
+        @foreach ($categories as $category)
+        <div class="item p-2">
+            <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
+                <div class="relative  overflow-hidden rounded-[0px]">
+                    <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        alt="{{ $category->name }}"
+                        class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+
+                        <div class="absolute top-6 left-6">
+                            <span class="bg-gradient-to-r from-gray-800 to-black block text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                <span class="flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
+                                    </svg>
+                                    Collection
+                                </span>
+                            </span>
+                        </div>
+
+                        <h3 class="text-3xl font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            {{ $category->name }}
+                        </h3>
+
+                        <p class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                            Explore our exclusive collection
+                        </p>
+
+                        <div class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                            <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                100+ Styles
+                            </span>
+                        </div>
+
+                        <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                            <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                Shop Now
+                                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Content Before Hover -->
+                    <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">{{ $category->name }}</h3>
+                        <div class="flex items-center">
+                            <span class="flex items-center text-sm text-white/90">
+                                <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                100+ Styles
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        @endforeach
+        @endif
+    </div>
+
+    <!-- Simple Navigation Arrows -->
+    <div class="custom-nav hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-2 pointer-events-none z-[1]">
+        <button class="owl-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <button class="owl-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+        <!-- Simple View All Button -->
+        <div class="text-center mt-12">
+            <a href="#"
+                class="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 hover:bg-black rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                <span>View All Categories</span>
+                <svg class="w-5 h-5 transform hover:translate-x-1 transition-transform"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+        </div>
     </div>
 </section>
 
