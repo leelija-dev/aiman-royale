@@ -1,92 +1,121 @@
 @extends('layout.web.main-layout')
 
-
-
 @section('content')
-<style>
-    body {
-        font-family: "Inter", sans-serif;
-        background-color: #F9FAFB;
-    }
+@if(!auth()->check())
+<!-- Guest User Login Prompt -->
+<div class="bg-white rounded-2xl shadow-sm p-8 mb-6">
+    <div class="text-center">
+        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-user text-purple-600 text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Sign In to View Your Wishlist</h2>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+            Save your favorite items and access them from any device by signing in to your account.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ route('page.login') }}" 
+               class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition font-medium flex items-center justify-center gap-2">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In
+            </a>
+            <a href="{{ route('page.register') }}" 
+               class="px-8 py-3 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition font-medium">
+                Create Account
+            </a>
+        </div>
+        <p class="text-gray-500 text-sm mt-6">
+            Don't want to sign in? Your wishlist will be saved temporarily in your browser.
+        </p>
+    </div>
+</div>
+@endif
 
-    .fashion-gradient {
-        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-    }
-
-    .fashion-gradient-light {
-        background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
-    }
-
-    .fashion-gradient-text {
-        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .sidebar-item.active {
-        background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
-        border-right: 3px solid #a855f7;
-        color: #7c3aed;
-    }
-
-    .sidebar-item:hover:not(.active) {
-        background-color: #f8fafc;
-    }
-
-    .product-card {
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
-
-    .wishlist-item {
-        transition: all 0.3s ease;
-    }
-
-    .wishlist-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    }
-
-    .sale-badge {
-        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-    }
-
-    .out-of-stock {
-        position: relative;
-    }
-
-    .out-of-stock::after {
-        content: "Out of Stock";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .filter-active {
-        background-color: #7c3aed;
-        color: white;
-    }
-
-    .collection-tab.active {
-        border-bottom: 3px solid #a855f7;
-        color: #7c3aed;
-        font-weight: 600;
-    }
-</style>
+<!-- Main Wishlist Content (only for authenticated users) -->
+@if(auth()->check())
 <section class="w-full px-4 lgg:py-12 py-6">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #F9FAFB;
+        }
+
+        .fashion-gradient {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        }
+
+        .fashion-gradient-light {
+            background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
+        }
+
+        .fashion-gradient-text {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
+            border-right: 3px solid #a855f7;
+            color: #7c3aed;
+        }
+
+        .sidebar-item:hover:not(.active) {
+            background-color: #f8fafc;
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .wishlist-item {
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .sale-badge {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        }
+
+        .out-of-stock {
+            position: relative;
+        }
+
+        .out-of-stock::after {
+            content: "Out of Stock";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .filter-active {
+            background-color: #7c3aed;
+            color: white;
+        }
+
+        .collection-tab.active {
+            border-bottom: 3px solid #a855f7;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+    </style>
     <div class="container mx-auto">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
@@ -112,11 +141,6 @@
                                 <i class="fas fa-sliders-h"></i>
                                 Filter
                             </button>
-                            <!-- <button
-                                class="px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium flex items-center gap-2">
-                                <i class="fas fa-shopping-cart"></i>
-                                Add All to Cart
-                            </button> -->
                         </div>
                     </div>
                 </div>
@@ -289,39 +313,40 @@
                     <p class="text-gray-600 mb-6">
                         Start adding items you love to your wishlist
                     </p>
-                    <button
-                        class="px-8 py-3 fashion-gradient text-white rounded-xl hover:shadow-lg transition font-medium">
+                    <a href="{{ url('/') }}" 
+                       class="px-8 py-3 fashion-gradient text-white rounded-xl hover:shadow-lg transition font-medium">
                         Start Shopping
-                    </button>
+                    </a>
                 </div>
-
-                <!-- Pagination -->
-                <div class="flex justify-center items-center gap-2">
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl fashion-gradient text-white">
-                        1
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        2
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        3
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+                @endif
             </div>
         </div>
     </div>
-</section>
+
+    <!-- Pagination - Only show if there are wishlist items -->
+    @if($wishlistItems->count() > 0)
+    <div class="flex justify-center items-center gap-2 mt-8">
+        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="w-10 h-10 flex items-center justify-center rounded-xl fashion-gradient text-white">
+            1
+        </button>
+        @if($wishlistItems->count() > 9)
+        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+            2
+        </button>
+        @endif
+        @if($wishlistItems->count() > 18)
+        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+            3
+        </button>
+        @endif
+        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    @endif
 
 
 

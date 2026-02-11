@@ -36,9 +36,14 @@ class AppServiceProvider extends ServiceProvider
         $notifications = Notification::where('viewed', 0)->latest()->get();
         $categories = Category::where('is_active', 1)->orderBy('name')->get();
         $sizes=Size::OrderBy('sort_order')->get();
-        // $wishlists = Wishlist::where('user_id', auth()->user()->id)->with('product')->get();
-        $wishlists = Wishlist::where('user_id', auth()->user()->id)->with(['product.images', 'variant'])
-                        ->get();
+        
+        // Only get wishlists if user is authenticated
+        $wishlists = [];
+        if (auth()->check()) {
+            $wishlists = Wishlist::where('user_id', auth()->user()->id)->with(['product.images', 'variant'])
+                            ->get();
+        }
+        
         $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes)
         ->with('wishlists', $wishlists);
     });
