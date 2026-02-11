@@ -30,8 +30,8 @@ $user = $user ?? auth()->user();
                 <span>Profile Information</span>
             </a>
             <a
-                href="orders.html"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                href="{{route('user.order-history',$user->id)}}"
+                class="sidebar-item {{ request()->routeIs('user.order-history') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-shopping-bag w-5 text-center"></i>
                 <span>Order History</span>
             </a>
@@ -43,7 +43,7 @@ $user = $user ?? auth()->user();
             </a>
             <a
                 href="wishlist.html"
-                class="sidebar-item active flex items-center gap-3 p-3 rounded-lg text-gray-700">
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-heart w-5 text-center"></i>
                 <span>My Wishlist</span>
                 <span

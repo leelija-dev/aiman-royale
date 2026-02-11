@@ -15,6 +15,9 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderProduct;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -221,4 +224,47 @@ class UserController extends Controller implements HasMiddleware
                 ->with('error', 'Failed to delete user: ' . $e->getMessage());
         }
     }
+
+    // public function orderHistory($id){
+    //     $user = User::findOrFail($id);
+        
+    //     $orders=Order::where('user_id',$id)->with('orderProducts.product')->get();
+    //     // print_r($orders);die;
+    //     return view('web.order-history',compact('user','orders'));
+    // }
+    public function orderHistory(Request $request,$id)
+{
+    
+    $user = User::findOrFail($id);
+    $query = Order::where('user_id', $id)
+                    ->with('orderProducts.product');
+
+    //  Search
+    if ($request->filled('search')) {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('id', $search)
+              ->orWhereHas('orderProducts.product', function ($p) use ($search) {
+                  $p->where('name', 'like', "%{$search}%");
+              });
+        });
+    }
+
+    // 
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    
+    if ($request->filled('date_filter')) {
+        $days = $request->date_filter;
+        $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    $orders = $query->latest()->paginate(10);
+
+    return view('web.order-history', compact('user','orders'));
+}
+
 }

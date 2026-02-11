@@ -108,7 +108,7 @@
                             <span>Profile Information</span>
                         </a>
                         <a
-                            href="#"
+                            href="{{route('user.order-history', $user->id)}}"
                             class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                             <i class="fas fa-shopping-bag w-5 text-center"></i>
                             <span>Order History</span>
@@ -355,4 +355,5 @@
             </div>
         </div>
     </section>
+    
     @endsection

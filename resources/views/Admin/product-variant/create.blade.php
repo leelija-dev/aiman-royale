@@ -103,10 +103,10 @@
                             <div class="mb-3">
                                 <label for="size" class="form-label">Size</label>
                                 <select class="form-control" id="size" name="size">
-                                    <option value="">No Size</option>
+                                    <option value="" selected hidden>Select Size</option>
                                     @foreach($sizes as $size)
-                                    <option value="{{ $size }}" {{ old('size') == $size ? 'selected' : '' }}>
-                                        {{ $size }}
+                                    <option value="{{ $size->code }}" {{ $size->name }}>
+                                        {{ $size->name }} ({{$size->code}})
                                     </option>
                                     @endforeach
                                 </select>

@@ -9,7 +9,7 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\SingleProductController;
 use App\Http\Controllers\Web\OccasionController;
 use App\Http\Controllers\Web\WishlistController;
-
+use App\Http\Controllers\Admin\UserController;
 
 
 
@@ -60,7 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
     Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
-
+    
     //Checkout route
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
@@ -73,6 +73,6 @@ Route::middleware(['auth'])->group(function () {
     // Cashfree Webhook Route
     Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
    
-    
+    Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
 // });
 

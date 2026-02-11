@@ -208,7 +208,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
         Route::get('/change-password/{id}', [UserController::class, 'editPassword'])->name('admin.users.edit-password');
         Route::post('/update-password/{id}', [UserController::class, 'updatePassword'])->name('admin.users.update-password');
-
+        
+        
     });
 
 
