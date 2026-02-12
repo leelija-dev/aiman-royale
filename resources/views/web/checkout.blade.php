@@ -22,7 +22,7 @@
                   <input
                     type="text"
                     name="firstName"
-                    value="{{ auth()->user()->name ?? '' }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->full_name ?? auth()->user()->name ?? '' }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -34,7 +34,7 @@
                   <input
                     type="text"
                     name="lastName"
-                    value="{{ auth()->user()->name ?? '' }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->full_name ?? auth()->user()->name ?? '' }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -61,7 +61,7 @@
                   <input
                     type="tel"
                     name="phone"
-                    value="{{ old('phone') }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->phone ?? old('phone') }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -75,7 +75,7 @@
                 <input
                   type="text"
                   name="address1"
-                  value="{{ old('address1') }}"
+                  value="{{ $addresses->where('is_default', 1)->first()->address_1 ?? old('address1') }}"
                   class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                   placeholder="Street address"
                   required
@@ -89,7 +89,7 @@
                 <input
                   type="text"
                   name="address2"
-                  value="{{ old('address2') }}"
+                  value="{{ $addresses->where('is_default', 1)->first()->address_2 ?? old('address2') }}"
                   class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                   placeholder="Apartment, suite, etc."
                 />
@@ -103,7 +103,7 @@
                   <input
                     type="text"
                     name="city"
-                    value="{{ old('city') }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->city ?? old('city') }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -115,7 +115,7 @@
                   <input
                     type="text"
                     name="state"
-                    value="{{ old('state') }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->state ?? old('state') }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -127,7 +127,7 @@
                   <input
                     type="text"
                     name="pinCode"
-                    value="{{ old('pinCode') }}"
+                    value="{{ $addresses->where('is_default', 1)->first()->pincode ?? old('pinCode') }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />

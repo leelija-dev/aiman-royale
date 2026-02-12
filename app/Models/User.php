@@ -60,15 +60,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the wishlists for the user.
+     * Get wishlists for user.
      */
     public function wishlists()
     {
         return $this->hasMany(\App\Models\Wishlist::class);
     }
 
+    /**
+     * Get addresses for user.
+     */
     public function addresses()
-{
-    return $this->hasMany(Address::class);
-}
+    {
+        return $this->hasMany(Address::class);
+    }
 }

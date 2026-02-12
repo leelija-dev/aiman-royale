@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Address;
 
 class CheckoutController extends Controller
 {
@@ -33,11 +34,20 @@ class CheckoutController extends Controller
     ->get();
 
     $occasions = \App\Models\Occasion::active()->get();
+    
+    // Load user addresses
+    $addresses = Address::where('user_id', $user_id)
+        ->orderBy('is_default', 'desc')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // dd($addresses);
+    
     if(count($carts) == 0){
         return redirect()->route('cart.index');
     }
 
-        return view('web.checkout', compact('carts', 'occasions'));
+        return view('web.checkout', compact('carts', 'occasions', 'addresses'));
     }
 
     public function placeOrder(Request $request){
