@@ -26,7 +26,7 @@ $currentRoute = request()->route()->getName();
         <nav class="space-y-2">
             <a
                 href="{{ $user ? route('web.profile') : route('page.login') }}"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'web.profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fas fa-user w-5 text-center"></i>
                 <span>Profile Information</span>
             </a>

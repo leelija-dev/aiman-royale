@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\SingleProductController;
 use App\Http\Controllers\Web\OccasionController;
 use App\Http\Controllers\Web\WishlistController;
 use App\Http\Controllers\Web\Profile;
+use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
 
 
@@ -23,6 +24,7 @@ Route::middleware(['guest'])->group(function () {
     
 });
 Route::view('/addresses', 'web.addresses');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
@@ -77,6 +79,21 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 
 // Cashfree Webhook Route
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
-   
+
+// Authenticated Routes
+Route::middleware(['auth'])->group(function () {
+    // Profile Routes
+    // Route::get('/profile', [Profile::class, 'profile'])->name('profile');
+    Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
+    Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
+    
+    // Address Routes
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::post('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.default');
+    
+    // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
-// });
+});
