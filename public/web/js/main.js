@@ -411,7 +411,7 @@ $(document).ready(function () {
         autoplayTimeout: 5000,
         responsive: {
           0: { items: 1, margin: 10 },
-          450: { items: 2, margin: 10 },
+          500: { items: 2, margin: 10 },
           640: { items: 2, margin: 10 },
           768: { items: 3, margin: 10 },
           1024: { items: 3, margin: 25 },
