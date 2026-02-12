@@ -195,15 +195,12 @@
                                 data-address-id="{{ $address->id }}"
                                 onclick='openEditModal({{ json_encode([
                                     "id" => $address->id,
-                                    "name" => $address->name,
                                     "full_name" => $address->full_name,
                                     "phone" => $address->phone,
-                                    "phone_no" => $address->phone_no,
                                     "address_1" => $address->address_1,
                                     "address_2" => $address->address_2,
                                     "city" => $address->city,
                                     "state" => $address->state,
-                                    "postal_code" => $address->postal_code,
                                     "country" => $address->country,
                                     "pincode" => $address->pincode,
                                     "landmark" => $address->landmark,
@@ -426,6 +423,12 @@
             // Update form action for create
             addressForm.action = '{{ route("addresses.store") }}';
             addressForm.method = 'POST';
+            
+            // Remove any existing method input
+            const existingMethodInput = addressForm.querySelector('input[name="_method"]');
+            if (existingMethodInput) {
+                existingMethodInput.remove();
+            }
         }
 
         // Close modal
@@ -510,7 +513,6 @@
         // Populate form with address data
         document.getElementById('addressId').value = addressData.id || '';
         document.getElementById('addressLabel').value = addressData.address_type || '';
-        document.getElementById('customLabel').value = addressData.name || '';
         document.getElementById('fullName').value = addressData.full_name || '';
         document.getElementById('streetAddress').value = addressData.address_1 || '';
         document.getElementById('apartment').value = addressData.address_2 || '';

@@ -69,7 +69,7 @@ class AddressController extends Controller
             'pincode' => $request->pincode,
             'landmark' => $request->landmark,
             'address_type' => $request->address_type,
-            'is_default' => $request->is_default ?? false,
+            'is_default' => $request->has('is_default') ? 1 : 0,
         ]);
         
         // Debug: Log after creation
@@ -85,22 +85,19 @@ class AddressController extends Controller
     public function update(Request $request, $id)
     {
         $address = Address::where('user_id', Auth::id())->findOrFail($id);
-        
+        // dd($address);
         $request->validate([
-            'name' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'phone_no' => 'nullable|string|max:20',
             'address_1' => 'required|string|max:255',
             'address_2' => 'nullable|string|max:255',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
-            'postal_code' => 'required|string|max:20',
             'country' => 'required|string|max:100',
             'pincode' => 'nullable|string|max:10',
-            'landmark' => 'nullable|string|max:255',
-            'address_type' => 'nullable|string|in:home,work,other',
-            'is_default' => 'boolean',
+            // 'landmark' => 'nullable|string|max:255',
+            // 'address_type' => 'nullable|string|in:home,work,other',
+            // 'is_default' => 'boolean',
         ]);
         
         // If this is set as default, unset all other default addresses
@@ -109,15 +106,12 @@ class AddressController extends Controller
         }
         
         $address->update([
-            'name' => $request->name,
             'full_name' => $request->full_name,
             'phone' => $request->phone,
-            'phone_no' => $request->phone_no,
             'address_1' => $request->address_1,
             'address_2' => $request->address_2,
             'city' => $request->city,
             'state' => $request->state,
-            'postal_code' => $request->postal_code,
             'country' => $request->country,
             'pincode' => $request->pincode,
             'landmark' => $request->landmark,
