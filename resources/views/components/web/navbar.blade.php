@@ -963,9 +963,9 @@
                 <!-- Book Appointment Button -->
                 <a  href="#"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
-          bg-[#EC4899] text-white font-semibold text-sm 
+          bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm 
           rounded-full shadow-md
-          hover:bg-pink-600 hover:shadow-lg 
+          hover:bg-gradient-to-r hover:from-secondary hover:to-primary hover:shadow-lg 
           transition-all duration-300 ease-in-out">
 
                     <i class="fa-solid fa-calendar-check text-sm"></i>
