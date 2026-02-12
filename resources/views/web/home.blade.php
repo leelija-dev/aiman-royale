@@ -682,6 +682,7 @@
         <!-- Scroll Wrapper -->
         <div class="flex gap-4 flex-wrap lgg:gap-6 justify-start items-center ">
             @foreach ($categories->where('parent_id', null) as $category)
+            <a href="{{ route('category.show',$category->slug) }}">
             <div
                 class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
                 <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
@@ -697,6 +698,7 @@
                     {{ $category->products_count }}
                 </span>
             </div>
+            </a>
             @endforeach
         </div>
     </div>
@@ -1624,6 +1626,7 @@
 
         <div class="main-owl owl-carousel owl-theme">
              @forelse($mostWishlisted as $index => $product)
+           
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">

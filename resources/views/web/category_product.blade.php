@@ -96,7 +96,7 @@
         </div>
       @empty
         <div class="text-center py-12">
-          <p class="text-gray-500 text-lg">No products found in this category.</p>
+          <p class="text-gray-500 text-center text-lg">No products found in this category.</p>
         </div>
       @endforelse
     </div>
