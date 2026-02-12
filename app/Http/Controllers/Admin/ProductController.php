@@ -64,6 +64,7 @@ class ProductController extends Controller
             'tags'=>'required|string',
             'meta_description'=>'required|string',
             'schema_markup'=>'nullable|string',
+            'image' => 'required|image',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
@@ -142,6 +143,7 @@ class ProductController extends Controller
             'tags'=>'required|string',
             'meta_description'=>'required|string',
             'schema_markup'=>'nullable|string',
+           
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 

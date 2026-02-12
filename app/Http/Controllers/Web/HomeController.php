@@ -327,7 +327,10 @@ class HomeController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
         $sizes=Size::OrderBy('sort_order')->get();
+        // print_r($product->category);die;
+        $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->with('variants','images')->get();
+        //  print_r($relatedProducts->first()->variants);die;
         // dd($product);
-        return view('web.single-product', compact('product','sizes'));
+        return view('web.single-product', compact('product','sizes','relatedProducts'));
     }
 }

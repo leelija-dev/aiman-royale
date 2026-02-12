@@ -396,7 +396,7 @@
 
                                                                 <div class="mb-3">
                                                                     <label for="edit_image_{{ $product->id }}"
-                                                                        class="form-label">Product Image</label>
+                                                                        class="form-label">Product Image<sup class="text-danger">*</sup></label>
                                                                     <input type="file" class="form-control"
                                                                         id="edit_image_{{ $product->id }}"
                                                                         name="image" accept="image/*">
@@ -404,6 +404,10 @@
                                                                         <small class="text-muted">Current:
                                                                             {{ $product->images->first()->image }}</small>
                                                                     @endif
+                                                                    @error('image')
+                                                                    <div class="text-danger small">{{ $message }}
+                                                                    </div>
+                                                                    @enderror
                                                                 </div>
 
                                                                 <div class="mb-3">
