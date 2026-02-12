@@ -331,10 +331,10 @@
                     </div>
 
                     <button
-                        class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-black via-gray-800 to-black rounded-full text-white text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:from-gray-900 hover:via-black hover:to-gray-900 group relative overflow-hidden">
+                        class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
                         <span class="relative z-10">Shop Now →</span>
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-rose-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                     </button>
 
@@ -668,7 +668,7 @@
         <!-- Simple View All Button -->
         <div class="text-center lgg:mt-12 mt-5">
             <a href="#"
-                class="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 hover:bg-black rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
+                class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
                 <span>View All Categories</span>
                 <svg class="w-5 h-5 transform hover:translate-x-1 transition-transform"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
