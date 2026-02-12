@@ -1108,11 +1108,7 @@
 <a href="https://wa.me/919999999999" target="_blank"
   class="fixed bottom-[7.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
 
-  <!-- Soft Glow Background -->
-  <div class="absolute inset-0 rounded-full bg-green-500 blur-xl opacity-30 group-hover:opacity-50 transition duration-500"></div>
-
-  <!-- Animated Ring -->
-  <span class="absolute inset-0 rounded-full border-2 border-pink-300/40 animate-ping"></span>
+  
 
   <!-- Main Button -->
   <div class="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-[0_10px_25px_rgba(236,72,153,0.35)] hover:shadow-[0_15px_35px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all duration-300">
