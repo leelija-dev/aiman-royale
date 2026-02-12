@@ -145,7 +145,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <h3 class="font-bold text-gray-900 text-lg">{{ $address->name ?? 'Untitled Address' }}</h3>
+                            <!-- <h3 class="font-bold text-gray-900 text-lg">{{ $address->name ?? 'Untitled Address' }}</h3> -->
                             @if($address->address_type)
                             <p class="text-gray-600 text-sm">{{ ucfirst($address->address_type) }} Address</p>
                             @endif

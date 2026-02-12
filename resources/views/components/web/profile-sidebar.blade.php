@@ -26,7 +26,7 @@ $currentRoute = request()->route()->getName();
         <nav class="space-y-2">
             <a
                 href="{{ $user ? route('web.profile') : route('page.login') }}"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
+                class="sidebar-item {{ request()->routeIs('web.profile') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fas fa-user w-5 text-center"></i>
                 <span>Profile Information</span>
             </a>
@@ -37,8 +37,8 @@ $currentRoute = request()->route()->getName();
                 <span>Order History</span>
             </a>
             <a
-                href="#"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
+                href="{{ route('addresses.index')}}"
+                class="sidebar-item {{ request()->routeIs('addresses.index') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
                 <i class="fas fa-map-marker-alt w-5 text-center"></i>
                 <span>My Addresses</span>
             </a>
