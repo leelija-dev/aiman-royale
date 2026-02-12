@@ -33,6 +33,9 @@ class CheckoutController extends Controller
     ->get();
 
     $occasions = \App\Models\Occasion::active()->get();
+    if(count($carts) == 0){
+        return redirect()->route('cart.index');
+    }
 
         return view('web.checkout', compact('carts', 'occasions'));
     }

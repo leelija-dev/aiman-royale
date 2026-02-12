@@ -182,11 +182,16 @@
             <div class="flex justify-between text-gray-700">
               <span>Shipping</span>
               <div class="text-right">
-                @if($shipping == 0)
+                @if($shipping == 0 )
                 <span class="block text-sm text-green-600">Free shipping!</span>
                 @else
+                @if($subtotal == 0)
+                <span class="block text-sm text-green-600">{{config('app.currency')}}0</span>
+                @else
                 <span class="block text-sm">{{config('app.currency')}}{{ number_format($shipping, 2) }}</span>
+                
                 <span class="block text-xs text-gray-500">Free shipping over {{config('app.currency')}}400</span>
+                @endif
                 @endif
                 <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a>
               </div>
@@ -196,14 +201,19 @@
               <div
                 class="flex justify-between text-lg font-medium text-gray-900">
                 <span>Total</span>
+                @if($subtotal == 0)
+                <span >{{config('app.currency')}}0</span>
+                @else
                 <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
+              @endif
               </div>
             </div>
 
             @if(auth()->check())
               <a href="{{ route('checkout.index') }}">
+              
                 <button
-                  class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
+                  class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800" {{ $subtotal == 0 ? 'disabled' : '' }}>
                   Proceed to checkout
                 </button>
               </a>
