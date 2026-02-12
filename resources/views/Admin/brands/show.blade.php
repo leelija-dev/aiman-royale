@@ -101,9 +101,9 @@
         </div>
     </div>
 
-    <div class="row w-100 px-3 mt-3 m-0 mb-3">
+    <div class="row w-100 px-4 pt-2 pb-2 mt-3 m-0 mb-3">
         <div class="col-12">
-            <div class="card">
+            <div class="card px-4 pt-2 pb-2">
                 <div class="card-header">
                     <h5>Products in this Brand</h5>
                 </div>

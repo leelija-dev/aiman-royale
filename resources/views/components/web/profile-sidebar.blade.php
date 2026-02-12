@@ -31,8 +31,8 @@ $currentRoute = request()->route()->getName();
                 <span>Profile Information</span>
             </a>
             <a
-                href="{{ $user ? route('user.order-history', $user->id) : '#' }}"
-                class="sidebar-item {{ request()->routeIs('user.order-history') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
+                href="{{route('user.order-history', base64_encode($user->id))}}"
+                class="sidebar-item {{ request()->routeIs('user.order-history') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg text-gray-700">
                 <i class="fas fa-shopping-bag w-5 text-center"></i>
                 <span>Order History</span>
             </a>

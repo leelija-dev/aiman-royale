@@ -94,7 +94,7 @@
                     </a>
                 </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
+            <div class="card-body px-4 pt-2 pb-2">
                 <!-- Filters -->
                 <div class="row mb-3">
                     <div class="col-md-3">
@@ -306,14 +306,17 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="edit_discount_price_{{ $variant->id }}" class="form-label">Discount Price</label>
-                                                            <input type="number" class="form-control" id="edit_discount_price_{{ $variant->id }}" name="discount_price" 
-                                                                   value="{{ $variant->discount_price }}" step="0.01" min="0">
+                                                            <label for="edit_discount_{{ $variant->id }}" class="form-label">Discount (%)</label>
+                                                            <input type="number" class="form-control" id="edit_discount_{{ $variant->id }}" name="discount" 
+                                                                   value="{{ $variant->discount }}" step="0.01" min="0">
+                                                            @error('discount')
+                                                            <div class="text-danger small">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="edit_stock_{{ $variant->id }}" class="form-label">Stock <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" id="edit_stock_{{ $variant->id }}" name="stock" 
-                                                                   value="{{ $variant->stock }}" min="0" required>
+                                                                   value="{{ $variant->stock }}" min="0" required readonly>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="edit_video_url_{{ $variant->id }}" class="form-label">Video URL</label>

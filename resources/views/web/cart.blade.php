@@ -41,6 +41,7 @@
               <tr>
                 <th class="px-6 py-4">Product</th>
                 <th class="px-6 py-4 text-center">Price</th>
+                <th class="px-6 py-4 text-center">After Discount</th>
                 <th class="px-6 py-4 text-center">Quantity</th>
                 <th class="px-6 py-4 text-center">Subtotal</th>
                 <th class="px-6 py-4 text-center"></th>
@@ -76,7 +77,8 @@
                   </div>
                 </td>
 
-                <td class="px-6 py-6 text-center">${{ number_format($item->variant->discount_price, 2) }}</td>
+                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</td>
+                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
 
                 <td class="px-6 py-6 text-center">
                   <div
@@ -102,7 +104,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-center font-medium">
-                  ${{ number_format($item->variant->discount_price * $item->count, 2) }}
+                  {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
                 </td>
 
                 <td class="px-6 py-6 text-center">
@@ -174,7 +176,7 @@
           <div class="space-y-4">
             <div class="flex justify-between text-gray-700">
               <span>Subtotal</span>
-              <span>${{ number_format($subtotal, 2) }}</span>
+              <span>{{config('app.currency')}}{{ number_format($subtotal, 2) }}</span>
             </div>
 
             <div class="flex justify-between text-gray-700">
@@ -183,8 +185,8 @@
                 @if($shipping == 0)
                 <span class="block text-sm text-green-600">Free shipping!</span>
                 @else
-                <span class="block text-sm">${{ number_format($shipping, 2) }}</span>
-                <span class="block text-xs text-gray-500">Free shipping over $400</span>
+                <span class="block text-sm">{{config('app.currency')}}{{ number_format($shipping, 2) }}</span>
+                <span class="block text-xs text-gray-500">Free shipping over {{config('app.currency')}}400</span>
                 @endif
                 <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a>
               </div>
@@ -194,7 +196,7 @@
               <div
                 class="flex justify-between text-lg font-medium text-gray-900">
                 <span>Total</span>
-                <span>${{ number_format($total, 2) }}</span>
+                <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
               </div>
             </div>
 

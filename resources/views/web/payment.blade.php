@@ -9,7 +9,7 @@
             <div class="text-center mb-8">
                 <h1 class="text-2xl font-semibold mb-2">Complete Your Payment</h1>
                 <p class="text-gray-600">Order ID: #{{ $orderId }}</p>
-                <p class="text-xl font-semibold text-black mt-2">Total Amount: ${{ number_format($total, 2) }}</p>
+                <p class="text-xl font-semibold text-black mt-2">Total Amount: {{config('app.currency')}}{{ number_format($total, 2) }}</p>
             </div>
 
             <div class="border-t pt-6">
@@ -73,19 +73,20 @@
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-600">Subtotal</span>
-                        <span>${{ number_format($total * 0.88, 2) }}</span>
+                        <span>{{config('app.currency')}}{{$total}}
+                        {{-- <span>${{ number_format($total * 0.88, 2) }}</span> --}}
                     </div>
-                    <div class="flex justify-between">
+                    {{-- <div class="flex justify-between">
                         <span class="text-gray-600">Shipping</span>
                         <span>{{ $total > 0 ? '$7.00' : '$0.00' }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Tax (5%)</span>
                         <span>${{ number_format($total * 0.05, 2) }}</span>
-                    </div>
+                    </div> --}}
                     <div class="flex justify-between font-semibold text-base pt-2 border-t">
                         <span>Total</span>
-                        <span>${{ number_format($total, 2) }}</span>
+                        <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
                     </div>
                 </div>
             </div>

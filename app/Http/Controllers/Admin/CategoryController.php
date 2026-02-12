@@ -39,8 +39,9 @@ class CategoryController extends Controller
     public function trash()
     {
         try {
-            $categories = Category::onlyTrashed()->latest()->paginate(20);
-            return view('Admin.categories.trash', compact('categories'));
+            $categoriess = Category::onlyTrashed()->latest()->paginate(20);
+            // dd($categoriess->count());
+            return view('Admin.categories.trash', compact('categoriess'));
         } catch (\Exception $e) {
             Log::error('Error in CategoryController@trash', [
                 'message' => $e->getMessage(),

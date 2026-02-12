@@ -191,7 +191,7 @@
                             <div class="mb-3">
                                 <label for="stock" class="form-label">Stock <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="stock" name="stock" 
-                                       value="{{ old('stock') }}" min="0" required>
+                                       value="0" min="0" required readonly>
                                 @error('stock')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror

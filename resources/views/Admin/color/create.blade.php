@@ -13,7 +13,7 @@
             <div class="card-header pb-0">
                 <h6>Add New Color</h6>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
+            <div class="card px-4 pt-2 pb-2">
                 <form action="{{ route('admin.colors.store') }}" method="POST">
                     @csrf
                     <div class="row">

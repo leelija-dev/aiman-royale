@@ -38,12 +38,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($categories as $category)
+                            @if($categoriess->count() > 0)
+                            {{-- @dd($categories->count()) --}}
+                            @foreach($categoriess as $category)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
-                                    <td>{{ $category->deleted_at->format('d M, Y h:i A') }}</td>
+                                    <td>{{ $category->deleted_at ? $category->deleted_at->format('d M, Y h:i A') : '' }}</td>
                                     <td>
                                         <div class="d-flex justify-content-start gap-2">
                                             <form action="{{ route('admin.categories.restore', $category->id) }}"
@@ -111,16 +113,17 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
+                            @endforeach
+                            @else
                                 <tr>
                                     <td colspan="5" class="text-center">Trashed categories not available!</td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>
                 <div class="mt-3">
-                    {{ $categories->links('pagination::bootstrap-5') }}
+                    {{-- {{ $categories->links('pagination::bootstrap-5') }} --}}
                 </div>
             </div>
         </div>

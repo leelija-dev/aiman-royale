@@ -234,7 +234,7 @@ class UserController extends Controller implements HasMiddleware
     // }
     public function orderHistory(Request $request,$id)
 {
-    
+    $id=base64_decode($id);
     $user = User::findOrFail($id);
     $query = Order::where('user_id', $id)
                     ->with('orderProducts.product');

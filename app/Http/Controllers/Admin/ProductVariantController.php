@@ -78,14 +78,15 @@ class ProductVariantController extends Controller
             'color' => 'nullable|string|max:50',
             'sku' => 'required|string|max:100|unique:product_variants,sku',
             'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
+            'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'video_url' => 'nullable|url|max:500',
             // 'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-
+        $discount_price=($data['price'] - (($data['price'] * $data['discount']) / 100));
+        $data['discount_price']=$discount_price;
         // Custom validation for unique combination of product_id, size, and color
         $existingVariant = ProductVariant::where('product_id', $data['product_id'])
             ->where('size', $data['size'] ?? '')
@@ -99,6 +100,10 @@ class ProductVariantController extends Controller
         }
 
         $variant = ProductVariant::create($data);
+        $product = Product::find($data['product_id']);
+        $product->update([
+            'stock' => $data['stock'],
+        ]);
         if($variant){
                     if ($request->hasFile('images')) {
 
@@ -149,12 +154,14 @@ class ProductVariantController extends Controller
             'color' => 'nullable|string|max:50',
             'sku' => 'required|string|max:100|unique:product_variants,sku,' . $productVariant->id,
             'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
+            'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
             // 'stock' => 'required|integer|min:0',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
+        $discount_price=($data['price'] - (($data['price'] * $data['discount']) / 100));
+        $data['discount_price']=$discount_price;
 
         // Custom validation for unique combination of product_id, size, and color (excluding current variant)
         $existingVariant = ProductVariant::where('product_id', $data['product_id'])
@@ -174,7 +181,8 @@ class ProductVariantController extends Controller
             'product_id'      => $request->product_id,
             'sku'             => $request->sku,
             'price'           => $request->price,
-            'discount_price'  => $request->discount_price,
+            'discount_price'  => $discount_price,
+            'discount'        => $request->discount,
             'color'           => $request->color,
             'size'            => $request->size,
             'video_url'       => $request->video_url,
