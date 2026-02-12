@@ -684,7 +684,7 @@
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto px-4">
         <!-- Scroll Wrapper -->
-        <div class="flex gap-4 flex-wrap lgg:gap-6 justify-start items-center ">
+        <div class="flex gap-4 flex-wrap lgg:gap-6 lgg:justify-start justify-center items-center ">
             @foreach ($categories->where('parent_id', null) as $category)
             <div
                 class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
