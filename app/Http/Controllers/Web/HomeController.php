@@ -99,7 +99,7 @@ class HomeController extends Controller
     public function ShowAllProduct(Request $request)
     {
         // Get filter parameters from request
-        $brands = $request->input('brands', []);
+        $categories = $request->input('category', []);
         $colors = $request->input('colors', []);
         $sizes = $request->input('sizes', []);
         $discountRanges = $request->input('discount_ranges', []);
@@ -107,6 +107,9 @@ class HomeController extends Controller
         $priceMin = $request->input('price_min');
         $priceMax = $request->input('price_max');
         $search = $request->input('search');
+        $priceRanges = $request->input('price_ranges', []);
+        $occasions = $request->input('occasions', []);
+
 
         // Start building the query
         $query = DB::table('products')
@@ -137,10 +140,28 @@ class HomeController extends Controller
                   ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
-
+       
         // Apply brand filters
-        if (!empty($brands)) {
-            $query->whereIn('products.brand', $brands);
+        if (!empty($categories)) {
+            $query->whereIn('categories.name', $categories);
+
+        }
+        // Apply occasion filters
+        if (!empty($occasions)) {
+            $query->whereIn('ocassions.name', $occasions);
+        }
+        // Apply price range filters
+      
+        if (!empty($priceRanges)) {
+            $query->where(function ($q) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    [$min, $max] = explode('-', $range);
+                
+
+                $q->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
+                    
+                }
+            });
         }
 
         // Apply color filters
@@ -151,6 +172,9 @@ class HomeController extends Controller
         // Apply size filters
         if (!empty($sizes)) {
             $query->whereIn('product_variants.size', $sizes);
+        }
+        if(!empty($price)){
+            $query->where('product_variants.discount_price',$price);
         }
 
         // Apply price range filters
@@ -199,10 +223,10 @@ class HomeController extends Controller
                 $query->orderBy('products.name', 'desc');
                 break;
             case 'price-low':
-                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.price) ASC');
+                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) ASC');
                 break;
             case 'price-high':
-                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.price) DESC');
+                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) DESC');
                 break;
             case 'date-asc':
                 $query->orderBy('products.created_at', 'asc');
@@ -272,17 +296,29 @@ class HomeController extends Controller
 
         // Get filter options for sidebar
         $filterOptions = [
-            'brands' => DB::table('products')->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand')->filter()->toArray(),
+            // 'brands' => DB::table('products')->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand')->filter()->toArray(),
+            'categories' => DB::table('categories')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
             'colors' => DB::table('product_variants')->whereNotNull('color')->where('color', '!=', '')->distinct()->pluck('color')->filter()->toArray(),
-            'sizes' => DB::table('product_variants')->whereNotNull('size')->where('size', '!=', '')->distinct()->pluck('size')->filter()->toArray(),
+            // 'sizes' => DB::table('product_variants')->whereNotNull('size')->where('size', '!=', '')->distinct()->pluck('size')->filter()->toArray(),
+            'sizes' => DB::table('sizes')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('code')->filter()->toArray(),
+            'occasions' => DB::table('ocassions')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
         ];
 
         // Get price range
         $priceRange = DB::table('product_variants')
             ->selectRaw('MIN(COALESCE(discount_price, price)) as min_price, MAX(COALESCE(discount_price, price)) as max_price')
             ->first();
+        $selectedFilters = [
+            'categories' => $categories,
+            'colors' => $colors,
+            'sizes' => $sizes,
+            'occasions' => $occasions,
+            'price_ranges' => array_unique($priceRanges),
+            'discount_ranges' => $discountRanges,
+        ];
 
-        return view('web.multi-product', compact('products', 'filterOptions', 'priceRange'));
+
+        return view('web.multi-product', compact('products', 'filterOptions', 'priceRange','selectedFilters'));
     }
 
     public function ShowSingleProduct($slug)
