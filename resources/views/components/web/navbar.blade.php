@@ -961,7 +961,7 @@
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Book Appointment Button -->
-                <a href="#"
+                <a  href="#"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
           bg-[#EC4899] text-white font-semibold text-sm 
           rounded-full shadow-md
@@ -973,7 +973,8 @@
                 </a>
 
                 <!-- Size Guide Button -->
-                <a href="#"
+                <button type="button"
+                    data-size-guide-trigger
                     class="flex items-center gap-2 px-3 py-2 
           bg-white border border-pink-200 
           text-gray-700 font-medium text-sm 
@@ -984,7 +985,7 @@
 
                     <i class="fa-solid fa-ruler-combined text-pink-500 text-sm"></i>
                     <span>Size </span>
-                </a>
+                </button>
 
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
