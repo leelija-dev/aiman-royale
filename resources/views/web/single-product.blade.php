@@ -70,10 +70,16 @@
         </div>
         <div class="flex items-center gap-3" id="price-container">
           <span class="text-2xl font-bold text-gray-900">Rs. {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }}</span>
-          @if($product->variants->first()->discount_price && $product->variants->first()->discount_price != $product->variants->first()->price)
+          @if($product->variants->first()->price  )
           <span class="line-through text-gray-400">Rs. {{ $product->variants->first()->price }}</span>
+           @endif
+           @if($product->variants->first()->discount)
           <span
-            class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round((($product->variants->first()->price - $product->variants->first()->discount_price) / $product->variants->first()->price) * 100) }}% off)</span>
+            class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{  $product->variants->first()->discount }}% off)</span>
+          @else
+         <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">
+                  Trending
+                </span>
           @endif
         </div>
 
@@ -249,7 +255,7 @@
           <button
             id="wishlist-btn"
             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
-            onclick="toggleWishlist({{ $product->id }}, event);">
+            onclick="toggleWishlist({{ $product->id }},this, event);">
             <i class="far fa-heart"></i>
           </button>
         </div>
@@ -418,15 +424,27 @@
     </div>
 
     <div class="main-owl owl-carousel owl-theme">
+     @php 
+    //  print_r($relatedProducts->count());die;
+     @endphp
       @if(isset($relatedProducts))
+      
       @forelse($relatedProducts as $relatedProduct)
+      @php 
+      // echo "images",$relatedProduct->images->first()->image; die;
+      @endphp
+      @php
+          $variant = $relatedProduct->variants->first();
+      @endphp
+
       <div class="item flex items-center justify-center">
         <div
           class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <!-- Image Wrapper -->
+         
           <div class="relative rounded-xl overflow-hidden">
             <img
-              src="{{ $relatedProduct->images->first() ? asset('uploads/products/' . $relatedProduct->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
+              src="{{ $relatedProduct->images->first() ? asset($relatedProduct->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
               alt="{{ $relatedProduct->name }}"
               class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -438,18 +456,25 @@
                 Trending
               </span>
               @endif
-              @if($relatedProduct->discount_price)
-              <span
-                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                -{{ round((($relatedProduct->price - $relatedProduct->discount_price) / $relatedProduct->price) * 100) }}%
-              </span>
-              @endif
+                @if($variant && $variant->discount)
+                    <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                      @if($variant->discount == 0)
+                      Trending
+                      @else
+                        OFF {{ $variant->discount }}%
+                      @endif
+                    </span>
+                @endif
+
             </div>
 
             <!-- Wishlist Heart Icon (Top Right) -->
             <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-              <svg
+             
+              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+               onclick="toggleWishlist({{ $variant->product_id }}, this,event);">
+               <i class="far fa-heart"></i>
+              {{-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -460,38 +485,46 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              </svg> --}}
             </button>
+            {{-- <button
+            id="wishlist-btn"
+            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
+            onclick="toggleWishlist({{ $variant->product_id }}, event);">
+            <i class="far fa-heart"></i>
+          </button> --}}
 
             <!-- Add To Cart (Hidden → Hover Show) -->
-            <div
+            {{-- <div
               class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
               <button data-variant-id="{{ $relatedProduct->variant_id ?? $relatedProduct->id }}" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                 Add To Cart
               </button>
-            </div>
+            </div> --}}
           </div>
 
           <!-- Content -->
+           <a href="{{route('page.single-product', $relatedProduct->slug)}}">
           <div class="p-4 space-y-1">
             <h3 class="text-[15px] font-semibold text-gray-900">
               {{ $relatedProduct->name }}
             </h3>
 
             <div class="flex items-center gap-2 text-sm text-gray-600">
-              <span>{{ $relatedProduct->brand ?? 'Brand Name' }}</span>
+              <span>{{ $relatedProduct->brand ?? '' }}</span>
               <span class="flex items-center gap-1 text-gray-700">
                 <span class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
               </span>
             </div>
 
             <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span class="text-lg font-bold text-gray-900">Rs. {{ $relatedProduct->discount_price ?? $relatedProduct->price }}</span>
-              @if($relatedProduct->discount_price)
-              <span class="text-sm text-gray-400 line-through">Rs. {{ $relatedProduct->price }}</span>
+              <span class="text-lg font-bold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
+              @if($variant->discount_price)
+              <span class="text-sm text-gray-400 line-through">Rs. {{ $variant->price }}</span>
               @endif
             </div>
           </div>
+          </a>
         </div>
       </div>
       @empty
@@ -618,7 +651,7 @@
 </section>
 
 <!-- Trending Products Section -->
-<section class="px-4 lgg:py-12 py-6">
+{{-- <section class="px-4 lgg:py-12 py-6">
   <div class="container mx-auto">
     <div
       class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -701,9 +734,10 @@
       <!-- Add more product items as needed -->
     </div>
   </div>
-</section>
+</section> --}}
 
 <script src="{{asset('web/js/single-product.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
   // Store all product variants data
@@ -967,16 +1001,19 @@
     if (priceContainer && variant) {
       const currentPrice = variant.discount_price || variant.price;
       const originalPrice = variant.price;
-
+      const discount = variant.discount;
       console.log('Current price:', currentPrice, 'Original price:', originalPrice);
 
       priceContainer.innerHTML = `
             <span class="text-2xl font-bold text-gray-900">Rs. ${currentPrice}</span>
-            ${variant.discount_price && variant.discount_price != originalPrice ? 
-                `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>
+           
+                <span class="line-through text-gray-400">Rs. ${originalPrice}</span>
+                ${discount > 0 ? `
                  <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
-                     (${Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}% off)
-                 </span>` : ''}
+                     (${discount}% off)
+                 </span>` : `<span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">
+                    Trending
+                </span>`}
         `;
     }
   }
@@ -1123,60 +1160,136 @@
   }
 
   // Toggle wishlist
-  function toggleWishlist(productId, event) {
+  // function toggleWishlist(productId, event) {
+  //   if (event) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+
+  //   if (!productId) {
+  //     alert('Product ID not found');
+  //     return;
+  //   }
+
+  //   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+  //   const wishlistBtn = document.getElementById('wishlist-btn');
+  //   const isInWishlist = wishlistBtn.classList.contains('text-red-500');
+
+  //   const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+  //   // Show loading state
+  //   const originalContent = wishlistBtn.innerHTML;
+  //   wishlistBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  //   wishlistBtn.disabled = true;
+
+  //   fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'X-CSRF-TOKEN': csrfToken
+  //       },
+  //       body: JSON.stringify({
+  //         product_id: productId
+  //       })
+  //     })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       if (data.success) {
+  //         showNotification(data.message, 'success');
+  //         updateWishlistButton(!isInWishlist);
+
+  //         // Update wishlist count if you have a counter
+  //         if (data.wishlist_count !== undefined) {
+  //           updateWishlistCount(data.wishlist_count);
+  //         }
+  //       } else {
+  //         showNotification(data.message || 'Failed to update wishlist', 'error');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //       showNotification('An error occurred while updating wishlist', 'error');
+  //     })
+  //     .finally(() => {
+  //       wishlistBtn.disabled = false;
+  //     });
+  // }
+  function toggleWishlist(productId, button, event) {
+
     if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     if (!productId) {
-      alert('Product ID not found');
-      return;
+        alert('Product ID not found');
+        return;
     }
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    const wishlistBtn = document.getElementById('wishlist-btn');
-    const isInWishlist = wishlistBtn.classList.contains('text-red-500');
 
+    const isInWishlist = button.classList.contains('text-red-500');
     const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
-    // Show loading state
-    const originalContent = wishlistBtn.innerHTML;
-    wishlistBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    wishlistBtn.disabled = true;
+    // Show loading
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
 
     fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrfToken
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify({
-          product_id: productId
+            product_id: productId
         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          showNotification(data.message, 'success');
-          updateWishlistButton(!isInWishlist);
+    })
+    .then(response => response.json())
+    .then(data => {
 
-          // Update wishlist count if you have a counter
-          if (data.wishlist_count !== undefined) {
-            updateWishlistCount(data.wishlist_count);
-          }
+        if (data.success) {
+
+            // Toggle UI
+            if (isInWishlist) {
+                button.classList.remove('text-red-500');
+                button.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                button.classList.add('text-red-500');
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+
         } else {
-          showNotification(data.message || 'Failed to update wishlist', 'error');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showNotification('An error occurred while updating wishlist', 'error');
-      })
-      .finally(() => {
-        wishlistBtn.disabled = false;
-      });
-  }
+
+    
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Already Added',
+            text: data.message,
+            // showConfirmButton: false,
+            ConfirmButtonText: 'Ok',
+            timer: 1800
+        });
+
+        // Keep heart filled
+        button.classList.add('text-red-500');
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+
+    
+}
+
+
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
+
 
   // Update wishlist count (if you have a counter)
   function updateWishlistCount(count) {
