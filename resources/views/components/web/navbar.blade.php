@@ -335,7 +335,7 @@
         .breadcrumbs__list {
             font-size: 12px;
         }
-        
+
         .breadcrumbs__link {
             padding: 2px 4px;
         }
@@ -954,12 +954,38 @@
 
             <div
                 class="lgg:absolute lgg:top-0 lgg:left-0 lgg:w-full lgg:flex lgg:justify-center lgg:items-center lgg:pointer-events-none">
-                <a href="/" >
+                <a href="/">
                     <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto"
                         src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
                 </a>
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
+                <!-- Book Appointment Button -->
+                <a href="#"
+                    class="hidden md:flex items-center gap-2 px-3 py-2 
+          bg-[#EC4899] text-white font-semibold text-sm 
+          rounded-full shadow-md
+          hover:bg-pink-600 hover:shadow-lg 
+          transition-all duration-300 ease-in-out">
+
+                    <i class="fa-solid fa-calendar-check text-sm"></i>
+                    <span>Book </span>
+                </a>
+
+                <!-- Size Guide Button -->
+                <a href="#"
+                    class="flex items-center gap-2 px-3 py-2 
+          bg-white border border-pink-200 
+          text-gray-700 font-medium text-sm 
+          rounded-full shadow-sm
+          hover:bg-pink-50 hover:text-[#EC4899] hover:border-[#EC4899]
+          hover:shadow-md 
+          transition-all duration-300 ease-in-out">
+
+                    <i class="fa-solid fa-ruler-combined text-pink-500 text-sm"></i>
+                    <span>Size </span>
+                </a>
+
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
 
@@ -2068,38 +2094,38 @@
             const filteredCategories = searchData.categories.filter(category => {
                 const categoryLower = category.toLowerCase();
                 // Check if category starts with or contains the search term as a whole word
-                return categoryLower === term || 
-                       categoryLower.includes(' ' + term) || 
-                       categoryLower.startsWith(term) ||
-                       term.includes(' ' + categoryLower);
+                return categoryLower === term ||
+                    categoryLower.includes(' ' + term) ||
+                    categoryLower.startsWith(term) ||
+                    term.includes(' ' + categoryLower);
             }).slice(0, 3);
 
             // Filter trending searches - exact word matching
             const filteredTrending = searchData.trending.filter(trend => {
                 const trendLower = trend.toLowerCase();
                 // Check if trend starts with or contains the search term as a whole word
-                return trendLower === term || 
-                       trendLower.includes(' ' + term) || 
-                       trendLower.startsWith(term) ||
-                       term.includes(' ' + trendLower);
+                return trendLower === term ||
+                    trendLower.includes(' ' + term) ||
+                    trendLower.startsWith(term) ||
+                    term.includes(' ' + trendLower);
             }).slice(0, 7);
 
             // Filter products - more precise matching
             const filteredProducts = searchData.products.filter(product => {
                 const titleLower = product.title.toLowerCase();
-                
+
                 // Exact match or starts with search term
                 if (titleLower === term || titleLower.startsWith(term)) return true;
-                
+
                 // Contains search term as whole word (not partial)
                 const words = titleLower.split(' ');
                 for (let word of words) {
                     if (word === term) return true;
                 }
-                
+
                 // Search in tags - exact matching
                 if (product.tags.some(tag => tag.toLowerCase() === term)) return true;
-                
+
                 return false;
             }).slice(0, 8);
 
@@ -2661,24 +2687,24 @@
             console.log('Updating breadcrumbs:', breadcrumbs);
             const breadcrumbsContainer = document.getElementById('breadcrumbs-container');
             const breadcrumbsList = document.getElementById('breadcrumbs-list');
-            
+
             if (!breadcrumbsContainer || !breadcrumbsList) {
                 console.error('Breadcrumb elements not found');
                 return;
             }
-            
+
             // Clear existing breadcrumbs
             breadcrumbsList.innerHTML = '';
-            
+
             // Hide breadcrumbs if empty
             if (!breadcrumbs || breadcrumbs.length === 0) {
                 breadcrumbsContainer.style.display = 'none';
                 return;
             }
-            
+
             // Show breadcrumbs container
             breadcrumbsContainer.style.display = 'block';
-            
+
             // Add breadcrumbs
             breadcrumbs.forEach((breadcrumb, index) => {
                 const li = document.createElement('li');
@@ -2686,7 +2712,7 @@
                 li.setAttribute('itemscope', '');
                 li.setAttribute('itemtype', 'https://schema.org/ListItem');
                 li.setAttribute('itemprop', 'itemListElement');
-                
+
                 if (breadcrumb.url) {
                     const a = document.createElement('a');
                     a.className = 'breadcrumbs__link';
@@ -2695,11 +2721,11 @@
                     a.setAttribute('itemtype', 'https://schema.org/WebPage');
                     a.setAttribute('itemprop', 'item');
                     a.setAttribute('itemid', breadcrumb.url);
-                    
+
                     const span = document.createElement('span');
                     span.setAttribute('itemprop', 'name');
                     span.textContent = breadcrumb.name;
-                    
+
                     a.appendChild(span);
                     li.appendChild(a);
                 } else {
@@ -2708,19 +2734,19 @@
                     span.setAttribute('aria-current', 'page');
                     span.setAttribute('itemprop', 'name');
                     span.textContent = breadcrumb.name;
-                    
+
                     li.appendChild(span);
                 }
-                
+
                 // Add position meta
                 const meta = document.createElement('meta');
                 meta.setAttribute('itemprop', 'position');
                 meta.setAttribute('content', index + 1);
                 li.appendChild(meta);
-                
+
                 breadcrumbsList.appendChild(li);
             });
-            
+
             console.log('Breadcrumbs updated successfully');
         }
 
@@ -2728,34 +2754,37 @@
             const currentPath = window.location.pathname;
             console.log('Current path:', currentPath);
             const breadcrumbs = [];
-            
+
             // Home
-            breadcrumbs.push({ name: 'Home', url: '/' });
-            
+            breadcrumbs.push({
+                name: 'Home',
+                url: '/'
+            });
+
             if (currentPath === '/' || currentPath === '') {
                 return breadcrumbs;
             }
-            
+
             // Parse path and generate breadcrumbs
             const pathSegments = currentPath.split('/').filter(segment => segment);
             console.log('Path segments:', pathSegments);
-            
+
             if (pathSegments.length > 0) {
                 if (pathSegments[0] === 'category' || pathSegments[0] === 'collections') {
                     if (pathSegments.length === 1) {
                         // Base category or collections page
                         const pageName = pathSegments[0] === 'category' ? 'Categories' : 'Collections';
-                        breadcrumbs.push({ 
-                            name: pageName, 
-                            url: null 
+                        breadcrumbs.push({
+                            name: pageName,
+                            url: null
                         });
                     } else {
                         // Specific category or collections page
                         const categoryName = pathSegments[1]?.replace(/-/g, ' ');
                         if (categoryName) {
-                            breadcrumbs.push({ 
-                                name: categoryName.charAt(0).toUpperCase() + categoryName.slice(1), 
-                                url: `/${pathSegments[0]}/${pathSegments[1]}` 
+                            breadcrumbs.push({
+                                name: categoryName.charAt(0).toUpperCase() + categoryName.slice(1),
+                                url: `/${pathSegments[0]}/${pathSegments[1]}`
                             });
                         }
                     }
@@ -2763,50 +2792,50 @@
                     // Occasion page
                     const occasionName = pathSegments[1]?.replace(/-/g, ' ');
                     if (occasionName) {
-                        breadcrumbs.push({ 
-                            name: occasionName.charAt(0).toUpperCase() + occasionName.slice(1), 
-                            url: `/occasion/${pathSegments[1]}` 
+                        breadcrumbs.push({
+                            name: occasionName.charAt(0).toUpperCase() + occasionName.slice(1),
+                            url: `/occasion/${pathSegments[1]}`
                         });
                     }
                 } else if (pathSegments[0] === 'products') {
                     // Single product page
-                    breadcrumbs.push({ 
-                        name: 'Products', 
-                        url: '/products' 
+                    breadcrumbs.push({
+                        name: 'Products',
+                        url: '/products'
                     });
-                    
+
                     // Try to get product name from page title or meta
                     const pageTitle = document.title;
                     if (pageTitle && pageTitle !== 'Aiman') {
-                        breadcrumbs.push({ 
-                            name: pageTitle.replace(' - Aiman', ''), 
-                            url: null 
+                        breadcrumbs.push({
+                            name: pageTitle.replace(' - Aiman', ''),
+                            url: null
                         });
                     }
                 } else if (pathSegments[0] === 'products' && pathSegments.length === 1) {
                     // All products page
-                    breadcrumbs.push({ 
-                        name: 'Products', 
-                        url: null 
+                    breadcrumbs.push({
+                        name: 'Products',
+                        url: null
                     });
                 } else if (pathSegments[0] === 'cart') {
-                    breadcrumbs.push({ 
-                        name: 'Cart', 
-                        url: null 
+                    breadcrumbs.push({
+                        name: 'Cart',
+                        url: null
                     });
                 } else if (pathSegments[0] === 'wishlist') {
-                    breadcrumbs.push({ 
-                        name: 'Wishlist', 
-                        url: null 
+                    breadcrumbs.push({
+                        name: 'Wishlist',
+                        url: null
                     });
                 } else if (pathSegments[0] === 'checkout') {
-                    breadcrumbs.push({ 
-                        name: 'Checkout', 
-                        url: null 
+                    breadcrumbs.push({
+                        name: 'Checkout',
+                        url: null
                     });
                 }
             }
-            
+
             console.log('Generated breadcrumbs:', breadcrumbs);
             return breadcrumbs;
         }
