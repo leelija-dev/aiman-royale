@@ -377,6 +377,29 @@ $(document).ready(function () {
   // All carousel configurations
   const carouselConfigs = [
     {
+      selector: "#ads-carousel",
+      options: {
+        loop: true,
+        margin: 20,
+        nav: false,
+        dots: false,
+        // ❌ Lazy loading removed
+        ...carouselPresets.autoplay,
+        autoplayTimeout: 5000,
+        responsive: {
+          0: { items: 1, margin: 10 },
+          450: { items: 1, margin: 10 },
+          640: { items: 1, margin: 10 },
+          768: { items: 2, margin: 10 },
+          1024: { items: 2, margin: 25 },
+          1280: { items: 3, margin: 25 },
+          1500: { items: 4, margin: 25 }
+
+        }
+      },
+     
+    },
+    {
       selector: "#categories-carousel",
       options: {
         loop: true,

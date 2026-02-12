@@ -928,11 +928,11 @@
     }
 </style>
 
-<header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
+<header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] ">
     <!-- Top Bar: Special Offer + Product Title (hidden on small screens for product title) -->
-    <div class="text-sm text-gray-600 py-2 border-b">
+    <div class="text-sm text-gray-600 py-2 px-3">
         <div class="xl:container mx-auto flex smx:flex-nowrap gap-2 justify-between items-center relative">
-            <div class="hidden lgg:flex justify-center">
+            <div class="hidden xl:flex justify-center">
                 <p
                     class="inline-flex items-center gap-2 text-sm font-medium
             bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10
@@ -953,7 +953,7 @@
             </div>
 
             <div
-                class="lgg:absolute lgg:top-0 lgg:left-0 lgg:w-full lgg:flex lgg:justify-center lgg:items-center lgg:pointer-events-none">
+                class="xl:absolute xl:top-0 xl:left-0 xl:w-full xl:flex xl:justify-center xl:items-center xl:pointer-events-none">
                 <a href="/">
                     <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto"
                         src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
@@ -969,7 +969,7 @@
           transition-all duration-300 ease-in-out">
 
                     <i class="fa-solid fa-calendar-check text-sm"></i>
-                    <span>Book </span>
+                    <span>Book Appointment</span>
                 </a>
 
                 <!-- Size Guide Button -->
@@ -1108,9 +1108,12 @@
             </div>
         </div>
     </div>
+    <!-- Zigzag pattern -->
+<!-- Responsive size changes -->
+ <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
 
     <!-- Main Header -->
-    <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto">
+    <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Desktop Navigation -->
@@ -1223,6 +1226,16 @@
         </div>
     </div>
 </header>
+
+
+
+
+
+<!-- Stars pattern -->
+
+
+
+
 
 <!-- ==================== BREADCRUMBS ==================== -->
 <div class="breadcrumbs-wrapper" id="breadcrumbs-container">
