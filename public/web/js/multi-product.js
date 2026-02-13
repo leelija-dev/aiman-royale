@@ -75,88 +75,88 @@ document.addEventListener("DOMContentLoaded", function () {
     //  API Functions
     // ──────────────────────────────────────────────
     async function fetchFilteredProducts() {
-    try {
-        showLoading();
-        
-        // Build query parameters matching API expected format
-        const params = new URLSearchParams();
-        
-        // Map frontend filter names to API expected names
-        // API expects: category_slug=mens-wear&occasion_slug=wedding&color=red&size=M&price_range=1000-5000
-        
-        // Colors - API expects single color? Let's use first selected or comma-separated
-        if (currentFilters.colors && currentFilters.colors.length > 0) {
-            // If multiple colors, join with commas or use first one
-            params.append('color', currentFilters.colors.join(','));
-        }
-        
-        // Sizes
-        if (currentFilters.sizes && currentFilters.sizes.length > 0) {
-            params.append('size', currentFilters.sizes.join(','));
-        }
-        
-        // Categories - API expects category_slug
-        if (currentFilters.categories && currentFilters.categories.length > 0) {
-            // Convert category names to slugs (lowercase, replace spaces with hyphens)
-            const categorySlugs = currentFilters.categories.map(cat => 
-                cat.toLowerCase().replace(/\s+/g, '-')
-            );
-            params.append('category_slug', categorySlugs.join(','));
-        }
-        
-        // Occasions - API expects occasion_slug
-        if (currentFilters.occasions && currentFilters.occasions.length > 0) {
-            // If "all" is selected, don't send any occasion parameter
-            if (!currentFilters.occasions.includes('all')) {
-                const occasionSlugs = currentFilters.occasions.map(occ => 
-                    occ.toLowerCase().replace(/\s+/g, '-')
-                );
-                params.append('occasion_slug', occasionSlugs.join(','));
-            }
-        }
-        
-        // Price ranges - API expects price_range like "1000-5000"
-        if (currentFilters.price_ranges && currentFilters.price_ranges.length > 0) {
-            // Use the first selected price range
-            params.append('price_range', currentFilters.price_ranges[0]);
-        }
-        
-        // Add dropdown values
-        if (currentFilters.sort && currentFilters.sort !== 'date-desc') {
-            params.append('sort', currentFilters.sort);
-        }
-        
-        if (currentFilters.filter && currentFilters.filter !== 'new-arrival') {
-            params.append('filter', currentFilters.filter);
-        }
-        
-        // Only add occasion from dropdown if not 'all'
-        if (currentFilters.occasion && currentFilters.occasion !== 'all') {
-            const occasionSlug = currentFilters.occasion.toLowerCase().replace(/\s+/g, '-');
-            params.append('occasion_slug', occasionSlug);
-        }
-        
-        if (currentFilters.collection && currentFilters.collection !== 'all') {
-            params.append('collection', currentFilters.collection);
-        }
+        try {
+            showLoading();
 
-        console.log('Sending filters to API:', params.toString());
-        
-        const response = await fetch(`/api/products/filter?${params.toString()}`);
-        const data = await response.json();
-        
-        console.log('API Response:', data);
-        
-        if (data.success) {
-            updateProductsGrid(data.data);
-            updateSelectedTags();
+            // Build query parameters matching API expected format
+            const params = new URLSearchParams();
+
+            // Map frontend filter names to API expected names
+            // API expects: category_slug=mens-wear&occasion_slug=wedding&color=red&size=M&price_range=1000-5000
+
+            // Colors - API expects single color? Let's use first selected or comma-separated
+            if (currentFilters.colors && currentFilters.colors.length > 0) {
+                // If multiple colors, join with commas or use first one
+                params.append('color', currentFilters.colors.join(','));
+            }
+
+            // Sizes
+            if (currentFilters.sizes && currentFilters.sizes.length > 0) {
+                params.append('size', currentFilters.sizes.join(','));
+            }
+
+            // Categories - API expects category_slug
+            if (currentFilters.categories && currentFilters.categories.length > 0) {
+                // Convert category names to slugs (lowercase, replace spaces with hyphens)
+                const categorySlugs = currentFilters.categories.map(cat =>
+                    cat.toLowerCase().replace(/\s+/g, '-')
+                );
+                params.append('category_slug', categorySlugs.join(','));
+            }
+
+            // Occasions - API expects occasion_slug
+            if (currentFilters.occasions && currentFilters.occasions.length > 0) {
+                // If "all" is selected, don't send any occasion parameter
+                if (!currentFilters.occasions.includes('all')) {
+                    const occasionSlugs = currentFilters.occasions.map(occ =>
+                        occ.toLowerCase().replace(/\s+/g, '-')
+                    );
+                    params.append('occasion_slug', occasionSlugs.join(','));
+                }
+            }
+
+            // Price ranges - API expects price_range like "1000-5000"
+            if (currentFilters.price_ranges && currentFilters.price_ranges.length > 0) {
+                // Use the first selected price range
+                params.append('price_range', currentFilters.price_ranges[0]);
+            }
+
+            // Add dropdown values
+            if (currentFilters.sort && currentFilters.sort !== 'date-desc') {
+                params.append('sort', currentFilters.sort);
+            }
+
+            if (currentFilters.filter && currentFilters.filter !== 'new-arrival') {
+                params.append('filter', currentFilters.filter);
+            }
+
+            // Only add occasion from dropdown if not 'all'
+            if (currentFilters.occasion && currentFilters.occasion !== 'all') {
+                const occasionSlug = currentFilters.occasion.toLowerCase().replace(/\s+/g, '-');
+                params.append('occasion_slug', occasionSlug);
+            }
+
+            if (currentFilters.collection && currentFilters.collection !== 'all') {
+                params.append('collection', currentFilters.collection);
+            }
+
+            console.log('Sending filters to API:', params.toString());
+
+            const response = await fetch(`/api/products/filter?${params.toString()}`);
+            const data = await response.json();
+
+            console.log('API Response:', data);
+
+            if (data.success) {
+                updateProductsGrid(data.data);
+                updateSelectedTags();
+            }
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        } finally {
+            hideLoading();
         }
-    } catch (error) {
-        console.error('Error fetching products:', error);
-    } finally {
-        hideLoading();
     }
-}
 
     function updateProductsGrid(products) {
         if (!productsContainer) return;
@@ -314,35 +314,35 @@ document.addEventListener("DOMContentLoaded", function () {
     // ──────────────────────────────────────────────
     //  Filter Update Functions
     // ──────────────────────────────────────────────
-   function updateFilters() {
-    // Update currentFilters from form inputs
-    const formData = new FormData(filterForm);
-    
-    // Get selected values
-    const selectedCategories = formData.getAll('category[]');
-    const selectedOccasions = formData.getAll('occasions[]');
-    const selectedColors = formData.getAll('colors[]');
-    const selectedSizes = formData.getAll('sizes[]');
-    const selectedPriceRanges = formData.getAll('price_ranges[]');
-    
-    // If "all" is selected with other options, filter it out
-    // Usually "all" should be exclusive
-    const finalOccasions = selectedOccasions.includes('all') 
-        ? [] // Send empty array when "all" is selected
-        : selectedOccasions;
-    
-    currentFilters = {
-        ...currentFilters,
-        categories: selectedCategories,
-        occasions: finalOccasions,
-        colors: selectedColors,
-        sizes: selectedSizes,
-        price_ranges: selectedPriceRanges
-    };
+    function updateFilters() {
+        // Update currentFilters from form inputs
+        const formData = new FormData(filterForm);
 
-    console.log('Updated filters:', currentFilters);
-    fetchFilteredProducts();
-}
+        // Get selected values
+        const selectedCategories = formData.getAll('category[]');
+        const selectedOccasions = formData.getAll('occasions[]');
+        const selectedColors = formData.getAll('colors[]');
+        const selectedSizes = formData.getAll('sizes[]');
+        const selectedPriceRanges = formData.getAll('price_ranges[]');
+
+        // If "all" is selected with other options, filter it out
+        // Usually "all" should be exclusive
+        const finalOccasions = selectedOccasions.includes('all')
+            ? [] // Send empty array when "all" is selected
+            : selectedOccasions;
+
+        currentFilters = {
+            ...currentFilters,
+            categories: selectedCategories,
+            occasions: finalOccasions,
+            colors: selectedColors,
+            sizes: selectedSizes,
+            price_ranges: selectedPriceRanges
+        };
+
+        console.log('Updated filters:', currentFilters);
+        fetchFilteredProducts();
+    }
 
     // Debounced filter update
     let filterTimeout;
@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
         openDropdowns = exceptId ? [exceptId] : [];
     }
 
-   function setupDropdown(dropdownId, menuId, buttonId, chevronId, labelId, optionClass) {
+  function setupDropdown(dropdownId, menuId, buttonId, chevronId, labelId, optionClass) {
     const menu = document.getElementById(menuId);
     const button = document.getElementById(buttonId);
     const chevron = document.getElementById(chevronId);
@@ -395,13 +395,58 @@ document.addEventListener("DOMContentLoaded", function () {
         button.setAttribute('aria-controls', menuId);
     }
 
-    const initialActive = document.querySelector(`.${optionClass}.active`);
-    if (initialActive && label) {
-        label.textContent = initialActive.querySelector("span").textContent.trim();
-        const dataValue = initialActive.dataset.value;
-        const optionType = optionClass.replace('-option', '');
-        currentFilters[optionType] = dataValue;
-    }
+    // Initialize - ensure only one active option has checkmark visible
+    const initializeDropdown = () => {
+        // First, hide all checkmarks
+        options.forEach(opt => {
+            const checkmark = opt.querySelector(".checkmark");
+            if (checkmark) checkmark.classList.add("opacity-0");
+            opt.classList.remove("active");
+        });
+
+        // Find the active option (should be only one)
+        const activeOption = Array.from(options).find(opt => opt.classList.contains("active"));
+        
+        if (activeOption) {
+            // Show checkmark for active option
+            const checkmark = activeOption.querySelector(".checkmark");
+            if (checkmark) checkmark.classList.remove("opacity-0");
+            
+            // Update label
+            if (label) {
+                label.textContent = activeOption.querySelector("span").textContent.trim();
+            }
+            
+            // Update currentFilters
+            const dataValue = activeOption.dataset.value;
+            const optionType = optionClass.replace('-option', '');
+            currentFilters[optionType] = dataValue;
+        } else {
+            // If no active option, set default based on option type
+            const defaultOption = Array.from(options).find(opt => 
+                opt.dataset.value === 'all' || 
+                opt.dataset.value === 'new-arrival' || 
+                opt.dataset.value === 'date-desc'
+            );
+            
+            if (defaultOption) {
+                defaultOption.classList.add("active");
+                const checkmark = defaultOption.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.remove("opacity-0");
+                
+                if (label) {
+                    label.textContent = defaultOption.querySelector("span").textContent.trim();
+                }
+                
+                const dataValue = defaultOption.dataset.value;
+                const optionType = optionClass.replace('-option', '');
+                currentFilters[optionType] = dataValue;
+            }
+        }
+    };
+
+    // Run initialization
+    initializeDropdown();
 
     button.addEventListener("click", e => {
         e.stopPropagation();
@@ -423,24 +468,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     options.forEach(option => {
-        option.addEventListener("click", () => {
-            options.forEach(opt => opt.classList.remove("active"));
-            option.classList.add("active");
-
+        option.addEventListener("click", (e) => {
+            e.stopPropagation();
+            
+            // Get the option type
+            const optionType = optionClass.replace('-option', '');
+            const dataValue = option.dataset.value;
+            
+            // Remove active class and hide checkmark from ALL options in this dropdown
             options.forEach(opt => {
+                opt.classList.remove("active");
                 const checkmark = opt.querySelector(".checkmark");
                 if (checkmark) checkmark.classList.add("opacity-0");
             });
             
-            const checkmark = option.querySelector(".checkmark");
-            if (checkmark) checkmark.classList.remove("opacity-0");
+            // Add active class to selected option
+            option.classList.add("active");
+            
+            // Show checkmark for selected option
+            const selectedCheckmark = option.querySelector(".checkmark");
+            if (selectedCheckmark) selectedCheckmark.classList.remove("opacity-0");
 
+            // Update button label
             if (label) {
                 label.textContent = option.querySelector("span").textContent.trim();
             }
-
-            const dataValue = option.dataset.value;
-            const optionType = optionClass.replace('-option', '');
             
             // If selecting "all", clear checkbox selections for that category
             if (dataValue === 'all') {
@@ -450,17 +502,29 @@ document.addEventListener("DOMContentLoaded", function () {
                         cb.checked = false;
                     });
                     currentFilters.occasions = [];
+                } else if (optionType === 'collection') {
+                    // Handle collection if needed
                 }
             }
             
+            // Update currentFilters
             currentFilters[optionType] = dataValue;
 
-            closeAllDropdowns();
+            // Close this specific dropdown
+            menu.classList.add("hidden");
+            if (chevron) chevron.classList.remove("rotate-180");
+            button.setAttribute("aria-expanded", "false");
+            
+            // Remove from open dropdowns
+            openDropdowns = openDropdowns.filter(id => id !== menuId);
+
+            // Fetch filtered products
             fetchFilteredProducts();
         });
     });
 
-    document.addEventListener("click", e => {
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
         if (!button.contains(e.target) && !menu.contains(e.target)) {
             menu.classList.add("hidden");
             if (chevron) chevron.classList.remove("rotate-180");
@@ -469,7 +533,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document.addEventListener("keydown", e => {
+    // Close dropdown on Escape key
+    document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && !menu.classList.contains("hidden")) {
             menu.classList.add("hidden");
             if (chevron) chevron.classList.remove("rotate-180");
@@ -568,49 +633,49 @@ document.addEventListener("DOMContentLoaded", function () {
     // ──────────────────────────────────────────────
     //  Clear Filters Function
     // ──────────────────────────────────────────────
-    window.clearAllFilters = function() {
-    // Uncheck all checkboxes
-    document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
-    
-    // Reset dropdowns to defaults
-    document.querySelectorAll('.filter-option, .occasion-option, .collection-option, .sort-option').forEach(opt => {
-        opt.classList.remove('active');
-        if (opt.dataset.value === 'all' || opt.dataset.value === 'new-arrival' || opt.dataset.value === 'date-desc') {
-            opt.classList.add('active');
-            const checkmark = opt.querySelector(".checkmark");
-            if (checkmark) checkmark.classList.remove("opacity-0");
-        } else {
-            const checkmark = opt.querySelector(".checkmark");
-            if (checkmark) checkmark.classList.add("opacity-0");
-        }
-    });
+    window.clearAllFilters = function () {
+        // Uncheck all checkboxes
+        document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
 
-    // Reset currentFilters
-    currentFilters = {
-        categories: [],
-        occasions: [], // Empty array instead of ['all']
-        colors: [],
-        sizes: [],
-        price_ranges: [],
-        sort: 'date-desc',
-        filter: 'new-arrival',
-        occasion: 'all',
-        collection: 'all'
+        // Reset dropdowns to defaults
+        document.querySelectorAll('.filter-option, .occasion-option, .collection-option, .sort-option').forEach(opt => {
+            opt.classList.remove('active');
+            if (opt.dataset.value === 'all' || opt.dataset.value === 'new-arrival' || opt.dataset.value === 'date-desc') {
+                opt.classList.add('active');
+                const checkmark = opt.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.remove("opacity-0");
+            } else {
+                const checkmark = opt.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.add("opacity-0");
+            }
+        });
+
+        // Reset currentFilters
+        currentFilters = {
+            categories: [],
+            occasions: [], // Empty array instead of ['all']
+            colors: [],
+            sizes: [],
+            price_ranges: [],
+            sort: 'date-desc',
+            filter: 'new-arrival',
+            occasion: 'all',
+            collection: 'all'
+        };
+
+        // Update labels
+        const filterLabel = document.getElementById('filter-label');
+        const occasionLabel = document.getElementById('occasion-label');
+        const collectionLabel = document.getElementById('collection-label');
+        const sortLabel = document.getElementById('sort-label');
+
+        if (filterLabel) filterLabel.textContent = 'Filter';
+        if (occasionLabel) occasionLabel.textContent = 'Occasion';
+        if (collectionLabel) collectionLabel.textContent = 'Collection';
+        if (sortLabel) sortLabel.textContent = 'Sort by';
+
+        fetchFilteredProducts();
     };
-
-    // Update labels
-    const filterLabel = document.getElementById('filter-label');
-    const occasionLabel = document.getElementById('occasion-label');
-    const collectionLabel = document.getElementById('collection-label');
-    const sortLabel = document.getElementById('sort-label');
-    
-    if (filterLabel) filterLabel.textContent = 'Filter';
-    if (occasionLabel) occasionLabel.textContent = 'Occasion';
-    if (collectionLabel) collectionLabel.textContent = 'Collection';
-    if (sortLabel) sortLabel.textContent = 'Sort by';
-
-    fetchFilteredProducts();
-};
 
     window.removeFilter = function (key, value) {
         // Find and uncheck the corresponding checkbox
