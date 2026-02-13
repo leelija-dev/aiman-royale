@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
@@ -328,8 +329,9 @@ class HomeController extends Controller
             ->firstOrFail();
         $sizes=Size::OrderBy('sort_order')->get();
         // print_r($product->category);die;
-        $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->with('variants','images')->get();
-        //  print_r($relatedProducts->first()->variants);die;
+        $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->whereHas('variants')->with(['variants','images'])->get();
+    //    dd($relatedProducts);
+       // print_r($relatedProducts->first()->variants);die;
         // dd($product);
         return view('web.single-product', compact('product','sizes','relatedProducts'));
     }

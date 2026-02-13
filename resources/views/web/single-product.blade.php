@@ -424,15 +424,8 @@
     </div>
 
     <div class="main-owl owl-carousel owl-theme">
-     @php 
-    //  print_r($relatedProducts->count());die;
-     @endphp
       @if(isset($relatedProducts))
-      
       @forelse($relatedProducts as $relatedProduct)
-      @php 
-      // echo "images",$relatedProduct->images->first()->image; die;
-      @endphp
       @php
           $variant = $relatedProduct->variants->first();
       @endphp
