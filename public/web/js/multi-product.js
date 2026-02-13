@@ -1,20 +1,44 @@
-// ============================================================================
-// MULTI-PRODUCT PAGE – FILTERS, SORT, SIDEBAR, ACCORDION
-// ============================================================================
-
 document.addEventListener("DOMContentLoaded", function () {
-    // ──────────────────────────────────────────────
-    //  Mobile Filter Sidebar Controls
-    // ──────────────────────────────────────────────
+    // DOM Elements
     const filterButton = document.querySelector("#open-filter");
     const sidebar = document.getElementById("filter-sidebar");
     const overlay = document.getElementById("filter-overlay");
-    const clearButton = document.querySelector(".text-blue-600.hover\\:underline"); // "Clear all"
+    const clearAllButton = document.getElementById("clear-all-filters");
+    const productsContainer = document.getElementById("products-container");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const filterForm = document.getElementById("filter-form");
 
+    // Current filters state
+    let currentFilters = {
+        categories: [],
+        occasions: [],
+        colors: [],
+        sizes: [],
+        price_ranges: [],
+        sort: 'date-desc',
+        filter: 'new-arrival',
+        occasion: 'all',
+        collection: 'all'
+    };
+
+    // ──────────────────────────────────────────────
+    //  Utility Functions
+    // ──────────────────────────────────────────────
     function isMobile() {
         return window.innerWidth < 991;
     }
 
+    function showLoading() {
+        if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        if (loadingSpinner) loadingSpinner.classList.add('hidden');
+    }
+
+    // ──────────────────────────────────────────────
+    //  Mobile Sidebar Functions
+    // ──────────────────────────────────────────────
     function openSidebar() {
         if (!isMobile()) return;
         sidebar.classList.remove("translate-x-[-150%]");
@@ -34,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (filterButton) filterButton.addEventListener("click", openSidebar);
     if (overlay) overlay.addEventListener("click", closeSidebar);
 
-    // Resize handling for sidebar behavior
+    // Resize handling
     window.addEventListener("resize", () => {
         if (isMobile()) {
             sidebar.classList.add("fixed", "translate-x-[-150%]");
@@ -48,91 +72,287 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // ──────────────────────────────────────────────
-    //  Helper: Parse current URL query params (supports arrays)
+    //  API Functions
     // ──────────────────────────────────────────────
-    function getCurrentQueryParams() {
-        const params = {};
-        const search = window.location.search.substring(1);
-        if (!search) return params;
-
-        search.split('&').forEach(pair => {
-            const [key, val] = pair.split('=');
-            if (!key) return;
-            const decodedKey = decodeURIComponent(key);
-            const decodedValue = decodeURIComponent(val || '');
-
-            if (decodedKey.endsWith('[]')) {
-                const cleanKey = decodedKey.replace('[]', '');
-                if (!params[cleanKey]) params[cleanKey] = [];
-                params[cleanKey].push(decodedValue);
-            } else {
-                params[decodedKey] = decodedValue;
+   async function fetchFilteredProducts() {
+    try {
+        showLoading();
+        
+        // Build query parameters matching API expected format
+        const params = new URLSearchParams();
+        
+        // Map frontend filter names to API expected names
+        // API expects: color=RED&size=XL (singular, not array format)
+        
+        // Colors - API expects comma-separated or multiple params? Let's use multiple params
+        if (currentFilters.colors && currentFilters.colors.length > 0) {
+            currentFilters.colors.forEach(color => params.append('color', color));
+        }
+        
+        // Sizes
+        if (currentFilters.sizes && currentFilters.sizes.length > 0) {
+            currentFilters.sizes.forEach(size => params.append('size', size));
+        }
+        
+        // Categories
+        if (currentFilters.categories && currentFilters.categories.length > 0) {
+            currentFilters.categories.forEach(cat => params.append('category', cat));
+        }
+        
+        // Occasions
+        if (currentFilters.occasions && currentFilters.occasions.length > 0) {
+            // If "all" is selected, don't send any occasion parameter
+            if (!currentFilters.occasions.includes('all')) {
+                currentFilters.occasions.forEach(occ => params.append('occasion', occ));
             }
-        });
-        return params;
-    }
-
-    // ──────────────────────────────────────────────
-    //  Build URL that combines current filters + sort + page
-    // ──────────────────────────────────────────────
-    function buildFilterURL() {
-        const currentParams = getCurrentQueryParams();
-        const form = document.getElementById("filter-form");
-        const sortOption = document.querySelector('.sort-option.active');
-        const filterOption = document.querySelector('.filter-option.active');
-        const occasionOption = document.querySelector('.occasion-option.active');
-        const collectionOption = document.querySelector('.collection-option.active');
-
-        const sortValue = sortOption?.dataset.value || currentParams.sort || '';
-        const filterValue = filterOption?.dataset.value || currentParams.filter || '';
-        const occasionValue = occasionOption?.dataset.value || currentParams.occasion || '';
-        const collectionValue = collectionOption?.dataset.value || currentParams.collection || '';
-
-        const finalParams = new URLSearchParams();
-
-        // 1. Add all checked filters from form
-        if (form) {
-            const formData = new FormData(form);
-            for (let [key, value] of formData.entries()) {
-                if (value) {
-                    finalParams.append(key, value);
+        }
+        
+        // Price ranges - convert to min/max if needed
+        if (currentFilters.price_ranges && currentFilters.price_ranges.length > 0) {
+            currentFilters.price_ranges.forEach(range => {
+                const [min, max] = range.split('-');
+                if (min && max) {
+                    params.append('min_price', min);
+                    params.append('max_price', max);
                 }
+            });
+        }
+        
+        // Add dropdown values (these are likely working)
+        if (currentFilters.sort && currentFilters.sort !== 'date-desc') {
+            params.append('sort', currentFilters.sort);
+        }
+        
+        if (currentFilters.filter && currentFilters.filter !== 'new-arrival') {
+            params.append('filter', currentFilters.filter);
+        }
+        
+        // Only add occasion from dropdown if not 'all'
+        if (currentFilters.occasion && currentFilters.occasion !== 'all') {
+            params.append('occasion', currentFilters.occasion);
+        }
+        
+        if (currentFilters.collection && currentFilters.collection !== 'all') {
+            params.append('collection', currentFilters.collection);
+        }
+
+        console.log('Sending filters to API:', params.toString());
+        
+        const response = await fetch(`/api/products/filter?${params.toString()}`);
+        const data = await response.json();
+        
+        console.log('API Response:', data);
+        
+        if (data.success) {
+            updateProductsGrid(data.data);
+            updateSelectedTags();
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    } finally {
+        hideLoading();
+    }
+}
+
+    function updateProductsGrid(products) {
+    if (!productsContainer) return;
+
+    if (!products || products.length === 0) {
+        productsContainer.innerHTML = `
+            <div class="col-span-full flex flex-col items-center justify-center py-16">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">No product found</h3>
+                    <p class="text-gray-600 mb-6">We couldn't find any products matching your criteria.</p>
+                    <button onclick="clearAllFilters()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    products.forEach(product => {
+        // Handle image URL
+        let imageUrl = '/assets/images/placeholder.jpg';
+        
+        if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+            const firstImage = product.images[0];
+            if (firstImage && typeof firstImage === 'object') {
+                imageUrl = firstImage.image || imageUrl;
+            } else if (typeof firstImage === 'string') {
+                imageUrl = firstImage;
+            }
+        } else if (product.image) {
+            imageUrl = product.image;
+        }
+
+        // Add leading slash if needed
+        if (imageUrl && !imageUrl.startsWith('/') && !imageUrl.startsWith('http')) {
+            imageUrl = '/' + imageUrl;
+        }
+
+        // Handle price
+        let displayPrice = product.discount_price || product.price || 0;
+        let originalPrice = product.price || 0;
+        
+        // Check variants
+        if (product.variants && Array.isArray(product.variants) && product.variants.length > 0) {
+            const firstVariant = product.variants[0];
+            if (firstVariant) {
+                displayPrice = firstVariant.discount_price || firstVariant.price || displayPrice;
+                originalPrice = firstVariant.price || originalPrice;
             }
         }
 
-        // 2. Add dropdown values
-        if (sortValue) finalParams.set('sort', sortValue);
-        if (filterValue) finalParams.set('filter', filterValue);
-        if (occasionValue) finalParams.set('occasion', occasionValue);
-        if (collectionValue) finalParams.set('collection', collectionValue);
+        // Calculate discount
+        const discountPercentage = displayPrice < originalPrice && originalPrice > 0
+            ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100)
+            : 0;
 
-        // 3. Preserve page (if you add pagination later)
-        if (currentParams.page) {
-            finalParams.set('page', currentParams.page);
-        }
-
-        const query = finalParams.toString();
-        return query ? `${window.location.pathname}?${query}` : window.location.pathname;
-    }
-
-    // ──────────────────────────────────────────────
-    //  Apply filters → page reload with correct params
-    // ──────────────────────────────────────────────
-    function applyFilters() {
-        window.location.href = buildFilterURL();
-    }
-
-    // Debounced filter apply
-    let filterTimeout;
-    document.addEventListener('change', e => {
-        if (e.target.classList.contains('filter-checkbox')) {
-            clearTimeout(filterTimeout);
-            filterTimeout = setTimeout(applyFilters, 220);
-        }
+        html += `
+            <div class="item flex justify-center items-center">
+                <a href="/products/${product.slug}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
+                    <div class="relative rounded-xl overflow-hidden">
+                        <img src="${imageUrl}" 
+                             alt="${product.name || 'Product'}" 
+                             class="w-full h-[340px] object-cover object-top object-center"
+                             onerror="this.src='/assets/images/placeholder.jpg'" />
+                        
+                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            ${product.is_featured ? `
+                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Featured</span>
+                            ` : ''}
+                            ${discountPercentage > 0 ? `
+                                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">-${discountPercentage}%</span>
+                            ` : ''}
+                        </div>
+                        
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="p-4 space-y-1">
+                        <h3 class="text-[15px] font-semibold text-gray-900">${product.name || ''}</h3>
+                        
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <span>${product.brand || 'Brand Name'}</span>
+                            <span class="flex items-center gap-1 text-gray-700">
+                                <span class="text-sm font-medium">4.4</span>
+                            </span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 mt-2 flex-wrap">
+                            <span class="text-lg font-bold text-gray-900">Rs. ${parseFloat(displayPrice).toFixed(2)}</span>
+                            ${displayPrice < originalPrice ? `
+                                <span class="text-sm text-gray-400 line-through">Rs. ${parseFloat(originalPrice).toFixed(2)}</span>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="lgg:hidden block">
+                            <button class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        `;
     });
 
+    productsContainer.innerHTML = html;
+}
+
+    function updateSelectedTags() {
+        const container = document.getElementById('selected-tags-container');
+        if (!container) return;
+
+        let tags = [];
+        
+        // Collect all selected values
+        Object.entries(currentFilters).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0) {
+                value.forEach(v => {
+                    let displayKey = key;
+                    if (key === 'price_ranges') displayKey = 'price';
+                    else if (key.endsWith('s')) displayKey = key.slice(0, -1);
+                    
+                    tags.push({
+                        type: displayKey,
+                        value: v,
+                        key: key
+                    });
+                });
+            }
+        });
+
+        // Generate HTML for tags
+        let tagsHtml = '';
+        tags.forEach(tag => {
+            tagsHtml += `
+                <span class="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 rounded-full">
+                    ${tag.type}: ${tag.value}
+                    <span class="cursor-pointer text-gray-500 hover:text-gray-700" onclick="removeFilter('${tag.key}', '${tag.value}')">×</span>
+                </span>
+            `;
+        });
+
+        container.innerHTML = tagsHtml;
+    }
+
     // ──────────────────────────────────────────────
-    //  Track all open dropdowns
+    //  Filter Update Functions
+    // ──────────────────────────────────────────────
+   function updateFilters() {
+    // Update currentFilters from form inputs
+    const formData = new FormData(filterForm);
+    
+    // Get selected values
+    const selectedCategories = formData.getAll('category[]');
+    const selectedOccasions = formData.getAll('occasions[]');
+    const selectedColors = formData.getAll('colors[]');
+    const selectedSizes = formData.getAll('sizes[]');
+    const selectedPriceRanges = formData.getAll('price_ranges[]');
+    
+    // If "all" is selected with other options, filter it out
+    // Usually "all" should be exclusive
+    const finalOccasions = selectedOccasions.includes('all') 
+        ? ['all'] 
+        : selectedOccasions;
+    
+    currentFilters = {
+        ...currentFilters,
+        categories: selectedCategories,
+        occasions: finalOccasions,
+        colors: selectedColors,
+        sizes: selectedSizes,
+        price_ranges: selectedPriceRanges
+    };
+
+    console.log('Updated filters:', currentFilters);
+    fetchFilteredProducts();
+}
+
+    // Debounced filter update
+    let filterTimeout;
+    if (filterForm) {
+        filterForm.addEventListener('change', e => {
+            if (e.target.classList.contains('filter-checkbox')) {
+                clearTimeout(filterTimeout);
+                filterTimeout = setTimeout(updateFilters, 300);
+            }
+        });
+    }
+
+    // ──────────────────────────────────────────────
+    //  Dropdown Management
     // ──────────────────────────────────────────────
     let openDropdowns = [];
 
@@ -140,8 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
         openDropdowns.forEach(dropdownId => {
             if (dropdownId !== exceptId) {
                 const menu = document.getElementById(dropdownId);
-                const button = document.querySelector(`[aria-controls="${dropdownId}"]`) || 
-                               document.querySelector(`[aria-labelledby="${dropdownId}"]`)?.previousElementSibling;
+                const button = document.querySelector(`[aria-controls="${dropdownId}"]`);
                 const chevron = button?.querySelector('.transition-transform');
                 
                 if (menu) {
@@ -156,150 +375,109 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         
-        // Update openDropdowns array
-        if (exceptId) {
-            openDropdowns = [exceptId];
-        } else {
-            openDropdowns = [];
-        }
+        openDropdowns = exceptId ? [exceptId] : [];
     }
 
-    // ──────────────────────────────────────────────
-    //  Generic Dropdown Handler Function
-    // ──────────────────────────────────────────────
     function setupDropdown(dropdownId, menuId, buttonId, chevronId, labelId, optionClass) {
-        const dropdown = document.getElementById(dropdownId);
         const menu = document.getElementById(menuId);
         const button = document.getElementById(buttonId);
         const chevron = document.getElementById(chevronId);
         const label = document.getElementById(labelId);
         const options = document.querySelectorAll(`.${optionClass}`);
 
-        // Set aria-controls for button to track dropdown
+        if (!menu || !button) return;
+
         if (button && menuId) {
             button.setAttribute('aria-controls', menuId);
         }
 
-        // Set initial label from active option
         const initialActive = document.querySelector(`.${optionClass}.active`);
         if (initialActive && label) {
             label.textContent = initialActive.querySelector("span").textContent.trim();
+            const dataValue = initialActive.dataset.value;
+            const optionType = optionClass.replace('-option', '');
+            currentFilters[optionType] = dataValue;
         }
 
-        // Toggle dropdown
-        if (button) {
-            button.addEventListener("click", e => {
-                e.stopPropagation();
-                const isCurrentlyOpen = !menu.classList.contains("hidden");
-                
-                // Close all other dropdowns first
-                if (!isCurrentlyOpen) {
-                    closeAllDropdowns(menuId);
-                }
-                
-                // Toggle this dropdown
-                const willBeOpen = menu.classList.toggle("hidden");
-                if (chevron) chevron.classList.toggle("rotate-180", !willBeOpen);
-                button.setAttribute("aria-expanded", !willBeOpen);
-                
-                // Update tracking
-                if (!willBeOpen) {
-                    // Adding to open dropdowns
-                    if (!openDropdowns.includes(menuId)) {
-                        openDropdowns.push(menuId);
-                    }
-                } else {
-                    // Removing from open dropdowns
-                    openDropdowns = openDropdowns.filter(id => id !== menuId);
-                }
-            });
-        }
-
-        // Click on option
-        options.forEach(option => {
-            option.addEventListener("click", () => {
-                // Update active state
-                options.forEach(opt => opt.classList.remove("active"));
-                option.classList.add("active");
-
-                // Update checkmarks
-                option.parentElement.querySelectorAll(".checkmark").forEach(m => m.classList.add("opacity-0"));
-                option.querySelector(".checkmark").classList.remove("opacity-0");
-
-                // Update button label
-                if (label) {
-                    label.textContent = option.querySelector("span").textContent.trim();
-                }
-
-                // Close all dropdowns including this one
-                closeAllDropdowns();
-
-                // Apply filter
-                applyFilters();
-            });
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", e => {
-            if (!button?.contains(e.target) && !menu?.contains(e.target)) {
-                menu.classList.add("hidden");
-                if (chevron) chevron.classList.remove("rotate-180");
-                button?.setAttribute("aria-expanded", "false");
-                
-                // Remove from open dropdowns
+        button.addEventListener("click", e => {
+            e.stopPropagation();
+            const isCurrentlyOpen = !menu.classList.contains("hidden");
+            
+            if (!isCurrentlyOpen) {
+                closeAllDropdowns(menuId);
+            }
+            
+            const willBeOpen = menu.classList.toggle("hidden");
+            if (chevron) chevron.classList.toggle("rotate-180", !willBeOpen);
+            button.setAttribute("aria-expanded", !willBeOpen);
+            
+            if (!willBeOpen && !openDropdowns.includes(menuId)) {
+                openDropdowns.push(menuId);
+            } else {
                 openDropdowns = openDropdowns.filter(id => id !== menuId);
             }
         });
 
-        // ESC key → close dropdown
+        options.forEach(option => {
+            option.addEventListener("click", () => {
+                options.forEach(opt => opt.classList.remove("active"));
+                option.classList.add("active");
+
+                options.forEach(opt => {
+                    const checkmark = opt.querySelector(".checkmark");
+                    if (checkmark) checkmark.classList.add("opacity-0");
+                });
+                
+                const checkmark = option.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.remove("opacity-0");
+
+                if (label) {
+                    label.textContent = option.querySelector("span").textContent.trim();
+                }
+
+                const dataValue = option.dataset.value;
+                const optionType = optionClass.replace('-option', '');
+                currentFilters[optionType] = dataValue;
+
+                closeAllDropdowns();
+                fetchFilteredProducts();
+            });
+        });
+
+        document.addEventListener("click", e => {
+            if (!button.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-180");
+                button.setAttribute("aria-expanded", "false");
+                openDropdowns = openDropdowns.filter(id => id !== menuId);
+            }
+        });
+
         document.addEventListener("keydown", e => {
             if (e.key === "Escape" && !menu.classList.contains("hidden")) {
                 menu.classList.add("hidden");
                 if (chevron) chevron.classList.remove("rotate-180");
-                button?.setAttribute("aria-expanded", "false");
-                button?.focus();
-                
-                // Remove from open dropdowns
+                button.setAttribute("aria-expanded", "false");
+                button.focus();
                 openDropdowns = openDropdowns.filter(id => id !== menuId);
             }
         });
     }
 
-    // ──────────────────────────────────────────────
-    //  Initialize all dropdowns
-    // ──────────────────────────────────────────────
+    // Initialize dropdowns
     setupDropdown('filter-dropdown-button', 'filter-menu', 'filter-dropdown-button', 'filter-chevron', 'filter-label', 'filter-option');
     setupDropdown('occasion-dropdown-button', 'occasion-menu', 'occasion-dropdown-button', 'occasion-chevron', 'occasion-label', 'occasion-option');
     setupDropdown('collection-dropdown-button', 'collection-menu', 'collection-dropdown-button', 'collection-chevron', 'collection-label', 'collection-option');
     setupDropdown('sort-button', 'sort-menu', 'sort-button', 'chevron-icon', 'sort-label', 'sort-option');
 
     // ──────────────────────────────────────────────
-    //  Close all dropdowns when clicking anywhere outside
-    // ──────────────────────────────────────────────
-    document.addEventListener('click', function(e) {
-        // Check if click is outside any dropdown button or menu
-        const isClickInsideDropdown = 
-            e.target.closest('#filter-dropdown-button') ||
-            e.target.closest('#filter-menu') ||
-            e.target.closest('#occasion-dropdown-button') ||
-            e.target.closest('#occasion-menu') ||
-            e.target.closest('#collection-dropdown-button') ||
-            e.target.closest('#collection-menu') ||
-            e.target.closest('#sort-button') ||
-            e.target.closest('#sort-menu');
-        
-        if (!isClickInsideDropdown) {
-            closeAllDropdowns();
-        }
-    });
-
-    // ──────────────────────────────────────────────
-    //  Accordion (your original logic – slightly cleaned)
+    //  Accordion Functionality
     // ──────────────────────────────────────────────
     setTimeout(() => {
         const accordions = document.querySelectorAll(".accordion-wrapper");
 
         function toggleContent(content, open) {
+            if (!content) return;
             if (open) {
                 const height = content.scrollHeight + 32;
                 content.style.maxHeight = height + "px";
@@ -318,11 +496,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const chevron = wrapper.querySelector(".accordion-chevron");
             const border = wrapper.querySelector(".line-border-block");
 
+            if (!header || !content || !chevron || !border) return;
+
             content.style.transition = "max-height 0.4s ease, padding-top 0.3s ease, padding-bottom 0.3s ease";
             content.style.overflow = "hidden";
             border.style.transition = "width 0.3s ease-in-out";
 
-            // First accordion open by default
             if (index === 0) {
                 wrapper.classList.add("active");
                 content.style.opacity = "1";
@@ -338,29 +517,28 @@ document.addEventListener("DOMContentLoaded", function () {
             header.addEventListener("click", () => {
                 const isActive = wrapper.classList.contains("active");
 
-                // Close others (accordion group behavior)
                 accordions.forEach(other => {
                     if (other !== wrapper && other.classList.contains("active")) {
                         const otherContent = other.querySelector(".accordion-content-block");
                         const otherChevron = other.querySelector(".accordion-chevron");
                         const otherBorder = other.querySelector(".line-border-block");
-                        other.classList.remove("active");
-                        toggleContent(otherContent, false);
-                        otherContent.style.opacity = "0";
-                        otherBorder.style.width = "0";
-                        otherChevron.style.transform = "rotate(90deg)";
+                        if (otherContent && otherChevron && otherBorder) {
+                            other.classList.remove("active");
+                            toggleContent(otherContent, false);
+                            otherContent.style.opacity = "0";
+                            otherBorder.style.width = "0";
+                            otherChevron.style.transform = "rotate(90deg)";
+                        }
                     }
                 });
 
                 if (isActive) {
-                    // Close this one
                     wrapper.classList.remove("active");
                     toggleContent(content, false);
                     content.style.opacity = "0";
                     border.style.width = "0";
                     chevron.style.transform = "rotate(90deg)";
                 } else {
-                    // Open this one
                     wrapper.classList.add("active");
                     content.style.opacity = "1";
                     border.style.width = "100%";
@@ -369,30 +547,76 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
-    }, 300); // small delay to make sure DOM is ready
+    }, 300);
 
-    // Optional: Clear all filters button
-    if (clearButton) {
-        clearButton.addEventListener("click", e => {
-            e.preventDefault();
-            document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
-            window.location.href = window.location.pathname;
-        });
-    }
-
-    // Clear filters function for "No Products Found" section
-    window.clearFilters = function () {
+    // ──────────────────────────────────────────────
+    //  Clear Filters Function
+    // ──────────────────────────────────────────────
+    window.clearAllFilters = function() {
+        // Uncheck all checkboxes
         document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
-        // Also reset dropdowns to "All"
+        
+        // Reset dropdowns to defaults
         document.querySelectorAll('.filter-option, .occasion-option, .collection-option, .sort-option').forEach(opt => {
             opt.classList.remove('active');
             if (opt.dataset.value === 'all' || opt.dataset.value === 'new-arrival' || opt.dataset.value === 'date-desc') {
                 opt.classList.add('active');
-                opt.querySelector(".checkmark")?.classList.remove("opacity-0");
+                const checkmark = opt.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.remove("opacity-0");
             } else {
-                opt.querySelector(".checkmark")?.classList.add("opacity-0");
+                const checkmark = opt.querySelector(".checkmark");
+                if (checkmark) checkmark.classList.add("opacity-0");
             }
         });
-        window.location.href = window.location.pathname;
+
+        // Reset currentFilters
+        currentFilters = {
+            categories: [],
+            occasions: [],
+            colors: [],
+            sizes: [],
+            price_ranges: [],
+            sort: 'date-desc',
+            filter: 'new-arrival',
+            occasion: 'all',
+            collection: 'all'
+        };
+
+        // Update labels
+        const filterLabel = document.getElementById('filter-label');
+        const occasionLabel = document.getElementById('occasion-label');
+        const collectionLabel = document.getElementById('collection-label');
+        const sortLabel = document.getElementById('sort-label');
+        
+        if (filterLabel) filterLabel.textContent = 'Filter';
+        if (occasionLabel) occasionLabel.textContent = 'Occasion';
+        if (collectionLabel) collectionLabel.textContent = 'Collection';
+        if (sortLabel) sortLabel.textContent = 'Sort by';
+
+        fetchFilteredProducts();
     };
+
+    window.removeFilter = function(key, value) {
+        // Find and uncheck the corresponding checkbox
+        document.querySelectorAll(`input[name="${key}[]"]`).forEach(cb => {
+            if (cb.value === value) {
+                cb.checked = false;
+            }
+        });
+
+        updateFilters();
+    };
+
+    if (clearAllButton) {
+        clearAllButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            clearAllFilters();
+        });
+    }
+
+    // Make functions globally available
+    window.clearFilters = clearAllFilters;
+
+    // Initial fetch to ensure filters are applied
+    fetchFilteredProducts();
 });
