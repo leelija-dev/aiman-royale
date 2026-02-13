@@ -1333,7 +1333,7 @@
         </div>
 
         <!-- CTA Section -->
-        <div class="mt-24 text-center">
+        <!-- <div class="mt-24 text-center">
             <div class="max-w-4xl mx-auto bg-gradient-to-br from-pink-50 to-purple-50 rounded-3xl p-10 md:p-12 shadow-lg">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-purple-800">Ready to Begin Your Design Journey?</h3>
                 <p class="text-xl mb-10 text-purple-700">
@@ -1350,7 +1350,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -1606,7 +1606,7 @@
         </div>
 
         <!-- CTA Section -->
-        <div class="text-center mt-16 fade-in">
+        <!-- <div class="text-center mt-16 fade-in">
             <p class="text-lg md:text-xl text-gray-600 mb-10">
                 See something you love? Each design can be adapted to your personal style and measurements.
             </p>
@@ -1620,7 +1620,7 @@
                     View Full Portfolio
                 </a>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -1777,7 +1777,7 @@
         </div>
 
         <!-- Testimonial -->
-        <div class="mt-20 max-w-3xl mx-auto fade-in">
+        <!-- <div class="mt-20 max-w-3xl mx-auto fade-in">
             <div class="bg-white rounded-2xl p-8 md:p-10 shadow-lg border border-pink-100">
                 <div class="flex items-center mb-6">
                     <div class="w-16 h-16 rounded-full overflow-hidden mr-6 border-4 border-pink-100">
@@ -1799,10 +1799,10 @@
                     "Working with Boutique Couture was a dream. My custom wedding gown fit perfectly without a single alteration. The attention to detail and personal designer support made me feel like a true collaborator in creating my dream dress. The quality is unmatched!"
                 </p>
             </div>
-        </div>
+        </div> -->
 
         <!-- CTA Section -->
-        <div class="text-center mt-16 fade-in">
+        <!-- <div class="text-center mt-16 fade-in">
             <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200 pulse">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready to Experience Custom Design?</h3>
                 <p class="text-xl mb-10 text-gray-600">
@@ -1819,7 +1819,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -1923,7 +1923,7 @@
         </div>
 
         <!-- Bottom CTA -->
-        <div class="mt-20 text-center fade-in">
+        <!-- <div class="mt-20 text-center fade-in">
             <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
                 <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Experience True Craftsmanship</h3>
                 <p class="text-xl mb-10 text-gray-600">
@@ -1940,7 +1940,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -2141,25 +2141,7 @@
             </div>
         </div>
 
-        <!-- CTA Section -->
-        <div class="text-center mt-16 fade-in">
-            <div class="max-w-4xl mx-auto bg-gradient-to-br from-white to-pink-50 rounded-3xl p-10 md:p-12 shadow-lg border border-pink-200">
-                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready for Your Custom Experience?</h3>
-                <p class="text-xl mb-10 text-gray-600">
-                    Join our community of satisfied clients and create a piece that's uniquely yours.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <a href="#custom-form" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                        <i class="fas fa-pen-fancy mr-3"></i>
-                        Start Your Design Journey
-                    </a>
-                    <a href="#" class="bg-white text-purple-600 border-2 border-purple-200 font-medium py-4 px-10 rounded-full text-lg shadow-md hover:shadow-lg transition-all duration-300">
-                        <i class="fas fa-comments mr-3"></i>
-                        Read More Stories
-                    </a>
-                </div>
-            </div>
-        </div>
+     
     </div>
 </section>
 
