@@ -125,55 +125,55 @@ class CartController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'count' => 'required|integer|min:1',
-            ]);
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'count' => 'required|integer|min:1',
+    //         ]);
 
-            $userId = Auth::id();
-            $sessionId = $userId ? null : session()->getId();
+    //         $userId = Auth::id();
+    //         $sessionId = $userId ? null : session()->getId();
 
-            $cartItem = Cart::where('id', $id)
-                ->where(function ($query) use ($userId, $sessionId) {
-                    if ($userId) {
-                        $query->where('user_id', $userId);
-                    } else {
-                        $query->where('session_id', $sessionId);
-                    }
-                })
-                ->first();
+    //         $cartItem = Cart::where('id', $id)
+    //             ->where(function ($query) use ($userId, $sessionId) {
+    //                 if ($userId) {
+    //                     $query->where('user_id', $userId);
+    //                 } else {
+    //                     $query->where('session_id', $sessionId);
+    //                 }
+    //             })
+    //             ->first();
 
-            if (!$cartItem) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Cart item not found'
-                ]);
-            }
+    //         if (!$cartItem) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Cart item not found'
+    //             ]);
+    //         }
 
-            // Check stock
-            $variant = $cartItem->variant;
-            if ($variant && $variant->stock < $request->count) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Not enough stock available. Only ' . $variant->stock . ' items left.'
-                ]);
-            }
+    //         // Check stock
+    //         $variant = $cartItem->variant;
+    //         if ($variant && $variant->stock < $request->count) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Not enough stock available. Only ' . $variant->stock . ' items left.'
+    //             ]);
+    //         }
 
-            $cartItem->update(['count' => $request->count]);
+    //         $cartItem->update(['count' => $request->count]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart updated successfully!'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Cart updated successfully!'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Error: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
 
     public function destroy($id)
     {
@@ -247,4 +247,26 @@ class CartController extends Controller
             'quantity' => $cartItem ? $cartItem->count : 0
         ]);
     }
+    public function update(Request $request)
+{
+    $data=$request->validate([
+        'cart_id' => 'required|array',
+        'cart_id.*' => 'integer|exists:carts,id',
+        'quantity' => 'required|array',
+        'quantity.*' => 'integer|min:1',
+    ]);
+    // dd($data);
+    foreach ($request->cart_id as $index => $cartId) {
+
+        $cart = Cart::findorFail($cartId);
+
+        if ($cart) {
+            $cart->count = $request->quantity[$index];
+            $cart->save();
+        }
+    }
+
+    return redirect()->route('checkout.index');
+}
+
 }
