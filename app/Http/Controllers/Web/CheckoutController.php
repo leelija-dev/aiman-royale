@@ -53,6 +53,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
+        
 
         $request->validate([
             'firstName' => 'required|string|max:255',
@@ -72,7 +73,7 @@ class CheckoutController extends Controller
         if (!$checkItsAddress) {
             DB::table('addresses')->insert([
                 'user_id' => $user_id,
-                'full_name' => $request->firstName . $request->lastName,
+                'full_name' => $request->firstName . " " . $request->lastName,
                 'phone' => $request->phone,
                 'address_1' => $request->address1,
                 'address_2' => $request->address2 ?? '',
