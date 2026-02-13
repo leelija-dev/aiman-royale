@@ -34,7 +34,7 @@ class HomeController extends Controller
         // ->get();
 
         $products = DB::table('products')
-            ->leftJoin('product_variants', function($join) {
+            ->Join('product_variants', function($join) {
                 $join->on('products.id', '=', 'product_variants.product_id')
                      ->where('product_variants.stock', '>', 0)
                      ->whereRaw('product_variants.id = (

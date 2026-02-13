@@ -135,13 +135,13 @@
                                 Save your favorite items for later
                             </p>
                         </div>
-                        <div class="mt-4 sm:mt-0 flex gap-3">
+                        {{-- <div class="mt-4 sm:mt-0 flex gap-3">
                             <button
                                 class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium flex items-center gap-2">
                                 <i class="fas fa-sliders-h"></i>
                                 Filter
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -222,31 +222,55 @@
                         </div>
                     </div>
                     @else
+                    
                     @foreach($wishlistItems as $wishlist)
-
+                        
+                    @php
+                    // dd($wishlist->id);
+                        $product = $wishlist->product;
+                        $image=$wishlist->product->images;
+                        // dd($images->image);
+                        $variant = $product->variants->first(); // get first variant
+                    @endphp
                     <div
                         class="wishlist-item product-card bg-white rounded-2xl shadow-sm overflow-hidden">
                         <div class="relative">
+                            
+                            <a href="{{ route('page.single-product', $product->slug) }}">
                             <div
-                                class="h-64 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                                <div class="text-center">
-                                    <i
-                                        class="fas fa-tshirt text-6xl fashion-gradient-text mb-4"></i>
-                                    <p class="text-gray-700 font-medium">
+                                class="h-full w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center" >
+                                <div class="text-center" >
+                                    {{-- <i --}}
+                                        {{-- class="fas fa-tshirt text-6xl fashion-gradient-text "></i> --}}
+                                    {{-- <p class="text-gray-700 font-medium">
                                         Premium Cotton T-Shirt
-                                    </p>
+                                    </p> --}}
+
+                                    <img 
+                                        src="{{ asset($image->first()->image) }}" 
+                                        alt="{{ $product->name }}"
+                                        class="h-full w-full object-cover"
+                                         
+                                    >
                                 </div>
                             </div>
+                            </a>
                             <div class="absolute top-4 right-4">
                                 <button
+                                    onclick="removeWishlist({{$wishlist->product_id }})"
                                     class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-red-500 hover:bg-red-50 transition">
                                     <i class="fas fa-heart"></i>
                                 </button>
+
                             </div>
                             <div class="absolute top-4 left-4">
                                 <span
                                     class="sale-badge text-white text-xs px-3 py-1 rounded-full font-medium">
-                                    20% OFF
+                                    @if($variant->discount > 0)
+                                    {{$variant->discount}}% OFF
+                                    @else
+                                    Trending
+                                    @endif
                                 </span>
                             </div>
                         </div>
@@ -254,16 +278,17 @@
                         <div class="p-4">
                             <div class="flex justify-between items-start mb-2">
                                 <h3 class="font-bold text-gray-900">
-                                    {{ $wishlist->product->name }}
+                                    {{ $product->name }}
                                 </h3>
                                 <div class="text-right">
-                                    <p class="font-bold text-gray-900">₹{{ $wishlist->product->discount_price}}</p>
-                                    <p class="text-gray-500 text-sm line-through">₹{{ $wishlist->product->price}}</p>
+                                    <p class="font-bold text-gray-900">{{config('app.currency')}}{{ $variant->discount_price}}</p>
+                                    <p class="text-gray-500 text-sm line-through">{{config('app.currency')}}{{ $variant->price}}</p>
                                 </div>
                             </div>
 
                             <p class="text-gray-600 text-sm mb-4">
-                                Soft cotton blend in classic fit
+                                {{-- Soft cotton blend in classic fit --}}
+                                {{$product->description ?? ''}}
                             </p>
 
                             <div
@@ -286,14 +311,18 @@
                             </div>
 
                             <div class="flex gap-2">
-                                <button
-                                    class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                    <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                                </button>
-                                <button
+                              <button
+                                onclick="addToCart({{ $variant?->id }}, this)"
+                                class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Add to Cart
+                            </button>
+
+
+                                {{-- <button
                                     class="w-10 h-10 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition flex items-center justify-center">
                                     <i class="fas fa-ellipsis-h"></i>
-                                </button>
+                                </button> --}}
                             </div>
                         </div>
                     </div>
@@ -353,6 +382,9 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
         // Wishlist functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -512,5 +544,112 @@
             };
         }
     </script>
+    
+<script> 
+function addToCart(variantId, btn) {
+
+    if (!variantId) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            variant_id: variantId,
+            count: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            //  Change Button UI
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i> Added';
+            btn.disabled = true;
+            btn.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-green-500', 'text-white', 'cursor-not-allowed');
+
+            //  Sweet Alert
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Added to Cart',
+            //     text: 'Product added successfully!',
+            //     timer: 1200,
+            //     showConfirmButton: false
+            // });
+
+            //  Confetti Blast ONLY on success
+            blastCelebration(btn);
+
+        } else {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message || 'Something went wrong'
+            });
+
+        }
+
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function blastCelebration(buttonElement) {
+
+    const rect = buttonElement.getBoundingClientRect();
+
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+   confetti({
+    particleCount: 120,
+    spread: 90,
+    startVelocity: 45,
+    origin: { x: x, y: y },
+    shapes: ['text'],
+    scalar: 1.5,
+    text: {
+        value: ['🎁','🎉','🎈'],
+        font: '10px Arial'
+    }
+});
+
+}
+
+
+function removeWishlist(productId) {
+
+    fetch(`/wishlist/remove`, {
+        method: "POST", // or DELETE if route is DELETE
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+           
+            // location.reload();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+
+</script>
 
 @endsection

@@ -23,6 +23,7 @@ class CategoryController extends Controller
 
         $products = $category->products()
             ->where('is_active', 1)
+            ->whereHas('variants') // Only include products that have variants
             ->with(['images' => function($query) {
                 $query->select('product_id', 'image');
             }])
