@@ -85,11 +85,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
               <h4 class="font-semibold text-gray-800 text-base">Bust Measurement</h4>
             </div>
-            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
-              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            
+              <img src="{{asset('web/images/size-guide/women-size (1).webp')}}"
                 alt="Bust measurement guide"
-                class="absolute inset-0 w-full h-full object-cover">
-            </div>
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+           
             <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
           </div>
 
@@ -99,11 +99,9 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
               <h4 class="font-semibold text-gray-800 text-base">Waist Measurement</h4>
             </div>
-            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
-              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                alt="Waist measurement guide"
-                class="absolute inset-0 w-full h-full object-cover">
-            </div>
+           <img src="{{asset('web/images/size-guide/women-size (3).webp')}}"
+                alt="Bust measurement guide"
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
             <p class="text-sm text-gray-600 px-1">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
           </div>
 
@@ -113,11 +111,9 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
               <h4 class="font-semibold text-gray-800 text-base">Hip Measurement</h4>
             </div>
-            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
-              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                alt="Hip measurement guide"
-                class="absolute inset-0 w-full h-full object-cover">
-            </div>
+             <img src="{{asset('web/images/size-guide/women-size (6).webp')}}"
+                alt="Bust measurement guide"
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
             <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
           </div>
 
@@ -127,11 +123,9 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
               <h4 class="font-semibold text-gray-800 text-base">Armhole Measurement</h4>
             </div>
-            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
-              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                alt="Armhole measurement guide"
-                class="absolute inset-0 w-full h-full object-cover">
-            </div>
+             <img src="{{asset('web/images/size-guide/women-size (5).webp')}}"
+                alt="Bust measurement guide"
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
             <p class="text-sm text-gray-600 px-1">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
           </div>
 
@@ -141,16 +135,24 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Shoulder Measurement</h4>
             </div>
-            <div class="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 mb-3">
-              <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                alt="Shoulder measurement guide"
-                class="absolute inset-0 w-full h-full object-cover">
+              <img src="{{asset('web/images/size-guide/women-size (2).webp')}}"
+                alt="Bust measurement guide"
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+            <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+          </div>
+          <div class="measurement-step">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
+              <h4 class="font-semibold text-gray-800 text-base">Arm Length Measurement</h4>
             </div>
+              <img src="{{asset('web/images/size-guide/women-size (4).webp')}}"
+                alt="Bust measurement guide"
+                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
             <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
 
           <!-- Tips Section -->
-          <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+          <!-- <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
             <h5 class="font-semibold text-blue-800 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
@@ -179,10 +181,10 @@
                 <span><strong>Repeat:</strong> Take each measurement 2-3 times for accuracy</span>
               </li>
             </ul>
-          </div>
+          </div> -->
 
           <!-- Size Selection Help -->
-          <div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
+          <!-- <div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
             <h5 class="font-semibold text-amber-800 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
@@ -204,7 +206,7 @@
                 <span>Focus on your largest measurement when deciding</span>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
 

@@ -205,6 +205,8 @@
 
 </div>
 
+
+
 <!-- Required CSS for no scrollbar + smooth snap -->
 
 <section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">

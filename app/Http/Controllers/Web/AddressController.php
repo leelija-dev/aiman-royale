@@ -116,7 +116,7 @@ class AddressController extends Controller
             'pincode' => $request->pincode,
             'landmark' => $request->landmark,
             'address_type' => $request->address_type,
-            'is_default' => $request->is_default ?? false,
+            'is_default' => $request->has('is_default') ? 1 : 0,
         ]);
         
         return redirect()->route('addresses.index')
