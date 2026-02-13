@@ -83,27 +83,36 @@
                 <td class="px-6 py-6 text-center">
                   <div
                     class="flex items-center justify-center border border-gray-300 rounded-md inline-flex">
-                    <button
-                      onclick="updateQuantity({{ $item->id }}, {{ $item->count - 1 }})"
+                    {{-- <button
+                      onclick="decreaseQuantity({{ $item->id }}, {{ $item->count - 1 }})"
                       class="px-3 py-1 hover:bg-gray-100"
                       {{ $item->count <= 1 ? 'disabled' : '' }}>
+                      -
+                    </button> --}}
+                    <button
+                      onclick="decreaseQuantity({{ $item->id }})"
+                      class="px-3 py-1 hover:bg-gray-100"
+                     >
                       -
                     </button>
                     <input
                       type="text"
                       value="{{ $item->count }}"
+                      name="quantity"
+                      data-stock="{{ $item->variant->stock }}"
                       id="quantity-{{ $item->id }}"
-                      class="w-12 text-center border-x border-gray-300 py-1"
-                      onchange="updateQuantity({{ $item->id }}, parseInt(this.value))" />
+                      class="w-12 text-center border-x border-gray-300 py-1" readonly
+                       /> {{--onchange="updateQuantity({{ $item->id }}, parseInt(this.value))" --}}
                     <button
-                      onclick="updateQuantity({{ $item->id }}, {{ $item->count + 1 }})"
+                      onclick="increaseQuantity({{ $item->id }})"
                       class="px-3 py-1 hover:bg-gray-100">
                       +
                     </button>
                   </div>
                 </td>
+                
 
-                <td class="px-6 py-6 text-center font-medium">
+                <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}">
                   {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
                 </td>
 
@@ -176,7 +185,7 @@
           <div class="space-y-4">
             <div class="flex justify-between text-gray-700">
               <span>Subtotal</span>
-              <span>{{config('app.currency')}}{{ number_format($subtotal, 2) }}</span>
+              <span id="total_subtotal">{{config('app.currency')}}{{ number_format($subtotal, 2) }}</span>
             </div>
 
             <div class="flex justify-between text-gray-700">
@@ -204,19 +213,21 @@
                 @if($subtotal == 0)
                 <span >{{config('app.currency')}}0</span>
                 @else
-                <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
+                <span id="total_price" data-shipping="{{$shipping}}">{{config('app.currency')}}{{ number_format($total, 2) }}</span>
               @endif
               </div>
             </div>
 
             @if(auth()->check())
-              <a href="{{ route('checkout.index') }}">
-              
-                <button
+            <form action="{{ route('cart.update') }}" method="POST" id="cartUpdateForm" enctype="multipart/form-data">
+             @csrf
+
+                <button type="submit"
                   class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800" {{ $subtotal == 0 ? 'disabled' : '' }}>
                   Proceed to checkout
                 </button>
-              </a>
+              
+            </form>
             @else
               <a href="{{ route('page.login') }}">
                 <button
@@ -233,47 +244,148 @@
 </section>
 
 
-@endsection
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  function updateQuantity(cartId, newQuantity) {
-    if (newQuantity < 1) {
-      removeFromCart(cartId);
-      return;
+  // function updateQuantity(cartId, newQuantity) {
+  //   if (newQuantity < 1) {
+  //     removeFromCart(cartId);
+  //     return;
+  //   }
+
+  //   let quantityInput = document.getElementById('quantity-' + cartId);
+  //   console.log('quantityInput', quantityInput.value);
+
+  //   quantityInput.value = parseInt(newQuantity);
+  //   console.log('newquantityInput', quantityInput.value);
+    // const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    // fetch(`/cart/update/${cartId}`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'X-CSRF-TOKEN': token,
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       count: newQuantity,
+    //       _token: token
+    //     })
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     if (data.success) {
+    //       location.reload(); // Reload to show updated totals
+    //     } else {
+    //       showNotification(data.message, 'error');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //     showNotification('Error updating quantity', 'error');
+    //   });
+
+  // }
+ 
+
+function increaseQuantity(cartId) {
+
+   
+    let qtyInput = document.getElementById('quantity-' + cartId);
+     let stock = parseFloat(qtyInput.getAttribute('data-stock') || 0);
+    let subTotal = document.getElementById('subtotal-' + cartId);
+    console.log('stock', stock);
+   
+    let price = parseFloat(subTotal.getAttribute('data-price'));
+    let currentQty = parseInt(qtyInput.value);
+
+    let newQty = currentQty + 1;
+    if (newQty > stock) {
+        Swal.fire({
+            title: 'Sorry!',
+            text: `Out of stock`,
+            icon: 'info',
+            timer: 5000,
+            showConfirmButton: false
+        });
+        return;
+    }
+    qtyInput.value = newQty;
+
+    let newSubtotal = newQty * price;
+    subTotal.textContent = "{{config('app.currency')}}" + newSubtotal.toFixed(2);
+
+    updateCartTotal(); // recalculate everything
+}
+
+function decreaseQuantity(cartId) {
+
+    let qtyInput = document.getElementById('quantity-' + cartId);
+    let subTotal = document.getElementById('subtotal-' + cartId);
+
+    let price = parseFloat(subTotal.getAttribute('data-price'));
+    let currentQty = parseInt(qtyInput.value);
+
+    let newQty = currentQty - 1;
+
+    if (newQty < 1) {
+        removeFromCart(cartId);
+        return;
     }
 
-    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    qtyInput.value = newQty;
 
-    fetch(`/cart/update/${cartId}`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          count: newQuantity,
-          _token: token
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          location.reload(); // Reload to show updated totals
-        } else {
-          showNotification(data.message, 'error');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error updating quantity', 'error');
-      });
-  }
+    let newSubtotal = newQty * price;
+    subTotal.textContent = "{{config('app.currency')}}" + newSubtotal.toFixed(2);
+
+    updateCartTotal(); //  recalculate everything
+}
+
+function updateCartTotal() {
+
+    let currency = "{{config('app.currency')}}";
+    let totalSubtotal = 0;
+
+    document.querySelectorAll('[id^="subtotal-"]').forEach(function (item) {
+
+        let price = parseFloat(item.getAttribute('data-price'));
+        let cartId = item.id.replace('subtotal-', '');
+        let qty = parseInt(document.getElementById('quantity-' + cartId).value);
+
+        let rowTotal = price * qty;
+
+        item.textContent = currency + rowTotal.toFixed(2);
+
+        totalSubtotal += rowTotal;
+    });
+
+    let totalSubtotalElement = document.getElementById('total_subtotal');
+    let totalPriceElement = document.getElementById('total_price');
+
+    let shippingCost = parseFloat(totalPriceElement?.getAttribute('data-shipping')) || 0;
+
+    totalSubtotalElement.textContent = currency + totalSubtotal.toFixed(2);
+
+    if (totalPriceElement) {
+        totalPriceElement.textContent = currency + (totalSubtotal + shippingCost).toFixed(2);
+    }
+}
+
 
   function removeFromCart(cartId) {
-    if (!confirm('Are you sure you want to remove this item?')) {
-      return;
-    }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This item will be removed from your cart!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#000',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, remove it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
 
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -289,7 +401,17 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          location.reload(); // Reload to show updated cart
+           location.reload(); // Reload to show updated cart
+           Swal.fire({
+            title: 'Removed!',
+            text: 'Item removed successfully.',
+            icon: 'success',
+            timer: 4000,
+            showConfirmButton: false
+        });
+       
+
+    
         } else {
           showNotification(data.message, 'error');
         }
@@ -298,6 +420,8 @@
         console.error('Error:', error);
         showNotification('Error removing item', 'error');
       });
+    }
+  });
   }
 
   function showNotification(message, type) {
@@ -323,3 +447,42 @@
     }, 3000);
   }
 </script>
+<script>
+document.getElementById('cartUpdateForm')?.addEventListener('submit', function () {
+
+    // remove old dynamic inputs
+    document.querySelectorAll('.dynamic-qty').forEach(el => el.remove());
+
+    document.querySelectorAll('[id^="quantity-"]').forEach(input => {
+
+        let cartId = input.id.replace('quantity-', '');
+        let quantity = input.value;
+
+        let cartInput = document.createElement('input');
+        cartInput.type = 'hidden';
+        cartInput.name = 'cart_id[]';
+        cartInput.value = cartId;
+        cartInput.classList.add('dynamic-qty');
+
+        let qtyInput = document.createElement('input');
+        qtyInput.type = 'hidden';
+        qtyInput.name = 'quantity[]';
+        qtyInput.value = quantity;
+        qtyInput.classList.add('dynamic-qty');
+
+        this.appendChild(cartInput);
+        this.appendChild(qtyInput);
+    });
+
+});
+document.addEventListener("DOMContentLoaded", function () {
+    updateCartTotal();
+});
+
+window.addEventListener("pageshow", function () {
+    updateCartTotal();
+});
+
+
+</script>
+@endsection
