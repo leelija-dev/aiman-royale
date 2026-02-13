@@ -11,15 +11,13 @@ use Illuminate\Http\JsonResponse;
 class ProductController extends Controller
 {
     /**
-     * Get all child categories by parent category ID
+     * Get all products
      *
-     * @param int $categoryId
      * @return JsonResponse
      */
     public function getAllProduct(): JsonResponse
     {
         try {
-
             $products = Product::where('is_active', 1)
                 ->with(['images', 'variants', 'category', 'occasion'])
                 ->get();
@@ -30,7 +28,134 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error retrieving child categories: ' . $e->getMessage(),
+                'message' => 'Error retrieving products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
+
+    /**
+     * Filter products with multiple criteria
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function filterProducts(Request $request): JsonResponse
+    {
+        try {
+            $query = Product::where('is_active', 1)
+                ->with(['variants', 'category', 'occasion']);
+
+            // Filter by category
+            if ($request->filled('category_id')) {
+                $categoryId = $request->input('category_id');
+                $query->where('category_id', $categoryId);
+            }
+
+            // Filter by occasion
+            if ($request->filled('occasion_id')) {
+                $occasionId = $request->input('occasion_id');
+                $query->where('occasion_id', $occasionId);
+            }
+
+            // Filter by color
+            if ($request->filled('color')) {
+                $color = $request->input('color');
+                $query->whereHas('variants', function($q) use ($color) {
+                    $q->where('color', $color);
+                });
+            }
+
+            // Filter by size
+            if ($request->filled('size')) {
+                $size = $request->input('size');
+                $query->whereHas('variants', function($q) use ($size) {
+                    $q->where('size', $size);
+                });
+            }
+
+            // Filter by price range (format: "100-500")
+            if ($request->filled('price_range')) {
+                $priceRange = $request->input('price_range');
+                if (strpos($priceRange, '-') !== false) {
+                    [$minPrice, $maxPrice] = explode('-', $priceRange);
+                    if (is_numeric($minPrice)) {
+                        $query->whereHas('variants', function($q) use ($minPrice) {
+                            $q->where('price', '>=', $minPrice);
+                        });
+                    }
+                    if (is_numeric($maxPrice)) {
+                        $query->whereHas('variants', function($q) use ($maxPrice) {
+                            $q->where('price', '<=', $maxPrice);
+                        });
+                    }
+                }
+            }
+
+            // Get products
+            $products = $query->get();
+
+            // Process products to get essential data
+            $processedProducts = $products->map(function ($product) {
+                $variants = $product->variants;
+                
+                // Get lowest price from variants
+                $lowestPrice = null;
+                if ($variants->isNotEmpty()) {
+                    $lowestPrice = $variants->min('price');
+                }
+
+                // Get first image (simplified - just get first image)
+                $firstImage = null;
+                $images = \App\Models\ProductImage::where('product_id', $product->id)->first();
+                if ($images) {
+                    $firstImage = $images->image;
+                }
+
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'slug' => $product->slug,
+                    'description' => $product->description,
+                    'design_no' => $product->design_no,
+                    'brand' => $product->brand,
+                    'fabric' => $product->fabric,
+                    'fit' => $product->fit,
+                    'price' => $product->price,
+                    'discount_price' => $product->discount_price,
+                    'stock' => $product->stock,
+                    'is_featured' => $product->is_featured,
+                    'lowest_price' => $lowestPrice,
+                    'image' => $firstImage,
+                    'category' => $product->category ? [
+                        'id' => $product->category->id,
+                        'name' => $product->category->name,
+                        'slug' => $product->category->slug
+                    ] : null,
+                    'occasion' => $product->occasion ? [
+                        'id' => $product->occasion->id,
+                        'name' => $product->occasion->name,
+                        'slug' => $product->occasion->slug
+                    ] : null
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $processedProducts,
+                'filters_applied' => [
+                    'category_id' => $request->input('category_id'),
+                    'occasion_id' => $request->input('occasion_id'),
+                    'color' => $request->input('color'),
+                    'size' => $request->input('size'),
+                    'price_range' => $request->input('price_range'),
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error filtering products: ' . $e->getMessage(),
                 'data' => null
             ], 500);
         }

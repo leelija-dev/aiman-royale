@@ -23,4 +23,10 @@ Route::prefix('categories')->group(function () {
     Route::get('/all-with-children', [CategoryController::class, 'getAllCategoriesWithChildren'])->name('api.categories.all-with-children');
     Route::get('/{categoryId}/with-children', [CategoryController::class, 'getCategoryWithChildren'])->name('api.categories.with-children');
 });
-Route::get('/products', [ProductController::class, 'getAllProduct']);
+
+// Product related API routes
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'getAllProduct']);
+    Route::get('/filter', [ProductController::class, 'filterProducts']);
+    Route::get('/filter-options', [ProductController::class, 'getFilterOptions']);
+});
