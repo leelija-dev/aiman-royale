@@ -17,7 +17,7 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        $wishlistItems = Wishlist::with(['product.images', 'variant'])
+        $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
             ->forCurrentUser()
             ->get();
             
@@ -51,7 +51,8 @@ class WishlistController extends Controller
         $user = auth()->user();
         $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
         $userName = $user ? $user->name : 'Guest User';
-        
+        // dd($wishlistItems->pluck('variant_id'));
+
         return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
     }
 

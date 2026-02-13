@@ -177,6 +177,7 @@ class CartController extends Controller
 
     public function destroy($id)
     {
+        
         try {
             $userId = Auth::id();
             $sessionId = $userId ? null : session()->getId();
