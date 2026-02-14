@@ -29,4 +29,5 @@ Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'getAllProduct']);
     Route::get('/filter', [ProductController::class, 'filterProducts']);
     Route::get('/filter-options', [ProductController::class, 'getFilterOptions']);
+    Route::get('/search', [ProductController::class, 'searchProducts']);
 });
