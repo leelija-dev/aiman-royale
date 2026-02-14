@@ -266,4 +266,111 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Search products by name or description
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchProducts(Request $request): JsonResponse
+    {
+        try {
+            $searchTerm = $request->input('search');
+
+            if (empty($searchTerm)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Search term is required',
+                    'data' => null
+                ], 400);
+            }
+
+            // $query = Product::where('is_active', 1)
+            //     ->where(function ($q) use ($searchTerm) {
+            //         $q->where('name', 'LIKE', '%' . $searchTerm . '%')
+            //             ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
+            //             ->orWhere('brand', 'LIKE', '%' . $searchTerm . '%')
+            //             ->orWhere('design_no', 'LIKE', '%' . $searchTerm . '%');
+            //     })
+
+
+            //     ->with(['variants', 'category', 'occasion']);
+
+            $query = Product::where('is_active', 1)
+                ->where(function ($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('brand', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('design_no', 'LIKE', '%' . $searchTerm . '%')
+
+                        // Search in category name
+                        ->orWhereHas('category', function ($cat) use ($searchTerm) {
+                            $cat->where('name', 'LIKE', '%' . $searchTerm . '%');
+                        })
+
+                        // Search in occasion name
+                        ->orWhereHas('occasion', function ($occ) use ($searchTerm) {
+                            $occ->where('name', 'LIKE', '%' . $searchTerm . '%');
+                        })
+
+                        // Search by occasion ID (if search term is numeric)
+                        ->orWhere('ocassion_id', $searchTerm);
+                })
+                ->with(['variants', 'category', 'occasion']);
+
+            // Get products
+            $products = $query->get();
+
+            // Process products to get essential data
+            $processedProducts = $products->map(function ($product) {
+                $variants = $product->variants;
+
+                // Get lowest price from variants
+                $lowestPrice = null;
+                if ($variants->isNotEmpty()) {
+                    $lowestPrice = $variants->min('price');
+                }
+
+                // Get first image
+                $firstImage = null;
+                $images = \App\Models\ProductImage::where('product_id', $product->id)->first();
+                if ($images) {
+                    $firstImage = $images->image;
+                }
+
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'slug' => $product->slug,
+                    'description' => $product->description,
+                    'design_no' => $product->design_no,
+                    'brand' => $product->brand,
+                    'fabric' => $product->fabric,
+                    'fit' => $product->fit,
+                    'price' => $product->price,
+                    'discount_price' => $product->discount_price,
+                    'stock' => $product->stock,
+                    'is_featured' => $product->is_featured,
+                    'lowest_price' => $lowestPrice,
+                    'image' => $firstImage,
+                    'category' => optional($product->category)->only(['id', 'name', 'slug']),
+                    'occasion' => optional($product->occasion)->only(['id', 'name', 'slug']),
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $processedProducts,
+                'search_term' => $searchTerm,
+                'total_results' => $processedProducts->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error searching products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
 }
