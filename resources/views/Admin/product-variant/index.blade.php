@@ -94,7 +94,7 @@
                     </a>
                 </div>
             </div>
-            <div class="card-body px-4 pt-2 pb-2">
+            <div class="card px-4 pt-2 pb-2">
                 <!-- Filters -->
                 <div class="row mb-3">
                     <div class="col-md-3">
@@ -299,11 +299,14 @@
                                                             <select class="form-control" id="edit_size_{{ $variant->id }}" name="size">
                                                                 <option value="" selected hidden>Select Size</option>
                                                                 @foreach($sizes as $size)
-                                                                <option value="{{ $size->code }}" {{ $variant->size == $size ? 'selected' : '' }}>
+                                                                <option value="{{ $size->code }}" {{ $variant->size == $size->code ? 'selected' : '' }}>
                                                                     {{ $size->name }}({{$size->code}})
                                                                 </option>
                                                                 @endforeach
                                                             </select>
+                                                            @error('size')
+                                                            <div class="text-danger small">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="edit_discount_{{ $variant->id }}" class="form-label">Discount (%)</label>

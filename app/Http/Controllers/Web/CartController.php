@@ -52,7 +52,7 @@ class CartController extends Controller
             ]);
 
             $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
-            
+            // dd($variant);
             // Check if variant is in stock
             if ($variant->stock < $request->count) {
                 return response()->json([

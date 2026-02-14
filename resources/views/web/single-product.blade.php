@@ -177,7 +177,7 @@
             $sizes = $product->variants->pluck('size')->unique()->filter();
             $availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
             @endphp
-            @foreach($availableSizes as $size)
+            @foreach($sizes as $size)
             @if($sizes->contains($size))
             <button
               class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"

@@ -1071,11 +1071,11 @@
                             <i class="fa-regular fa-user text-gray-500 w-4"></i>
                             <span>My Profile</span>
                         </a>
-                        <a href="#"
+                        <a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}"
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
                             <span>Orders</span>
-                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">2</span>
+                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">{{ Auth::user()->order->count() }}</span>
                         </a>
                         <a href="{{route('wishlist.index')}}"
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">

@@ -69,17 +69,42 @@ class HomeController extends Controller
                 'product_variants.price',
                 'product_variants.discount_price as price_after_discount',
                 'product_variants.stock',
-                'product_images.image as product_image'
+                'product_images.image as product_image',
+                'product_variants.discount as discount'
             )
             ->latest('products.created_at')
             ->take(12)
             ->get();
 
-        $mostWishlisted = Product::with('wishlists', 'images')
-            ->withCount('wishlists')
-            ->orderByDesc('wishlists_count')
-            ->take(12)
+        // $mostWishlisted = Product::with('wishlists', 'images', 'variants')
+        //     ->withCount('wishlists')
+        //     ->orderByDesc('wishlists_count')
+        //     ->take(12)
+        //     ->get();
+        // 🔹 Step 1: Get Most Wishlisted Products
+    $mostWishlisted = Product::with('images', 'variants')
+        ->withCount('wishlists')
+        ->whereHas('wishlists') // only products in wishlist
+        ->orderByDesc('wishlists_count')
+        ->take(12)
+        ->get();
+
+    $wishlistCount = $mostWishlisted->count();
+
+    // 🔹 Step 2: If less than 12 → add remaining normal products
+    if ($wishlistCount < 12) {
+
+        $remaining = 12 - $wishlistCount;
+
+        $otherProducts = Product::with('images', 'variants')
+            ->whereNotIn('id', $mostWishlisted->pluck('id'))
+            ->where('is_active', 1)
+            ->take($remaining)
             ->get();
+
+        $mostWishlisted = $mostWishlisted->merge($otherProducts);
+    }
+
         // dd($mostWishlisted);
 
         // dd($products);

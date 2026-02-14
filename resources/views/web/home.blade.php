@@ -743,12 +743,15 @@
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            @if($product->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
                             </span>
+                            @else
                             <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
+                                {{ $product->discount }}% OFF
                             </span>
+                            @endif
                         </div>
 
                         <!-- Wishlist Heart Icon (Top Right) -->
@@ -1650,26 +1653,39 @@ All Products
 
         <div class="main-owl owl-carousel owl-theme">
             @forelse($mostWishlisted as $index => $product)
+            @php
+                $variant = $product->variants->first();
+            @endphp
+
+          
+
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
+                        
+                        <a href="{{route('category.show', $product->category->slug)}}">
+                        <img src="{{ asset($product->images->first()->image) }}"
                             alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
+                        </a>
+                        
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
+                             {{-- @dd($product->variants->first()->discount) --}}
+                            @if(optional($product->variants->first())->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
                             </span>
+                            @else
                             <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
+                                {{ optional($product->variants->first())->discount }}% OFF
                             </span>
+                            @endif
                         </div>
 
                         <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
+                        {{-- <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
                             onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -1678,43 +1694,53 @@ All Products
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
-                        </button>
+                        </button> --}}
 
                         <!-- Add To Cart (Hidden → Hover Show) -->
+                        @php
+                               $variant_id = optional($variant)->id ?? $variant?->first()->id; 
+                        @endphp
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
+                            
+                            
+                            <a href="{{route('category.show', $product->category->slug)}}">
+                            <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                                View
                             </button>
+                            </a>
+                            
                         </div>
                     </div>
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Red Plazo
+                           {{$product->name ?? ''}}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
+                            <span>{{$product->brand ?? ''}}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
+                            <span class="text-lg font-bold text-gray-900">Rs. {{$variant->discount_price ?? $product->price}}</span>
+                            @if($variant != null )
+                            <span class="text-sm text-gray-400 line-through">Rs. {{$variant->price ?? $product->price}}</span>
+                            @endif
                         </div>
                         <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                            
+                            <button onclick="addToCart({{$variant_id}}, event)"
+                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="item flex justify-center items-center">
+            {{-- <div class="item flex justify-center items-center">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
@@ -1776,8 +1802,8 @@ All Products
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="item flex justify-center items-center">
+            </div> --}}
+            {{-- <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
@@ -1819,10 +1845,10 @@ All Products
                         Add To Cart
                         </button>
                     </div> --}}
-                </div>
+                {{-- </div> --}}
 
                 <!-- Content -->
-                <div class="p-4 space-y-1">
+                {{-- <div class="p-4 space-y-1">
                     <h3 class="text-[15px] font-semibold text-gray-900">
                         {{ $product->name }}
                     </h3>
@@ -1842,10 +1868,10 @@ All Products
                         <button onclick="addToCart(1, event)"
                             class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="item flex justify-center items-center">
+                </div> --}}
+            {{-- </div> --}}
+        {{-- </div> --}} 
+        {{-- <div class="item flex justify-center items-center">
             <div
                 class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
@@ -1908,7 +1934,7 @@ All Products
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         @empty
         <div class="text-center py-8">
             <p class="text-gray-500">No wishlisted products found.</p>
@@ -2409,6 +2435,7 @@ All Products
 
 @endsection
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <!-- Cart Functionality -->
 <script>
     // Wishlist functionality
@@ -2547,49 +2574,60 @@ All Products
         }
     }
 
-    function addToCart(variantId, event) {
-        // Show loading state
-        const button = event.target;
-        const originalText = button.textContent;
-        button.textContent = 'Adding...';
-        button.disabled = true;
+    // function addToCart(variantId, event) {
+    //     // Show loading state
+    //     console.log('Adding to cart, variantId:', variantId);
+    //     const button = event.target;
+    //     const originalText = button.textContent;
+    //     button.textContent = 'Adding...';
+    //     button.disabled = true;
 
-        // Create form data
-        const formData = new FormData();
-        formData.append('variant_id', variantId);
-        formData.append('count', 1);
-        console.log(formData);
-        // Get CSRF token
-        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    //     // Create form data
+    //     const formData = new FormData();
+    //     formData.append('variant_id', variantId);
+    //     formData.append('count', 1);
+    //     console.log(formData);
+    //     // Get CSRF token
+    //     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-        // Send AJAX request
-        fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': token,
-                    'Accept': 'application/json'
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    updateCartCount(data.cart_count);
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('An error occurred while adding to cart', 'error');
-            })
-            .finally(() => {
-                button.textContent = originalText;
-                button.disabled = false;
-            });
-    }
+    //     // Send AJAX request
+    //     fetch('/cart/add', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': token,
+    //                 'Accept': 'application/json'
+    //             },
+    //             body: formData
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data)
+    //             if (data.success) {
+    //                 button.textContent = 'Added';
+    //                 button.disabled = true;
+
+    //                 // Optional styling change
+    //                 button.classList.remove('bg-white');
+    //                 button.classList.add('bg-green-600', 'text-white');
+
+    //                 showNotification(data.message, 'success');
+    //                 updateCartCount(data.cart_count);
+    //                 blastCelebration(button);
+    //             } else {
+    //                  button.textContent = originalText;
+    //                  button.disabled = false;
+    //                 showNotification(data.message, 'error');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             showNotification('An error occurred while adding to cart', 'error');
+    //         });
+    //         // .finally(() => {
+    //         //     button.textContent = originalText;
+    //         //     button.disabled = false;
+    //         // });
+    // }
 
     function showNotification(message, type) {
         const notification = document.createElement('div');
@@ -2672,5 +2710,8 @@ All Products
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
     });
+
+    
 </script>
+
 @endsection
