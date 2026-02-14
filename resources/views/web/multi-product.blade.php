@@ -116,7 +116,7 @@
                 role="menuitem">
                 <span>New Arrival</span>
                 <svg
-                  class="w-4 h-4 text-blue-600 opacity-100 checkmark"
+                  class="w-4 h-4 text-blue-600  checkmark"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -255,7 +255,7 @@
                 role="menuitem">
                 <span>All Occasions</span>
                 <svg
-                  class="w-4 h-4 text-blue-600 opacity-100 checkmark"
+                  class="w-4 h-4 text-blue-600  checkmark"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -394,7 +394,7 @@
                 role="menuitem">
                 <span>All Collections</span>
                 <svg
-                  class="w-4 h-4 text-blue-600 opacity-100 checkmark"
+                  class="w-4 h-4 text-blue-600  checkmark"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -533,7 +533,7 @@
                 role="menuitem">
                 <span>Date (Newest first)</span>
                 <svg
-                  class="w-4 h-4 text-blue-600 opacity-100 checkmark"
+                  class="w-4 h-4 text-blue-600  checkmark"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

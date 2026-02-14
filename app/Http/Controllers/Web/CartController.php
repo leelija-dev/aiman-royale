@@ -37,6 +37,7 @@ class CartController extends Controller
         $shipping = $subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
         $cartCount = $cartItems->sum('count');
+        
         $occasions = \App\Models\Occasion::active()->get();
 
         return view('web.cart', compact('cartItems', 'subtotal', 'shipping', 'total', 'cartCount', 'occasions'));

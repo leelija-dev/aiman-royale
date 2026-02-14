@@ -1,12 +1,5 @@
 @extends('layout.web.main-layout')
 
-
-
-
-
-
-
-
 @section('content')
 
 
@@ -221,7 +214,7 @@
             @if(auth()->check())
             <form action="{{ route('cart.update') }}" method="POST" id="cartUpdateForm" enctype="multipart/form-data">
              @csrf
-
+                
                 <button type="submit"
                   class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800" {{ $subtotal == 0 ? 'disabled' : '' }}>
                   Proceed to checkout
@@ -481,8 +474,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener("pageshow", function () {
     updateCartTotal();
+    // window.location.reload()
 });
 
+window.addEventListener("pageshow", function (event) {
 
+    // If page is loaded from browser cache
+    if (event.persisted) {
+        window.location.reload();
+    }
+
+});
 </script>
+
+
+
 @endsection
