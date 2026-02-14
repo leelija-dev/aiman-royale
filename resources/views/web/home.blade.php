@@ -1734,8 +1734,12 @@ All Products
                         </div>
                         <div class="lgg:hidden block">
                             
-                            <button onclick="addToCart({{$variant_id}}, event)"
-                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                            {{-- <button onclick="addToCart({{$variant_id}}, event)"
+                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button> --}}
+                             <a href="{{route('category.show', $product->category->slug)}}"> 
+                                <button 
+                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
+                             </a>   
                         </div>
                     </div>
                 </div>
