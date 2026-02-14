@@ -961,7 +961,7 @@
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Book Appointment Button -->
-                <a  href="#"
+                <a href="#"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
           bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm 
           rounded-full shadow-md
@@ -1109,8 +1109,8 @@
         </div>
     </div>
     <!-- Zigzag pattern -->
-<!-- Responsive size changes -->
- <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+    <!-- Responsive size changes -->
+    <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
 
     <!-- Main Header -->
     <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
@@ -1557,82 +1557,46 @@
         let currentCategoryData = null;
         let categoryCache = {}; // Cache for API responses
 
-        // ==================== SEARCH DATA ====================
-        const searchData = {
-            categories: [
-                "Saree",
-                "Saree Gown",
-                "Saree with Ready-made Blouse",
-                "Salwar Kameez",
-                "Lehengas",
-                "Bridal Wear",
-                "Party Wear",
-                "Casual Wear"
-            ],
+        // ==================== SEARCH FUNCTIONALITY ====================
+        // Desktop elements
+        const searchInput = document.getElementById('search-input');
+        const searchIcon = document.getElementById('search-icon');
+        const searchDropdown = document.getElementById('search-dropdown');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+        const searchContainer = document.getElementById('search-container');
+        const searchLoading = document.getElementById('search-loading');
+        const noResults = document.getElementById('no-results');
+        const searchQuery = document.getElementById('search-query');
 
-            trending: [
-                "Saree Gown for Women",
-                "Saree with Readymade Blouse for women",
-                "Saree for women",
-                "Saree Gown for Cocktail",
-                "Saree Gown for Reception",
-                "Saree Gown for Party",
-                "Saree Gown for Bridal Cocktail",
-                "Blue Banarasi Silk Saree",
-                "Mint Green Satin Saree",
-                "Wine Tissue Organza Saree"
-            ],
+        // Mobile elements
+        const mobileSearchDropdown = document.getElementById('mobile-search-dropdown');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const mobileSearchBack = document.getElementById('mobile-search-back');
+        const mobileSearchClear = document.getElementById('mobile-search-clear');
+        const mobileSearchResults = document.getElementById('mobile-search-results');
+        const mobileSearchLoading = document.getElementById('mobile-search-loading');
+        const mobileNoResults = document.getElementById('mobile-no-results');
+        const mobileSearchQuery = document.getElementById('mobile-search-query');
+        const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
+        const mobileSidebarSearchInput = document.getElementById('mobile-sidebar-search-input');
+        const mobileSidebarSearchIcon = document.getElementById('mobile-sidebar-search-icon');
+        const mobileSuggestionsInput = document.getElementById('mobile-suggestions-input');
+        const mobileSuggestionsBack = document.getElementById('mobile-suggestions-back');
+        const mobileSuggestionsClear = document.getElementById('mobile-suggestions-clear');
+        const mobileSuggestionsContent = document.getElementById('mobile-suggestions-content');
 
-            products: [{
-                    title: "Blue Banarasi Silk Woven Saree With Zari Paisley Motifs",
-                    price: "MRP ₹5,085",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["blue", "banarasi", "silk", "saree", "zari"]
-                },
-                {
-                    title: "Mint Green Satin Printed Saree With Digital Florals",
-                    price: "MRP ₹16,895",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["mint", "green", "satin", "saree", "floral"]
-                },
-                {
-                    title: "Wine Tissue Organza Embroidered Saree with Unstitched Blouse",
-                    price: "MRP ₹8,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["wine", "organza", "embroidered", "saree", "blouse"]
-                },
-                {
-                    title: "Teal Green Organza Silk Saree with Unstitched Blouse",
-                    price: "MRP ₹5,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["teal", "green", "organza", "silk", "saree"]
-                },
-                {
-                    title: "Maroon Shaded Organza Silk Saree with Unstitched Blouse",
-                    price: "MRP ₹5,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["maroon", "organza", "silk", "saree", "shaded"]
-                },
-                {
-                    title: "Black Cotton Linen Saree with Blouse Fabric",
-                    price: "MRP ₹7,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["black", "cotton", "linen", "saree", "blouse"]
-                },
-                {
-                    title: "Olive Green Linen Printed Saree With Heritage Ajrakh Geometric Print",
-                    price: "MRP ₹2,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["olive", "green", "linen", "saree", "printed"]
-                },
-                {
-                    title: "Maroon Tissue Organza Resham Work Saree with Unstitched Blouse",
-                    price: "MRP ₹10,995",
-                    image: "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                    tags: ["maroon", "tissue", "organza", "resham", "saree"]
-                }
-            ]
-        };
+        // DOM elements for desktop search results
+        const categoriesList = document.getElementById('categories-list');
+        const trendingList = document.getElementById('trending-list');
+        const productsList = document.getElementById('products-list');
+        const viewMore = document.getElementById('view-more');
+
+        // DOM elements for mobile search results
+        const mobileCategoriesList = document.getElementById('mobile-categories-list');
+        const mobileProductsList = document.getElementById('mobile-products-list');
+
+        // Cache for search results
+        const searchCache = {};
 
         // ==================== CATEGORY API FUNCTIONS ====================
         async function fetchCategoryData(categoryId) {
@@ -1647,7 +1611,8 @@
             }
 
             try {
-                const response = await fetch(`/api/categories/${categoryId}`);
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/categories/${categoryId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1740,26 +1705,7 @@
                 const li = document.createElement('a');
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
-                li.href = `/category/${style.slug}`;
-
-                // Create subcategories list
-                const subUl = document.createElement('ul');
-                subUl.className = 'ml-4 mb-4';
-
-                // You might want to fetch subcategories or use existing data
-                // For now, we'll show the style name as the only item
-                const subLi = document.createElement('li');
-                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
-
-                const link = document.createElement('a');
-                link.href = `/category/${style.slug}`;
-                link.className = 'hover:text-black transition-colors';
-                link.textContent = style.name;
-
-                // subLi.appendChild(link);
-                // subUl.appendChild(subLi);
-
-                // li.appendChild(subUl);
+                li.href = `/collections/${style.slug}`;
                 styleLeftList.appendChild(li);
             });
 
@@ -1768,22 +1714,7 @@
                 const li = document.createElement('a');
                 li.className = 'mb-4 text-[1.3rem]';
                 li.textContent = style.name;
-                li.href = `/category/${style.slug}`;
-
-                const subUl = document.createElement('ul');
-                subUl.className = 'ml-4 mb-4';
-
-                const subLi = document.createElement('li');
-                subLi.className = 'mb-2 text-[1.1rem] text-gray-600';
-
-                const link = document.createElement('a');
-                link.href = `/category/${style.slug}`;
-                link.className = 'hover:text-black transition-colors';
-                link.textContent = style.name;
-
-                // subLi.appendChild(link);
-                // subUl.appendChild(subLi);
-                // li.appendChild(subUl);
+                li.href = `/collections/${style.slug}`;
                 styleRightList.appendChild(li);
             });
         }
@@ -2034,50 +1965,13 @@
             // Add click event to navigate to product page
             card.style.cursor = 'pointer';
             card.addEventListener('click', function() {
-                window.location.href = `/product/${product.slug}`;
+                window.location.href = `/products/${product.slug}`;
             });
 
             return card;
         }
 
-        // ==================== SEARCH FUNCTIONALITY ====================
-        // Desktop elements
-        const searchInput = document.getElementById('search-input');
-        const searchIcon = document.getElementById('search-icon');
-        const searchDropdown = document.getElementById('search-dropdown');
-        const closeSearchBtn = document.getElementById('close-search-btn');
-        const searchContainer = document.getElementById('search-container');
-        const searchLoading = document.getElementById('search-loading');
-        const noResults = document.getElementById('no-results');
-        const searchQuery = document.getElementById('search-query');
-
-        // Mobile elements
-        const mobileSearchDropdown = document.getElementById('mobile-search-dropdown');
-        const mobileSearchInput = document.getElementById('mobile-search-input');
-        const mobileSearchBack = document.getElementById('mobile-search-back');
-        const mobileSearchClear = document.getElementById('mobile-search-clear');
-        const mobileSearchResults = document.getElementById('mobile-search-results');
-        const mobileSearchLoading = document.getElementById('mobile-search-loading');
-        const mobileNoResults = document.getElementById('mobile-no-results');
-        const mobileSearchQuery = document.getElementById('mobile-search-query');
-        const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
-        const mobileSidebarSearchInput = document.getElementById('mobile-sidebar-search-input');
-        const mobileSidebarSearchIcon = document.getElementById('mobile-sidebar-search-icon');
-        const mobileSuggestionsInput = document.getElementById('mobile-suggestions-input');
-        const mobileSuggestionsBack = document.getElementById('mobile-suggestions-back');
-        const mobileSuggestionsClear = document.getElementById('mobile-suggestions-clear');
-        const mobileSuggestionsContent = document.getElementById('mobile-suggestions-content');
-
-        // DOM elements for desktop search results
-        const categoriesList = document.getElementById('categories-list');
-        const trendingList = document.getElementById('trending-list');
-        const productsList = document.getElementById('products-list');
-        const viewMore = document.getElementById('view-more');
-
-        // DOM elements for mobile search results
-        const mobileCategoriesList = document.getElementById('mobile-categories-list');
-        const mobileProductsList = document.getElementById('mobile-products-list');
-
+        // ==================== SEARCH API FUNCTIONS ====================
         // Check if we're on mobile
         function isMobile() {
             return window.innerWidth <= 991;
@@ -2091,71 +1985,133 @@
             return text.replace(regex, '<span class="highlight">$1</span>');
         }
 
-        // Filter data based on search term
-        function filterData(searchTerm) {
-            const term = searchTerm.toLowerCase().trim();
+        // ==================== SEARCH API FUNCTIONS ====================
+        // Get base URL dynamically
+        function getBaseUrl() {
+            // Get current protocol and host
+            const protocol = window.location.protocol;
+            const host = window.location.host;
 
-            if (!term) {
+            // For local development with port 8000, keep using localhost:8000
+            // For production (aimanroyale.com), use the current host
+            if (host.includes('localhost') || host.includes('127.0.0.1')) {
+                return `${protocol}//${host}`;
+            } else {
+                // For production, use https://aimanroyale.com
+                return 'https://aimanroyale.com';
+            }
+        }
+
+        // Fetch search results from API
+        async function fetchSearchResults(searchTerm) {
+            if (!searchTerm.trim()) {
                 return {
-                    categories: searchData.categories.slice(0, 3),
-                    trending: searchData.trending.slice(0, 7),
-                    products: searchData.products.slice(0, 4),
-                    hasResults: true
+                    categories: [],
+                    products: [],
+                    hasResults: false
                 };
             }
 
-            // Filter categories - exact word matching
-            const filteredCategories = searchData.categories.filter(category => {
-                const categoryLower = category.toLowerCase();
-                // Check if category starts with or contains the search term as a whole word
-                return categoryLower === term ||
-                    categoryLower.includes(' ' + term) ||
-                    categoryLower.startsWith(term) ||
-                    term.includes(' ' + categoryLower);
-            }).slice(0, 3);
+            // Check cache first
+            if (searchCache[searchTerm]) {
+                return searchCache[searchTerm];
+            }
 
-            // Filter trending searches - exact word matching
-            const filteredTrending = searchData.trending.filter(trend => {
-                const trendLower = trend.toLowerCase();
-                // Check if trend starts with or contains the search term as a whole word
-                return trendLower === term ||
-                    trendLower.includes(' ' + term) ||
-                    trendLower.startsWith(term) ||
-                    term.includes(' ' + trendLower);
-            }).slice(0, 7);
-
-            // Filter products - more precise matching
-            const filteredProducts = searchData.products.filter(product => {
-                const titleLower = product.title.toLowerCase();
-
-                // Exact match or starts with search term
-                if (titleLower === term || titleLower.startsWith(term)) return true;
-
-                // Contains search term as whole word (not partial)
-                const words = titleLower.split(' ');
-                for (let word of words) {
-                    if (word === term) return true;
+            try {
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/products/search?search=${encodeURIComponent(searchTerm)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                const data = await response.json();
 
-                // Search in tags - exact matching
-                if (product.tags.some(tag => tag.toLowerCase() === term)) return true;
+                // Process and cache the response
+                const processedData = processSearchResponse(data, searchTerm);
+                searchCache[searchTerm] = processedData;
+                return processedData;
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                return {
+                    categories: [],
+                    products: [],
+                    hasResults: false,
+                    error: error.message
+                };
+            }
+        }
 
-                return false;
-            }).slice(0, 8);
-
-            return {
-                categories: filteredCategories,
-                trending: filteredTrending,
-                products: filteredProducts,
-                hasResults: filteredCategories.length > 0 || filteredTrending.length > 0 || filteredProducts
-                    .length > 0
+        // Process API response to match our expected format
+        function processSearchResponse(data, searchTerm) {
+            const term = searchTerm.toLowerCase().trim();
+            const results = {
+                categories: [],
+                products: [],
+                hasResults: false
             };
+
+            if (data.success && data.data) {
+                // Extract unique categories from products
+                const categoryMap = new Map();
+
+                data.data.forEach(product => {
+                    // Add product
+                    results.products.push({
+                        id: product.id,
+                        title: product.name,
+                        price: product.discount_price ? `MRP ₹${product.discount_price}` : `MRP ₹${product.price}`,
+                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        slug: product.slug,
+                        tags: [product.category?.name?.toLowerCase() || '', product.subcategory?.name?.toLowerCase() || ''].filter(Boolean)
+                    });
+
+                    // Add category if not already added
+                    if (product.category && !categoryMap.has(product.category.id)) {
+                        categoryMap.set(product.category.id, {
+                            id: product.category.id,
+                            name: product.category.name,
+                            slug: product.category.slug
+                        });
+                    }
+
+                    // Add subcategory if exists and not already added
+                    if (product.subcategory && !categoryMap.has(`sub_${product.subcategory.id}`)) {
+                        categoryMap.set(`sub_${product.subcategory.id}`, {
+                            id: product.subcategory.id,
+                            name: product.subcategory.name,
+                            slug: product.subcategory.slug,
+                            is_subcategory: true
+                        });
+                    }
+                });
+
+                // Convert categories map to array and limit to 3
+                results.categories = Array.from(categoryMap.values()).slice(0, 3);
+                results.hasResults = results.products.length > 0 || results.categories.length > 0;
+            }
+
+            return results;
         }
 
         // ==================== DESKTOP SEARCH FUNCTIONS ====================
         // Render desktop search results
-        function renderDesktopSearchResults(searchTerm = '') {
-            const results = filterData(searchTerm);
+        async function renderDesktopSearchResults(searchTerm = '') {
+            if (!searchTerm.trim()) {
+                // Show empty state or default suggestions
+                categoriesList.innerHTML = '';
+                trendingList.innerHTML = '';
+                productsList.innerHTML = '';
+
+                document.getElementById('categories-section').style.display = 'none';
+                document.getElementById('trending-section').style.display = 'none';
+                document.getElementById('products-section').style.display = 'none';
+                noResults.style.display = 'none';
+
+                viewMore.href = '#';
+                viewMore.textContent = 'View More →';
+                return;
+            }
+
+            const results = await fetchSearchResults(searchTerm);
 
             // Clear previous results
             categoriesList.innerHTML = '';
@@ -2168,7 +2124,7 @@
             const productsSection = document.getElementById('products-section');
 
             categoriesSection.style.display = results.categories.length > 0 ? 'block' : 'none';
-            trendingSection.style.display = results.trending.length > 0 ? 'block' : 'none';
+            trendingSection.style.display = 'none'; // Hide trending section as we don't have trending data from API
             productsSection.style.display = results.products.length > 0 ? 'block' : 'none';
             noResults.style.display = results.hasResults ? 'none' : 'block';
 
@@ -2181,26 +2137,11 @@
             results.categories.forEach(category => {
                 const categoryElement = document.createElement('div');
                 categoryElement.className = 'search-category-item';
-                categoryElement.innerHTML = highlightText(category, searchTerm);
+                categoryElement.innerHTML = highlightText(category.name, searchTerm);
                 categoryElement.addEventListener('click', () => {
-                    searchInput.value = category;
-                    searchInput.focus();
-                    performComprehensiveSearch(category);
+                    window.location.href = `/category/${category.slug}`;
                 });
                 categoriesList.appendChild(categoryElement);
-            });
-
-            // Render trending searches
-            results.trending.forEach(trend => {
-                const trendElement = document.createElement('div');
-                trendElement.className = 'trending-tag';
-                trendElement.innerHTML = highlightText(trend, searchTerm);
-                trendElement.addEventListener('click', () => {
-                    searchInput.value = trend;
-                    searchInput.focus();
-                    performComprehensiveSearch(trend);
-                });
-                trendingList.appendChild(trendElement);
             });
 
             // Render products
@@ -2215,13 +2156,7 @@
                     </div>
                 `;
                 productElement.addEventListener('click', () => {
-                    // Navigate to product detail page
-                    if (product.id) {
-                        window.location.href = `/products/${product.id}`;
-                    } else {
-                        // If no ID, perform search with product title
-                        performComprehensiveSearch(product.title);
-                    }
+                    window.location.href = `/products/${product.slug}`;
                 });
                 productsList.appendChild(productElement);
             });
@@ -2243,11 +2178,10 @@
             // Show loading indicator
             searchLoading.classList.add('active');
 
-            // Simulate API call delay
-            setTimeout(() => {
-                renderDesktopSearchResults(searchTerm);
+            // Fetch and render results
+            renderDesktopSearchResults(searchTerm).then(() => {
                 searchLoading.classList.remove('active');
-            }, 300);
+            });
         }
 
         // Show desktop search dropdown
@@ -2264,8 +2198,18 @@
 
         // ==================== MOBILE SEARCH FUNCTIONS ====================
         // Render mobile search results
-        function renderMobileSearchResults(searchTerm = '') {
-            const results = filterData(searchTerm);
+        async function renderMobileSearchResults(searchTerm = '') {
+            if (!searchTerm.trim()) {
+                mobileCategoriesList.innerHTML = '';
+                mobileProductsList.innerHTML = '';
+
+                document.getElementById('mobile-categories-section').style.display = 'none';
+                document.getElementById('mobile-products-section').style.display = 'none';
+                mobileNoResults.style.display = 'none';
+                return;
+            }
+
+            const results = await fetchSearchResults(searchTerm);
 
             // Clear previous results
             mobileCategoriesList.innerHTML = '';
@@ -2290,16 +2234,15 @@
                 categoryElement.className = 'mobile-search-item';
                 categoryElement.innerHTML = `
                     <i class="fa-solid fa-tag mr-2"></i>
-                    ${highlightText(category, searchTerm)}
+                    ${highlightText(category.name, searchTerm)}
                 `;
                 categoryElement.addEventListener('click', () => {
-                    mobileSearchInput.value = category;
-                    performMobileSearch(category);
+                    window.location.href = `/category/${category.slug}`;
                 });
                 mobileCategoriesList.appendChild(categoryElement);
             });
 
-            // Render products for mobile (simplified view)
+            // Render products for mobile
             results.products.forEach(product => {
                 const productElement = document.createElement('div');
                 productElement.className = 'mobile-search-item product-item';
@@ -2311,7 +2254,7 @@
                     </div>
                 `;
                 productElement.addEventListener('click', () => {
-                    console.log('Mobile product clicked:', product.title);
+                    window.location.href = `/products/${product.slug}`;
                     closeMobileSearch();
                 });
                 mobileProductsList.appendChild(productElement);
@@ -2319,34 +2262,45 @@
         }
 
         // Update mobile search suggestions
-        function updateMobileSuggestions(searchTerm = '') {
+        async function updateMobileSuggestions(searchTerm = '') {
             const suggestionsContainer = mobileSuggestionsContent;
             suggestionsContainer.innerHTML = '';
 
             if (!searchTerm.trim()) {
-                // Show default trending suggestions
-                searchData.trending.slice(0, 5).forEach(trend => {
+                // Show default categories as suggestions
+                const results = await fetchSearchResults(''); // Fetch some default products
+                const defaultSuggestions = results.products.slice(0, 5).map(p => p.title);
+
+                if (defaultSuggestions.length === 0) {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.className = 'search-suggestion-item';
-                    suggestionItem.setAttribute('data-search', trend);
                     suggestionItem.innerHTML = `
-                        <i class="fa-solid fa-tag"></i>
-                        <span>${trend}</span>
+                        <i class="fa-solid fa-search"></i>
+                        <span>Start typing to search</span>
                     `;
-                    suggestionItem.addEventListener('click', () => {
-                        openMobileSearch(trend);
-                        hideMobileSuggestions();
-                    });
                     suggestionsContainer.appendChild(suggestionItem);
-                });
+                } else {
+                    defaultSuggestions.forEach(suggestion => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'search-suggestion-item';
+                        suggestionItem.setAttribute('data-search', suggestion);
+                        suggestionItem.innerHTML = `
+                            <i class="fa-solid fa-tag"></i>
+                            <span>${suggestion}</span>
+                        `;
+                        suggestionItem.addEventListener('click', () => {
+                            openMobileSearch(suggestion);
+                            hideMobileSuggestions();
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                }
             } else {
-                // Show filtered suggestions
-                const term = searchTerm.toLowerCase();
-                const filteredTrending = searchData.trending.filter(trend =>
-                    trend.toLowerCase().includes(term)
-                ).slice(0, 5);
+                // Show filtered suggestions from API
+                const results = await fetchSearchResults(searchTerm);
+                const filteredSuggestions = results.products.slice(0, 5).map(p => p.title);
 
-                if (filteredTrending.length === 0) {
+                if (filteredSuggestions.length === 0) {
                     const noSuggestion = document.createElement('div');
                     noSuggestion.className = 'search-suggestion-item';
                     noSuggestion.innerHTML = `
@@ -2355,16 +2309,16 @@
                     `;
                     suggestionsContainer.appendChild(noSuggestion);
                 } else {
-                    filteredTrending.forEach(trend => {
+                    filteredSuggestions.forEach(suggestion => {
                         const suggestionItem = document.createElement('div');
                         suggestionItem.className = 'search-suggestion-item';
-                        suggestionItem.setAttribute('data-search', trend);
+                        suggestionItem.setAttribute('data-search', suggestion);
                         suggestionItem.innerHTML = `
                             <i class="fa-solid fa-tag"></i>
-                            <span>${highlightText(trend, searchTerm)}</span>
+                            <span>${highlightText(suggestion, searchTerm)}</span>
                         `;
                         suggestionItem.addEventListener('click', () => {
-                            openMobileSearch(trend);
+                            openMobileSearch(suggestion);
                             hideMobileSuggestions();
                         });
                         suggestionsContainer.appendChild(suggestionItem);
@@ -2378,11 +2332,10 @@
             // Show loading indicator
             mobileSearchLoading.classList.add('active');
 
-            // Simulate API call delay
-            setTimeout(() => {
-                renderMobileSearchResults(searchTerm);
+            // Fetch and render results
+            renderMobileSearchResults(searchTerm).then(() => {
                 mobileSearchLoading.classList.remove('active');
-            }, 300);
+            });
         }
 
         // Open mobile search
@@ -2440,7 +2393,6 @@
         // ==================== INITIALIZE SEARCH ====================
         function initSearch() {
             // Initial render of default results
-            renderDesktopSearchResults();
             updateMobileSuggestions();
 
             // ==================== DESKTOP SEARCH EVENTS ====================
@@ -2449,7 +2401,6 @@
                     if (!isMobile()) {
                         showDesktopSearchDropdown();
                         hideCategoriesMenu();
-                        renderDesktopSearchResults();
                     }
                 });
 
@@ -2514,7 +2465,6 @@
 
             function performComprehensiveSearch(searchTerm) {
                 // Navigate to all-product page with search parameter
-                // This will search across product names, categories, occasions, etc.
                 window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
             }
 
@@ -2549,7 +2499,7 @@
                     if (e.key === 'Enter') {
                         const searchTerm = this.value.trim();
                         if (searchTerm) {
-                            window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+                            window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
                         }
                     }
                 });
@@ -2638,8 +2588,7 @@
             // Close search when clicking outside (desktop only)
             if (!isMobile()) {
                 document.addEventListener('click', function(event) {
-                    const isClickInsideSearch = searchContainer && searchContainer.contains(event
-                        .target);
+                    const isClickInsideSearch = searchContainer && searchContainer.contains(event.target);
 
                     if (!isClickInsideSearch) {
                         hideDesktopSearchDropdown();
@@ -2676,8 +2625,7 @@
                     }
                 } else {
                     // Keyboard is hidden - check if we need to close search
-                    if (mobileSearchInput.value.trim() === '' && mobileSearchDropdown.classList
-                        .contains('active')) {
+                    if (mobileSearchInput.value.trim() === '' && mobileSearchDropdown.classList.contains('active')) {
                         // User might have closed keyboard without searching
                         // Keep search open but reset results
                         renderMobileSearchResults();
@@ -3199,7 +3147,6 @@
         // Initialize desktop menu to default state
         hideCategoriesMenu();
 
-        // Handle window resize
         // Handle window resize
         let lastWindowWidth = window.innerWidth;
         window.addEventListener('resize', function() {
