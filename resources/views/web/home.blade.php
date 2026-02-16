@@ -272,17 +272,19 @@
                         @foreach ($topCategories as $index => $cat)
                         <img data-link="{{ url('collections/' . $cat->slug) }}"
                             class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center
-               transition-opacity duration-1000 transform group-hover:scale-110
-               {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                                transition-opacity duration-1000 transform group-hover:scale-110
+                                {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
                             src="{{ asset('uploads/category/' . $cat->image) }}" alt="{{ $cat->name }}">
                         @endforeach
 
                     </a>
                     @else
                     <!-- Default Image -->
+                    <a href="{{ url('collections/' . 'lahanga') }}">
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
                         alt="Glow Pink Dress">
+                    </a>
                     @endif
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" /> --}}
@@ -369,9 +371,11 @@
                     </a>
                     @else
                     <!-- Default Image -->
+                    <a href="{{ url('collections/' . 'lahanga') }}">
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
                         alt="Gray Lahenga">
+                    </a>
                     @endif
                     <div
                         class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
@@ -405,8 +409,10 @@
 
                     </a>
                     @else
+                     <a href="{{ url('collections/' . 'lahanga') }}">
                     <img class="object-cover h-full w-full"
                         src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
+                     </a>
                     @endif
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">

@@ -926,6 +926,12 @@
             display: block !important;
         }
     }
+ /* SweetAlert ABOVE mobile navbar / drawer */
+.swal2-container {
+    z-index: 999999 !important;
+}
+
+
 </style>
 
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] ">
@@ -1335,10 +1341,11 @@
                         </div>
                         <ul class="submenu">
                             @if (isset($categories) && count($categories) > 0)
-                            @foreach ($categories->take(5) as $cat)
+                            @foreach ($categories->where('parent_id', $category->id) as $subCategory)
+
                             <li class="menu-item">
-                                <a href="{{ route('category.show', $cat->slug) }}"
-                                    class="menu-link hover:pl-6 transition-all">{{ $cat->name }}</a>
+                                <a href="{{ route('category.show', $subCategory->slug) }}"
+                                    class="menu-link hover:pl-6 transition-all">{{ $subCategory->name }}</a>
                             </li>
                             @endforeach
                             @endif
@@ -1368,16 +1375,28 @@
                                 class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
                         <ul class="submenu">
+                            @foreach($category->products->take(5) as $product)
                             <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Red Saree</a>
+                                @if($product->ready_to_ship == true)
+                                <a href="{{route('page.single-product', $product->slug)}}" class="menu-link hover:pl-6 transition-all">{{ $product->name }}</a>
+                                @else
+                                 <a href="#"
+                                    onclick="notAvailableToast()"
+                                    class="menu-link hover:pl-6 transition-all text-gray-400">
+                                        {{ $product->name }}
+                                    </a>
+                                @endif
+                                
+
                             </li>
-                            <li class="menu-item">
+                            @endforeach
+                            {{-- <li class="menu-item">
                                 <a href="#" class="menu-link hover:pl-6 transition-all">Salwar
                                     Kameez</a>
                             </li>
                             <li class="menu-item">
                                 <a href="#" class="menu-link hover:pl-6 transition-all">Lehenga</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                 </ul>
@@ -1477,7 +1496,7 @@
                 <button
                     class="category-sidebar-btn px-6 py-2 rounded-full rounded-r-none text-lg font-medium w-full text-left"
                     data-target="collection-products">
-                    Collection
+                    Collection 
                 </button>
             </div>
 
@@ -1549,6 +1568,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -3269,3 +3289,22 @@
         });
     });
 </script>
+<script>
+function notAvailableToast() {
+    Swal.fire({
+        toast: true,
+        position: 'top',
+        icon: 'warning',
+        title: 'Product not available',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+}
+</script>
+
+
+
+
+
+
