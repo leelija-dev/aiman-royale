@@ -80,130 +80,130 @@
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
                         <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
-                            alt="Saree"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
-                <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
-            </a>
-
-            <!-- Salwar Kameez -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
-                            alt="Salwar Kameez"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar
-                    Kameez</span>
-                <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
-            </a>
-
-            <!-- Lehenga -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}" alt="Lehenga"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                    </div>
-
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
-                <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
-            </a>
-
-            <!-- Indo Western -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
-                            alt="Indo Western"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo
-                    Western</span>
-                <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
-            </a>
-
-            <!-- Blouses -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}" alt="Blouses"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
-                <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
-            </a>
-
-            <!-- Menswear -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}" alt="Menswear"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
-                <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
-            </a>
-
-            <!-- Bridal Edit -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
-                            alt="Bridal Edit"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                    </div>
-
-                </div>
-                <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal
-                    Edit</span>
-                <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
-            </a>
---}}
+            alt="Saree"
+            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
         </div>
     </div>
+    <span
+        class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
+    <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
+    </a>
+
+    <!-- Salwar Kameez -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
+                    alt="Salwar Kameez"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            </div>
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar
+            Kameez</span>
+        <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
+    </a>
+
+    <!-- Lehenga -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}" alt="Lehenga"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                </div>
+            </div>
+
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
+        <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
+    </a>
+
+    <!-- Indo Western -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
+                    alt="Indo Western"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            </div>
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo
+            Western</span>
+        <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
+    </a>
+
+    <!-- Blouses -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}" alt="Blouses"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            </div>
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
+        <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
+    </a>
+
+    <!-- Menswear -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}" alt="Menswear"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            </div>
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
+        <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
+    </a>
+
+    <!-- Bridal Edit -->
+    <a href="/" class="group flex flex-col items-center  snap-center">
+        <div class="relative mb-2">
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+            </div>
+            <div
+                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
+                <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
+                    alt="Bridal Edit"
+                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+            </div>
+
+        </div>
+        <span
+            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal
+            Edit</span>
+        <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
+    </a>
+    --}}
+</div>
+</div>
 
 
 </div>
@@ -692,21 +692,21 @@
         <div class="flex gap-4 flex-wrap lgg:gap-6 lgg:justify-start justify-center items-center ">
             @foreach ($categories->where('parent_id', null) as $category)
             <a href="{{ route('category.show',$category->slug) }}">
-            <div
-                class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
-                <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                    class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                <div
+                    class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
+                    <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
-                <span
-                    class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary">
-                    {{ $category->name }}
-                </span>
+                    <span
+                        class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary">
+                        {{ $category->name }}
+                    </span>
 
-                <span
-                    class="lgg:ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white">
-                    {{ $category->products_count }}
-                </span>
-            </div>
+                    <span
+                        class="lgg:ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white">
+                        {{ $category->products_count }}
+                    </span>
+                </div>
             </a>
             @endforeach
         </div>
@@ -1477,76 +1477,78 @@ All Products
         <div class="main-owl owl-carousel owl-theme">
             @foreach ($categories as $category)
             <div class="item flex justify-center items-center">
-                <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card"
-                    data-category-id="{{ $category->id }}">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                            alt="{{ $category->name }}"
-                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                <a href="{{ route('category.show', $category->slug) }}">
+                    <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card"
+                        data-category-id="{{ $category->id }}">
+                        <!-- Image Wrapper -->
+                        <div class="relative rounded-[6px] overflow-hidden">
+                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                                alt="{{ $category->name }}"
+                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
-                        <!-- Category Badge -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            @if ($category->products_count ?? false)
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                {{ $category->products_count }} Products
-                            </span>
-                            @endif
-                            @if ($category->is_active)
-                            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                Active
-                            </span>
-                            @endif
+                            <!-- Category Badge -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                @if ($category->products_count ?? false)
+                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                                    {{ $category->products_count }} Products
+                                </span>
+                                @endif
+                                @if ($category->is_active)
+                                <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                    Active
+                                </span>
+                                @endif
+                            </div>
+
+                            <!-- View Products Button (Top Right) -->
+                            <button
+                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+
+                            <!-- View Category (Hidden → Hover Show) -->
+                            <div
+                                class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+                                <a href="{{ route('category.show', $category->slug) }}"
+                                    class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
+                                    View Category
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- View Products Button (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
+                        <!-- Content -->
+                        <div class="p-4 space-y-1">
+                            <h3 class="text-[15px] font-semibold text-gray-900">
+                                {{ $category->name }}
+                            </h3>
 
-                        <!-- View Category (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <a href="{{ route('category.show', $category->slug) }}"
-                                class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
-                                View Category
-                            </a>
+                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                @if ($category->products_count)
+                                <span class="text-lg font-bold text-gray-900">{{ $category->products_count }}
+                                    Items</span>
+                                @else
+                                <span class="text-lg font-bold text-gray-900">Browse Collection</span>
+                                @endif
+                            </div>
+                            <div class="lgg:hidden block">
+                                <a href="{{ route('category.show', $category->slug) }}"
+                                    class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
+                                    View
+                                </a>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            {{ $category->name }}
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            @if ($category->products_count)
-                            <span class="text-lg font-bold text-gray-900">{{ $category->products_count }}
-                                Items</span>
-                            @else
-                            <span class="text-lg font-bold text-gray-900">Browse Collection</span>
-                            @endif
-                        </div>
-                        <div class="lgg:hidden block">
-                            <a href="{{ route('category.show', $category->slug) }}"
-                                class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
-                                View
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
             @endforeach
         </div>
@@ -1657,25 +1659,25 @@ All Products
         <div class="main-owl owl-carousel owl-theme">
             @forelse($mostWishlisted as $index => $product)
             @php
-                $variant = $product->variants->first();
+            $variant = $product->variants->first();
             @endphp
 
-          
+
 
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
-                        
+
                         <a href="{{route('category.show', $product->category->slug)}}">
-                        <img src="{{ asset($product->images->first()->image) }}"
-                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                            <img src="{{ asset($product->images->first()->image) }}"
+                                alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
                         </a>
-                        
+
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
-                             {{-- @dd($product->variants->first()->discount) --}}
+                            {{-- @dd($product->variants->first()->discount) --}}
                             @if(optional($product->variants->first())->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
@@ -1701,25 +1703,25 @@ All Products
 
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         @php
-                               $variant_id = optional($variant)->id ?? $variant?->first()->id; 
+                        $variant_id = optional($variant)->id ?? $variant?->first()->id;
                         @endphp
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            
-                            
+
+
                             <a href="{{route('category.show', $product->category->slug)}}">
-                            <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                View
-                            </button>
+                                <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                                    View
+                                </button>
                             </a>
-                            
+
                         </div>
                     </div>
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                           {{$product->name ?? ''}}
+                            {{$product->name ?? ''}}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -1736,13 +1738,13 @@ All Products
                             @endif
                         </div>
                         <div class="lgg:hidden block">
-                            
+
                             {{-- <button onclick="addToCart({{$variant_id}}, event)"
-                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button> --}}
-                             <a href="{{route('category.show', $product->category->slug)}}"> 
-                                <button 
-                                class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
-                             </a>   
+                            class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button> --}}
+                            <a href="{{route('category.show', $product->category->slug)}}">
+                                <button
+                                    class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1752,203 +1754,203 @@ All Products
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
                         <img src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
+            <!-- Badges -->
+            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                    Trending
+                </span>
+                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                    -17%
+                </span>
+            </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                                id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
+            <!-- Wishlist Heart Icon (Top Right) -->
+            <button
+                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                onclick="toggleHomeWishlist(1, event)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
+                    id="wishlist-heart-1">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
 
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)"
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
+            <!-- Add To Cart (Hidden → Hover Show) -->
+            <div
+                class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+                <button onclick="addToCart(1, event)"
+                    class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                    Add To Cart
+                </button>
+            </div>
+        </div>
 
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Light Pink Plazo
-                        </h3>
+        <!-- Content -->
+        <div class="p-4 space-y-1">
+            <h3 class="text-[15px] font-semibold text-gray-900">
+                Light Pink Plazo
+            </h3>
 
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <span>Brand Name</span>
+                <span class="flex items-center gap-1 text-gray-700">
+                    <span class="text-sm font-medium">4.4</span>
+                </span>
+            </div>
 
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button onclick="addToCart(1, event)"
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-            {{-- <div class="item flex justify-center items-center">
+            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                <span class="text-lg font-bold text-gray-900">Rs. 700</span>
+                <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
+            </div>
+            <div class="lgg:hidden block">
+                <button onclick="addToCart(1, event)"
+                    class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+            </div>
+        </div>
+    </div>
+    </div> --}}
+    {{-- <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
                         <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
-                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+    alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+    <!-- Badges -->
+    <div class="absolute top-3 left-3 flex flex-col gap-2">
 
-                            @if($product->wishlists_count > 0)
-                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            @endif
-                            @if($product->discount_price && $product->discount_price < $product->price)
-                                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                    -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
-                                </span>
-                                @endif
-                        </div>
+        @if($product->wishlists_count > 0)
+        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+            Trending
+        </span>
+        @endif
+        @if($product->discount_price && $product->discount_price < $product->price)
+            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
+            </span>
+            @endif
+    </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                                id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
+    <!-- Wishlist Heart Icon (Top Right) -->
+    <button
+        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+        onclick="toggleHomeWishlist(1, event)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
+            id="wishlist-heart-1">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+    </button>
 
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        {{-- <div class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+    <!-- Add To Cart (Hidden → Hover Show) -->
+    {{-- <div class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
                             <button onclick="addToCart({{ $product->id }}, event)"
-                        class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                        Add To Cart
-                        </button>
-                    </div> --}}
-                {{-- </div> --}}
+    class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+    Add To Cart
+    </button>
+    </div> --}}
+    {{-- </div> --}}
 
-                <!-- Content -->
-                {{-- <div class="p-4 space-y-1">
+    <!-- Content -->
+    {{-- <div class="p-4 space-y-1">
                     <h3 class="text-[15px] font-semibold text-gray-900">
                         {{ $product->name }}
-                    </h3>
+    </h3>
 
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <span>{{ $product->brand_name ?? 'Brand Name' }}</span>
-                        <span class="flex items-center gap-1 text-gray-700">
-                            <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
-                        </span>
-                    </div>
+    <div class="flex items-center gap-2 text-sm text-gray-600">
+        <span>{{ $product->brand_name ?? 'Brand Name' }}</span>
+        <span class="flex items-center gap-1 text-gray-700">
+            <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
+        </span>
+    </div>
 
-                    <div class="flex items-center gap-2 mt-2 flex-wrap">
-                        <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                        <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                    </div>
-                    <div class="lgg:hidden block">
-                        <button onclick="addToCart(1, event)"
-                            class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                    </div>
-                </div> --}}
-            {{-- </div> --}}
-        {{-- </div> --}} 
-        {{-- <div class="item flex justify-center items-center">
+    <div class="flex items-center gap-2 mt-2 flex-wrap">
+        <span class="text-lg font-bold text-gray-900">Rs. 700</span>
+        <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
+    </div>
+    <div class="lgg:hidden block">
+        <button onclick="addToCart(1, event)"
+            class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+    </div>
+    </div> --}}
+    {{-- </div> --}}
+    {{-- </div> --}}
+    {{-- <div class="item flex justify-center items-center">
             <div
                 class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <!-- Image Wrapper -->
                 <div class="relative rounded-[6px] overflow-hidden">
                     <img src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
-                        alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+    alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
-                    <!-- Badges -->
-                    <div class="absolute top-3 left-3 flex flex-col gap-2">
-                        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                            Trending
-                        </span>
-                        <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                            -17%
-                        </span>
-                    </div>
+    <!-- Badges -->
+    <div class="absolute top-3 left-3 flex flex-col gap-2">
+        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+            Trending
+        </span>
+        <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+            -17%
+        </span>
+    </div>
 
-                    <!-- Wishlist Heart Icon (Top Right) -->
-                    <button
-                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                        onclick="toggleHomeWishlist(1, event)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                            id="wishlist-heart-1">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </button>
+    <!-- Wishlist Heart Icon (Top Right) -->
+    <button
+        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+        onclick="toggleHomeWishlist(1, event)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
+            id="wishlist-heart-1">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+    </button>
 
-                    <!-- Add To Cart (Hidden → Hover Show) -->
-                    <div
-                        class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                        <button onclick="addToCart(1, event)"
-                            class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                            Add To Cart
-                        </button>
-                    </div>
-                </div>
+    <!-- Add To Cart (Hidden → Hover Show) -->
+    <div
+        class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+        <button onclick="addToCart(1, event)"
+            class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+            Add To Cart
+        </button>
+    </div>
+    </div>
 
-                <!-- Content -->
-                <div class="p-4 space-y-1">
-                    <h3 class="text-[15px] font-semibold text-gray-900">
-                        Cherry Plazo
-                    </h3>
+    <!-- Content -->
+    <div class="p-4 space-y-1">
+        <h3 class="text-[15px] font-semibold text-gray-900">
+            Cherry Plazo
+        </h3>
 
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <span>Brand Name</span>
-                        <span class="flex items-center gap-1 text-gray-700">
-                            <span class="text-sm font-medium">4.4</span>
-                        </span>
-                    </div>
-
-                    <div class="flex items-center gap-2 mt-2 flex-wrap">
-                        <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                        <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                    </div>
-                    <div class="lgg:hidden block">
-                        <button onclick="addToCart(1, event)"
-                            class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        @empty
-        <div class="text-center py-8">
-            <p class="text-gray-500">No wishlisted products found.</p>
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+            <span>Brand Name</span>
+            <span class="flex items-center gap-1 text-gray-700">
+                <span class="text-sm font-medium">4.4</span>
+            </span>
         </div>
-        @endforelse
 
-        <!-- Add more product items as needed -->
+        <div class="flex items-center gap-2 mt-2 flex-wrap">
+            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
+            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
+        </div>
+        <div class="lgg:hidden block">
+            <button onclick="addToCart(1, event)"
+                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+        </div>
+    </div>
+    </div>
+    </div> --}}
+    @empty
+    <div class="text-center py-8">
+        <p class="text-gray-500">No wishlisted products found.</p>
+    </div>
+    @endforelse
+
+    <!-- Add more product items as needed -->
     </div>
     </div>
 </section>
@@ -2717,8 +2719,6 @@ All Products
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
     });
-
-    
 </script>
 
 @endsection
