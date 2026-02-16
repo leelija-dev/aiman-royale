@@ -107,7 +107,12 @@ class CheckoutController extends Controller
         });
         // $shipping = 7.00;
         // $tax = $subtotal * 0.05;
-        $total = $subtotal; //+ $shipping + $tax;
+        if($subtotal <= 400) {
+            $shipping = 50;
+        } else {
+            $shipping = 0;
+        }
+        $total = $subtotal + $shipping; //+ $shipping + $tax;
 
         // Create order
         $order_id = DB::table('orders')->insertGetId([

@@ -181,6 +181,11 @@
             </div>
             @php 
             $total +=(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count);
+            $shippingCost =0;
+            if($total <= 400)
+            {
+              $shippingCost =50;
+            }
             @endphp
             @endforeach
             @else
@@ -202,8 +207,14 @@
 
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
+                 
                 <span class="text-gray-600">Subtotal</span>
                 <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
+                </div>
+                <div class="flex justify-between">
+
+                <span class="text-gray-600">Shipping</span>
+                <span>{{config('app.currency')}}{{$shippingCost}}</span>
               </div>
               {{-- <div class="flex justify-between">
                     <span class="text-gray-600">Shipping</span>
@@ -217,7 +228,7 @@
             class="flex justify-between font-semibold text-base pt-2 border-t">
             <span>Total</span>
             
-            <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span>
+            <span>{{config('app.currency')}}{{ number_format($total+$shippingCost, 2) }}</span>
           </div>
         </div>
 
