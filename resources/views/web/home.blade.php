@@ -744,6 +744,7 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
+           
             @foreach ($products as $product)
             <div class="item flex justify-center items-center">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer"
