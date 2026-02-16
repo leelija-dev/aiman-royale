@@ -1087,7 +1087,7 @@
       <div class="flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="text-center md:text-left">
           <p class="text-gray-600 text-sm">
-            &copy; 2024 Aiman Fashion. All rights reserved.
+            &copy; {{now()->format('Y')}} Aiman Fashion. All rights reserved.
           </p>
           <p class="text-gray-500 text-xs mt-2">
             Crafted with ❤️ in India
