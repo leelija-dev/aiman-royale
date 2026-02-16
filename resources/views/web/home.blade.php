@@ -234,8 +234,10 @@
 
                     </a>
                     @else
-                    <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
-                        class="block h-full w-full relative">
+                        {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
+                        class="block h-full w-full relative"> --}}
+                        <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
+                        class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
                             src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
                     @endif
@@ -409,7 +411,9 @@
 
                     </a>
                     @else
-                     <a href="{{ url('collections/' . 'lehengas') }}">
+                    <a id="rightSliderLink" href="{{ url('collections/lehengas') }}"
+                        class="absolute inset-0 z-20 block">
+                     
                     <img class="object-cover h-full w-full"
                         src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
                      </a>
