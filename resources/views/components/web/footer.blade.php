@@ -632,13 +632,18 @@
             </p>
           </div>
 
-          <form action="" class="relative">
+          <form action="{{ route('newsletter.store') }}" method="POST" >
+            @csrf
             <div class="flex flex-col sm:flex-row gap-4">
               <div class="flex-1 relative group">
                 <input
                   type="email"
+                  name="email"
                   class="w-full px-6 py-4 lg:py-5 bg-white/80 backdrop-blur-sm border-2 border-[#EC4899]/30 rounded-2xl lg:rounded-3xl outline-none text-gray-800 placeholder-gray-500 transition-all duration-300 focus:border-[#EC4899] focus:bg-white focus:shadow-lg focus:shadow-[#EC4899]/20"
-                  placeholder="Your email address" />
+                  placeholder="Your email address" required/>
+                  @error('email')
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                  @enderror
                 <div class="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-[#A10000]/0 via-[#EC4899]/0 to-[#EC4899]/0 group-focus-within:from-[#A10000]/5 group-focus-within:via-[#EC4899]/5 group-focus-within:to-[#EC4899]/5 transition-all duration-500 -z-10"></div>
               </div>
               <button
@@ -1396,3 +1401,40 @@
     animation: gradient-shift 3s ease infinite;
   }
 </style>
+{{-- @if(session('success'))
+<script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: '{{ session('success') }}',
+    showConfirmButton: false,
+    timer: 3000
+});
+</script>
+@endif --}}
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK',
+        confirmButtonColor: 'green'
+    });
+</script>
+@endif
+
+@if ($errors->has('email'))
+<script>
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops!',
+        text: "{{ $errors->first('email') }}",
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#000'
+    });
+</script>
+@endif
+
+

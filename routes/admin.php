@@ -253,6 +253,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\PrintBillController::class, 'index'])->name('admin.print-bill');
         Route::get('/{id}', [\App\Http\Controllers\Admin\PrintBillController::class, 'getInvoice'])->name('admin.print-bill.get');
     });
+
+    Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
+
     // ProductPackage routes (commented out - controller doesn't exist)
     // Route::prefix('product-package')->group(function(){
     //     Route::get('/',[ProductPackageController::class,'index'])->name('admin.product-package.index');
