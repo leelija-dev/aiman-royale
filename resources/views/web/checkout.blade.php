@@ -16,7 +16,7 @@
           @csrf
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">First Name<sup class="text-danger" style="color: red">*</sup></label>
               @php
               $defaultAddress = $addresses->where('is_default', 1)->first();
               $fullName = $defaultAddress->full_name ?? auth()->user()->name ?? '';
@@ -34,7 +34,7 @@
                 @enderror
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Last Name<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="text"
                 name="lastName"
@@ -49,7 +49,7 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="email"
                 name="email"
@@ -61,7 +61,7 @@
                 @enderror
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Phone No</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phone No<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="tel"
                 name="phone"
@@ -76,7 +76,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Address 1</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Address 1<sup class="text-danger" style="color: red">*</sup></label>
             <input
               type="text"
               name="address1"
@@ -104,7 +104,7 @@
 
           <div class="grid grid-cols-3 gap-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">City<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="text"
                 name="city"
@@ -116,7 +116,7 @@
                 @enderror
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">State<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="text"
                 name="state"
@@ -128,7 +128,7 @@
                 @enderror
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code<sup class="text-danger" style="color: red">*</sup></label>
               <input
                 type="text"
                 name="pinCode"
