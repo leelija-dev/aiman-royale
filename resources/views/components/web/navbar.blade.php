@@ -2712,20 +2712,114 @@
             console.log('Breadcrumbs updated successfully');
         }
 
+        // function generateBreadcrumbsFromCurrentPage() {
+        //     const currentPath = window.location.pathname;
+        //     console.log('Current path:', currentPath);
+        //     const breadcrumbs = [];
+
+        //     // Home
+        //     breadcrumbs.push({
+        //         name: 'Home',
+        //         url: '/'
+        //     });
+
+        //     if (currentPath === '/' || currentPath === '') {
+        //         return breadcrumbs;
+        //     }
+
+        //     // Parse path and generate breadcrumbs
+        //     const pathSegments = currentPath.split('/').filter(segment => segment);
+        //     console.log('Path segments:', pathSegments);
+
+        //     if (pathSegments.length > 0) {
+        //         if (pathSegments[0] === 'category' || pathSegments[0] === 'collections') {
+        //             if (pathSegments.length === 1) {
+        //                 // Base category or collections page
+        //                 const pageName = pathSegments[0] === 'category' ? 'Categories' : 'Collections';
+        //                 breadcrumbs.push({
+        //                     name: pageName,
+        //                     url: null
+        //                 });
+        //             } else {
+        //                 // Specific category or collections page
+        //                 const categoryName = pathSegments[1]?.replace(/-/g, ' ');
+        //                 if (categoryName) {
+        //                     breadcrumbs.push({
+        //                         name: categoryName.charAt(0).toUpperCase() + categoryName.slice(1),
+        //                         url: `/${pathSegments[0]}/${pathSegments[1]}`
+        //                     });
+        //                 }
+        //             }
+        //         } else if (pathSegments[0] === 'occasion') {
+        //             // Occasion page
+        //             const occasionName = pathSegments[1]?.replace(/-/g, ' ');
+        //             if (occasionName) {
+        //                 breadcrumbs.push({
+        //                     name: occasionName.charAt(0).toUpperCase() + occasionName.slice(1),
+        //                     url: `/occasion/${pathSegments[1]}`
+        //                 });
+        //             }
+        //         } else if (pathSegments[0] === 'products') {
+        //             // Single product page
+        //             breadcrumbs.push({
+        //                 name: 'Products',
+        //                 url: '/products'
+        //             });
+
+        //             // Try to get product name from page title or meta
+        //             const pageTitle = document.title;
+        //             if (pageTitle && pageTitle !== 'Aiman') {
+        //                 breadcrumbs.push({
+        //                     name: pageTitle.replace(' - Aiman', ''),
+        //                     url: null
+        //                 });
+        //             }
+        //         } else if (pathSegments[0] === 'products' && pathSegments.length === 1) {
+        //             // All products page
+        //             breadcrumbs.push({
+        //                 name: 'Products',
+        //                 url: null
+        //             });
+        //         } else if (pathSegments[0] === 'cart') {
+        //             breadcrumbs.push({
+        //                 name: 'Cart',
+        //                 url: null
+        //             });
+        //         } else if (pathSegments[0] === 'wishlist') {
+        //             breadcrumbs.push({
+        //                 name: 'Wishlist',
+        //                 url: null
+        //             });
+        //         } else if (pathSegments[0] === 'checkout') {
+        //             breadcrumbs.push({
+        //                 name: 'Checkout',
+        //                 url: null
+        //             });
+        //         }
+        //     }
+
+        //     console.log('Generated breadcrumbs:', breadcrumbs);
+        //     return breadcrumbs;
+        // }
+
         function generateBreadcrumbsFromCurrentPage() {
             const currentPath = window.location.pathname;
             console.log('Current path:', currentPath);
+
+            // Check if we're on the homepage
+            // This handles both root path '/' and empty path
+            if (currentPath === '/' || currentPath === '' || currentPath === '/home' || currentPath === '/index') {
+                console.log('On homepage - returning empty breadcrumbs');
+                return []; // Return empty array for homepage
+            }
+
             const breadcrumbs = [];
 
-            // Home
+            // Home (only added if not on homepage)
             breadcrumbs.push({
                 name: 'Home',
                 url: '/'
             });
-
-            if (currentPath === '/' || currentPath === '') {
-                return breadcrumbs;
-            }
 
             // Parse path and generate breadcrumbs
             const pathSegments = currentPath.split('/').filter(segment => segment);

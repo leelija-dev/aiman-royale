@@ -50,25 +50,28 @@
 
             <!-- Category Items with Enhanced Cards -->
             <!-- Bestsellers -->
-            <a href="/" class="group flex flex-col items-center  snap-center">
+            @if($categories)
+            @foreach($categories->whereNull('parent_id') as $category)
+            <a href="{{ route('category.show',$category->slug) }}" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                     </div>
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}"
-                            alt="Bestsellers"
+                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            alt="{{$category->name}}"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                 </div>
                 <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Bestsellers</span>
+                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{$category->name}}</span>
                 <span class="text-xs text-gray-500 mt-1">Most Loved</span>
             </a>
-
-            <!-- Saree -->
+            @endforeach
+            @endif
+            <!-- Saree --> {{--
             <a href="/" class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div
@@ -198,7 +201,7 @@
                     Edit</span>
                 <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
             </a>
-
+--}}
         </div>
     </div>
 
