@@ -103,6 +103,7 @@ class ProductVariantController extends Controller
         $product = Product::find($data['product_id']);
         $product->update([
             'stock' => $data['stock'],
+            'ready_to_ship' => 1,
         ]);
         if($variant){
                     if ($request->hasFile('images')) {
@@ -121,6 +122,7 @@ class ProductVariantController extends Controller
                 ]);
             }
             }
+            
         }
         // Create stock entry for the new variant
         StockIn::create([
@@ -186,6 +188,11 @@ class ProductVariantController extends Controller
             'color'           => $request->color,
             'size'            => $request->size,
             'video_url'       => $request->video_url,
+        ]);
+
+        $product = Product::find($data['product_id']);
+        $product->update([
+            'ready_to_ship' => 1,
         ]);
     //if removed images
         if ($request->removed_images) {

@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Category;
 use App\Models\Size;
 use App\Models\Wishlist;
+use App\Models\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $notifications = Notification::where('viewed', 0)->latest()->get();
         $categories = Category::where('is_active', 1)->orderBy('name')->get();
         $sizes=Size::OrderBy('sort_order')->get();
+        $products=Product::all();
         
         // Only get wishlists if user is authenticated
         $wishlists = [];
@@ -45,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
         }
         
         $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes)
-        ->with('wishlists', $wishlists);
+        ->with('wishlists', $wishlists)->with('products',$products);
     });
    }
 }
