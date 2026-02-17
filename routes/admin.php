@@ -211,6 +211,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         
         
     });
+    Route::prefix('customers')->group(function () {
+
+        Route::get('/', [UserController::class, 'customer'])->name('admin.customers.show');
+       
+        
+    });
 
 
     Route::prefix('unit')->group(function () {

@@ -310,15 +310,16 @@ $isEmailActive = false;
                 </a>
             </li> --}}
 
-            {{-- <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('') ? 'active' : '' }}" href="{{ route('Admin.dashboard') }}">
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('admin.customers.show') ? 'active' : '' }}" href="{{ route('admin.customers.show') }}">
             <div
                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                <i class="fa-solid fa-user" aria-hidden="true"></i>
             </div>
-            <span class="nav-link-text ms-1">Categorie</span>
+            <span class="nav-link-text ms-1">Users</span>
             </a>
-            </li>--}}
+            </li>
+            
             {{-- @if($admin->hasPermissionTo('view newsletter')|| $roles[0]=='superadmin') --}}
             
             @php 
@@ -381,14 +382,14 @@ $isEmailActive = false;
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-users-line"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Users</span>
+                    <span class="nav-link-text ms-1">Admin</span>
                 </a>
 
                 <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : '' }}" data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
                             <a class="submenu-link {{ $isUserActive ?  'active' : ''}}"
-                                href="{{ route('admin.users.show') }}">Users</a>
+                                href="{{ route('admin.users.show') }}">Admin</a>
                         </li>
                     </ul>
                 </div>
