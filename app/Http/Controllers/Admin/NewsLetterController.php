@@ -12,7 +12,7 @@ class NewsLetterController extends Controller
 {
     //
     public function ShowNewsLetter(){
-        $data=NewsLetter::all();
+        $data=NewsLetter::orderBy('created_at','desc')->get();
         return view('Admin.News_letter.news_letter',['data'=>$data]);
     }
     public function EmailGroup(){
@@ -69,6 +69,20 @@ class NewsLetterController extends Controller
     }
 
     return redirect()->back()->with('success', 'All emails sent successfully!');
+}
+public function store(Request $request){
+    
+    $data=$request->validate( [
+            'email' => 'required|email|unique:news_letter,email'
+        ],
+        [
+            'email.unique' => 'This email is already subscribed'
+        ]
+        );
+    
+    $data['status']='1';
+    NewsLetter::create($data);
+    return redirect()->back()->with('success', 'Subscribed successfully!');
 }
 
 

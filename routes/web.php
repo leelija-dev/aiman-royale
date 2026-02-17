@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NewsLetterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\CartController;
@@ -12,8 +13,7 @@ use App\Http\Controllers\Web\WishlistController;
 use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
-
-
+use App\Models\NewsLetter;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
@@ -99,3 +99,6 @@ Route::middleware(['auth'])->group(function () {
     // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
 });
+
+
+Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
