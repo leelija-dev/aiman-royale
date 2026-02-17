@@ -1105,7 +1105,7 @@
                 @else
                 <!-- Login Button (Not Logged In) -->
 
-                <a href="{{ route('page.login') }}">
+                <a href="{{ route('page.login', ['redirect' => url()->current()]) }}">
                     <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
                         <i class="fa-solid fa-user text-xs text-[14px]"></i>
                     </div>

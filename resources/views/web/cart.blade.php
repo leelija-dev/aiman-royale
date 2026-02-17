@@ -222,7 +222,7 @@
               
             </form>
             @else
-              <a href="{{ route('page.login') }}">
+              <a href="{{ route('page.login', ['redirect' => url()->current()]) }}">
                 <button
                   class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
                   Login to checkout

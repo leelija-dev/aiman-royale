@@ -35,17 +35,41 @@ class AuthController extends Controller
         return redirect()->route('page.login')->with('success', 'Account created successfully! Please login.');
     }
 
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|string|email',
+    //         'password' => 'required',
+    //     ]);
+
+    //     if (Auth::guard('web')->attempt($credentials)) {
+    //         $request->session()->regenerate();
+
+    //         return redirect()->intended('/')->with('success', 'Welcome back!');
+    //     }
+
+    //     return back()->withErrors([
+    //         'email' => 'The provided credentials do not match our records.',
+    //     ])->onlyInput('email');
+    // }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required',
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        if (Auth::guard('web')->attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('success', 'Welcome back!');
+            // Check if there's a redirect URL
+            if ($request->has('redirect') && $request->redirect) {
+                return redirect()->to($request->redirect);
+            }
+
+            // Default redirect if no redirect URL provided
+            return redirect()->intended(route('page.index'));
         }
 
         return back()->withErrors([
