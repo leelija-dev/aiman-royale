@@ -3,144 +3,520 @@
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
-    <!-- Category Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">
-        {{ $category->name ?? 'Products' }}
-      </h1>
-      @if(isset($category->description))
-        <p class="text-gray-600">{{ $category->description }}</p>
-      @endif
-    </div>
-
-    <!-- Products Grid -->
-    <div class="w-full grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">
-      @forelse($products as $product)
-
-        <div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card" data-product-slug="{{ $product->slug }}">
-          <!-- Image Wrapper -->
-          <div class="relative rounded-xl overflow-hidden">
-            <img 
-              src="{{ $product->images->first() ? asset($product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
-              alt="{{ $product->name }}"
-              class="w-full h-[340px] object-cover object-top object-center"
-            />
-
-            <!-- Badges -->
-            <div class="absolute top-3 left-3 flex flex-col gap-2">
-              @if($product->is_trending ?? false)
-                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                  Trending
-                </span>
-              @endif
-              @if($product->discount_percentage ?? false)
-                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                  -{{ $product->discount_percentage }}%
-                </span>
-              @endif
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Filters Sidebar -->
+      <div class="lg:w-1/4 w-full">
+        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Filters</h2>
+          
+           <!-- Occasion Filter -->
+          @if(isset($occasions) && $occasions->isNotEmpty())
+          <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Occasion</h3>
+            <div class="space-y-2">
+              @foreach($occasions as $occasion)
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="occasion[]" 
+                  value="{{ $occasion->id }}"
+                  class="occasion-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">{{ $occasion->name }}</span>
+              </label>
+              @endforeach
             </div>
+          </div>
+          @endif
 
-            <!-- Wishlist Heart Icon (Top Right) -->
-            {{-- <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                class="w-5 h-5 text-red-500">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button> --}}
-            @if(Auth::check())
-                        <button
-             
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            onclick="toggleWishlist({{ $product->id }}, this,event);">
-                            <i class="far fa-heart"></i>
-                        </button>
-                        @else
-                        <a href="{{ route('page.login') }}" >
-                           
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-                            >
-                            <i class="far fa-heart"></i>
-                        </button>
-                        </a>
-                        @endif
+          <!-- Custom Price Range Slider (Optional - can keep or remove) -->
+          {{-- <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Custom Price Range</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">Rs. <span id="min-price-display">{{ number_format($priceRange['min']) }}</span></span>
+                <span class="text-sm text-gray-600">Rs. <span id="max-price-display">{{ number_format($priceRange['max']) }}</span></span>
+              </div>
+              <input 
+                type="range" 
+                id="min-price" 
+                min="{{ $priceRange['min'] }}" 
+                max="{{ $priceRange['max'] }}" 
+                value="{{ $priceRange['min'] }}"
+                class="w-full accent-primary"
+              >
+              <input 
+                type="range" 
+                id="max-price" 
+                min="{{ $priceRange['min'] }}" 
+                max="{{ $priceRange['max'] }}" 
+                value="{{ $priceRange['max'] }}"
+                class="w-full accent-primary"
+              >
+            </div>
+          </div> --}}
 
-            <!-- Add To Cart (Hidden → Hover Show) -->
-            <div
-              class="hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-              <button
-                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                Add To Cart
-              </button>
+          <!-- Size Filter -->
+          @if(isset($sizes) && $sizes->isNotEmpty())
+          <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Size</h3>
+            <div class="space-y-2">
+              @foreach($sizes as $size)
+              
+              @php
+                $sizeId = is_object($size) ? $size->id : $size;
+                $sizeName = is_object($size) ? $size->name : $size;
+                $sizeCode = is_object($size) && isset($size->code) ? $size->code : '';
+                $displayText = $sizeCode ? "$sizeCode" : $sizeName;
+              @endphp
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="size[]" 
+                  value="{{ $displayText }}"
+                  class="size-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">{{ $displayText }}</span>
+              </label>
+              @endforeach
+            </div>
+          </div>
+          @endif
+
+          <!-- Color Filter -->
+          @if(isset($colors) && $colors->isNotEmpty())
+          <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Color</h3>
+            <div class="space-y-2">
+              @foreach($colors as $color)
+              @php
+                $colorId = is_object($color) ? $color->id : $color;
+                $colorName = is_object($color) ? $color->name : $color;
+              @endphp
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="color[]" 
+                  value="{{ $colorId }}"
+                  class="color-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">{{ $colorName }}</span>
+              </label>
+              @endforeach
+            </div>
+          </div>
+          @endif
+
+         
+          <!-- Price Range Filter - Checkboxes -->
+          <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
+            <div class="space-y-2">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="below-200"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">Below ₹200</span>
+              </label>
+              
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="200-300"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">₹200 - ₹300</span>
+              </label>
+              
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="300-400"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">₹300 - ₹400</span>
+              </label>
+              
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="400-500"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">₹400 - ₹500</span>
+              </label>
+              
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="500-600"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">₹500 - ₹600</span>
+              </label>
+              
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="price_range[]" 
+                  value="600-above"
+                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
+                >
+                <span class="text-sm text-gray-700">₹600 & Above</span>
+              </label>
             </div>
           </div>
 
-          <!-- Content -->
-          <div class="p-4 space-y-1">
-            <h3 class="text-[15px] font-semibold text-gray-900">
-              {{ $product->name }}
-            </h3>
+          <!-- Active Filters Display -->
+          <div id="active-filters" class="mb-4 hidden">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Active Filters:</h4>
+            <div id="filter-tags" class="flex flex-wrap gap-2"></div>
+          </div>
 
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-              <span>{{ $product->brand ?? 'Brand Name' }}</span>
-              <span class="flex items-center gap-1 text-gray-700">
-                <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
-              </span>
-            </div>
-
-            <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span class="text-lg font-bold text-gray-900">Rs. {{ $product->discount_price ?? $product->price }}</span>
-              @if($product->price_after_discount && $product->price)
-                <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
-              @endif
-            </div>
-            <div class="md:hidden block">
-              <button
-                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">
-                Add
-              </button>
-            </div>
+          <!-- Filter Actions -->
+          <div class="flex gap-2 mt-4">
+            <button 
+              id="clear-filters" 
+              class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
-      @empty
-        <div class="text-center py-12">
-          <p class="text-gray-500 text-center text-lg">No products found in this category.</p>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="lg:w-3/4 w-full">
+        <!-- Category Header -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">
+            {{ $category->name ?? 'Products' }}
+          </h1>
+          @if(isset($category->description))
+            <p class="text-gray-600">{{ $category->description }}</p>
+          @endif
         </div>
-      @endforelse
+
+        <!-- Products Count -->
+        {{-- <div id="products-count" class="mb-4 text-sm text-gray-600">
+          Showing {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products
+        </div> --}}
+
+        <!-- Products Container -->
+        <div id="products-container" class="w-full grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6">
+          @include('web.partials.category-grid', ['products' => $products])
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="hidden text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
+        </div>
+
+        <!-- Pagination -->
+        @if($products->hasPages())
+        <div class="mt-8">
+          {{ $products->links() }}
+        </div>
+        @endif
+      </div>
     </div>
   </div>
 </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Add click event listeners to all product cards
-    const productCards = document.querySelectorAll('.product-card');
+    // Initialize filters
+    let currentFilters = {
+        priceRanges: [],
+        customPrice: { min: {{ $priceRange['min'] }}, max: {{ $priceRange['max'] }} },
+        sizes: [],
+        colors: [],
+        occasions: []
+    };
+
+    let filterTimeout;
+    let isLoading = false;
+
+    // DOM Elements
+    const productsContainer = document.getElementById('products-container');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const productsCountDiv = document.getElementById('products-count');
     
-    productCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Prevent navigation if clicking on buttons or links inside the card
-            if (e.target.closest('button') || e.target.closest('a')) {
-                return;
+    // Price range elements
+    const minPriceInput = document.getElementById('min-price');
+    const maxPriceInput = document.getElementById('max-price');
+    const minPriceDisplay = document.getElementById('min-price-display');
+    const maxPriceDisplay = document.getElementById('max-price-display');
+
+    // Update price displays
+    function updatePriceDisplay() {
+        minPriceDisplay.textContent = Number(minPriceInput.value).toLocaleString();
+        maxPriceDisplay.textContent = Number(maxPriceInput.value).toLocaleString();
+        currentFilters.customPrice.min = parseInt(minPriceInput.value);
+        currentFilters.customPrice.max = parseInt(maxPriceInput.value);
+    }
+
+    // Ensure min doesn't exceed max and vice versa
+    if (minPriceInput && maxPriceInput) {
+        minPriceInput.addEventListener('input', function() {
+            if (parseInt(this.value) > parseInt(maxPriceInput.value)) {
+                this.value = maxPriceInput.value;
             }
+            updatePriceDisplay();
+            debouncedFilter();
+        });
+
+        maxPriceInput.addEventListener('input', function() {
+            if (parseInt(this.value) < parseInt(minPriceInput.value)) {
+                this.value = minPriceInput.value;
+            }
+            updatePriceDisplay();
+            debouncedFilter();
+        });
+    }
+
+    // Collect filter values
+    function collectFilters() {
+        // Price ranges
+        currentFilters.priceRanges = Array.from(document.querySelectorAll('.price-range-filter:checked')).map(cb => cb.value);
+        
+        // Sizes
+        currentFilters.sizes = Array.from(document.querySelectorAll('.size-filter:checked')).map(cb => cb.value);
+        
+        // Colors
+        currentFilters.colors = Array.from(document.querySelectorAll('.color-filter:checked')).map(cb => cb.value);
+        
+        // Occasions
+        currentFilters.occasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
+    }
+
+    // Convert price range to min/max values
+    function getPriceRangeValues(range) {
+        switch(range) {
+            case 'below-200':
+                return { min: 0, max: 200 };
+            case '200-300':
+                return { min: 200, max: 300 };
+            case '300-400':
+                return { min: 300, max: 400 };
+            case '400-500':
+                return { min: 400, max: 500 };
+            case '500-600':
+                return { min: 500, max: 600 };
+            case '600-above':
+                return { min: 600, max: 999999 };
+            default:
+                return null;
+        }
+    }
+
+    // Update active filters display
+    function updateActiveFiltersDisplay() {
+        const activeFiltersDiv = document.getElementById('active-filters');
+        const filterTagsDiv = document.getElementById('filter-tags');
+        
+        const activeFilters = [];
+        
+        // Add price range filters
+        document.querySelectorAll('.price-range-filter:checked').forEach(cb => {
+            const label = cb.closest('label').querySelector('span').textContent;
+            activeFilters.push({
+                type: 'price',
+                text: label,
+                value: cb.value
+            });
+        });
+        
+        // Add custom price if different from default
+        if (currentFilters.customPrice.min > {{ $priceRange['min'] }} || currentFilters.customPrice.max < {{ $priceRange['max'] }}) {
+            activeFilters.push({
+                type: 'custom-price',
+                text: `Rs. ${currentFilters.customPrice.min} - Rs. ${currentFilters.customPrice.max}`
+            });
+        }
+        
+        // Add size filters
+        document.querySelectorAll('.size-filter:checked').forEach(cb => {
+            const label = cb.closest('label').querySelector('span').textContent;
+            activeFilters.push({
+                type: 'size',
+                text: label,
+                value: cb.value
+            });
+        });
+        
+        // Add color filters
+        document.querySelectorAll('.color-filter:checked').forEach(cb => {
+            const label = cb.closest('label').querySelector('span').textContent;
+            activeFilters.push({
+                type: 'color',
+                text: label,
+                value: cb.value
+            });
+        });
+        
+        // Add occasion filters
+        document.querySelectorAll('.occasion-filter:checked').forEach(cb => {
+            const label = cb.closest('label').querySelector('span').textContent;
+            activeFilters.push({
+                type: 'occasion',
+                text: label,
+                value: cb.value
+            });
+        });
+        
+        if (activeFilters.length > 0) {
+            activeFiltersDiv.classList.remove('hidden');
+            filterTagsDiv.innerHTML = activeFilters.map(filter => `
+                <span class="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                    ${filter.text}
+                    <button onclick="removeFilter('${filter.type}', '${filter.value || ''}')" class="hover:text-primary-dark">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </span>
+            `).join('');
+        } else {
+            activeFiltersDiv.classList.add('hidden');
+        }
+    }
+
+    // Remove individual filter
+    window.removeFilter = function(type, value) {
+        if (type === 'price' || type === 'custom-price') {
+            if (type === 'custom-price') {
+                if (minPriceInput && maxPriceInput) {
+                    minPriceInput.value = {{ $priceRange['min'] }};
+                    maxPriceInput.value = {{ $priceRange['max'] }};
+                    updatePriceDisplay();
+                }
+            } else {
+                document.querySelectorAll(`.price-range-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            }
+        } else if (type === 'size') {
+            document.querySelectorAll(`.size-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+        } else if (type === 'color') {
+            document.querySelectorAll(`.color-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+        } else if (type === 'occasion') {
+            document.querySelectorAll(`.occasion-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+        }
+        
+        applyFilters();
+    };
+
+    // Debounced filter function
+    function debouncedFilter() {
+        clearTimeout(filterTimeout);
+        filterTimeout = setTimeout(() => {
+            applyFilters();
+        }, 500);
+    }
+
+    // Apply filters
+    async function applyFilters() {
+        if (isLoading) return;
+        
+        collectFilters();
+        updateActiveFiltersDisplay();
+        
+        // Show loading
+        isLoading = true;
+        loadingSpinner.classList.remove('hidden');
+        productsContainer.style.opacity = '0.5';
+
+        // Build query string
+        const params = new URLSearchParams({
+            price_ranges: JSON.stringify(currentFilters.priceRanges),
+            custom_min_price: currentFilters.customPrice.min,
+            custom_max_price: currentFilters.customPrice.max,
+            sizes: JSON.stringify(currentFilters.sizes),
+            colors: JSON.stringify(currentFilters.colors),
+            occasions: JSON.stringify(currentFilters.occasions)
+        });
+
+        try {
+            const response = await fetch(`/category/{{ $category->slug }}/filter?${params.toString()}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             
-            const productSlug = this.getAttribute('data-product-slug');
-            if (productSlug) {
-                window.location.href = `/products/${productSlug}`;
+            const data = await response.json();
+            
+            if (data.success) {
+                productsContainer.innerHTML = data.html;
+                
+                // Update products count
+                if (productsCountDiv) {
+                    productsCountDiv.innerHTML = `Showing ${data.firstItem} - ${data.lastItem} of ${data.total} products`;
+                }
+
+                // Re-attach product card handlers
+                attachProductCardHandlers();
             }
+        } catch (error) {
+            console.error('Filter error:', error);
+        } finally {
+            isLoading = false;
+            loadingSpinner.classList.add('hidden');
+            productsContainer.style.opacity = '1';
+        }
+    }
+
+    // Attach product card click handlers
+    function attachProductCardHandlers() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('button') || e.target.closest('a')) {
+                    return;
+                }
+                const productSlug = this.getAttribute('data-product-slug');
+                if (productSlug) {
+                    window.location.href = `/products/${productSlug}`;
+                }
+            });
+        });
+    }
+
+    // Add event listeners to all checkboxes for instant filtering
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            applyFilters();
         });
     });
+
+    // Clear all filters button
+    document.getElementById('clear-filters').addEventListener('click', function() {
+        // Uncheck all checkboxes
+        document.querySelectorAll('.price-range-filter, .size-filter, .color-filter, .occasion-filter').forEach(cb => {
+            cb.checked = false;
+        });
+        
+        // Reset price ranges
+        if (minPriceInput && maxPriceInput) {
+            minPriceInput.value = {{ $priceRange['min'] }};
+            maxPriceInput.value = {{ $priceRange['max'] }};
+            updatePriceDisplay();
+        }
+        
+        // Apply filters with cleared values
+        applyFilters();
+    });
+
+    // Initial attachment of product card handlers
+    attachProductCardHandlers();
 });
 
+// Wishlist toggle function
 function toggleWishlist(productId, button, event) {
-
     if (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -152,12 +528,10 @@ function toggleWishlist(productId, button, event) {
     }
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
     const isInWishlist = button.classList.contains('text-red-500');
     const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
     // Show loading
-    const originalContent = button.innerHTML;
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     button.disabled = true;
 
@@ -173,10 +547,7 @@ function toggleWishlist(productId, button, event) {
     })
     .then(response => response.json())
     .then(data => {
-
         if (data.success) {
-
-            // Toggle UI
             if (isInWishlist) {
                 button.classList.remove('text-red-500');
                 button.innerHTML = '<i class="far fa-heart"></i>';
@@ -184,28 +555,10 @@ function toggleWishlist(productId, button, event) {
                 button.classList.add('text-red-500');
                 button.innerHTML = '<i class="fas fa-heart"></i>';
             }
-
         } else {
-
-    
-
-        Swal.fire({
-            icon: 'info',
-            title: 'Already Added',
-            text: data.message,
-            // showConfirmButton: false,
-            ConfirmButtonText: 'Ok',
-            timer: 1800
-        });
-
-        // Keep heart filled
-        button.classList.add('text-red-500');
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-
-    
-}
-
-
+            button.classList.add('text-red-500');
+            button.innerHTML = '<i class="fas fa-heart"></i>';
+        }
     })
     .catch(error => {
         console.error(error);
@@ -215,6 +568,4 @@ function toggleWishlist(productId, button, event) {
     });
 }
 </script>
-</script>
-
 @endsection

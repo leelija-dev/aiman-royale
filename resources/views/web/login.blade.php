@@ -1,12 +1,4 @@
 @extends('layout.web.main-layout')
-
-
-
-
-
-
-
-
 @section('content')
 
 <style>
@@ -77,7 +69,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('web.login') }}" method="post" class="space-y-5" id="loginForm">
+                <form action="{{ route('web.login') }}" method="post" class="space-y-5" id="loginForm"  novalidate>
                     @csrf
                     <input type="hidden" name="redirect" value="{{ request('redirect') }}">
                     <div>
@@ -89,7 +81,12 @@
                             <input type="email" id="email" name="email" required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition duration-200"
                                 placeholder="you@example.com">
+                                
                         </div>
+                        @error('email')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+
                     </div>
 
                     <div>
@@ -107,8 +104,12 @@
                             <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                 <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
                             </button>
+                           
                         </div>
-                    </div>
+                         @error('password')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror 
+                    </div> 
 
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox"
@@ -165,6 +166,19 @@
 
 
 @endsection
+<script>
+        (function() {
+            'use strict'
+            const form = document.getElementById('loginForm');
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
