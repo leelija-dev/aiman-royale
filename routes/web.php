@@ -41,6 +41,8 @@ Route::view('/appointment', 'web.appointment')->name('page.appointment');
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
+// In your web.php routes file
+Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->name('category.filter');
 
 // Occasion Routes
 Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
