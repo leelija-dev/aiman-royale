@@ -56,7 +56,7 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </button> --}}
-            @if(Auth::check())
+                  @if(Auth::check())
                         <button
              
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
@@ -64,14 +64,14 @@
                             <i class="far fa-heart"></i>
                         </button>
                         @else
-                        <a href="{{ route('page.login') }}" >
+                        <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
                            
                         <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
                             >
                             <i class="far fa-heart"></i>
                         </button>
                         </a>
-                        @endif
+                  @endif
 
             <!-- Add To Cart (Hidden → Hover Show) -->
             <div

@@ -246,6 +246,7 @@
         <div
           class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
           data-product-variants="{{ json_encode($product->variants) }}">
+          @if(Auth::check())
           <button
             id="add-to-cart"
             data-variant-id="{{ $product->variants->first()->id }}"
@@ -257,7 +258,25 @@
             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
             onclick="toggleWishlist({{ $product->id }},this, event);">
             <i class="far fa-heart"></i>
-          </button>
+          </button> 
+          @else
+          <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
+            <button
+                          
+              class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
+              <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+            </button>
+          </a>
+            <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
+            <button
+             
+              class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
+             >
+              <i class="far fa-heart"></i>
+            </button>
+            </a>
+          @endif
+          
         </div>
       </div>
     </div>
@@ -462,6 +481,7 @@
             </div>
 
             <!-- Wishlist Heart Icon (Top Right) -->
+            @if(Auth::check())
             <button
              
               class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
@@ -480,6 +500,14 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg> --}}
             </button>
+            @else
+             <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
+             <button
+              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+              <i class="far fa-heart"></i>
+            </button>
+             </a>
+            @endif
             {{-- <button
             id="wishlist-btn"
             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
