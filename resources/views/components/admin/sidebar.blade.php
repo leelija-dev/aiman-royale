@@ -185,49 +185,7 @@ $isEmailActive = false;
             </li>
             @endif --}}
 
-            {{-- @if($admin->hasPermissionTo('view newsletter')|| $roles[0]=='superadmin') --}}
-            {{-- @php 
-            // $isMarketingActive = str_contains(request()->path(), 'newsletter') || request()->routeIs();
-            // $isNewsletterActive=request()->routeIs('admin.news-letter');
-            // $isEmailActive=request()->routeIs('admin.email-group');
-           
-            $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.news-letter', 'admin.email-group');
-            $isNewsletterActive = request()->routeIs('admin.news-letter');
-            $isEmailActive = request()->routeIs('admin.email-group');
-
-
-            @endphp
-                   <li class="nav-item has-submenu">
-                <a class="nav-link  submenu-toggle {{$isMarketingActive ? 'active' : ''}}"
-            href="#" href="#" data-bs-toggle="collapse" data-bs-target="#marketing-menu"
-            aria-expanded="{{$isMarketingActive ? 'true' :'false'}}"
-            aria-controls="marketing-menu">
-            <div
-                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fas fa-cart-arrow-down"></i>
-            </div>
-            <span class="nav-link-text ms-1">Markerting Tools</span>
-            </a>
-            <div id="marketing-menu"
-                class="collapse submenu {{$isMarketingActive ? 'show' : ''}} "
-                data-bs-parent="#menu-accordion">
-                <ul class="submenu-list list-unstyled">
-                    <li class="submenu-item"><a
-                            class="submenu-link {{ $isNewsletterActive ? 'active' : '' }} "
-                            href="{{route('admin.news-letter')}}">News Letter</a></li> --}}
-                    {{-- </ul> --}}
-                    {{-- </div> --}}
-                    {{-- <div id="marketing-menu"
-                    class="collapse submenu marketing-menu {{$isEmailActive ? 'show' : ''}} "
-                    data-bs-parent="#menu-accordion"> --}}
-                    {{-- <ul class="submenu-list list-unstyled"> --}}
-                    {{-- <li class="submenu-item"><a
-                                class="submenu-link {{ $isEmailActive ? 'active' : '' }}"
-                    href="{{route('admin.email-group')}}">E-mail Group</a></li>
-                </ul>
-            </div>
-            </li> --}}
-            {{-- @endif --}}
+            
             {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('admin.new-bill') ? 'active' : '' }}" href="{{ route('admin.new-bill') }}">
                     <div
@@ -352,15 +310,63 @@ $isEmailActive = false;
                 </a>
             </li> --}}
 
-            {{-- <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('') ? 'active' : '' }}" href="{{ route('Admin.dashboard') }}">
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('admin.customers.show') ? 'active' : '' }}" href="{{ route('admin.customers.show') }}">
             <div
                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                <i class="fa-solid fa-user" aria-hidden="true"></i>
             </div>
-            <span class="nav-link-text ms-1">Categorie</span>
+            <span class="nav-link-text ms-1">Users</span>
             </a>
-            </li>--}}
+            </li>
+            
+            {{-- @if($admin->hasPermissionTo('view newsletter')|| $roles[0]=='superadmin') --}}
+            
+            @php 
+            // $isMarketingActive = str_contains(request()->path(), 'newsletter') || request()->routeIs();
+            // $isNewsletterActive=request()->routeIs('admin.news-letter');
+            // $isEmailActive=request()->routeIs('admin.email-group');
+           
+            $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index');
+            $isNewsletterActive = request()->routeIs('admin.newsletter.index');
+            $isEmailActive = request()->routeIs('admin.email-group');
+
+
+            @endphp
+                   <li class="nav-item has-submenu">
+                <a class="nav-link submenu-toggle {{ $isMarketingActive ? 'active' : '' }}"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#newsletter-menu"
+                    aria-expanded="{{ $isMarketingActive ? 'true' : 'false' }}"
+                    aria-controls="newsletter-menu">
+
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-cart-arrow-down"></i>
+            </div>
+            <span class="nav-link-text ms-1">Markerting Tools</span>
+            </a>
+           <div id="newsletter-menu"
+                class="collapse submenu {{ $isMarketingActive ? 'show' : '' }}"
+                data-bs-parent="#menu-accordion">
+                <ul class="submenu-list list-unstyled">
+                    <li class="submenu-item"><a
+                            class="submenu-link {{ $isNewsletterActive ? 'active' : '' }} "
+                            href="{{route('admin.newsletter.index')}}">News Letter</a></li>
+                    </ul>
+                    </div>
+                    <div id="marketing-menu"
+                    class="collapse submenu marketing-menu {{$isEmailActive ? 'show' : ''}} "
+                    data-bs-parent="#menu-accordion"> 
+                     {{-- <ul class="submenu-list list-unstyled">
+                   <li class="submenu-item"><a
+                                class="submenu-link {{ $isEmailActive ? 'active' : '' }}"
+                    href="{{route('admin.email-group')}}">E-mail Group</a></li>
+                </ul> --}}
+            </div>
+            </li> 
+            {{-- @endif --}}
 
             @if ($admin->hasPermissionTo('view reports') || $admin->hasPermissionTo('view roles') || $admin->hasPermissionTo('view page') || $roles[0] == 'superadmin')
             @php
@@ -376,14 +382,14 @@ $isEmailActive = false;
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-users-line"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Users</span>
+                    <span class="nav-link-text ms-1">Admin</span>
                 </a>
 
                 <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : '' }}" data-bs-parent="#menu-accordion">
                     <ul class="submenu-list list-unstyled">
                         <li class="submenu-item">
                             <a class="submenu-link {{ $isUserActive ?  'active' : ''}}"
-                                href="{{ route('admin.users.show') }}">Users</a>
+                                href="{{ route('admin.users.show') }}">Admin</a>
                         </li>
                     </ul>
                 </div>

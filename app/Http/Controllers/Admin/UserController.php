@@ -267,4 +267,11 @@ class UserController extends Controller implements HasMiddleware
     return view('web.order-history', compact('user','orders'));
 }
 
+// user customer index page
+public function customer()
+{
+    $data=User::orderBy('created_at', 'desc')->paginate(10);
+    return view('Admin.customer.index',compact('data'));
+}
+
 }

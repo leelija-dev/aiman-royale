@@ -1,4 +1,4 @@
-{{-- @extends('Admin.layouts.master')
+@extends('Admin.layouts.master')
 @section('source', 'News Letter')
 @section('page-title', 'All News Letter')
 @section('content')
@@ -23,27 +23,21 @@
                                         <th
                                         class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Email</th>
-                                        <th
-                                        class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Status</th>
+                                        
                                         <th
                                         class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                          Date</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @if($data->count()>0)
                             @foreach($data as $newsletter)
-                                <tr class="{{ $newsletter->viewed ? '' : 'bg-light unviewed-row' }}" 
-                                style="{{ $newsletter->viewed ? '' : 'bg-primary text-white p-3' }}">
+                                <tr >
                                     
                                 <td class="position-relative text-center">
                                     
 
-                                     @if(!$newsletter->viewed)
-                                        <span class="badge bg-primary rounded-pill py-1 px-1 position-absolute start-0 top-50 translate-middle-y ms-1" style="font-size: 7px;">
-                                        New
-                                        </span>
-                                    @endif
+                                   
                                     {{ $loop->iteration }}  
                                 </td>
                                 <td class="position-relative text-center">
@@ -51,24 +45,20 @@
                                             {{$newsletter->email}}
                                     </div>
                                 </td>
+                                
                                 <td class="position-relative text-center">
                                     <div class="d-flex  flex-column  justify-content-center">
-                                            {{$newsletter->status}}
-                                    </div>                            
-                                </td>
-                                <td class="position-relative text-center">
-                                    <div class="d-flex  flex-column  justify-content-center">
-                                            {{$newsletter->created_at->format('d-m-Y') }}
+                                            {{$newsletter->created_at->format('d M, Y h:i A') }}
                                     </div>
                                 </td>
-                                <td class="position-relative text-center"> 
-                                    <a href="{{ route('admin.show-Email', $newsletter->id) }}">
-                                                <i class="bi bi-eye-fill me-2" title="Show Details"></i>
-                                                
-                                            </a>
-                                </td>
+                                
                              </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="3" class="text-center">No news letter found!</td>
+                            </tr>
+                            @endif
                     </tbody>
                         </table>     
 
@@ -78,4 +68,4 @@
     </div>
 </div>
 
-@endsection --}}
+@endsection

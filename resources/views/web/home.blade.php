@@ -236,7 +236,7 @@
                     @else
                         {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
                         class="block h-full w-full relative"> --}}
-                        <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
+                        <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
                             src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
@@ -282,7 +282,7 @@
                     </a>
                     @else
                     <!-- Default Image -->
-                    <a href="{{ url('collections/' . 'lehengas') }}">
+                    <a href="{{ url('collections/' . 'lehanga') }}">
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
                         alt="Glow Pink Dress">
@@ -373,7 +373,7 @@
                     </a>
                     @else
                     <!-- Default Image -->
-                    <a href="{{ url('collections/' . 'lehengas') }}">
+                    <a href="{{ url('collections/' . 'lehanga') }}">
                     <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                         src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
                         alt="Gray Lahenga">
@@ -411,7 +411,7 @@
 
                     </a>
                     @else
-                    <a id="rightSliderLink" href="{{ url('collections/lehengas') }}"
+                    <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                      
                     <img class="object-cover h-full w-full"
@@ -534,7 +534,7 @@
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
                         <div class="relative h-96 overflow-hidden rounded-3xl">
                             <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
-                                alt="Lehengas"
+                                alt="Lehanga"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
 
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
@@ -769,7 +769,7 @@
                         </div>
 
                         <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
+                        {{-- <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
                             onclick="toggleHomeWishlist({{ $product->id }}, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -778,7 +778,23 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
+                        </button> --}}
+                        @if(Auth::check())
+                        <button
+             
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleWishlist({{ $product->id }}, this,event);">
+                            <i class="far fa-heart"></i>
                         </button>
+                        @else
+                        <a href="{{ route('page.login') }}" >
+                           
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            >
+                            <i class="far fa-heart"></i>
+                        </button>
+                        </a>
+                        @endif
                     </div>
 
                     <!-- Content -->
@@ -2730,6 +2746,84 @@ All Products
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
     });
+
+
+    
+function toggleWishlist(productId, button, event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    if (!productId) {
+        alert('Product ID not found');
+        return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const isInWishlist = button.classList.contains('text-red-500');
+    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+    // Show loading
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            // Toggle UI
+            if (isInWishlist) {
+                button.classList.remove('text-red-500');
+                button.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                button.classList.add('text-red-500');
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+
+        } else {
+
+    
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Already Added',
+            text: data.message,
+            // showConfirmButton: false,
+            ConfirmButtonText: 'Ok',
+            timer: 1800
+        });
+
+        // Keep heart filled
+        button.classList.add('text-red-500');
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+
+    
+}
+
+
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
 </script>
 
 @endsection
