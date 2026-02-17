@@ -769,7 +769,7 @@
                         </div>
 
                         <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
+                        {{-- <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
                             onclick="toggleHomeWishlist({{ $product->id }}, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -778,7 +778,23 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
+                        </button> --}}
+                        @if(Auth::check())
+                        <button
+             
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            onclick="toggleWishlist({{ $product->id }}, this,event);">
+                            <i class="far fa-heart"></i>
                         </button>
+                        @else
+                        <a href="{{ route('page.login') }}" >
+                           
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            >
+                            <i class="far fa-heart"></i>
+                        </button>
+                        </a>
+                        @endif
                     </div>
 
                     <!-- Content -->
@@ -2730,6 +2746,84 @@ All Products
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
     });
+
+
+    
+function toggleWishlist(productId, button, event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    if (!productId) {
+        alert('Product ID not found');
+        return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const isInWishlist = button.classList.contains('text-red-500');
+    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+    // Show loading
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            // Toggle UI
+            if (isInWishlist) {
+                button.classList.remove('text-red-500');
+                button.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                button.classList.add('text-red-500');
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+
+        } else {
+
+    
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Already Added',
+            text: data.message,
+            // showConfirmButton: false,
+            ConfirmButtonText: 'Ok',
+            timer: 1800
+        });
+
+        // Keep heart filled
+        button.classList.add('text-red-500');
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+
+    
+}
+
+
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
 </script>
 
 @endsection

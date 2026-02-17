@@ -45,7 +45,7 @@ class AuthController extends Controller
         if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('success', 'Welcome back!');
+            return redirect()->intended('/');//->with('success', 'Welcome back!');
         }
 
         return back()->withErrors([
