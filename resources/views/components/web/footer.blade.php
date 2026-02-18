@@ -18,10 +18,11 @@
     </div>
 
     <!-- Content -->
-    <div class="grid lg:grid-cols-2 gap-8 p-6 sm:p-8">
+    <div class="flex lgg:flex-row flex-col  gap-8 p-6 sm:p-8">
 
       <!-- LEFT — SIZE TABLE -->
-      <div class="overflow-x-auto">
+      <div class="w-full">
+        <div class="overflow-x-auto">
         <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -72,6 +73,8 @@
         </div>
       </div>
 
+      </div>
+
       <!-- RIGHT — MEASURE GUIDE WITH SCROLLABLE CONTENT -->
       <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4">
         <div class="sticky top-0 bg-white pt-2 pb-4 z-10">
@@ -88,7 +91,7 @@
             
               <img src="{{asset('web/images/size-guide/women-size (1).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
            
             <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
           </div>
@@ -101,7 +104,7 @@
             </div>
            <img src="{{asset('web/images/size-guide/women-size (3).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
             <p class="text-sm text-gray-600 px-1">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
           </div>
 
@@ -113,7 +116,7 @@
             </div>
              <img src="{{asset('web/images/size-guide/women-size (6).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
             <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
           </div>
 
@@ -125,7 +128,7 @@
             </div>
              <img src="{{asset('web/images/size-guide/women-size (5).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
             <p class="text-sm text-gray-600 px-1">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
           </div>
 
@@ -137,7 +140,7 @@
             </div>
               <img src="{{asset('web/images/size-guide/women-size (2).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
             <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
@@ -147,7 +150,7 @@
             </div>
               <img src="{{asset('web/images/size-guide/women-size (4).webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" h-[400px] w-auto  rounded-md mb-2 mx-auto">
             <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
 
