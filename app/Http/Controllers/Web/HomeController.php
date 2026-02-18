@@ -145,6 +145,7 @@ class HomeController extends Controller
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
             ->where('products.is_active', 1)
+            ->where('products.ready_to_ship', 1)
             ->select(
                 'products.*',
                 'product_variants.id as variant_id',

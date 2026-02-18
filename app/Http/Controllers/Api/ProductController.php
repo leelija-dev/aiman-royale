@@ -19,6 +19,7 @@ class ProductController extends Controller
     {
         try {
             $products = Product::where('is_active', 1)
+                ->where('products.ready_to_ship', 1)
                 ->with(['images', 'variants', 'category', 'occasion'])
                 ->get();
             return response()->json([
@@ -164,6 +165,7 @@ class ProductController extends Controller
     {
         try {
             $query = Product::where('is_active', 1)
+                ->where('products.ready_to_ship', 1)
                 ->with(['variants', 'category', 'occasion']);
 
             // Filter by category slug
@@ -298,6 +300,7 @@ class ProductController extends Controller
             //     ->with(['variants', 'category', 'occasion']);
 
             $query = Product::where('is_active', 1)
+                ->where('products.ready_to_ship', 1)
                 ->where(function ($q) use ($searchTerm) {
                     $q->where('name', 'LIKE', '%' . $searchTerm . '%')
                         ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
