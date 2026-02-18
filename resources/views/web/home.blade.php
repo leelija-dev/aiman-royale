@@ -706,7 +706,7 @@
 
 
         <!-- Hanging Tags -->
-        <div class="flex  justify-center items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+        <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
             @foreach ($categories->where('parent_id', null) as $category)
             <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
                 <!-- String/Hanger -->
