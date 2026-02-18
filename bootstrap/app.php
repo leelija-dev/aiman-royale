@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Ensure index.php paths are redirected to clean URLs in all environments
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\RedirectIndexPhp::class,
+            \App\Http\Middleware\DynamicSeoMiddleware::class,
         ]);
 
     })

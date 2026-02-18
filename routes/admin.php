@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\PrintBillController;
+use App\Http\Controllers\Admin\SeoController;
 // use App\Http\Controllers\ShopController;
 
 
@@ -408,7 +409,16 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     //     Route::post('reply-contact/{id}', [ContactController::class, 'Reply'])->name('admin.reply-contact');
     //     Route::post('delete-contact/{id}', [ContactController::class, 'deleteContact'])->name('admin.delete-contact');
     // });
-
+    
+    // SEO Management Routes
+    Route::prefix('seo')->group(function () {
+        Route::get('/', [SeoController::class, 'index'])->name('seo.index');
+        Route::get('/categories', [SeoController::class, 'categories'])->name('seo.categories');
+        Route::post('/categories/{id}', [SeoController::class, 'updateCategory'])->name('seo.categories.update');
+        Route::get('/products', [SeoController::class, 'products'])->name('seo.products');
+        Route::post('/products/{id}', [SeoController::class, 'updateProduct'])->name('seo.products.update');
+        Route::get('/generate-suggestions', [SeoController::class, 'generateSuggestions'])->name('seo.generate-suggestions');
+    });
 
 
 

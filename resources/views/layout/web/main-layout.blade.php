@@ -13,13 +13,41 @@
     <meta name="googlebot-video" content="noindex, nofollow">
     @endif
 
-    <title>{{$pageMeta->meta_title ?? ''}}</title>
-    <meta name="description" content="{{$pageMeta->meta_description ?? ''}}">
-    <meta name="keywords" content="{{$pageMeta->meta_keyword ?? ''}}">
-    <meta name="tag" content="{{$pageMeta->meta_tags ?? ''}}">
+    <title>{{ $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}</title>
+    <meta name="description" content="{{ $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta name="keywords" content="{{ $pageMeta->meta_keyword ?? 'fashion, designer wear, traditional clothing, premium fashion, aiman royale' }}">
+    <meta name="tags" content="{{ $pageMeta->meta_tags ?? 'fashion, clothing, designer, premium, traditional, contemporary' }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
+    <meta property="og:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta property="og:type" content="{{ $ogMeta['type'] ?? 'website' }}">
+    <meta property="og:url" content="{{ $ogMeta['url'] ?? url()->current() }}">
+    <meta property="og:site_name" content="{{ $ogMeta['site_name'] ?? 'Aiman Royale' }}">
+    <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    @if(isset($ogMeta['locale']))
+    <meta property="og:locale" content="{{ $ogMeta['locale'] }}">
+    @endif
+    @if(isset($ogMeta['publisher']))
+    <meta property="article:publisher" content="{{ $ogMeta['publisher'] }}">
+    @endif
+    @if(isset($ogMeta['section']))
+    <meta property="article:section" content="{{ $ogMeta['section'] }}">
+    @endif
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
+    <meta name="twitter:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.' }}">
+    <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
