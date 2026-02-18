@@ -50,6 +50,7 @@ class HomeController extends Controller
                      )');
             })
             ->where('products.is_active', 1)
+            ->where('products.ready_to_ship', 1)
             ->select(
                 'products.id',
                 'products.name',
