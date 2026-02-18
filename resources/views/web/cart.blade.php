@@ -3,6 +3,8 @@
 @section('content')
 
 
+
+
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 ">
   <div class="container mx-auto">
     <!-- Progress Bar and Banner -->
@@ -240,7 +242,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+
 <script>
+
   // function updateQuantity(cartId, newQuantity) {
   //   if (newQuantity < 1) {
   //     removeFromCart(cartId);
@@ -289,7 +294,7 @@ function increaseQuantity(cartId) {
      let stock = parseFloat(qtyInput.getAttribute('data-stock') || 0);
     let subTotal = document.getElementById('subtotal-' + cartId);
     console.log('stock', stock);
-   
+    
     let price = parseFloat(subTotal.getAttribute('data-price'));
     let currentQty = parseInt(qtyInput.value);
 
@@ -339,6 +344,7 @@ function updateCartTotal() {
 
     let currency = "{{config('app.currency')}}";
     let totalSubtotal = 0;
+    let totalItems = 0;
 
     document.querySelectorAll('[id^="subtotal-"]').forEach(function (item) {
 
@@ -351,6 +357,7 @@ function updateCartTotal() {
         item.textContent = currency + rowTotal.toFixed(2);
 
         totalSubtotal += rowTotal;
+        totalItems += qty;
     });
 
     let totalSubtotalElement = document.getElementById('total_subtotal');
@@ -363,6 +370,37 @@ function updateCartTotal() {
     if (totalPriceElement) {
         totalPriceElement.textContent = currency + (totalSubtotal + shippingCost).toFixed(2);
     }
+    
+    // Update navbar cart count
+    updateNavbarCartCount(totalItems);
+}
+
+// Function to update navbar cart count
+function updateNavbarCartCount(count) {
+    // Find all cart count elements in navbar
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5');
+    
+    // Update cart count elements
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
+    
+    // Update cart badges
+    cartBadges.forEach(badge => {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+    
+    // Update cart tooltip text
+    const cartTooltips = document.querySelectorAll('.absolute.-bottom-8');
+    cartTooltips.forEach(tooltip => {
+        tooltip.textContent = 'Cart' + (count > 0 ? ' (' + count + ')' : '');
+    });
 }
 
 
@@ -470,21 +508,37 @@ document.getElementById('cartUpdateForm')?.addEventListener('submit', function (
 });
 document.addEventListener("DOMContentLoaded", function () {
     updateCartTotal();
+   
 });
 
-window.addEventListener("pageshow", function () {
-    updateCartTotal();
-    // window.location.reload()
-});
+// window.addEventListener("pageshow", function () {
+//     updateCartTotal();
+//     // window.location.reload()
+// });
+
+// window.addEventListener("pageshow", function (event) {
+
+//     // If page is loaded from browser cache
+//     if (event.persisted) {
+//         window.location.reload();
+//     }
+
+// });
 
 window.addEventListener("pageshow", function (event) {
 
-    // If page is loaded from browser cache
-    if (event.persisted) {
+    updateCartTotal();
+
+    // Reload only if page came from browser cache (back button)
+    const navigationEntries = performance.getEntriesByType("navigation");
+
+    if (navigationEntries.length > 0 && navigationEntries[0].type === "back_forward") {
         window.location.reload();
     }
 
+
 });
+
 </script>
 
 

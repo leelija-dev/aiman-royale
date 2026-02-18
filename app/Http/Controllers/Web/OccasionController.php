@@ -18,6 +18,7 @@ class OccasionController extends Controller
             // dd($occasion);
         $products = Product::where('ocassion_id', $occasion->id)
             ->where('is_active', 1)
+            ->where('ready_to_ship', 1)
             ->with(['images' => function($query) {
                 $query->select('product_id', 'image');
             }])

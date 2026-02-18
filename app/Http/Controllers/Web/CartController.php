@@ -40,7 +40,10 @@ class CartController extends Controller
         
         $occasions = \App\Models\Occasion::active()->get();
 
-        return view('web.cart', compact('cartItems', 'subtotal', 'shipping', 'total', 'cartCount', 'occasions'));
+        // Check if we need to force refresh (coming from checkout)
+        $forceRefresh = session()->pull('force_cart_refresh', false);
+
+        return view('web.cart', compact('cartItems', 'subtotal', 'shipping', 'total', 'cartCount', 'occasions', 'forceRefresh'));
     }
 
     public function add(Request $request)

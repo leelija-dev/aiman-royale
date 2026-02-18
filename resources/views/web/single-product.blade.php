@@ -1452,18 +1452,30 @@
 
   // Update cart count function
   function updateCartCount(count) {
-    // Find cart count elements and update them
+    // Find all cart count elements in navbar
     const cartCountElements = document.querySelectorAll('.cart-count');
+    const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5');
+    
+    // Update cart count elements
     cartCountElements.forEach(element => {
       element.textContent = count;
     });
-
-    // If you have a cart icon with badge, update it
-    const cartBadge = document.querySelector('.cart-badge');
-    if (cartBadge) {
-      cartBadge.textContent = count;
-      cartBadge.style.display = count > 0 ? 'block' : 'none';
-    }
+    
+    // Update cart badges
+    cartBadges.forEach(badge => {
+      if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+    
+    // Update cart tooltip text
+    const cartTooltips = document.querySelectorAll('.absolute.-bottom-8');
+    cartTooltips.forEach(tooltip => {
+      tooltip.textContent = 'Cart' + (count > 0 ? ' (' + count + ')' : '');
+    });
   }
 </script>
 

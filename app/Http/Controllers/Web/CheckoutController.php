@@ -45,6 +45,7 @@ class CheckoutController extends Controller
         // dd($addresses);
 
         if (count($carts) == 0) {
+            session()->flash('force_cart_refresh', true);
             return redirect()->route('cart.index');
         }
 
@@ -339,7 +340,8 @@ class CheckoutController extends Controller
         // Clear Cashfree session
         session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']);
 
-        return redirect()->route('checkout.index')->with('error', 'Payment was cancelled. Please try again.');
+        session()->flash('force_cart_refresh', true);
+        return redirect()->route('cart.index')->with('error', 'Payment was cancelled. Please try again.');
     }
 
     public function orderSuccess()
