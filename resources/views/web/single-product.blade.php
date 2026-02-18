@@ -53,36 +53,6 @@
 
       <!-- RIGHT CONTENT -->
       <div class="space-y-6">
-        @if($product->variants->isEmpty())
-        <!-- No Variants Available Message -->
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-          <div class="flex flex-col items-center gap-4">
-            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
-              <i class="fas fa-exclamation-triangle text-yellow-600 text-2xl"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-yellow-800 mb-2">No Variants Available</h3>
-              <p class="text-yellow-700">This product currently has no variants available for purchase.</p>
-              <p class="text-yellow-600 text-sm mt-1">Please check back later or contact customer support.</p>
-            </div>
-            <div class="flex gap-3">
-              <button onclick="history.back()" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
-                <i class="fas fa-arrow-left mr-2"></i>Go Back
-              </button>
-              {{--
-                <a href="{{ route('page.index') }}" class="px-4 py-2 border border-yellow-600 text-yellow-600 rounded-lg hover:bg-yellow-50 transition-colors">
-              <i class="fas fa-home mr-2"></i>Continue Shopping
-              </button>
-              --}}
-              <button onclick="window.location.href='{{ route('page.index') }}'"
-                class="px-4 py-2 border border-yellow-600 text-yellow-600 rounded-lg hover:bg-yellow-50 transition-colors">
-                <i class="fas fa-home mr-2"></i>Continue Shopping
-              </button>
-            </div>
-          </div>
-        </div>
-        @else
-        <!-- Product has variants - show normal content -->
         <div>
           <!-- Title -->
           <h3
@@ -100,88 +70,88 @@
         </div>
         <div class="flex items-center gap-3" id="price-container">
           <span class="text-2xl font-bold text-gray-900">Rs. {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }}</span>
-          @if($product->variants->first()->price )
+          @if($product->variants->first()->price  )
           <span class="line-through text-gray-400">Rs. {{ $product->variants->first()->price }}</span>
-          @endif
-          @if($product->variants->first()->discount)
+           @endif
+           @if($product->variants->first()->discount)
           <span
-            class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ $product->variants->first()->discount }}% off)</span>
+            class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{  $product->variants->first()->discount }}% off)</span>
           @else
-          <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">
-            Trending
-          </span>
+         <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">
+                  Trending
+                </span>
           @endif
         </div>
 
         <div>
-          <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
-          <div class="flex gap-3 xxs:flex-row flex-col">
-            <button
-              class="type-btn px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:border-secondary transition-all"
-              data-type="stitched">
-              Stitched
-            </button>
+  <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
+  <div class="flex gap-3 xxs:flex-row flex-col">
+    <button
+      class="type-btn px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:border-secondary transition-all"
+      data-type="stitched">
+      Stitched
+    </button>
 
-            <button
-              id="custom-dimension-btn"
-              class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
-              <i class="fas fa-ruler-combined"></i>
-              Custom Dimension
-            </button>
-          </div>
-        </div>
+    <button
+      id="custom-dimension-btn"
+      class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
+      <i class="fas fa-ruler-combined"></i>
+      Custom Dimension
+    </button>
+  </div>
+</div>
 
-        <!-- Custom Dimension Input Section (Hidden by Default) -->
-        <div id="custom-dimension-section" class="hidden space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <h3 class="font-medium text-gray-800">Enter Custom Dimensions</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Height (in cm)</label>
-              <input
-                type="number"
-                id="custom-height"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
-                placeholder="Enter height"
-                min="1"
-                step="0.1">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Width (in cm)</label>
-              <input
-                type="number"
-                id="custom-width"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
-                placeholder="Enter width"
-                min="1"
-                step="0.1">
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Select Color</label>
-            <div class="flex gap-3" id="custom-color-selection">
-              <!-- Colors will be populated dynamically -->
-              <div class="flex flex-wrap gap-2">
-                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-red-500 hover:scale-110 transition-all" data-color="#FF0000"></button>
-                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-blue-500 hover:scale-110 transition-all" data-color="#0000FF"></button>
-                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-green-500 hover:scale-110 transition-all" data-color="#00FF00"></button>
-                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-black hover:scale-110 transition-all" data-color="#000000"></button>
-                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-white hover:scale-110 transition-all" data-color="#FFFFFF"></button>
-              </div>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <button
-              id="save-dimension-btn"
-              class="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 transition-colors">
-              Save Dimensions
-            </button>
-            <button
-              id="cancel-custom-btn"
-              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
-              Cancel
-            </button>
-          </div>
-        </div>
+<!-- Custom Dimension Input Section (Hidden by Default) -->
+<div id="custom-dimension-section" class="hidden space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+  <h3 class="font-medium text-gray-800">Enter Custom Dimensions</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Height (in cm)</label>
+      <input
+        type="number"
+        id="custom-height"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
+        placeholder="Enter height"
+        min="1"
+        step="0.1">
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Width (in cm)</label>
+      <input
+        type="number"
+        id="custom-width"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
+        placeholder="Enter width"
+        min="1"
+        step="0.1">
+    </div>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Select Color</label>
+    <div class="flex gap-3" id="custom-color-selection">
+      <!-- Colors will be populated dynamically -->
+      <div class="flex flex-wrap gap-2">
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-red-500 hover:scale-110 transition-all" data-color="#FF0000"></button>
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-blue-500 hover:scale-110 transition-all" data-color="#0000FF"></button>
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-green-500 hover:scale-110 transition-all" data-color="#00FF00"></button>
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-black hover:scale-110 transition-all" data-color="#000000"></button>
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-white hover:scale-110 transition-all" data-color="#FFFFFF"></button>
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-3">
+    <button
+      id="save-dimension-btn"
+      class="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 transition-colors">
+      Save Dimensions
+    </button>
+    <button
+      id="cancel-custom-btn"
+      class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+      Cancel
+    </button>
+  </div>
+</div>
 
         <!-- Size Selection -->
         <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -274,41 +244,36 @@
 
         <!-- Action Buttons -->
         <div
-          class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
-          data-product-variants="{{ json_encode($product->variants) }}">
+           class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+           data-product-variants="{{ json_encode($product->variants) }}">
           @if(Auth::check())
-          <button
-            id="add-to-cart"
-            data-variant-id="{{ $product->variants->first()->id }}"
-            class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
-            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-          </button>
-          <button
-            id="wishlist-btn"
-            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
-            onclick="toggleWishlist({{ $product->id }},this, event);">
-            <i class="far fa-heart"></i>
-          </button> 
+           <button
+             id="add-to-cart"
+             data-variant-id="{{ $product->variants->first()->id }}"
+             class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
+             <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+           </button>
+           <button
+             id="wishlist-btn"
+             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
+             onclick="toggleWishlist({{ $product->id }},this, event);">
+             <i class="far fa-heart"></i>
+           </button>
           @else
-          <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
+          <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" class="flex-1">
             <button
-                          
               class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
               <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
             </button>
           </a>
-            <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
+            <a href="{{ route('page.login', ['redirect' => url()->current()]) }}">
             <button
-             
-              class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
-             >
+              class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition">
               <i class="far fa-heart"></i>
             </button>
             </a>
           @endif
-          
         </div>
-        @endif <!-- End of variants check -->
       </div>
     </div>
   </div>
@@ -477,14 +442,14 @@
       @if(isset($relatedProducts))
       @forelse($relatedProducts as $relatedProduct)
       @php
-      $variant = $relatedProduct->variants->first();
+          $variant = $relatedProduct->variants->first();
       @endphp
 
       <div class="item flex items-center justify-center">
         <div
           class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <!-- Image Wrapper -->
-
+         
           <div class="relative rounded-xl overflow-hidden">
             <img
               src="{{ $relatedProduct->images->first() ? asset($relatedProduct->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
@@ -499,25 +464,24 @@
                 Trending
               </span>
               @endif
-              @if($variant && $variant->discount)
-              <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                @if($variant->discount == 0)
-                Trending
-                @else
-                OFF {{ $variant->discount }}%
+                @if($variant && $variant->discount)
+                    <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                      @if($variant->discount == 0)
+                      Trending
+                      @else
+                        OFF {{ $variant->discount }}%
+                      @endif
+                    </span>
                 @endif
-              </span>
-              @endif
 
             </div>
 
             <!-- Wishlist Heart Icon (Top Right) -->
-            @if(Auth::check())
             <button
-
+             
               class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
-              onclick="toggleWishlist({{ $variant->product_id }}, this,event);">
-              <i class="far fa-heart"></i>
+               onclick="toggleWishlist({{ $variant->product_id }}, this,event);">
+               <i class="far fa-heart"></i>
               {{-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -531,32 +495,24 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg> --}}
             </button>
-            @else
-             <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" >
-             <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-              <i class="far fa-heart"></i>
-            </button>
-             </a>
-            @endif
             {{-- <button
             id="wishlist-btn"
             class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
             onclick="toggleWishlist({{ $variant->product_id }}, event);">
             <i class="far fa-heart"></i>
-            </button> --}}
+          </button> --}}
 
             <!-- Add To Cart (Hidden → Hover Show) -->
             {{-- <div
               class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
               <button data-variant-id="{{ $relatedProduct->variant_id ?? $relatedProduct->id }}" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-            Add To Cart
-            </button>
-          </div> --}}
-        </div>
+                Add To Cart
+              </button>
+            </div> --}}
+          </div>
 
-        <!-- Content -->
-        <a href="{{route('page.single-product', $relatedProduct->slug)}}">
+          <!-- Content -->
+           <a href="{{route('page.single-product', $relatedProduct->slug)}}">
           <div class="p-4 space-y-1">
             <h3 class="text-[15px] font-semibold text-gray-900">
               {{ $relatedProduct->name }}
@@ -576,20 +532,20 @@
               @endif
             </div>
           </div>
-        </a>
+          </a>
+        </div>
       </div>
+      @empty
+      <div class="item flex items-center justify-center">
+        <p class="text-gray-500">No related products found.</p>
+      </div>
+      @endforelse
+      @else
+      <div class="item flex items-center justify-center">
+        <p class="text-gray-500">Related products not available.</p>
+      </div>
+      @endif
     </div>
-    @empty
-    <div class="item flex items-center justify-center">
-      <p class="text-gray-500">No related products found.</p>
-    </div>
-    @endforelse
-    @else
-    <div class="item flex items-center justify-center">
-      <p class="text-gray-500">Related products not available.</p>
-    </div>
-    @endif
-  </div>
   </div>
 </section>
 
@@ -791,7 +747,6 @@
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if($product->variants->isNotEmpty())
 <script>
   // Store all product variants data
   const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
@@ -906,11 +861,7 @@
     if (!customDimensions) return;
 
     // Calculate custom price (example: base price + (area * price per sq cm))
-    const basePrice = {
-      {
-        $product - > variants - > first() - > discount_price ?? $product - > variants - > first() - > price
-      }
-    };
+    const basePrice = {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }};
     const area = customDimensions.height * customDimensions.width;
     const pricePerSqCm = basePrice / 1000; // Example calculation
     const customPrice = Math.round(basePrice + (area * pricePerSqCm));
@@ -980,7 +931,7 @@
       colorBtn.setAttribute('data-color', variant.color);
       colorBtn.setAttribute('data-size', size);
       colorBtn.setAttribute('data-variant-id', variant.id);
-
+      
       // Add event listener instead of onclick
       colorBtn.addEventListener('click', function() {
         selectColor(variant.color, size, variant.id, this);
@@ -1111,7 +1062,7 @@
           b.classList.remove('border-secondary');
           b.classList.add('border-gray-300');
         });
-
+        
         // Add border-secondary to clicked button
         this.classList.add('border-secondary');
         this.classList.remove('border-gray-300');
@@ -1147,11 +1098,7 @@
     }
 
     // Check if product is already in wishlist
-    checkProductInWishlist({
-      {
-        $product - > id
-      }
-    });
+    checkProductInWishlist({{$product->id}});
   });
 
   // Check if variant is in cart and update button
@@ -1278,13 +1225,13 @@
   function toggleWishlist(productId, button, event) {
 
     if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     if (!productId) {
-      alert('Product ID not found');
-      return;
+        alert('Product ID not found');
+        return;
     }
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -1300,56 +1247,56 @@
     fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrfToken
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify({
-          product_id: productId
+            product_id: productId
         })
-      })
-      .then(response => response.json())
-      .then(data => {
+    })
+    .then(response => response.json())
+    .then(data => {
 
         if (data.success) {
 
-          // Toggle UI
-          if (isInWishlist) {
-            button.classList.remove('text-red-500');
-            button.innerHTML = '<i class="far fa-heart"></i>';
-          } else {
-            button.classList.add('text-red-500');
-            button.innerHTML = '<i class="fas fa-heart"></i>';
-          }
+            // Toggle UI
+            if (isInWishlist) {
+                button.classList.remove('text-red-500');
+                button.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                button.classList.add('text-red-500');
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
 
         } else {
 
+    
 
-
-          Swal.fire({
+        Swal.fire({
             icon: 'info',
             title: 'Already Added',
             text: data.message,
             // showConfirmButton: false,
             ConfirmButtonText: 'Ok',
             timer: 1800
-          });
+        });
 
-          // Keep heart filled
-          button.classList.add('text-red-500');
-          button.innerHTML = '<i class="fas fa-heart"></i>';
+        // Keep heart filled
+        button.classList.add('text-red-500');
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+
+    
+}
 
 
-        }
-
-
-      })
-      .catch(error => {
+    })
+    .catch(error => {
         console.error(error);
-      })
-      .finally(() => {
+    })
+    .finally(() => {
         button.disabled = false;
-      });
-  }
+    });
+}
 
 
   // Update wishlist count (if you have a counter)
@@ -1407,11 +1354,7 @@
     if (customDimensionsAttr) {
       // Add custom dimension to cart
       requestData = {
-        product_id: {
-          {
-            $product - > id
-          }
-        },
+        product_id: {{ $product->id }},
         custom_dimensions: JSON.parse(customDimensionsAttr),
         type: selectedType,
         count: 1
@@ -1523,6 +1466,5 @@
     }
   }
 </script>
-@endif
 
 @endsection
