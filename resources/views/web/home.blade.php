@@ -212,7 +212,7 @@
 
 <!-- Required CSS for no scrollbar + smooth snap -->
 
-<section class="px-4 lgg:py-12 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
+<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
             <!-- Left Image Column -->
@@ -439,10 +439,10 @@
 
 
 
-<section class="px-4 py-12 bg-gradient-to-b from-white to-gray-50/50">
+<section class="px-4 lgg:py-8 py-6 bg-gradient-to-b from-white to-gray-50/50">
     <div class="container mx-auto">
         <!-- Section Header -->
-        <div class="text-center lgg:mb-12 mb-5">
+        <div class="text-center mb-0">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                 <span class="bg-gradient-to-r from-primary via-secondary to-black bg-clip-text text-transparent">
                     Shop By Category
@@ -681,7 +681,7 @@
         </div>
 
         <!-- Simple View All Button -->
-        <div class="text-center lgg:mt-12 mt-5">
+        <div class="text-center mt-0">
             <a href="#"
                 class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
                 <span>View All Categories</span>
@@ -696,26 +696,43 @@
 </section>
 
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
-        <!-- Scroll Wrapper -->
-        <div class="flex gap-4 flex-wrap lgg:gap-6 lgg:justify-start justify-center items-center ">
+        <!-- Header -->
+         <div class="text-center mb-4">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Tied with Love</h2>
+            <p class="text-gray-500">Occasions wrapped perfectly</p>
+        </div>
+
+
+        <!-- Hanging Tags -->
+        <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
             @foreach ($categories->where('parent_id', null) as $category)
-            <a href="{{ route('category.show',$category->slug) }}">
-                <div
-                    class="group flex justify-between items-center lgg:gap-4 gap-[15px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
-                    <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                        class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
-
-                    <span
-                        class="text-sm font-medium whitespace-nowrap transition-colors duration-300 group-hover:text-secondary">
-                        {{ $category->name }}
-                    </span>
-
-                    <span
-                        class="lgg:ml-auto min-w-9 min-h-9 w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 text-secondary text-sm font-semibold transition-all duration-300 group-hover:bg-secondary group-hover:text-white">
-                        {{ $category->products_count }}
-                    </span>
+            <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
+                <!-- String/Hanger -->
+                <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
+                <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
+                
+                <!-- Tag -->
+                <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
+                    
+                    <!-- Tag Hole -->
+                    <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10"></div>
+                    
+                    <!-- Image -->
+                    <div class="h-32 overflow-hidden">
+                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            alt="{{ $category->name }}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-3 text-center">
+                        <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
+                        <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
+                            {{ $category->products_count }} items
+                        </span>
+                    </div>
                 </div>
             </a>
             @endforeach
@@ -724,7 +741,7 @@
 </section>
 
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
             <!-- Left Title -->
@@ -831,7 +848,7 @@
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto lgg:py-12 lgg:px-12 py-12  px-4 relative rounded-[10px] overflow-hidden">
         <span class="absolute z-[1] top-[8px] right-[30px] text-secondary/30 text-[100px]">%</span>
         <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-100 z-[-1]"></div>
@@ -1011,7 +1028,7 @@
         </div>
     </div>
 </section>
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div id="ads-carousel" class="owl-carousel owl-theme">
             <!-- Banner 1: Autumn Sale -->
@@ -1119,7 +1136,7 @@
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="flex flex-col lgg:flex-row gap-8 lgg:gap-12">
             <div class="w-full lgg:w-2/5 px-4 lgg:text-left text-center">
@@ -1323,7 +1340,7 @@
 </section>
 
 {{--
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
             <!-- Left Title -->
@@ -1423,7 +1440,7 @@ All Products
 </div>
 </section>
 --}}
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
             <!-- Item 1 -->
@@ -1485,7 +1502,7 @@ All Products
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
 
@@ -1582,7 +1599,7 @@ All Products
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
@@ -1675,7 +1692,7 @@ All Products
     </div>
 </section>
 
-<section class="px-4 lgg:py-12 py-6">
+<section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">

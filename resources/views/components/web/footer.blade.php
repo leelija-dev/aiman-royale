@@ -2,26 +2,27 @@
   <div class="bg-white w-full container rounded-xl shadow-2xl relative modal-container my-8">
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 sm:px-8 py-5 border-b gap-4">
+    <div class="flex flex-col smxl:flex-row items-start smxl:items-center justify-between px-6 sm:px-8 py-5 border-b gap-4">
       <h2 class="text-xl sm:text-2xl font-bold">Size Guide</h2>
 
-      <div class="flex items-center gap-4 w-full sm:w-auto">
+      <div class="flex items-center gap-4 w-fit smxl:w-auto">
         <!-- Unit Toggle -->
-        <div class="flex bg-gray-100 rounded-full p-1 text-sm font-medium flex-1 sm:flex-none">
+        <div class="flex bg-gray-100 rounded-full p-1 text-sm font-medium flex-1 smxl:flex-none w-fit">
           <button class="px-3 sm:px-4 py-1.5 rounded-full bg-black text-white transition-all active:scale-95 unit-btn active" data-unit="inches">Inches</button>
           <button class="px-3 sm:px-4 py-1.5 rounded-full text-gray-600 transition-all active:scale-95 unit-btn" data-unit="cm">cm</button>
         </div>
 
         <!-- Close Button -->
-        <button class="text-2xl text-gray-500 hover:text-black transition-colors close-btn">&times;</button>
+        <button class="text-2xl text-gray-500 hover:text-black transition-colors close-btn smxl:relative smxl:top-[0px] top-[10px] smxl:right-[0px] right-[16px] absolute">&times;</button>
       </div>
     </div>
 
     <!-- Content -->
-    <div class="grid lg:grid-cols-2 gap-8 p-6 sm:p-8">
+    <div class="flex md:flex-row flex-col  gap-8 pt-[10px] pb-6 sm:pb-8 px-6 sm:px-8 ">
 
       <!-- LEFT — SIZE TABLE -->
-      <div class="overflow-x-auto">
+      <div class="w-full">
+        <div class="overflow-x-auto">
         <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -72,8 +73,10 @@
         </div>
       </div>
 
+      </div>
+
       <!-- RIGHT — MEASURE GUIDE WITH SCROLLABLE CONTENT -->
-      <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4">
+      <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4 lgg:min-w-[380px] md:min-w-[330px] min-w-full lgg:max-w-[380px] md:max-w-[330px] max-w-full">
         <div class="sticky top-0 bg-white pt-2 pb-4 z-10">
           <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">How to Measure Yourself</h3>
         </div>
@@ -81,74 +84,99 @@
         <div class="space-y-6 pb-4">
           <!-- Image 1 -->
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
               <h4 class="font-semibold text-gray-800 text-base">Bust Measurement</h4>
             </div>
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+
             
-              <img src="{{asset('web/images/size-guide/women-size (1).webp')}}"
+              <img src="{{asset('web/images/size-guide/bust.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
+                class=" w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+                </div>
            
-            <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
           </div>
 
           <!-- Image 2 -->
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
               <h4 class="font-semibold text-gray-800 text-base">Waist Measurement</h4>
             </div>
-           <img src="{{asset('web/images/size-guide/women-size (3).webp')}}"
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+           <img src="{{asset('web/images/size-guide/waist.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
-            <p class="text-sm text-gray-600 px-1">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
           </div>
 
           <!-- Image 3 -->
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
               <h4 class="font-semibold text-gray-800 text-base">Hip Measurement</h4>
             </div>
-             <img src="{{asset('web/images/size-guide/women-size (6).webp')}}"
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+             <img src="{{asset('web/images/size-guide/hip.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
-            <p class="text-sm text-gray-600 px-1">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
           </div>
 
           <!-- Image 4 -->
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
               <h4 class="font-semibold text-gray-800 text-base">Armhole Measurement</h4>
             </div>
-             <img src="{{asset('web/images/size-guide/women-size (5).webp')}}"
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+             <img src="{{asset('web/images/size-guide/arm-round.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
-            <p class="text-sm text-gray-600 px-1">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
           </div>
 
           <!-- Image 5 -->
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Shoulder Measurement</h4>
             </div>
-              <img src="{{asset('web/images/size-guide/women-size (2).webp')}}"
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/shoulder.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
-            <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Arm Length Measurement</h4>
             </div>
-              <img src="{{asset('web/images/size-guide/women-size (4).webp')}}"
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/arm-length.webp')}}"
                 alt="Bust measurement guide"
-                class=" h-auto w-auto aspect-[9/12] rounded-md mb-2">
-            <p class="text-sm text-gray-600 px-1">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+          </div>
+          <div class="measurement-step">
+            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
+              <h4 class="font-semibold text-gray-800 text-base">Height Measurement</h4>
+            </div>
+             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/height.webp')}}"
+                alt="Bust measurement guide"
+                class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
+              </div>
+            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
 
           <!-- Tips Section -->

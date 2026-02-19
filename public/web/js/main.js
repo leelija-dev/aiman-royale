@@ -410,13 +410,13 @@ $(document).ready(function () {
         ...carouselPresets.autoplay,
         autoplayTimeout: 5000,
         responsive: {
-          0: { items: 1, margin: 10 },
-          500: { items: 2, margin: 10 },
-          640: { items: 2, margin: 10 },
-          768: { items: 3, margin: 10 },
-          1024: { items: 3, margin: 25 },
-          1280: { items: 4, margin: 25 },
-          1500: { items: 5, margin: 25 }
+          0: { items: 1, margin: 9 },
+          500: { items: 2, margin: 9 },
+          640: { items: 2, margin: 9 },
+          768: { items: 3, margin: 9 },
+          1024: { items: 3, margin: 9 },
+          1280: { items: 4, margin: 9 },
+          1500: { items: 5, margin: 9 }
 
         }
       },
@@ -435,12 +435,12 @@ $(document).ready(function () {
         ...carouselPresets.navigation,
         ...carouselPresets.autoplay,
         responsive: {
-          0: { items: 1, margin: 10 },
-          450: { items: 2, margin: 16 },
-          768: { items: 3, margin: 20 },
-          1024: { items: 4, margin: 30 },
-          1280: { items: 4 ,margin: 35 },
-          1500: { items: 5 ,margin: 35 }
+          0: { items: 1, margin: 21 },
+          450: { items: 2, margin: 21 },
+          768: { items: 3, margin: 21 },
+          1024: { items: 4, margin: 21 },
+          1280: { items: 4 ,margin: 21 },
+          1500: { items: 5 ,margin: 21 }
         }
       }
     },
