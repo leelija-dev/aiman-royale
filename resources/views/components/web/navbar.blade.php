@@ -1718,7 +1718,7 @@
             // Update shop button link
             if (shopBtn && parentCategory.slug) {
                 shopBtn.onclick = function() {
-                    window.location.href = `/category/${parentCategory.slug}`;
+                    window.location.href = `/collections/${parentCategory.slug}`;
                 };
             }
 
@@ -2194,7 +2194,7 @@
                 categoryElement.className = 'search-category-item';
                 categoryElement.innerHTML = highlightText(category.name, searchTerm);
                 categoryElement.addEventListener('click', () => {
-                    window.location.href = `/category/${category.slug}`;
+                    window.location.href = `/collections/${category.slug}`;
                 });
                 categoriesList.appendChild(categoryElement);
             });
@@ -2292,7 +2292,7 @@
                     ${highlightText(category.name, searchTerm)}
                 `;
                 categoryElement.addEventListener('click', () => {
-                    window.location.href = `/category/${category.slug}`;
+                    window.location.href = `/collections/${category.slug}`;
                 });
                 mobileCategoriesList.appendChild(categoryElement);
             });
@@ -2921,7 +2921,7 @@
                     if (productCategory && productCategory.name) {
                         breadcrumbs.push({
                             name: productCategory.name,
-                            url: '/category/' + productCategory.slug
+                            url: '/collections/' + productCategory.slug
                         });
                     } else {
                         breadcrumbs.push({

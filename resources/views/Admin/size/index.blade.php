@@ -164,7 +164,7 @@
                                                     <label for="hip" class="form-label">Hip Size <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" id="hip" name="hip" 
                                                         value="{{ old('hip') ?? $size->hip }}"  required>
-                                                    @error('chest_size')
+                                                    @error('hip')
                                                     <div class="text-danger small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -172,15 +172,16 @@
                                                     <label for="arm" class="form-label">Arm Hole Size <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" id="arm" name="arm" 
                                                         value="{{ old('arm') ?? $size->arm }}"  required>
-                                                    @error('chest_size')
+                                                    @error('arm')
                                                     <div class="text-danger small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+                                           
                                                  <div class="mb-3">
                                                     <label for="uk" class="form-label">Uk Size <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" id="uk" name="uk" 
                                                         value="{{ old('uk') ?? $size->uk_size }}"  required>
-                                                    @error('chest_size')
+                                                    @error('uk')
                                                     <div class="text-danger small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
