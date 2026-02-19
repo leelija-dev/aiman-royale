@@ -22,7 +22,7 @@
 
       <!-- LEFT — SIZE TABLE -->
       <div class="w-full">
-        <div class="overflow-x-auto">
+        <div class="">
         <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">

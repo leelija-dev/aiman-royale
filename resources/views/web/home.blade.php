@@ -787,7 +787,7 @@
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         {{-- <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleHomeWishlist({{ $product->id }}, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
@@ -799,14 +799,14 @@
                         @if(Auth::check())
                         <button
              
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleWishlist({{ $product->id }}, this,event);">
                             <i class="far fa-heart"></i>
                         </button>
                         @else
                         <a href="{{ route('page.login') }}" >
                            
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             >
                             <i class="far fa-heart"></i>
                         </button>
@@ -1386,7 +1386,7 @@ All Products
 
                 <!-- Wishlist Heart Icon (Top Right) -->
                 <button
-                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                     onclick="toggleHomeWishlist({{ $product->id }}, event)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
@@ -1546,7 +1546,7 @@ All Products
 
                             <!-- View Products Button (Top Right) -->
                             <button
-                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -1735,7 +1735,7 @@ All Products
 
                         <!-- Wishlist Heart Icon (Top Right) -->
                         {{-- <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleHomeWishlist(1, event)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
@@ -1812,7 +1812,7 @@ All Products
 
             <!-- Wishlist Heart Icon (Top Right) -->
             <button
-                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                 onclick="toggleHomeWishlist(1, event)">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
@@ -1881,7 +1881,7 @@ All Products
 
     <!-- Wishlist Heart Icon (Top Right) -->
     <button
-        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
         onclick="toggleHomeWishlist(1, event)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
@@ -1944,7 +1944,7 @@ All Products
 
     <!-- Wishlist Heart Icon (Top Right) -->
     <button
-        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
+        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
         onclick="toggleHomeWishlist(1, event)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"

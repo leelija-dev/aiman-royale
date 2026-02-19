@@ -49,12 +49,12 @@
             @if(Auth::check())
                 <button
                     onclick="toggleWishlist({{ $product->id }}, this, event)"
-                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                     <i class="far fa-heart"></i>
                 </button>
             @else
                 <a href="{{ route('login') }}" onclick="event.stopPropagation()">
-                    <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                    <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                         <i class="far fa-heart"></i>
                     </button>
                 </a>
