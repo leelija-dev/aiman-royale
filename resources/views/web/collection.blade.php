@@ -44,7 +44,7 @@
 
                     <!-- Wishlist Heart Icon (Top Right) -->
                     {{-- <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
