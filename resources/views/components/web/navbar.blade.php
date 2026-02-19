@@ -2912,8 +2912,10 @@
                     // Single product page
                     let productCategory = null;
                     @if(isset($productCategory))
-                    productCategory = @json($productCategory);
-                    console.log('Product Category from navbar:', productCategory);
+                        productCategory = @json($productCategory);
+                        console.log('Product Category from navbar:', productCategory);
+                    @else
+                        console.log('Product Category NOT available in navbar');
                     @endif
 
                     if (productCategory && productCategory.name) {

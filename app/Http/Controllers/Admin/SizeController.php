@@ -14,17 +14,17 @@ class SizeController extends Controller
     public function index(Request $request)
     {
         $query = Size::query();
-        
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('code', 'like', "%{$search}%");
             });
         }
-        
+
         $data = $query->orderBy('sort_order')->orderBy('name')->paginate(15);
-        
+
         return view('Admin.size.index', compact('data'));
     }
 
@@ -41,15 +41,19 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $data = $request->validate([
             'name' => 'required|string|max:20|unique:sizes,name',
             'code' => 'required|string|max:10|unique:sizes,code',
             'sort_order' => 'required|integer|unique:sizes,sort_order',
-            'chest_size'=>'required|numeric|min:0',
-            'neck_size'=>'required|numeric|min:0',
-            'waist_size'=>'required|numeric|min:0',
+            'chest_size' => 'required|numeric|min:0',
+            'neck_size' => 'required|numeric|min:0',
+            'waist_size' => 'required|numeric|min:0',
+            'arm' => 'required|numeric|min:0',
+            'hip' => 'required|numeric|min:0'
         ]);
 
+        $data['uk_size'] = $request->uk_size;
         Size::create($data);
 
         return redirect()->route('admin.sizes')->with('success', 'Size created successfully!');
@@ -69,14 +73,18 @@ class SizeController extends Controller
     public function update(Request $request, Size $size)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:20|unique:sizes,name,'.$size->id,
-            'code' => 'required|string|max:10|unique:sizes,code,'.$size->id,
-            'sort_order' => 'required|integer|unique:sizes,sort_order,'.$size->id,
-            'chest_size'=>'required|numeric|min:0',
-            'neck_size'=>'required|numeric|min:0',
-            'waist_size'=>'required|numeric|min:0',
+            'name' => 'required|string|max:20|unique:sizes,name,' . $size->id,
+            'code' => 'required|string|max:10|unique:sizes,code,' . $size->id,
+            'sort_order' => 'required|integer|unique:sizes,sort_order,' . $size->id,
+            'chest_size' => 'required|numeric|min:0',
+            'neck_size' => 'required|numeric|min:0',
+            'waist_size' => 'required|numeric|min:0',
+            'arm' => 'required|numeric|min:0',
+            'hip' => 'required|numeric|min:0',
         ]);
 
+        $data['uk_size'] = $request->uk;
+        // dd($data);
         $size->update($data);
 
         return redirect()->route('admin.sizes')->with('success', 'Size updated successfully!');
@@ -88,7 +96,7 @@ class SizeController extends Controller
     public function delete(Size $size)
     {
         $size->delete();
-        
+
         return redirect()->route('admin.sizes')->with('success', 'Size deleted successfully!');
     }
 }

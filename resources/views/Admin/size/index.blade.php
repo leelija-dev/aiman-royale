@@ -137,7 +137,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="chest_size" class="form-label">Chest Size <span class="text-danger">*</span></label>
+                                                    <label for="chest_size" class="form-label">Bust Size <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" id="chest_size" name="chest_size" 
                                                         value="{{ old('chest_size') ?? $size->chest_size }}"  required>
                                                     @error('chest_size')
@@ -157,6 +157,30 @@
                                                     <input type="number" class="form-control" id="waist_size" name="waist_size" 
                                                         value="{{ old('waist_size') ?? $size->waist_size }}" required>
                                                     @error('waist_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label for="hip" class="form-label">Hip Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="hip" name="hip" 
+                                                        value="{{ old('hip') ?? $size->hip }}"  required>
+                                                    @error('chest_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label for="arm" class="form-label">Arm Hole Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="arm" name="arm" 
+                                                        value="{{ old('arm') ?? $size->arm }}"  required>
+                                                    @error('chest_size')
+                                                    <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label for="uk" class="form-label">Uk Size <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="uk" name="uk" 
+                                                        value="{{ old('uk') ?? $size->uk_size }}"  required>
+                                                    @error('chest_size')
                                                     <div class="text-danger small">{{ $message }}</div>
                                                     @enderror
                                                 </div>

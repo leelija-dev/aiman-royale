@@ -21,7 +21,10 @@ class Size extends Model
         'sort_order',
         'chest_size',
         'neck_size',
-        'waist_size'
+        'waist_size',
+        'arm',
+        'hip',
+        'uk_size'
         
     ];
 
