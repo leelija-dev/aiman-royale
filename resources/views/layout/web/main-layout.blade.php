@@ -117,7 +117,7 @@
 <body class="overflow-x-hidden ">
 
     @if(!request()->is('login') && !request()->is('register'))
-    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" />
+    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
     @endif
 
 

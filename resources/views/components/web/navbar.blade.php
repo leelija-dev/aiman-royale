@@ -926,12 +926,11 @@
             display: block !important;
         }
     }
- /* SweetAlert ABOVE mobile navbar / drawer */
-.swal2-container {
-    z-index: 999999 !important;
-}
 
-
+    /* SweetAlert ABOVE mobile navbar / drawer */
+    .swal2-container {
+        z-index: 999999 !important;
+    }
 </style>
 
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] ">
@@ -1380,13 +1379,13 @@
                                 @if($product->ready_to_ship == true)
                                 <a href="{{route('page.single-product', $product->slug)}}" class="menu-link hover:pl-6 transition-all">{{ $product->name }}</a>
                                 @else
-                                 <a href="#"
+                                <a href="#"
                                     onclick="notAvailableToast()"
                                     class="menu-link hover:pl-6 transition-all text-gray-400">
-                                        {{ $product->name }}
-                                    </a>
+                                    {{ $product->name }}
+                                </a>
                                 @endif
-                                
+
 
                             </li>
                             @endforeach
@@ -1496,7 +1495,7 @@
                 <button
                     class="category-sidebar-btn px-6 py-2 rounded-full rounded-r-none text-lg font-medium w-full text-left"
                     data-target="collection-products">
-                    Collection 
+                    Collection
                 </button>
             </div>
 
@@ -2875,10 +2874,23 @@
                     }
                 } else if (pathSegments[0] === 'products') {
                     // Single product page
-                    breadcrumbs.push({
-                        name: 'Products',
-                        url: '/products'
-                    });
+                    let productCategory = null;
+                    @if(isset($productCategory))
+                    productCategory = @json($productCategory);
+                    console.log('Product Category from navbar:', productCategory);
+                    @endif
+
+                    if (productCategory && productCategory.name) {
+                        breadcrumbs.push({
+                            name: productCategory.name,
+                            url: '/category/' + productCategory.slug
+                        });
+                    } else {
+                        breadcrumbs.push({
+                            name: 'Products',
+                            url: '/products'
+                        });
+                    }
 
                     // Try to get product name from page title or meta
                     const pageTitle = document.title;
@@ -3290,21 +3302,15 @@
     });
 </script>
 <script>
-function notAvailableToast() {
-    Swal.fire({
-        toast: true,
-        position: 'top',
-        icon: 'warning',
-        title: 'Product not available',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-}
+    function notAvailableToast() {
+        Swal.fire({
+            toast: true,
+            position: 'top',
+            icon: 'warning',
+            title: 'Product not available',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
 </script>
-
-
-
-
-
-

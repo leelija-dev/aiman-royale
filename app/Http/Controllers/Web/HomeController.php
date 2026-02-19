@@ -351,7 +351,7 @@ class HomeController extends Controller
 
     public function ShowSingleProduct($slug)
     {
-        $product = Product::with(['images', 'variants'])
+        $product = Product::with(['images', 'variants', 'category'])
             ->where('slug', $slug)
             ->firstOrFail();
         $sizes=Size::OrderBy('sort_order')->get();

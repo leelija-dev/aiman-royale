@@ -1,5 +1,26 @@
 @extends('layout.web.main-layout')
 
+@section('page-type', 'single-product')
+
+@php
+    // Pass product category data to navbar for breadcrumbs
+    $productCategory = null;
+    if (isset($product) && $product->category) {
+        $productCategory = [
+            'name' => $product->category->name,
+            'slug' => $product->category->slug
+        ];
+    }
+    // Debug: Log the product data to check if category is loaded
+    error_log('Product Data: ' . json_encode([
+        'product_id' => $product->id ?? 'null',
+        'product_name' => $product->name ?? 'null',
+        'category_id' => $product->category_id ?? 'null',
+        'category_exists' => isset($product->category),
+        'category_name' => $product->category->name ?? 'null'
+    ]));
+@endphp
+
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
