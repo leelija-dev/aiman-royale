@@ -23,55 +23,63 @@
       <!-- LEFT — SIZE TABLE -->
       <div class="w-full">
         <div class="">
-        <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
+          <h3 class="text-lg sm:text-xl font-semibold mb-4 text-center">Size Guide</h3>
 
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-          <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-gray-700">
-              <tr>
-                <th class="p-3 border-b border-r min-w-[80px] text-center">SIZE</th>
-                <th class="p-3 border-b border-r min-w-[80px] text-center">Chest</th>
-                <th class="p-3 border-b border-r min-w-[80px] text-center">Waist</th>
-                <th class="p-3 border-b border-r min-w-[80px] text-center">Neck</th>
-                
-              </tr>
-            </thead>
+          <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+            <table class="w-full text-sm text-left">
+              <thead class="bg-gray-50 text-gray-700">
+                <tr>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">SIZE</th>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">Bust</th>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">Waist</th>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">Hip</th>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">Armhole</th>
+                  <th class="p-3 border-b border-r min-w-[80px] text-center">UK Size</th>
 
-            <tbody class="text-gray-700">
-              @foreach($sizes as $size)
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="p-3 border-b border-r font-medium text-center">{{$size->code}} ({{$size->chest_size ? floor($size->chest_size) == $size->chest_size 
+                </tr>
+              </thead>
+
+              <tbody class="text-gray-700">
+                @foreach($sizes as $size)
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="p-3 border-b border-r font-medium text-center">{{$size->code}} ({{$size->chest_size ? floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size : ''}}) </td>
-                <td class="p-3 border-b border-r text-center" data-inches="37" data-cm="94.0">{{ floor($size->chest_size) == $size->chest_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="37" data-cm="94.0">{{ floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size }}
-                </td>
-                <td class="p-3 border-b border-r text-center" data-inches="33" data-cm="83.8">{{ floor($size->waist_size) == $size->waist_size 
+                  </td>
+                  <td class="p-3 border-b border-r text-center" data-inches="33" data-cm="83.8">{{ floor($size->waist_size) == $size->waist_size 
                   ? (int) $size->waist_size : $size->waist_size }}
-                </td>
-                <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->neck_size) == $size->neck_size 
-                  ? (int) $size->neck_size : $size->neck_size }}</td>
-                
-                
-              
-              </tr>
-              @endforeach
-              
-            </tbody>
-          </table>
-        </div>
+                  </td>
+                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->hip) == $size->hip 
+                  ? (int) $size->hip : $size->hip }}</td>
 
-        <!-- Table Legend -->
-        <div class="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
-          <div class="flex items-center gap-2">
-            <div class="w-3 h-3 bg-white border border-gray-300"></div>
-            <span>Standard sizes</span>
+                   <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->arm) == $size->arm 
+                  ? (int) $size->arm : $size->arm }}</td>
+
+                   <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->uk_size) == $size->uk_size 
+                  ? (int) $size->uk_size : $size->uk_size }}</td>
+
+
+
+                </tr>
+                @endforeach
+
+              </tbody>
+            </table>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="w-3 h-3 bg-gray-50/50 border border-gray-300"></div>
-            <span>Alternate sizes</span>
+
+          <!-- Table Legend -->
+          <div class="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 bg-white border border-gray-300"></div>
+              <span>Standard sizes</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 bg-gray-50/50 border border-gray-300"></div>
+              <span>Alternate sizes</span>
+            </div>
           </div>
         </div>
-      </div>
 
       </div>
 
@@ -90,12 +98,12 @@
             </div>
             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
 
-            
+
               <img src="{{asset('web/images/size-guide/bust.webp')}}"
                 alt="Bust measurement guide"
                 class=" w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-                </div>
-           
+            </div>
+
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
           </div>
 
@@ -105,11 +113,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
               <h4 class="font-semibold text-gray-800 text-base">Waist Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
-           <img src="{{asset('web/images/size-guide/waist.webp')}}"
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/waist.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
           </div>
 
@@ -119,11 +127,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
               <h4 class="font-semibold text-gray-800 text-base">Hip Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
-             <img src="{{asset('web/images/size-guide/hip.webp')}}"
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/hip.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
           </div>
 
@@ -133,11 +141,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
               <h4 class="font-semibold text-gray-800 text-base">Armhole Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
-             <img src="{{asset('web/images/size-guide/arm-round.webp')}}"
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+              <img src="{{asset('web/images/size-guide/arm-round.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
           </div>
 
@@ -147,11 +155,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Shoulder Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/shoulder.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
@@ -159,11 +167,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Arm Length Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/arm-length.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
@@ -171,11 +179,11 @@
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Height Measurement</h4>
             </div>
-             <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/height.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
-              </div>
+            </div>
             <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
 
@@ -660,7 +668,7 @@
             </p>
           </div>
 
-          <form action="{{ route('newsletter.store') }}" method="POST" >
+          <form action="{{ route('newsletter.store') }}" method="POST">
             @csrf
             <div class="flex flex-col sm:flex-row gap-4">
               <div class="flex-1 relative group">
@@ -668,10 +676,10 @@
                   type="email"
                   name="email"
                   class="w-full px-6 py-4 lg:py-5 bg-white/80 backdrop-blur-sm border-2 border-[#EC4899]/30 rounded-2xl lg:rounded-3xl outline-none text-gray-800 placeholder-gray-500 transition-all duration-300 focus:border-[#EC4899] focus:bg-white focus:shadow-lg focus:shadow-[#EC4899]/20"
-                  placeholder="Your email address" required/>
-                  @error('email')
-                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                  @enderror
+                  placeholder="Your email address" required />
+                @error('email')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
                 <div class="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-[#A10000]/0 via-[#EC4899]/0 to-[#EC4899]/0 group-focus-within:from-[#A10000]/5 group-focus-within:via-[#EC4899]/5 group-focus-within:to-[#EC4899]/5 transition-all duration-500 -z-10"></div>
               </div>
               <button
@@ -1143,7 +1151,7 @@
 <a href="https://wa.me/919999999999" target="_blank"
   class="fixed bottom-[7.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
 
-  
+
 
   <!-- Main Button -->
   <div class="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-[0_10px_25px_rgba(236,72,153,0.35)] hover:shadow-[0_15px_35px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all duration-300">
@@ -1436,33 +1444,31 @@ Swal.fire({
     position: 'top-end',
     icon: 'success',
     title: '{{ session('success') }}',
-    showConfirmButton: false,
-    timer: 3000
+showConfirmButton: false,
+timer: 3000
 });
 </script>
 @endif --}}
 @if (session('success'))
 <script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: "{{ session('success') }}",
-        confirmButtonText: 'OK',
-        confirmButtonColor: 'green'
-    });
+  Swal.fire({
+    icon: 'success',
+    title: 'Success',
+    text: "{{ session('success') }}",
+    confirmButtonText: 'OK',
+    confirmButtonColor: 'green'
+  });
 </script>
 @endif
 
 @if ($errors->has('email'))
 <script>
-    Swal.fire({
-        icon: 'warning',
-        title: 'Oops!',
-        text: "{{ $errors->first('email') }}",
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#000'
-    });
+  Swal.fire({
+    icon: 'warning',
+    title: 'Oops!',
+    text: "{{ $errors->first('email') }}",
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#000'
+  });
 </script>
 @endif
-
-
