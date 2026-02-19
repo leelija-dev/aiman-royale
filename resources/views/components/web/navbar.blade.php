@@ -781,7 +781,7 @@
     }
 
     /* Desktop nav link hover effect */
-    
+
 
     /* Hide/Show based on screen size */
     @media (max-width:991px) {
@@ -903,12 +903,11 @@
             display: block !important;
         }
     }
- /* SweetAlert ABOVE mobile navbar / drawer */
-.swal2-container {
-    z-index: 999999 !important;
-}
 
-
+    /* SweetAlert ABOVE mobile navbar / drawer */
+    .swal2-container {
+        z-index: 999999 !important;
+    }
 </style>
 
 <header id="nav-wrapper" class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] ">
@@ -1099,89 +1098,89 @@
     <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
-    <!-- Desktop Navigation with Enhanced Hover Effects -->
-    <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium">
-        @if (isset($categories) && count($categories) > 0)
-        @foreach ($categories->where('parent_id', null) as $category)
-        <div class="relative group">
-            <a href="{{ route('category.show', $category->slug) }}"
-                class="hover:text-black desktop-nav-link flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 
+            <!-- Desktop Navigation with Enhanced Hover Effects -->
+            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium">
+                @if (isset($categories) && count($categories) > 0)
+                @foreach ($categories->where('parent_id', null) as $category)
+                <div class="relative group">
+                    <a href="{{ route('category.show', $category->slug) }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
-                data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
-                
-                <!-- Animated underline effect -->
-                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                        data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
                              group-hover:w-full transition-all duration-300"></span>
-                
-                <!-- Category name with subtle animation -->
-                <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
                              group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
                              transition-all duration-300 uppercase">
-                    {{ $category->name }}
-                </span>
+                            {{ $category->name }}
+                        </span>
 
-                <!-- Animated arrow icon (optional) -->
-                <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 
-                            transition-all duration-300 text-purple-600" 
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </a>
+                        <!-- Animated arrow icon (optional) -->
+                        <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 
+                            transition-all duration-300 text-purple-600"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+                @endforeach
+                @else
+                <!-- Enhanced fallback navigation items -->
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Salwar Kameez
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Lehengas
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Bridal
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Wedding
+                    </span>
+                </a>
+                @endif
+            </nav>
         </div>
-        @endforeach
-        @else
-        <!-- Enhanced fallback navigation items -->
-        <a href="#" 
-           class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
-                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
-                  hover:shadow-md transform hover:scale-105">
-            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
-                         group-hover:w-full transition-all duration-300"></span>
-            <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
-                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
-                Salwar Kameez
-            </span>
-        </a>
-        
-        <a href="#" 
-           class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
-                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
-                  hover:shadow-md transform hover:scale-105">
-            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
-                         group-hover:w-full transition-all duration-300"></span>
-            <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
-                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
-                Lehengas
-            </span>
-        </a>
-        
-        <a href="#" 
-           class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
-                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
-                  hover:shadow-md transform hover:scale-105">
-            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
-                         group-hover:w-full transition-all duration-300"></span>
-            <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
-                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
-                Bridal
-            </span>
-        </a>
-        
-        <a href="#" 
-           class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
-                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
-                  hover:shadow-md transform hover:scale-105">
-            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
-                         group-hover:w-full transition-all duration-300"></span>
-            <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
-                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
-                Wedding
-            </span>
-        </a>
-        @endif
-    </nav>
-</div>
 
         <!-- Mobile Menu Button -->
         <button id="mobile-menu-btn" class="lgg:hidden text-gray-700 hover:text-black">
@@ -1416,13 +1415,13 @@
                                 @if($product->ready_to_ship == true)
                                 <a href="{{route('page.single-product', $product->slug)}}" class="menu-link hover:pl-6 transition-all">{{ $product->name }}</a>
                                 @else
-                                 <a href="#"
+                                <a href="#"
                                     onclick="notAvailableToast()"
                                     class="menu-link hover:pl-6 transition-all text-gray-400">
-                                        {{ $product->name }}
-                                    </a>
+                                    {{ $product->name }}
+                                </a>
                                 @endif
-                                
+
 
                             </li>
                             @endforeach
@@ -1532,7 +1531,7 @@
                 <button
                     class="category-sidebar-btn px-6 py-2 rounded-full rounded-r-none text-lg font-medium w-full text-left"
                     data-target="collection-products">
-                    Collection 
+                    Collection
                 </button>
             </div>
 
@@ -3326,21 +3325,15 @@
     });
 </script>
 <script>
-function notAvailableToast() {
-    Swal.fire({
-        toast: true,
-        position: 'top',
-        icon: 'warning',
-        title: 'Product not available',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-}
+    function notAvailableToast() {
+        Swal.fire({
+            toast: true,
+            position: 'top',
+            icon: 'warning',
+            title: 'Product not available',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
 </script>
-
-
-
-
-
-
