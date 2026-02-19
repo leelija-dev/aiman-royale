@@ -6,7 +6,7 @@
         z-index: 20004;
         opacity: 0;
         pointer-events: none;
-        top: 101px;
+        top: 141px;
         left: 0;
         right: 0;
         transform: translateY(-20px);
@@ -781,30 +781,7 @@
     }
 
     /* Desktop nav link hover effect */
-    .desktop-nav-link {
-        transition: all 0.3s ease;
-        position: relative;
-    }
 
-    .desktop-nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #d4a574, #b8863c);
-        transition: width 0.3s ease;
-    }
-
-    .desktop-nav-link:hover::after {
-        width: 100%;
-    }
-
-    .desktop-nav-link:hover {
-        color: #d4a574;
-        transform: translateY(-2px);
-    }
 
     /* Hide/Show based on screen size */
     @media (max-width:991px) {
@@ -1121,27 +1098,86 @@
     <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
-            <!-- Desktop Navigation -->
-            <nav class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium">
+            <!-- Desktop Navigation with Enhanced Hover Effects -->
+            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium">
                 @if (isset($categories) && count($categories) > 0)
                 @foreach ($categories->where('parent_id', null) as $category)
                 <div class="relative group">
                     <a href="{{ route('category.show', $category->slug) }}"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
                         data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
-                        {{ $category->name }}
 
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            {{ $category->name }}
+                        </span>
+
+                        <!-- Animated arrow icon (optional) -->
+                        <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 
+                            transition-all duration-300 text-purple-600"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </a>
-
-
                 </div>
                 @endforeach
                 @else
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Salwar Kameez">Salwar
-                    Kameez</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Lehengas">Lehengas</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Bridal">Bridal</a>
-                <a href="#" class="hover:text-black desktop-nav-link" data-category="Wedding">Wedding</a>
+                <!-- Enhanced fallback navigation items -->
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Salwar Kameez
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Lehengas
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Bridal
+                    </span>
+                </a>
+
+                <a href="#"
+                    class="hover:text-black desktop-nav-link relative px-3 py-2 rounded-lg transition-all duration-300
+                  overflow-hidden group hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 
+                  hover:shadow-md transform hover:scale-105">
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 
+                         group-hover:w-full transition-all duration-300"></span>
+                    <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                         group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600">
+                        Wedding
+                    </span>
+                </a>
                 @endif
             </nav>
         </div>
@@ -1478,7 +1514,7 @@
 
 <!-- Categories Menu for Desktop -->
 <div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto opacity-0 pointer-events-none top-[80px] hidden">
-    <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white">
+    <div class="max-w-[calc(100%-50px)] mx-auto my-0 shadow-lg rounded-xl overflow-hidden bg-white">
         <div class="flex">
             <!-- Left Sidebar -->
             <div class="bg-[#fdebdc] p-8 flex flex-col gap-1 pr-0 min-w-[300px] text-left">
