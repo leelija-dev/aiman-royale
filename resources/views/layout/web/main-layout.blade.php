@@ -49,6 +49,13 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
+    <!-- Dynamic Schema Markup -->
+    @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
+    <script type="application/ld+json">
+    {!! $pageMeta->schema_markup !!}
+    </script>
+    @endif
+
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 

@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\PageSeoController;
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -44,7 +45,7 @@ use App\Http\Controllers\Admin\SeoController;
 
 
 Route::middleware(['web'])->prefix('admin')->group(function () {
-    Route::view('/login', 'Admin.login')->name('login')->middleware(['guest.admin','prevent.back.history']);
+    Route::view('/login', 'Admin.login')->name('login')->middleware(['guest.admin', 'prevent.back.history']);
     //Route::get('/login', [AuthController::class, 'showLoginForm'])->name('Admin.showLogin');
     Route::post('/login', [AuthController::class, 'login'])->name('Admin.login')->middleware('guest.admin');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:admin');
@@ -55,11 +56,13 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
     Route::get('/dashboard', [HomeController::class, 'home'])->name('Admin.dashboard')->middleware('auth:admin');
     Route::get('/dashboard/data', [HomeController::class, 'getDashboardData'])->name('admin.dashboard.data')->middleware('auth:admin');
-    Route::fallback(function () { abort(404); });
+    Route::fallback(function () {
+        abort(404);
+    });
 
-        // Product Categories
+    // Product Categories
 
-        Route::middleware(['auth:admin'])->group(function () {
+    Route::middleware(['auth:admin'])->group(function () {
         Route::resource('product-categories', 'App\Http\Controllers\Admin\CategoryController', [
             'parameters' => ['product-categories' => 'category:id'],
             'names' => [
@@ -180,102 +183,98 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::prefix('permissions')->group(function () {
 
-        Route::get('/', [PermissionController::class, 'index'])->name('admin.permissions');
-        Route::get('/create/', [PermissionController::class, 'create'])->name('admin.create');
-        Route::post('/create/', [PermissionController::class, 'store'])->name('admin.store');
-        Route::get('/edit-permission/{id}', [PermissionController::class, 'edit'])->name('admin.edit-permission');
-        Route::post('/update/{id}', [PermissionController::class, 'update'])->name('admin.permissions.update');
-        Route::delete('/delete-permission/{id}', [PermissionController::class, 'delete'])->name('admin.delete-permission');
-    });
+            Route::get('/', [PermissionController::class, 'index'])->name('admin.permissions');
+            Route::get('/create/', [PermissionController::class, 'create'])->name('admin.create');
+            Route::post('/create/', [PermissionController::class, 'store'])->name('admin.store');
+            Route::get('/edit-permission/{id}', [PermissionController::class, 'edit'])->name('admin.edit-permission');
+            Route::post('/update/{id}', [PermissionController::class, 'update'])->name('admin.permissions.update');
+            Route::delete('/delete-permission/{id}', [PermissionController::class, 'delete'])->name('admin.delete-permission');
+        });
 
-    Route::prefix('roles')->group(function () {
+        Route::prefix('roles')->group(function () {
 
-        Route::get('/', [RoleController::class, 'index'])->name('admin.roles');
-        Route::get('/create/', [RoleController::class, 'create'])->name('admin.roles.create');
-        Route::post('/create/', [RoleController::class, 'store'])->name('admin.roles.store');
-        Route::get('/edit-role/{id}', [RoleController::class, 'edit'])->name('admin.roles.edit-role');
-        Route::post('/update/{id}', [RoleController::class, 'update'])->name('admin.roles.update');
-        Route::delete('/delete-role/{id}', [RoleController::class, 'delete'])->name('admin.delete-role');
-    });
-
-
-    Route::prefix('users')->group(function () {
-
-        Route::get('/', [UserController::class, 'index'])->name('admin.users.show');
-        Route::get('/create/', [UserController::class, 'create'])->name('admin.users.create');
-        Route::post('/create/', [UserController::class, 'store'])->name('admin.users.store');
-        Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
-        Route::post('/update/{id}', [UserController::class, 'update'])->name('admin.users.update');
-        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
-        Route::get('/change-password/{id}', [UserController::class, 'editPassword'])->name('admin.users.edit-password');
-        Route::post('/update-password/{id}', [UserController::class, 'updatePassword'])->name('admin.users.update-password');
-        
-        
-    });
-    Route::prefix('customers')->group(function () {
-
-        Route::get('/', [UserController::class, 'customer'])->name('admin.customers.show');
-       
-        
-    });
+            Route::get('/', [RoleController::class, 'index'])->name('admin.roles');
+            Route::get('/create/', [RoleController::class, 'create'])->name('admin.roles.create');
+            Route::post('/create/', [RoleController::class, 'store'])->name('admin.roles.store');
+            Route::get('/edit-role/{id}', [RoleController::class, 'edit'])->name('admin.roles.edit-role');
+            Route::post('/update/{id}', [RoleController::class, 'update'])->name('admin.roles.update');
+            Route::delete('/delete-role/{id}', [RoleController::class, 'delete'])->name('admin.delete-role');
+        });
 
 
-    Route::prefix('unit')->group(function () {
-        Route::get('/',[UnitController::class,'index'])->name('admin.unit');
-        Route::get('/add-unit',[UnitController::class,'create'])->name('admin.add-unit');
-        Route::post('/add-unit',[UnitController::class,'store'])->name('admin.unit.store');
-        Route::delete('/unit/{id}', [UnitController::class, 'delete'])->name('unit.delete');
-        Route::get('/update-unit/{id}',[UnitController::class,'update'])->name('admin.unit.update');
-        Route::post('/edit-unit/{id}',[UnitController::class,'edit'])->name('admin.unit.edit');
-    });
-    // Brand Routes
-    Route::prefix('brands')->group(function () {
-        Route::get('/', [AdminBrandController::class, 'index'])->name('admin.brands.index');
-        Route::get('/create', [AdminBrandController::class, 'create'])->name('admin.brands.create');
-        Route::post('/', [AdminBrandController::class, 'store'])->name('admin.brands.store');
-        Route::get('/{brand}', [AdminBrandController::class, 'show'])->name('admin.brands.show');
-        Route::get('/{brand}/edit', [AdminBrandController::class, 'edit'])->name('admin.brands.edit');
-        Route::put('/{brand}', [AdminBrandController::class, 'update'])->name('admin.brands.update');
-        Route::delete('/{brand}', [AdminBrandController::class, 'destroy'])->name('admin.brands.destroy');
+        Route::prefix('users')->group(function () {
 
-        // Trash related routes
-        Route::get('/trashed/list', [AdminBrandController::class, 'trashed'])->name('admin.brands.trashed');
-        Route::patch('/trashed/{id}/restore', [AdminBrandController::class, 'restore'])->name('admin.brands.restore');
-        Route::delete('/trashed/{id}/force-delete', [AdminBrandController::class, 'forceDelete'])->name('admin.brands.force-delete');
+            Route::get('/', [UserController::class, 'index'])->name('admin.users.show');
+            Route::get('/create/', [UserController::class, 'create'])->name('admin.users.create');
+            Route::post('/create/', [UserController::class, 'store'])->name('admin.users.store');
+            Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
+            Route::post('/update/{id}', [UserController::class, 'update'])->name('admin.users.update');
+            Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
+            Route::get('/change-password/{id}', [UserController::class, 'editPassword'])->name('admin.users.edit-password');
+            Route::post('/update-password/{id}', [UserController::class, 'updatePassword'])->name('admin.users.update-password');
+        });
+        Route::prefix('customers')->group(function () {
 
-        // AJAX route for slug generation
-        Route::post('/generate-slug', function (\Illuminate\Http\Request $request) {
-            $slug = \Illuminate\Support\Str::slug($request->name);
-            return response()->json(['slug' => $slug]);
-        })->name('admin.brands.generate-slug');
-    });
+            Route::get('/', [UserController::class, 'customer'])->name('admin.customers.show');
+        });
 
 
-    // Bill Routes
-    Route::get('/new-bill', [BillController::class, 'index'])->name('admin.new-bill')->middleware('auth:admin');
-    Route::post('/bill/save', [BillController::class, 'store'])->name('admin.bill.save')->middleware('auth:admin');
+        Route::prefix('unit')->group(function () {
+            Route::get('/', [UnitController::class, 'index'])->name('admin.unit');
+            Route::get('/add-unit', [UnitController::class, 'create'])->name('admin.add-unit');
+            Route::post('/add-unit', [UnitController::class, 'store'])->name('admin.unit.store');
+            Route::delete('/unit/{id}', [UnitController::class, 'delete'])->name('unit.delete');
+            Route::get('/update-unit/{id}', [UnitController::class, 'update'])->name('admin.unit.update');
+            Route::post('/edit-unit/{id}', [UnitController::class, 'edit'])->name('admin.unit.edit');
+        });
+        // Brand Routes
+        Route::prefix('brands')->group(function () {
+            Route::get('/', [AdminBrandController::class, 'index'])->name('admin.brands.index');
+            Route::get('/create', [AdminBrandController::class, 'create'])->name('admin.brands.create');
+            Route::post('/', [AdminBrandController::class, 'store'])->name('admin.brands.store');
+            Route::get('/{brand}', [AdminBrandController::class, 'show'])->name('admin.brands.show');
+            Route::get('/{brand}/edit', [AdminBrandController::class, 'edit'])->name('admin.brands.edit');
+            Route::put('/{brand}', [AdminBrandController::class, 'update'])->name('admin.brands.update');
+            Route::delete('/{brand}', [AdminBrandController::class, 'destroy'])->name('admin.brands.destroy');
 
-    // Print Bill Routes
-    Route::prefix('print-bill')->group(function() {
-        Route::get('/', [\App\Http\Controllers\Admin\PrintBillController::class, 'index'])->name('admin.print-bill');
-        Route::get('/{id}', [\App\Http\Controllers\Admin\PrintBillController::class, 'getInvoice'])->name('admin.print-bill.get');
-    });
+            // Trash related routes
+            Route::get('/trashed/list', [AdminBrandController::class, 'trashed'])->name('admin.brands.trashed');
+            Route::patch('/trashed/{id}/restore', [AdminBrandController::class, 'restore'])->name('admin.brands.restore');
+            Route::delete('/trashed/{id}/force-delete', [AdminBrandController::class, 'forceDelete'])->name('admin.brands.force-delete');
 
-    Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
-
-    // ProductPackage routes (commented out - controller doesn't exist)
-    // Route::prefix('product-package')->group(function(){
-    //     Route::get('/',[ProductPackageController::class,'index'])->name('admin.product-package.index');
-    //     Route::get('/create',[ProductPackageController::class,'create'])->name('admin.product-package.create');
-    //     Route::post('/create',[ProductPackageController::class,'store'])->name('admin.product-package.store');
-    //     Route::get('/edit/{id}',[ProductPackageController::class,'edit'])->name('admin.product-package.edit');
-    //     Route::post('/update/{id}',[ProductPackageController::class,'update'])->name('admin.product-package.update');
-    //     Route::delete('/{id}', [ProductPackageController::class, 'delete'])->name('admin.product-package.delete');
-    // });
+            // AJAX route for slug generation
+            Route::post('/generate-slug', function (\Illuminate\Http\Request $request) {
+                $slug = \Illuminate\Support\Str::slug($request->name);
+                return response()->json(['slug' => $slug]);
+            })->name('admin.brands.generate-slug');
+        });
 
 
-    // Shop Routes (commented out - controller doesn't exist)
-    /*
+        // Bill Routes
+        Route::get('/new-bill', [BillController::class, 'index'])->name('admin.new-bill')->middleware('auth:admin');
+        Route::post('/bill/save', [BillController::class, 'store'])->name('admin.bill.save')->middleware('auth:admin');
+
+        // Print Bill Routes
+        Route::prefix('print-bill')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\PrintBillController::class, 'index'])->name('admin.print-bill');
+            Route::get('/{id}', [\App\Http\Controllers\Admin\PrintBillController::class, 'getInvoice'])->name('admin.print-bill.get');
+        });
+
+        Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
+
+        // ProductPackage routes (commented out - controller doesn't exist)
+        // Route::prefix('product-package')->group(function(){
+        //     Route::get('/',[ProductPackageController::class,'index'])->name('admin.product-package.index');
+        //     Route::get('/create',[ProductPackageController::class,'create'])->name('admin.product-package.create');
+        //     Route::post('/create',[ProductPackageController::class,'store'])->name('admin.product-package.store');
+        //     Route::get('/edit/{id}',[ProductPackageController::class,'edit'])->name('admin.product-package.edit');
+        //     Route::post('/update/{id}',[ProductPackageController::class,'update'])->name('admin.product-package.update');
+        //     Route::delete('/{id}', [ProductPackageController::class, 'delete'])->name('admin.product-package.delete');
+        // });
+
+
+        // Shop Routes (commented out - controller doesn't exist)
+        /*
     Route::prefix('shops')->group(function () {
         Route::get('/', [ShopController::class, 'index'])->name('shops.index');
         Route::get('/create', [ShopController::class, 'create'])->name('shops.create');
@@ -292,30 +291,30 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     });
     */
 
-    // Stock Management Routes
-    Route::prefix('stocks')->name('stocks.')->group(function () {
-        Route::get('/', [StockController::class, 'index'])->name('index');
-        Route::get('/create', [StockController::class, 'create'])->name('create');
-        Route::post('/', [StockController::class, 'store'])->name('store');
-        Route::get('/{stock}/edit', [StockController::class, 'edit'])->name('edit');
-        Route::put('/{stock}', [StockController::class, 'update'])->name('update');
-        Route::delete('/{stock}', [StockController::class, 'destroy'])->name('destroy');
+        // Stock Management Routes
+        Route::prefix('stocks')->name('stocks.')->group(function () {
+            Route::get('/', [StockController::class, 'index'])->name('index');
+            Route::get('/create', [StockController::class, 'create'])->name('create');
+            Route::post('/', [StockController::class, 'store'])->name('store');
+            Route::get('/{stock}/edit', [StockController::class, 'edit'])->name('edit');
+            Route::put('/{stock}', [StockController::class, 'update'])->name('update');
+            Route::delete('/{stock}', [StockController::class, 'destroy'])->name('destroy');
 
-        // Stock operations
-        Route::post('/{stock}/add-stock', [StockController::class, 'addStock'])->name('add-stock');
-        Route::post('/{stock}/deduct-stock', [StockController::class, 'deductStock'])->name('deduct-stock');
-    });
+            // Stock operations
+            Route::post('/{stock}/add-stock', [StockController::class, 'addStock'])->name('add-stock');
+            Route::post('/{stock}/deduct-stock', [StockController::class, 'deductStock'])->name('deduct-stock');
+        });
 
 
-     // Route::middleware(['auth:admin'])->prefix('cms')->group(function () {
+        // Route::middleware(['auth:admin'])->prefix('cms')->group(function () {
 
-    //     Route::get('/pages', [ContentController::class, 'index'])->name('admin.pages');
-    //     Route::get('/add-page', [ContentController::class, 'showCreateForm'])->name('admin.page.add');
-    //     Route::post('/add-page', [ContentController::class, 'create'])->name('admin.page.store');
-    //     Route::get('/edit-page/{id}', [ContentController::class, 'showEditForm'])->name('admin.page.edit-page');
-    //     Route::post('/edit-page/{id}', [ContentController::class, 'edit'])->name('admin.page.update');
-    //     Route::delete('/delete-page/{id}', [ContentController::class, 'delete'])->name('admin.page.delete-page');
-    //     Route::delete('/delete-component/{id}', [ContentController::class, 'componentDelete'])->name('admin.page.delete-component');
+        //     Route::get('/pages', [ContentController::class, 'index'])->name('admin.pages');
+        //     Route::get('/add-page', [ContentController::class, 'showCreateForm'])->name('admin.page.add');
+        //     Route::post('/add-page', [ContentController::class, 'create'])->name('admin.page.store');
+        //     Route::get('/edit-page/{id}', [ContentController::class, 'showEditForm'])->name('admin.page.edit-page');
+        //     Route::post('/edit-page/{id}', [ContentController::class, 'edit'])->name('admin.page.update');
+        //     Route::delete('/delete-page/{id}', [ContentController::class, 'delete'])->name('admin.page.delete-page');
+        //     Route::delete('/delete-component/{id}', [ContentController::class, 'componentDelete'])->name('admin.page.delete-component');
 
         // Route::prefix('faqs')->group(function () {
         //     Route::get('/', [FaqsController::class, 'index'])->name('faq.list');
@@ -363,64 +362,73 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         //         Route::post('store', [AdminKeywordController::class, 'searchStore'])->name('store');
         //     });
         // });
-    // });
+        // });
 
-    // Route::middleware(['auth:admin'])->prefix('career')->group(function () {
+        // Route::middleware(['auth:admin'])->prefix('career')->group(function () {
 
-    //     Route::get('/vacancies', [CareerController::class, 'index'])->name('admin.vacancies');
-    //     Route::get('/add-vacancy', [CareerController::class, 'showCreateForm'])->name('admin.add-vacancy');
-    //     Route::get('/edit-vacancy/{id}', [CareerController::class, 'showCreateForm'])->name('admin.edit-vacancy');
-    //     Route::get('/delete-vacancy/{id}', [CareerController::class, 'showCreateForm'])->name('admin.delete-vacancy');
+        //     Route::get('/vacancies', [CareerController::class, 'index'])->name('admin.vacancies');
+        //     Route::get('/add-vacancy', [CareerController::class, 'showCreateForm'])->name('admin.add-vacancy');
+        //     Route::get('/edit-vacancy/{id}', [CareerController::class, 'showCreateForm'])->name('admin.edit-vacancy');
+        //     Route::get('/delete-vacancy/{id}', [CareerController::class, 'showCreateForm'])->name('admin.delete-vacancy');
 
-    //     Route::post('/applications', [CareerController::class, 'create'])->name('admin.applications');
-    //     Route::get('/application/{id}', [CareerController::class, 'showEditForm'])->name('admin.application');
-    // });
-    // Route::middleware(['auth:admin'])->prefix('job')->group(function () {
+        //     Route::post('/applications', [CareerController::class, 'create'])->name('admin.applications');
+        //     Route::get('/application/{id}', [CareerController::class, 'showEditForm'])->name('admin.application');
+        // });
+        // Route::middleware(['auth:admin'])->prefix('job')->group(function () {
 
-    //     Route::get('jobvacancyform', [JobVacancyController::class, 'showInsertForm'])->name('jobvacancyform');
-    //     Route::post('job', [JobVacancyController::class, 'JobVacancyFun'])->name('admin.job');
-    //     Route::get('showjobvacancy', [JobVacancyController::class, 'ShowJobVacancy'])->name('showjobvacancy');
-    //     Route::get('deletevacancy/{id}', [JobVacancyController::class, 'deleteVacancy'])->name('deletevacancy');
-    //     Route::post('updatevacancy/{id}', [JobVacancyController::class, 'updateVacancy'])->name('updatevacancy');
-    //     Route::get('editvacancy/{id}', [JobVacancyController::class, 'editVacancy'])->name('editvacancy');
-    //     Route::get('show-vacancy/{id}', [JobVacancyController::class, 'ShowVacancy'])->name('show-vacancy');
-    // });
-    //Route::get('show/{id}',[JobVacancyController::class,'ShowJob'])->name('show');
-    // Route::get('jobvacancyform', [JobVacancyController::class, 'showInsertForm'])->name('jobvacancyform');
-    // Route::post('job', [JobVacancyController::class, 'JobVacancyfun'])->name('job');
+        //     Route::get('jobvacancyform', [JobVacancyController::class, 'showInsertForm'])->name('jobvacancyform');
+        //     Route::post('job', [JobVacancyController::class, 'JobVacancyFun'])->name('admin.job');
+        //     Route::get('showjobvacancy', [JobVacancyController::class, 'ShowJobVacancy'])->name('showjobvacancy');
+        //     Route::get('deletevacancy/{id}', [JobVacancyController::class, 'deleteVacancy'])->name('deletevacancy');
+        //     Route::post('updatevacancy/{id}', [JobVacancyController::class, 'updateVacancy'])->name('updatevacancy');
+        //     Route::get('editvacancy/{id}', [JobVacancyController::class, 'editVacancy'])->name('editvacancy');
+        //     Route::get('show-vacancy/{id}', [JobVacancyController::class, 'ShowVacancy'])->name('show-vacancy');
+        // });
+        //Route::get('show/{id}',[JobVacancyController::class,'ShowJob'])->name('show');
+        // Route::get('jobvacancyform', [JobVacancyController::class, 'showInsertForm'])->name('jobvacancyform');
+        // Route::post('job', [JobVacancyController::class, 'JobVacancyfun'])->name('job');
 
 
-    // Route::get('application', [NewApplicationController::class, 'newApplication'])->name('application');
-    // Route::post('user_application', [NewApplicationController::class, 'addNewApplication'])->name('user_application');
-    // Route::get('show-application', [NewApplicationController::class, 'ShowApplication'])->name('show-application');
-    // Route::get('deleteapplication/{id}', [NewApplicationController::class, 'deleteApplication'])->name('deleteapplication');
-    // Route::get('single-application/{id}', [NewApplicationController::class, 'singleApplication'])->name('single-application');
+        // Route::get('application', [NewApplicationController::class, 'newApplication'])->name('application');
+        // Route::post('user_application', [NewApplicationController::class, 'addNewApplication'])->name('user_application');
+        // Route::get('show-application', [NewApplicationController::class, 'ShowApplication'])->name('show-application');
+        // Route::get('deleteapplication/{id}', [NewApplicationController::class, 'deleteApplication'])->name('deleteapplication');
+        // Route::get('single-application/{id}', [NewApplicationController::class, 'singleApplication'])->name('single-application');
 
-    // Route::middleware(['auth:admin'])->prefix('contacts')->group(function () {
+        // Route::middleware(['auth:admin'])->prefix('contacts')->group(function () {
 
-    //     Route::get('/', [ContactController::class, 'index'])->name('admin.contacts');
-    //     Route::get('/sendmail/{id}', [ContactController::class, 'mail'])->name('admin.sendmail');
-    //     Route::post('/sendmail/{id}', [ContactController::class, 'Sendmail'])->name('admin.sendmail.send');
-    //     // Route::post('/insert-contact', [ContactController::class, 'insertContact'])->name('admin.insert-contact');
-    //     //  Route::get('contact', [ContactController::class, 'showForm'])->name('admin.contact');
-    //     Route::get('single-contact/{id}', [ContactController::class, 'showContact'])->name('admin.show-contact');
-    //     Route::get('edit-contact/{id}', [ContactController::class, 'editContact'])->name('admin.edit-contact');
-    //     Route::post('update-contact/{id}', [ContactController::class, 'updateStatus'])->name('admin.update-contact');
-    //     Route::post('reply-contact/{id}', [ContactController::class, 'Reply'])->name('admin.reply-contact');
-    //     Route::post('delete-contact/{id}', [ContactController::class, 'deleteContact'])->name('admin.delete-contact');
-    // });
-    
-    // SEO Management Routes
-    Route::prefix('seo')->group(function () {
-        Route::get('/', [SeoController::class, 'index'])->name('seo.index');
-        Route::get('/categories', [SeoController::class, 'categories'])->name('seo.categories');
-        Route::post('/categories/{id}', [SeoController::class, 'updateCategory'])->name('seo.categories.update');
-        Route::get('/products', [SeoController::class, 'products'])->name('seo.products');
-        Route::post('/products/{id}', [SeoController::class, 'updateProduct'])->name('seo.products.update');
-        Route::get('/generate-suggestions', [SeoController::class, 'generateSuggestions'])->name('seo.generate-suggestions');
+        //     Route::get('/', [ContactController::class, 'index'])->name('admin.contacts');
+        //     Route::get('/sendmail/{id}', [ContactController::class, 'mail'])->name('admin.sendmail');
+        //     Route::post('/sendmail/{id}', [ContactController::class, 'Sendmail'])->name('admin.sendmail.send');
+        //     // Route::post('/insert-contact', [ContactController::class, 'insertContact'])->name('admin.insert-contact');
+        //     //  Route::get('contact', [ContactController::class, 'showForm'])->name('admin.contact');
+        //     Route::get('single-contact/{id}', [ContactController::class, 'showContact'])->name('admin.show-contact');
+        //     Route::get('edit-contact/{id}', [ContactController::class, 'editContact'])->name('admin.edit-contact');
+        //     Route::post('update-contact/{id}', [ContactController::class, 'updateStatus'])->name('admin.update-contact');
+        //     Route::post('reply-contact/{id}', [ContactController::class, 'Reply'])->name('admin.reply-contact');
+        //     Route::post('delete-contact/{id}', [ContactController::class, 'deleteContact'])->name('admin.delete-contact');
+        // });
+
+        // SEO Management Routes
+        Route::prefix('seo')->group(function () {
+            Route::get('/', [SeoController::class, 'index'])->name('seo.index');
+            Route::get('/categories', [SeoController::class, 'categories'])->name('seo.categories');
+            Route::post('/categories/{id}', [SeoController::class, 'updateCategory'])->name('seo.categories.update');
+            Route::get('/products', [SeoController::class, 'products'])->name('seo.products');
+            Route::post('/products/{id}', [SeoController::class, 'updateProduct'])->name('seo.products.update');
+            Route::get('/generate-suggestions', [SeoController::class, 'generateSuggestions'])->name('seo.generate-suggestions');
+        });
+
+
+
+        // routes/admin.php
+        Route::prefix('seo/pages')->group(function () {
+            Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
+            Route::get('/create', [PageSeoController::class, 'create'])->name('seo.pages.create');
+            Route::post('/', [PageSeoController::class, 'store'])->name('seo.pages.store');
+            Route::get('{slug}/edit', [PageSeoController::class, 'edit'])->name('seo.pages.edit');
+            Route::put('{slug}', [PageSeoController::class, 'update'])->name('seo.pages.update');
+            Route::delete('{id}', [PageSeoController::class, 'destroy'])->name('seo.pages.destroy');
+        });
     });
-
-
-
-});
 });

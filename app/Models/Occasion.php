@@ -17,7 +17,12 @@ class Occasion extends Model
         'slug',
         'description',
         'parent_id',
-        'is_active'
+        'is_active',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'meta_tags',
+        'schema_markup'
     ];
 
     protected $casts = [

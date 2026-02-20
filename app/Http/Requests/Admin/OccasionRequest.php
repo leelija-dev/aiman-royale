@@ -20,6 +20,11 @@ class OccasionRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'parent_id' => ['nullable', 'exists:ocassions,id'],
             'is_active' => ['boolean'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:500'],
+            'meta_keywords' => ['nullable', 'string', 'max:255'],
+            'meta_tags' => ['nullable', 'string', 'max:255'],
+            'schema_markup' => ['nullable', 'string'],
         ];
     }
     
@@ -31,6 +36,10 @@ class OccasionRequest extends FormRequest
             'slug.required' => 'Please enter a slug.',
             'slug.unique'   => 'Slug already exists!',
             'parent_id.exists' => 'Selected parent occasion does not exist.',
+            'meta_title.max' => 'Meta title must not exceed 255 characters.',
+            'meta_description.max' => 'Meta description must not exceed 500 characters.',
+            'meta_keywords.max' => 'Meta keywords must not exceed 255 characters.',
+            'meta_tags.max' => 'Meta tags must not exceed 255 characters.',
         ];
     }
 }
