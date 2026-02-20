@@ -334,11 +334,11 @@
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-black/30 z-10"></div>
-        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&auto=format&fit=crop" 
-             alt="Fashion background" 
-             class="w-full h-full object-cover">
+        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&auto=format&fit=crop"
+            alt="Fashion background"
+            class="w-full h-full object-cover">
     </div>
-    
+
     <!-- Simple decorative elements (adjusted opacity for overlay) -->
     <div class="absolute top-0 right-0 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob z-20"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 z-20"></div>
@@ -404,7 +404,7 @@
             </div>
 
             <!-- Right Content - Simple Calendar Preview -->
-            <div class="hidden lg:block">
+            <a href="#appoint-book-section" class="hidden lg:block">
                 <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 transform rotate-1 hover:rotate-0 transition-transform">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="font-semibold text-gray-900">March 2024</h3>
@@ -472,7 +472,7 @@
                         <span>60 min session • Free rescheduling</span>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Simple Stats Bar - Updated for dark background -->
@@ -502,12 +502,15 @@
         0% {
             transform: scale(1);
         }
+
         33% {
             transform: scale(1.1);
         }
+
         66% {
             transform: scale(0.9);
         }
+
         100% {
             transform: scale(1);
         }
@@ -756,19 +759,19 @@
 --}}
 
 <!-- Appointment Booking Section with Calendly -->
-<section class="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+<section id="appoint-book-section" class="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
     <!-- Background Image with Overlay (keep the same) -->
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 via-purple-900/30 to-gray-900/40 z-10"></div>
-        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&auto=format&fit=crop" 
-             alt="Luxury fashion background" 
-             class="w-full h-full object-cover">
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&auto=format&fit=crop"
+            alt="Luxury fashion background"
+            class="w-full h-full object-cover">
     </div>
-    
+
     <!-- Decorative Elements (keep the same) -->
     <div class="absolute top-20 right-20 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob z-20"></div>
     <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 z-20"></div>
-    
+
     <div class="relative z-30 max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center mb-8 md:mb-12 fade-up">
@@ -780,10 +783,10 @@
         </div>
 
         <!-- Calendly Widget Container -->
-        <div class="bg-white/90 backdrop-blur-md rounded-3xl md:rounded-[40px] shadow-2xl border border-white/60 p-5 sm:p-7 md:p-10 fade-in">
+        <div class="">
             <div class="calendly-inline-widget"
-                 data-url="https://calendly.com/susmitaghosh-leelija/30min"
-                 style="min-width:320px;height:700px;">
+                data-url="https://calendly.com/susmitaghosh-leelija/30min?primary_color={{ config('colors.primary', 'A10000') }}&text_color={{ config('colors.secondary', 'EC4899') }}&background_color={{ config('colors.secondary-light', 'FCE7F3') }}&hide_gdpr_banner=1"
+                style="min-width:320px;height:700px;">
             </div>
         </div>
     </div>
@@ -795,12 +798,15 @@
         0% {
             transform: scale(1);
         }
+
         33% {
             transform: scale(1.1);
         }
+
         66% {
             transform: scale(0.9);
         }
+
         100% {
             transform: scale(1);
         }
@@ -827,6 +833,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -837,6 +844,7 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }
@@ -1904,6 +1912,28 @@
             });
         });
     }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const appointLink = document.querySelector('a[href="#appoint-book-section"]');
+    
+    if (appointLink) {
+        appointLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            const targetSection = document.querySelector('#appoint-book-section');
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // No URL hash will be added
+            }
+        });
+    }
+});
 </script>
 <!-- Add Calendly script at the end of the section or in your scripts section -->
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
