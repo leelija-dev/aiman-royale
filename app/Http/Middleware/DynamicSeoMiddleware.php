@@ -25,11 +25,21 @@ class DynamicSeoMiddleware
         // Handle different page types
         switch ($routeName) {
             case 'page.index':
-                // Home page SEO
-                $pageMeta->meta_title = 'Aiman Royale - Premium Fashion Collection | Home';
-                $pageMeta->meta_description = 'Welcome to Aiman Royale - Your destination for premium fashion. Explore our exclusive collections of designer wear, traditional outfits, and contemporary styles.';
-                $pageMeta->meta_keyword = 'aiman royale, premium fashion, designer wear, traditional clothing, home page, fashion collection';
-                $pageMeta->meta_tags = 'fashion, designer, premium, traditional, contemporary, home';
+                // Home page SEO - use PageSeo model
+                $pageSeo = \App\Models\PageSeo::where('slug', 'home')->where('is_active', true)->first();
+                
+                if ($pageSeo) {
+                    $pageMeta->meta_title = $pageSeo->meta_title;
+                    $pageMeta->meta_description = $pageSeo->meta_description;
+                    $pageMeta->meta_keyword = $pageSeo->meta_keywords;
+                    $pageMeta->meta_tags = $pageSeo->meta_tags;
+                } else {
+                    // Fallback to hardcoded values
+                    $pageMeta->meta_title = 'Aiman Royale - Premium Fashion Collection | Home';
+                    $pageMeta->meta_description = 'Welcome to Aiman Royale - Your destination for premium fashion. Explore our exclusive collections of designer wear, traditional outfits, and contemporary styles.';
+                    $pageMeta->meta_keyword = 'aiman royale, premium fashion, designer wear, traditional clothing, home page, fashion collection';
+                    $pageMeta->meta_tags = 'fashion, designer, premium, traditional, contemporary, home';
+                }
                 break;
 
             case 'category.show':
