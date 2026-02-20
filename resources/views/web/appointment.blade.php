@@ -631,6 +631,7 @@
     </div>
 </section>
 
+{{--
 <!-- Appointment Booking Section -->
 <section class="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
     <!-- Background Image with Overlay -->
@@ -752,6 +753,42 @@
         </div>
     </div>
 </section>
+--}}
+
+<!-- Appointment Booking Section with Calendly -->
+<section class="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <!-- Background Image with Overlay (keep the same) -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 via-purple-900/30 to-gray-900/40 z-10"></div>
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&auto=format&fit=crop" 
+             alt="Luxury fashion background" 
+             class="w-full h-full object-cover">
+    </div>
+    
+    <!-- Decorative Elements (keep the same) -->
+    <div class="absolute top-20 right-20 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob z-20"></div>
+    <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 z-20"></div>
+    
+    <div class="relative z-30 max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-8 md:mb-12 fade-up">
+            <span class="stat-badge inline-block px-4 py-2 bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider shadow-lg">
+                <i class="fas fa-calendar-alt mr-2 text-pink-200"></i>booking calendar
+            </span>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-4 md:mt-6 mb-3 md:mb-4 drop-shadow-lg">Reserve your hour</h2>
+            <p class="text-sm md:text-base text-white/90 max-w-xl mx-auto px-4 drop-shadow">Pick a date, choose your slot — we'll take it from there.</p>
+        </div>
+
+        <!-- Calendly Widget Container -->
+        <div class="bg-white/90 backdrop-blur-md rounded-3xl md:rounded-[40px] shadow-2xl border border-white/60 p-5 sm:p-7 md:p-10 fade-in">
+            <div class="calendly-inline-widget"
+                 data-url="https://calendly.com/susmitaghosh-leelija/30min"
+                 style="min-width:320px;height:700px;">
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <style>
     @keyframes blob {
@@ -1868,4 +1905,6 @@
         });
     }
 </script>
+<!-- Add Calendly script at the end of the section or in your scripts section -->
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 @endsection
