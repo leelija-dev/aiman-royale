@@ -38,7 +38,9 @@ class DynamicSeoMiddleware
                 $slug = $request->route('slug');
                 $category = Category::where('slug', $slug)->first();
                 
+                
                 if ($category) {
+                    
                     $pageMeta->meta_title = $category->meta_title 
                         ?? $category->name . ' Collection - Aiman Royale'
                         ?? 'Collection - Aiman Royale';
@@ -47,11 +49,11 @@ class DynamicSeoMiddleware
                         ?? 'Explore our ' . $category->name . ' collection at Aiman Royale. Discover premium ' . strtolower($category->name) . ' designs and styles.'
                         ?? 'Browse our exclusive collections at Aiman Royale.';
                     
-                    $pageMeta->meta_keyword = $category->meta_keyword 
+                    $pageMeta->meta_keyword = $category->keywords 
                         ?? $category->name . ', collection, aiman royale, premium fashion, ' . strtolower($category->name)
                         ?? 'collection, aiman royale, premium fashion';
                     
-                    $pageMeta->meta_tags = $category->meta_tags 
+                    $pageMeta->meta_tags = $category->tags 
                         ?? $category->name . ', fashion, collection, premium, designer'
                         ?? 'fashion, collection, premium, designer';
                 }
@@ -71,7 +73,7 @@ class DynamicSeoMiddleware
                         ?? 'Shop ' . $product->name . ' at Aiman Royale. ' . ($product->description ? substr(strip_tags($product->description), 0, 150) . '...' : 'Premium quality product with exceptional design.')
                         ?? 'Discover premium products at Aiman Royale.';
                     
-                    $pageMeta->meta_keyword = $product->meta_keyword 
+                    $pageMeta->meta_keyword = $product->keywords 
                         ?? $product->name . ', aiman royale, premium fashion, designer wear, ' . ($product->brand ?? 'fashion')
                         ?? 'product, aiman royale, premium fashion';
                     
