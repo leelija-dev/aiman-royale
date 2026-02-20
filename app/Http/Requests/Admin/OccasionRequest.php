@@ -24,6 +24,7 @@ class OccasionRequest extends FormRequest
             'meta_description' => ['nullable', 'string', 'max:500'],
             'meta_keywords' => ['nullable', 'string', 'max:255'],
             'meta_tags' => ['nullable', 'string', 'max:255'],
+            'schema_markup' => ['nullable', 'string'],
         ];
     }
     

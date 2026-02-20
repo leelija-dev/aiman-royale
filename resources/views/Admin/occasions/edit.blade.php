@@ -94,6 +94,15 @@
             </div>
             
             <div class="mb-3">
+              <label class="form-label text-secondary text-uppercase">Schema Markup</label>
+              <textarea name="schema_markup" rows="8" class="form-control font-monospace" placeholder="Enter JSON-LD schema markup...">{{ old('schema_markup', $occasion->schema_markup) }}</textarea>
+              <small class="text-muted">JSON-LD schema markup for structured data (optional)</small>
+              @error('schema_markup')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Status</label>
               <div class="form-check form-switch">
                 <input type="hidden" name="is_active" value="0">

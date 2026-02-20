@@ -16,7 +16,8 @@ class DynamicSeoMiddleware
             'meta_title' => 'Aiman Royale - Premium Fashion Collection',
             'meta_description' => 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.',
             'meta_keyword' => 'fashion, designer wear, traditional clothing, premium fashion, aiman royale',
-            'meta_tags' => 'fashion, clothing, designer, premium, traditional, contemporary'
+            'meta_tags' => 'fashion, clothing, designer, premium, traditional, contemporary',
+            'schema_markup' => null
         ];
 
         $routeName = $request->route()->getName();
@@ -33,6 +34,7 @@ class DynamicSeoMiddleware
                     $pageMeta->meta_description = $pageSeo->meta_description;
                     $pageMeta->meta_keyword = $pageSeo->meta_keywords;
                     $pageMeta->meta_tags = $pageSeo->meta_tags;
+                    $pageMeta->schema_markup = $pageSeo->schema_markup;
                 } else {
                     // Fallback to hardcoded values
                     $pageMeta->meta_title = 'Aiman Royale - Premium Fashion Collection | Home';
@@ -114,6 +116,8 @@ class DynamicSeoMiddleware
                     $pageMeta->meta_tags = $occasion->meta_tags 
                         ?? $occasion->name . ', occasion, fashion, premium, designer'
                         ?? 'fashion, premium, designer, occasion';
+                    
+                    $pageMeta->schema_markup = $occasion->schema_markup;
                 }
                 break;
 
