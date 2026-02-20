@@ -368,6 +368,20 @@ $isEmailActive = false;
             </li> 
             {{-- @endif --}}
 
+            {{-- SEO Management --}}
+            @php
+            $isSeoActive = request()->routeIs('seo.pages.*');
+            @endphp
+            <li class="nav-item">
+                <a class="nav-link {{ $isSeoActive ? 'active' : '' }}" href="{{ route('seo.pages.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">SEO Pages</span>
+                </a>
+            </li>
+
             @if ($admin->hasPermissionTo('view reports') || $admin->hasPermissionTo('view roles') || $admin->hasPermissionTo('view page') || $roles[0] == 'superadmin')
             @php
             $isUserManagement = request()->routeIs('admin.roles*','admin.roles.edit-role', 'admin.users*', "admin.permissions*");

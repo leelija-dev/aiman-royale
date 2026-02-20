@@ -943,7 +943,7 @@
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Book Appointment Button -->
-                <a href="#"
+                <a href="{{ route('page.appointment') }}"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
           bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm 
           rounded-full shadow-md
