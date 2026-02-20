@@ -55,6 +55,47 @@
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
+            
+            <!-- SEO Fields -->
+            <hr class="my-4">
+            <h5 class="text-secondary text-uppercase mb-3">SEO Details</h5>
+            
+            <div class="mb-3">
+              <label class="form-label text-secondary text-uppercase">Meta Title</label>
+              <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title') }}" maxlength="255">
+              <small class="text-muted">SEO title for search engines (max 255 characters)</small>
+              @error('meta_title')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-secondary text-uppercase">Meta Description</label>
+              <textarea name="meta_description" rows="3" class="form-control" maxlength="500">{{ old('meta_description') }}</textarea>
+              <small class="text-muted">SEO description for search engines (max 500 characters)</small>
+              @error('meta_description')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-secondary text-uppercase">Meta Keywords</label>
+              <input type="text" name="meta_keywords" class="form-control" value="{{ old('meta_keywords') }}" maxlength="255">
+              <small class="text-muted">Comma-separated keywords for SEO</small>
+              @error('meta_keywords')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-secondary text-uppercase">Meta Tags</label>
+              <input type="text" name="meta_tags" class="form-control" value="{{ old('meta_tags') }}" maxlength="255">
+              <small class="text-muted">Comma-separated tags for categorization</small>
+              @error('meta_tags')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+            
             <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Status</label>
               <div class="form-check form-switch">

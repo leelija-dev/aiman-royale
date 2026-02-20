@@ -94,15 +94,26 @@ class DynamicSeoMiddleware
                 break;
 
             case 'occasion.show':
-                // Occasion page SEO
+                // Occasion page SEO - use SEO fields from database
                 $slug = $request->route('slug');
                 $occasion = \App\Models\Occasion::where('slug', $slug)->first();
                 
                 if ($occasion) {
-                    $pageMeta->meta_title = $occasion->name . ' Collection - Aiman Royale';
-                    $pageMeta->meta_description = 'Explore our ' . $occasion->name . ' collection at Aiman Royale. Perfect outfits for ' . strtolower($occasion->name) . ' occasions.';
-                    $pageMeta->meta_keyword = $occasion->name . ', occasion, aiman royale, premium fashion, ' . strtolower($occasion->name) . ' wear';
-                    $pageMeta->meta_tags = $occasion->name . ', occasion, fashion, premium, designer';
+                    $pageMeta->meta_title = $occasion->meta_title 
+                        ?? $occasion->name . ' Collection - Aiman Royale'
+                        ?? 'Collection - Aiman Royale';
+                    
+                    $pageMeta->meta_description = $occasion->meta_description 
+                        ?? 'Explore our ' . $occasion->name . ' collection at Aiman Royale. Perfect outfits for ' . strtolower($occasion->name) . ' occasions.'
+                        ?? 'Browse our exclusive collections at Aiman Royale.';
+                    
+                    $pageMeta->meta_keyword = $occasion->meta_keywords 
+                        ?? $occasion->name . ', occasion, aiman royale, premium fashion, ' . strtolower($occasion->name) . ' wear'
+                        ?? 'occasion, aiman royale, premium fashion';
+                    
+                    $pageMeta->meta_tags = $occasion->meta_tags 
+                        ?? $occasion->name . ', occasion, fashion, premium, designer'
+                        ?? 'fashion, premium, designer, occasion';
                 }
                 break;
 
