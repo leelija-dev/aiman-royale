@@ -10,15 +10,13 @@ class PageSeoController extends Controller
 {
     public function index()
     {
-        
         $pages = PageSeo::all();
-        dd($pages);
-        return view('admin.seo.pages', compact('pages'));
+        return view('Admin.seo.pages', compact('pages'));
     }
 
     public function create()
     {
-        return view('admin.seo.create');
+        return view('Admin.seo.create');
     }
 
     public function store(Request $request)
@@ -45,7 +43,7 @@ class PageSeoController extends Controller
     public function edit($slug)
     {
         $page = PageSeo::where('slug', $slug)->firstOrFail();
-        return view('admin.seo.page-edit', compact('page'));
+        return view('Admin.seo.page-edit', compact('page'));
     }
 
     public function update(Request $request, $slug)
