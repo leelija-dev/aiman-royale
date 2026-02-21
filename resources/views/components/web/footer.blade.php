@@ -53,10 +53,10 @@
                   <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->hip) == $size->hip 
                   ? (int) $size->hip : $size->hip }}</td>
 
-                   <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->arm) == $size->arm 
+                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->arm) == $size->arm 
                   ? (int) $size->arm : $size->arm }}</td>
 
-                   <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->uk_size) == $size->uk_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->uk_size) == $size->uk_size 
                   ? (int) $size->uk_size : $size->uk_size }}</td>
 
 
