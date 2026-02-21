@@ -144,60 +144,65 @@ class DynamicSeoMiddleware
                         ?? $product->name . ', fashion, premium, designer, ' . ($product->brand ?? 'brand')
                         ?? 'fashion, premium, designer, product';
                     
-                    // Generate dynamic schema markup for product
-                    $schema = [
-                        "@context" => "https://schema.org",
-                        "@graph" => [
-                            [
-                                "@type" => "Product",
-                                "@id" => route('page.single-product', $product->slug) . '#product',
-                                "name" => $product->name,
-                                "url" => route('page.single-product', $product->slug),
-                                "description" => $product->description ? substr(strip_tags($product->description), 0, 500) : $product->name . ' - Premium fashion item from Aiman Royale',
-                                "brand" => [
-                                    "@type" => "Brand",
-                                    "name" => $product->brand ?? "Aiman Royale"
-                                ],
-                                "offers" => [
-                                    "@type" => "Offer",
-                                    "price" => $product->price ?? 0,
-                                    "priceCurrency" => "INR",
-                                    "availability" => $product->stock_status === 'in_stock' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-                                    "seller" => [
-                                        "@type" => "Organization",
-                                        "name" => "Aiman Royale",
-                                        "url" => url('/')
+                    // Use schema_markup from products table if available, otherwise generate dynamic schema
+                    if ($product->schema_markup) {
+                        $pageMeta->schema_markup = $product->schema_markup;
+                    } else {
+                        // Generate dynamic schema markup for product
+                        $schema = [
+                            "@context" => "https://schema.org",
+                            "@graph" => [
+                                [
+                                    "@type" => "Product",
+                                    "@id" => route('page.single-product', $product->slug) . '#product',
+                                    "name" => $product->name,
+                                    "url" => route('page.single-product', $product->slug),
+                                    "description" => $product->description ? substr(strip_tags($product->description), 0, 500) : $product->name . ' - Premium fashion item from Aiman Royale',
+                                    "brand" => [
+                                        "@type" => "Brand",
+                                        "name" => $product->brand ?? "Aiman Royale"
+                                    ],
+                                    "offers" => [
+                                        "@type" => "Offer",
+                                        "price" => $product->price ?? 0,
+                                        "priceCurrency" => "INR",
+                                        "availability" => $product->stock_status === 'in_stock' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                                        "seller" => [
+                                            "@type" => "Organization",
+                                            "name" => "Aiman Royale",
+                                            "url" => url('/')
+                                        ]
                                     ]
-                                ]
-                            ],
-                            [
-                                "@type" => "BreadcrumbList",
-                                "@id" => route('page.single-product', $product->slug) . '#breadcrumb',
-                                "itemListElement" => [
-                                    [
-                                        "@type" => "ListItem",
-                                        "position" => 1,
-                                        "name" => "Home",
-                                        "item" => url('/')
-                                    ],
-                                    [
-                                        "@type" => "ListItem",
-                                        "position" => 2,
-                                        "name" => $product->category ? $product->category->name : "Products",
-                                        "item" => $product->category ? route('category.show', $product->category->slug) : route('page.index')
-                                    ],
-                                    [
-                                        "@type" => "ListItem",
-                                        "position" => 3,
-                                        "name" => $product->name,
-                                        "item" => route('page.single-product', $product->slug)
+                                ],
+                                [
+                                    "@type" => "BreadcrumbList",
+                                    "@id" => route('page.single-product', $product->slug) . '#breadcrumb',
+                                    "itemListElement" => [
+                                        [
+                                            "@type" => "ListItem",
+                                            "position" => 1,
+                                            "name" => "Home",
+                                            "item" => url('/')
+                                        ],
+                                        [
+                                            "@type" => "ListItem",
+                                            "position" => 2,
+                                            "name" => $product->category ? $product->category->name : "Products",
+                                            "item" => $product->category ? route('category.show', $product->category->slug) : route('page.index')
+                                        ],
+                                        [
+                                            "@type" => "ListItem",
+                                            "position" => 3,
+                                            "name" => $product->name,
+                                            "item" => route('page.single-product', $product->slug)
+                                        ]
                                     ]
                                 ]
                             ]
-                        ]
-                    ];
-                    
-                    $pageMeta->schema_markup = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                        ];
+                        
+                        $pageMeta->schema_markup = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                    }
                 }
                 break;
 
