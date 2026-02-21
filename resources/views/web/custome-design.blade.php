@@ -1,4 +1,4 @@
-@extends('layout.web.main-layout')
+ @extends('layout.web.main-layout')
 
 @section('title', 'Custom Design Studio | Personalize Your Perfect Outfit')
 @section('meta-description', 'Work with our expert designers to create custom-made outfits tailored to your style, measurements, and occasion.')
@@ -868,12 +868,12 @@
     <!-- Premium Fashion Background - Modern & Sophisticated -->
     <div class="absolute inset-0 z-0">
         <!-- Clean, modern gradient overlay - from charcoal to slate -->
-        <div class="absolute inset-0 bg-gradient-to-br from-neutral-900/85 via-neutral-800/75 to-neutral-900/85 z-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-neutral-900/85 via-neutral-800/75 to-neutral-900/85 z-10 opacity-60"></div>
         
         <!-- Background Image - High fashion studio aesthetic -->
-        <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        <img src="{{asset('web/images/custom_design\DSC_1887 (1).webp')}}"
             alt="Minimalist fashion studio with mannequin and drafting tools"
-            class="w-full h-full object-cover opacity-40">
+            class="w-full h-full object-cover opacity-80 object-top">
         
         <!-- Subtle geometric pattern - modern & architectural -->
         <div class="absolute inset-0 opacity-10 z-20" 
@@ -1129,7 +1129,7 @@
                 <div class="w-full md:w-1/2 mb-10 md:mb-0 md:pr-12">
                     <div class="step-card overflow-hidden">
                         <img
-                            src="https://images.unsplash.com/photo-1520006403909-838d6b92c22e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                            src="{{"
                             alt="Woman discussing fashion design with a designer"
                             class="w-full step-image">
                     </div>

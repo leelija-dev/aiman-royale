@@ -334,9 +334,9 @@
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-black/30 z-10"></div>
-        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&auto=format&fit=crop"
+        <img src="{{asset('web/images/section-banner/couple-banner.webp')}}"
             alt="Fashion background"
-            class="w-full h-full object-cover">
+            class="w-full h-full object-cover object-top">
     </div>
 
     <!-- Simple decorative elements (adjusted opacity for overlay) -->
@@ -763,9 +763,9 @@
     <!-- Background Image with Overlay (keep the same) -->
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 via-purple-900/30 to-gray-900/40 z-10"></div>
-        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&auto=format&fit=crop"
+        <img src="{{asset('web/images/section-banner/couple-banner-2.webp')}}"
             alt="Luxury fashion background"
-            class="w-full h-full object-cover">
+            class="w-full h-full object-cover object-top">
     </div>
 
     <!-- Decorative Elements (keep the same) -->
@@ -1172,7 +1172,7 @@
             <div class="lg:w-1/2 w-full mb-8 lg:mb-0 fade-in-left">
                 <div class="designer-image-container shadow-2xl rounded-2xl">
                     <img
-                        src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=1206&q=80"
+                        src="{{asset('web/images/appointment/DSC_2148 (1).webp')}}"
                         alt="Sophia Laurent - Fashion Designer"
                         class="w-full h-auto object-cover rounded-2xl">
 
@@ -1915,25 +1915,25 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const appointLink = document.querySelector('a[href="#appoint-book-section"]');
-    
-    if (appointLink) {
-        appointLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            const targetSection = document.querySelector('#appoint-book-section');
-            
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                // No URL hash will be added
-            }
-        });
-    }
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        const appointLink = document.querySelector('a[href="#appoint-book-section"]');
+
+        if (appointLink) {
+            appointLink.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const targetSection = document.querySelector('#appoint-book-section');
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // No URL hash will be added
+                }
+            });
+        }
+    });
 </script>
 <!-- Add Calendly script at the end of the section or in your scripts section -->
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
