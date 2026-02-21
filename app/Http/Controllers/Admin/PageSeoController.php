@@ -10,8 +10,9 @@ class PageSeoController extends Controller
 {
     public function index()
     {
-        print_r('hi');  die;
+        
         $pages = PageSeo::all();
+        dd($pages);
         return view('admin.seo.pages', compact('pages'));
     }
 
