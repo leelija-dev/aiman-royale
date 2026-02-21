@@ -410,19 +410,19 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // });
 
         // SEO Management Routes
-        Route::prefix('seo')->group(function () {
-            Route::get('/', [SeoController::class, 'index'])->name('seo.index');
-            Route::get('/categories', [SeoController::class, 'categories'])->name('seo.categories');
-            Route::post('/categories/{id}', [SeoController::class, 'updateCategory'])->name('seo.categories.update');
-            Route::get('/products', [SeoController::class, 'products'])->name('seo.products');
-            Route::post('/products/{id}', [SeoController::class, 'updateProduct'])->name('seo.products.update');
-            Route::get('/generate-suggestions', [SeoController::class, 'generateSuggestions'])->name('seo.generate-suggestions');
-        });
+        // Route::prefix('seo')->group(function () {
+        //     Route::get('/', [SeoController::class, 'index'])->name('seo.index');
+        //     Route::get('/categories', [SeoController::class, 'categories'])->name('seo.categories');
+        //     Route::post('/categories/{id}', [SeoController::class, 'updateCategory'])->name('seo.categories.update');
+        //     Route::get('/products', [SeoController::class, 'products'])->name('seo.products');
+        //     Route::post('/products/{id}', [SeoController::class, 'updateProduct'])->name('seo.products.update');
+        //     Route::get('/generate-suggestions', [SeoController::class, 'generateSuggestions'])->name('seo.generate-suggestions');
+        // });
 
 
 
         // routes/admin.php
-        Route::prefix('seo/pages')->group(function () {
+        Route::prefix('seo')->group(function () {
             Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
             Route::get('/create', [PageSeoController::class, 'create'])->name('seo.pages.create');
             Route::post('/', [PageSeoController::class, 'store'])->name('seo.pages.store');
