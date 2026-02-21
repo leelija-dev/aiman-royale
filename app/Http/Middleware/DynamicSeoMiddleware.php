@@ -229,7 +229,7 @@ class DynamicSeoMiddleware
                         ?? 'fashion, premium, designer, occasion';
                     
                     // Generate dynamic schema markup with products for this occasion
-                    $products = Product::where('occasion_id', $occasion->id)
+                    $products = Product::where('ocassion_id', $occasion->id)
                         ->where('is_active', true)
                         ->orderBy('name')
                         ->get();
