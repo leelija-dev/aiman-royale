@@ -46,78 +46,78 @@ class DynamicSeoMiddleware
 
             case 'category.show':
             case 'category.collection':
-                // Category/Collection page SEO
-                $slug = $request->route('slug');
-                $category = Category::where('slug', $slug)->first();
+                // Collections page SEO - check page_seo table first
+                $pageSeo = \App\Models\PageSeo::where('slug', 'collections')->where('is_active', true)->first();
                 
-                if ($category) {
-                    $pageMeta->meta_title = $category->meta_title 
-                        ?? $category->name . ' Collection - Aiman Royale'
-                        ?? 'Collection - Aiman Royale';
+                if ($pageSeo) {
+                    $pageMeta->meta_title = $pageSeo->meta_title;
+                    $pageMeta->meta_description = $pageSeo->meta_description;
+                    $pageMeta->meta_keyword = $pageSeo->meta_keywords;
+                    $pageMeta->meta_tags = $pageSeo->meta_tags;
+                    $pageMeta->schema_markup = $pageSeo->schema_markup;
+                } else {
+                    // Fallback to category logic if no page_seo found
+                    $slug = $request->route('slug');
+                    $category = Category::where('slug', $slug)->first();
                     
-                    $pageMeta->meta_description = $category->meta_description 
-                        ?? 'Explore our ' . $category->name . ' collection at Aiman Royale. Discover premium ' . strtolower($category->name) . ' designs and styles.'
-                        ?? 'Browse our exclusive collections at Aiman Royale.';
-                    
-                    $pageMeta->meta_keyword = $category->keywords 
-                        ?? $category->name . ', collection, aiman royale, premium fashion, ' . strtolower($category->name)
-                        ?? 'collection, aiman royale, premium fashion';
-                    
-                    $pageMeta->meta_tags = $category->tags 
-                        ?? $category->name . ', fashion, collection, premium, designer'
-                        ?? 'fashion, collection, premium, designer';
-                    
-                    // Generate dynamic schema markup with products
-                    $products = Product::where('category_id', $category->id)
-                        ->where('is_active', true)
-                        ->orderBy('name')
-                        ->get();
-                    
-                    if ($products->isNotEmpty()) {
-                        $itemListElement = [];
-                        foreach ($products as $index => $product) {
-                            $itemListElement[] = [
-                                "@type" => "ListItem",
-                                "position" => $index + 1,
-                                "item" => [
-                                    "@type" => "Product",
-                                    "name" => $product->name,
-                                    "url" => route('page.single-product', $product->slug),
-                                    "description" => $product->description ? substr(strip_tags($product->description), 0, 200) : $product->name . ' - Premium fashion item from Aiman Royale'
-                                ]
-                            ];
-                        }
+                    if ($category) {
+                        $pageMeta->meta_title = $category->meta_title 
+                            ?? $category->name . ' Collection - Aiman Royale'
+                            ?? 'Collection - Aiman Royale';
                         
-                        $schema = [
-                            "@context" => "https://schema.org",
-                            "@graph" => [
-                                [
-                                    "@type" => "CollectionPage",
-                                    "@id" => route('category.show', $category->slug) . '#collection',
-                                    "name" => $category->name . ' Collection',
-                                    "url" => route('category.show', $category->slug),
-                                    "description" => $pageMeta->meta_description,
-                                    "mainEntity" => [
-                                        "@type" => "ItemList",
-                                        "numberOfItems" => $products->count(),
-                                        "itemListElement" => $itemListElement
+                        $pageMeta->meta_description = $category->meta_description 
+                            ?? 'Explore our ' . $category->name . ' collection at Aiman Royale. Discover premium ' . strtolower($category->name) . ' designs and styles.'
+                            ?? 'Browse our exclusive collections at Aiman Royale.';
+                        
+                        $pageMeta->meta_keyword = $category->keywords 
+                            ?? $category->name . ', collection, aiman royale, premium fashion, ' . strtolower($category->name)
+                            ?? 'collection, aiman royale, premium fashion';
+                        
+                        $pageMeta->meta_tags = $category->tags 
+                            ?? $category->name . ', fashion, collection, premium, designer'
+                            ?? 'fashion, collection, premium, designer';
+                        
+                        // Generate dynamic schema markup with products
+                        $products = Product::where('category_id', $category->id)
+                            ->where('is_active', true)
+                            ->orderBy('name')
+                            ->get();
+                        
+                        if ($products->isNotEmpty()) {
+                            $itemListElement = [];
+                            foreach ($products as $index => $product) {
+                                $itemListElement[] = [
+                                    "@type" => "ListItem",
+                                    "position" => $index + 1,
+                                    "item" => [
+                                        "@type" => "Product",
+                                        "name" => $product->name,
+                                        "url" => route('page.single-product', $product->slug),
+                                        "description" => $product->description ? substr(strip_tags($product->description), 0, 200) : $product->name . ' - Premium fashion item from Aiman Royale'
+                                    ]
+                                ];
+                            }
+                            
+                            $schema = [
+                                "@context" => "https://schema.org",
+                                "@graph" => [
+                                    [
+                                        "@type" => "CollectionPage",
+                                        "@id" => route('category.collection') . '#collection',
+                                        "name" => 'Collections',
+                                        "url" => route('category.collection'),
+                                        "description" => $pageMeta->meta_description,
+                                        "mainEntity" => [
+                                            "@type" => "ItemList",
+                                            "numberOfItems" => $products->count(),
+                                            "itemListElement" => $itemListElement
+                                        ]
                                     ]
                                 ]
-                            ]
-                        ];
-                        
-                        $pageMeta->schema_markup = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-                    } else {
-                        // Fallback schema for empty collections
-                        $schema = [
-                            "@context" => "https://schema.org",
-                            "@type" => "CollectionPage",
-                            "name" => $category->name . ' Collection',
-                            "url" => route('category.show', $category->slug),
-                            "description" => $pageMeta->meta_description
-                        ];
-                        
-                        $pageMeta->schema_markup = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                            ];
+                            
+                            $pageMeta->schema_markup = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                        }
                     }
                 }
                 break;
