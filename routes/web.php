@@ -44,8 +44,9 @@ Route::get('/collections', [CategoryController::class, 'collection'])->name('cat
 // In your web.php routes file
 Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->name('category.filter');
 
-// Combined Category + Occasion Routes
-Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])->name('category.occasion.show');
+// Combined Category + Occasion Routes - Exclude admin and products routes
+Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
+Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 
 // Occasion Routes
 // Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
@@ -54,9 +55,6 @@ Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWi
 Route::get('/test-occasion', function () {
     return 'Test route is working!';
 });
-
-Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
-Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 
 // Auth Routes
 Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
@@ -107,3 +105,8 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
+
+// Combined Category + Occasion Routes - Must be at the end to avoid conflicts
+Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
+    ->name('category.occasion.show')
+    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
