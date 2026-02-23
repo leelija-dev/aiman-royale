@@ -44,8 +44,11 @@ Route::get('/collections', [CategoryController::class, 'collection'])->name('cat
 // In your web.php routes file
 Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->name('category.filter');
 
+// Combined Category + Occasion Routes
+Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])->name('category.occasion.show');
+
 // Occasion Routes
-Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
+// Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
 // Test route
 Route::get('/test-occasion', function () {

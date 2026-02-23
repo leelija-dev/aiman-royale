@@ -255,4 +255,82 @@ private function isJson($string) {
 
     return redirect()->route('category.show', $slug);
 }
+
+/**
+ * Display products for a specific category filtered by occasion.
+ *
+ * @param string $categorySlug
+ * @param string $occasionSlug
+ * @return \Illuminate\View\View
+ */
+public function showWithOccasion($categorySlug, $occasionSlug)
+{
+    // dd($categorySlug);
+    $category = Category::where('slug', $categorySlug)
+        ->where('is_active', 1)
+        ->firstOrFail();
+
+    $occasion = Occasion::where('slug', $occasionSlug)
+        ->where('is_active', 1)
+        ->firstOrFail();
+
+    // Get products that belong to both the category and occasion
+    $products = Product::where('category_id', $category->id)
+        ->where('ocassion_id', $occasion->id) // Note: ocassion_id with double 's' in database
+        ->where('is_active', 1)
+        ->whereHas('variants')
+        ->with(['images' => function($query) {
+            $query->select('product_id', 'image');
+        }, 'variants' => function($query) {
+            $query->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock');
+        }])
+        ->select('products.*')
+        ->latest()
+        ->paginate(12);
+    
+    $occasions = Occasion::where('is_active', 1)->get();
+    
+    // Get all available sizes from variants for this category
+    $allVariants = \App\Models\ProductVariant::whereHas('product', function($query) use ($category) {
+        $query->where('category_id', $category->id)->where('is_active', 1);
+    })->get();
+    
+    // Get unique sizes
+    $sizes = $allVariants->pluck('size')
+        ->filter()
+        ->map(function($size) {
+            if (is_string($size) && $this->isJson($size)) {
+                return json_decode($size, true);
+            }
+            return $size;
+        })
+        ->flatten()
+        ->unique()
+        ->filter()
+        ->sort()
+        ->values();
+    
+    // Get unique colors
+    $colors = $allVariants->pluck('color')
+        ->filter()
+        ->map(function($color) {
+            if (is_string($color) && $this->isJson($color)) {
+                return json_decode($color, true);
+            }
+            return $color;
+        })
+        ->flatten()
+        ->unique()
+        ->filter()
+        ->sort()
+        ->values();
+
+    // Get price range
+    $priceRange = [
+        'min' => $allVariants->min('discount_price') ?? $allVariants->min('price') ?? 0,
+        'max' => $allVariants->max('price') ?? 10000
+    ];
+
+    return view('web.category_product', compact('category', 'products', 'occasions', 'occasion', 'sizes', 'colors', 'priceRange'));
+}
 }

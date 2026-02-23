@@ -1393,10 +1393,11 @@
                                 class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
                         <ul class="submenu">
+
                             @if (isset($occasions) && count($occasions) > 0)
                             @foreach ($occasions->take(5) as $occasion)
                             <li class="menu-item">
-                                <a href="{{ route('occasion.show', $occasion->slug) }}"
+                                <a href="/{{ $category->slug }}/{{ $occasion->slug }}"
                                     class="menu-link hover:pl-6 transition-all">{{ $occasion->name }}</a>
                             </li>
                             @endforeach
@@ -1774,6 +1775,108 @@
             });
         }
 
+        // function renderOccasionSection(categoryData) {
+        //     const occasionList = document.getElementById('occasion-list');
+        //     const showMoreBtn = document.getElementById('occasion-show-more');
+
+        //     if (!occasionList) return;
+
+        //     occasionList.innerHTML = '';
+
+        //     const occasions = categoryData.ocassions || [];
+
+
+        //     if (occasions.length === 0) {
+        //         // Show default fallback occasions
+        //         const fallbackOccasions = [{
+        //                 name: 'Wedding',
+        //                 slug: 'wedding'
+        //             },
+        //             {
+        //                 name: 'Party',
+        //                 slug: 'party'
+        //             },
+        //             {
+        //                 name: 'Festival',
+        //                 slug: 'festival'
+        //             },
+        //             {
+        //                 name: 'Casual',
+        //                 slug: 'casual'
+        //             }
+        //         ];
+
+        //         fallbackOccasions.forEach(occasion => {
+        //             const div = document.createElement('div');
+        //             div.className = 'flex flex-col gap-2';
+
+        //             const link = document.createElement('a');
+        //             link.href = `/occasion/${occasion.slug}`;
+        //             link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+
+        //             const img = document.createElement('img');
+        //             img.className = 'w-full h-full object-cover aspect-auto';
+        //             img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+        //             img.alt = occasion.name;
+
+        //             link.appendChild(img);
+        //             div.appendChild(link);
+
+        //             const p = document.createElement('p');
+        //             p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+
+        //             const occLink = document.createElement('a');
+        //             occLink.href = `/occasion/${occasion.slug}`;
+        //             occLink.className = 'hover:text-black transition-colors';
+        //             occLink.textContent = occasion.name;
+
+        //             p.appendChild(occLink);
+        //             div.appendChild(p);
+        //             occasionList.appendChild(div);
+        //         });
+        //     } else {
+        //         occasions.slice(0, 4).forEach(occasion => {
+        //             const div = document.createElement('div');
+        //             div.className = 'flex flex-col gap-2';
+
+        //             const link = document.createElement('a');
+        //             link.href = `/occasion/${occasion.slug}`;
+        //             link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+
+        //             const img = document.createElement('img');
+        //             img.className = 'w-full h-full object-cover aspect-auto';
+        //             img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+        //             img.alt = occasion.name;
+
+        //             link.appendChild(img);
+        //             div.appendChild(link);
+
+        //             const p = document.createElement('p');
+        //             p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+
+        //             const occLink = document.createElement('a');
+        //             occLink.href = `/occasion/${occasion.slug}`;
+        //             occLink.className = 'hover:text-black transition-colors';
+        //             occLink.textContent = occasion.name;
+
+        //             p.appendChild(occLink);
+        //             div.appendChild(p);
+        //             occasionList.appendChild(div);
+        //         });
+        //     }
+
+        //     // Update show more button
+        //     if (showMoreBtn && occasions.length > 4) {
+        //         showMoreBtn.style.display = 'block';
+        //         showMoreBtn.onclick = function() {
+        //             // Implement show more functionality
+        //             console.log('Show more occasions clicked');
+        //         };
+        //     } else if (showMoreBtn) {
+        //         showMoreBtn.style.display = 'none';
+        //     }
+        // }
+
         function renderOccasionSection(categoryData) {
             const occasionList = document.getElementById('occasion-list');
             const showMoreBtn = document.getElementById('occasion-show-more');
@@ -1783,10 +1886,12 @@
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
+            const parentCategory = categoryData.parent_category;
 
+            if (!parentCategory) return;
 
             if (occasions.length === 0) {
-                // Show default fallback occasions
+                // Show default fallback occasions with category slug
                 const fallbackOccasions = [{
                         name: 'Wedding',
                         slug: 'wedding'
@@ -1810,7 +1915,8 @@
                     div.className = 'flex flex-col gap-2';
 
                     const link = document.createElement('a');
-                    link.href = `/occasion/${occasion.slug}`;
+                    // Modified href to include category slug
+                    link.href = `/${parentCategory.slug}/${occasion.slug}`;
                     link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
 
                     const img = document.createElement('img');
@@ -1825,7 +1931,8 @@
                     p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
 
                     const occLink = document.createElement('a');
-                    occLink.href = `/occasion/${occasion.slug}`;
+                    // Modified href to include category slug
+                    occLink.href = `/${parentCategory.slug}/${occasion.slug}`;
                     occLink.className = 'hover:text-black transition-colors';
                     occLink.textContent = occasion.name;
 
@@ -1839,12 +1946,13 @@
                     div.className = 'flex flex-col gap-2';
 
                     const link = document.createElement('a');
-                    link.href = `/occasion/${occasion.slug}`;
+                    // Modified href to include category slug
+                    link.href = `/${parentCategory.slug}/${occasion.slug}`;
                     link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
 
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
-                    img.src = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.src = occasion.image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
 
                     link.appendChild(img);
@@ -1854,7 +1962,8 @@
                     p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
 
                     const occLink = document.createElement('a');
-                    occLink.href = `/occasion/${occasion.slug}`;
+                    // Modified href to include category slug
+                    occLink.href = `/${parentCategory.slug}/${occasion.slug}`;
                     occLink.className = 'hover:text-black transition-colors';
                     occLink.textContent = occasion.name;
 
@@ -1865,14 +1974,44 @@
             }
 
             // Update show more button
-            if (showMoreBtn && occasions.length > 4) {
-                showMoreBtn.style.display = 'block';
-                showMoreBtn.onclick = function() {
-                    // Implement show more functionality
-                    console.log('Show more occasions clicked');
-                };
-            } else if (showMoreBtn) {
-                showMoreBtn.style.display = 'none';
+            if (showMoreBtn) {
+                if (occasions.length > 4) {
+                    showMoreBtn.style.display = 'block';
+                    showMoreBtn.onclick = function() {
+                        // Show all occasions
+                        occasions.slice(4).forEach(occasion => {
+                            const div = document.createElement('div');
+                            div.className = 'flex flex-col gap-2';
+
+                            const link = document.createElement('a');
+                            link.href = `/${parentCategory.slug}/${occasion.slug}`;
+                            link.className = 'overflow-hidden rounded-md w-full block hover:opacity-90 transition-opacity';
+
+                            const img = document.createElement('img');
+                            img.className = 'w-full h-full object-cover aspect-auto';
+                            img.src = occasion.image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                            img.alt = occasion.name;
+
+                            link.appendChild(img);
+                            div.appendChild(link);
+
+                            const p = document.createElement('p');
+                            p.className = 'text-[1.2rem] font-bold text-gray-700 text-center';
+
+                            const occLink = document.createElement('a');
+                            occLink.href = `/${parentCategory.slug}/${occasion.slug}`;
+                            occLink.className = 'hover:text-black transition-colors';
+                            occLink.textContent = occasion.name;
+
+                            p.appendChild(occLink);
+                            div.appendChild(p);
+                            occasionList.appendChild(div);
+                        });
+                        showMoreBtn.style.display = 'none';
+                    };
+                } else {
+                    showMoreBtn.style.display = 'none';
+                }
             }
         }
 
@@ -2912,10 +3051,10 @@
                     // Single product page
                     let productCategory = null;
                     @if(isset($productCategory))
-                        productCategory = @json($productCategory);
-                        console.log('Product Category from navbar:', productCategory);
+                    productCategory = @json($productCategory);
+                    console.log('Product Category from navbar:', productCategory);
                     @else
-                        console.log('Product Category NOT available in navbar');
+                    console.log('Product Category NOT available in navbar');
                     @endif
 
                     if (productCategory && productCategory.name) {
