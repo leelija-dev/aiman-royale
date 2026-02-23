@@ -28,7 +28,9 @@ class ProductController extends Controller
             });
         }
 
+       
         $data = $query->paginate(15);
+        
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();

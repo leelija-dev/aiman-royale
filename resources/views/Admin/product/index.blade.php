@@ -6,6 +6,7 @@
     {{ config('app.name') }} - Products
 @endsection
 
+
 @section('content')
     <div class="container-fluid py-4">
         <div class="col-12">
@@ -326,7 +327,7 @@
                                                                         <option value="">Select Occasion</option>
                                                                         @foreach ($occasions as $occasion)
                                                                             <option value="{{ $occasion->id }}"
-                                                                                {{ $product->occasion_id == $occasion->id ? 'selected' : '' }}>
+                                                                                {{ $product->ocassion_id == $occasion->id ? 'selected' : '' }}>
                                                                                 {{ $occasion->name }}
                                                                             </option>
                                                                         @endforeach
@@ -463,6 +464,18 @@
             if (confirm('Are you sure you want to delete this product?')) {
                 document.getElementById('delete-form-' + productId).submit();
             }
+        }
+
+        function openEditModal(productId, occasionId) {
+            const modal = new bootstrap.Modal(document.getElementById('editModal' + productId));
+            
+            // Only set occasion dropdown if not already set by Blade
+            const occasionSelect = document.getElementById('edit_occasion_id_' + productId);
+            if (occasionSelect && occasionId && !occasionSelect.value) {
+                occasionSelect.value = occasionId;
+            }
+            
+            modal.show();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
