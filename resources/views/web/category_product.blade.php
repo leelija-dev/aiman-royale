@@ -108,69 +108,21 @@
           @endif
 
          
-          <!-- Price Range Filter - Checkboxes -->
+          <!-- Price Range Filter - Dynamic from Product Variants -->
           <div class="mb-6">
             <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
             <div class="space-y-2">
+              @foreach($priceRanges as $range)
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input 
                   type="checkbox" 
                   name="price_range[]" 
-                  value="below-200"
+                  value="{{ $range['value'] }}"
                   class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
                 >
-                <span class="text-sm text-gray-700">Below ₹200</span>
+                <span class="text-sm text-gray-700">{{ $range['label'] }}</span>
               </label>
-              
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="price_range[]" 
-                  value="200-300"
-                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
-                >
-                <span class="text-sm text-gray-700">₹200 - ₹300</span>
-              </label>
-              
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="price_range[]" 
-                  value="300-400"
-                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
-                >
-                <span class="text-sm text-gray-700">₹300 - ₹400</span>
-              </label>
-              
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="price_range[]" 
-                  value="400-500"
-                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
-                >
-                <span class="text-sm text-gray-700">₹400 - ₹500</span>
-              </label>
-              
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="price_range[]" 
-                  value="500-600"
-                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
-                >
-                <span class="text-sm text-gray-700">₹500 - ₹600</span>
-              </label>
-              
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="price_range[]" 
-                  value="600-above"
-                  class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox"
-                >
-                <span class="text-sm text-gray-700">₹600 & Above</span>
-              </label>
+              @endforeach
             </div>
           </div>
 
@@ -297,8 +249,15 @@ document.addEventListener('DOMContentLoaded', function() {
         currentFilters.occasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
     }
 
-    // Convert price range to min/max values
+    // Convert price range to min/max values (now handles dynamic ranges)
     function getPriceRangeValues(range) {
+        // Handle dynamic range format (min-max)
+        if (range.includes('-')) {
+            const [min, max] = range.split('-').map(Number);
+            return { min, max };
+        }
+        
+        // Fallback for old hardcoded ranges
         switch(range) {
             case 'below-200':
                 return { min: 0, max: 200 };

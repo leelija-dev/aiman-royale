@@ -112,7 +112,10 @@ class CategoryController extends Controller
             'max' => $allVariants->max('price') ?? 10000
         ];
 
-        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange'));
+        // Calculate dynamic price ranges based on actual product data
+        $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
+
+        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges'));
     }
 
     // Helper function to check if string is JSON
@@ -120,6 +123,31 @@ class CategoryController extends Controller
     {
         json_decode($string);
         return json_last_error() === JSON_ERROR_NONE;
+    }
+
+    /**
+     * Calculate dynamic price ranges based on actual product data
+     */
+    private function calculateDynamicPriceRanges($minPrice, $maxPrice)
+    {
+        $range = $maxPrice - $minPrice;
+        $rangeSize = $range / 5;
+        
+        $ranges = [];
+        
+        for ($i = 0; $i < 5; $i++) {
+            $rangeMin = $minPrice + ($i * $rangeSize);
+            $rangeMax = ($i == 4) ? $maxPrice : $minPrice + (($i + 1) * $rangeSize);
+            
+            $ranges[] = [
+                'min' => $rangeMin,
+                'max' => $rangeMax,
+                'label' => '₹' . number_format($rangeMin) . ' - ₹' . number_format($rangeMax),
+                'value' => $rangeMin . '-' . $rangeMax
+            ];
+        }
+        
+        return $ranges;
     }
 
     public function collection()
@@ -155,7 +183,7 @@ class CategoryController extends Controller
             }])
             ->select('products.*');
 
-        // Apply price range filters (checkboxes)
+        // Apply price range filters (checkboxes) - now handles dynamic ranges
         if ($request->filled('price_ranges')) {
             $priceRanges = json_decode($request->price_ranges);
 
@@ -163,61 +191,74 @@ class CategoryController extends Controller
                 $query->whereHas('variants', function ($q) use ($priceRanges) {
                     $q->where(function ($subQ) use ($priceRanges) {
                         foreach ($priceRanges as $range) {
-                            switch ($range) {
-                                case 'below-200':
-                                    $subQ->orWhere(function ($orQ) {
-                                        $orQ->where('discount_price', '<', 200)
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->where('price', '<', 200);
-                                            });
-                                    });
-                                    break;
-                                case '200-300':
-                                    $subQ->orWhere(function ($orQ) use ($range) {
-                                        $orQ->whereBetween('discount_price', [200, 300])
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->whereBetween('price', [200, 300]);
-                                            });
-                                    });
-                                    break;
-                                case '300-400':
-                                    $subQ->orWhere(function ($orQ) {
-                                        $orQ->whereBetween('discount_price', [300, 400])
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->whereBetween('price', [300, 400]);
-                                            });
-                                    });
-                                    break;
-                                case '400-500':
-                                    $subQ->orWhere(function ($orQ) {
-                                        $orQ->whereBetween('discount_price', [400, 500])
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->whereBetween('price', [400, 500]);
-                                            });
-                                    });
-                                    break;
-                                case '500-600':
-                                    $subQ->orWhere(function ($orQ) {
-                                        $orQ->whereBetween('discount_price', [500, 600])
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->whereBetween('price', [500, 600]);
-                                            });
-                                    });
-                                    break;
-                                case '600-above':
-                                    $subQ->orWhere(function ($orQ) {
-                                        $orQ->where('discount_price', '>=', 600)
-                                            ->orWhere(function ($q) {
-                                                $q->whereNull('discount_price')
-                                                    ->where('price', '>=', 600);
-                                            });
-                                    });
-                                    break;
+                            // Handle dynamic range format (min-max)
+                            if (strpos($range, '-') !== false) {
+                                list($min, $max) = explode('-', $range);
+                                $subQ->orWhere(function ($orQ) use ($min, $max) {
+                                    $orQ->whereBetween('discount_price', [$min, $max])
+                                        ->orWhere(function ($q) use ($min, $max) {
+                                            $q->whereNull('discount_price')
+                                                ->whereBetween('price', [$min, $max]);
+                                        });
+                                });
+                            } else {
+                                // Fallback for old hardcoded ranges
+                                switch ($range) {
+                                    case 'below-200':
+                                        $subQ->orWhere(function ($orQ) {
+                                            $orQ->where('discount_price', '<', 200)
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->where('price', '<', 200);
+                                                });
+                                        });
+                                        break;
+                                    case '200-300':
+                                        $subQ->orWhere(function ($orQ) use ($range) {
+                                            $orQ->whereBetween('discount_price', [200, 300])
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->whereBetween('price', [200, 300]);
+                                                });
+                                        });
+                                        break;
+                                    case '300-400':
+                                        $subQ->orWhere(function ($orQ) use ($range) {
+                                            $orQ->whereBetween('discount_price', [300, 400])
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->whereBetween('price', [300, 400]);
+                                                });
+                                        });
+                                        break;
+                                    case '400-500':
+                                        $subQ->orWhere(function ($orQ) use ($range) {
+                                            $orQ->whereBetween('discount_price', [400, 500])
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->whereBetween('price', [400, 500]);
+                                                });
+                                        });
+                                        break;
+                                    case '500-600':
+                                        $subQ->orWhere(function ($orQ) use ($range) {
+                                            $orQ->whereBetween('discount_price', [500, 600])
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->whereBetween('price', [500, 600]);
+                                                });
+                                        });
+                                        break;
+                                    case '600-above':
+                                        $subQ->orWhere(function ($orQ) {
+                                            $orQ->where('discount_price', '>=', 600)
+                                                ->orWhere(function ($q) {
+                                                    $q->whereNull('discount_price')
+                                                        ->where('price', '>=', 600);
+                                                });
+                                        });
+                                        break;
+                                }
                             }
                         }
                     });
@@ -370,6 +411,9 @@ class CategoryController extends Controller
             'max' => $allVariants->max('price') ?? 10000
         ];
 
-        return view('web.category_product', compact('category', 'products', 'occasions', 'occasion', 'sizes', 'colors', 'priceRange'));
+        // Calculate dynamic price ranges based on actual product data
+        $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
+
+        return view('web.category_product', compact('category', 'products', 'occasions', 'occasion', 'sizes', 'colors', 'priceRange', 'priceRanges'));
     }
 }
