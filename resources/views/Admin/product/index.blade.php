@@ -461,9 +461,27 @@
 @section('scripts')
     <script>
         function confirmDelete(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                document.getElementById('delete-form-' + productId).submit();
-            }
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    // Submit the form
+                    document.getElementById('delete-form-' + productId).submit();
+                    // Return false to prevent SweetAlert from closing immediately
+                    return false;
+                }
+            }).then((result) => {
+                // This won't execute because form submission redirects
+                if (result.isConfirmed) {
+                    // Form is submitted, page will redirect
+                }
+            });
         }
 
         function openEditModal(productId, occasionId) {
