@@ -272,7 +272,7 @@ $isEmailActive = false;
                                 href="{{ route('admin.sizes') }}">Sizes</a>
                         </li>
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.product-variants','admin.categories.create') ? 'active' : '' }} "
+                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.product-variants','admin.product-variants.create') ? 'active' : '' }} "
                                 href="{{ route('admin.product-variants') }}">Product Variants</a>
                         </li>
                     </ul>

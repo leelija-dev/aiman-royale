@@ -157,7 +157,7 @@
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">{{ $variant->product->name }}</h6>
+                                            <h6 class="mb-0 text-sm">{{ $variant->product ? $variant->product->name : 'N/A' }}</h6>
                                         </div>
                                     </div>
                                 </td>
