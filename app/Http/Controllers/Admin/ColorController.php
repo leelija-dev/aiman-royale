@@ -14,18 +14,18 @@ class ColorController extends Controller
     public function index(Request $request)
     {
         $query = Color::query();
-        
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%")
-                  ->orWhere('color_tone', 'like', "%{$search}%");
+                    ->orWhere('code', 'like', "%{$search}%")
+                    ->orWhere('color_tone', 'like', "%{$search}%");
             });
         }
-        
+
         $data = $query->orderBy('name')->paginate(15);
-        
+
         return view('Admin.color.index', compact('data'));
     }
 
@@ -42,9 +42,14 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
+        // $data = $request->validate([
+        //     'name' => 'required|string|max:50|unique:colors,name',
+        //     'code' => 'required',
+        //     'color_tone' => 'nullable|string|max:50',
+        // ]);
         $data = $request->validate([
             'name' => 'required|string|max:50|unique:colors,name',
-            'code' => 'required',
+            'code' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'color_tone' => 'nullable|string|max:50',
         ]);
 
@@ -67,8 +72,8 @@ class ColorController extends Controller
     public function update(Request $request, Color $color)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:50|unique:colors,name,'.$color->id,
-            'code' => 'required|string|max:7|unique:colors,code,'.$color->id.'|regex:/^#[0-9A-Fa-f]{6}$/',
+            'name' => 'required|string|max:50|unique:colors,name,' . $color->id,
+            'code' => 'required|string|max:7|unique:colors,code,' . $color->id . '|regex:/^#[0-9A-Fa-f]{6}$/',
             'color_tone' => 'nullable|string|max:50',
         ]);
 
@@ -80,10 +85,10 @@ class ColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Color $color)
+    public function destroy(Color $color)
     {
         $color->delete();
-        
+
         return redirect()->route('admin.colors')->with('success', 'Color deleted successfully!');
     }
 }

@@ -65,18 +65,18 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <a href="#" class="text-secondary font-weight-bold text-xs me-4"
-                                       data-bs-toggle="modal" data-bs-target="#editModal{{ $color->id }}"
-                                       title="Edit color">
+                                        data-bs-toggle="modal" data-bs-target="#editModal{{ $color->id }}"
+                                        title="Edit color">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                     <form id="delete-form-{{ $color->id }}"
-                                          action="{{ route('admin.colors.delete', $color->id) }}"
-                                          method="POST" style="display:none;">
+                                        action="{{ route('admin.colors.delete', $color->id) }}"
+                                        method="POST" style="display:none;">
                                         @csrf
                                         @method('DELETE')
                                     </form>
                                     <a href="javascript:void(0);"
-                                       onclick="confirmDelete({{ $color->id }})">
+                                        onclick="confirmDelete({{ $color->id }})">
                                         <i class="fa-solid fa-trash text-danger font-weight-bold text-xs"></i>
                                     </a>
                                 </td>
@@ -91,28 +91,28 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form id="editForm{{ $color->id }}"
-                                              action="{{ route('admin.colors.update', $color->id) }}"
-                                              method="POST">
+                                            action="{{ route('admin.colors.update', $color->id) }}"
+                                            method="POST">
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-body text-start">
                                                 <div class="mb-3">
                                                     <label for="edit_name_{{ $color->id }}" class="form-label">Color Name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" id="edit_name_{{ $color->id }}" name="name" 
-                                                           value="{{ $color->name }}" maxlength="50" required>
+                                                    <input type="text" class="form-control" id="edit_name_{{ $color->id }}" name="name"
+                                                        value="{{ $color->name }}" maxlength="50" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="edit_code_{{ $color->id }}" class="form-label">Color Code <span class="text-danger">*</span></label>
                                                     <div class="d-flex gap-2 align-items-center">
-                                                        <input type="text" class="form-control" id="edit_code_{{ $color->id }}" name="code" 
-                                                               value="{{ $color->code }}" maxlength="7" required pattern="^#[0-9A-Fa-f]{6}$">
+                                                        <input type="text" class="form-control" id="edit_code_{{ $color->id }}" name="code"
+                                                            value="{{ $color->code }}" maxlength="7" required pattern="^#[0-9A-Fa-f]{6}$">
                                                         <div class="color-preview" style="width: 32px; height: 32px; background-color: {{ $color->code }}; border: 1px solid #ddd; border-radius: 4px;"></div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="edit_color_tone_{{ $color->id }}" class="form-label">Color Tone</label>
-                                                    <input type="text" class="form-control" id="edit_color_tone_{{ $color->id }}" name="color_tone" 
-                                                           value="{{ $color->color_tone }}" maxlength="50">
+                                                    <input type="text" class="form-control" id="edit_color_tone_{{ $color->id }}" name="color_tone"
+                                                        value="{{ $color->color_tone }}" maxlength="50">
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -133,7 +133,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <div class="text-muted">
@@ -151,42 +151,67 @@
 
 @section('scripts')
 <script>
-function confirmDelete(colorId) {
-    if (confirm('Are you sure you want to delete this color?')) {
-        document.getElementById('delete-form-' + colorId).submit();
-    }
-}
+    // function confirmDelete(colorId) {
+    //     if (confirm('Are you sure you want to delete this color?')) {
+    //         document.getElementById('delete-form-' + colorId).submit();
+    //     }
+    // }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Form validation for edit modals
-    document.querySelectorAll('form[id^="editForm"]').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const colorId = this.id.replace('editForm', '');
-            const name = document.getElementById('edit_name_' + colorId);
-            const code = document.getElementById('edit_code_' + colorId);
-
-            let isValid = true;
-
-            // Reset validation states
-            this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-
-            // Validate required fields
-            if (!name.value.trim()) {
-                name.classList.add('is-invalid');
-                isValid = false;
+    function confirmDelete(colorId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                // Submit the form
+                document.getElementById('delete-form-' + colorId).submit();
+                // document.getElementById('delete-form-' + colorId).submit();
+                // Return false to prevent SweetAlert from closing immediately
+                return false;
             }
-
-            if (!code.value.trim() || !/^#[0-9A-Fa-f]{6}$/.test(code.value)) {
-                code.classList.add('is-invalid');
-                isValid = false;
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-                alert('Please fill in all required fields correctly.');
+        }).then((result) => {
+            // This won't execute because form submission redirects
+            if (result.isConfirmed) {
+                // Form is submitted, page will redirect
             }
         });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation for edit modals
+        document.querySelectorAll('form[id^="editForm"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const colorId = this.id.replace('editForm', '');
+                const name = document.getElementById('edit_name_' + colorId);
+                const code = document.getElementById('edit_code_' + colorId);
+
+                let isValid = true;
+
+                // Reset validation states
+                this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+                // Validate required fields
+                if (!name.value.trim()) {
+                    name.classList.add('is-invalid');
+                    isValid = false;
+                }
+
+                if (!code.value.trim() || !/^#[0-9A-Fa-f]{6}$/.test(code.value)) {
+                    code.classList.add('is-invalid');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields correctly.');
+                }
+            });
+        });
     });
-});
 </script>
 @endsection

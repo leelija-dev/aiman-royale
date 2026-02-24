@@ -14,17 +14,18 @@
                 <h6>Add New Color</h6>
             </div>
             <div class="card px-4 pt-2 pb-2">
-                <form action="{{ route('admin.colors.store') }}" method="POST">
+                <form action="{{ route('admin.colors.store') }}" method="POST" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Color Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="name" name="name" 
-                                       value="{{ old('name') }}" maxlength="50" required>
+                                       value="{{ old('name') }}" maxlength="50">
                                 @error('name')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="name-error" class="text-danger small" style="display: none;"></div>
                             </div>
                         </div>
 
@@ -33,12 +34,13 @@
                                 <label for="code" class="form-label">Color Code <span class="text-danger">*</span></label>
                                 <div class="d-flex gap-2 align-items-center">
                                     <input type="text" class="form-control" id="code" name="code" 
-                                           value="{{ old('code') }}" maxlength="7" required pattern="^#[0-9A-Fa-f]{6}$">
+                                           value="{{ old('code') }}" maxlength="7">
                                     <div id="colorPreview" style="width: 32px; height: 32px; background-color: #000000; border: 1px solid #ddd; border-radius: 4px;"></div>
                                 </div>
                                 @error('code')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="code-error" class="text-danger small" style="display: none;"></div>
                                 <small class="text-muted">Enter hex color code (e.g., #FF5733)</small>
                             </div>
                         </div>
@@ -78,12 +80,30 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const codeInput = document.getElementById('code');
+    const nameInput = document.getElementById('name');
     const colorPreview = document.getElementById('colorPreview');
+    const nameError = document.getElementById('name-error');
+    const codeError = document.getElementById('code-error');
     
+    // Color preview update
     codeInput.addEventListener('input', function() {
         const color = this.value;
         if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
             colorPreview.style.backgroundColor = color;
+        }
+        
+        // Clear error when user starts typing
+        if (this.value.trim()) {
+            this.classList.remove('is-invalid');
+            codeError.style.display = 'none';
+        }
+    });
+    
+    // Clear name error when user starts typing
+    nameInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            this.classList.remove('is-invalid');
+            nameError.style.display = 'none';
         }
     });
     
@@ -92,26 +112,47 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         const name = document.getElementById('name');
         const code = document.getElementById('code');
+        const nameError = document.getElementById('name-error');
+        const codeError = document.getElementById('code-error');
 
         let isValid = true;
 
-        // Reset validation states
-        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+        // Hide all custom errors
+        nameError.style.display = 'none';
+        codeError.style.display = 'none';
 
-        // Validate required fields
+        // Remove invalid classes
+        name.classList.remove('is-invalid');
+        code.classList.remove('is-invalid');
+
+        // Validate name field
         if (!name.value.trim()) {
             name.classList.add('is-invalid');
+            nameError.textContent = 'Color name is required.';
+            nameError.style.display = 'block';
             isValid = false;
         }
 
-        if (!code.value.trim() || !/^#[0-9A-Fa-f]{6}$/.test(code.value)) {
+        // Validate color code field
+        if (!code.value.trim()) {
             code.classList.add('is-invalid');
+            codeError.textContent = 'Color code is required.';
+            codeError.style.display = 'block';
+            isValid = false;
+        } else if (!/^#[0-9A-Fa-f]{6}$/.test(code.value)) {
+            code.classList.add('is-invalid');
+            codeError.textContent = 'Please enter a valid hex color code (e.g., #FF5733).';
+            codeError.style.display = 'block';
             isValid = false;
         }
 
         if (!isValid) {
             e.preventDefault();
-            alert('Please fill in all required fields correctly.');
+            // Focus on first invalid field
+            const firstInvalid = document.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
         }
     });
 });
