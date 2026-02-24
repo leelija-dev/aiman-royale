@@ -129,8 +129,8 @@
                             <select name="size" class="form-control" onchange="this.form.submit()">
                                 <option value="">All Sizes</option>
                                 @foreach($sizes as $size)
-                                <option value="{{ $size }}" {{ request('size') == $size ? 'selected' : '' }}>
-                                    {{ $size }}
+                                <option value="{{ $size->code }}" {{ request('size') == $size->code ? 'selected' : '' }}>
+                                    {{ $size->code }}
                                 </option>
                                 @endforeach
                             </select>
