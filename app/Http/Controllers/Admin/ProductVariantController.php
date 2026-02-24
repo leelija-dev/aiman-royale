@@ -74,8 +74,8 @@ class ProductVariantController extends Controller
     {
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'size' => 'nullable|string|max:20',
-            'color' => 'nullable|string|max:50',
+            'size' => 'required|string|max:20',
+            'color' => 'required|string|max:50',
             'sku' => 'required|string|max:100|unique:product_variants,sku',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',

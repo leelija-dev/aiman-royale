@@ -41,13 +41,13 @@
                         {{ $errors->first('unique_combination') }}
                     </div>
                 @endif
-                <form action="{{ route('admin.product-variants.store') }}" method="POST" enctype="multipart/form-data" id="variantForm">
+                <form action="{{ route('admin.product-variants.store') }}" method="POST" enctype="multipart/form-data" id="variantForm" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="product_id" class="form-label">Product <span class="text-danger">*</span></label>
-                                <select class="form-control" id="product_id" name="product_id" required>
+                                <select class="form-control" id="product_id" name="product_id">
                                     <option value="" selected hidden>Select Product</option>
                                     @foreach($products as $product)
                                     <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
@@ -58,22 +58,25 @@
                                 @error('product_id')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="product_id-error" class="text-danger small" style="display: none;"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="sku" name="sku" 
-                                       value="{{ old('sku') }}" maxlength="100" required>
+                                       value="{{ old('sku') }}" maxlength="100">
                                 @error('sku')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="sku-error" class="text-danger small" style="display: none;"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="price" name="price" 
-                                       value="{{ old('price') }}" step="0.01" min="0" required>
+                                       value="{{ old('price') }}" step="0.01" min="0">
                                 @error('price')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="price-error" class="text-danger small" style="display: none;"></div>
                             </div>
                                     <div class="mb-3">
                                     <label class="text-uppercase text-secondary">Upload Gallery Images</label>
@@ -86,9 +89,9 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="color" class="form-label">Color</label>
+                                <label for="color" class="form-label">Color <span class="text-danger">*</span></label>
                                 <select class="form-control" id="color" name="color">
-                                    <option value="">No Color</option>
+                                    <option value="" selected hidden>Select Color</option>
                                     @foreach($colors as $color)
                                     <option value="{{ $color }}" {{ old('color') == $color ? 'selected' : '' }}>
                                         {{ $color }}
@@ -98,10 +101,11 @@
                                 @error('color')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Select a color for this variant</small>
+                                <div id="color-error" class="text-danger small" style="display: none;"></div>
+                                
                             </div>
                             <div class="mb-3">
-                                <label for="size" class="form-label">Size</label>
+                                <label for="size" class="form-label">Size <span class="text-danger">*</span></label>
                                 <select class="form-control" id="size" name="size">
                                     <option value="" selected hidden>Select Size</option>
                                     @foreach($sizes as $size)
@@ -113,7 +117,8 @@
                                 @error('size')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Select a size for this variant</small>
+                                <div id="size-error" class="text-danger small" style="display: none;"></div>
+                                
                             </div>
                             <div class="mb-3">
                                 <label for="discount" class="form-label">Discount(%)</label>
@@ -127,10 +132,11 @@
                             <div class="mb-3">
                                 <label for="stock" class="form-label">Stock <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="stock" name="stock" 
-                                       value="{{ old('stock') }}" min="0" required>
+                                       value="{{ old('stock') }}" min="0">
                                 @error('stock')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
+                                <div id="stock-error" class="text-danger small" style="display: none;"></div>
                                 <small class="text-muted">Number of items available for this variant</small>
                             </div>
                             <div class="mb-3">
@@ -203,36 +209,127 @@ document.addEventListener('DOMContentLoaded', function() {
         const sku = document.getElementById('sku');
         const price = document.getElementById('price');
         const stock = document.getElementById('stock');
+        const color = document.getElementById('color');
+        const size = document.getElementById('size');
+
+        // Debug: Check if elements are found
+        console.log('Elements found:', {
+            productId: !!productId,
+            sku: !!sku,
+            price: !!price,
+            stock: !!stock,
+            color: !!color,
+            size: !!size
+        });
+
+        // Error elements
+        const productIdError = document.getElementById('product_id-error');
+        const skuError = document.getElementById('sku-error');
+        const priceError = document.getElementById('price-error');
+        const stockError = document.getElementById('stock-error');
+        const colorError = document.getElementById('color-error');
+        const sizeError = document.getElementById('size-error');
+
+        // Debug: Check if error elements are found
+        console.log('Error elements found:', {
+            productIdError: !!productIdError,
+            skuError: !!skuError,
+            priceError: !!priceError,
+            stockError: !!stockError,
+            colorError: !!colorError,
+            sizeError: !!sizeError
+        });
 
         let isValid = true;
 
-        // Reset validation states
+        // Hide all custom errors
+        document.querySelectorAll('[id$="-error"]').forEach(el => el.style.display = 'none');
+
+        // Remove invalid classes
         document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
 
-        // Validate required fields
+        // Validate required fields with custom messages
         if (!productId.value) {
             productId.classList.add('is-invalid');
+            productIdError.textContent = 'Please select a product.';
+            productIdError.style.display = 'block';
             isValid = false;
         }
 
         if (!sku.value.trim()) {
             sku.classList.add('is-invalid');
+            skuError.textContent = 'SKU is required.';
+            skuError.style.display = 'block';
             isValid = false;
         }
 
         if (!price.value || price.value < 0) {
             price.classList.add('is-invalid');
+            priceError.textContent = 'Please enter a valid price (minimum 0).';
+            priceError.style.display = 'block';
             isValid = false;
         }
 
         if (!stock.value || stock.value < 0) {
             stock.classList.add('is-invalid');
+            stockError.textContent = 'Please enter a valid stock quantity (minimum 0).';
+            stockError.style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate color (optional but show error if empty)
+        console.log('Color value:', color.value);
+        console.log('Color element:', color);
+        if (!color.value || color.value === '') {
+            color.classList.add('is-invalid');
+            colorError.textContent = 'Please select a color.';
+            colorError.style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate size (optional but show error if empty)
+        console.log('Size value:', size.value);
+        console.log('Size element:', size);
+        if (!size.value || size.value === '') {
+            size.classList.add('is-invalid');
+            sizeError.textContent = 'Please select a size.';
+            sizeError.style.display = 'block';
             isValid = false;
         }
 
         if (!isValid) {
             e.preventDefault();
-            alert('Please fill in all required fields correctly.');
+            // Focus on first invalid field
+            const firstInvalid = document.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
+        }
+    });
+
+    // Real-time error clearing
+    const fields = ['product_id', 'sku', 'price', 'stock', 'color', 'size'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + '-error');
+        
+        if (field && errorDiv) {
+            field.addEventListener('input', function() {
+                if (this.value.trim() || (this.type === 'select-one' && this.value)) {
+                    this.classList.remove('is-invalid');
+                    errorDiv.style.display = 'none';
+                }
+            });
+            
+            // Handle select change events
+            if (field.tagName === 'SELECT') {
+                field.addEventListener('change', function() {
+                    if (this.value) {
+                        this.classList.remove('is-invalid');
+                        errorDiv.style.display = 'none';
+                    }
+                });
+            }
         }
     });
 });
