@@ -1641,12 +1641,14 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Handle existing session errors (if any)
-  @if ($errors->has('email'))
-    const errorMessage = "{{ $errors->first('email') }}";
-    if (emailInput && emailError) {
-      showError(emailInput, emailError, errorMessage);
-    }
-  @endif
+  @isset($errors)
+    @if ($errors->has('email'))
+      const errorMessage = "{{ $errors->first('email') }}";
+      if (emailInput && emailError) {
+        showError(emailInput, emailError, errorMessage);
+      }
+    @endif
+  @endisset
   
   // Handle success message from session
   @if (session('success'))
@@ -1809,18 +1811,6 @@ timer: 3000
     text: "{{ session('success') }}",
     confirmButtonText: 'OK',
     confirmButtonColor: 'green'
-  });
-</script>
-@endif
-
-@if ($errors->has('email'))
-<script>
-  Swal.fire({
-    icon: 'warning',
-    title: 'Oops!',
-    text: "{{ $errors->first('email') }}",
-    confirmButtonText: 'OK',
-    confirmButtonColor: '#000'
   });
 </script>
 @endif

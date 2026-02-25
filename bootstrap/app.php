@@ -31,4 +31,12 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
+         // Handle 404 errors and redirect to custom 404 page
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Page not found'], 404);
+            }
+            
+            return response()->view('web.404', [], 404);
+        });
     })->create();
