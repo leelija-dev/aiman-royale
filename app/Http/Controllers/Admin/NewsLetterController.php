@@ -12,7 +12,7 @@ class NewsLetterController extends Controller
 {
     //
     public function ShowNewsLetter(){
-        $data=NewsLetter::orderBy('created_at','desc')->paginate(2);
+        $data=NewsLetter::orderBy('created_at','desc')->paginate(15);
         return view('Admin.News_letter.news_letter',compact('data'));
     }
     public function EmailGroup(){

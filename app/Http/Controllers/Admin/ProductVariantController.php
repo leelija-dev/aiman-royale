@@ -76,7 +76,7 @@ class ProductVariantController extends Controller
             'product_id' => 'required|exists:products,id',
             'size' => 'required|string|max:20',
             'color' => 'required|string|max:50',
-            'sku' => 'required|string|max:100|unique:product_variants,sku',
+            // 'sku' => 'required|string|max:100|unique:product_variants,sku',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -154,7 +154,7 @@ class ProductVariantController extends Controller
             'product_id' => 'required|exists:products,id',
             'size' => 'nullable|string|max:20',
             'color' => 'nullable|string|max:50',
-            'sku' => 'required|string|max:100|unique:product_variants,sku,' . $productVariant->id,
+            // 'sku' => 'required|string|max:100|unique:product_variants,sku,' . $productVariant->id,
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
@@ -181,7 +181,7 @@ class ProductVariantController extends Controller
         // $productVariant->update($data);
         $productVariant->update([
             'product_id'      => $request->product_id,
-            'sku'             => $request->sku,
+            // 'sku'             => $request->sku,
             'price'           => $request->price,
             'discount_price'  => $discount_price,
             'discount'        => $request->discount,

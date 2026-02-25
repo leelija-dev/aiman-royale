@@ -60,7 +60,7 @@
                                 @enderror
                                 <div id="product_id-error" class="text-danger small" style="display: none;"></div>
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="sku" name="sku" 
                                        value="{{ old('sku') }}" maxlength="100">
@@ -68,7 +68,7 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                                 <div id="sku-error" class="text-danger small" style="display: none;"></div>
-                            </div>
+                            </div> --}}
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="price" name="price" 
@@ -153,13 +153,14 @@
 
                     <!-- Submit Buttons -->
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 text-end">
+                            <a href="{{ route('admin.product-variants') }}" class="btn btn-danger me-3">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>Save Variant
                             </button>
-                            <a href="{{ route('admin.product-variants') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i>Cancel
-                            </a>
+                            
                         </div>
                     </div>
                 </form>

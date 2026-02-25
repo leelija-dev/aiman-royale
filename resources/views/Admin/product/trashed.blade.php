@@ -88,7 +88,7 @@
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Cancel</button>
                                                                 <form
-                                                                    action="{{ route('admin.products.restore', $product->id) }}"
+                                                                    action="{{ route('admin.products.trashed', $product->id) }}"
                                                                     method="POST" class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')
