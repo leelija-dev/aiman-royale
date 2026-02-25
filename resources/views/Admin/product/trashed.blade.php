@@ -45,7 +45,7 @@
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <!-- Restore Form -->
-                                                    <form action="{{ route('product.restore', $product->id) }}" method="POST"
+                                                    <form action="{{ route('admin.products.restore', $product->id) }}" method="POST"
                                                         class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
@@ -88,7 +88,7 @@
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Cancel</button>
                                                                 <form
-                                                                    action="{{ route('product.force-delete', $product->id) }}"
+                                                                    action="{{ route('admin.products.restore', $product->id) }}"
                                                                     method="POST" class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')

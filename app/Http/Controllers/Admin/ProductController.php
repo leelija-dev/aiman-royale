@@ -28,13 +28,13 @@ class ProductController extends Controller
             });
         }
 
-       
+
         $data = $query->paginate(15);
-        
+
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
-        return view('Admin.product.index', compact('data', 'categories', 'occasions','brands'));
+        return view('Admin.product.index', compact('data', 'categories', 'occasions', 'brands'));
     }
 
     public function create()
@@ -43,7 +43,7 @@ class ProductController extends Controller
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
 
-        return view('Admin.product.create', compact('categories', 'occasions','brands'));
+        return view('Admin.product.create', compact('categories', 'occasions', 'brands'));
     }
     public function store(Request $request)
     {
@@ -61,11 +61,11 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
             'is_featured' => 'required|boolean',
-            'meta_title'=>'required|string',
-            'keywords'=>'required|string',
-            'tags'=>'required|string',
-            'meta_description'=>'required|string',
-            'schema_markup'=>'nullable|string',
+            'meta_title' => 'required|string',
+            'keywords' => 'required|string',
+            'tags' => 'required|string',
+            'meta_description' => 'required|string',
+            'schema_markup' => 'nullable|string',
             'image' => 'required|image',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
@@ -140,12 +140,12 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
             'is_featured' => 'required|boolean',
-            'meta_title'=>'required|string',
-            'keywords'=>'required|string',
-            'tags'=>'required|string',
-            'meta_description'=>'required|string',
-            'schema_markup'=>'nullable|string',
-           
+            'meta_title' => 'required|string',
+            'keywords' => 'required|string',
+            'tags' => 'required|string',
+            'meta_description' => 'required|string',
+            'schema_markup' => 'nullable|string',
+
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
