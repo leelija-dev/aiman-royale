@@ -12,8 +12,8 @@ class NewsLetterController extends Controller
 {
     //
     public function ShowNewsLetter(){
-        $data=NewsLetter::orderBy('created_at','desc')->get();
-        return view('Admin.News_letter.news_letter',['data'=>$data]);
+        $data=NewsLetter::orderBy('created_at','desc')->paginate(2);
+        return view('Admin.News_letter.news_letter',compact('data'));
     }
     public function EmailGroup(){
         return view('Admin.News_letter.email_group');

@@ -12,7 +12,7 @@
                       <button class="btn btn-primary me-3"  >Add news letter </button>
                     </a>
                 </div>
-                <div class="card-body px-0 pt-0 pb-2">
+                <div class="card-body px-47 pt-2 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0 datatable">
                             <thead>
@@ -62,8 +62,11 @@
                     </tbody>
                         </table>     
 
-
+                        <div class="mt-4">
+                            {{ $data->links('pagination::bootstrap-5') }}
+                        </div>
             </div>
+            
         </div>
     </div>
 </div>

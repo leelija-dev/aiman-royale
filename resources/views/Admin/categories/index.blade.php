@@ -43,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            @forelse($categories as $category)
+            @forelse($categoriess as $category)
               <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $category->name }}</td>
@@ -87,9 +87,9 @@
           </tbody>
         </table>
       </div>
-      {{-- <div class="mt-3">
-        {{ $categories->links('pagination::bootstrap-5') }}
-      </div> --}}
+      <div class="mt-3">
+        {{ $categoriess->links('pagination::bootstrap-5') }}
+      </div>
     </div>
   </div>
 </div>

@@ -393,12 +393,12 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div class="text-muted">
+                <div class=" mt-4">
+                    {{-- <div class="text-muted">
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
-                    </div>
+                    </div> --}}
                     <div>
-                        {{ $data->links() }}
+                        {{ $data->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

@@ -11,6 +11,7 @@ class UnitController extends Controller
         $units=Unit::all();
         return view('Admin.unit.index',compact('units'));
     }
+
     public function create(){
         return view('Admin.unit.create');
     }
