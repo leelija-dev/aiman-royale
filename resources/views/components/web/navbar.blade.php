@@ -2083,7 +2083,8 @@
                         name: product.name,
                         price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
                         originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
-                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        // image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        image: product.images && product.images[0] ? (product.images[0].image.startsWith('http') ? product.images[0].image : getBaseUrl() + '/' + product.images[0].image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
                         slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
                     });
                     collectionList.appendChild(productCard);
