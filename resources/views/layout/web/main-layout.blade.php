@@ -123,7 +123,7 @@
 
 <body class="overflow-x-hidden ">
 
-    @if(!request()->is('login') && !request()->is('register'))
+    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
     <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
     @endif
 
@@ -131,7 +131,7 @@
     <main class="">
         @yield('content')
     </main>
-    @if(!request()->is('login') && !request()->is('register'))
+    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
     <x-web.footer />
     @endif
     <!-- Add this temporarily for testing -->

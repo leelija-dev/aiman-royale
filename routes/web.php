@@ -24,6 +24,7 @@ Route::middleware(['guest'])->group(function () {
     
 });
 Route::view('/addresses', 'web.addresses');
+Route::view('/404', 'web.404');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');

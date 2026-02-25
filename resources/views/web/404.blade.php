@@ -1,4 +1,4 @@
-@extends('web.layouts.app')
+@extends('layout.web.main-layout')
 
 @section('content')
 <style>
