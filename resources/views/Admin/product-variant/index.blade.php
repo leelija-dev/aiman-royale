@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
 
 @endsection
+@dd($products);
 <style>
  /* Dropzone container */
 .dropzone {
