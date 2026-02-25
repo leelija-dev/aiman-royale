@@ -167,6 +167,9 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div class="text-center sm">
+                        Have an account? <a href="{{ route('web.login') }}" class="text-purple-600 hover:text-purple-500">Login</a>
+                    </div>
 
                     <button type="submit"
                         class="w-full py-3 px-4 fashion-gradient text-white font-medium rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">

@@ -38,6 +38,7 @@ class AddressController extends Controller
         $request->validate([
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
+            'phone_no' => 'nullable|string|max:20',
             'address_1' => 'required|string|max:255',
             'address_2' => 'nullable|string|max:255',
             'city' => 'required|string|max:100',
@@ -61,6 +62,7 @@ class AddressController extends Controller
             'user_id' => Auth::id(),
             'full_name' => $request->full_name,
             'phone' => $request->phone,
+            'alternative_phone' => $request->phone_no,
             'address_1' => $request->address_1,
             'address_2' => $request->address_2,
             'city' => $request->city,
@@ -89,6 +91,7 @@ class AddressController extends Controller
         $request->validate([
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
+            'phone_no' => 'nullable|string|max:20',
             'address_1' => 'required|string|max:255',
             'address_2' => 'nullable|string|max:255',
             'city' => 'required|string|max:100',
@@ -108,6 +111,7 @@ class AddressController extends Controller
         $address->update([
             'full_name' => $request->full_name,
             'phone' => $request->phone,
+            'alternative_phone' => $request->phone_no,
             'address_1' => $request->address_1,
             'address_2' => $request->address_2,
             'city' => $request->city,

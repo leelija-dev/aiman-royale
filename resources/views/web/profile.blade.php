@@ -287,14 +287,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-6">
+                        {{-- <div class="mt-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
                             <div
                                 class="p-3 bg-gray-50 rounded-xl border border-gray-200 min-h-20">
                                 Fashion enthusiast with a passion for sustainable style. Love
                                 exploring new trends while staying true to classic pieces.
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Recent Orders -->

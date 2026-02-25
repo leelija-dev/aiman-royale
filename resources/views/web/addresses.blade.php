@@ -159,10 +159,10 @@
                                 {{ $address->phone }}
                             </p>
                             @endif
-                            @if($address->phone_no)
+                            @if($address->alternative_phone)
                             <p class="font-medium">
                                 <i class="fas fa-phone-alt text-gray-400 mr-2"></i>
-                                {{ $address->phone_no }}
+                                {{ $address->alternative_phone }}
                             </p>
                             @endif
                             <p>
@@ -197,6 +197,7 @@
                                     "id" => $address->id,
                                     "full_name" => $address->full_name,
                                     "phone" => $address->phone,
+                                    "phone_no" => $address->alternative_phone,
                                     "address_1" => $address->address_1,
                                     "address_2" => $address->address_2,
                                     "city" => $address->city,
@@ -369,6 +370,9 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Alternate Phone (Optional)</label>
                         <input type="tel" id="altPhoneNumber" name="phone_no" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="+1 (555) 987-6543">
                     </div>
+                    @error('phone_no')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div class="flex items-center gap-3">
