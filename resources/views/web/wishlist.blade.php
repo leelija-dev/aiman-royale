@@ -266,7 +266,7 @@
                             <div class="absolute top-4 left-4">
                                 <span
                                     class="sale-badge text-white text-xs px-3 py-1 rounded-full font-medium">
-                                    @if($variant->discount > 0)
+                                    @if($variant?->discount > 0)
                                     {{$variant->discount}}% OFF
                                     @else
                                     Trending
@@ -281,8 +281,8 @@
                                     {{ $product->name }}
                                 </h3>
                                 <div class="text-right">
-                                    <p class="font-bold text-gray-900">{{config('app.currency')}}{{ $variant->discount_price}}</p>
-                                    <p class="text-gray-500 text-sm line-through">{{config('app.currency')}}{{ $variant->price}}</p>
+                                    <p class="font-bold text-gray-900">{{config('app.currency')}}{{ $variant?->discount_price}}</p>
+                                    <p class="text-gray-500 text-sm line-through">{{config('app.currency')}}{{ $variant?->price}}</p>
                                 </div>
                             </div>
 
