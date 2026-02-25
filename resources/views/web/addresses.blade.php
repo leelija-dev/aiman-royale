@@ -559,8 +559,20 @@
 
     // Delete address function
     // Delete address function
-    function deleteAddress(addressId) {
-        if (confirm('Are you sure you want to remove this address?')) {
+   
+function deleteAddress(addressId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to remove this address!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("addresses.destroy", ":id") }}'.replace(':id', addressId);
@@ -581,8 +593,8 @@
             document.body.appendChild(form);
             form.submit();
         }
-    }
-
+    });
+}
     // Set default address function
     function setDefaultAddress(addressId) {
         const form = document.createElement('form');

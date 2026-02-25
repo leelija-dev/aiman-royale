@@ -71,38 +71,79 @@
                     </div>
                 </div>
 
-                <form action="{{ route('web.register.add') }}" method="post" class="space-y-5">
+                <form action="{{ route('web.register.add') }}" method="post" id="registerForm" class="space-y-5"  novalidate >
                     @csrf
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                            <input type="text" id="firstName" name="firstName" required
+                            <input type="text" id="firstName" name="firstName" 
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                        <p class="error text-red-500 text-xs mt-1 hidden"></p>
+                        @error('firstName')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                         </div>
                         <div>
                             <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" required
+                            <input type="text" id="lastName" name="lastName" 
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                       <p class="error text-red-500 text-xs mt-1 hidden"></p>
+                        @error('lastName')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                         </div>
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" id="email" name="email" required
+                        <input type="email" id="email" name="email" 
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                        <p class="error text-red-500 text-xs mt-1 hidden"></p>
+                         @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input type="password" id="password" name="password" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
-                        <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters with a number and symbol</p>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                            Password
+                        </label>
+
+                        <div class="relative">
+                            <input type="password" id="password" name="password" 
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl 
+                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                            
+                            <button type="button" id="togglePassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                            </button>
+                             
+                        </div>
+                        <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
+                        
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <div class="relative">
+
+                            <input type="password" id="confirmPassword" name="confirmPassword" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                            <button type="button" id="togglePassword1"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                            </button>
+
+                        </div>
+                        <p id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden"></p>
+                        <p class="error text-red-500 text-xs mt-1 hidden"></p>
+                        @error('confirmPassword')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center">
@@ -111,14 +152,20 @@
                         <label for="newsletter" class="ml-2 block text-sm text-gray-700">
                             Send me style tips, trends, and exclusive offers (optional)
                         </label>
+                        @error('newsletter')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex items-center">
-                        <input id="terms" name="terms" type="checkbox" required
+                        <input id="terms" name="terms" type="checkbox" 
                             class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
                         <label for="terms" class="ml-2 block text-sm text-gray-700">
                             I agree to the <a href="#" class="text-purple-600 hover:text-purple-500">Terms of Service</a> and <a href="#" class="text-purple-600 hover:text-purple-500">Privacy Policy</a>
                         </label>
+                        @error('terms')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button type="submit"
@@ -137,5 +184,154 @@
 
 <script src="{{asset('web/js/register.js')}}"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
 
+        const togglePassword = document.getElementById("togglePassword");
+         const togglePassword1 = document.getElementById("togglePassword1");
+        const passwordInput = document.getElementById("password");
+        const passwordInput1 = document.getElementById("confirmPassword");
+
+        if (togglePassword && passwordInput) {
+
+            togglePassword.addEventListener("click", function() {
+
+                const icon = this.querySelector("i");
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+               
+
+            });
+
+        }
+        if (togglePassword1 && passwordInput1) {
+
+            togglePassword1.addEventListener("click", function() {
+
+                const icon = this.querySelector("i");
+
+                if (passwordInput1.type === "password") {
+                    passwordInput1.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput1.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+               
+
+            });
+
+        }
+
+
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("registerForm");
+
+    const firstName = document.getElementById("firstName");
+    const lastName = document.getElementById("lastName");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+
+    function showError(input, message) {
+        const parent = input.closest("div");
+        const error = parent.querySelector(".error");
+
+        if (error) {
+            error.textContent = message;
+            error.classList.remove("hidden");
+        }
+
+        input.classList.add("border-red-500");
+    }
+
+    function clearError(input) {
+        const parent = input.closest("div");
+        const error = parent.querySelector(".error");
+
+        if (error) {
+            error.textContent = "";
+            error.classList.add("hidden");
+        }
+
+        input.classList.remove("border-red-500");
+    }
+
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+  password.addEventListener('input', function () {
+        passwordError.classList.add('hidden');
+    });
+
+    confirmPassword.addEventListener('input', function () {
+        confirmPasswordError.classList.add('hidden');
+    });
+    form.addEventListener("submit", function (e) {
+
+        let valid = true;
+
+        // First Name
+        if (firstName.value.trim() === "") {
+            showError(firstName, "First name is required");
+            valid = false;
+        } else {
+            clearError(firstName);
+        }
+
+        // Last Name
+        if (lastName.value.trim() === "") {
+            showError(lastName, "Last name is required");
+            valid = false;
+        } else {
+            clearError(lastName);
+        }
+
+        // Email
+        if (!validateEmail(email.value.trim())) {
+            showError(email, "Enter a valid email address");
+            valid = false;
+        } else {
+            clearError(email);
+        }
+
+        // Password
+        if (password.value.length < 8) {
+            showError(password, "Password must be at least 8 characters long.");
+            valid = false;
+        } else {
+            clearError(password);
+        }
+
+        // Confirm Password
+        if (confirmPassword.value !== password.value) {
+            showError(confirmPassword, "Passwords do not match");
+            valid = false;
+        } else {
+            clearError(confirmPassword);
+        }
+
+        if (!valid) {
+            e.preventDefault();
+        }
+
+    });
+
+});
+</script>
 @endsection
