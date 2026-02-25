@@ -270,7 +270,7 @@ class UserController extends Controller implements HasMiddleware
 // user customer index page
 public function customer()
 {
-    $data=User::orderBy('created_at', 'desc')->paginate(10);
+    $data=User::orderBy('created_at', 'desc')->paginate(15);
     return view('Admin.customer.index',compact('data'));
 }
 
