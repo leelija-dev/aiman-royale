@@ -394,7 +394,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                    <input type="email" name="email" value="{{ $user->email }}"
+                    <input type="email" name="email" value="{{ $user->email }}" readonly
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                 </div>
 
