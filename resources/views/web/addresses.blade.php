@@ -159,10 +159,10 @@
                                 {{ $address->phone }}
                             </p>
                             @endif
-                            @if($address->phone_no)
+                            @if($address->alternative_phone)
                             <p class="font-medium">
                                 <i class="fas fa-phone-alt text-gray-400 mr-2"></i>
-                                {{ $address->phone_no }}
+                                {{ $address->alternative_phone }}
                             </p>
                             @endif
                             <p>
@@ -197,6 +197,7 @@
                                     "id" => $address->id,
                                     "full_name" => $address->full_name,
                                     "phone" => $address->phone,
+                                    "phone_no" => $address->alternative_phone,
                                     "address_1" => $address->address_1,
                                     "address_2" => $address->address_2,
                                     "city" => $address->city,
@@ -264,7 +265,7 @@
                 </div>
             </div>
 
-            <form id="addressForm" class="p-6 space-y-6" method="POST" action="{{ route('addresses.store') }}">
+            <form id="addressForm" class="p-6 space-y-6" method="POST" action="{{ route('addresses.store') }}" >
                 @csrf
                 <input type="hidden" id="addressId" name="address_id">
 
@@ -278,38 +279,60 @@
                             <option value="parents">Parents' House</option>
                             <option value="other">Other</option>
                         </select>
+                        @error('address_type')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                        <input type="text" id="fullName" name="full_name" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Enter full name" required>
+                        <input type="text" id="fullName" name="full_name" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Enter full name" >
+                        
+                        @error('full_name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Address 1</label>
-                    <input type="text" id="streetAddress" name="address_1" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="123 Main Street" required>
+                    <input type="text" id="streetAddress" name="address_1" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="123 Main Street" >
+                         @error('address_1')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Address 2</label>
                     <input type="text" id="apartment" name="address_2" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Apt 4B">
+                    @error('address_2')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Landmark (Optional)</label>
                         <input type="text" id="landmark" name="landmark" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Near hospital, park, etc.">
+                    @error('landmark')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
-                        <input type="text" id="country" name="country" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Country" required>
+                        <input type="text" id="country" name="country" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Country" >
+                        @error('country')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
-                        <input type="text" id="city" name="city" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="City" required>
+                        <input type="text" id="city" name="city" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="City" >
+                        @error('city')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>
@@ -318,11 +341,17 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
-                        <input type="text" id="state" name="state" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="State" required>
+                        <input type="text" id="state" name="state" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="State" >
+                        @error('state')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
                         <input type="text" id="pincode" name="pincode" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="Enter pincode">
+                        @error('pincode')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>
@@ -332,12 +361,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Primary Phone Number</label>
-                        <input type="tel" id="phoneNumber" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="+1 (555) 123-4567" required>
+                        <input type="tel" id="phoneNumber" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="+1 (555) 123-4567" >
+                        @error('phone')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Alternate Phone (Optional)</label>
                         <input type="tel" id="altPhoneNumber" name="phone_no" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus" placeholder="+1 (555) 987-6543">
                     </div>
+                    @error('phone_no')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -528,8 +563,20 @@
 
     // Delete address function
     // Delete address function
-    function deleteAddress(addressId) {
-        if (confirm('Are you sure you want to remove this address?')) {
+   
+function deleteAddress(addressId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to remove this address!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("addresses.destroy", ":id") }}'.replace(':id', addressId);
@@ -550,8 +597,8 @@
             document.body.appendChild(form);
             form.submit();
         }
-    }
-
+    });
+}
     // Set default address function
     function setDefaultAddress(addressId) {
         const form = document.createElement('form');

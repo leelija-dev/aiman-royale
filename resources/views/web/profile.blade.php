@@ -287,14 +287,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-6">
+                        {{-- <div class="mt-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
                             <div
                                 class="p-3 bg-gray-50 rounded-xl border border-gray-200 min-h-20">
                                 Fashion enthusiast with a passion for sustainable style. Love
                                 exploring new trends while staying true to classic pieces.
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Recent Orders -->
@@ -394,7 +394,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                    <input type="email" name="email" value="{{ $user->email }}"
+                    <input type="email" name="email" value="{{ $user->email }}" readonly
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                 </div>
 
