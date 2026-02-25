@@ -351,9 +351,21 @@ class HomeController extends Controller
 
     public function ShowSingleProduct($slug)
     {
-        $product = Product::with(['images', 'variants', 'category'])
+        //  dd($slug);
+         $data = Product::where('slug', $slug)->first();
+         if($data){
+         $product = Product::with(['images', 'variants', 'category'])
             ->where('slug', $slug)
             ->firstOrFail();
+         
+         }else{
+            $product =$data;
+            $sizes = $relatedProducts ='';
+            
+           return view('web.single-product', compact('product','sizes','relatedProducts'));
+         }
+       
+       
         $sizes=Size::OrderBy('sort_order')->get();
         // print_r($product->category);die;
         $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->whereHas('variants')->with(['variants','images'])->get();

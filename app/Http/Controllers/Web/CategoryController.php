@@ -39,10 +39,22 @@ class CategoryController extends Controller
 
     public function show($slug)
     {
+        $categoryExist = Category::where('slug', $slug)->first();
+        if($categoryExist){
+
         $category = Category::where('slug', $slug)
             ->where('is_active', 1)
             ->firstOrFail();
-
+        }else{
+            $category =$categoryExist;
+            $product = '';
+            $priceRanges ='';
+            $priceRange=[
+                'min'=>'',
+                'max'=>'',
+            ];
+            return view('web.category_product', compact('category','product','priceRanges','priceRange'));
+        }
         // Get products from current category and its child categories if it's a parent
         $categoryIds = [$category->id];
         

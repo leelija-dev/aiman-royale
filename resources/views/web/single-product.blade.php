@@ -1,7 +1,7 @@
 @extends('layout.web.main-layout')
 
 @section('page-type', 'single-product')
-
+{{-- @dd($product); --}}
 @php
     // Pass product category data to navbar for breadcrumbs
     $productCategory = null;
@@ -22,7 +22,11 @@
 @endphp
 
 @section('content')
+  @if($product == true)
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
+
+   @if($product->variants->first() == true)
+
   <div class="container mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[55%_40%] gap-6">
       <!-- LEFT IMAGE SECTION -->
@@ -298,6 +302,14 @@
       </div>
     </div>
   </div>
+    @else
+    <div class="container mx-auto">
+      <div class="w-full text-center mb-6">
+        <h1 class="text-2xl font-semibold mb-2">Product Not Found!</h1>
+      </div>
+    </div>
+    @endif
+ 
 </section>
 
 <!-- Fullscreen Modal -->
@@ -678,7 +690,13 @@
     </div>
   </div>
 </section>
-
+ @else
+  <div class="container mx-auto ">
+    <div class="w-full text-center mb-6 mt-5">
+      <h1 class="text-2xl font-semibold mb-2">Product Not Found!</h1>
+    </div>
+  </div>
+  @endif
 <!-- Trending Products Section -->
 {{-- <section class="px-4 lgg:py-12 py-6">
   <div class="container mx-auto">
@@ -764,20 +782,29 @@
     </div>
   </div>
 </section> --}}
-
+@php
+    $variant = $product?->variants?->first();
+    $basePrice = $variant?->discount_price 
+                ?? $variant?->price 
+                ?? 0;
+@endphp
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
   // Store all product variants data
   const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
+  // if({{$product == true }}){
+    
+  
+  let selectedSize = '{{ $product?->variants?->first()->size ?? "M" }}' ?? '' ;
+  let selectedColor = '{{ $product?->variants?->first()->color ?? "" }}' ?? '';
+  // }
 
-  let selectedSize = '{{ $product->variants->first()->size ?? "M" }}';
-  let selectedColor = '{{ $product->variants->first()->color ?? "" }}';
   let selectedType = 'stitched'; // Default type
   let customDimensions = null;
   let selectedCustomColor = null;
-
+  
   // Type selection
   function selectType(type) {
     selectedType = type;
@@ -879,10 +906,12 @@
 
   // Update price for custom dimension
   function updateCustomPrice() {
+    
     if (!customDimensions) return;
-
+    
     // Calculate custom price (example: base price + (area * price per sq cm))
-    const basePrice = {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }};
+    const basePrice = {{ $basePrice ?? 0 }};
+  
     const area = customDimensions.height * customDimensions.width;
     const pricePerSqCm = basePrice / 1000; // Example calculation
     const customPrice = Math.round(basePrice + (area * pricePerSqCm));
@@ -892,6 +921,7 @@
         <span class="text-2xl font-bold text-gray-900">Rs. ${customPrice}</span>
         <span class="text-sm text-gray-500">(Custom: ${customDimensions.height}cm × ${customDimensions.width}cm)</span>
     `;
+  
   }
 
   // Update price based on type
@@ -1003,7 +1033,7 @@
       const mainImage = document.getElementById('main-image');
       if (mainImage) {
         mainImage.src = variantImage;
-        mainImage.alt = `${color} ${size} - {{ $product->name }}`;
+        mainImage.alt = `${color} ${size} - {{ $product?->name }}`;
       }
     }
 
@@ -1119,7 +1149,7 @@
     }
 
     // Check if product is already in wishlist
-    checkProductInWishlist({{$product->id}});
+    checkProductInWishlist({{$product?->id}});
   });
 
   // Check if variant is in cart and update button
@@ -1375,7 +1405,7 @@
     if (customDimensionsAttr) {
       // Add custom dimension to cart
       requestData = {
-        product_id: {{ $product->id }},
+        product_id: {{ $product?->id }},
         custom_dimensions: JSON.parse(customDimensionsAttr),
         type: selectedType,
         count: 1

@@ -4,6 +4,7 @@
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
     <div class="flex flex-col lg:flex-row gap-8">
+        @if($category!=null)
       <!-- Filters Sidebar -->
       <div class="lg:w-1/4 w-full">
         <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
@@ -178,6 +179,13 @@
         </div>
         @endif
       </div>
+      @else
+      <div class="container mx-auto">
+        <div class="w-full text-center mb-6">
+          <h1 class="text-2xl font-semibold mb-2">Product Not Found!</h1>
+        </div>
+      </div>
+      @endif
     </div>
   </div>
 </section>
@@ -402,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         try {
-            const response = await fetch(`/category/{{ $category->slug }}/filter?${params.toString()}`, {
+            const response = await fetch(`/category/{{ $category?->slug }}/filter?${params.toString()}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
