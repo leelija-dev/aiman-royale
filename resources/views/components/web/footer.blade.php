@@ -721,14 +721,10 @@
                 placeholder="Your email address"
                 autocomplete="off" />
 
-              <!-- Error Message Container -->
-              <div id="email-error" class="text-red-500 text-sm mt-1 hidden"></div>
-
-              <!-- Success Message Container -->
-              <div id="email-success" class="text-green-500 text-sm mt-1 hidden"></div>
-
+            
               <div class="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-[#A10000]/0 via-[#EC4899]/0 to-[#EC4899]/0 group-focus-within:from-[#A10000]/5 group-focus-within:via-[#EC4899]/5 group-focus-within:to-[#EC4899]/5 transition-all duration-500 -z-10"></div>
             </div>
+            
             <button
               type="button"
               id="newsletterSubmitBtn"
@@ -738,6 +734,10 @@
               <span class="ml-2">→</span>
             </button>
           </div>
+          <!-- Error Message Container -->
+              <div id="email-error" class="text-red-500 text-sm mt-1 hidden"></div>
+               <!-- Success Message Container -->
+              <div id="email-success" class="text-green-500 text-sm mt-1 hidden"></div>
         </form>
       </div>
       <!-- Divider - Hidden on mobile -->
