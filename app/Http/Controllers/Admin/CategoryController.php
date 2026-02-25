@@ -19,8 +19,8 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $categories = Category::latest()->paginate(15);
-            return view('Admin.categories.index', compact('categories'));
+            $categoriess = Category::paginate(15);
+            return view('Admin.categories.index', compact('categoriess'));
         } catch (\Exception $e) {
             Log::error('Error in CategoryController@index', [
                 'message' => $e->getMessage(),

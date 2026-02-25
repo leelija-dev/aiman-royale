@@ -170,7 +170,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // Product Trashed Routes
         Route::get('products/trashed', [AdminProductController::class, 'trashed'])->name('admin.products-trashed');
         Route::patch('products/{id}/restore', [AdminProductController::class, 'restore'])->name('admin.products.restore');
-        Route::delete('products/{id}/force-delete', [AdminProductController::class, 'permanentlyDelete'])->name('admin.products.restore');
+        Route::delete('products/{id}/force-delete', [AdminProductController::class, 'permanentlyDelete'])->name('admin.products.trashed');
 
         // Backward compatibility route alias
         Route::get('add-product', [AdminProductController::class, 'create'])->name('admin.add-product');

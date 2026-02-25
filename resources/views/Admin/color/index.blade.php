@@ -116,7 +116,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                                             </div>
                                         </form>
@@ -135,12 +135,12 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div class="text-muted">
+                <div class=" mt-4">
+                    {{-- <div class="text-muted">
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
-                    </div>
+                    </div> --}}
                     <div>
-                        {{ $data->links() }}
+                        {{ $data->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

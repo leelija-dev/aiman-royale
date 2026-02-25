@@ -60,13 +60,14 @@
 
                     <!-- Submit Buttons -->
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 text-end">
+                            <a href="{{ route('admin.colors') }}" class="btn btn-danger me-3" >
+                                <i class="fas fa-times me-3"></i>Cancel
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>Save Color
                             </button>
-                            <a href="{{ route('admin.colors') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i>Cancel
-                            </a>
+                            
                         </div>
                     </div>
                 </form>

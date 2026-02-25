@@ -82,7 +82,7 @@
                 <!-- Search Form -->
                 <form method="GET" action="{{ route('admin.product-variants') }}" class="mb-2 mb-md-0 d-flex w-100 w-lg-50">
                     <div class="d-flex gap-2 col-12 flex-sm-nowrap flex-wrap justify-content-sm-start justify-content-end">
-                        <input type="text" name="search" class="form-control me-2" style="height:40px;width:100%;" placeholder="Search by SKU, size, color, or product name" value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control me-2" style="height:40px;width:100%;" placeholder="Search by size, color, or product name" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary me-2 mb-sm-3 mb-1" style="height:40px;">Search</button>
                         <a href="{{ route('admin.product-variants') }}" class="btn btn-danger mb-sm-3 mb-1" style="height:40px;">Reset</a>
                     </div>
@@ -144,7 +144,7 @@
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SKU</th>
+                                {{-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SKU</th> --}}
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Color</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Size</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
@@ -162,13 +162,13 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                {{-- <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
                                             <span class="text-sm">{{ $variant->sku }}</span>
                                         </div>
                                     </div>
-                                </td>
+                                </td> --}}
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
@@ -263,11 +263,11 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="mb-3">
+                                                        {{-- <div class="mb-3">
                                                             <label for="edit_sku_{{ $variant->id }}" class="form-label">SKU <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" id="edit_sku_{{ $variant->id }}" name="sku" 
                                                                    value="{{ $variant->sku }}" maxlength="100" required>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="mb-3">
                                                             <label for="edit_price_{{ $variant->id }}" class="form-label">Price <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control" id="edit_price_{{ $variant->id }}" name="price" 
@@ -331,7 +331,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                                             </div>
                                         </form>
@@ -393,12 +393,12 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div class="text-muted">
+                <div class=" mt-4">
+                    {{-- <div class="text-muted">
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
-                    </div>
+                    </div> --}}
                     <div>
-                        {{ $data->links() }}
+                        {{ $data->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
