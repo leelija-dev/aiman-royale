@@ -413,11 +413,28 @@
 
 @section('scripts')
 <script>
-function confirmDelete(variantId) {
-    if (confirm('Are you sure you want to delete this product variant?')) {
-        document.getElementById('delete-form-' + variantId).submit();
-    }
-}
+// function confirmDelete(variantId) {
+//     if (confirm('Are you sure you want to delete this product variant?')) {
+//         document.getElementById('delete-form-' + variantId).submit();
+//     }
+// }
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be delete this!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            })
+        }
+    
 
 function openStockModal(variantId, sku, currentStock) {
     document.getElementById('stock_variant_id').value = sku;
