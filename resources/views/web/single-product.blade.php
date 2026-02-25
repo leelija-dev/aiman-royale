@@ -1505,14 +1505,16 @@
   function updateCartCount(count) {
     // Find all cart count elements in navbar
     const cartCountElements = document.querySelectorAll('.cart-count');
-    const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5');
+    // Target only the navbar cart badge (span with bg-primary class)
+    const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5.bg-primary');
+    console.log('Cart badges found:', cartBadges.length);
     
     // Update cart count elements
     cartCountElements.forEach(element => {
       element.textContent = count;
     });
     
-    // Update cart badges
+    // Update only the navbar cart badges
     cartBadges.forEach(badge => {
       if (count > 0) {
         badge.textContent = count;
