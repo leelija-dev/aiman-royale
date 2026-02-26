@@ -61,7 +61,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add')->middleware('check.login');
 Route::post('/cart/update/', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
