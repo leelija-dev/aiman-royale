@@ -240,13 +240,17 @@ class UserController extends Controller implements HasMiddleware
                     ->with('orderProducts.product');
 
     //  Search
+    
     if ($request->filled('search')) {
+    
         $search = $request->search;
 
         $query->where(function ($q) use ($search) {
             $q->where('id', $search)
+              ->orWhereRaw('LOWER(order_status) LIKE ?', ['%' . strtolower($search) . '%'])
               ->orWhereHas('orderProducts.product', function ($p) use ($search) {
                   $p->where('name', 'like', "%{$search}%");
+                  
               });
         });
     }
