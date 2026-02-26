@@ -45,8 +45,11 @@
             </thead>
             <tbody>
               @forelse ($cartItems as $item)
+             
               <tr class="border-b border-gray-200 hover:bg-gray-50">
+                
                 <td class="px-6 py-6">
+                   <a href="{{route("page.single-product", $item->product->slug)}}">
                   <div class="flex items-center gap-4">
                     <div
                       class="w-24 h-32 bg-gray-200 border-2 border-dashed rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden">
@@ -70,8 +73,9 @@
                       @endif
                     </div>
                   </div>
+                  </a>
                 </td>
-
+                 
                 <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</td>
                 <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
 
@@ -129,6 +133,7 @@
                     </svg>
                   </button>
                 </td>
+               
               </tr>
               @empty
               <tr>
@@ -139,7 +144,7 @@
                     </svg>
                     <p class="text-lg font-medium">Your cart is empty</p>
                     <p class="text-sm">Add some products to get started!</p>
-                    <a href="{{ route('page.index') }}" class="inline-flex items-center px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
+                    <a href="{{ route('page.multi-product') }}" class="inline-flex items-center px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
                       Continue Shopping
                     </a>
                   </div>
@@ -162,10 +167,12 @@
               class="px-6 py-3 smx:w-fit w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800">
               Apply coupon
             </button>
+            <a href="{{ route('page.multi-product') }}">
             <button
               class="px-6 py-3 smx:w-fit w-full border border-gray-300 lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-100">
               Continue shopping
             </button>
+            </a>
           </div>
         </div>
       </div>

@@ -231,6 +231,7 @@
                                         @endif
                                     </div>
                                     <p class="text-gray-600 text-sm">Placed on {{$ord->created_at->format('M d, Y h:i A')}}</p>
+                                    <p class="text-gray-600 text-bold">Total Price: <strong>{{config('app.currency')}}{{$ord->total_amount ?? '0'}}</strong> </p>
                                 </div>
                                 <div class="mt-3 lg:mt-0">
                                     <button class="px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
@@ -256,19 +257,23 @@
                               @foreach($ord->orderProducts as $orderProduct)
                             <div class="space-y-4 mt-2">
                                 <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
+                                    
                                     <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
                                         {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
-                                        <img
+                                       <a href="{{route('page.single-product', $orderProduct->product->slug)}}" > <img
                                         src="{{asset($orderProduct->product->images->first()->image ?? '')}}"
                                         class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
-                                        alt="{{$orderProduct->product->name ?? ''}}" />
+                                        alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                     </div>
                                   
                                     <div class="flex-1">
+                                        <a href="{{route('page.single-product', $orderProduct->product->slug)}}" >
                                         <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
                                         <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
                                         <p class="text-gray-600 text-sm">Quantity: {{$orderProduct->quantity ?? ''}}</p>
+                                        </a>
                                     </div>
+                                    
                                     <div class="text-right">
                                         <p class="font-medium text-gray-900">{{config('app.currency')}}{{$orderProduct->total ?? ''}}</p>
                                         <p class="text-green-600 text-sm">In Stock</p>
