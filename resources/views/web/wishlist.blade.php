@@ -288,7 +288,7 @@
 
                             <p class="text-gray-600 text-sm mb-4">
                                 {{-- Soft cotton blend in classic fit --}}
-                                {{$product->description ?? ''}}
+                                {{ substr($product->description, 0, 65) }}...
                             </p>
 
                             <div

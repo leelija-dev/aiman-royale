@@ -271,7 +271,7 @@
         <div
            class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
            data-product-variants="{{ json_encode($product->variants) }}">
-          @if(Auth::check())
+          {{-- @if(Auth::check()) --}}
            <button
              id="add-to-cart"
              data-variant-id="{{ $product->variants->first()->id }}"
@@ -284,7 +284,7 @@
              onclick="toggleWishlist({{ $product->id }},this, event);">
              <i class="far fa-heart"></i>
            </button>
-          @else
+          {{-- @else
           <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" class="flex-1">
             <button
               class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
@@ -297,7 +297,7 @@
               <i class="far fa-heart"></i>
             </button>
             </a>
-          @endif
+          @endif --}}
         </div>
       </div>
     </div>
@@ -790,7 +790,9 @@
 @endphp
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script>
+  const loginUrl="{{route('page.login')}}";
+  </script>
 <script>
   // Store all product variants data
   const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
@@ -1438,11 +1440,21 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrfToken
+          'X-CSRF-TOKEN': csrfToken,
+          'Accept': 'application/json',
         },
         body: JSON.stringify(requestData)
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log('Raw response:', response.status);
+        if(response.status === 401) {
+           const currentUrl = window.location.href;
+           window.location.href = loginUrl + '?redirect=' + encodeURIComponent(currentUrl);
+          // window.location.href = loginUrl;
+          return;
+        }
+       return response.json();
+      })
       .then(data => {
         if (data.success) {
           // Show success message

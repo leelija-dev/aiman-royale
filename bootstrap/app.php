@@ -20,12 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'prevent.back.history' => \App\Http\Middleware\PreventBackHistory::class,
             'guest.admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
+           'check.login' => \App\Http\Middleware\CheckUserLogin::class,
         ]);
 
         // Ensure index.php paths are redirected to clean URLs in all environments
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\RedirectIndexPhp::class,
             \App\Http\Middleware\DynamicSeoMiddleware::class,
+             
         ]);
 
     })
