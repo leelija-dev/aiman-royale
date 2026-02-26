@@ -765,7 +765,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/dark-red-plazo-5_15_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Dark Red Plazo" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -778,7 +778,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/glow-orange-3_18_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Glow Orange" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -791,7 +791,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/glow-red-1_33_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Glow Red" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -804,7 +804,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/green-plazo-4_46_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Green Plazo" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

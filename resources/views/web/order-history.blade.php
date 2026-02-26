@@ -220,9 +220,15 @@
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
                                         <h3 class="font-bold text-gray-900">Order #{{$ord->id ?? ''}}</h3>
+                                        @if(ucfirst($ord->order_status)=='Paid')
                                         <span class="order-status-delivered px-3 py-1 rounded-full text-xs font-medium">
                                             {{ucfirst($ord->order_status ?? '')}}
                                         </span>
+                                        @else
+                                            <span class="bg-red-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                                                {{ ucfirst($ord->order_status ?? 'Pending') }}
+                                            </span>
+                                        @endif
                                     </div>
                                     <p class="text-gray-600 text-sm">Placed on {{$ord->created_at->format('M d, Y h:i A')}}</p>
                                 </div>
