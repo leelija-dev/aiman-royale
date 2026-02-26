@@ -167,7 +167,7 @@
                 <!-- Filters and Search -->
                 <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div class="flex flex-col md:flex-row gap-4 justify-between">
-                        <form method="GET" action="{{ route('user.order-history', $user->id) }}">
+                        <form method="GET" action="{{ route('user.order-history', base64_encode($user->id)) }}">
                         <div class="flex-1">
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -198,7 +198,7 @@
 
                     <!-- Quick Filter Tabs -->
                     <div class="flex flex-wrap gap-2 mt-4">
-                        <button class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">All Orders</button>
+                        <a href="{{route('user.order-history', base64_encode($user->id))}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition"><button class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">All Orders</button> </a>
                         <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">To Ship</button>
                         <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">To Receive</button>
                         <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">Completed</button>
@@ -256,9 +256,14 @@
                               @foreach($ord->orderProducts as $orderProduct)
                             <div class="space-y-4 mt-2">
                                 <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-tshirt text-purple-600"></i>
+                                    <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                        {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
+                                        <img
+                                        src="{{asset($orderProduct->product->images->first()->image ?? '')}}"
+                                        class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                                        alt="{{$orderProduct->product->name ?? ''}}" />
                                     </div>
+                                  
                                     <div class="flex-1">
                                         <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
                                         <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
