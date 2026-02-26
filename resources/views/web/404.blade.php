@@ -582,12 +582,12 @@
 
             <!-- action row: stacks nicely on small devices -->
             <div class="action-row">
-                <a href="#" class="btn btn-primary"><i class="fas fa-arrow-left"></i> home</a>
-                <a href="#" class="btn btn-outline"><i class="fas fa-tag"></i> sale picks</a>
+                <a href="{{route('page.index')}}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> home</a>
+                {{--<a href="#" class="btn btn-outline"><i class="fas fa-tag"></i> sale picks</a>--}}
             </div>
 
             <!-- category pills: always wrap, mobile optimised -->
-            <div class="shop-strip">
+            {{--<div class="shop-strip">
                 <p><i class="fa-regular fa-heart"></i> keep browsing</p>
                 <div class="pill-group">
                     <a href="#" class="pill"><i class="fas fa-dress"></i> dresses</a>
@@ -601,7 +601,7 @@
             <!-- extra hint – fully responsive chip -->
             <div class="hint-chip">
                 <i class="fas fa-gift"></i> free shipping on orders over $150
-            </div>
+            </div>--}}
         </div>
     </div>
 

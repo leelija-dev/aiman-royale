@@ -2,7 +2,517 @@
 
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
-  <div class="container mx-auto">
+    <div class="mb-4 flex flex-row lgg:justify-end justify-between gap-3 flex-wrap">
+        <!-- Mobile Filter Button -->
+        <button
+            id="open-filter"
+            type="button"
+            class="lgg:hidden flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-gray-100 hover:shadow-md active:scale-95">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2">
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 018 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
+            </svg>
+            Filter
+        </button>
+
+        <!-- Desktop Filter Dropdowns Container -->
+        <div class="flex flex-row gap-3 flex-wrap">
+            <!-- Filter Dropdown -->
+            <div class="relative inline-block text-left">
+                <button
+                    type="button"
+                    id="filter-dropdown-button"
+                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    <span id="filter-label">Filter</span>
+                    <svg
+                        id="filter-chevron"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div
+                    id="filter-menu"
+                    class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="filter-dropdown-button">
+                    <div class="py-2" role="none">
+                        <button
+                            type="button"
+                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="featured"
+                            role="menuitem">
+                            <span>Featured</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="best-seller"
+                            role="menuitem">
+                            <span>Best Seller</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                            data-value="new-arrival"
+                            role="menuitem">
+                            <span>New Arrival</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600  checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="top-rated"
+                            role="menuitem">
+                            <span>Top Rated</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Occasion Dropdown -->
+            <div class="relative inline-block text-left">
+                <button
+                    type="button"
+                    id="occasion-dropdown-button"
+                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span id="occasion-label">Occasion</span>
+                    <svg
+                        id="occasion-chevron"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div
+                    id="occasion-menu"
+                    class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="occasion-dropdown-button">
+                    <div class="py-2" role="none">
+                        @if(isset($occasions) && $occasions->isNotEmpty())
+                            @foreach($occasions as $occasion)
+                            <button
+                                type="button"
+                                class="occasion-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                data-value="{{ $occasion->id }}"
+                                role="menuitem">
+                                <span>{{ $occasion->name }}</span>
+                                <svg
+                                    class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="3"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </button>
+                            @endforeach
+                        @else
+                            <div class="px-4 py-2.5 text-sm text-gray-500">No occasions available</div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection Dropdown -->
+            <div class="relative inline-block text-left">
+                <button
+                    type="button"
+                    id="collection-dropdown-button"
+                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span id="collection-label">Collection</span>
+                    <svg
+                        id="collection-chevron"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div
+                    id="collection-menu"
+                    class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="collection-dropdown-button">
+                    <div class="py-2" role="none">
+                        <button
+                            type="button"
+                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="spring-2024"
+                            role="menuitem">
+                            <span>Spring 2024</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="summer-essentials"
+                            role="menuitem">
+                            <span>Summer Essentials</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                            data-value="all"
+                            role="menuitem">
+                            <span>All Collections</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600  checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="limited-edition"
+                            role="menuitem">
+                            <span>Limited Edition</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="winter-collection"
+                            role="menuitem">
+                            <span>Winter Collection</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Sort Dropdown -->
+            <div class="relative inline-block text-left">
+                <button
+                    type="button"
+                    id="sort-button"
+                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 7h14M3 12h10M3 17h6M17 7l3 3m0 0l-3 3m3-3H10" />
+                    </svg>
+                    <span id="sort-label">Sort by</span>
+                    <svg
+                        id="chevron-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div
+                    id="sort-menu"
+                    class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="sort-button">
+                    <div class="py-2" role="none">
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="name-asc"
+                            role="menuitem">
+                            <span>Name (A to Z)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="name-desc"
+                            role="menuitem">
+                            <span>Name (Z to A)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                            data-value="date-desc"
+                            role="menuitem">
+                            <span>Date (Newest first)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600  checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="date-asc"
+                            role="menuitem">
+                            <span>Date (Oldest first)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="price-asc"
+                            role="menuitem">
+                            <span>Price (Low to High)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                            data-value="price-desc"
+                            role="menuitem">
+                            <span>Price (High to Low)</span>
+                            <svg
+                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto">
     <div class="flex flex-col lg:flex-row gap-8">
         @if($category!=null)
       <!-- Filters Sidebar -->
@@ -195,10 +705,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize filters
     let currentFilters = {
         priceRanges: [],
-        customPrice: { min: {{ $priceRange['min'] }}, max: {{ $priceRange['max'] }} },
+        customPrice: { min: 0, max: 10000 },
         sizes: [],
         colors: [],
-        occasions: []
+        occasions: [],
+        filter: '', // Add filter for best-seller, new-arrival, etc.
+        collection: '', // Add collection filter
+        sort: '' // Add sort filter
     };
 
     let filterTimeout;
@@ -302,7 +815,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Add custom price if different from default
-        if (currentFilters.customPrice.min > {{ $priceRange['min'] }} || currentFilters.customPrice.max < {{ $priceRange['max'] }}) {
+        if (currentFilters.customPrice.min > 0 || currentFilters.customPrice.max < 10000) {
             activeFilters.push({
                 type: 'custom-price',
                 text: `Rs. ${currentFilters.customPrice.min} - Rs. ${currentFilters.customPrice.max}`
@@ -361,8 +874,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'price' || type === 'custom-price') {
             if (type === 'custom-price') {
                 if (minPriceInput && maxPriceInput) {
-                    minPriceInput.value = {{ $priceRange['min'] }};
-                    maxPriceInput.value = {{ $priceRange['max'] }};
+                    minPriceInput.value = 0;
+                    maxPriceInput.value = 10000;
                     updatePriceDisplay();
                 }
             } else {
@@ -406,11 +919,17 @@ document.addEventListener('DOMContentLoaded', function() {
             custom_max_price: currentFilters.customPrice.max,
             sizes: JSON.stringify(currentFilters.sizes),
             colors: JSON.stringify(currentFilters.colors),
-            occasions: JSON.stringify(currentFilters.occasions)
+            occasions: JSON.stringify(currentFilters.occasions),
+            filter: currentFilters.filter,
+            collection: currentFilters.collection,
+            sort: currentFilters.sort
         });
 
+        // Get category slug from the page
+        const categorySlug = window.location.pathname.split('/').pop();
+        
         try {
-            const response = await fetch(`/category/{{ $category?->slug }}/filter?${params.toString()}`, {
+            const response = await fetch(`/category/${categorySlug}/filter?${params.toString()}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -469,8 +988,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Reset price ranges
         if (minPriceInput && maxPriceInput) {
-            minPriceInput.value = {{ $priceRange['min'] }};
-            maxPriceInput.value = {{ $priceRange['max'] }};
+            minPriceInput.value = 0;
+            maxPriceInput.value = 10000;
             updatePriceDisplay();
         }
         
@@ -480,6 +999,258 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial attachment of product card handlers
     attachProductCardHandlers();
+
+    // Filter dropdown functionality
+    const filterDropdownButton = document.getElementById('filter-dropdown-button');
+    const filterMenu = document.getElementById('filter-menu');
+    const filterLabel = document.getElementById('filter-label');
+    const filterChevron = document.getElementById('filter-chevron');
+
+    if (filterDropdownButton && filterMenu && filterChevron) {
+        // Toggle dropdown
+        filterDropdownButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = filterMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                filterMenu.classList.remove('hidden');
+                filterChevron.style.transform = 'rotate(180deg)';
+            } else {
+                filterMenu.classList.add('hidden');
+                filterChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Handle filter option clicks
+        const filterOptions = filterMenu.querySelectorAll('.filter-option');
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const value = this.getAttribute('data-value');
+                const text = this.querySelector('span').textContent;
+                
+                // Update active state
+                filterOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.checkmark').style.opacity = '0';
+                });
+                
+                this.classList.add('active');
+                this.querySelector('.checkmark').style.opacity = '1';
+                
+                // Update filter
+                currentFilters.filter = value;
+                filterLabel.textContent = text;
+                
+                // Close dropdown
+                filterMenu.classList.add('hidden');
+                filterChevron.style.transform = 'rotate(0deg)';
+                
+                // Apply filter
+                applyFilters();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!filterDropdownButton.contains(e.target) && !filterMenu.contains(e.target)) {
+                filterMenu.classList.add('hidden');
+                filterChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+
+    // Occasion dropdown functionality
+    const occasionDropdownButton = document.getElementById('occasion-dropdown-button');
+    const occasionMenu = document.getElementById('occasion-menu');
+    const occasionLabel = document.getElementById('occasion-label');
+    const occasionChevron = document.getElementById('occasion-chevron');
+
+    if (occasionDropdownButton && occasionMenu && occasionChevron) {
+        // Toggle dropdown
+        occasionDropdownButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = occasionMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                occasionMenu.classList.remove('hidden');
+                occasionChevron.style.transform = 'rotate(180deg)';
+            } else {
+                occasionMenu.classList.add('hidden');
+                occasionChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Handle occasion option clicks
+        const occasionOptions = occasionMenu.querySelectorAll('.occasion-option');
+        occasionOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const value = this.getAttribute('data-value');
+                const text = this.querySelector('span').textContent;
+                
+                // Update active state
+                occasionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.checkmark').style.opacity = '0';
+                });
+                
+                this.classList.add('active');
+                this.querySelector('.checkmark').style.opacity = '1';
+                
+                // Update filter - toggle occasion selection
+                const index = currentFilters.occasions.indexOf(value);
+                if (index > -1) {
+                    currentFilters.occasions.splice(index, 1);
+                    occasionLabel.textContent = 'Occasion';
+                    this.classList.remove('active');
+                    this.querySelector('.checkmark').style.opacity = '0';
+                } else {
+                    currentFilters.occasions = [value]; // Single selection for simplicity
+                    occasionLabel.textContent = text;
+                }
+                
+                // Close dropdown
+                occasionMenu.classList.add('hidden');
+                occasionChevron.style.transform = 'rotate(0deg)';
+                
+                // Apply filter
+                applyFilters();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!occasionDropdownButton.contains(e.target) && !occasionMenu.contains(e.target)) {
+                occasionMenu.classList.add('hidden');
+                occasionChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+
+    // Collection dropdown functionality
+    const collectionDropdownButton = document.getElementById('collection-dropdown-button');
+    const collectionMenu = document.getElementById('collection-menu');
+    const collectionLabel = document.getElementById('collection-label');
+    const collectionChevron = document.getElementById('collection-chevron');
+
+    if (collectionDropdownButton && collectionMenu && collectionChevron) {
+        // Toggle dropdown
+        collectionDropdownButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = collectionMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                collectionMenu.classList.remove('hidden');
+                collectionChevron.style.transform = 'rotate(180deg)';
+            } else {
+                collectionMenu.classList.add('hidden');
+                collectionChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Handle collection option clicks
+        const collectionOptions = collectionMenu.querySelectorAll('.collection-option');
+        collectionOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const value = this.getAttribute('data-value');
+                const text = this.querySelector('span').textContent;
+                
+                // Update active state
+                collectionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.checkmark').style.opacity = '0';
+                });
+                
+                this.classList.add('active');
+                this.querySelector('.checkmark').style.opacity = '1';
+                
+                // Update filter
+                currentFilters.collection = value;
+                collectionLabel.textContent = text;
+                
+                // Close dropdown
+                collectionMenu.classList.add('hidden');
+                collectionChevron.style.transform = 'rotate(0deg)';
+                
+                // Apply filter
+                applyFilters();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!collectionDropdownButton.contains(e.target) && !collectionMenu.contains(e.target)) {
+                collectionMenu.classList.add('hidden');
+                collectionChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+
+    // Sort dropdown functionality
+    const sortButton = document.getElementById('sort-button');
+    const sortMenu = document.getElementById('sort-menu');
+    const sortLabel = document.getElementById('sort-label');
+    const chevronIcon = document.getElementById('chevron-icon');
+
+    if (sortButton && sortMenu && chevronIcon) {
+        // Toggle dropdown
+        sortButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = sortMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                sortMenu.classList.remove('hidden');
+                chevronIcon.style.transform = 'rotate(180deg)';
+            } else {
+                sortMenu.classList.add('hidden');
+                chevronIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Handle sort option clicks
+        const sortOptions = sortMenu.querySelectorAll('.sort-option');
+        sortOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const value = this.getAttribute('data-value');
+                const text = this.querySelector('span').textContent;
+                
+                // Update active state
+                sortOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.checkmark').style.opacity = '0';
+                });
+                
+                this.classList.add('active');
+                this.querySelector('.checkmark').style.opacity = '1';
+                
+                // Update sort
+                currentFilters.sort = value;
+                sortLabel.textContent = text;
+                
+                // Close dropdown
+                sortMenu.classList.add('hidden');
+                chevronIcon.style.transform = 'rotate(0deg)';
+                
+                // Apply filter
+                applyFilters();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
+                sortMenu.classList.add('hidden');
+                chevronIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
 });
 
 // Wishlist toggle function

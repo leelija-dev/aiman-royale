@@ -315,11 +315,74 @@ class CategoryController extends Controller
         if ($request->filled('occasions')) {
             $occasions = json_decode($request->occasions);
             if (!empty($occasions)) {
-                $query->whereIn('occasion_id', $occasions);
+                $query->whereHas('occasion', function ($q) use ($occasions) {
+                    $q->whereIn('id', $occasions);
+                });
             }
         }
 
-        $products = $query->latest()->paginate(12);
+        // Apply filter (featured, best-seller, new-arrival, top-rated)
+        if ($request->filled('filter')) {
+            $filterValue = $request->input('filter');
+            if ($filterValue == 'best-seller') {
+                // Order by total quantity sold across all orders
+                $query->withCount(['orderProducts as total_sold' => function ($query) {
+                    $query->selectRaw('SUM(quantity)');
+                }])
+                    ->orderBy('total_sold', 'desc');
+            } elseif ($filterValue == 'new-arrival') {
+                // Order by created_at (newest first)
+                $query->orderBy('created_at', 'desc');
+            } elseif ($filterValue == 'featured') {
+                // Order by featured products
+                $query->where('is_featured', true)->orderBy('created_at', 'desc');
+            } elseif ($filterValue == 'top-rated') {
+                // Order by rating (if you have rating field) or by created_at as fallback
+                $query->orderBy('created_at', 'desc');
+            }
+        }
+
+        // Apply collection filter
+        if ($request->filled('collection')) {
+            $collection = $request->input('collection');
+            // You may need to adjust this based on your collection logic
+            // This assumes you have a collection field or relationship
+            if ($collection == 'spring-2024') {
+                $query->where('collection', 'Spring 2024');
+            } elseif ($collection == 'summer-essentials') {
+                $query->where('collection', 'Summer Essentials');
+            } elseif ($collection == 'limited-edition') {
+                $query->where('collection', 'Limited Edition');
+            } elseif ($collection == 'winter-collection') {
+                $query->where('collection', 'Winter Collection');
+            }
+            // 'all-collections' doesn't need filtering as it shows all
+        }
+
+        // Apply sort
+        if ($request->filled('sort')) {
+            $sortValue = $request->input('sort');
+            if ($sortValue == 'name-asc') {
+                $query->orderBy('name', 'asc');
+            } elseif ($sortValue == 'name-desc') {
+                $query->orderBy('name', 'desc');
+            } elseif ($sortValue == 'date-desc') {
+                $query->orderBy('created_at', 'desc');
+            } elseif ($sortValue == 'date-asc') {
+                $query->orderBy('created_at', 'asc');
+            } elseif ($sortValue == 'price-asc') {
+                $query->orderBy('price', 'asc');
+            } elseif ($sortValue == 'price-desc') {
+                $query->orderBy('price', 'desc');
+            }
+        }
+
+        // Apply default ordering if no specific sort is applied
+        if (!$request->filled('sort') && !$request->filled('filter')) {
+            $query->latest();
+        }
+
+        $products = $query->paginate(12);
 
         if ($request->ajax()) {
             $html = view('web.partials.category-grid', compact('products'))->render();
