@@ -4,7 +4,7 @@
 
 
 <style>
-  
+
 </style>
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
@@ -191,12 +191,13 @@
             aria-orientation="vertical"
             aria-labelledby="occasion-dropdown-button">
             <div class="py-2" role="none">
+              @foreach($filterOptions['occasions'] as $occasion)
               <button
                 type="button"
                 class="occasion-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                data-value="casual"
+                data-value="{{ $occasion }}"
                 role="menuitem">
-                <span>Casual</span>
+                <span>{{ $occasion }}</span>
                 <svg
                   class="w-4 h-4 text-blue-600 opacity-0 checkmark"
                   xmlns="http://www.w3.org/2000/svg"
@@ -210,6 +211,8 @@
                     d="M5 13l4 4L19 7" />
                 </svg>
               </button>
+              @endforeach
+              {{--
               <button
                 type="button"
                 class="occasion-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
@@ -305,6 +308,7 @@
                     d="M5 13l4 4L19 7" />
                 </svg>
               </button>
+              --}}
             </div>
           </div>
         </div>
@@ -651,13 +655,13 @@
               <div class="accordion-content-block">
                 <div class="space-y-2 text-sm mt-4">
                   @foreach($filterOptions['categories'] as $category)
-                    <label class="flex items-center gap-2">
-                      <input type="checkbox" 
-                             name="category[]" 
-                             value="{{ $category }}" 
-                             class="accent-gray-800 filter-checkbox">
-                      {{ ucfirst($category) }}
-                    </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox"
+                      name="category[]"
+                      value="{{ $category }}"
+                      class="accent-gray-800 filter-checkbox">
+                    {{ ucfirst($category) }}
+                  </label>
                   @endforeach
                 </div>
               </div>
@@ -687,10 +691,10 @@
                   @foreach($filterOptions['occasions'] as $occasion)
                   <label class="flex items-center gap-2">
                     <input type="checkbox"
-                        name="occasions[]"
-                        value="{{ $occasion}}"
-                        class="accent-gray-800 filter-checkbox">
-                  {{ $occasion }}
+                      name="occasions[]"
+                      value="{{ $occasion}}"
+                      class="accent-gray-800 filter-checkbox">
+                    {{ $occasion }}
                   </label>
                   @endforeach
                 </div>
@@ -719,13 +723,13 @@
               <div class="accordion-content-block">
                 <div class="space-y-2 text-sm mt-4">
                   @foreach($filterOptions['colors'] as $color)
-                    <label class="flex items-center gap-2">
-                      <input type="checkbox" 
-                             name="colors[]" 
-                             value="{{ $color }}" 
-                             class="accent-gray-800 filter-checkbox">
-                      {{ ucfirst($color) }}
-                    </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox"
+                      name="colors[]"
+                      value="{{ $color }}"
+                      class="accent-gray-800 filter-checkbox">
+                    {{ ucfirst($color) }}
+                  </label>
                   @endforeach
                 </div>
               </div>
@@ -753,13 +757,13 @@
               <div class="accordion-content-block">
                 <div class="space-y-2 text-sm mt-4">
                   @foreach($filterOptions['sizes'] as $size)
-                    <label class="flex items-center gap-2">
-                      <input type="checkbox" 
-                             name="sizes[]" 
-                             value="{{ $size }}" 
-                             class="accent-gray-800 filter-checkbox">
-                      {{ strtoupper($size) }}
-                    </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox"
+                      name="sizes[]"
+                      value="{{ $size }}"
+                      class="accent-gray-800 filter-checkbox">
+                    {{ strtoupper($size) }}
+                  </label>
                   @endforeach
                 </div>
               </div>

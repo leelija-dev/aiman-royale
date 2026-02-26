@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Occasion;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -367,6 +368,7 @@ class HomeController extends Controller
        
        
         $sizes=Size::OrderBy('sort_order')->get();
+      
         // print_r($product->category);die;
         $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->whereHas('variants')->with(['variants','images'])->get();
     //    dd($relatedProducts);

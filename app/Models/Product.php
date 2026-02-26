@@ -144,4 +144,12 @@ class Product extends Model
     {
         return $this->hasMany('App\\Models\\Wishlist', 'product_id');
     }
+
+    /**
+     * Get the order products associated with the product.
+     */
+    public function orderProducts(): HasMany
+    {
+        return $this->hasMany('App\\Models\\OrderProduct', 'product_id');
+    }
 }

@@ -219,6 +219,26 @@ class ProductController extends Controller
                 }
             }
 
+            if ($request->filled('filter')) {
+                $filterValue = $request->input('filter');
+                if ($filterValue == 'best-seller') {
+                    // Order by total quantity sold across all orders
+                    $query->withCount(['orderProducts as total_sold' => function ($query) {
+                        $query->selectRaw('SUM(quantity)');
+                    }])
+                        ->orderBy('total_sold', 'desc');
+                } elseif ($filterValue == 'new-arrival') {
+                    // Order by created_at (newest first)
+                    $query->orderBy('created_at', 'desc');
+                } elseif ($filterValue == 'featured') {
+                    // Order by featured products
+                    $query->where('is_featured', true)->orderBy('created_at', 'desc');
+                } elseif ($filterValue == 'top-rated') {
+                    // Order by rating (if you have rating field) or by created_at as fallback
+                    $query->orderBy('created_at', 'desc');
+                }
+            }
+
             $products = $query->get();
 
             $processedProducts = $products->map(function ($product) {
