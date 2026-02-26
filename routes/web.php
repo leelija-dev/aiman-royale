@@ -69,8 +69,8 @@ Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name(
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');;
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');;
 Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
 //Checkout route

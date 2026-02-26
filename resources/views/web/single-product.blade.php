@@ -1301,13 +1301,22 @@
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             product_id: productId
         })
     })
-    .then(response => response.json())
+    .then(response => {
+      if(response.status === 401) {
+          const currentUrl = window.location.href;
+          window.location.href = loginUrl + '?redirect=' + encodeURIComponent(currentUrl);
+          return;
+        }
+    
+    return response.json();
+  })
     .then(data => {
 
         if (data.success) {
@@ -1446,11 +1455,9 @@
         body: JSON.stringify(requestData)
       })
       .then(response => {
-        console.log('Raw response:', response.status);
         if(response.status === 401) {
            const currentUrl = window.location.href;
            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(currentUrl);
-          // window.location.href = loginUrl;
           return;
         }
        return response.json();
@@ -1520,7 +1527,7 @@
     // Target only the navbar cart badge (span with bg-primary class)
     const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5.bg-primary');
     console.log('Cart badges found:', cartBadges.length);
-    
+
     // Update cart count elements
     cartCountElements.forEach(element => {
       element.textContent = count;
