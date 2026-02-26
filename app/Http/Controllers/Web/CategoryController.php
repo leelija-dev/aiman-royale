@@ -314,6 +314,7 @@ class CategoryController extends Controller
         // Apply occasion filter
         if ($request->filled('occasions')) {
             $occasions = json_decode($request->occasions);
+            
             if (!empty($occasions)) {
                 $query->whereHas('occasion', function ($q) use ($occasions) {
                     $q->whereIn('id', $occasions);

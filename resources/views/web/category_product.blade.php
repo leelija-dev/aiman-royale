@@ -766,8 +766,25 @@ document.addEventListener('DOMContentLoaded', function() {
         // Colors
         currentFilters.colors = Array.from(document.querySelectorAll('.color-filter:checked')).map(cb => cb.value);
         
-        // Occasions
-        currentFilters.occasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
+        // Occasions - check both dropdown and sidebar
+        const dropdownOccasion = document.querySelector('.occasion-option.active');
+        const sidebarOccasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
+        
+        console.log('=== COLLECT FILTERS ===');
+        console.log('Dropdown occasion found:', dropdownOccasion ? dropdownOccasion.getAttribute('data-value') : 'none');
+        console.log('Sidebar occasions found:', sidebarOccasions);
+        
+        if (dropdownOccasion) {
+            // Use dropdown selection if active
+            currentFilters.occasions = [dropdownOccasion.getAttribute('data-value')];
+            console.log('Using dropdown occasion:', currentFilters.occasions);
+        } else {
+            // Use sidebar checkboxes if any are checked
+            currentFilters.occasions = sidebarOccasions;
+            console.log('Using sidebar occasions:', currentFilters.occasions);
+        }
+        
+        console.log('Final occasions after collectFilters:', currentFilters.occasions);
     }
 
     // Convert price range to min/max values (now handles dynamic ranges)
@@ -927,6 +944,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Get category slug from the page
         const categorySlug = window.location.pathname.split('/').pop();
+
+        // Debug: Log what's being sent to controller
+        console.log('=== SENDING TO CONTROLLER ===');
+        console.log('Full URL:', `/category/${categorySlug}/filter?${params.toString()}`);
+        console.log('Occasions parameter:', JSON.stringify(currentFilters.occasions));
+        console.log('All params:', params.toString());
+        
         
         try {
             const response = await fetch(`/category/${categorySlug}/filter?${params.toString()}`, {
@@ -936,6 +960,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const data = await response.json();
+            console.log('=== CONTROLLER RESPONSE ===');
+            console.log('Response status:', response.status);
+            console.log('Response data:', data);
+            console.log('Success:', data.success);
+            console.log('HTML length:', data.html ? data.html.length : 'No HTML');
             
             if (data.success) {
                 productsContainer.innerHTML = data.html;
@@ -947,6 +976,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Re-attach product card handlers
                 attachProductCardHandlers();
+            } else {
+                console.error('Controller returned error:', data);
             }
         } catch (error) {
             console.error('Filter error:', error);
@@ -1063,6 +1094,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Occasion dropdown functionality
     const occasionDropdownButton = document.getElementById('occasion-dropdown-button');
+   
     const occasionMenu = document.getElementById('occasion-menu');
     const occasionLabel = document.getElementById('occasion-label');
     const occasionChevron = document.getElementById('occasion-chevron');
@@ -1091,6 +1123,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 const value = this.getAttribute('data-value');
                 const text = this.querySelector('span').textContent;
                 
+                // Debug: Log what's being clicked
+                console.log('=== OCCASION DROPDOWN CLICKED ===');
+                console.log('Clicked value:', value);
+                console.log('Clicked text:', text);
+                console.log('Current occasions before:', currentFilters.occasions);
+                console.log('Value type:', typeof value);
+                console.log('Value length:', value ? value.length : 'null');
+                console.log('Is value null?', value === null);
+                console.log('Is value undefined?', value === undefined);
+                
                 // Update active state
                 occasionOptions.forEach(opt => {
                     opt.classList.remove('active');
@@ -1102,20 +1144,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Update filter - toggle occasion selection
                 const index = currentFilters.occasions.indexOf(value);
+                console.log('Index of value in array:', index);
+                
                 if (index > -1) {
                     currentFilters.occasions.splice(index, 1);
                     occasionLabel.textContent = 'Occasion';
                     this.classList.remove('active');
                     this.querySelector('.checkmark').style.opacity = '0';
+                    console.log('Removed occasion. New occasions:', currentFilters.occasions);
                 } else {
                     currentFilters.occasions = [value]; // Single selection for simplicity
                     occasionLabel.textContent = text;
+                    console.log('Added occasion. New occasions:', currentFilters.occasions);
                 }
+                
+                console.log('Final occasions array before applyFilters:', currentFilters.occasions);
+                console.log('Array length:', currentFilters.occasions.length);
                 
                 // Close dropdown
                 occasionMenu.classList.add('hidden');
                 occasionChevron.style.transform = 'rotate(0deg)';
                 
+                console.log('Calling applyFilters...');
                 // Apply filter
                 applyFilters();
             });
