@@ -44,19 +44,19 @@
                 <tr class="hover:bg-gray-50 transition-colors">
                   <td class="p-3 border-b border-r font-medium text-center">{{$size->code}} ({{$size->chest_size ? floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size : ''}}) </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="37" data-cm="94.0">{{ floor($size->chest_size) == $size->chest_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->chest_size ?? 0}}" data-cm="{{$size->chest_size * 2.54?? 0}}">{{ floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size }}
                   </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="33" data-cm="83.8">{{ floor($size->waist_size) == $size->waist_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->waist_size ?? 0}}" data-cm="{{$size->waist_size * 2.54 ?? 0}}">{{ floor($size->waist_size) == $size->waist_size 
                   ? (int) $size->waist_size : $size->waist_size }}
                   </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->hip) == $size->hip 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->hip ?? 0}}" data-cm="{{$size->hip * 2.54 ?? 0}}">{{ floor($size->hip) == $size->hip 
                   ? (int) $size->hip : $size->hip }}</td>
 
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->arm) == $size->arm 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->arm ?? 0}}" data-cm="{{$size->arm * 2.54 ?? 0}}"">{{ floor($size->arm) == $size->arm 
                   ? (int) $size->arm : $size->arm }}</td>
 
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->uk_size) == $size->uk_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->uk_size ?? 0}}" data-cm="{{$size->uk_size * 2.54 ?? 0}}">{{ floor($size->uk_size) == $size->uk_size 
                   ? (int) $size->uk_size : $size->uk_size }}</td>
 
 
