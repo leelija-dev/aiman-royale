@@ -44,19 +44,19 @@
                 <tr class="hover:bg-gray-50 transition-colors">
                   <td class="p-3 border-b border-r font-medium text-center">{{$size->code}} ({{$size->chest_size ? floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size : ''}}) </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="37" data-cm="94.0">{{ floor($size->chest_size) == $size->chest_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->chest_size ?? 0}}" data-cm="{{$size->chest_size * 2.54?? 0}}">{{ floor($size->chest_size) == $size->chest_size 
                    ? (int) $size->chest_size : $size->chest_size }}
                   </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="33" data-cm="83.8">{{ floor($size->waist_size) == $size->waist_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->waist_size ?? 0}}" data-cm="{{$size->waist_size * 2.54 ?? 0}}">{{ floor($size->waist_size) == $size->waist_size 
                   ? (int) $size->waist_size : $size->waist_size }}
                   </td>
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->hip) == $size->hip 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->hip ?? 0}}" data-cm="{{$size->hip * 2.54 ?? 0}}">{{ floor($size->hip) == $size->hip 
                   ? (int) $size->hip : $size->hip }}</td>
 
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->arm) == $size->arm 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->arm ?? 0}}" data-cm="{{$size->arm * 2.54 ?? 0}}"">{{ floor($size->arm) == $size->arm 
                   ? (int) $size->arm : $size->arm }}</td>
 
-                  <td class="p-3 border-b border-r text-center" data-inches="27" data-cm="68.6">{{ floor($size->uk_size) == $size->uk_size 
+                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->uk_size ?? 0}}" data-cm="{{$size->uk_size * 2.54 ?? 0}}">{{ floor($size->uk_size) == $size->uk_size 
                   ? (int) $size->uk_size : $size->uk_size }}</td>
 
 
@@ -765,7 +765,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/dark-red-plazo-5_15_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Dark Red Plazo" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -778,7 +778,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/glow-orange-3_18_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Glow Orange" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -791,7 +791,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/glow-red-1_33_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Glow Red" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -804,7 +804,7 @@
           <a href="https://www.instagram.com/aimanroyale/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden rounded-xl lg:rounded-2xl aspect-square cursor-pointer">
             <img
               src="{{asset('web/images/product-images/green-plazo-4_46_11zon.webp')}}"
-              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-19 object-cover object-center group-hover:scale-110 transition-transform duration-500"
               alt="Green Plazo" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
