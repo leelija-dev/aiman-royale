@@ -83,19 +83,19 @@ class Product extends Model
      * @param string $title
      * @return string
      */
-    private function generateUniqueSlug($title)
-    {
-        $slug = Str::slug($title);
-        $originalSlug = $slug;
-        $counter = 1;
+    // private function generateUniqueSlug($title)
+    // {
+    //     $slug = Str::slug($title);
+    //     $originalSlug = $slug;
+    //     $counter = 1;
 
-        while (static::where('slug', $slug)->where('id', '!=', $this->id ?? 0)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
+    //     while (static::where('slug', $slug)->where('id', '!=', $this->id ?? 0)->exists()) {
+    //         $slug = $originalSlug . '-' . $counter;
+    //         $counter++;
+    //     }
 
-        return $slug;
-    }
+    //     return $slug;
+    // }
 
     /**
      * Get the category that owns the product.

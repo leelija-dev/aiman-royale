@@ -42,6 +42,16 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <!-- slug -->
+                            <div class="mb-3">
+                                <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="slug" name="slug"
+                                    value="{{ old('slug') }}" maxlength="255" required>
+                                @error('slug')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
 
                             <!-- Brand -->
                             <div class="mb-3">
@@ -320,6 +330,35 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
         }
     });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+
+    let manuallyEdited = false;
+
+    // If user edits slug manually → stop auto update
+    slugInput.addEventListener('input', function () {
+        manuallyEdited = true;
+    });
+
+    nameInput.addEventListener('input', function () {
+
+        if (manuallyEdited) return;
+
+        let slug = this.value
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
+            .replace(/\s+/g, '-')           // spaces to dash
+            .replace(/-+/g, '-');           // remove duplicate dash
+
+        slugInput.value = slug;
+    });
+
 });
 </script>
 @endsection

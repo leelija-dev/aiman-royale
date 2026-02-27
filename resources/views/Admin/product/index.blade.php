@@ -194,7 +194,15 @@
                                                                         value="{{ $product->name }}" maxlength="200"
                                                                         required>
                                                                 </div>
-
+                                                                <div class="mb-3">
+                                                                    <label for="slug{{ $product->id }}"
+                                                                        class="form-label">slug<span
+                                                                            class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="edit_slug_{{ $product->slug }}" name="slug"
+                                                                        value="{{ $product->slug }}" maxlength="200"
+                                                                        required readonly>
+                                                                </div>
                                                                 <div class="mb-3">
                                                                     <label for="edit_brand_{{ $product->id }}"
                                                                         class="form-label">Brand</label>
