@@ -22,7 +22,6 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
-    
 });
 Route::view('/addresses', 'web.addresses');
 
@@ -93,16 +92,24 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/profile', [Profile::class, 'profile'])->name('profile');
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
-    
+
     // Address Routes
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
     Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
     Route::post('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.default');
-    
+
     // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
+
+    // Custom Dimensions Routes
+    Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('custom-request');
+    Route::post('/custom-dimensions', [CustomDimensionController::class, 'store'])->name('custom-dimensions.store');
+    Route::get('/custom-dimensions/{productId}', [CustomDimensionController::class, 'show'])->name('custom-dimensions.show');
+    Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
+    Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
+    
 });
 
 
@@ -112,9 +119,3 @@ Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsle
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
-
-// Custom Dimensions Routes
-Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('custom-request');
-Route::post('/custom-dimensions', [CustomDimensionController::class, 'store'])->name('custom-dimensions.store');
-Route::get('/custom-dimensions/{productId}', [CustomDimensionController::class, 'show'])->name('custom-dimensions.show');
-Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');

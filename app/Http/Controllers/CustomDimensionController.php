@@ -16,13 +16,13 @@ class CustomDimensionController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         // Get all custom dimension requests for the user with product relationship
         $customRequests = CustomDimension::where('user_id', $user->id)
             ->with('product')
             ->orderBy('created_at', 'desc')
-            ->get();
-        
+            ->paginate(10);
+
         return view('web.custom-request', compact('customRequests'));
     }
 
@@ -33,7 +33,7 @@ class CustomDimensionController extends Controller
     {
         // Debug: Log the incoming request
         \Log::info('Custom dimensions request data:', $request->all());
-        
+
         // Check if user is authenticated
         if (!Auth::check()) {
             return response()->json([
@@ -73,8 +73,9 @@ class CustomDimensionController extends Controller
                 'hip' => $request->hip,
                 'armhole' => $request->armhole,
                 'color_code' => $request->color_code,
+                'status' => 'requested',
             ]);
-            
+
             \Log::info('Created new custom dimension request:', $dimension->toArray());
 
             return response()->json([
@@ -82,7 +83,6 @@ class CustomDimensionController extends Controller
                 'message' => 'Your custom dimension request has been sent! Our team will contact you within 24 hours.',
                 'data' => $dimension
             ]);
-
         } catch (\Exception $e) {
             \Log::error('Error saving custom dimensions: ' . $e->getMessage());
             return response()->json([
@@ -115,6 +115,20 @@ class CustomDimensionController extends Controller
         ]);
     }
 
+    public function cancel($id)
+    {
+        $dimension = CustomDimension::find($id);
+
+        if (!$dimension) {
+            return redirect()->back()->with('error', 'Record not found');
+        }
+
+        $dimension->update([
+            'status' => 'canceled'
+        ]);
+
+        return redirect()->back()->with('success', 'Order canceled successfully');
+    }
     /**
      * Delete custom dimensions for a product.
      */

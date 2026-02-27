@@ -37,9 +37,14 @@
            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
        }
 
-       .status-pending {
+       .status-requested {
            background-color: #fef3c7;
            color: #d97706;
+       }
+
+       .status-viewed {
+           background-color: #e0e7ff;
+           color: #3730a3;
        }
 
        .status-processing {
@@ -50,11 +55,6 @@
        .status-completed {
            background-color: #d1fae5;
            color: #059669;
-       }
-
-       .dimension-badge {
-           background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-           color: #374151;
        }
 
        .color-preview {
@@ -99,7 +99,7 @@
            <a href="{{ route('custom-request') }}" class="sidebar-item active flex items-center gap-3 p-3 rounded-lg text-gray-700">
                <i class="fas fa-ruler-combined w-5 text-center"></i>
                <span>Custom Requests</span>
-               <span class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">{{ $customRequests->count() }}</span>
+               <span class="ml-auto bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">{{ $customRequests->total() }}</span>
            </a>
            <a href="#" class="sidebar-item flex items-center gap-3 p-3 rounded-lg text-gray-700">
                <i class="fas fa-heart w-5 text-center"></i>
@@ -109,28 +109,6 @@
 
        <!-- Request Stats -->
        <div class="mt-8 pt-6 border-t border-gray-200">
-           <h3 class="font-medium text-gray-900 mb-4">Request Summary</h3>
-           <div class="space-y-3">
-               <div class="flex justify-between text-sm">
-                   <span class="text-gray-600">Total Requests</span>
-                   <span class="font-medium">{{ $customRequests->count() }}</span>
-               </div>
-               <div class="flex justify-between text-sm">
-                   <span class="text-gray-600">Pending</span>
-                   <span class="font-medium text-amber-600">{{ $customRequests->where('status', 'pending')->count() }}</span>
-               </div>
-               <div class="flex justify-between text-sm">
-                   <span class="text-gray-600">Processing</span>
-                   <span class="font-medium text-blue-600">{{ $customRequests->where('status', 'processing')->count() }}</span>
-               </div>
-               <div class="flex justify-between text-sm">
-                   <span class="text-gray-600">Completed</span>
-                   <span class="font-medium text-green-600">{{ $customRequests->where('status', 'completed')->count() }}</span>
-               </div>
-           </div>
-       </div>
-       </div>
-       </div>
        --}}
        <!-- Main Content -->
        <div class="lg:w-3/4">
@@ -155,7 +133,7 @@
            <!-- Custom Requests List -->
            @if($customRequests->count() > 0)
            <div class="space-y-4">
-               @foreach($customRequests as $request)
+               @foreach($customRequests->items() as $request)
                <div class="bg-white rounded-2xl shadow-sm p-6 request-card">
                    <div class="flex flex-col lg:flex-row gap-6">
                        <!-- Product Info -->
@@ -219,17 +197,22 @@
                        <div class="lg:w-1/3">
                            <div class="text-right">
                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium 
-                                                {{ $request->status == 'pending' ? 'status-pending' : 
-                                                   ($request->status == 'processing' ? 'status-processing' : 'status-completed') }}">
+                                                {{ $request->status == 'requested' ? 'status-requested' : 
+                                                   ($request->status == 'viewed' ? 'status-viewed' :
+                                                   ($request->status == 'processing' ? 'status-processing' :
+                                                   ($request->status == 'completed' ? 'status-completed' : 'status-canceled'))) }}">
                                    <i class="fas fa-circle text-xs"></i>
-                                   {{ ucfirst($request->status ?? 'pending') }}
+                                   {{ ucfirst($request->status ?? 'requested') }}
                                </div>
 
                                <div class="mt-4 space-y-2">
-                                   @if($request->status == 'pending')
-                                   <button class="w-full px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200 text-sm font-medium">
-                                       <i class="fas fa-times mr-2"></i>Cancel Request
-                                   </button>
+                                   @if(in_array($request->status, ['requested', 'viewed', 'processing']))
+                                   <form action="{{ route('custom-dimensions.cancel', $request->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this request?')">
+                                       @csrf
+                                       <button type="submit" class="w-full px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200 text-sm font-medium">
+                                           <i class="fas fa-times mr-2"></i>Cancel Request
+                                       </button>
+                                   </form>
                                    @endif
                                </div>
                            </div>
@@ -365,17 +348,9 @@
        </div>
 
        <!-- Pagination -->
-       <div class="flex justify-center items-center gap-2 mt-8">
-           <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-               <i class="fas fa-chevron-left"></i>
-           </button>
-           <button class="w-10 h-10 flex items-center justify-center rounded-xl fashion-gradient text-white">1</button>
-           <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">2</button>
-           <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">3</button>
-           <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-               <i class="fas fa-chevron-right"></i>
-           </button>
-       </div>
+           <div class="mt-8">
+               {{ $customRequests->links('pagination::bootstrap-4') }}
+           </div>
        </div>
        </div>
    </section>

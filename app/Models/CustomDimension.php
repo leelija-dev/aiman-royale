@@ -25,6 +25,7 @@ class CustomDimension extends Model
         'waist' => 'decimal:2',
         'hip' => 'decimal:2',
         'armhole' => 'decimal:2',
+        'status' => 'string',
     ];
 
     /**
