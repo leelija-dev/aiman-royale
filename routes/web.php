@@ -29,7 +29,7 @@ Route::view('/addresses', 'web.addresses');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
-    Route::view('/custom-request', 'web.custom-request');
+    // Route::view('/custom-request', 'web.custom-request');
 });
 
 
