@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\WishlistController;
 use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CustomDimensionController;
 use App\Models\NewsLetter;
 
 // Public routes (accessible without authentication)
@@ -28,6 +29,7 @@ Route::view('/addresses', 'web.addresses');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
+    Route::view('/custom-request', 'web.custom-request');
 });
 
 
@@ -107,6 +109,12 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
-Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
-    ->name('category.occasion.show')
+Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
+    ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+
+// Custom Dimensions Routes
+Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('custom-request');
+Route::post('/custom-dimensions', [CustomDimensionController::class, 'store'])->name('custom-dimensions.store');
+Route::get('/custom-dimensions/{productId}', [CustomDimensionController::class, 'show'])->name('custom-dimensions.show');
+Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');

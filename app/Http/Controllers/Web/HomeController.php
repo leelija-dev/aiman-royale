@@ -7,6 +7,7 @@ use App\Http\Service\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\Occasion;
 use App\Models\ProductVariant;
@@ -368,12 +369,12 @@ class HomeController extends Controller
        
        
         $sizes=Size::OrderBy('sort_order')->get();
-      
+        $colors = Color::orderBy('id')->get();
         // print_r($product->category);die;
         $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->whereHas('variants')->with(['variants','images'])->get();
     //    dd($relatedProducts);
        // print_r($relatedProducts->first()->variants);die;
         // dd($product);
-        return view('web.single-product', compact('product','sizes','relatedProducts'));
+        return view('web.single-product', compact('product','sizes','relatedProducts', 'colors'));
     }
 }

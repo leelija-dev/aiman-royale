@@ -131,22 +131,42 @@
   <h3 class="font-medium text-gray-800">Enter Custom Dimensions</h3>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Height (in cm)</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Bust (in cm)</label>
       <input
         type="number"
-        id="custom-height"
+        id="custom-bust"
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
-        placeholder="Enter height"
+        placeholder="Enter bust"
         min="1"
         step="0.1">
     </div>
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Width (in cm)</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Waist (in cm)</label>
       <input
         type="number"
-        id="custom-width"
+        id="custom-waist"
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
-        placeholder="Enter width"
+        placeholder="Enter waist"
+        min="1"
+        step="0.1">
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Hip (in cm)</label>
+      <input
+        type="number"
+        id="custom-hip"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
+        placeholder="Enter hip"
+        min="1"
+        step="0.1">
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Armhole (in cm)</label>
+      <input
+        type="number"
+        id="custom-armhole"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary"
+        placeholder="Enter Armhole"
         min="1"
         step="0.1">
     </div>
@@ -156,11 +176,11 @@
     <div class="flex gap-3" id="custom-color-selection">
       <!-- Colors will be populated dynamically -->
       <div class="flex flex-wrap gap-2">
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-red-500 hover:scale-110 transition-all" data-color="#FF0000"></button>
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-blue-500 hover:scale-110 transition-all" data-color="#0000FF"></button>
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-green-500 hover:scale-110 transition-all" data-color="#00FF00"></button>
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-black hover:scale-110 transition-all" data-color="#000000"></button>
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 bg-white hover:scale-110 transition-all" data-color="#FFFFFF"></button>
+        @foreach($colors as $color)
+        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all" 
+                style="background-color: {{ $color->code }};" 
+                data-color="{{ $color->code }}"></button>
+        @endforeach
       </div>
     </div>
   </div>
@@ -806,6 +826,179 @@
   let selectedType = 'stitched'; // Default type
   let customDimensions = null;
   let selectedCustomColor = null;
+  
+  // Custom dimensions and color functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const saveDimensionBtn = document.getElementById('save-dimension-btn');
+    const cancelCustomBtn = document.getElementById('cancel-custom-btn');
+    const customBustInput = document.getElementById('custom-bust');
+    const customWaistInput = document.getElementById('custom-waist');
+    const customHipInput = document.getElementById('custom-hip');
+    const customArmholeInput = document.getElementById('custom-armhole');
+    
+    // Custom color selection
+    const customColorBtns = document.querySelectorAll('.custom-color-btn');
+    let selectedCustomColor = null;
+    
+    // Handle color button clicks
+    if (customColorBtns) {
+      console.log('Found color buttons:', customColorBtns.length);
+      
+      customColorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          console.log('Color button clicked:', this.getAttribute('data-color'));
+          
+          // Remove active state from all buttons
+          customColorBtns.forEach(b => b.classList.remove('ring-2', 'ring-offset-2', 'bg-blue-500'));
+          
+          // Add active state to clicked button
+          this.classList.add('ring-2', 'ring-offset-2', 'bg-blue-500');
+          selectedCustomColor = this.getAttribute('data-color');
+          
+          console.log('Selected custom color updated to:', selectedCustomColor);
+        });
+      });
+    } else {
+      console.log('No color buttons found');
+    }
+    
+    // Handle save dimensions
+    if (saveDimensionBtn) {
+      saveDimensionBtn.addEventListener('click', function() {
+        console.log('Save button clicked!');
+        
+        // Get fresh references to inputs
+        const bustInput = document.getElementById('custom-bust');
+        const waistInput = document.getElementById('custom-waist');
+        const hipInput = document.getElementById('custom-hip');
+        const armholeInput = document.getElementById('custom-armhole');
+        
+        console.log('Input elements found:', {
+          bustInput: !!bustInput,
+          waistInput: !!waistInput,
+          hipInput: !!hipInput,
+          armholeInput: !!armholeInput
+        });
+        
+        // Check if inputs exist before accessing their values
+        const dimensions = {
+          product_id: {{ $product->id }},
+          bust: bustInput ? (bustInput.value || null) : null,
+          waist: waistInput ? (waistInput.value || null) : null,
+          hip: hipInput ? (hipInput.value || null) : null,
+          armhole: armholeInput ? (armholeInput.value || null) : null,
+          color_code: selectedCustomColor
+        };
+        
+        console.log('Saving custom dimensions:', dimensions);
+        console.log('Selected color:', selectedCustomColor);
+        
+        // Disable button and show loading
+        const originalText = saveDimensionBtn.innerHTML;
+        saveDimensionBtn.disabled = true;
+        saveDimensionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+        
+        // Send to backend
+        fetch('/custom-dimensions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(dimensions)
+        })
+        .then(response => {
+          if (response.status === 401) {
+            // User not authenticated, redirect to login
+            return response.json().then(data => {
+              window.location.href = data.redirect;
+              throw new Error('Authentication required');
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Response received:', data);
+          
+          if (data.success) {
+            console.log('Success! Showing notification...');
+            
+            // Show SweetAlert2 success message
+            Swal.fire({
+              icon: 'success',
+              title: 'Request Sent!',
+              text: 'Your custom dimension request has been sent! Our team will contact you within 24 hours.',
+              confirmButtonColor: '#10b981',
+              timer: 5000,
+              timerProgressBar: true
+            });
+            
+            // Try to show notification
+            try {
+              showNotification('Your custom dimension request has been sent! Our team will contact you within 24 hours.', 'success');
+              console.log('Notification function called successfully');
+            } catch (error) {
+              console.error('Error calling showNotification:', error);
+            }
+            
+            // Clear inputs
+            if (bustInput) bustInput.value = '';
+            if (waistInput) waistInput.value = '';
+            if (hipInput) hipInput.value = '';
+            if (armholeInput) armholeInput.value = '';
+            
+            // Remove color selection
+            if (customColorBtns) {
+              customColorBtns.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'bg-blue-500'));
+              selectedCustomColor = null;
+            }
+          } else {
+            console.log('Error in response:', data.message);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: data.message || 'Failed to save custom dimensions',
+              confirmButtonColor: '#ef4444'
+            });
+            showNotification(data.message || 'Failed to save custom dimensions', 'error');
+          }
+        })
+        .catch(error => {
+          if (error.message !== 'Authentication required') {
+            console.error('Error:', error);
+            showNotification('An error occurred while saving custom dimensions', 'error');
+          }
+        })
+        .finally(() => {
+          // Re-enable button
+          saveDimensionBtn.disabled = false;
+          saveDimensionBtn.innerHTML = originalText;
+        });
+      });
+    } else {
+      console.log('Save dimension button not found!');
+    }
+    
+    // Handle cancel custom dimensions
+    if (cancelCustomBtn) {
+      cancelCustomBtn.addEventListener('click', function() {
+        // Clear all inputs
+        if (customBustInput) customBustInput.value = '';
+        if (customWaistInput) customWaistInput.value = '';
+        if (customHipInput) customHipInput.value = '';
+        if (customArmholeInput) customArmholeInput.value = '';
+        
+        // Remove color selection
+        if (customColorBtns) {
+          customColorBtns.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'bg-blue-500'));
+          selectedCustomColor = null;
+        }
+        
+        console.log('Custom dimensions cancelled');
+      });
+    }
+  });
   
   // Type selection
   function selectType(type) {
