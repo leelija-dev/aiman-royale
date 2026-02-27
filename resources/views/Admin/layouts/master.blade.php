@@ -18,6 +18,9 @@
 
     <title> @yield('title')</title>
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
      <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
     <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />

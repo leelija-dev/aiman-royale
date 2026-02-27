@@ -110,6 +110,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
     
+    // Admin Custom Dimensions Routes
+    Route::get('/admin/custom-dimensions', [CustomDimensionController::class, 'adminIndex'])->name('admin.custom-dimensions.index');
+    Route::post('/admin/custom-dimensions/{id}/status', [CustomDimensionController::class, 'updateStatus'])->name('admin.custom-dimensions.update-status');
+    
 });
 
 
