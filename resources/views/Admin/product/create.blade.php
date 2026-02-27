@@ -70,17 +70,52 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            <div class="mb-3 d-flex align-items-center">
+                                    <hr class="flex-grow-1 hr-line">
+                                    <span class="px-2 text-muted fw-bold">Febric</span>
+                                    <hr class="flex-grow-1 hr-line">
+                                </div>
                             <!-- Fabric -->
-                            <div class="mb-3">
-                                <label for="fabric" class="form-label">Fabric</label>
-                                <input type="text" class="form-control" id="fabric" name="fabric" 
-                                       value="{{ old('fabric') }}" maxlength="100">
-                                @error('fabric')
-                                <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
+                           <div class="col-md-12">
+                                <div id="fabric-wrapper">
 
+                                    <!-- Default Row -->
+                                    <div class="fabric-row row align-items-end mb-2">
+
+                                        <!-- Key -->
+                                        <div class="col-md-5">
+                                            <div class="mb-3">
+                                                <label class="form-label">Fabric Name</label>
+                                                <input type="text" class="form-control" name="fabric_key[]" placeholder="Fabric name...">
+                                            </div>
+                                        </div>
+
+                                        <!-- Value -->
+                                        <div class="col-md-5">
+                                            <div class="mb-3">
+                                                <label class="form-label">Fabric Dsciription</label>
+                                                <input type="text" class="form-control" name="fabric_value[]" placeholder="Fabric desciription...">
+                                            </div>
+                                        </div>
+
+                                        <!-- Delete -->
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <div class="mb-3">
+                                                <button type="button" class="btn btn-danger btn-sm remove-row">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Add Button -->
+                                <button type="button" id="add-row" class="btn btn-primary btn-sm mt-2">
+                                    + Add 
+                                </button>
+                            </div>
                             <!-- Fit -->
                             <div class="mb-3">
                                 <label for="fit" class="form-label">Fit</label>
@@ -359,6 +394,47 @@ document.addEventListener("DOMContentLoaded", function () {
         slugInput.value = slug;
     });
 
+});
+</script>
+<script>
+document.getElementById('add-row').addEventListener('click', function () {
+
+    let wrapper = document.getElementById('fabric-wrapper');
+
+    let newRow = document.createElement('div');
+    newRow.classList.add('fabric-row', 'row', 'align-items-end', 'mb-2');
+
+    newRow.innerHTML = `
+        <div class="col-md-5">
+            <div class="mb-3">
+                <label class="form-label">Fabric Name</label>
+                <input type="text" class="form-control" name="fabric_key[]" placeholder="Fabric name...">
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="mb-3">
+                <label class="form-label">Fabric Description</label>
+                <input type="text" class="form-control" name="fabric_value[]" placeholder="Fabric description...">
+            </div>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <div class="mb-3">
+                <button type="button" class="btn btn-danger btn-sm remove-row">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    wrapper.appendChild(newRow);
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.remove-row')) {
+        e.target.closest('.fabric-row').remove();
+    }
 });
 </script>
 @endsection

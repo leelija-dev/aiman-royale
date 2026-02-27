@@ -5,8 +5,12 @@
 @section('title')
     {{ config('app.name') }} - Products
 @endsection
-
-
+<style>
+.hr-line {
+    border-top: 2px solid #0408382d !important;
+    opacity: 1 !important;
+}
+</style>
 @section('content')
     <div class="container-fluid py-4">
         <div class="col-12">
@@ -88,9 +92,13 @@
                                             <div class="d-flex px-2 py-1">
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{ $product->name }}</h6>
-                                                    @if ($product->fabric)
-                                                        <p class="text-xs text-secondary mb-0">{{ $product->fabric }}</p>
-                                                    @endif
+
+                                                    @foreach($product->fabric ?? [] as $key => $value)
+                                                        <p class="text-xs text-secondary mb-0">
+                                                            <strong>{{ $key }}:</strong> {{ $value }}
+                                                        </p>
+                                                    @endforeach
+
                                                 </div>
                                             </div>
                                         </td>
@@ -220,15 +228,74 @@
                                                                         </select>
                                                                 </div>
 
-                                                                <div class="mb-3">
+                                                                {{-- <div class="mb-3">
                                                                     <label for="edit_fabric_{{ $product->id }}"
                                                                         class="form-label">Fabric</label>
                                                                     <input type="text" class="form-control"
                                                                         id="edit_fabric_{{ $product->id }}"
                                                                         name="fabric" value="{{ $product->fabric }}"
                                                                         maxlength="100">
+                                                                </div> --}}
+                                                                <div class="mb-3 d-flex align-items-center">
+                                                                    <hr class="flex-grow-1 hr-line">
+                                                                    <span class="px-2 text-muted fw-bold">Febric</span>
+                                                                    <hr class="flex-grow-1 hr-line">
                                                                 </div>
+                                                               
+                                                        
+                                                    
+                                                                    <div class="col-md-12">
 
+                                                                    <!-- Wrapper MUST be outside loop -->
+                                                                    <div id="fabric-wrapper-{{ $product->id }}">
+                                                                        <input type="hidden" name="fabric_key[]" >
+                                                                        <input type="hidden" name="fabric_value[]" >
+                                                                        @foreach($product->fabric ?? []  as $key => $value)
+                                                                            <div class="fabric-row row align-items-end mb-2">
+
+                                                                                <!-- Key -->
+                                                                                <div class="col-md-5">
+                                                                                    <div class="mb-2">
+                                                                                        <label class="form-label">Fabric Name</label>
+                                                                                        <input type="text" class="form-control"
+                                                                                            name="fabric_key[]" value="{{ $key }}"
+                                                                                            placeholder="Fabric name...">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <!-- Value -->
+                                                                                <div class="col-md-5">
+                                                                                    <div class="mb-2">
+                                                                                        <label class="form-label">Fabric Description</label>
+                                                                                        <input type="text" class="form-control"
+                                                                                            name="fabric_value[]" value="{{ $value }}"
+                                                                                            placeholder="Fabric description...">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <!-- Delete -->
+                                                                                <div class="col-md-2 d-flex align-items-end">
+                                                                                    <div class="mb-2">
+                                                                                        <button type="button"
+                                                                                                class="btn btn-danger btn-sm remove-row">
+                                                                                            <i class="fa fa-trash"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        @endforeach
+
+                                                                    </div>
+
+                                                                    <!-- Add Button -->
+                                                                    <button type="button"
+                                                                        class="btn btn-primary btn-sm mt-2 add-row-btn"
+                                                                        data-product="{{ $product->id }}">
+                                                                        + Add
+                                                                    </button>
+
+                                                                </div>
                                                                 <div class="mb-3">
                                                                     <label for="edit_fit_{{ $product->id }}"
                                                                         class="form-label">Fit</label>
@@ -561,4 +628,59 @@
             });
         });
     </script>
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Add row click
+    document.addEventListener('click', function (e) {
+
+        if (e.target.closest('.add-row-btn')) {
+
+            let button = e.target.closest('.add-row-btn');
+            let productId = button.getAttribute('data-product');
+
+            let wrapper = document.getElementById('fabric-wrapper-' + productId);
+
+            let newRow = document.createElement('div');
+            newRow.classList.add('fabric-row', 'row', 'align-items-end', 'mb-2');
+
+            newRow.innerHTML = `
+                <div class="col-md-5">
+                    <div class="mb-2">
+                        <label class="form-label">Fabric Name</label>
+                        <input type="text" class="form-control"
+                               name="fabric_key[]" placeholder="Fabric name...">
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="mb-2">
+                        <label class="form-label">Fabric Description</label>
+                        <input type="text" class="form-control"
+                               name="fabric_value[]" placeholder="Fabric description...">
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="mb-2">
+                        <button type="button"
+                                class="btn btn-danger btn-sm remove-row">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            wrapper.appendChild(newRow);
+        }
+
+        // Remove row
+        if (e.target.closest('.remove-row')) {
+            e.target.closest('.fabric-row').remove();
+        }
+
+    });
+
+});
+</script>
 @endsection

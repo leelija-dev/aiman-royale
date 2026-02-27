@@ -55,7 +55,9 @@ class ProductController extends Controller
             'slug' => 'required|string|max:200|unique:products,slug',
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:100',
-            'fabric' => 'nullable|string|max:100',
+            // 'fabric' => 'nullable|string|max:100',
+            // 'fabric_key.*' => 'nullable|string|max:100',
+            // 'fabric_value.*' => 'nullable|string|max:100',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
@@ -70,7 +72,17 @@ class ProductController extends Controller
             'image' => 'required|image',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
+            $fabricData = [];
 
+        if ($request->fabric_key) {
+            foreach ($request->fabric_key as $index => $key) {
+
+                if (!empty($key) && !empty($request->fabric_value[$index])) {
+                    $fabricData[$key] = $request->fabric_value[$index];
+                }
+            }
+        }
+        $data['fabric'] = $fabricData;
         $product = Product::create($data);
 
         // Handle image upload if present
@@ -135,7 +147,8 @@ class ProductController extends Controller
             'slug' => 'required|string|max:200|unique:products,slug,' . $id,
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:100',
-            'fabric' => 'nullable|string|max:100',
+            // 'fabric.*' => 'nullable|array|max:100',
+            // 'fabric_key.*' => 'nullable|max:100',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
@@ -150,6 +163,20 @@ class ProductController extends Controller
 
         ]);
         $data['ocassion_id'] = $request->occasion_id;
+       
+        $fabricData = [];
+
+        if ($request->fabric_key) {
+            foreach ($request->fabric_key as $index => $key) {
+
+                if (!empty($key) && !empty($request->fabric_value[$index])) {
+                    $fabricData[$key] = $request->fabric_value[$index];
+                }
+            }
+        }
+       
+       $data['fabric'] = !empty($fabricData) ? json_encode($fabricData) : null;
+        // dd($request->fabric_key);
 
         $product = Product::findOrFail($id);
         $product->update($data);

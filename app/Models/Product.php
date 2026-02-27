@@ -54,7 +54,8 @@ class Product extends Model
         'stock' => 'integer',
         'status' => 'string',
         'is_featured' => 'boolean',
-        'ready_to_ship' => 'boolean'
+        'ready_to_ship' => 'boolean',
+        'fabric' => 'array',
     ];
 
     /**
