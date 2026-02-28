@@ -41,6 +41,7 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\CustomDimensionController;
 // use App\Http\Controllers\ShopController;
 
 
@@ -422,6 +423,69 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
 
         // routes/admin.php
+        Route::prefix('seo')->group(function () {
+            Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
+        });
+
+        // Bill Routes
+        Route::get('/new-bill', [BillController::class, 'index'])->name('admin.new-bill')->middleware('auth:admin');
+        Route::post('/bill/save', [BillController::class, 'store'])->name('admin.bill.save')->middleware('auth:admin');
+
+        // Print Bill Routes
+        Route::prefix('print-bill')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\PrintBillController::class, 'index'])->name('admin.print-bill');
+            Route::get('/{id}', [\App\Http\Controllers\Admin\PrintBillController::class, 'getInvoice'])->name('admin.print-bill.get');
+        });
+
+        Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
+
+        // ProductPackage routes (commented out - controller doesn't exist)
+        // Route::prefix('product-package')->group(function(){
+        //     Route::get('/',[ProductPackageController::class,'index'])->name('admin.product-package.index');
+        //     Route::get('/create',[ProductPackageController::class,'create'])->name('admin.product-package.create');
+        //     Route::post('/create',[ProductPackageController::class,'store'])->name('admin.product-package.store');
+        //     Route::get('/edit/{id}',[ProductPackageController::class,'edit'])->name('admin.product-package.edit');
+        //     Route::post('/update/{id}',[ProductPackageController::class,'update'])->name('admin.product-package.update');
+        //     Route::delete('/{id}', [ProductPackageController::class, 'delete'])->name('admin.product-package.delete');
+        // });
+
+        // Shop Routes (commented out - controller doesn't exist)
+        /*
+Route::prefix('shops')->group(function () {
+    Route::get('/', [ShopController::class, 'index'])->name('shops.index');
+    Route::get('/create', [ShopController::class, 'create'])->name('shops.create');
+    Route::post('/', [ShopController::class, 'store'])->name('shops.store');
+    Route::get('/{shop}', [ShopController::class, 'show'])->name('shops.show');
+    Route::get('/{shop}/edit', [ShopController::class, 'edit'])->name('shops.edit');
+    Route::put('/{shop}', [ShopController::class, 'update'])->name('shops.update');
+    Route::put('/{shop}/update-due-amount', [ShopController::class, 'updateDueAmount'])->name('shops.update-due-amount');
+    Route::delete('/{shop}', [ShopController::class, 'destroy'])->name('shops.destroy');
+   //trashed shop
+    Route::get('/trashed/shops', [ShopController::class, 'trashed'])->name('shops.trashed');
+    Route::patch('/trashed/{id}/restore', [ShopController::class, 'restore'])->name('shops.restore');
+    Route::delete('/trashed/{id}/force-delete', [ShopController::class, 'deletePermanently'])->name('shops.force-delete');
+});
+*/
+
+        // Stock Management Routes
+        Route::prefix('stocks')->name('stocks.')->group(function () {
+            Route::get('/', [StockController::class, 'index'])->name('index');
+            Route::get('/create', [StockController::class, 'create'])->name('create');
+            Route::post('/', [StockController::class, 'store'])->name('store');
+            Route::get('/{stock}/edit', [StockController::class, 'edit'])->name('edit');
+            Route::put('/{stock}', [StockController::class, 'update'])->name('update');
+            Route::delete('/{stock}', [StockController::class, 'destroy'])->name('destroy');
+
+            // Stock operations
+            Route::post('/{stock}/add-stock', [StockController::class, 'addStock'])->name('add-stock');
+            Route::post('/{stock}/deduct-stock', [StockController::class, 'deductStock'])->name('deduct-stock');
+        });
+
+        // Custom Dimensions Management Routes
+        Route::get('/custom-dimensions', [CustomDimensionController::class, 'index'])->name('admin.custom-dimensions.index');
+        Route::post('/custom-dimensions/{id}/status', [CustomDimensionController::class, 'updateStatus'])->name('admin.custom-dimensions.update-status');
+
+        // SEO Management Routes
         Route::prefix('seo')->group(function () {
             Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
             Route::get('/create', [PageSeoController::class, 'create'])->name('seo.pages.create');

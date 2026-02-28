@@ -13,7 +13,7 @@ use App\Http\Controllers\Web\WishlistController;
 use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\CustomDimensionController;
+use App\Http\Controllers\Web\CustomDimensionController;
 use App\Models\NewsLetter;
 
 // Public routes (accessible without authentication)
@@ -104,15 +104,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
 
     // Custom Dimensions Routes
-    Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('custom-request');
+    Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('web.custom-request');
     Route::post('/custom-dimensions', [CustomDimensionController::class, 'store'])->name('custom-dimensions.store');
     Route::get('/custom-dimensions/{productId}', [CustomDimensionController::class, 'show'])->name('custom-dimensions.show');
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
-    
-    // Admin Custom Dimensions Routes
-    Route::get('/admin/custom-dimensions', [CustomDimensionController::class, 'adminIndex'])->name('admin.custom-dimensions.index');
-    Route::post('/admin/custom-dimensions/{id}/status', [CustomDimensionController::class, 'updateStatus'])->name('admin.custom-dimensions.update-status');
     
 });
 

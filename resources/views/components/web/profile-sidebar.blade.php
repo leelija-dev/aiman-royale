@@ -49,10 +49,10 @@ $currentRoute = request()->route()->getName();
                 <span>My Wishlist</span>
             </a>
             <a
-                href="{{route('custom-request')}}"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'custom-request' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
-                <i class="fas fa-heart w-5 text-center"></i>
-                <span>Custom Request</span>
+                href="{{route('web.custom-request')}}"
+                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'web.custom-request' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
+                <i class="fas fa-ruler-combined w-5 text-center"></i>
+                <span>Custom Requests</span>
             </a>
             <a
                 href="#"
