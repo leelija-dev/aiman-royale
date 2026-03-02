@@ -1054,16 +1054,18 @@
 
   // Save custom dimensions
   function saveCustomDimension() {
-    const height = document.getElementById('custom-height').value;
-    const width = document.getElementById('custom-width').value;
+    const bust = document.getElementById('custom-bust').value;
+    const waist = document.getElementById('custom-waist').value;
+    const hip = document.getElementById('custom-hip').value;
+    const armhole = document.getElementById('custom-armhole').value;
 
-    if (!height || !width) {
-      showNotification('Please enter both height and width', 'error');
+    if (!bust || !waist || !hip || !armhole) {
+      showNotification('Please enter all measurements (bust, waist, hip, armhole)', 'error');
       return;
     }
 
-    if (height <= 0 || width <= 0) {
-      showNotification('Height and width must be positive numbers', 'error');
+    if (bust <= 0 || waist <= 0 || hip <= 0 || armhole <= 0) {
+      showNotification('All measurements must be positive numbers', 'error');
       return;
     }
 
@@ -1077,8 +1079,10 @@
     }
 
     customDimensions = {
-      height: parseFloat(height),
-      width: parseFloat(width),
+      bust: parseFloat(bust),
+      waist: parseFloat(waist),
+      hip: parseFloat(hip),
+      armhole: parseFloat(armhole),
       color: selectedColor,
       type: selectedType
     };
@@ -1104,17 +1108,18 @@
     
     if (!customDimensions) return;
     
-    // Calculate custom price (example: base price + (area * price per sq cm))
+    // Calculate custom price (example: base price + measurement-based pricing)
     const basePrice = {{ $basePrice ?? 0 }};
   
-    const area = customDimensions.height * customDimensions.width;
-    const pricePerSqCm = basePrice / 1000; // Example calculation
-    const customPrice = Math.round(basePrice + (area * pricePerSqCm));
+    // Example pricing based on measurements
+    const measurementComplexity = (customDimensions.bust + customDimensions.waist + customDimensions.hip + customDimensions.armhole) / 4;
+    const priceMultiplier = 1.2; // 20% premium for custom dimensions
+    const customPrice = Math.round(basePrice * priceMultiplier);
 
     const priceContainer = document.getElementById('price-container');
     priceContainer.innerHTML = `
         <span class="text-2xl font-bold text-gray-900">Rs. ${customPrice}</span>
-        <span class="text-sm text-gray-500">(Custom: ${customDimensions.height}cm × ${customDimensions.width}cm)</span>
+        <span class="text-sm text-gray-500">(Custom: B:${customDimensions.bust}cm W:${customDimensions.waist}cm H:${customDimensions.hip}cm A:${customDimensions.armhole}cm)</span>
     `;
   
   }

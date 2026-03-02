@@ -269,7 +269,7 @@
                                     <div class="flex-1">
                                         <a href="{{route('page.single-product', $orderProduct->product->slug)}}" >
                                         <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
-                                        <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
+                                        <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size ?? ''}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
                                         <p class="text-gray-600 text-sm">Quantity: {{$orderProduct->quantity ?? ''}}</p>
                                         </a>
                                     </div>
