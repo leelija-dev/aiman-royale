@@ -25,6 +25,10 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/verify-email', 'web.verify-email')->name('page.verify-email');
     Route::post('/verify-email', [AuthController::class, 'verifyEmail'])->name('web.verify-email');
     Route::post('/resend-otp', [AuthController::class, 'resendOTP'])->name('web.resend-otp');
+    
+    // JWT API routes
+    Route::post('/api/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
+    Route::post('/api/auth/refresh', [AuthController::class, 'refresh'])->name('api.auth.refresh');
 });
 Route::view('/addresses', 'web.addresses');
 

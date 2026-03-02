@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -103,10 +104,13 @@ class AuthController extends Controller
             // Clear session
             session()->forget('registration_data');
 
-            // Auto login
+            // Generate JWT token
+            $token = JWTAuth::fromUser($user);
+
+            // Auto login with both JWT and Laravel Auth
             Auth::login($user);
 
-            return redirect()->route('page.index')->with('success', 'Account created and verified successfully!');
+            return redirect()->route('page.index')->with('success', 'Account created and verified successfully!')->with('jwt_token', $token);
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to create account. Please try again.');
         }
@@ -155,25 +159,42 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-
-            // Check if there's a redirect URL
-            if ($request->has('redirect') && $request->redirect) {
-                return redirect()->to($request->redirect);
-            }
-
-            // Default redirect if no redirect URL provided
-            return redirect()->intended(route('page.index'));
+        // Attempt login with JWT
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        // Get authenticated user from JWT
+        $user = JWTAuth::user();
+
+        // Also login with Laravel's Auth for web routes
+        Auth::login($user);
+
+        // Regenerate session
+        $request->session()->regenerate();
+
+        // Check if there's a redirect URL
+        if ($request->has('redirect') && $request->redirect) {
+            return redirect()->to($request->redirect)->with('jwt_token', $token);
+        }
+
+        // Default redirect if no redirect URL provided
+        return redirect()->intended(route('page.index'))->with('jwt_token', $token);
     }
 
     public function logout(Request $request)
     {
+        // Invalidate JWT token if it exists
+        try {
+            if ($token = JWTAuth::getToken()) {
+                JWTAuth::invalidate($token);
+            }
+        } catch (\Exception $e) {
+            // Token might be invalid or expired, continue with logout
+        }
+
         // Use web guard specifically
         Auth::guard('web')->logout();
 
@@ -181,5 +202,37 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('success', 'You have been logged out successfully!');
+    }
+
+    /**
+     * Get authenticated user with JWT token
+     */
+    public function me()
+    {
+        return response()->json(Auth::user());
+    }
+
+    /**
+     * Refresh JWT token
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken(JWTAuth::refresh());
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
+        ]);
     }
 }
