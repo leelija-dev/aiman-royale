@@ -55,8 +55,7 @@ class User extends Authenticatable
      */
     public function orders()
     {
-        // Return empty collection for now since proper Order model doesn't exist
-        return collect([]);
+        return $this->hasMany(\App\Models\Order::class);
     }
 
     /**
@@ -74,8 +73,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
-    public function order()
+
+    /**
+     * Get email verifications for user.
+     */
+    public function emailVerifications()
     {
-        return $this->hasMany(\App\Models\Order::class);
+        return $this->hasMany(EmailVerification::class);
     }
 }

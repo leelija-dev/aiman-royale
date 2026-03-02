@@ -105,6 +105,16 @@
                     </div>
 
                     <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input type="number" id="phone" name="phone" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                        <p class="error text-red-500 text-xs mt-1 hidden"></p>
+                         @error('phone')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
                             Password
                         </label>
