@@ -344,7 +344,6 @@ class CustomDimensionController extends Controller
      */
     private function sendWhatsAppMessage($phone, $message)
     {
-
         try {
             // Clean phone number (remove any non-digit characters)
             $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
@@ -361,30 +360,10 @@ class CustomDimensionController extends Controller
                 $formattedPhone = $cleanPhone;
             }
 
-            // Option 1: Twilio WhatsApp API
-            if (env('TWILIO_SID') && env('TWILIO_TOKEN') && env('TWILIO_WHATSAPP_NUMBER')) {
-                $twilio = new \Twilio\Rest\Client(env('TWILIO_SID'), env('TWILIO_TOKEN'));
-
-                $result = $twilio->messages->create(
-                    "whatsapp:+{$formattedPhone}",
-                    [
-                        "from" => "whatsapp:" . env('TWILIO_WHATSAPP_NUMBER'),
-                        "body" => $message
-                    ]
-                );
-
-                \Log::info('WhatsApp message sent via Twilio', [
-                    'phone' => $formattedPhone,
-                    'message_sid' => $result->sid ?? 'N/A'
-                ]);
-
-                return true;
-            }
-
-            // Option 2: WhatsApp Business API (if you have direct API access)
+            // Option 1: WhatsApp Business API (if you have direct API access)
             // This would require your own WhatsApp Business API setup
 
-            // Option 3: Third-party WhatsApp services
+            // Option 2: Third-party WhatsApp services
             // Examples: WATI, MessageBird, Vonage, etc.
 
             // Fallback: Log for now
