@@ -125,6 +125,10 @@ Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsle
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
 
+Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
+    ->name('category.occasion.show')
+    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
