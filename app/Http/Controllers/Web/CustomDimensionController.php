@@ -168,4 +168,32 @@ class CustomDimensionController extends Controller
             'message' => 'No custom dimensions found for this product'
         ], 404);
     }
+
+    /**
+     * Show payment page for custom order.
+     */
+    public function payment($id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('page.login')->with('error', 'Please login to make payment');
+        }
+
+        $dimension = CustomDimension::with(['user', 'product'])->find($id);
+
+        if (!$dimension) {
+            return redirect()->back()->with('error', 'Custom order not found');
+        }
+
+        // Check if the order belongs to the authenticated user
+        if ($dimension->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'Unauthorized access');
+        }
+
+        // Check if order is accepted
+        if ($dimension->status !== 'accepted') {
+            return redirect()->back()->with('error', 'Order is not ready for payment');
+        }
+
+        return view('web.custom-order-payment', compact('dimension'));
+    }
 }

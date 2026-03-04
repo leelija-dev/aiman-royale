@@ -130,10 +130,10 @@ class CustomDimensionController extends Controller
         try {
             $user = $dimension->user;
             $product = $dimension->product;
-            
+
             // Generate payment link (you can customize this based on your payment system)
             $paymentLink = url("/pay-custom-order/{$dimension->id}");
-            
+
             // Get product image URL
             $productImage = $product->image ? asset('storage/' . $product->image) : asset('images/default-product.jpg');
 
@@ -152,7 +152,7 @@ class CustomDimensionController extends Controller
             $message .= "Thank you for choosing us! 🛍️";
 
             // Send WhatsApp message with image
-            $this->sendWhatsAppMessageWithImage($user->phone, $message, $productImage);
+            $this->sendWhatsAppMessageWithImage($user->phone, $message, $productImage, $dimension);
 
             \Log::info('WhatsApp notification sent for accepted custom request to user: ' . $user->id);
         } catch (\Exception $e) {
@@ -161,14 +161,14 @@ class CustomDimensionController extends Controller
     }
 
     /**
-     * Send WhatsApp message with image (implement your WhatsApp API here)
+     * Send WhatsApp message with image using Facebook Graph API
      */
-    private function sendWhatsAppMessageWithImage($phone, $message, $imageUrl = null)
+    private function sendWhatsAppMessageWithImage($phone, $message, $imageUrl = null, $dimension = null)
     {
         try {
             // Clean phone number (remove any non-digit characters)
             $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
-            
+
             // Format phone number for WhatsApp (include country code if not present)
             if (strlen($cleanPhone) === 10) {
                 // Assume India if 10 digits
@@ -181,51 +181,160 @@ class CustomDimensionController extends Controller
                 $formattedPhone = $cleanPhone;
             }
 
-            // Option 1: Twilio WhatsApp API with Media URL
-            if (env('TWILIO_SID') && env('TWILIO_TOKEN') && env('TWILIO_WHATSAPP_NUMBER')) {
-                $twilio = new \Twilio\Rest\Client(env('TWILIO_SID'), env('TWILIO_TOKEN'));
-                
-                $messageParams = [
-                    "from" => "whatsapp:" . env('TWILIO_WHATSAPP_NUMBER'),
-                    "body" => $message
-                ];
-                
-                // Add image if provided
-                if ($imageUrl) {
-                    $messageParams["mediaUrl"] = [$imageUrl];
-                }
-                
-                $result = $twilio->messages->create(
-                    "whatsapp:+{$formattedPhone}",
-                    $messageParams
-                );
+            // Facebook Graph API WhatsApp Business API
+            $accessToken = env('WHATSAPP_ACCESS_TOKEN');
+            $phoneNumberId = env('PHONE_NUMBER_ID');
+            $version = env('FACEBOOK_GRAPH_API_VERSION', 'v18.0');
 
-                \Log::info('WhatsApp message with image sent via Twilio', [
-                    'phone' => $formattedPhone,
-                    'message_sid' => $result->sid ?? 'N/A',
-                    'image_url' => $imageUrl ?? 'N/A'
-                ]);
-                
-                return true;
+            if ($accessToken && $phoneNumberId && $dimension) {
+                // Prepare message payload
+                $messageData = [
+                    'messaging_product' => 'whatsapp',
+                    'to' => $formattedPhone,
+                    'type' => 'template',
+                    'template' => [
+                        'name' => 'custom_order_accepted',
+                        'language' => [
+                            'code' => 'en_US'
+                        ],
+                        'components' => [
+                            [
+                                'type' => 'header',
+                                'parameters' => [
+                                    [
+                                        'type' => 'image',
+                                        'image' => [
+                                            'link' => $imageUrl ?? asset('images/default-product.jpg')
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            [
+                                'type' => 'body',
+                                'parameters' => [
+                                    [
+                                        'type' => 'text',
+                                        'text' => $dimension->user->name ?? 'Customer'
+                                    ],
+                                    [
+                                        'type' => 'text',
+                                        'text' => $dimension->product->name ?? 'Product'
+                                    ],
+                                    [
+                                        'type' => 'text',
+                                        'text' => url("/product/{$dimension->product->id}")
+                                    ],
+                                    [
+                                        'type' => 'text',
+                                        'text' => url("/pay-custom-order/{$dimension->id}")
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+
+                // Send message via Facebook Graph API
+                $response = $this->sendFacebookWhatsAppMessage($messageData, $accessToken, $phoneNumberId, $version);
+
+                if ($response) {
+                    \Log::info('WhatsApp message sent via Facebook Graph API', [
+                        'phone' => $formattedPhone,
+                        'message_id' => $response['message_id'] ?? 'N/A',
+                        'image_url' => $imageUrl ?? 'N/A'
+                    ]);
+                    return true;
+                }
             }
 
-            // Option 2: WhatsApp Business API with Media
-            // This would require your own WhatsApp Business API setup
-            
-            // Option 3: Third-party WhatsApp services with Media support
-            // Examples: WATI, MessageBird, Vonage, etc.
-            
+            // Fallback: Send simple text message if template not set up
+            if ($accessToken && $phoneNumberId) {
+                $simpleMessageData = [
+                    'messaging_product' => 'whatsapp',
+                    'to' => $formattedPhone,
+                    'type' => 'text',
+                    'text' => [
+                        'body' => $message
+                    ]
+                ];
+
+                if ($imageUrl) {
+                    // Send image separately
+                    $imageData = [
+                        'messaging_product' => 'whatsapp',
+                        'to' => $formattedPhone,
+                        'type' => 'image',
+                        'image' => [
+                            'link' => $imageUrl
+                        ]
+                    ];
+
+                    $this->sendFacebookWhatsAppMessage($imageData, $accessToken, $phoneNumberId, $version);
+                }
+
+                $response = $this->sendFacebookWhatsAppMessage($simpleMessageData, $accessToken, $phoneNumberId, $version);
+
+                if ($response) {
+                    \Log::info('WhatsApp message sent via Facebook Graph API (simple)', [
+                        'phone' => $formattedPhone,
+                        'message_id' => $response['message_id'] ?? 'N/A'
+                    ]);
+                    return true;
+                }
+            }
+
             // Fallback: Log for now
-            \Log::info('WhatsApp message with image would be sent (no API configured):', [
+            \Log::info('WhatsApp message would be sent (no API configured):', [
                 'phone' => $formattedPhone,
                 'message_length' => strlen($message),
                 'image_url' => $imageUrl ?? 'N/A'
             ]);
-            
+
             return false;
-            
         } catch (\Exception $e) {
-            \Log::error('Error sending WhatsApp message with image: ' . $e->getMessage());
+            \Log::error('Error sending WhatsApp message: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send message via Facebook Graph API
+     */
+    private function sendFacebookWhatsAppMessage($messageData, $accessToken, $phoneNumberId, $version = 'v18.0')
+    {
+        try {
+            $url = "https://graph.facebook.com/{$version}/{$phoneNumberId}/messages";
+            
+            $headers = [
+                'Authorization: Bearer ' . $accessToken,
+                'Content-Type: application/json'
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode === 200) {
+                $responseData = json_decode($response, true);
+                return $responseData;
+            } else {
+                \Log::error('Facebook Graph API error:', [
+                    'http_code' => $httpCode,
+                    'response' => $response
+                ]);
+                return false;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Facebook Graph API exception: ' . $e->getMessage());
             return false;
         }
     }

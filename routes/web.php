@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/custom-dimensions/{productId}', [CustomDimensionController::class, 'show'])->name('custom-dimensions.show');
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
+    Route::get('/pay-custom-order/{id}', [CustomDimensionController::class, 'payment'])->name('custom-order.payment');
     
 });
 
@@ -123,6 +124,7 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
+
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
