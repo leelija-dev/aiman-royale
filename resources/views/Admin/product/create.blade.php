@@ -81,6 +81,16 @@
                                 @enderror
                             </div>
 
+                            <!-- Featured Image -->
+                            <div class="mb-3">
+                                <label for="featured_image" class="form-label">Featured Image</label>
+                                <input type="file" class="form-control" id="featured_image" name="featured_image" accept="image/*">
+                                @error('featured_image')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Upload a featured image. Will be compressed to ~10KB.</small>
+                            </div>
+
                             <!-- Fit -->
                             <div class="mb-3">
                                 <label for="fit" class="form-label">Fit</label>

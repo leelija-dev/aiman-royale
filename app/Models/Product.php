@@ -34,6 +34,7 @@ class Product extends Model
         'discount_price',
         'stock',
         'status',
+        'featured_image',
         'is_featured',
         'meta_title',
         'keywords',

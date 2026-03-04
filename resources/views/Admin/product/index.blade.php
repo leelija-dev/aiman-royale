@@ -57,6 +57,8 @@
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status
                                     </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Featured Image
+                                    </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions
                                     </th>
                                 </tr>
@@ -134,6 +136,25 @@
                                                         class="badge {{ $product->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                                                         {{ $product->status }}
                                                     </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    @if($product->featured_image)
+                                                        <img src="{{ asset($product->featured_image) }}" 
+                                                             alt="Featured Image" 
+                                                             class="avatar avatar-sm me-2" 
+                                                             style="max-width: 40px; max-height: 40px; object-fit: cover;">
+                                                        <span class="text-xs text-success">✓</span>
+                                                    @else
+                                                        <img src="{{ asset('assets/img/placeholder.png') }}" 
+                                                             alt="No Featured Image" 
+                                                             class="avatar avatar-sm me-2" 
+                                                             style="max-width: 40px; max-height: 40px; object-fit: cover;">
+                                                        <span class="text-xs text-muted">None</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
@@ -227,6 +248,24 @@
                                                                         id="edit_fabric_{{ $product->id }}"
                                                                         name="fabric" value="{{ $product->fabric }}"
                                                                         maxlength="100">
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="edit_featured_image_{{ $product->id }}"
+                                                                        class="form-label">Featured Image</label>
+                                                                    <input type="file" class="form-control"
+                                                                        id="edit_featured_image_{{ $product->id }}"
+                                                                        name="featured_image" accept="image/*">
+                                                                    @if($product->featured_image)
+                                                                        <div class="mt-2">
+                                                                            <img src="{{ asset($product->featured_image) }}" 
+                                                                                 alt="Current Featured Image" 
+                                                                                 class="img-thumbnail" 
+                                                                                 style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                                                                            <br>
+                                                                            <small class="text-muted">Current featured image</small>
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
 
                                                                 <div class="mb-3">
@@ -442,7 +481,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center py-4">
+                                        <td colspan="10" class="text-center py-4">
                                             <p class="text-muted">No products found.</p>
                                         </td>
                                     </tr>

@@ -9,6 +9,7 @@ use App\Models\Occasion;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use App\Models\Brand;
 
 class ProductController extends Controller
@@ -47,6 +48,7 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
+        
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no',
             'category_id' => 'required|exists:categories,id',
@@ -61,6 +63,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048', // Max 2MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -121,12 +124,35 @@ class ProductController extends Controller
             ]);
         }
 
+        // Handle featured image upload if present
+        if ($request->hasFile('featured_image')) {
+            $featuredImage = $request->file('featured_image');
+            
+            // Create directory if not exists
+            $featuredFolder = 'uploads/featured';
+            $featuredUploadPath = public_path($featuredFolder);
+            if (!file_exists($featuredUploadPath)) {
+                mkdir($featuredUploadPath, 0777, true);
+            }
+            
+            // Generate unique filename
+            $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+            
+            // Move file without compression for now
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+            
+            // Update product with featured image path
+            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+            $product->save();
+        }
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully!');
     }
     public function update(Request $request, $id)
     {
-        // dd($request);
+        // Log to file to test if method is called
+        // file_put_contents(public_path('update_test.txt'), 'Update method called at ' . date('Y-m-d H:i:s'));
+        
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
@@ -141,6 +167,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048', // Max 2MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -222,9 +249,59 @@ class ProductController extends Controller
             ]);
         }
 
+        // Handle featured image upload if present
+        if ($request->hasFile('featured_image')) {
+            $featuredImage = $request->file('featured_image');
+            
+            // Delete existing featured image
+            if ($product->featured_image && file_exists(public_path($product->featured_image))) {
+                unlink(public_path($product->featured_image));
+            }
+            
+            // Create directory if not exists
+            $featuredFolder = 'uploads/featured';
+            $featuredUploadPath = public_path($featuredFolder);
+            if (!file_exists($featuredUploadPath)) {
+                mkdir($featuredUploadPath, 0777, true);
+            }
+            
+            // Generate unique filename
+            $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+            
+            // Move file without compression for now
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+            
+            // Update product with new featured image path
+            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+            $product->save();
+        } else {
+            // No featured image uploaded
+        }
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }
+
+    // In your controller
+// public function update(Request $request, $id)
+// {
+//     // Check if file exists
+//     if ($request->hasFile('featured_image')) {
+//         dd([
+//             'file_exists' => true,
+//             'file_info' => [
+//                 'original_name' => $request->file('featured_image')->getClientOriginalName(),
+//                 'size' => $request->file('featured_image')->getSize(),
+//                 'mime' => $request->file('featured_image')->getMimeType(),
+//                 'extension' => $request->file('featured_image')->getClientOriginalExtension(),
+//                 'is_valid' => $request->file('featured_image')->isValid(),
+//             ],
+//             'all_request_data' => $request->except(['_token', '_method']),
+//             'files' => $_FILES, // Raw files data
+//         ]);
+//     }
+    
+//     dd('No file uploaded', $request->all(), $_FILES);
+// }
     public function delete($id)
     {
         $product = Product::findOrFail($id);
@@ -250,5 +327,103 @@ class ProductController extends Controller
         $product = Product::onlyTrashed()->findOrFail($id);
         $product->forceDelete();
         return (redirect()->route('admin.products-trashed'))->with('success', 'Product permanently deleted successfully!');
+    }
+
+    /**
+     * Compress image to target file size (approximately)
+     */
+    private function compressImage($sourceFile, $destinationPath, $targetSizeKB = 10)
+    {
+        try {
+            // Get image info
+            $imageInfo = getimagesize($sourceFile->getPathname());
+            $mimeType = $imageInfo['mime'];
+            
+            // Create image resource based on mime type
+            switch ($mimeType) {
+                case 'image/jpeg':
+                    $image = imagecreatefromjpeg($sourceFile->getPathname());
+                    break;
+                case 'image/png':
+                    $image = imagecreatefrompng($sourceFile->getPathname());
+                    break;
+                case 'image/gif':
+                    $image = imagecreatefromgif($sourceFile->getPathname());
+                    break;
+                default:
+                    // If unsupported mime type, just move the file
+                    move_uploaded_file($sourceFile->getPathname(), $destinationPath);
+                    return;
+            }
+            
+            if (!$image) {
+                // If image creation fails, just move the file
+                move_uploaded_file($sourceFile->getPathname(), $destinationPath);
+                return;
+            }
+            
+            // Get original dimensions
+            $width = imagesx($image);
+            $height = imagesy($image);
+            
+            // Calculate compression quality iteratively
+            $quality = 85;
+            $step = 5;
+            $minQuality = 10;
+            
+            while ($quality > $minQuality) {
+                // Create temporary file to check size
+                $tempPath = $destinationPath . '_temp';
+                
+                // Save with current quality
+                switch ($mimeType) {
+                    case 'image/jpeg':
+                        imagejpeg($image, $tempPath, $quality);
+                        break;
+                    case 'image/png':
+                        imagepng($image, $tempPath, (int)(9 * $quality / 100));
+                        break;
+                    case 'image/gif':
+                        imagegif($image, $tempPath);
+                        break;
+                }
+                
+                // Check file size
+                $fileSizeKB = filesize($tempPath) / 1024;
+                
+                if ($fileSizeKB <= $targetSizeKB) {
+                    // Target size achieved, move temp file to destination
+                    rename($tempPath, $destinationPath);
+                    break;
+                } else {
+                    // File too large, delete temp and reduce quality
+                    unlink($tempPath);
+                    $quality -= $step;
+                }
+            }
+            
+            // If we couldn't achieve target size, save with minimum quality
+            if ($quality <= $minQuality && !file_exists($destinationPath)) {
+                switch ($mimeType) {
+                    case 'image/jpeg':
+                        imagejpeg($image, $destinationPath, $minQuality);
+                        break;
+                    case 'image/png':
+                        imagepng($image, $destinationPath, 0);
+                        break;
+                    case 'image/gif':
+                        imagegif($image, $destinationPath);
+                        break;
+                }
+            }
+            
+            // Clean up
+            imagedestroy($image);
+            
+        } catch (\Exception $e) {
+            // If compression fails, just move the original file
+            move_uploaded_file($sourceFile->getPathname(), $destinationPath);
+            // Error logged for debugging
+        }
     }
 }
