@@ -48,7 +48,6 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-        
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no',
             'category_id' => 'required|exists:categories,id',
@@ -63,7 +62,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -138,8 +137,8 @@ class ProductController extends Controller
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
             
-            // Move file without compression for now
-            $featuredImage->move($featuredUploadPath, $featuredFilename);
+            // Compress and save image to ~10KB
+            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;
@@ -150,9 +149,6 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Log to file to test if method is called
-        // file_put_contents(public_path('update_test.txt'), 'Update method called at ' . date('Y-m-d H:i:s'));
-        
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
@@ -167,7 +163,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -268,8 +264,8 @@ class ProductController extends Controller
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
             
-            // Move file without compression for now
-            $featuredImage->move($featuredUploadPath, $featuredFilename);
+            // Compress and save image to ~10KB
+            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with new featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;
@@ -350,6 +346,9 @@ class ProductController extends Controller
                 case 'image/gif':
                     $image = imagecreatefromgif($sourceFile->getPathname());
                     break;
+                case 'image/webp':
+                    $image = imagecreatefromwebp($sourceFile->getPathname());
+                    break;
                 default:
                     // If unsupported mime type, just move the file
                     move_uploaded_file($sourceFile->getPathname(), $destinationPath);
@@ -386,6 +385,9 @@ class ProductController extends Controller
                     case 'image/gif':
                         imagegif($image, $tempPath);
                         break;
+                    case 'image/webp':
+                        imagewebp($image, $tempPath, $quality);
+                        break;
                 }
                 
                 // Check file size
@@ -413,6 +415,9 @@ class ProductController extends Controller
                         break;
                     case 'image/gif':
                         imagegif($image, $destinationPath);
+                        break;
+                    case 'image/webp':
+                        imagewebp($image, $destinationPath, $minQuality);
                         break;
                 }
             }
