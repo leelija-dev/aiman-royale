@@ -64,6 +64,7 @@ class HomeController extends Controller
                 'products.fit',
                 'products.status',
                 'products.is_featured',
+                'products.featured_image',
                 'products.slug',
                 'products.created_at',
                 'product_variants.id as variant_id',

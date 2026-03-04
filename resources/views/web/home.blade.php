@@ -234,9 +234,9 @@
 
                     </a>
                     @else
-                        {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
-                        class="block h-full w-full relative"> --}}
-                        <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
+                    {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
+                    class="block h-full w-full relative"> --}}
+                    <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
                             src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
@@ -283,9 +283,9 @@
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
-                        alt="Glow Pink Dress">
+                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                            src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
+                            alt="Glow Pink Dress">
                     </a>
                     @endif
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
@@ -374,9 +374,9 @@
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                        alt="Gray Lahenga">
+                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                            src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
+                            alt="Gray Lahenga">
                     </a>
                     @endif
                     <div
@@ -413,10 +413,10 @@
                     @else
                     <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
-                     
-                    <img class="object-cover h-full w-full"
-                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
-                     </a>
+
+                        <img class="object-cover h-full w-full"
+                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
+                    </a>
                     @endif
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -699,7 +699,7 @@
 <section class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
         <!-- Header -->
-         <div class="text-center mb-4">
+        <div class="text-center mb-4">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Tied with Love</h2>
             <p class="text-gray-500">Occasions wrapped perfectly</p>
         </div>
@@ -712,20 +712,20 @@
                 <!-- String/Hanger -->
                 <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
                 <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
-                
+
                 <!-- Tag -->
                 <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
-                    
+
                     <!-- Tag Hole -->
                     <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10"></div>
-                    
+
                     <!-- Image -->
                     <div class="h-32 overflow-hidden">
                         <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                             alt="{{ $category->name }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
                     </div>
-                    
+
                     <!-- Content -->
                     <div class="p-3 text-center">
                         <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
@@ -761,14 +761,14 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
-           
+
             @foreach ($products as $product)
             <div class="item flex justify-center items-center">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
@@ -789,27 +789,26 @@
                         {{-- <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleHomeWishlist({{ $product->id }}, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                                id="wishlist-heart-{{ $product->id }}">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
+                            id="wishlist-heart-{{ $product->id }}">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                         </button> --}}
                         @if(Auth::check())
                         <button
-             
+
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleWishlist({{ $product->id }}, this,event);">
                             <i class="far fa-heart"></i>
                         </button>
                         @else
-                        <a href="{{ route('page.login') }}" >
-                           
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                            >
-                            <i class="far fa-heart"></i>
-                        </button>
+                        <a href="{{ route('page.login') }}">
+
+                            <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </a>
                         @endif
                     </div>
@@ -1366,7 +1365,7 @@ All Products
             data-product-id="{{ $product->id }}">
             <!-- Image Wrapper -->
             <div class="relative rounded-[6px] overflow-hidden">
-                <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                     alt="{{ $product->name }}"
                     class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
@@ -1715,8 +1714,10 @@ All Products
                     <div class="relative rounded-[6px] overflow-hidden">
 
                         <a href="{{route('category.show', $product->category->slug)}}">
-                            <img src="{{ asset($product->images->first()->image) }}"
+                            <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                                 alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                            {{--<img src="{{ asset($product->images->first()->image) }}"
+                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />--}}
                         </a>
 
                         <!-- Badges -->
@@ -1753,7 +1754,7 @@ All Products
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
 
 
-                            <a href="{{route('category.show', $product->category->slug)}}">
+                            <a href="{{route('page.single-product', $product->slug)}}">
                                 <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                     View
                                 </button>
@@ -2765,82 +2766,82 @@ All Products
     });
 
 
-    
-function toggleWishlist(productId, button, event) {
 
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
+    function toggleWishlist(productId, button, event) {
+
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        const isInWishlist = button.classList.contains('text-red-500');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+        // Show loading
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.success) {
+
+                    // Toggle UI
+                    if (isInWishlist) {
+                        button.classList.remove('text-red-500');
+                        button.innerHTML = '<i class="far fa-heart"></i>';
+                    } else {
+                        button.classList.add('text-red-500');
+                        button.innerHTML = '<i class="fas fa-heart"></i>';
+                    }
+
+                } else {
+
+
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Already Added',
+                        text: data.message,
+                        // showConfirmButton: false,
+                        ConfirmButtonText: 'Ok',
+                        timer: 1800
+                    });
+
+                    // Keep heart filled
+                    button.classList.add('text-red-500');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+
+
+                }
+
+
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
     }
-
-    if (!productId) {
-        alert('Product ID not found');
-        return;
-    }
-
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-    const isInWishlist = button.classList.contains('text-red-500');
-    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
-    // Show loading
-    const originalContent = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    button.disabled = true;
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({
-            product_id: productId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-        if (data.success) {
-
-            // Toggle UI
-            if (isInWishlist) {
-                button.classList.remove('text-red-500');
-                button.innerHTML = '<i class="far fa-heart"></i>';
-            } else {
-                button.classList.add('text-red-500');
-                button.innerHTML = '<i class="fas fa-heart"></i>';
-            }
-
-        } else {
-
-    
-
-        Swal.fire({
-            icon: 'info',
-            title: 'Already Added',
-            text: data.message,
-            // showConfirmButton: false,
-            ConfirmButtonText: 'Ok',
-            timer: 1800
-        });
-
-        // Keep heart filled
-        button.classList.add('text-red-500');
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-
-    
-}
-
-
-    })
-    .catch(error => {
-        console.error(error);
-    })
-    .finally(() => {
-        button.disabled = false;
-    });
-}
 </script>
 
 @endsection
