@@ -91,6 +91,315 @@
                                 <small class="text-muted">Upload a featured image. Will be compressed to ~10KB.</small>
                             </div>
 
+                            <!-- Specifications Section -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Product Specifications</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Lehenga Fabric -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lehenga_fabric" class="form-label">Lehenga Fabric</label>
+                                            <input type="text" class="form-control" id="lehenga_fabric" name="lehenga_fabric" 
+                                                   value="{{ old('lehenga_fabric') }}" maxlength="100">
+                                            @error('lehenga_fabric')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Choli Fabric -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="choli_fabric" class="form-label">Choli Fabric</label>
+                                            <input type="text" class="form-control" id="choli_fabric" name="choli_fabric" 
+                                                   value="{{ old('choli_fabric') }}" maxlength="100">
+                                            @error('choli_fabric')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Dupatta Fabric -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="dupatta_fabric" class="form-label">Dupatta Fabric</label>
+                                            <input type="text" class="form-control" id="dupatta_fabric" name="dupatta_fabric" 
+                                                   value="{{ old('dupatta_fabric') }}" maxlength="100">
+                                            @error('dupatta_fabric')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Type -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="type" class="form-label">Type</label>
+                                            <input type="text" class="form-control" id="type" name="type" 
+                                                   value="{{ old('type') }}" maxlength="100">
+                                            @error('type')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Stitching Type -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="stitching_type" class="form-label">Stitching Type</label>
+                                            <input type="text" class="form-control" id="stitching_type" name="stitching_type" 
+                                                   value="{{ old('stitching_type') }}" maxlength="100">
+                                            @error('stitching_type')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Pattern -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="pattern" class="form-label">Pattern</label>
+                                            <input type="text" class="form-control" id="pattern" name="pattern" 
+                                                   value="{{ old('pattern') }}" maxlength="100">
+                                            @error('pattern')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Color -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="color" class="form-label">Color</label>
+                                            <input type="text" class="form-control" id="color" name="color" 
+                                                   value="{{ old('color') }}" maxlength="100">
+                                            @error('color')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Sales Package -->
+                                        <div class="col-md-12 mb-3">
+                                            <label for="sales_package" class="form-label">Sales Package</label>
+                                            <textarea class="form-control" id="sales_package" name="sales_package" rows="2">{{ old('sales_package') }}</textarea>
+                                            @error('sales_package')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Parts Management -->
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Product Parts</h5>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="addProductPart()">
+                                        <i class="fas fa-plus"></i> Add Part
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="product-parts-container">
+                                        <!-- Parts will be added here dynamically -->
+                                    </div>
+                                    
+                                    <!-- Template for new part -->
+                                    <div id="part-template" style="display: none;">
+                                        <div class="part-item border rounded p-3 mb-3" style="background: #f8f9fa;">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">New Part</h6>
+                                                <button type="button" class="btn btn-sm btn-danger" onclick="removePart(this)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Part Name *</label>
+                                                    <input type="text" class="form-control part-name" name="parts[][part_name]" 
+                                                           placeholder="e.g., Lehenga, Choli, Dupatta" required>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Fabric</label>
+                                                    <input type="text" class="form-control" name="parts[][fabric]" 
+                                                           placeholder="e.g., Art Silk, Cotton, Net">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Work Type</label>
+                                                    <input type="text" class="form-control" name="parts[][work_type]" 
+                                                           placeholder="e.g., Zari Work, Mirror Work, Thread Work">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- JavaScript for dynamic specifications and product parts -->
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const categorySelect = document.getElementById('category_id');
+                                    const lehengaSpecs = ['lehenga_fabric', 'choli_fabric', 'dupatta_fabric'];
+                                    const sareeSpecs = ['fabric'];
+                                    const gownSpecs = ['fabric', 'stitching_type'];
+                                    const commonSpecs = ['type', 'pattern', 'color', 'sales_package'];
+                                    
+                                    function toggleSpecifications() {
+                                        const category = categorySelect.options[categorySelect.selectedIndex]?.text.toLowerCase() || '';
+                                        
+                                        // Hide all specification fields first
+                                        const allSpecFields = [
+                                            ...lehengaSpecs, ...sareeSpecs, ...gownSpecs, ...commonSpecs
+                                        ];
+                                        
+                                        allSpecFields.forEach(fieldId => {
+                                            const field = document.getElementById(fieldId);
+                                            if (field) {
+                                                field.closest('.mb-3, .col-md-6, .col-md-12').style.display = 'none';
+                                            }
+                                        });
+                                        
+                                        // Show relevant fields based on category
+                                        if (category.includes('lehenga')) {
+                                            lehengaSpecs.forEach(fieldId => {
+                                                const field = document.getElementById(fieldId);
+                                                if (field) field.closest('.mb-3, .col-md-6, .col-md-12').style.display = 'block';
+                                            });
+                                        } else if (category.includes('saree')) {
+                                            sareeSpecs.forEach(fieldId => {
+                                                const field = document.getElementById(fieldId);
+                                                if (field) field.closest('.mb-3, .col-md-6, .col-md-12').style.display = 'block';
+                                            });
+                                        } else if (category.includes('gown')) {
+                                            gownSpecs.forEach(fieldId => {
+                                                const field = document.getElementById(fieldId);
+                                                if (field) field.closest('.mb-3, .col-md-6, .col-md-12').style.display = 'block';
+                                            });
+                                        }
+                                        
+                                        // Always show common specs
+                                        commonSpecs.forEach(fieldId => {
+                                            const field = document.getElementById(fieldId);
+                                            if (field) field.closest('.mb-3, .col-md-6, .col-md-12').style.display = 'block';
+                                        });
+                                    }
+                                    
+                                    if (categorySelect) {
+                                        categorySelect.addEventListener('change', toggleSpecifications);
+                                        // Initial call
+                                        toggleSpecifications();
+                                    }
+                                });
+
+                                // Product Parts Management Functions
+                                let partCounter = 0;
+
+                                function addProductPart() {
+                                    const container = document.getElementById('product-parts-container');
+                                    const template = document.getElementById('part-template');
+                                    const clone = template.cloneNode(true);
+                                    
+                                    // Update part number
+                                    partCounter++;
+                                    clone.querySelector('h6').textContent = 'Part ' + partCounter;
+                                    
+                                    // Update name attributes to ensure unique array indices
+                                    const inputs = clone.querySelectorAll('input, textarea');
+                                    inputs.forEach(input => {
+                                        const name = input.getAttribute('name');
+                                        if (name && name.startsWith('parts[][')) {
+                                            // Replace parts[][field] with parts[index][field]
+                                            input.setAttribute('name', 'parts[' + (partCounter - 1) + ']' + name.substring(7));
+                                        }
+                                    });
+                                    
+                                    // Show the cloned part
+                                    clone.style.display = 'block';
+                                    clone.id = '';
+                                    container.appendChild(clone);
+                                    
+                                    // Update order numbers
+                                    updatePartOrders();
+                                }
+
+                                function removePart(button) {
+                                    const partItem = button.closest('.part-item');
+                                    partItem.remove();
+                                    updatePartOrders();
+                                }
+
+                                function updatePartOrders() {
+                                    const parts = document.querySelectorAll('#product-parts-container .part-item');
+                                    parts.forEach((part, index) => {
+                                        const orderInput = part.querySelector('.part-order');
+                                        if (orderInput) {
+                                            orderInput.value = index + 1;
+                                        }
+                                        
+                                        // Update part number display
+                                        const partHeader = part.querySelector('h6');
+                                        if (partHeader) {
+                                            partHeader.textContent = 'Part ' + (index + 1);
+                                        }
+                                        
+                                        // Update all input names to use new index
+                                        const inputs = part.querySelectorAll('input, textarea');
+                                        inputs.forEach(input => {
+                                            const name = input.getAttribute('name');
+                                            if (name && name.startsWith('parts[')) {
+                                                // Extract field name from parts[oldIndex][fieldName]
+                                                const fieldName = name.match(/parts\[\d+\]\[(.+)\]/)[1];
+                                                // Update to new index
+                                                input.setAttribute('name', 'parts[' + index + '][' + fieldName + ']');
+                                            }
+                                        });
+                                    });
+                                }
+
+                                // Auto-add default parts based on category
+                                function addDefaultParts(category) {
+                                    const container = document.getElementById('product-parts-container');
+                                    
+                                    // Clear existing parts
+                                    container.innerHTML = '';
+                                    partCounter = 0;
+                                    
+                                    if (category.toLowerCase().includes('lehenga')) {
+                                        // Add Lehenga
+                                        addProductPart();
+                                        const lehengaPart = container.lastElementChild;
+                                        lehengaPart.querySelector('.part-name').value = 'Lehenga';
+                                        
+                                        // Add Choli
+                                        addProductPart();
+                                        const choliPart = container.lastElementChild;
+                                        choliPart.querySelector('.part-name').value = 'Choli';
+                                        
+                                        // Add Dupatta
+                                        addProductPart();
+                                        const dupattaPart = container.lastElementChild;
+                                        dupattaPart.querySelector('.part-name').value = 'Dupatta';
+                                    } else if (category.toLowerCase().includes('saree')) {
+                                        // Add Saree
+                                        addProductPart();
+                                        const sareePart = container.lastElementChild;
+                                        sareePart.querySelector('.part-name').value = 'Saree';
+                                        
+                                        // Add Blouse Piece
+                                        addProductPart();
+                                        const blousePart = container.lastElementChild;
+                                        blousePart.querySelector('.part-name').value = 'Blouse Piece';
+                                    } else if (category.toLowerCase().includes('gown')) {
+                                        // Add Gown
+                                        addProductPart();
+                                        const gownPart = container.lastElementChild;
+                                        gownPart.querySelector('.part-name').value = 'Gown';
+                                    }
+                                }
+
+                                // Add event listener to category select to auto-add default parts
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const categorySelect = document.getElementById('category_id');
+                                    if (categorySelect) {
+                                        categorySelect.addEventListener('change', function() {
+                                            const category = this.options[this.selectedIndex]?.text || '';
+                                            if (category && document.getElementById('product-parts-container').children.length === 0) {
+                                                addDefaultParts(category);
+                                            }
+                                        });
+                                    }
+                                });
+                            </script>
+
                             <!-- Fit -->
                             <div class="mb-3">
                                 <label for="fit" class="form-label">Fit</label>

@@ -367,6 +367,189 @@
           data-tab="specification">
           Specification
         </button>
+        
+        <!-- Specifications Display -->
+        <div class="tab-content" id="specification" style="display: none;">
+          <h3
+            class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">
+            Product Specifications
+          </h3>
+          <div class="css-175oi2r" style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
+            
+            <!-- Display Product Parts -->
+            @if($product->parts && $product->parts->count() > 0)
+              @foreach($product->parts->ordered as $part)
+                <div class="mb-4 p-3 border rounded" style="background: #f8f9fa;">
+                  <h5 class="font-semibold mb-3" style="color: #333;">{{ $part->part_name }}</h5>
+                  
+                  @if($part->fabric)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Fabric</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->fabric }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->work_type)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Work Type</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->work_type }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->color)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Color</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->color }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->pattern)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Pattern</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->pattern }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->embroidery)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Embroidery</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->embroidery }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->lining)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Lining</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->lining }}</div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if($part->description)
+                  <div class="grid-formation grid-column-2">
+                    <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                      <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Details</div>
+                      <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $part->description }}</div>
+                    </div>
+                  </div>
+                  @endif
+                </div>
+              @endforeach
+            @else
+              <!-- Fallback to old single specification system -->
+              <!-- Lehenga Specifications -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'lehenga'))
+                @if($product->lehenga_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Lehenga Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->lehenga_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->choli_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Choli Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->choli_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->dupatta_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Dupatta Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->dupatta_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+              
+              <!-- Saree Specifications -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'saree'))
+                @if($product->fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Saree Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->pattern)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Pattern</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->pattern }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+              
+              <!-- Gown Specifications -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'gown'))
+                @if($product->fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Gown Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->stitching_type)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Stitching Type</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->stitching_type }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+              
+              <!-- Common Specifications for All Types -->
+              @if($product->type)
+              <div class="grid-formation grid-column-2">
+                <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                  <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Type</div>
+                  <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->type }}</div>
+                </div>
+              </div>
+              @endif
+              
+              @if($product->color)
+              <div class="grid-formation grid-column-2">
+                <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                  <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Color</div>
+                  <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->color }}</div>
+                </div>
+              </div>
+              @endif
+              
+              @if($product->sales_package)
+              <div class="grid-formation grid-column-2">
+                <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                  <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Sales Package</div>
+                  <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->sales_package }}</div>
+                </div>
+              </div>
+              @endif
+            @endif
+          </div>
+        </div>
         <button
           class="tab-btn border-b-2 border-transparent pb-2 text-gray-500"
           data-tab="reviews">

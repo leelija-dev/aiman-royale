@@ -357,7 +357,7 @@ class HomeController extends Controller
         //  dd($slug);
          $data = Product::where('slug', $slug)->first();
          if($data){
-         $product = Product::with(['images', 'variants', 'category'])
+         $product = Product::with(['images', 'variants', 'category', 'parts'])
             ->where('slug', $slug)
             ->firstOrFail();
          

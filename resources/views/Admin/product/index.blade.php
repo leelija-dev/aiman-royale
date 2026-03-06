@@ -227,10 +227,6 @@
                                                                 <div class="mb-3">
                                                                     <label for="edit_brand_{{ $product->id }}"
                                                                         class="form-label">Brand</label>
-                                                                    {{-- <input type="text" class="form-control"
-                                                                        id="edit_brand_{{ $product->id }}"
-                                                                        name="brand" value="{{ $product->brand }}"
-                                                                        maxlength="100"> --}}
                                                                         <select class="form-control" id="brand" name="brand">
                                                                             <option value="" selected hidden>Select Brand</option>
                                                                             @foreach ($brands as $brand)
@@ -266,6 +262,149 @@
                                                                             <small class="text-muted">Current featured image</small>
                                                                         </div>
                                                                     @endif
+                                                                </div>
+
+                                                                <!-- Specifications Section -->
+                                                                <div class="card mb-3">
+                                                                    <div class="card-header">
+                                                                        <h6 class="mb-0">Product Specifications</h6>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <!-- Lehenga Fabric -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_lehenga_fabric_{{ $product->id }}" class="form-label">Lehenga Fabric</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_lehenga_fabric_{{ $product->id }}" 
+                                                                                       name="lehenga_fabric" 
+                                                                                       value="{{ $product->lehenga_fabric ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Choli Fabric -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_choli_fabric_{{ $product->id }}" class="form-label">Choli Fabric</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_choli_fabric_{{ $product->id }}" 
+                                                                                       name="choli_fabric" 
+                                                                                       value="{{ $product->choli_fabric ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Dupatta Fabric -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_dupatta_fabric_{{ $product->id }}" class="form-label">Dupatta Fabric</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_dupatta_fabric_{{ $product->id }}" 
+                                                                                       name="dupatta_fabric" 
+                                                                                       value="{{ $product->dupatta_fabric ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Type -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_type_{{ $product->id }}" class="form-label">Type</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_type_{{ $product->id }}" 
+                                                                                       name="type" 
+                                                                                       value="{{ $product->type ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Stitching Type -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_stitching_type_{{ $product->id }}" class="form-label">Stitching Type</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_stitching_type_{{ $product->id }}" 
+                                                                                       name="stitching_type" 
+                                                                                       value="{{ $product->stitching_type ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Pattern -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_pattern_{{ $product->id }}" class="form-label">Pattern</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_pattern_{{ $product->id }}" 
+                                                                                       name="pattern" 
+                                                                                       value="{{ $product->pattern ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Color -->
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="edit_color_{{ $product->id }}" class="form-label">Color</label>
+                                                                                <input type="text" class="form-control" 
+                                                                                       id="edit_color_{{ $product->id }}" 
+                                                                                       name="color" 
+                                                                                       value="{{ $product->color ?? '' }}" maxlength="100">
+                                                                            </div>
+
+                                                                            <!-- Sales Package -->
+                                                                            <div class="col-md-12 mb-3">
+                                                                                <label for="edit_sales_package_{{ $product->id }}" class="form-label">Sales Package</label>
+                                                                                <textarea class="form-control" 
+                                                                                          id="edit_sales_package_{{ $product->id }}" 
+                                                                                          name="sales_package" rows="2">{{ $product->sales_package ?? '' }}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Product Parts Section -->
+                                                                <div class="card mb-3">
+                                                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                                                        <h6 class="mb-0">Product Parts</h6>
+                                                                        <button type="button" class="btn btn-sm btn-primary" onclick="addProductPart({{ $product->id }})">
+                                                                            <i class="fas fa-plus"></i> Add Part
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div id="product-parts-container-{{ $product->id }}">
+                                                                            @if($product->parts && $product->parts->count() > 0)
+                                                                                @foreach($product->parts as $index => $part)
+                                                                                    <div class="part-item border rounded p-3 mb-3" style="background: #f8f9fa;">
+                                                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                            <h6 class="mb-0">Part {{ $index + 1 }}</h6>
+                                                                                            <button type="button" class="btn btn-sm btn-danger" onclick="removePart(this)">
+                                                                                                <i class="fas fa-trash"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-6 mb-3">
+                                                                                                <label class="form-label">Part Name *</label>
+                                                                                                <input type="text" class="form-control part-name" name="parts[{{ $index }}][part_name]" 
+                                                                                                       value="{{ $part->part_name }}" placeholder="e.g., Lehenga, Choli, Dupatta" required>
+                                                                                            </div>
+                                                                                            <div class="col-md-6 mb-3">
+                                                                                                <label class="form-label">Fabric</label>
+                                                                                                <input type="text" class="form-control" name="parts[{{ $index }}][fabric]" 
+                                                                                                       value="{{ $part->fabric }}" placeholder="e.g., Art Silk, Cotton, Net">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </div>
+                                                                        
+                                                                        <!-- Template for new part - WITHOUT required attribute -->
+                                                                        <div id="part-template-{{ $product->id }}" style="display: none;">
+                                                                            <div class="part-item border rounded p-3 mb-3" style="background: #f8f9fa;">
+                                                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                    <h6 class="mb-0">New Part</h6>
+                                                                                    <button type="button" class="btn btn-sm btn-danger" onclick="removePart(this)">
+                                                                                        <i class="fas fa-trash"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6 mb-3">
+                                                                                        <label class="form-label">Part Name *</label>
+                                                                                        <input type="text" class="form-control part-name" name="parts[new_part_index][part_name]" 
+                                                                                               placeholder="e.g., Lehenga, Choli, Dupatta">
+                                                                                    </div>
+                                                                                    <div class="col-md-6 mb-3">
+                                                                                        <label class="form-label">Fabric</label>
+                                                                                        <input type="text" class="form-control" name="parts[new_part_index][fabric]" 
+                                                                                               placeholder="e.g., Art Silk, Cotton, Net">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
 
                                                                 <div class="mb-3">
@@ -492,9 +631,6 @@
 
                     <!-- Pagination -->
                     <div class=" mt-4">
-                        {{-- <div class="text-muted">
-                            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
-                        </div> --}}
                         <div>
                             {{ $data->links('pagination::bootstrap-5') }}
                         </div>
@@ -518,15 +654,8 @@
                 confirmButtonText: 'Yes, delete it!',
                 showLoaderOnConfirm: true,
                 preConfirm: () => {
-                    // Submit the form
                     document.getElementById('delete-form-' + productId).submit();
-                    // Return false to prevent SweetAlert from closing immediately
                     return false;
-                }
-            }).then((result) => {
-                // This won't execute because form submission redirects
-                if (result.isConfirmed) {
-                    // Form is submitted, page will redirect
                 }
             });
         }
@@ -534,7 +663,6 @@
         function openEditModal(productId, occasionId) {
             const modal = new bootstrap.Modal(document.getElementById('editModal' + productId));
             
-            // Only set occasion dropdown if not already set by Blade
             const occasionSelect = document.getElementById('edit_occasion_id_' + productId);
             if (occasionSelect && occasionId && !occasionSelect.value) {
                 occasionSelect.value = occasionId;
@@ -543,10 +671,116 @@
             modal.show();
         }
 
+        // Store part counters for each product
+        let partCounters = {};
+
+        function addProductPart(productId) {
+            // Initialize counter for this product if not exists
+            if (!partCounters[productId]) {
+                const existingParts = document.querySelectorAll('#product-parts-container-' + productId + ' .part-item');
+                partCounters[productId] = existingParts.length;
+            }
+            
+            const container = document.getElementById('product-parts-container-' + productId);
+            const template = document.getElementById('part-template-' + productId);
+            const clone = template.cloneNode(true);
+            
+            // Update part number
+            partCounters[productId]++;
+            const partHeader = clone.querySelector('h6');
+            if (partHeader) {
+                partHeader.textContent = 'Part ' + partCounters[productId];
+            }
+            
+            // Update name attributes with unique indices and add required attribute
+            const inputs = clone.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                const name = input.getAttribute('name');
+                if (name && name.includes('new_part_index')) {
+                    const newName = name.replace('new_part_index', partCounters[productId] - 1);
+                    input.setAttribute('name', newName);
+                    
+                    // Add required attribute to part_name field
+                    if (input.classList.contains('part-name')) {
+                        input.setAttribute('required', 'required');
+                    }
+                }
+            });
+            
+            // Show the cloned part
+            clone.style.display = 'block';
+            clone.id = '';
+            container.appendChild(clone);
+            
+            // Update order numbers
+            updatePartOrders(productId);
+        }
+
+        function removePart(button) {
+            const partItem = button.closest('.part-item');
+            if (partItem) {
+                partItem.remove();
+                const container = partItem.closest('[id^="product-parts-container-"]');
+                if (container) {
+                    const productId = container.id.replace('product-parts-container-', '');
+                    
+                    // Update counter
+                    if (partCounters[productId]) {
+                        partCounters[productId]--;
+                    }
+                    
+                    updatePartOrders(productId);
+                }
+            }
+        }
+
+        function updatePartOrders(productId) {
+            const parts = document.querySelectorAll('#product-parts-container-' + productId + ' .part-item');
+            parts.forEach((part, index) => {
+                // Update part number display
+                const partHeader = part.querySelector('h6');
+                if (partHeader) {
+                    partHeader.textContent = 'Part ' + (index + 1);
+                }
+                
+                // Update all input names to use new index
+                const inputs = part.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name && name.startsWith('parts[')) {
+                        const match = name.match(/parts\[\d+\]\[(.+)\]/);
+                        if (match && match[1]) {
+                            const fieldName = match[1];
+                            input.setAttribute('name', 'parts[' + index + '][' + fieldName + ']');
+                        }
+                    }
+                });
+            });
+            
+            // Update counter
+            partCounters[productId] = parts.length;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Form validation for edit modals
+            // Initialize part counters
+            document.querySelectorAll('[id^="product-parts-container-"]').forEach(container => {
+                const productId = container.id.replace('product-parts-container-', '');
+                const existingParts = container.querySelectorAll('.part-item');
+                partCounters[productId] = existingParts.length;
+            });
+            
+            // Remove required attribute from all hidden template fields before form submission
             document.querySelectorAll('form[id^="editForm"]').forEach(form => {
                 form.addEventListener('submit', function(e) {
+                    // Find all hidden templates and remove required attributes
+                    const hiddenTemplates = this.querySelectorAll('[id^="part-template-"]');
+                    hiddenTemplates.forEach(template => {
+                        const requiredFields = template.querySelectorAll('[required]');
+                        requiredFields.forEach(field => {
+                            field.removeAttribute('required');
+                        });
+                    });
+                    
                     const productId = this.id.replace('editForm', '');
                     const designNo = document.getElementById('edit_design_no_' + productId);
                     const name = document.getElementById('edit_name_' + productId);
@@ -558,8 +792,7 @@
                     let isValid = true;
 
                     // Reset validation states
-                    this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove(
-                        'is-invalid'));
+                    this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
 
                     // Validate required fields
                     if (!designNo.value.trim()) {
@@ -592,9 +825,28 @@
                         isValid = false;
                     }
 
+                    // Validate product parts
+                    const partContainer = document.getElementById('product-parts-container-' + productId);
+                    if (partContainer) {
+                        const partItems = partContainer.querySelectorAll('.part-item');
+                        partItems.forEach((item, index) => {
+                            const partName = item.querySelector('.part-name');
+                            if (partName && !partName.value.trim()) {
+                                partName.classList.add('is-invalid');
+                                isValid = false;
+                                if (!document.activeElement || document.activeElement !== partName) {
+                                    partName.focus();
+                                }
+                                alert('Please fill in Part Name for Part ' + (index + 1));
+                            }
+                        });
+                    }
+
                     if (!isValid) {
                         e.preventDefault();
-                        alert('Please fill in all required fields correctly.');
+                        if (!document.querySelector('.part-validation-error')) {
+                            alert('Please fill in all required fields correctly.');
+                        }
                     }
                 });
             });
