@@ -376,6 +376,87 @@
                                     </select>
                                 </div>
 
+                                <!-- Specifications Section -->
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Product Specifications</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Lehenga Fabric -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_lehenga_fabric_{{ $product->id }}" class="form-label">Lehenga Fabric</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_lehenga_fabric_{{ $product->id }}" 
+                                                       name="lehenga_fabric" 
+                                                       value="{{ $product->lehenga_fabric ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Choli Fabric -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_choli_fabric_{{ $product->id }}" class="form-label">Choli Fabric</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_choli_fabric_{{ $product->id }}" 
+                                                       name="choli_fabric" 
+                                                       value="{{ $product->choli_fabric ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Dupatta Fabric -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_dupatta_fabric_{{ $product->id }}" class="form-label">Dupatta Fabric</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_dupatta_fabric_{{ $product->id }}" 
+                                                       name="dupatta_fabric" 
+                                                       value="{{ $product->dupatta_fabric ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Type -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_type_{{ $product->id }}" class="form-label">Type</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_type_{{ $product->id }}" 
+                                                       name="type" 
+                                                       value="{{ $product->type ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Stitching Type -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_stitching_type_{{ $product->id }}" class="form-label">Stitching Type</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_stitching_type_{{ $product->id }}" 
+                                                       name="stitching_type" 
+                                                       value="{{ $product->stitching_type ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Pattern -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_pattern_{{ $product->id }}" class="form-label">Pattern</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_pattern_{{ $product->id }}" 
+                                                       name="pattern" 
+                                                       value="{{ $product->pattern ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Color -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_color_{{ $product->id }}" class="form-label">Color</label>
+                                                <input type="text" class="form-control" 
+                                                       id="edit_color_{{ $product->id }}" 
+                                                       name="color" 
+                                                       value="{{ $product->color ?? '' }}" maxlength="100">
+                                            </div>
+
+                                            <!-- Sales Package -->
+                                            <div class="col-md-12 mb-3">
+                                                <label for="edit_sales_package_{{ $product->id }}" class="form-label">Sales Package</label>
+                                                <textarea class="form-control" 
+                                                          id="edit_sales_package_{{ $product->id }}" 
+                                                          name="sales_package" rows="2">{{ $product->sales_package ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="edit_price_{{ $product->id }}"
                                         class="form-label">Price <span class="text-danger">*</span></label>
