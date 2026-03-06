@@ -171,7 +171,7 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-       dd($request);
+    //    dd($request);
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
