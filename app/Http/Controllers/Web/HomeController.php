@@ -354,7 +354,7 @@ class HomeController extends Controller
 
     public function ShowSingleProduct($slug)
     {
-        //  dd($slug);
+         dd($slug);
          $data = Product::where('slug', $slug)->first();
          if($data){
          $product = Product::with(['images', 'variants', 'category', 'parts' => function($query) {
