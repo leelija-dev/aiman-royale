@@ -442,17 +442,72 @@
                 </div>
 
                 <!-- Pagination -->
+                @if($orders->hasPages())
                 <div class="flex justify-center items-center gap-2 mt-8">
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl fashion-gradient text-white">1</button>
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">2</button>
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">3</button>
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <!-- Previous Button -->
+                    @if($orders->onFirstPage())
+                        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    @else
+                        <a href="{{ $orders->previousPageUrl() }}" 
+                           class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    @endif
+
+                    <!-- Page Numbers -->
+                    @php
+                        $currentPage = $orders->currentPage();
+                        $lastPage = $orders->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                        
+                        // Show first page if not in range
+                        if ($start > 1) {
+                            echo '<a href="'.$orders->url(1).'" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">1</a>';
+                            if ($start > 2) {
+                                echo '<span class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400">...</span>';
+                            }
+                        }
+                    @endphp
+                    
+                    @for($i = $start; $i <= $end; $i++)
+                        @if($i == $currentPage)
+                            <span class="w-10 h-10 flex items-center justify-center rounded-xl fashion-gradient text-white">
+                                {{ $i }}
+                            </span>
+                        @else
+                            <a href="{{ $orders->url($i) }}" 
+                               class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+                                {{ $i }}
+                            </a>
+                        @endif
+                    @endfor
+                    
+                    @php
+                        // Show last page if not in range
+                        if ($end < $lastPage) {
+                            if ($end < $lastPage - 1) {
+                                echo '<span class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400">...</span>';
+                            }
+                            echo '<a href="'.$orders->url($lastPage).'" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">'.$lastPage.'</a>';
+                        }
+                    @endphp
+
+                    <!-- Next Button -->
+                    @if($orders->hasMorePages())
+                        <a href="{{ $orders->nextPageUrl() }}" 
+                           class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    @else
+                        <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed" disabled>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    @endif
                 </div>
+                @endif
             </div>
         </div>
       </div>

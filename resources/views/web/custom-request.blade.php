@@ -174,7 +174,7 @@
                                                 </span>
                                             </div>
                                             
-                                            @if($request->status !== 'canceled' && $request->status !== 'completed')
+                                            @if($request->status !== 'canceled' && $request->status !== 'accepted')
                                                 <form action="{{ route('custom-dimensions.cancel', $request->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this request?')">
                                                     @csrf
                                                     <button type="submit" class="w-full px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200 text-sm font-medium">
