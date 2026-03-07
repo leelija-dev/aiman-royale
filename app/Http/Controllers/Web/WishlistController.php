@@ -19,7 +19,9 @@ class WishlistController extends Controller
     {
         $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
             ->forCurrentUser()
-            ->get();
+            ->paginate(9);
+            // ->get();
+            // dd($wishlistItems);
             
         // Load stock data for each wishlist item
         $wishlistItems->each(function ($wishlist) {
