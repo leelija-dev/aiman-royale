@@ -357,7 +357,9 @@ class HomeController extends Controller
         //  dd($slug);
          $data = Product::where('slug', $slug)->first();
          if($data){
-         $product = Product::with(['images', 'variants', 'category'])
+         $product = Product::with(['images', 'variants', 'category', 'parts' => function($query) {
+                $query->orderBy('order')->orderBy('id');
+            }])
             ->where('slug', $slug)
             ->firstOrFail();
          
@@ -367,7 +369,7 @@ class HomeController extends Controller
             
            return view('web.single-product', compact('product','sizes','relatedProducts'));
          }
-       
+    //    dd($product);
        
         $sizes=Size::OrderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();

@@ -131,28 +131,18 @@ class CustomDimensionController extends Controller
             $user = $dimension->user;
             $product = $dimension->product;
 
-            // Generate payment link (you can customize this based on your payment system)
+            // Generate order number
+            $orderNumber = 'CO' . str_pad($dimension->id, 5, '0', STR_PAD_LEFT);
             $paymentLink = url("/pay-custom-order/{$dimension->id}");
 
-            // Get product image URL
-            $productImage = $product->image ? asset('storage/' . $product->image) : asset('images/default-product.jpg');
-
-            $message = "🎉 *Custom Request Accepted!*\n\n";
-            $message .= "Hello {$user->name},\n\n";
-            $message .= "Your custom measurement request for *{$product->name}* has been accepted!\n\n";
-            $message .= "📏 *Measurements:*\n";
-            if ($dimension->bust) $message .= "• Bust: {$dimension->bust}cm\n";
-            if ($dimension->waist) $message .= "• Waist: {$dimension->waist}cm\n";
-            if ($dimension->hip) $message .= "• Hip: {$dimension->hip}cm\n";
-            if ($dimension->armhole) $message .= "• Armhole: {$dimension->armhole}cm\n";
-            if ($dimension->color_code) $message .= "• Color: {$dimension->color_code}\n";
-            $message .= "\n💰 *Price:* " . ($product->price ? '₹' . number_format($product->price, 2) : 'Contact for pricing');
-            $message .= "\n\n� *Payment Link:*\n{$paymentLink}";
-            $message .= "\n\n� *Next Steps:* Click the payment link to complete your order. Our team will contact you for confirmation.\n\n";
-            $message .= "Thank you for choosing us! 🛍️";
+            // Update message to match confirm_order template format and include payment link
+            $message = "Hi {$user->name},\n\n";
+            $message .= "Your custom order has been successfully placed and is being processed. ";
+            $message .= "Your order number is #{$orderNumber}. ";
+            $message .= "Payment link: {$paymentLink}";
 
             // Send WhatsApp message with image
-            $this->sendWhatsAppMessageWithImage($user->phone, $message, $productImage, $dimension);
+            $this->sendWhatsAppMessageWithImage($user->phone, $message, null, $dimension);
 
             \Log::info('WhatsApp notification sent for accepted custom request to user: ' . $user->id);
         } catch (\Exception $e) {
@@ -186,29 +176,22 @@ class CustomDimensionController extends Controller
             $phoneNumberId = env('PHONE_NUMBER_ID');
             $version = env('FACEBOOK_GRAPH_API_VERSION', 'v18.0');
 
+            // Use existing confirm_order template
             if ($accessToken && $phoneNumberId && $dimension) {
-                // Prepare message payload
+                // Generate order number (you can customize this)
+                $orderNumber = 'CO' . str_pad($dimension->id, 5, '0', STR_PAD_LEFT);
+                
+                // Prepare message payload for confirm_order template
                 $messageData = [
                     'messaging_product' => 'whatsapp',
                     'to' => $formattedPhone,
                     'type' => 'template',
                     'template' => [
-                        'name' => 'custom_order_accepted',
+                        'name' => 'confirm_order',
                         'language' => [
                             'code' => 'en_US'
                         ],
                         'components' => [
-                            [
-                                'type' => 'header',
-                                'parameters' => [
-                                    [
-                                        'type' => 'image',
-                                        'image' => [
-                                            'link' => $imageUrl ?? asset('images/default-product.jpg')
-                                        ]
-                                    ]
-                                ]
-                            ],
                             [
                                 'type' => 'body',
                                 'parameters' => [
@@ -218,15 +201,7 @@ class CustomDimensionController extends Controller
                                     ],
                                     [
                                         'type' => 'text',
-                                        'text' => $dimension->product->name ?? 'Product'
-                                    ],
-                                    [
-                                        'type' => 'text',
-                                        'text' => url("/product/{$dimension->product->id}")
-                                    ],
-                                    [
-                                        'type' => 'text',
-                                        'text' => url("/pay-custom-order/{$dimension->id}")
+                                        'text' => $orderNumber
                                     ]
                                 ]
                             ]
@@ -238,16 +213,16 @@ class CustomDimensionController extends Controller
                 $response = $this->sendFacebookWhatsAppMessage($messageData, $accessToken, $phoneNumberId, $version);
 
                 if ($response) {
-                    \Log::info('WhatsApp message sent via Facebook Graph API', [
+                    \Log::info('WhatsApp message sent via confirm_order template', [
                         'phone' => $formattedPhone,
                         'message_id' => $response['message_id'] ?? 'N/A',
-                        'image_url' => $imageUrl ?? 'N/A'
+                        'order_number' => $orderNumber
                     ]);
                     return true;
                 }
             }
 
-            // Fallback: Send simple text message if template not set up
+            // Fallback: Send simple text message if template fails
             if ($accessToken && $phoneNumberId) {
                 $simpleMessageData = [
                     'messaging_product' => 'whatsapp',

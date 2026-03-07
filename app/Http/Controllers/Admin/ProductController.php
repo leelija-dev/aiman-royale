@@ -18,7 +18,7 @@ class ProductController extends Controller
     {
         $query = Product::with(['category', 'occasion', 'images' => function ($q) {
             $q->orderBy('id');
-        }]);
+        }, 'parts']);
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -70,6 +70,14 @@ class ProductController extends Controller
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
             'image' => 'required|image',
+            'lehenga_fabric' => 'nullable|string|max:100',
+            'choli_fabric' => 'nullable|string|max:100',
+            'dupatta_fabric' => 'nullable|string|max:100',
+            'type' => 'nullable|string|max:100',
+            'stitching_type' => 'nullable|string|max:100',
+            'pattern' => 'nullable|string|max:100',
+            'sales_package' => 'nullable|string|max:500',
+            'color' => 'nullable|string|max:100',
         ]);
         $data['ocassion_id'] = $request->occasion_id;
 
@@ -145,10 +153,25 @@ class ProductController extends Controller
             $product->save();
         }
 
+        // Handle product parts
+        if ($request->has('parts') && is_array($request->parts)) {
+            foreach ($request->parts as $partData) {
+                if (!empty($partData['part_name'])) {
+                    $product->parts()->create([
+                        'part_name' => $partData['part_name'],
+                        'fabric' => $partData['fabric'] ?? null,
+                        'work_type' => $partData['work_type'] ?? null,
+                        'order' => $partData['order'] ?? 1
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('admin.products')->with('success', 'Product created successfully!');
     }
     public function update(Request $request, $id)
     {
+    //    dd($request);
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
@@ -170,6 +193,14 @@ class ProductController extends Controller
             'tags' => 'required|string',
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
+            'lehenga_fabric' => 'nullable|string|max:100',
+            'choli_fabric' => 'nullable|string|max:100',
+            'dupatta_fabric' => 'nullable|string|max:100',
+            'type' => 'nullable|string|max:100',
+            'stitching_type' => 'nullable|string|max:100',
+            'pattern' => 'nullable|string|max:100',
+            'sales_package' => 'nullable|string|max:500',
+            'color' => 'nullable|string|max:100',
 
         ]);
         $data['ocassion_id'] = $request->occasion_id;
@@ -272,6 +303,24 @@ class ProductController extends Controller
             $product->save();
         } else {
             // No featured image uploaded
+        }
+
+        // Handle product parts
+        if ($request->has('parts') && is_array($request->parts)) {
+            // Delete existing parts
+            $product->parts()->delete();
+            
+            // Add new parts
+            foreach ($request->parts as $partData) {
+                if (!empty($partData['part_name'])) {
+                    $product->parts()->create([
+                        'part_name' => $partData['part_name'],
+                        'fabric' => $partData['fabric'] ?? null,
+                        'work_type' => $partData['work_type'] ?? null,
+                        'order' => $partData['order'] ?? 1
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');

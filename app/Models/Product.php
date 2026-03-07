@@ -41,7 +41,15 @@ class Product extends Model
         'tags',
         'meta_description',
         'schema_markup',
-        'ready_to_ship'
+        'ready_to_ship',
+        'lehenga_fabric',
+        'choli_fabric',
+        'dupatta_fabric',
+        'type',
+        'stitching_type',
+        'pattern',
+        'sales_package',
+        'color'
     ];
 
     /**
@@ -112,6 +120,14 @@ class Product extends Model
     public function occasion(): BelongsTo
     {
         return $this->belongsTo('App\\Models\\Occasion', 'ocassion_id');
+    }
+
+    /**
+     * Get the parts for the product.
+     */
+    public function parts()
+    {
+        return $this->hasMany(ProductPart::class)->ordered();
     }
 
     /**

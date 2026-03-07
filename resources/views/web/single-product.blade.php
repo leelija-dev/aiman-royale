@@ -1,7 +1,7 @@
 @extends('layout.web.main-layout')
 
 @section('page-type', 'single-product')
-{{-- @dd($product); --}}
+
 @php
     // Pass product category data to navbar for breadcrumbs
     $productCategory = null;
@@ -17,7 +17,9 @@
         'product_name' => $product->name ?? 'null',
         'category_id' => $product->category_id ?? 'null',
         'category_exists' => isset($product->category),
-        'category_name' => $product->category->name ?? 'null'
+        'category_name' => $product->category->name ?? 'null',
+        'parts_count' => $product->parts ? $product->parts->count() : 0,
+        'stitching_type' => $product->stitching_type ?? 'null'
     ]));
 @endphp
 
@@ -350,7 +352,7 @@
   </div>
 </div>
 
-<!-- Rest of your sections remain the same -->
+<!-- Product Details and Specifications Section -->
 <section class="px-4 lgg:py-12 py-6">
   <div class="container mx-auto">
     <!-- DESKTOP TABS -->
@@ -373,7 +375,10 @@
           Ratings & Reviews
         </button>
       </div>
-      <div class="mt-6 relative">
+      
+      <!-- Tab Content Container -->
+      <div class="mt-6 relative min-h-[300px]">
+        <!-- Product Details Tab -->
         <div class="tab-content active" id="details">
           <h3
             class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">
@@ -405,16 +410,206 @@
           </p>
           @endif
         </div>
-        <div class="tab-content absolute inset-0" id="specification">
-          <p
-            class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-            Specification content here
-          </p>
+
+        <!-- Specification Tab -->
+        <div class="tab-content hidden" id="specification">
+          <h3
+            class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-4">
+            Product Specifications
+          </h3>
+          
+          <div class="css-175oi2r" style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
+            
+            <!-- Stitching Type - Show at the top -->
+            @if($product->stitching_type)
+            <div class="mb-4 p-3 border rounded-lg bg-gray-50">
+              <h4 class="font-semibold text-lg mb-2" style="color: #333;">Stitching Information</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Stitching Type</span>
+                  <span class="text-base font-medium text-gray-900">{{ ucfirst($product->stitching_type) }}</span>
+                </div>
+              </div>
+            </div>
+            @endif
+            
+            <!-- Display Product Parts -->
+            @if($product->parts && $product->parts->count() > 0)
+              @foreach($product->parts as $index => $part)
+                <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                  <h4 class="font-semibold text-lg mb-3" style="color: #333; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
+                    {{ $part->part_name }}
+                  </h4>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @if($part->fabric)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Fabric</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->fabric }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->work_type)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Work Type</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->work_type }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->color)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Color</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->color }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->pattern)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Pattern</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->pattern }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->embroidery)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Embroidery</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->embroidery }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->lining)
+                    <div class="flex flex-col">
+                      <span class="text-sm text-gray-500">Lining</span>
+                      <span class="text-base font-medium text-gray-900">{{ $part->lining }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($part->description)
+                    <div class="flex flex-col md:col-span-2">
+                      <span class="text-sm text-gray-500">Details</span>
+                      <span class="text-base text-gray-900">{{ $part->description }}</span>
+                    </div>
+                    @endif
+                  </div>
+                </div>
+              @endforeach
+            @else
+              <!-- Fallback to old single specification system -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'lehenga'))
+                @if($product->lehenga_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Lehenga Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->lehenga_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->choli_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Choli Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->choli_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->dupatta_fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Dupatta Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->dupatta_fabric }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+              
+              <!-- Saree Specifications -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'saree'))
+                @if($product->fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Saree Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->fabric }}</div>
+                  </div>
+                </div>
+                @endif
+                
+                @if($product->pattern)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Pattern</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->pattern }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+              
+              <!-- Gown Specifications -->
+              @if($product->category && str_contains(strtolower($product->category->name), 'gown'))
+                @if($product->fabric)
+                <div class="grid-formation grid-column-2">
+                  <div class="_1psv1zeb9 _1psv1ze0 _1psv1ze4i _1o6mltljo _1psv1ze6r _1psv1ze29 _1psv1zej9" style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: flex-start; min-height: 0px; min-width: 0px; position: relative; z-index: 0; box-sizing: border-box; border-width: 0px;">
+                    <div class="v1zwn21l v1zwn27 _1psv1zeb9 _1psv1ze0" font="default-fk-font-m" style="color: rgb(112, 112, 112); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">Gown Fabric</div>
+                    <div class="v1zwn21k v1zwn25 _1psv1zeb9 _1psv1ze0" font="default-fk-font-l" style="color: rgb(51, 51, 51); box-sizing: border-box; display: inline; white-space: pre-wrap; overflow-wrap: break-word; border-width: 0px; font-weight: normal;">{{ $product->fabric }}</div>
+                  </div>
+                </div>
+                @endif
+              @endif
+            @endif
+            
+            <!-- Common Specifications for All Types (shown at the bottom) -->
+            <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+              <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @if($product->type)
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Type</span>
+                  <span class="text-base font-medium text-gray-900">{{ $product->type }}</span>
+                </div>
+                @endif
+                
+                @if($product->color)
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Color</span>
+                  <span class="text-base font-medium text-gray-900">{{ $product->color }}</span>
+                </div>
+                @endif
+                
+                @if($product->fit)
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Fit</span>
+                  <span class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
+                </div>
+                @endif
+                
+                @if($product->fabric && !$product->parts)
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Fabric</span>
+                  <span class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
+                </div>
+                @endif
+                
+                @if($product->sales_package)
+                <div class="flex flex-col">
+                  <span class="text-sm text-gray-500">Sales Package</span>
+                  <span class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
+                </div>
+                @endif
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="tab-content absolute inset-0" id="reviews">
+
+        <!-- Reviews Tab -->
+        <div class="tab-content hidden" id="reviews">
+          <h3
+            class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">
+            Ratings & Reviews
+          </h3>
           <p
             class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-            Ratings & Reviews content here
+            Reviews content will appear here.
           </p>
         </div>
       </div>
@@ -435,8 +630,7 @@
         <div class="accordion-content-block overflow-hidden">
           <p
             class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-4 pb-4">
-            Blue washed jacket, has a spread collar, 4 pockets, button
-            closure, long sleeves, straight hem
+            {{ $product->description ?? 'No description available.' }}
           </p>
         </div>
       </div>
@@ -452,10 +646,58 @@
         </div>
         <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
         <div class="accordion-content-block overflow-hidden">
-          <p
-            class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-0 pb-0">
-            Specification content here
-          </p>
+          <div class="pt-4 pb-4">
+            <!-- Stitching Type for Mobile -->
+            @if($product->stitching_type)
+            <div class="mb-4 p-3 border rounded bg-gray-50">
+              <h5 class="font-semibold mb-2">Stitching Information</h5>
+              <div class="flex justify-between py-1">
+                <span class="text-gray-500">Stitching Type:</span>
+                <span class="font-medium">{{ ucfirst($product->stitching_type) }}</span>
+              </div>
+            </div>
+            @endif
+            
+            @if($product->parts && $product->parts->count() > 0)
+              @foreach($product->parts as $part)
+                <div class="mb-4 p-3 border rounded bg-gray-50">
+                  <h5 class="font-semibold mb-2">{{ $part->part_name }}</h5>
+                  @if($part->fabric)
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-500">Fabric:</span>
+                    <span class="font-medium">{{ $part->fabric }}</span>
+                  </div>
+                  @endif
+                  @if($part->work_type)
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-500">Work Type:</span>
+                    <span class="font-medium">{{ $part->work_type }}</span>
+                  </div>
+                  @endif
+                  @if($part->color)
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-500">Color:</span>
+                    <span class="font-medium">{{ $part->color }}</span>
+                  </div>
+                  @endif
+                  @if($part->pattern)
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-500">Pattern:</span>
+                    <span class="font-medium">{{ $part->pattern }}</span>
+                  </div>
+                  @endif
+                  @if($part->embroidery)
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-500">Embroidery:</span>
+                    <span class="font-medium">{{ $part->embroidery }}</span>
+                  </div>
+                  @endif
+                </div>
+              @endforeach
+            @else
+              <p class="text-gray-700">Specification details will appear here.</p>
+            @endif
+          </div>
         </div>
       </div>
 
@@ -535,33 +777,7 @@
               class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110"
                onclick="toggleWishlist({{ $variant->product_id }}, this,event);">
                <i class="far fa-heart"></i>
-              {{-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                class="w-5 h-5 text-red-500">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg> --}}
             </button>
-            {{-- <button
-            id="wishlist-btn"
-            class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition"
-            onclick="toggleWishlist({{ $variant->product_id }}, event);">
-            <i class="far fa-heart"></i>
-          </button> --}}
-
-            <!-- Add To Cart (Hidden → Hover Show) -->
-            {{-- <div
-              class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-              <button data-variant-id="{{ $relatedProduct->variant_id ?? $relatedProduct->id }}" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                Add To Cart
-              </button>
-            </div> --}}
           </div>
 
           <!-- Content -->
@@ -717,111 +933,99 @@
     </div>
   </div>
   @endif
-<!-- Trending Products Section -->
-{{-- <section class="px-4 lgg:py-12 py-6">
-  <div class="container mx-auto">
-    <div
-      class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-      <!-- Left Title -->
-      <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-        Trending Best Selling Products
-      </h2>
-    </div>
 
-    <div class="main-owl owl-carousel owl-theme">
-      <div class="item flex justify-center items-center">
-        <div
-          class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
-          <!-- Image Wrapper -->
-          <div class="relative rounded-xl overflow-hidden">
-            <img
-              src="./assets/images/Home-image/pic-18.avif"
-              alt="Silver Lehenga"
-              class="w-full h-[340px] object-cover object-top object-center" />
-
-            <!-- Badges -->
-            <div class="absolute top-3 left-3 flex flex-col gap-2">
-              <span
-                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                Trending
-              </span>
-              <span
-                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                -17%
-              </span>
-            </div>
-
-            <!-- Wishlist Heart Icon (Top Right) -->
-            <button
-              class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                class="w-5 h-5 text-red-500">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
-
-            <!-- Add To Cart (Hidden → Hover Show) -->
-            <div
-              class="absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-              <button
-                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                Add To Cart
-              </button>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="p-4 space-y-1">
-            <h3 class="text-[15px] font-semibold text-gray-900">
-              Womens Denim Jacket
-            </h3>
-
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-              <span>Brand Name</span>
-              <span class="flex items-center gap-1 text-gray-700">
-                <span class="text-sm font-medium">4.4</span>
-              </span>
-            </div>
-
-            <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-              <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Add more product items as needed -->
-    </div>
-  </div>
-</section> --}}
 @php
     $variant = $product?->variants?->first();
     $basePrice = $variant?->discount_price 
                 ?? $variant?->price 
                 ?? 0;
 @endphp
+
+<!-- Tab Switching JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Desktop tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = {
+        'details': document.getElementById('details'),
+        'specification': document.getElementById('specification'),
+        'reviews': document.getElementById('reviews')
+    };
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Update button styles
+            tabBtns.forEach(b => {
+                b.classList.remove('border-black', 'text-black');
+                b.classList.add('border-transparent', 'text-gray-500');
+            });
+            this.classList.remove('border-transparent', 'text-gray-500');
+            this.classList.add('border-black', 'text-black');
+            
+            // Show selected tab content, hide others
+            Object.keys(tabContents).forEach(key => {
+                if (tabContents[key]) {
+                    if (key === tabId) {
+                        tabContents[key].classList.remove('hidden');
+                        tabContents[key].classList.add('active');
+                    } else {
+                        tabContents[key].classList.add('hidden');
+                        tabContents[key].classList.remove('active');
+                    }
+                }
+            });
+        });
+    });
+    
+    // Mobile accordion functionality
+    const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
+    
+    accordionWrappers.forEach(wrapper => {
+        const header = wrapper.querySelector('.flex.justify-between');
+        const content = wrapper.querySelector('.accordion-content-block');
+        const chevron = wrapper.querySelector('.accordion-chevron');
+        
+        if (header && content) {
+            // Set initial state
+            if (wrapper.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.maxHeight = '0';
+                chevron.style.transform = 'rotate(0deg)';
+            }
+            
+            header.addEventListener('click', function() {
+                const isActive = wrapper.classList.contains('active');
+                
+                if (isActive) {
+                    wrapper.classList.remove('active');
+                    content.style.maxHeight = '0';
+                    chevron.style.transform = 'rotate(0deg)';
+                } else {
+                    wrapper.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    chevron.style.transform = 'rotate(180deg)';
+                }
+            });
+        }
+    });
+});
+</script>
+
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   const loginUrl="{{route('page.login')}}";
-  </script>
+</script>
 <script>
   // Store all product variants data
   const productVariants = JSON.parse(document.querySelector('[data-product-variants]').getAttribute('data-product-variants'));
-  // if({{$product == true }}){
-    
   
   let selectedSize = '{{ $product?->variants?->first()->size ?? "M" }}' ?? '' ;
   let selectedColor = '{{ $product?->variants?->first()->color ?? "" }}' ?? '';
-  // }
 
   let selectedType = 'stitched'; // Default type
   let customDimensions = null;
@@ -1419,60 +1623,6 @@
   }
 
   // Toggle wishlist
-  // function toggleWishlist(productId, event) {
-  //   if (event) {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-
-  //   if (!productId) {
-  //     alert('Product ID not found');
-  //     return;
-  //   }
-
-  //   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-  //   const wishlistBtn = document.getElementById('wishlist-btn');
-  //   const isInWishlist = wishlistBtn.classList.contains('text-red-500');
-
-  //   const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
-  //   // Show loading state
-  //   const originalContent = wishlistBtn.innerHTML;
-  //   wishlistBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-  //   wishlistBtn.disabled = true;
-
-  //   fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'X-CSRF-TOKEN': csrfToken
-  //       },
-  //       body: JSON.stringify({
-  //         product_id: productId
-  //       })
-  //     })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       if (data.success) {
-  //         showNotification(data.message, 'success');
-  //         updateWishlistButton(!isInWishlist);
-
-  //         // Update wishlist count if you have a counter
-  //         if (data.wishlist_count !== undefined) {
-  //           updateWishlistCount(data.wishlist_count);
-  //         }
-  //       } else {
-  //         showNotification(data.message || 'Failed to update wishlist', 'error');
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //       showNotification('An error occurred while updating wishlist', 'error');
-  //     })
-  //     .finally(() => {
-  //       wishlistBtn.disabled = false;
-  //     });
-  // }
   function toggleWishlist(productId, button, event) {
 
     if (event) {

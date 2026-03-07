@@ -266,7 +266,7 @@ class UserController extends Controller implements HasMiddleware
         $query->where('created_at', '>=', now()->subDays($days));
     }
 
-    $orders = $query->latest()->paginate(10);
+    $orders = $query->latest()->paginate(5, '*', 'page');
 
     return view('web.order-history', compact('user','orders'));
 }
