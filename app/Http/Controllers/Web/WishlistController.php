@@ -27,8 +27,19 @@ class WishlistController extends Controller
             
             Log::info('Wishlist items loaded:', ['count' => $wishlistItems->count()]);
 
-            // Load stock data for each wishlist item
-            $wishlistItems->each(function ($wishlist) {
+            // Filter out items with null products and load stock data
+            $validItems = $wishlistItems->getCollection()->filter(function ($wishlist) {
+                // Keep only items with valid products
+                $hasValidProduct = $wishlist->product !== null;
+                
+                if (!$hasValidProduct) {
+                    Log::warning('Wishlist item has null product, filtering out:', [
+                        'wishlist_id' => $wishlist->id,
+                        'product_id' => $wishlist->product_id
+                    ]);
+                    return false;
+                }
+                
                 try {
                     // Get stock from stock_in table for this product/variant
                     $stockQuery = DB::table('stock_in')
@@ -43,18 +54,23 @@ class WishlistController extends Controller
 
                     $stockRecord = $stockQuery->first();
                     $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
+                    return true;
                 } catch (\Exception $e) {
                     Log::error('Error loading stock for wishlist item: ' . $e->getMessage());
                     $wishlist->stock = 0;
+                    return true; // Still include the item even if stock loading fails
                 }
             });
+
+            // Update the paginator with filtered items
+            $wishlistItems->setCollection($validItems);
 
             // Calculate wishlist statistics
             $totalItems = $wishlistItems->count();
 
             $totalValue = $wishlistItems->sum(function ($item) {
                 try {
-                    return $item->product->discount_price ?? $item->product->price ?? 0;
+                    return $item->product ? ($item->product->discount_price ?? $item->product->price ?? 0) : 0;
                 } catch (\Exception $e) {
                     Log::error('Error calculating total value: ' . $e->getMessage());
                     return 0;
@@ -80,8 +96,6 @@ class WishlistController extends Controller
                 $onSaleItems = 0;
             }
             
-            // dd($onSaleItems);
-            
             // Get user data
             $user = auth()->user();
             $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
@@ -90,7 +104,8 @@ class WishlistController extends Controller
             Log::info('Wishlist data prepared successfully', [
                 'totalItems' => $totalItems,
                 'totalValue' => $totalValue,
-                'onSaleItems' => $onSaleItems
+                'onSaleItems' => $onSaleItems,
+                'validItems' => $validItems->count()
             ]);
 
             return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
