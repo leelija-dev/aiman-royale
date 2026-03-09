@@ -354,24 +354,37 @@ class HomeController extends Controller
     {
         //  dd($slug);
         $data = Product::where('slug', $slug)->first();
-
-        if ($data) {
-            $product = Product::with(['images', 'variants', 'category', 'parts' => function ($query) {
-                $query->orderBy('order')->orderBy('id');
-            }])
-                ->where('slug', $slug)
-                ->firstOrFail();
-            // dd($product);
-        } else {
-            $product = $data;
-            $sizes = $relatedProducts = '';
-
-            return view('web.single-product', compact('product', 'sizes', 'relatedProducts'));
+        if (!$data) {
+            abort(404);
         }
+        // dd($data);
+        $product = $data;
         // dd($product);
-
+        $product->load(['images', 'variants', 'category', 'parts']);
+        // dd($product);
         $sizes = Size::OrderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();
+        
+        // If no colors exist, create some default ones
+        if ($colors->count() === 0) {
+            $defaultColors = [
+                ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
+                ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
+                ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
+                ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
+                ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
+                ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
+                ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
+                ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
+            ];
+            
+            foreach ($defaultColors as $colorData) {
+                Color::create($colorData);
+            }
+            
+            $colors = Color::orderBy('id')->get();
+        }
+        
         // print_r($product->category);die;
         $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)->whereHas('variants')->with(['variants', 'images'])->get();
         //    dd($relatedProducts);

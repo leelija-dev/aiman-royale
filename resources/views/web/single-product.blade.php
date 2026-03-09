@@ -25,6 +25,22 @@
 
 @section('content')
   @if($product == true)
+  
+  <style>
+    .custom-color-btn {
+        transition: all 0.2s ease;
+    }
+    
+    .custom-color-btn:hover {
+        transform: scale(1.1);
+    }
+    
+    .custom-color-btn.border-secondary {
+        border-color: var(--secondary-color, #8b5cf6) !important;
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+    }
+  </style>
+  
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
 
    @if($product->variants->first() == true)
@@ -178,11 +194,16 @@
     <div class="flex gap-3" id="custom-color-selection">
       <!-- Colors will be populated dynamically -->
       <div class="flex flex-wrap gap-2">
-        @foreach($colors as $color)
-        <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all" 
-                style="background-color: {{ $color->code }};" 
-                data-color="{{ $color->code }}"></button>
-        @endforeach
+        @if($colors->count() > 0)
+          @foreach($colors as $color)
+          <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all" 
+                  style="background-color: {{ $color->code }};" 
+                  data-color="{{ $color->code }}"
+                  title="{{ $color->name }}"></button>
+          @endforeach
+        @else
+          <p class="text-gray-500 text-sm">No colors available</p>
+        @endif
       </div>
     </div>
   </div>
@@ -201,7 +222,7 @@
 </div>
 
         <!-- Size Selection -->
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
               <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -1114,11 +1135,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
           if (response.status === 401) {
-            // User not authenticated, redirect to login
-            return response.json().then(data => {
-              window.location.href = data.redirect;
-              throw new Error('Authentication required');
-            });
+            // User not authenticated
+            showNotification('Please login to save custom dimensions', 'error');
+            // Optionally redirect to login after a delay
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 2000);
+            throw new Error('Authentication required');
           }
           return response.json();
         })
@@ -1236,23 +1259,27 @@ document.addEventListener('DOMContentLoaded', function() {
   function toggleCustomDimension() {
     const section = document.getElementById('custom-dimension-section');
     const customBtn = document.getElementById('custom-dimension-btn');
+    const sizeSection = document.getElementById('size-selection-section');
+
+    if (!section || !customBtn) {
+      console.error('Required elements not found');
+      return;
+    }
 
     if (section.classList.contains('hidden')) {
       section.classList.remove('hidden');
       customBtn.classList.add('border-secondary', 'text-secondary', 'bg-secondary/10');
       customBtn.classList.remove('border-dashed', 'border-gray-400', 'text-gray-600');
 
-      // Hide size and color selection when custom dimension is open
-      document.getElementById('size-selection-section').classList.add('hidden');
-      document.getElementById('color-selection-section').classList.add('hidden');
+      // Hide size selection when custom dimension is open (but keep color selection visible inside custom dimension)
+      if (sizeSection) sizeSection.classList.add('hidden');
     } else {
       section.classList.add('hidden');
       customBtn.classList.remove('border-secondary', 'text-secondary', 'bg-secondary/10');
       customBtn.classList.add('border-dashed', 'border-gray-400', 'text-gray-600');
 
-      // Show size and color selection when custom dimension is closed
-      document.getElementById('size-selection-section').classList.remove('hidden');
-      document.getElementById('color-selection-section').classList.remove('hidden');
+      // Show size selection when custom dimension is closed
+      if (sizeSection) sizeSection.classList.remove('hidden');
     }
   }
 
