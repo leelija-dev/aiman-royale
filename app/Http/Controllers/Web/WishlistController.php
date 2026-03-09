@@ -20,44 +20,45 @@ class WishlistController extends Controller
         $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
             ->forCurrentUser()
             ->paginate(9);
-            // ->get();
-            // dd($wishlistItems);
-            
+        // ->get();
+        // dd($wishlistItems);
+
         // Load stock data for each wishlist item
         $wishlistItems->each(function ($wishlist) {
             // Get stock from stock_in table for this product/variant
             $stockQuery = DB::table('stock_in')
                 ->where('product_id', $wishlist->product_id);
-                
+
             // If variant exists, get variant-specific stock
             if ($wishlist->variant_id) {
                 $stockQuery->where('product_variant_id', $wishlist->variant_id);
             } else {
                 $stockQuery->whereNull('product_variant_id');
             }
-            
+
             $stockRecord = $stockQuery->first();
             // dd($stockRecord);
             $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
         });
-        
+
         // Calculate wishlist statistics
         $totalItems = $wishlistItems->count();
-         dd($totalItems);
+
         // dd($wishlistItems);
-        $totalValue = $wishlistItems->sum(function($item) {
+        $totalValue = $wishlistItems->sum(function ($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
-        $onSaleItems = $wishlistItems->filter(function($item) {
+        dd($totalValue);
+        $onSaleItems = $wishlistItems->filter(function ($item) {
             return $item->product->discount_price && $item->product->discount_price < $item->product->price;
         })->count();
-         dd($totalItems);
+        dd($totalItems);
         // Get user data
         $user = auth()->user();
         $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
         $userName = $user ? $user->name : 'Guest User';
         // dd($wishlistItems->pluck('variant_id'));
-       
+
 
         return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
     }
@@ -109,7 +110,6 @@ class WishlistController extends Controller
                 'message' => 'Product added to wishlist successfully!',
                 'wishlist_count' => $wishlistCount
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -157,7 +157,6 @@ class WishlistController extends Controller
                 'message' => 'Product removed from wishlist successfully!',
                 'wishlist_count' => $wishlistCount
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
