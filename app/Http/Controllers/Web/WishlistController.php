@@ -44,14 +44,15 @@ class WishlistController extends Controller
         // Calculate wishlist statistics
         $totalItems = $wishlistItems->count();
 
-        // dd($wishlistItems);
         $totalValue = $wishlistItems->sum(function ($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
-        dd($wishlistItems);
-        $onSaleItems = $wishlistItems->filter(function ($item) {
+       
+        // Fix: Use getCollection() to access the underlying collection for filtering
+        $onSaleItems = $wishlistItems->getCollection()->filter(function ($item) {
             return $item->product->discount_price && $item->product->discount_price < $item->product->price;
         })->count();
+        
         dd($onSaleItems);
         // Get user data
         $user = auth()->user();
