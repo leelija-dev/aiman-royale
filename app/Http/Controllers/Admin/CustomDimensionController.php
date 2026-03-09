@@ -21,7 +21,7 @@ class CustomDimensionController extends Controller
             ->paginate(15);
         // dd($customRequests);
 
-        return view('admin.custom-dimensions.index', compact('customRequests'));
+        return view('Admin.custom-dimensions.index', compact('customRequests'));
     }
 
     /**
