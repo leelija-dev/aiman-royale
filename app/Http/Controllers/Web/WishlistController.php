@@ -37,12 +37,13 @@ class WishlistController extends Controller
             }
             
             $stockRecord = $stockQuery->first();
-            dd($stockRecord);
+            // dd($stockRecord);
             $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
         });
         
         // Calculate wishlist statistics
         $totalItems = $wishlistItems->count();
+        dd($totalItems);
         $totalValue = $wishlistItems->sum(function($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
