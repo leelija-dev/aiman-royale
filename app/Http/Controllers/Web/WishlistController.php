@@ -43,7 +43,7 @@ class WishlistController extends Controller
         
         // Calculate wishlist statistics
         $totalItems = $wishlistItems->count();
-        dd($totalItems);
+        dd($wishlistItems);
         $totalValue = $wishlistItems->sum(function($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
