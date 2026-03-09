@@ -48,7 +48,7 @@ class WishlistController extends Controller
         $totalValue = $wishlistItems->sum(function ($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
-        // dd($totalValue);
+        dd($wishlistItems);
         $onSaleItems = $wishlistItems->filter(function ($item) {
             return $item->product->discount_price && $item->product->discount_price < $item->product->price;
         })->count();
