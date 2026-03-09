@@ -154,7 +154,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        dd($request);
+       
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -169,7 +169,7 @@ class AuthController extends Controller
 
         // Get authenticated user from JWT
         $user = JWTAuth::user();
-
+        dd($user);
         // Also login with Laravel's Auth for web routes
         Auth::login($user);
 
