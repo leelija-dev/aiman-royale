@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-@dd($wishlistItems)
+
 @section('content')
 @if(!auth()->check())
 <!-- Guest User Login Prompt -->

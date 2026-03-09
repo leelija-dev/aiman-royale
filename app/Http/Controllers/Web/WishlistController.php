@@ -56,6 +56,7 @@ class WishlistController extends Controller
         $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
         $userName = $user ? $user->name : 'Guest User';
         // dd($wishlistItems->pluck('variant_id'));
+        dd($totalItems);
 
         return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
     }
