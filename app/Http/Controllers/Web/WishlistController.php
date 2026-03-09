@@ -21,7 +21,7 @@ class WishlistController extends Controller
             ->forCurrentUser()
             ->paginate(9);
             // ->get();
-            dd($wishlistItems);
+            // dd($wishlistItems);
             
         // Load stock data for each wishlist item
         $wishlistItems->each(function ($wishlist) {
@@ -37,6 +37,7 @@ class WishlistController extends Controller
             }
             
             $stockRecord = $stockQuery->first();
+            dd($stockRecord);
             $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
         });
         
