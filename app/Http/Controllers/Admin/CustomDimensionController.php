@@ -19,7 +19,7 @@ class CustomDimensionController extends Controller
         $customRequests = CustomDimension::with(['user', 'product', 'product.images'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-        dd($customRequests);
+        // dd($customRequests);
 
         return view('admin.custom-dimensions.index', compact('customRequests'));
     }
