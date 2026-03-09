@@ -43,6 +43,7 @@ class WishlistController extends Controller
         
         // Calculate wishlist statistics
         $totalItems = $wishlistItems->count();
+         dd($totalItems);
         // dd($wishlistItems);
         $totalValue = $wishlistItems->sum(function($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
@@ -50,13 +51,13 @@ class WishlistController extends Controller
         $onSaleItems = $wishlistItems->filter(function($item) {
             return $item->product->discount_price && $item->product->discount_price < $item->product->price;
         })->count();
-        
+         dd($totalItems);
         // Get user data
         $user = auth()->user();
         $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
         $userName = $user ? $user->name : 'Guest User';
         // dd($wishlistItems->pluck('variant_id'));
-        dd($totalItems);
+       
 
         return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
     }
