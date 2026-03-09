@@ -48,11 +48,11 @@ class WishlistController extends Controller
         $totalValue = $wishlistItems->sum(function ($item) {
             return $item->product->discount_price ?? $item->product->price ?? 0;
         });
-        dd($totalValue);
+        // dd($totalValue);
         $onSaleItems = $wishlistItems->filter(function ($item) {
             return $item->product->discount_price && $item->product->discount_price < $item->product->price;
         })->count();
-        dd($totalItems);
+        dd($onSaleItems);
         // Get user data
         $user = auth()->user();
         $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
