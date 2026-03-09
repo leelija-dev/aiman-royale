@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('hip', 8, 2)->nullable();
             $table->decimal('armhole', 8, 2)->nullable();
             $table->string('color_code')->nullable();
-            $table->enum('status', ['requested', 'viewed', 'processing', 'accepted', 'canceled'])->default('requested');
+            // $table->enum('status', ['requested', 'viewed', 'processing', 'accepted', 'canceled'])->default('requested');
             $table->timestamps();
             
             // Add indexes for better performance
