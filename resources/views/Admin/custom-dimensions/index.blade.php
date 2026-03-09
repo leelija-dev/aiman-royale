@@ -5,7 +5,7 @@
 @section('title')
 {{ config('app.name') }} - Custom Dimensions
 @endsection
-
+@dd($customRequests)
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
