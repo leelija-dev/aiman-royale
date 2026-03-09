@@ -36,17 +36,17 @@ class HomeController extends Controller
         // ->get();
 
         $products = DB::table('products')
-            ->Join('product_variants', function($join) {
+            ->Join('product_variants', function ($join) {
                 $join->on('products.id', '=', 'product_variants.product_id')
-                     ->where('product_variants.stock', '>', 0)
-                     ->whereRaw('product_variants.id = (
+                    ->where('product_variants.stock', '>', 0)
+                    ->whereRaw('product_variants.id = (
                          SELECT MIN(id) FROM product_variants 
                          WHERE product_id = products.id AND stock > 0
                      )');
             })
-            ->leftJoin('product_images', function($join) {
+            ->leftJoin('product_images', function ($join) {
                 $join->on('products.id', '=', 'product_images.product_id')
-                     ->whereRaw('product_images.id = (
+                    ->whereRaw('product_images.id = (
                          SELECT MIN(id) FROM product_images 
                          WHERE product_id = products.id
                      )');
@@ -86,28 +86,28 @@ class HomeController extends Controller
         //     ->take(12)
         //     ->get();
         // 🔹 Step 1: Get Most Wishlisted Products
-    $mostWishlisted = Product::with('images', 'variants')
-        ->withCount('wishlists')
-        ->whereHas('wishlists') // only products in wishlist
-        ->orderByDesc('wishlists_count')
-        ->take(12)
-        ->get();
-
-    $wishlistCount = $mostWishlisted->count();
-
-    // 🔹 Step 2: If less than 12 → add remaining normal products
-    if ($wishlistCount < 12) {
-
-        $remaining = 12 - $wishlistCount;
-
-        $otherProducts = Product::with('images', 'variants')
-            ->whereNotIn('id', $mostWishlisted->pluck('id'))
-            ->where('is_active', 1)
-            ->take($remaining)
+        $mostWishlisted = Product::with('images', 'variants')
+            ->withCount('wishlists')
+            ->whereHas('wishlists') // only products in wishlist
+            ->orderByDesc('wishlists_count')
+            ->take(12)
             ->get();
 
-        $mostWishlisted = $mostWishlisted->merge($otherProducts);
-    }
+        $wishlistCount = $mostWishlisted->count();
+
+        // 🔹 Step 2: If less than 12 → add remaining normal products
+        if ($wishlistCount < 12) {
+
+            $remaining = 12 - $wishlistCount;
+
+            $otherProducts = Product::with('images', 'variants')
+                ->whereNotIn('id', $mostWishlisted->pluck('id'))
+                ->where('is_active', 1)
+                ->take($remaining)
+                ->get();
+
+            $mostWishlisted = $mostWishlisted->merge($otherProducts);
+        }
 
         // dd($mostWishlisted);
 
@@ -116,14 +116,14 @@ class HomeController extends Controller
         $categories = Category::withCount('products')->get();
         $occasions = \App\Models\Occasion::active()->get();
         $homeCategories = Category::where('is_home', 1)
-        ->whereNotNull('home_position')
-        ->get()
-        ->groupBy('home_position');
+            ->whereNotNull('home_position')
+            ->get()
+            ->groupBy('home_position');
 
 
         $testimonials = [];
 
-        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions','homeCategories', 'mostWishlisted'));
+        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions', 'homeCategories', 'mostWishlisted'));
     }
 
     public function ShowAllProduct(Request $request)
@@ -163,34 +163,32 @@ class HomeController extends Controller
         // Apply search filter
         if ($search && !empty(trim($search))) {
             $searchTerm = trim($search);
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
+                    ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
-       
+
         // Apply brand filters
         if (!empty($categories)) {
             $query->whereIn('categories.name', $categories);
-
         }
         // Apply occasion filters
         if (!empty($occasions)) {
             $query->whereIn('ocassions.name', $occasions);
         }
         // Apply price range filters
-      
+
         if (!empty($priceRanges)) {
             $query->where(function ($q) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     [$min, $max] = explode('-', $range);
-                
 
-                $q->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
-                    
+
+                    $q->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
                 }
             });
         }
@@ -204,28 +202,28 @@ class HomeController extends Controller
         if (!empty($sizes)) {
             $query->whereIn('product_variants.size', $sizes);
         }
-        if(!empty($price)){
-            $query->where('product_variants.discount_price',$price);
+        if (!empty($price)) {
+            $query->where('product_variants.discount_price', $price);
         }
 
         // Apply price range filters
         if ($priceMin) {
-            $query->where(function($q) use ($priceMin) {
+            $query->where(function ($q) use ($priceMin) {
                 $q->where('product_variants.price', '>=', $priceMin)
-                  ->orWhere('product_variants.discount_price', '>=', $priceMin);
+                    ->orWhere('product_variants.discount_price', '>=', $priceMin);
             });
         }
 
         if ($priceMax) {
-            $query->where(function($q) use ($priceMax) {
+            $query->where(function ($q) use ($priceMax) {
                 $q->where('product_variants.price', '<=', $priceMax)
-                  ->orWhere('product_variants.discount_price', '<=', $priceMax);
+                    ->orWhere('product_variants.discount_price', '<=', $priceMax);
             });
         }
 
         // Apply discount range filters
         if (!empty($discountRanges)) {
-            $query->where(function($q) use ($discountRanges) {
+            $query->where(function ($q) use ($discountRanges) {
                 foreach ($discountRanges as $range) {
                     switch ($range) {
                         case '10+':
@@ -275,7 +273,7 @@ class HomeController extends Controller
         $groupedProducts = [];
         foreach ($products as $product) {
             $productId = $product->id;
-            
+
             if (!isset($groupedProducts[$productId])) {
                 // Create main product entry
                 $groupedProducts[$productId] = [
@@ -302,7 +300,7 @@ class HomeController extends Controller
                     'images' => [],
                 ];
             }
-            
+
             // Add variant if not already added
             $variantId = $product->variant_id;
             if (!isset($groupedProducts[$productId]['variants'][$variantId])) {
@@ -315,7 +313,7 @@ class HomeController extends Controller
                     'stock' => $product->stock,
                 ];
             }
-            
+
             // Add image if not already added
             if ($product->variant_image && !in_array($product->variant_image, $groupedProducts[$productId]['images'])) {
                 $groupedProducts[$productId]['images'][] = $product->variant_image;
@@ -349,36 +347,36 @@ class HomeController extends Controller
         ];
 
 
-        return view('web.multi-product', compact('products', 'filterOptions', 'priceRange','selectedFilters'));
+        return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
     }
 
     public function ShowSingleProduct($slug)
     {
         //  dd($slug);
-         $data = Product::where('slug', $slug)->first();
-         dd($data);
-         if($data){
-         $product = Product::with(['images', 'variants', 'category', 'parts' => function($query) {
+        $data = Product::where('slug', $slug)->first();
+
+        if ($data) {
+            $product = Product::with(['images', 'variants', 'category', 'parts' => function ($query) {
                 $query->orderBy('order')->orderBy('id');
             }])
-            ->where('slug', $slug)
-            ->firstOrFail();
-         
-         }else{
-            $product =$data;
-            $sizes = $relatedProducts ='';
-            
-           return view('web.single-product', compact('product','sizes','relatedProducts'));
-         }
-       dd($product);
-       
-        $sizes=Size::OrderBy('sort_order')->get();
+                ->where('slug', $slug)
+                ->firstOrFail();
+            // dd($product);
+        } else {
+            $product = $data;
+            $sizes = $relatedProducts = '';
+
+            return view('web.single-product', compact('product', 'sizes', 'relatedProducts'));
+        }
+        // dd($product);
+
+        $sizes = Size::OrderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();
         // print_r($product->category);die;
-        $relatedProducts=Product::where('category_id','=',$product->category_id)->where('is_active',1)->whereHas('variants')->with(['variants','images'])->get();
-    //    dd($relatedProducts);
-       // print_r($relatedProducts->first()->variants);die;
+        $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)->whereHas('variants')->with(['variants', 'images'])->get();
+        //    dd($relatedProducts);
+        // print_r($relatedProducts->first()->variants);die;
         // dd($product);
-        return view('web.single-product', compact('product','sizes','relatedProducts', 'colors'));
+        return view('web.single-product', compact('product', 'sizes', 'relatedProducts', 'colors'));
     }
 }
