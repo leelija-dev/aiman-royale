@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WishlistController extends Controller
 {
@@ -17,51 +18,98 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
-            ->forCurrentUser()
-            ->paginate(9);
-        // ->get();
-        // dd($wishlistItems);
+        try {
+            Log::info('Wishlist index method started');
+            
+            $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
+                ->forCurrentUser()
+                ->paginate(9);
+            
+            Log::info('Wishlist items loaded:', ['count' => $wishlistItems->count()]);
 
-        // Load stock data for each wishlist item
-        $wishlistItems->each(function ($wishlist) {
-            // Get stock from stock_in table for this product/variant
-            $stockQuery = DB::table('stock_in')
-                ->where('product_id', $wishlist->product_id);
+            // Load stock data for each wishlist item
+            $wishlistItems->each(function ($wishlist) {
+                try {
+                    // Get stock from stock_in table for this product/variant
+                    $stockQuery = DB::table('stock_in')
+                        ->where('product_id', $wishlist->product_id);
 
-            // If variant exists, get variant-specific stock
-            if ($wishlist->variant_id) {
-                $stockQuery->where('product_variant_id', $wishlist->variant_id);
-            } else {
-                $stockQuery->whereNull('product_variant_id');
+                    // If variant exists, get variant-specific stock
+                    if ($wishlist->variant_id) {
+                        $stockQuery->where('product_variant_id', $wishlist->variant_id);
+                    } else {
+                        $stockQuery->whereNull('product_variant_id');
+                    }
+
+                    $stockRecord = $stockQuery->first();
+                    $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
+                } catch (\Exception $e) {
+                    Log::error('Error loading stock for wishlist item: ' . $e->getMessage());
+                    $wishlist->stock = 0;
+                }
+            });
+
+            // Calculate wishlist statistics
+            $totalItems = $wishlistItems->count();
+
+            $totalValue = $wishlistItems->sum(function ($item) {
+                try {
+                    return $item->product->discount_price ?? $item->product->price ?? 0;
+                } catch (\Exception $e) {
+                    Log::error('Error calculating total value: ' . $e->getMessage());
+                    return 0;
+                }
+            });
+           
+            // Fix: Use getCollection() to access the underlying collection for filtering
+            try {
+                $onSaleItems = $wishlistItems->getCollection()->filter(function ($item) {
+                    try {
+                        return isset($item->product) && 
+                               $item->product->discount_price && 
+                               $item->product->discount_price < $item->product->price;
+                    } catch (\Exception $e) {
+                        Log::error('Error filtering on-sale items: ' . $e->getMessage());
+                        return false;
+                    }
+                })->count();
+                
+                Log::info('On-sale items calculated:', ['count' => $onSaleItems]);
+            } catch (\Exception $e) {
+                Log::error('Error calculating on-sale items: ' . $e->getMessage());
+                $onSaleItems = 0;
             }
+            
+            // dd($onSaleItems);
+            
+            // Get user data
+            $user = auth()->user();
+            $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
+            $userName = $user ? $user->name : 'Guest User';
 
-            $stockRecord = $stockQuery->first();
-            // dd($stockRecord);
-            $wishlist->stock = $stockRecord ? $stockRecord->stock : 0;
-        });
+            Log::info('Wishlist data prepared successfully', [
+                'totalItems' => $totalItems,
+                'totalValue' => $totalValue,
+                'onSaleItems' => $onSaleItems
+            ]);
 
-        // Calculate wishlist statistics
-        $totalItems = $wishlistItems->count();
-
-        $totalValue = $wishlistItems->sum(function ($item) {
-            return $item->product->discount_price ?? $item->product->price ?? 0;
-        });
-       
-        // Fix: Use getCollection() to access the underlying collection for filtering
-        $onSaleItems = $wishlistItems->getCollection()->filter(function ($item) {
-            return $item->product->discount_price && $item->product->discount_price < $item->product->price;
-        })->count();
-        
-        dd($onSaleItems);
-        // Get user data
-        $user = auth()->user();
-        $userInitials = $user ? substr($user->name, 0, 2) : 'GU';
-        $userName = $user ? $user->name : 'Guest User';
-        // dd($wishlistItems->pluck('variant_id'));
-
-
-        return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
+            return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
+            
+        } catch (\Exception $e) {
+            Log::error('Error in wishlist index: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return empty data on error
+            return view('web.wishlist', [
+                'wishlistItems' => collect([]),
+                'totalItems' => 0,
+                'totalValue' => 0,
+                'onSaleItems' => 0,
+                'userInitials' => 'GU',
+                'userName' => 'Guest User'
+            ]);
+        }
     }
 
     /**
