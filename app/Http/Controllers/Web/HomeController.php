@@ -369,7 +369,7 @@ class HomeController extends Controller
             
            return view('web.single-product', compact('product','sizes','relatedProducts'));
          }
-    //    dd($product);
+       dd($product);
        
         $sizes=Size::OrderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();
