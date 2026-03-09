@@ -356,6 +356,7 @@ class HomeController extends Controller
     {
         //  dd($slug);
          $data = Product::where('slug', $slug)->first();
+         dd($data);
          if($data){
          $product = Product::with(['images', 'variants', 'category', 'parts' => function($query) {
                 $query->orderBy('order')->orderBy('id');
