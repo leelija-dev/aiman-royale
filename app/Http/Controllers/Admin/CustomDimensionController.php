@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomDimension;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomDimensionController extends Controller
 {
@@ -20,6 +21,197 @@ class CustomDimensionController extends Controller
             ->paginate(15);
 
         return view('admin.custom-dimensions.index', compact('customRequests'));
+    }
+
+    /**
+     * Store a new custom dimension request.
+     */
+    public function store(Request $request)
+    {
+        try {
+            // Debug: Log incoming request data
+            Log::info('Custom dimension store request:', [
+                'user_authenticated' => Auth::check(),
+                'request_data' => $request->all()
+            ]);
+
+            // Get the authenticated user first
+            $user = Auth::user();
+            
+            if (!$user) {
+                Log::warning('Custom dimension request - User not authenticated');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated. Please login first.'
+                ], 401);
+            }
+
+            // Validate the request data
+            $validated = $request->validate([
+                'product_id' => 'required|exists:products,id',
+                'bust' => 'required|numeric|min:1|max:200',
+                'waist' => 'required|numeric|min:1|max:200',
+                'hip' => 'required|numeric|min:1|max:200',
+                'armhole' => 'required|numeric|min:1|max:100',
+                'color_code' => 'required|string|max:20',
+            ]);
+
+            // Check if product exists and is active
+            $product = \App\Models\Product::find($validated['product_id']);
+            if (!$product || $product->is_active != 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not available'
+                ], 404);
+            }
+
+            // Create the custom dimension request
+            $customDimension = CustomDimension::create([
+                'user_id' => $user->id,
+                'product_id' => $validated['product_id'],
+                'bust' => $validated['bust'],
+                'waist' => $validated['waist'],
+                'hip' => $validated['hip'],
+                'armhole' => $validated['armhole'],
+                'color_code' => $validated['color_code'],
+                'status' => 'requested',
+            ]);
+
+            Log::info('Custom dimension request created successfully:', [
+                'request_id' => $customDimension->id,
+                'user_id' => $user->id,
+                'product_id' => $validated['product_id'],
+                'measurements' => [
+                    'bust' => $validated['bust'],
+                    'waist' => $validated['waist'],
+                    'hip' => $validated['hip'],
+                    'armhole' => $validated['armhole'],
+                    'color' => $validated['color_code']
+                ]
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Custom dimension request submitted successfully! We will contact you soon.',
+                'data' => $customDimension
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Custom dimension validation failed:', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Please check all measurements and try again.',
+                'errors' => $e->errors()
+            ], 422);
+            
+        } catch (\Exception $e) {
+            Log::error('Error creating custom dimension request: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error occurred. Please try again later.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Show custom dimension requests for a specific product.
+     */
+    public function show($productId)
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+
+            // Get custom dimensions for this product and user
+            $customDimensions = CustomDimension::with(['product', 'product.images'])
+                ->where('user_id', $user->id)
+                ->where('product_id', $productId)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $customDimensions
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching custom dimensions: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch custom dimensions'
+            ], 500);
+        }
+    }
+
+    /**
+     * Cancel a custom dimension request.
+     */
+    public function cancel($id)
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+
+            $customDimension = CustomDimension::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (!$customDimension) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Custom dimension request not found'
+                ], 404);
+            }
+
+            // Only allow cancellation if status is 'requested' or 'viewed'
+            if (!in_array($customDimension->status, ['requested', 'viewed'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot cancel request that is already being processed'
+                ], 400);
+            }
+
+            $customDimension->update(['status' => 'canceled']);
+
+            Log::info('Custom dimension request cancelled:', [
+                'request_id' => $customDimension->id,
+                'user_id' => $user->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Custom dimension request cancelled successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error cancelling custom dimension: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to cancel custom dimension request'
+            ], 500);
+        }
     }
 
     /**
@@ -351,6 +543,101 @@ class CustomDimensionController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error sending WhatsApp message: ' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Show payment page for custom order.
+     */
+    public function payment($id)
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return redirect()->route('web.login')->with('error', 'Please login to access payment page');
+            }
+
+            $customDimension = CustomDimension::with(['user', 'product', 'product.images'])
+                ->where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (!$customDimension) {
+                return redirect()->route('page.index')->with('error', 'Custom dimension request not found');
+            }
+
+            // Check if there's already an order for this custom dimension
+            $existingOrder = \App\Models\OrderProduct::where('request_id', $id)->first();
+
+            if ($existingOrder) {
+                // Redirect to existing order payment
+                return redirect()->route('checkout.show', $existingOrder->order_id);
+            }
+
+            // If no order exists yet, create one
+            $orderProduct = $this->createOrderFromCustomRequest($customDimension);
+
+            if (!$orderProduct) {
+                return redirect()->route('page.index')->with('error', 'Failed to create order for payment');
+            }
+
+            // Redirect to checkout with the created order
+            return redirect()->route('checkout.show', $orderProduct->order_id);
+
+        } catch (\Exception $e) {
+            Log::error('Error accessing custom order payment: ' . $e->getMessage());
+            
+            return redirect()->route('page.index')->with('error', 'Unable to access payment page');
+        }
+    }
+
+    /**
+     * Delete a custom dimension request.
+     */
+    public function destroy($productId)
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+
+            // Find and delete custom dimensions for this product and user
+            $deleted = CustomDimension::where('user_id', $user->id)
+                ->where('product_id', $productId)
+                ->where('status', 'requested') // Only allow deletion of requested requests
+                ->delete();
+
+            if ($deleted > 0) {
+                Log::info('Custom dimension requests deleted:', [
+                    'user_id' => $user->id,
+                    'product_id' => $productId,
+                    'deleted_count' => $deleted
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Custom dimension requests deleted successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No deletable custom dimension requests found'
+                ], 404);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting custom dimensions: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete custom dimension requests'
+            ], 500);
         }
     }
 }
