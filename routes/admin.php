@@ -484,6 +484,7 @@ Route::prefix('shops')->group(function () {
         // Custom Dimensions Management Routes
         Route::get('/custom-dimensions', [CustomDimensionController::class, 'index'])->name('admin.custom-dimensions.index');
         Route::post('/custom-dimensions/{id}/status', [CustomDimensionController::class, 'updateStatus'])->name('admin.custom-dimensions.update-status');
+        Route::post('/custom-dimensions/{id}/price', [CustomDimensionController::class, 'updatePrice'])->name('admin.custom-dimensions.update-price');
 
         // SEO Management Routes
         Route::prefix('seo')->group(function () {

@@ -153,6 +153,15 @@
                                                 <span class="text-sm text-gray-600">{{ $request->color_code }}</span>
                                             </div>
                                         @endif
+
+                                        @if($request->price)
+                                            <div class="mt-3 pt-3 border-t">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm font-medium text-gray-700">Revised Price:</span>
+                                                    <span class="text-lg font-semibold text-green-600">{{config('app.currency')}}{{ number_format($request->price, 2) }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <!-- Status & Action -->

@@ -18,6 +18,7 @@ class CustomDimension extends Model
         'armhole',
         'color_code',
         'status',
+        'price',
     ];
 
     protected $casts = [
@@ -26,6 +27,7 @@ class CustomDimension extends Model
         'hip' => 'decimal:2',
         'armhole' => 'decimal:2',
         'status' => 'string',
+        'price' => 'decimal:2',
     ];
 
     /**

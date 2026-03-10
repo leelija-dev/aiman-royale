@@ -212,6 +212,52 @@ class CustomDimensionController extends Controller
     }
 
     /**
+     * Update custom dimension price.
+     */
+    public function updatePrice(Request $request, $id)
+    {
+        try {
+            $dimension = CustomDimension::find($id);
+
+            if (!$dimension) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Custom dimension request not found'
+                ], 404);
+            }
+
+            $request->validate([
+                'price' => 'required|numeric|min:0|max:999999.99'
+            ]);
+
+            $dimension->update([
+                'price' => $request->price
+            ]);
+
+            \Log::info('Custom dimension price updated', [
+                'dimension_id' => $dimension->id,
+                'new_price' => $request->price,
+                'updated_by' => Auth::id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Price updated successfully',
+                'data' => [
+                    'price' => $dimension->price
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error updating custom dimension price: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating price: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Update custom dimension request status.
      */
     public function updateStatus(Request $request, $id)
@@ -253,6 +299,9 @@ class CustomDimensionController extends Controller
     private function createOrderFromCustomRequest($dimension)
     {
         try {
+            // Get price from custom dimension if available, otherwise from product
+            $price = $dimension->price ?? $dimension->product->price ?? 0;
+
             // First create main order record
             // Get user's default address from addresses table
             $userAddress = $dimension->user->addresses()->where('is_default', true)->first()
@@ -261,7 +310,7 @@ class CustomDimensionController extends Controller
             $mainOrder = \App\Models\Order::create([
                 'user_id' => $dimension->user_id,
                 'order_number' => 'ORD-' . strtoupper(uniqid()),
-                'total_amount' => $dimension->product->price ?? 0,
+                'total_amount' => $price,
                 'status' => 'pending',
                 'payment_status' => 'pending',
                 'order_date' => now(),
@@ -283,8 +332,8 @@ class CustomDimensionController extends Controller
                 'variant_id' => null, // Custom dimensions don't use variants
                 'request_id' => $dimension->id, // Link to custom dimension request
                 'quantity' => 1,
-                'price' => $dimension->product->price ?? 0,
-                'total' => $dimension->product->price ?? 0,
+                'price' => $price,
+                'total' => $price,
                 'status' => 'pending',
                 'payment_status' => 'pending',
                 'order_date' => now(),
@@ -643,10 +692,30 @@ class CustomDimensionController extends Controller
                 // Get order details
                 $order = \App\Models\Order::find($existingOrder->order_id);
                 
+                // Check if order needs price update
+                $correctPrice = $customDimension->price ?? $customDimension->product->price ?? 0;
+                if ($order->total_amount != $correctPrice) {
+                    // Update order with correct price
+                    $order->update(['total_amount' => $correctPrice]);
+                    
+                    // Also update order product price
+                    $existingOrder->update([
+                        'price' => $correctPrice,
+                        'total' => $correctPrice
+                    ]);
+                    
+                    \Log::info('Updated existing order price for custom dimension', [
+                        'order_id' => $order->id,
+                        'request_id' => $customDimension->id,
+                        'old_price' => $order->total_amount,
+                        'new_price' => $correctPrice
+                    ]);
+                }
+                
                 // Store order details in session for Cashfree
                 session([
                     'cashfree_order_id' => $existingOrder->order_id,
-                    'cashfree_total' => $order->total_amount ?? 0,
+                    'cashfree_total' => $correctPrice,
                     'cashfree_currency' => 'INR'
                 ]);
 

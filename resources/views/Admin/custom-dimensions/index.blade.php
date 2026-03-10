@@ -95,6 +95,7 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Measurements</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Color</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                                 {{--
@@ -165,6 +166,28 @@
                                             </div>
                                             @else
                                             <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="number" 
+                                                       class="form-control form-control-sm" 
+                                                       style="width: 100px;" 
+                                                       id="price-{{ $request->id }}" 
+                                                       value="{{ $request->price ?? '' }}" 
+                                                       placeholder="0.00" 
+                                                       step="0.01" 
+                                                       min="0">
+                                                <button class="btn btn-sm btn-primary" onclick="updatePrice({{ $request->id }})">
+                                                    <i class="fas fa-save"></i>
+                                                </button>
+                                            </div>
+                                            @if($request->price)
+                                                <small class="text-muted">Current: {{config('app.currency')}}{{ number_format($request->price, 2) }}</small>
                                             @endif
                                         </div>
                                     </div>
@@ -303,6 +326,80 @@
                     position: 'top-end',
                     icon: 'error',
                     title: 'Error updating status',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+            });
+    }
+
+    function updatePrice(id) {
+        const priceInput = document.getElementById(`price-${id}`);
+        const price = priceInput.value;
+        
+        if (!price || price < 0) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Please enter a valid price',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+            document.querySelector('meta[name="csrf-token"]').getAttribute('content') :
+            document.querySelector('meta[name="_token"]') ?
+            document.querySelector('meta[name="_token"]').getAttribute('content') :
+            '';
+
+        fetch(`/admin/custom-dimensions/${id}/price`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    price: price
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Price updated successfully',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                    // Update the current price display
+                    location.reload();
+                } else {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: data.message || 'Error updating price',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Error updating price',
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true
