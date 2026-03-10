@@ -38,7 +38,7 @@ class CustomDimensionController extends Controller
 
             // Get the authenticated user first
             $user = Auth::user();
-            
+
             if (!$user) {
                 Log::warning('Custom dimension request - User not authenticated');
                 return response()->json([
@@ -96,25 +96,23 @@ class CustomDimensionController extends Controller
                 'message' => 'Custom dimension request submitted successfully! We will contact you soon.',
                 'data' => $customDimension
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::warning('Custom dimension validation failed:', [
                 'errors' => $e->errors(),
                 'request_data' => $request->all()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Please check all measurements and try again.',
                 'errors' => $e->errors()
             ], 422);
-            
         } catch (\Exception $e) {
             Log::error('Error creating custom dimension request: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request_data' => $request->all()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Server error occurred. Please try again later.'
@@ -129,7 +127,7 @@ class CustomDimensionController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -148,10 +146,9 @@ class CustomDimensionController extends Controller
                 'success' => true,
                 'data' => $customDimensions
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error fetching custom dimensions: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch custom dimensions'
@@ -166,7 +163,7 @@ class CustomDimensionController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -204,10 +201,9 @@ class CustomDimensionController extends Controller
                 'success' => true,
                 'message' => 'Custom dimension request cancelled successfully'
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error cancelling custom dimension: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to cancel custom dimension request'
@@ -369,22 +365,39 @@ class CustomDimensionController extends Controller
             $phoneNumberId = env('PHONE_NUMBER_ID');
             $version = env('FACEBOOK_GRAPH_API_VERSION', 'v18.0');
 
-            // Use existing confirm_order template
+            // Use custom_dimension_order template (fallback to confirm_order if not approved)
             if ($accessToken && $phoneNumberId && $dimension) {
-                // Generate order number (you can customize this)
+                // Generate order number
                 $orderNumber = 'CO' . str_pad($dimension->id, 5, '0', STR_PAD_LEFT);
-                
-                // Prepare message payload for confirm_order template
+
+                // Generate product URL
+                $productUrl = url('/product/' . $dimension->product->id);
+
+                // Generate payment URL
+                $paymentUrl = url('/pay-custom-order/' . $dimension->id);
+
+                // Try custom_dimension_order template first
                 $messageData = [
                     'messaging_product' => 'whatsapp',
                     'to' => $formattedPhone,
                     'type' => 'template',
                     'template' => [
-                        'name' => 'confirm_order',
+                        'name' => 'custom_dimension_order',
                         'language' => [
-                            'code' => 'en_US'
+                            'code' => 'en'
                         ],
                         'components' => [
+                            [
+                                'type' => 'header',
+                                'parameters' => [
+                                    [
+                                        'type' => 'image',
+                                        'image' => [
+                                            'link' => $imageUrl ?? asset('images/default-product.jpg')
+                                        ]
+                                    ]
+                                ]
+                            ],
                             [
                                 'type' => 'body',
                                 'parameters' => [
@@ -395,8 +408,20 @@ class CustomDimensionController extends Controller
                                     [
                                         'type' => 'text',
                                         'text' => $orderNumber
+                                    ],
+                                    [
+                                        'type' => 'text',
+                                        'text' => $dimension->product->name ?? 'Product'
+                                    ],
+                                    [
+                                        'type' => 'text',
+                                        'text' => $productUrl
                                     ]
                                 ]
+                            ],
+                            [
+                                'type' => 'footer',
+                                'parameters' => []
                             ]
                         ]
                     ]
@@ -406,12 +431,55 @@ class CustomDimensionController extends Controller
                 $response = $this->sendFacebookWhatsAppMessage($messageData, $accessToken, $phoneNumberId, $version);
 
                 if ($response) {
-                    \Log::info('WhatsApp message sent via confirm_order template', [
+                    \Log::info('WhatsApp message sent via custom_dimension_order template', [
                         'phone' => $formattedPhone,
                         'message_id' => $response['message_id'] ?? 'N/A',
-                        'order_number' => $orderNumber
+                        'order_number' => $orderNumber,
+                        'template' => 'custom_dimension_order'
                     ]);
                     return true;
+                } else {
+                    // Fallback to confirm_order template if custom_dimension_order fails
+                    \Log::info('custom_dimension_order template failed, trying confirm_order template');
+
+                    $fallbackMessageData = [
+                        'messaging_product' => 'whatsapp',
+                        'to' => $formattedPhone,
+                        'type' => 'template',
+                        'template' => [
+                            'name' => 'confirm_order',
+                            'language' => [
+                                'code' => 'en'
+                            ],
+                            'components' => [
+                                [
+                                    'type' => 'body',
+                                    'parameters' => [
+                                        [
+                                            'type' => 'text',
+                                            'text' => $dimension->user->name ?? 'Customer'
+                                        ],
+                                        [
+                                            'type' => 'text',
+                                            'text' => $orderNumber
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
+
+                    $fallbackResponse = $this->sendFacebookWhatsAppMessage($fallbackMessageData, $accessToken, $phoneNumberId, $version);
+
+                    if ($fallbackResponse) {
+                        \Log::info('WhatsApp message sent via confirm_order fallback template', [
+                            'phone' => $formattedPhone,
+                            'message_id' => $fallbackResponse['message_id'] ?? 'N/A',
+                            'order_number' => $orderNumber,
+                            'template' => 'confirm_order'
+                        ]);
+                        return true;
+                    }
                 }
             }
 
@@ -472,7 +540,7 @@ class CustomDimensionController extends Controller
     {
         try {
             $url = "https://graph.facebook.com/{$version}/{$phoneNumberId}/messages";
-            
+
             $headers = [
                 'Authorization: Bearer ' . $accessToken,
                 'Content-Type: application/json'
@@ -554,7 +622,7 @@ class CustomDimensionController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return redirect()->route('web.login')->with('error', 'Please login to access payment page');
             }
@@ -572,8 +640,18 @@ class CustomDimensionController extends Controller
             $existingOrder = \App\Models\OrderProduct::where('request_id', $id)->first();
 
             if ($existingOrder) {
-                // Redirect to existing order payment
-                return redirect()->route('checkout.show', $existingOrder->order_id);
+                // Get order details
+                $order = \App\Models\Order::find($existingOrder->order_id);
+                
+                // Store order details in session for Cashfree
+                session([
+                    'cashfree_order_id' => $existingOrder->order_id,
+                    'cashfree_total' => $order->total_amount ?? 0,
+                    'cashfree_currency' => 'INR'
+                ]);
+
+                // Redirect to payment page
+                return redirect()->route('checkout.payment');
             }
 
             // If no order exists yet, create one
@@ -583,12 +661,21 @@ class CustomDimensionController extends Controller
                 return redirect()->route('page.index')->with('error', 'Failed to create order for payment');
             }
 
-            // Redirect to checkout with the created order
-            return redirect()->route('checkout.show', $orderProduct->order_id);
+            // Get order details
+            $order = \App\Models\Order::find($orderProduct->order_id);
 
+            // Store order details in session for Cashfree
+            session([
+                'cashfree_order_id' => $orderProduct->order_id,
+                'cashfree_total' => $order->total_amount ?? 0,
+                'cashfree_currency' => 'INR'
+            ]);
+
+            // Redirect to payment page
+            return redirect()->route('checkout.payment');
         } catch (\Exception $e) {
             Log::error('Error accessing custom order payment: ' . $e->getMessage());
-            
+
             return redirect()->route('page.index')->with('error', 'Unable to access payment page');
         }
     }
@@ -600,7 +687,7 @@ class CustomDimensionController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -631,10 +718,9 @@ class CustomDimensionController extends Controller
                     'message' => 'No deletable custom dimension requests found'
                 ], 404);
             }
-
         } catch (\Exception $e) {
             Log::error('Error deleting custom dimensions: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete custom dimension requests'

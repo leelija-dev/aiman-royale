@@ -184,7 +184,7 @@ class CustomDimensionController extends Controller
             return redirect()->back()->with('error', 'Custom order not found');
         }
 
-        // Check if the order belongs to the authenticated user
+        // Check if order belongs to the authenticated user
         if ($dimension->user_id !== Auth::id()) {
             return redirect()->back()->with('error', 'Unauthorized access');
         }
@@ -194,6 +194,7 @@ class CustomDimensionController extends Controller
             return redirect()->back()->with('error', 'Order is not ready for payment');
         }
 
-        return view('web.custom-order-payment', compact('dimension'));
+        // Redirect to Admin controller's payment method which handles the proper payment flow
+        return app(\App\Http\Controllers\Admin\CustomDimensionController::class)->payment($id);
     }
 }
