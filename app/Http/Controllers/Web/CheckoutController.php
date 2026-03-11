@@ -237,6 +237,48 @@ class CheckoutController extends Controller
         }
     }
 
+    public function processCOD(Request $request)
+    {
+        // dd($request);
+        try {
+            $request->validate([
+                'order_id' => 'required|string',
+                'total' => 'required|numeric|min:1',
+                'currency' => 'required|string|max:3'
+            ]);
+
+            $orderId = $request->order_id;
+            $total = $request->total;
+            $currency = $request->currency;
+
+            // Debug logging
+            Log::info('COD Processing - Order ID: ' . $orderId . ', Total: ' . $total . ', Currency: ' . $currency);
+
+            // Update order status for COD
+            $updateData = [
+                'order_status' => 'confirmed',
+                'payment_status' => 'cod',
+                'payment_method' => 'cash_on_delivery',
+                'updated_at' => now()
+            ];
+
+            $affected = DB::table('orders')->where('id', $orderId)->update($updateData);
+            
+            Log::info('COD order processed: ' . $orderId . ', Affected rows: ' . $affected);
+
+            // Clear cart
+            DB::table('carts')->where('user_id', auth()->id())->delete();
+
+            // Clear session
+            session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']);
+
+            return redirect()->route('page.index')->with('success', 'Order placed successfully! You will pay cash on delivery.');
+        } catch (\Exception $e) {
+            Log::error('COD processing error: ' . $e->getMessage());
+            return redirect()->route('checkout.payment')->with('error', 'Failed to process COD order. Please try again.');
+        }
+    }
+
     public function paymentSuccess(Request $request)
     {
         // Log all request data for debugging
@@ -260,6 +302,7 @@ class CheckoutController extends Controller
         $updateData = [
             'order_status' => 'paid',
             'payment_status' => 'paid',
+            'payment_method' => 'cashfree',
             'paid_at' => now(),
             'updated_at' => now()
         ];

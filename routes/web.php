@@ -86,6 +86,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
 Route::post('/checkout/payment/session', [CheckoutController::class, 'createPaymentSession'])->name('checkout.payment.session');
+Route::post('/checkout/cod/process', [CheckoutController::class, 'processCOD'])->name('checkout.cod.process');
 Route::get('/checkout/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
 Route::get('/checkout/cancel', [CheckoutController::class, 'paymentCancel'])->name('checkout.cancel');
 Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
