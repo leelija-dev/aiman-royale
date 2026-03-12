@@ -513,10 +513,11 @@
         </div>
     </div>
     <div class="container mx-auto">
-    <div class="flex flex-col lg:flex-row gap-8">
+    <div class="flex flex-row gap-3 relative">
         @if($category!=null)
       <!-- Filters Sidebar -->
-      <div class="lg:w-1/4 w-full">
+      <div  id="filter-sidebar"
+        class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 z-[20003] transition-all duration-300 ease-in-out">
         <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
           <h2 class="text-xl font-bold text-gray-900 mb-4">Filters</h2>
           
@@ -699,6 +700,60 @@
     </div>
   </div>
 </section>
+
+<!-- Overlay -->
+<div id="filter-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[20002] lg:hidden hidden"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // DOM Elements
+    const filterButton = document.querySelector("#open-filter");
+    const sidebar = document.getElementById("filter-sidebar");
+    const overlay = document.getElementById("filter-overlay");
+
+    // ──────────────────────────────────────────────
+    //  Utility Functions
+    // ──────────────────────────────────────────────
+    function isMobile() {
+        return window.innerWidth < 991;
+    }
+
+    // ──────────────────────────────────────────────
+    //  Mobile Sidebar Functions
+    // ──────────────────────────────────────────────
+    function openSidebar() {
+        if (!isMobile()) return;
+        sidebar.classList.remove("translate-x-[-150%]");
+        sidebar.classList.add("translate-x-0");
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeSidebar() {
+        if (!isMobile()) return;
+        sidebar.classList.remove("translate-x-0");
+        sidebar.classList.add("translate-x-[-150%]");
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+    }
+
+    if (filterButton) filterButton.addEventListener("click", openSidebar);
+    if (overlay) overlay.addEventListener("click", closeSidebar);
+
+    // Resize handling
+    window.addEventListener("resize", () => {
+        if (isMobile()) {
+            sidebar.classList.add("fixed", "translate-x-[-150%]");
+            sidebar.classList.remove("relative");
+        } else {
+            sidebar.classList.remove("fixed", "translate-x-[-150%]", "translate-x-0");
+            sidebar.classList.add("relative", "lgg:sticky");
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "";
+        }
+    });
+});
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
