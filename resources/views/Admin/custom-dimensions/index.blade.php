@@ -195,13 +195,22 @@
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <select class="form-select form-select-sm" onchange="updateStatus({{ $request->id }}, this.value)">
-                                                <option value="requested" {{ $request->status == 'requested' ? 'selected' : '' }}>Requested</option>
-                                                <option value="viewed" {{ $request->status == 'viewed' ? 'selected' : '' }}>Viewed</option>
-                                                <option value="processing" {{ $request->status == 'processing' ? 'selected' : '' }}>Processing</option>
-                                                <option value="accepted" {{ $request->status == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                                                <option value="canceled" {{ $request->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
-                                            </select>
+                                            @if($request->status == 'accepted')
+                                                <!-- If status is accepted, only show accepted and canceled options -->
+                                                <select class="form-select form-select-sm" onchange="updateStatus({{ $request->id }}, this.value)">
+                                                    <option value="accepted" selected>Accepted</option>
+                                                    <option value="canceled">Canceled</option>
+                                                </select>
+                                            @else
+                                                <!-- For other statuses, show all options except accepted -->
+                                                <select class="form-select form-select-sm" onchange="updateStatus({{ $request->id }}, this.value)">
+                                                    <option value="requested" {{ $request->status == 'requested' ? 'selected' : '' }}>Requested</option>
+                                                    <option value="viewed" {{ $request->status == 'viewed' ? 'selected' : '' }}>Viewed</option>
+                                                    <option value="processing" {{ $request->status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                                     <option value="accepted" {{ $request->status == 'accepted' ? 'selected' : '' }}>Accepted</option>
+                                                    <option value="canceled" {{ $request->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
+                                                </select>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
