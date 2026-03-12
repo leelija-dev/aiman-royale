@@ -299,13 +299,21 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex items-center gap-4 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+                <div class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
                      data-product-variants="{{ json_encode($product->variants) }}">
-                    <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
-                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                    </button>
-                    <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
-                        <i class="far fa-heart"></i>
+                    <div class="flex items-center gap-4">
+                        <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
+                            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                        </button>
+                        <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- WhatsApp Share Button -->
+                    <button id="whatsapp-share-btn" class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                        <span>Share on WhatsApp</span>
                     </button>
                 </div>
             </div>
@@ -770,6 +778,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // WhatsApp Share Button Functionality
+    const whatsappBtn = document.getElementById('whatsapp-share-btn');
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', function() {
+            shareOnWhatsApp();
+        });
+    }
 });
 </script>
 
@@ -791,6 +807,50 @@ let selectedVariantId = '{{ $product?->variants?->first()->id ?? "" }}';
 let selectedType = 'stitched';
 let customDimensions = null;
 let selectedCustomColor = null;
+
+// WhatsApp Share Function
+function shareOnWhatsApp() {
+    // Get product details
+    const productName = "{{ $product->name ?? 'Product' }}";
+    const productPrice = document.querySelector('#price-container .text-2xl')?.textContent || "{{ $basePrice }}";
+    const productUrl = window.location.href;
+    const mainImage = document.getElementById('main-image')?.src || '';
+    
+    // Get selected variant details
+    let selectedVariant = null;
+    if (selectedVariantId) {
+        selectedVariant = productVariants.find(v => v.id == selectedVariantId);
+    }
+    
+    const size = selectedSize || 'N/A';
+    const color = selectedColor || 'N/A';
+    
+    // Build the message
+    let message = `*${productName}*\n\n`;
+    message += `💰 *Price:* ${productPrice}\n`;
+    message += `📏 *Size:* ${size}\n`;
+    message += `🎨 *Color:* ${color}\n`;
+    
+    if (customDimensions) {
+        message += `📐 *Custom Dimensions:*\n`;
+        message += `   Bust: ${customDimensions.bust} cm\n`;
+        message += `   Waist: ${customDimensions.waist} cm\n`;
+        message += `   Hip: ${customDimensions.hip} cm\n`;
+        message += `   Armhole: ${customDimensions.armhole} cm\n`;
+    }
+    
+    message += `\n🔗 *Product Link:* ${productUrl}\n\n`;
+    message += `🛍️ Check out this amazing product!`;
+    
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Open WhatsApp Web with the message
+    window.open(`https://web.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+    
+    // Optional: Show success message
+    showNotification('WhatsApp opened! Share this product with your friends.', 'success');
+}
 
 // Image functions
 function updateMainImage(imageSrc, altText, thumbnailElement) {
