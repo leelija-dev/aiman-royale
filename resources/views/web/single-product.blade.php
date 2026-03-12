@@ -719,6 +719,62 @@
     </div>
 </section>
 
+
+<!-- Last Viewed Products Section -->
+@if($lastViewedProducts && $lastViewedProducts->isNotEmpty())
+
+<section class="px-4 lgg:py-12 py-6">
+    <div class="container mx-auto">
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
+            <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Last Viewed Products</h2>
+        </div>
+
+        <div class="main-owl owl-carousel owl-theme">
+            @forelse($lastViewedProducts as $lastViewedProduct)
+           
+            @php
+            $imagePath = $lastViewedProduct['featured_image'] ? ltrim($lastViewedProduct['featured_image'], '/') : 'assets/images/placeholder.jpg';
+            @endphp
+            <div class="item flex items-center justify-center">
+                <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative rounded-xl overflow-hidden">
+                        <img src="{{ asset($imagePath) }}" 
+                             alt="{{ $lastViewedProduct['id'] }}" 
+                             class="w-full h-[340px] object-cover object-top object-center" />
+                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            @if($lastViewedProduct['is_trending'] ?? false)
+                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
+                            @endif
+                            <span class="bg-gray-800 text-white text-xs font-semibold px-2 py-1 rounded">Recently Viewed</span>
+                        </div>
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
+                                data-product-id="{{ $lastViewedProduct['id'] }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <a href="{{route('page.single-product', $lastViewedProduct['slug'])}}">
+                        <div class="p-4 space-y-1">
+                            <h3 class="text-[15px] font-semibold text-gray-900">{{ $lastViewedProduct['name'] }}</h3>
+                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                <span>{{ $lastViewedProduct->brand ?? '' }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['price'] }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @empty
+            <div class="item flex items-center justify-center">
+                <p class="text-gray-500">No recently viewed products.</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- Editor's Pick Section -->
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">

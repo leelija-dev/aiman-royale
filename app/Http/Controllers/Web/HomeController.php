@@ -350,23 +350,146 @@ class HomeController extends Controller
         return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
     }
 
+    // public function ShowSingleProduct($slug)
+    // {
+    //     //  dd($slug);
+    //     $data = Product::where('slug', $slug)->first();
+    //     if (!$data) {
+    //         abort(404);
+    //     }
+
+    //     $product = $data;
+    //     $product->load(['images', 'variants', 'category', 'parts']);
+    //     // dd($product);
+    //     $sizes = Size::OrderBy('sort_order')->get();
+    //     $colors = Color::orderBy('id')->get();
+
+    //     // Track last viewed products in session
+    //     $lastViewed = session()->get('last_viewed', []);
+
+    //     // Add current product to the beginning of the array
+    //     array_unshift($lastViewed, [
+    //         'id' => $product->id,
+    //         'name' => $product->name,
+    //         'slug' => $product->slug,
+    //         'featured_image' => $product->featured_image,
+    //         'price' => $product->price,
+    //         'is_trending' => $product->is_trending ?? false,
+    //         'viewed_at' => now()->timestamp
+    //     ]);
+
+    //     // Keep only last 5 viewed products and remove duplicates
+    //     $uniqueViewed = [];
+    //     $seenIds = [];
+
+    //     foreach ($lastViewed as $item) {
+    //         if (!in_array($item['id'], $seenIds) && $item['id'] != $product->id) {
+    //             $uniqueViewed[] = $item;
+    //             $seenIds[] = $item['id'];
+    //         }
+    //     }
+
+    //     session()->put('last_viewed', array_slice($uniqueViewed, 0, 5));
+
+    //     // Convert to collection for easier handling in view
+    //     $lastViewedProducts = collect($uniqueViewed)->take(5);
+
+    //     // If no colors exist, create some default ones
+    //     if ($colors->count() === 0) {
+    //         $defaultColors = [
+    //             ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
+    //             ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
+    //             ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
+    //             ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
+    //             ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
+    //             ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
+    //             ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
+    //             ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
+    //         ];
+
+    //         foreach ($defaultColors as $colorData) {
+    //             Color::create($colorData);
+    //         }
+
+    //         $colors = Color::orderBy('id')->get();
+    //     }
+
+    //     // Get most wishlisted products
+    //     $mostWishlistedProducts = Product::where('is_active', 1)
+    //         ->withCount('wishlists')
+    //         ->orderBy('wishlists_count', 'desc')
+    //         ->limit(8)
+    //         ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
+
+    //     // Load necessary relationships for most wishlisted products
+    //     $mostWishlistedProducts->load(['variants', 'images']);
+
+    //     $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
+    //         ->whereBetween('price', [
+    //             $product->price - 1000,
+    //             $product->price + 1000
+    //         ])
+    //         ->whereHas('variants')->with(['variants', 'images'])->get();
+    //     return view('web.single-product', compact('product', 'sizes', 'relatedProducts', 'colors', 'mostWishlistedProducts', 'lastViewedProducts'));
+    // }
+
     public function ShowSingleProduct($slug)
     {
-        //  dd($slug);
         $data = Product::where('slug', $slug)->first();
+
         if (!$data) {
             abort(404);
         }
-        // dd($data);
+
         $product = $data;
-        // dd($product);
         $product->load(['images', 'variants', 'category', 'parts']);
-        // dd($product);
-        $sizes = Size::OrderBy('sort_order')->get();
+
+        $sizes = Size::orderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();
 
-        // If no colors exist, create some default ones
+        /*
+    |--------------------------------------------------------------------------
+    | Last Viewed Products (Store Last 5 in Session)
+    |--------------------------------------------------------------------------
+    */
+
+        // Get session products
+        $lastViewed = session()->get('last_viewed', []);
+
+        // Remove current product if already exists
+        $lastViewed = array_filter($lastViewed, function ($item) use ($product) {
+            return $item['id'] != $product->id;
+        });
+
+        // Add current product at beginning
+        array_unshift($lastViewed, [
+            'id' => $product->id,
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'featured_image' => $product->featured_image,
+            'price' => $product->price,
+            'is_trending' => $product->is_trending ?? false,
+            'viewed_at' => now()->timestamp
+        ]);
+
+        // Keep only 5 products
+        $lastViewed = array_slice($lastViewed, 0, 5);
+
+        // Store again in session
+        session()->put('last_viewed', $lastViewed);
+
+        // Convert to collection for blade
+        $lastViewedProducts = collect($lastViewed);
+        // dd($lastViewedProducts);
+
+        /*
+    |--------------------------------------------------------------------------
+    | Default Colors (If none exist)
+    |--------------------------------------------------------------------------
+    */
+
         if ($colors->count() === 0) {
+
             $defaultColors = [
                 ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
                 ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
@@ -385,29 +508,52 @@ class HomeController extends Controller
             $colors = Color::orderBy('id')->get();
         }
 
-        // Get most wishlisted products
+        /*
+    |--------------------------------------------------------------------------
+    | Most Wishlisted Products
+    |--------------------------------------------------------------------------
+    */
+
         $mostWishlistedProducts = Product::where('is_active', 1)
             ->withCount('wishlists')
             ->orderBy('wishlists_count', 'desc')
             ->limit(8)
             ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
 
-        // dd($mostWishlistedProducts);
-
-        // Load necessary relationships for most wishlisted products
         $mostWishlistedProducts->load(['variants', 'images']);
-        // dd($mostWishlistedProducts);
 
-        // print_r($product->category);die;
+        /*
+    |--------------------------------------------------------------------------
+    | Related Products
+    |--------------------------------------------------------------------------
+    */
+
+        // $relatedProducts = Product::where('category_id', $product->category_id)
+        //     ->where('id', '!=', $product->id)
+        //     ->where('is_active', 1)
+        //     ->whereBetween('price', [
+        //         $product->price - 1000,
+        //         $product->price + 1000
+        //     ])
+        //     ->whereHas('variants')
+        //     ->with(['variants', 'images'])
+        //     ->limit(8)
+        //     ->get();
         $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
             ->whereBetween('price', [
                 $product->price - 1000,
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-        //    dd($relatedProducts);
-        // print_r($relatedProducts->first()->variants);die;
-        // dd($product);
-        return view('web.single-product', compact('product', 'sizes', 'relatedProducts', 'colors', 'mostWishlistedProducts'));
+            // dd($relatedProducts);
+
+        return view('web.single-product', compact(
+            'product',
+            'sizes',
+            'relatedProducts',
+            'colors',
+            'mostWishlistedProducts',
+            'lastViewedProducts'
+        ));
     }
 }
