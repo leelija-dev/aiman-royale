@@ -583,9 +583,9 @@
 
 <!-- Related Products Section -->
 <section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto">
+     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-            <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Trending Best Selling Products</h2>
+            <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Related Products</h2>
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
@@ -595,6 +595,75 @@
             $variant = $relatedProduct->variants->first();
             $productImage = $relatedProduct->images->first();
             $imagePath = $productImage ? ltrim($productImage->image, '/') : 'assets/images/placeholder.jpg';
+            @endphp
+            <div class="item flex items-center justify-center">
+                <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div class="relative rounded-xl overflow-hidden">
+                        <img src="{{ asset($imagePath) }}" 
+                             alt="{{ $relatedProduct->name }}" 
+                             class="w-full h-[340px] object-cover object-top object-center" />
+                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            @if($relatedProduct->is_trending ?? false)
+                            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
+                            @endif
+                            @if($variant && $variant->discount)
+                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                                @if($variant->discount == 0) Trending @else OFF {{ $variant->discount }}% @endif
+                            </span>
+                            @endif
+                        </div>
+                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
+                                data-product-id="{{ $variant->product_id }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <a href="{{route('page.single-product', $relatedProduct->slug)}}">
+                        <div class="p-4 space-y-1">
+                            <h3 class="text-[15px] font-semibold text-gray-900">{{ $relatedProduct->name }}</h3>
+                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                <span>{{ $relatedProduct->brand ?? '' }}</span>
+                                <span class="flex items-center gap-1 text-gray-700">
+                                    <span class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                <span class="text-lg font-bold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
+                                @if($variant->discount_price)
+                                <span class="text-sm text-gray-400 line-through">Rs. {{ $variant->price }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @empty
+            <div class="item flex items-center justify-center">
+                <p class="text-gray-500">No related products found.</p>
+            </div>
+            @endforelse
+            @else
+            <div class="item flex items-center justify-center">
+                <p class="text-gray-500">Related products not available.</p>
+            </div>
+            @endif
+        </div>
+    </div>
+    <div class="container mx-auto">
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
+            <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Most Wishlisted Products</h2>
+        </div>
+
+        <div class="main-owl owl-carousel owl-theme">
+            @if(isset($mostWishlistedProducts))
+            @forelse($mostWishlistedProducts as $relatedProduct)
+            @php
+            $variant = $relatedProduct->variants->first();
+            $productImage = $relatedProduct->featured_image;
+            $imagePath = $productImage ? ltrim($productImage, '/') : 'assets/images/placeholder.jpg';
+            // Debug: Check if variant exists
+            if (!$variant) {
+                continue; // Skip this product if no variant found
+            }
             @endphp
             <div class="item flex items-center justify-center">
                 <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
@@ -781,6 +850,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // WhatsApp Share Button Functionality
     const whatsappBtn = document.getElementById('whatsapp-share-btn');
+    // console.log(whatsappBtn)
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', function() {
             shareOnWhatsApp();
@@ -797,7 +867,7 @@ const loginUrl = "{{route('page.login')}}";
 
 // Store all product variants data
 const productVariants = @json($product->variants);
-console.log(productVariants)
+// console.log(productVariants)
 
 // Set default size and color from first variant
 let selectedSize = '{{ $product?->variants?->first()->size ?? "M" }}';

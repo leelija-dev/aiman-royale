@@ -364,7 +364,7 @@ class HomeController extends Controller
         // dd($product);
         $sizes = Size::OrderBy('sort_order')->get();
         $colors = Color::orderBy('id')->get();
-        
+
         // If no colors exist, create some default ones
         if ($colors->count() === 0) {
             $defaultColors = [
@@ -377,19 +377,37 @@ class HomeController extends Controller
                 ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
                 ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
             ];
-            
+
             foreach ($defaultColors as $colorData) {
                 Color::create($colorData);
             }
-            
+
             $colors = Color::orderBy('id')->get();
         }
-        
+
+        // Get most wishlisted products
+        $mostWishlistedProducts = Product::where('is_active', 1)
+            ->withCount('wishlists')
+            ->orderBy('wishlists_count', 'desc')
+            ->limit(8)
+            ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
+
+        // dd($mostWishlistedProducts);
+
+        // Load necessary relationships for most wishlisted products
+        $mostWishlistedProducts->load(['variants', 'images']);
+        // dd($mostWishlistedProducts);
+
         // print_r($product->category);die;
-        $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)->whereHas('variants')->with(['variants', 'images'])->get();
+        $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
+            ->whereBetween('price', [
+                $product->price - 1000,
+                $product->price + 1000
+            ])
+            ->whereHas('variants')->with(['variants', 'images'])->get();
         //    dd($relatedProducts);
         // print_r($relatedProducts->first()->variants);die;
         // dd($product);
-        return view('web.single-product', compact('product', 'sizes', 'relatedProducts', 'colors'));
+        return view('web.single-product', compact('product', 'sizes', 'relatedProducts', 'colors', 'mostWishlistedProducts'));
     }
 }
