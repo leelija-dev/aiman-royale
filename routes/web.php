@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\NewsLetterController;
+use App\Http\Controllers\Admin\FalseReviewsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\CartController;
@@ -123,6 +124,15 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
+
+// Admin Reviews Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('reviews', FalseReviewsController::class);
+    Route::post('reviews/bulk-action', [FalseReviewsController::class, 'bulkAction'])->name('reviews.bulk-action');
+    Route::post('reviews/{review}/toggle-status', [FalseReviewsController::class, 'toggleStatus'])->name('reviews.toggle-status');
+    Route::post('reviews/{review}/toggle-featured', [FalseReviewsController::class, 'toggleFeatured'])->name('reviews.toggle-featured');
+    Route::post('reviews/{review}/toggle-verified', [FalseReviewsController::class, 'toggleVerified'])->name('reviews.toggle-verified');
+});
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
 

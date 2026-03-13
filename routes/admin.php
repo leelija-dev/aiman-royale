@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\FalseReviewsController;
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -200,6 +201,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             Route::get('/edit-role/{id}', [RoleController::class, 'edit'])->name('admin.roles.edit-role');
             Route::post('/update/{id}', [RoleController::class, 'update'])->name('admin.roles.update');
             Route::delete('/delete-role/{id}', [RoleController::class, 'delete'])->name('admin.delete-role');
+        });
+
+        Route::prefix('false-reviews')->group(function (){
+            Route::get('/', [FalseReviewsController::class, 'index'])->name('reviews.index');
+            Route::get('/create', [FalseReviewsController::class, 'create'])->name('reviews.create');
+            Route::post('/create', [FalseReviewsController::class, 'store'])->name('reviews.store');
         });
 
 
