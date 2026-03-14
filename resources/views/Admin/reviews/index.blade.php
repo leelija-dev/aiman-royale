@@ -23,32 +23,7 @@
                     @endif
 
                     <!-- Bulk Actions -->
-                    <form action="{{ route('admin.reviews.bulk-action') }}" method="POST" id="bulkActionForm">
-                        @csrf
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAll()">
-                                        <i class="fas fa-check-square"></i> Select All
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAll()">
-                                        <i class="fas fa-square"></i> Deselect All
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-md-6 text-right">
-                                <select name="action" class="form-control form-control-sm d-inline-block w-auto mr-2" required>
-                                    <option value="">Bulk Action</option>
-                                    <option value="approve">✅ Approve Selected</option>
-                                    <option value="reject">❌ Reject Selected</option>
-                                    <option value="delete">🗑️ Delete Selected</option>
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-warning" onclick="return confirmBulkAction()">
-                                    <i class="fas fa-play"></i> Execute
-                                </button>
-                            </div>
-                        </div>
-
+                    
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped">
                                 <thead>
@@ -158,7 +133,7 @@
                                 {{ $reviews->links() }}
                             </div>
                         </div>
-                    </form>
+                   
                 </div>
             </div>
         </div>
