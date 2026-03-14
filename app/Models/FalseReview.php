@@ -19,22 +19,11 @@ class FalseReview extends Model
         'reviewer_email',
         'rating',
         'review_text',
-        'is_verified',
-        'is_featured',
-        'helpful_count',
-        'total_count',
-        'ip_address',
-        'user_agent',
-        'status',
         'admin_notes',
         'review_date'
     ];
 
     protected $casts = [
-        'is_verified' => 'boolean',
-        'is_featured' => 'boolean',
-        'helpful_count' => 'decimal:2',
-        'total_count' => 'decimal:2',
         'rating' => 'integer',
         'review_date' => 'datetime',
         'created_at' => 'datetime',

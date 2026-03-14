@@ -85,20 +85,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="status">Status <span class="text-danger">*</span></label>
-                                    <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>🟡 Pending</option>
-                                        <option value="approved" {{ old('status') == 'approved' ? 'selected' : '' }}>🟢 Approved</option>
-                                        <option value="rejected" {{ old('status') == 'rejected' ? 'selected' : '' }}>🔴 Rejected</option>
-                                    </select>
-                                    @error('status')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                          
                         </div>
 
                         <div class="form-group">
@@ -107,29 +94,6 @@
                             @error('review_text')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" name="is_verified" id="is_verified" class="custom-control-input" {{ old('is_verified') ? 'checked' : '' }}>
-                                        <label class="custom-control-label" for="is_verified">
-                                            ✅ Verified Purchase
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" name="is_featured" id="is_featured" class="custom-control-input" {{ old('is_featured') ? 'checked' : '' }}>
-                                        <label class="custom-control-label" for="is_featured">
-                                            ⭐ Featured Review
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="form-group">
@@ -163,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const reviewerName = document.getElementById('reviewer_name');
     const reviewText = document.getElementById('review_text');
     const productSelect = document.getElementById('product_id');
-    const statusSelect = document.getElementById('status');
 
     // Add CSS to ensure error messages are visible
     const style = document.createElement('style');
@@ -182,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 
     // Real-time validation
-    const inputs = [reviewerName, reviewText, productSelect, ratingSelect, statusSelect];
+    const inputs = [reviewerName, reviewText, productSelect, ratingSelect];
     inputs.forEach(input => {
         if (input) {
             input.addEventListener('input', function() {
@@ -216,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!validateField(reviewerName)) isValid = false;
         if (!validateField(ratingSelect)) isValid = false;
         if (!validateField(reviewText)) isValid = false;
-        if (!validateField(statusSelect)) isValid = false;
 
         // Validate email format if provided
         const emailField = document.getElementById('reviewer_email');

@@ -20,13 +20,6 @@ return new class extends Migration
             $table->string('reviewer_email')->nullable();
             $table->integer('rating')->default(5); // 1-5 stars
             $table->text('review_text');
-            $table->boolean('is_verified')->default(false);
-            $table->boolean('is_featured')->default(false);
-            $table->decimal('helpful_count', 8, 2)->default(0);
-            $table->decimal('total_count', 8, 2)->default(0);
-            $table->string('ip_address')->nullable();
-            $table->string('user_agent')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('admin_notes')->nullable();
             $table->timestamp('review_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();

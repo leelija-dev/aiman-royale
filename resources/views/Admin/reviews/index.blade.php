@@ -59,8 +59,6 @@
                                         <th>Product</th>
                                         <th>Reviewer</th>
                                         <th>Rating</th>
-                                        <th>Status</th>
-                                        <th>Verified</th>
                                         <th>Review Text</th>
                                         <th>Date</th>
                                         <th width="150">Actions</th>
@@ -92,18 +90,6 @@
                                                     @php echo str_repeat('⭐', $review->rating); @endphp
                                                     <small class="text-muted">({{ $review->rating }}/5)</small>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-{{ $review->status == 'approved' ? 'success' : ($review->status == 'rejected' ? 'danger' : 'warning') }}">
-                                                    {{ ucfirst($review->status) }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                @if($review->is_verified)
-                                                    <span class="badge badge-success">✅</span>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
                                             </td>
                                             <td>
                                                 {{$review->review_text ?? ''}}

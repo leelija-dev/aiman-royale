@@ -37,9 +37,6 @@ class FalseReviewsController extends Controller
             'reviewer_email' => 'nullable|email|max:255',
             'rating' => 'required|integer|min:1|max:5',
             'review_text' => 'required|string|min:10',
-            'is_verified' => 'boolean',
-            'is_featured' => 'boolean',
-            'status' => 'required|in:pending,approved,rejected',
             'admin_notes' => 'nullable|string|max:1000'
         ]);
 
@@ -88,7 +85,6 @@ class FalseReviewsController extends Controller
             'reviewer_email' => 'nullable|email|max:255',
             'rating' => 'required|integer|min:1|max:5',
             'review_text' => 'required|string|min:10',
-            'status' => 'required|in:pending,approved,rejected',
             'admin_notes' => 'nullable|string|max:1000'
         ]);
 
@@ -99,9 +95,6 @@ class FalseReviewsController extends Controller
             'reviewer_email' => $request->reviewer_email,
             'rating' => $request->rating,
             'review_text' => $request->review_text,
-            'is_verified' => $request->boolean('is_verified', false),
-            'is_featured' => $request->boolean('is_featured', false),
-            'status' => $request->status,
             'admin_notes' => $request->admin_notes ?? ''
         ]);
 
