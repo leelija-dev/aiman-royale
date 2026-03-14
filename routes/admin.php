@@ -502,5 +502,23 @@ Route::prefix('shops')->group(function () {
             Route::put('{slug}', [PageSeoController::class, 'update'])->name('seo.pages.update');
             Route::delete('{id}', [PageSeoController::class, 'destroy'])->name('seo.pages.destroy');
         });
+
+        // False Reviews Management Routes
+        Route::resource('reviews', FalseReviewsController::class, [
+            'names' => [
+                'index' => 'admin.reviews.index',
+                'create' => 'admin.reviews.create',
+                'store' => 'admin.reviews.store',
+                'show' => 'admin.reviews.show',
+                'edit' => 'admin.reviews.edit',
+                'update' => 'admin.reviews.update',
+                'destroy' => 'admin.reviews.destroy'
+            ]
+        ]);
+
+        Route::post('reviews/bulk-action', [FalseReviewsController::class, 'bulkAction'])->name('reviews.bulk-action');
+        Route::post('reviews/{review}/toggle-status', [FalseReviewsController::class, 'toggleStatus'])->name('reviews.toggle-status');
+        Route::post('reviews/{review}/toggle-featured', [FalseReviewsController::class, 'toggleFeatured'])->name('reviews.toggle-featured');
+        Route::post('reviews/{review}/toggle-verified', [FalseReviewsController::class, 'toggleVerified'])->name('reviews.toggle-verified');
     });
 });

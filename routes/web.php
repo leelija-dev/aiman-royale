@@ -125,14 +125,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
 
-// Admin Reviews Routes
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('reviews', FalseReviewsController::class);
-    Route::post('reviews/bulk-action', [FalseReviewsController::class, 'bulkAction'])->name('reviews.bulk-action');
-    Route::post('reviews/{review}/toggle-status', [FalseReviewsController::class, 'toggleStatus'])->name('reviews.toggle-status');
-    Route::post('reviews/{review}/toggle-featured', [FalseReviewsController::class, 'toggleFeatured'])->name('reviews.toggle-featured');
-    Route::post('reviews/{review}/toggle-verified', [FalseReviewsController::class, 'toggleVerified'])->name('reviews.toggle-verified');
-});
+// Admin Reviews Routes - MOVED TO routes/admin.php
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
 

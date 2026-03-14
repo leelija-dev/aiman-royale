@@ -72,28 +72,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <strong>Verified Purchase:</strong>
-                                            <p>
-                                                @if($review->is_verified)
-                                                    <span class="badge badge-success">✅ Yes</span>
-                                                @else
-                                                    <span class="badge badge-secondary">❌ No</span>
-                                                @endif
-                                            </p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <strong>Featured Review:</strong>
-                                            <p>
-                                                @if($review->is_featured)
-                                                    <span class="badge badge-warning">⭐ Yes</span>
-                                                @else
-                                                    <span class="badge badge-secondary">❌ No</span>
-                                                @endif
-                                            </p>
-                                        </div>
-                                    </div>
+                                
 
                                     <div class="mb-3">
                                         <strong>Review Text:</strong>
@@ -122,15 +101,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
-                                        <button type="button" class="btn btn-success" onclick="toggleStatus({{ $review->id }})">
-                                            <i class="fas fa-sync"></i> Toggle Status
-                                        </button>
-                                        <button type="button" class="btn btn-primary" onclick="toggleFeatured({{ $review->id }})">
-                                            <i class="fas fa-star"></i> Toggle Featured
-                                        </button>
-                                        <button type="button" class="btn btn-info" onclick="toggleVerified({{ $review->id }})">
-                                            <i class="fas fa-check"></i> Toggle Verified
-                                        </button>
+                                        
                                         <a href="{{ route('admin.reviews.edit', $review) }}" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Edit Review
                                         </a>
