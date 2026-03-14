@@ -387,9 +387,15 @@
                                @endforeach
                                <!-- Order Actions -->
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
+                                   @if($ord->order_status == 'delivered')
+                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                       <i class="fas fa-times mr-2"></i>Return Product
+                                   </button>
+                                   @else
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
                                    </button>
+                                   @endif
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-question-circle mr-2"></i>Get Help
                                    </button>
