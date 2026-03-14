@@ -36,7 +36,7 @@ class FalseReviewsController extends Controller
             'reviewer_name' => 'required|string|max:255',
             'reviewer_email' => 'nullable|email|max:255',
             'rating' => 'required|integer|min:1|max:5',
-            'review_text' => 'required|string|min:10',
+            'review_text' => 'nullable|string|min:10',
             'admin_notes' => 'nullable|string|max:1000'
         ]);
 

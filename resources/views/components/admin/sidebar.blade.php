@@ -386,8 +386,35 @@ $isEmailActive = false;
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-search" aria-hidden="true"></i>
-                    </div>
                     <span class="nav-link-text ms-1">SEO Pages</span>
+                </a>
+            </li>
+
+            {{-- Reviews Management --}}
+            @php
+            $isReviewsActive = request()->routeIs('admin.reviews.*');
+            @endphp
+            <li class="nav-item">
+                <a class="nav-link {{ $isReviewsActive ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Reviews</span>
+                </a>
+            </li>
+
+            {{-- Orders Management --}}
+            @php
+            $isOrdersActive = request()->routeIs('admin.orders.*');
+            @endphp
+            <li class="nav-item">
+                <a class="nav-link {{ $isOrdersActive ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Orders</span>
                 </a>
             </li>
 

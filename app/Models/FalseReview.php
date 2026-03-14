@@ -15,6 +15,7 @@ class FalseReview extends Model
     protected $fillable = [
         'product_id',
         'user_id',
+        'order_id',
         'reviewer_name',
         'reviewer_email',
         'rating',
@@ -44,6 +45,11 @@ class FalseReview extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     // Accessors for formatted dates

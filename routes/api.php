@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\BlogApiController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
 
 Route::prefix('blog')->group(function () {
     Route::get('/posts', [BlogApiController::class, 'posts']);
@@ -30,4 +31,9 @@ Route::prefix('products')->group(function () {
     Route::get('/filter', [ProductController::class, 'filterProducts']);
     Route::get('/filter-options', [ProductController::class, 'getFilterOptions']);
     Route::get('/search', [ProductController::class, 'searchProducts']);
+});
+
+// Review related API routes
+Route::prefix('reviews')->group(function () {
+    Route::post('/', [ReviewController::class, 'store'])->name('api.reviews.store');
 });

@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\FalseReviewsController;
 
 use App\Http\Controllers\Admin\ServicesController;
@@ -520,5 +521,19 @@ Route::prefix('shops')->group(function () {
         Route::post('reviews/{review}/toggle-status', [FalseReviewsController::class, 'toggleStatus'])->name('reviews.toggle-status');
         Route::post('reviews/{review}/toggle-featured', [FalseReviewsController::class, 'toggleFeatured'])->name('reviews.toggle-featured');
         Route::post('reviews/{review}/toggle-verified', [FalseReviewsController::class, 'toggleVerified'])->name('reviews.toggle-verified');
+
+        // Orders Management Routes
+        Route::resource('orders', OrderManagementController::class, [
+            'names' => [
+                'index' => 'admin.orders.index',
+                'show' => 'admin.orders.show',
+                'destroy' => 'admin.orders.destroy'
+            ]
+        ]);
+
+        Route::post('orders/{order}/status', [OrderManagementController::class, 'updateStatus'])->name('admin.orders.update-status');
+        Route::post('orders/{order}/tracking', [OrderManagementController::class, 'updateTracking'])->name('admin.orders.update-tracking');
+        Route::post('orders/bulk-update', [OrderManagementController::class, 'bulkUpdateStatus'])->name('admin.orders.bulk-update');
+        Route::get('orders/stats', [OrderManagementController::class, 'getStats'])->name('admin.orders.stats');
     });
 });
