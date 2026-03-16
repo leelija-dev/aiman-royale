@@ -10,6 +10,16 @@
             'slug' => $product->category->slug
         ];
     }
+    
+    // Calculate dynamic rating and review count from false_reviews table
+    $reviews = \App\Models\FalseReview::where('product_id', $product->id)->get();
+    
+    $reviewCount = $reviews->count();
+    $averageRating = $reviewCount > 0 ? round($reviews->avg('rating'), 1) : 0;
+    $fullStars = floor($averageRating);
+    $hasHalfStar = ($averageRating - $fullStars) >= 0.5;
+    $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+    
     // Debug: Log the product data to check if category is loaded
     error_log('Product Data: ' . json_encode([
         'product_id' => $product->id ?? 'null',
@@ -18,7 +28,9 @@
         'category_exists' => isset($product->category),
         'category_name' => $product->category->name ?? 'null',
         'parts_count' => $product->parts ? $product->parts->count() : 0,
-        'stitching_type' => $product->stitching_type ?? 'null'
+        'stitching_type' => $product->stitching_type ?? 'null',
+        'review_count' => $reviewCount,
+        'average_rating' => $averageRating
     ]));
 @endphp
 
@@ -137,9 +149,17 @@
                 
                 <div class="flex items-center gap-2">
                     <div class="flex text-yellow-400 text-sm">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        @for($i = 0; $i < $fullStars; $i++)
+                            <i class="fas fa-star"></i>
+                        @endfor
+                        @if($hasHalfStar)
+                            <i class="fas fa-star-half-alt"></i>
+                        @endif
+                        @for($i = 0; $i < $emptyStars; $i++)
+                            <i class="far fa-star"></i>
+                        @endfor
                     </div>
-                    <span class="text-sm text-gray-500">4.4 · 36 Reviews</span>
+                    <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                 </div>
                 
                 <div class="flex items-center gap-3 flex-wrap" id="price-container">
