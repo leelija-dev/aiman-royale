@@ -192,8 +192,8 @@
                                 <div class="relative">
                                     <a href="{{ route('page.single-product', $product->slug) }}">
                                         <div class="h-64 w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                                            @if($image)
-                                                <img src="{{ asset($image->image) }}" 
+                                            @if($product->featured_image)
+                                                <img src="{{ asset($product->featured_image) }}" 
                                                      alt="{{ $product->name }}"
                                                      class="h-full w-full object-cover">
                                             @else
