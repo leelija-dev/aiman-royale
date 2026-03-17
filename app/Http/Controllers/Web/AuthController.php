@@ -293,6 +293,181 @@ class AuthController extends Controller
         }
     }
 
+    public function sendForgotPasswordOTP(Request $request)
+    {
+        $request->validate([
+            'email' => 'nullable|required_without:phone|email|exists:users,email',
+            'phone' => 'nullable|required_without:email|string|exists:users,phone'
+        ]);
+
+        // Generate OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $token = Str::random(60);
+
+        // Store forgot password data in session
+        $forgotPasswordData = [
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'otp' => $otp,
+            'token' => $token
+        ];
+
+        session(['forgot_password_data' => $forgotPasswordData]);
+
+        // Store email/phone for display
+        if ($request->email) {
+            session(['forgot_email' => $request->email]);
+        } else {
+            session(['forgot_phone' => $request->phone]);
+        }
+
+        try {
+            if ($request->email) {
+                // Send OTP email
+                Mail::raw("Your OTP for password reset is: {$otp}", function ($message) use ($request) {
+                    $message->to($request->email)
+                        ->subject('Password Reset OTP - StyleHub');
+                });
+
+                // Store OTP in database
+                EmailVerification::updateOrCreate(
+                    ['email' => $request->email],
+                    [
+                        'otp' => $otp,
+                        'token' => $token,
+                        'expires_at' => now()->addMinutes(10)
+                    ]
+                );
+            } else {
+                // For phone OTP, store in session
+                session(['forgot_phone_otp' => $otp]);
+            }
+
+            return redirect()->route('web.forgot-password.verify-otp')->with('success', 'Password reset code sent successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send reset code. Please try again.')->withInput();
+        }
+    }
+
+    public function verifyForgotPasswordOTP(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|digits:6'
+        ]);
+
+        $forgotPasswordData = session('forgot_password_data');
+        
+        if (!$forgotPasswordData) {
+            return redirect()->route('page.forgot-password')->with('error', 'Password reset session expired. Please try again.');
+        }
+
+        // Verify OTP
+        if ($forgotPasswordData['email']) {
+            $verification = EmailVerification::where('email', $forgotPasswordData['email'])
+                ->where('otp', $request->otp)
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if (!$verification) {
+                return back()->with('error', 'Invalid or expired reset code. Please try again.');
+            }
+        } else {
+            // For phone verification
+            $phoneOtp = session('forgot_phone_otp');
+            if ($phoneOtp != $request->otp) {
+                return back()->with('error', 'Invalid reset code. Please try again.');
+            }
+        }
+
+        // Update session to mark as verified
+        session(['forgot_password_data.verified' => true]);
+
+        return redirect()->route('web.forgot-password.reset')->with('success', 'Identity verified successfully! Please set your new password.');
+    }
+
+    public function resendForgotPasswordOTP(Request $request)
+    {
+        $forgotPasswordData = session('forgot_password_data');
+        
+        if (!$forgotPasswordData) {
+            return redirect()->route('page.forgot-password')->with('error', 'Password reset session expired. Please try again.');
+        }
+
+        // Generate new OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        try {
+            if ($forgotPasswordData['email']) {
+                // Send OTP email
+                Mail::raw("Your OTP for password reset is: {$otp}", function ($message) use ($forgotPasswordData) {
+                    $message->to($forgotPasswordData['email'])
+                        ->subject('Password Reset OTP - StyleHub');
+                });
+
+                // Update OTP in database
+                EmailVerification::updateOrCreate(
+                    ['email' => $forgotPasswordData['email']],
+                    [
+                        'otp' => $otp,
+                        'expires_at' => now()->addMinutes(10)
+                    ]
+                );
+            } else {
+                // Update phone OTP in session
+                session(['forgot_phone_otp' => $otp]);
+            }
+
+            // Update session
+            session(['forgot_password_data.otp' => $otp]);
+
+            return redirect()->route('web.forgot-password.verify-otp')->with('success', 'Reset code resent successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to resend reset code. Please try again.');
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $forgotPasswordData = session('forgot_password_data');
+        
+        if (!$forgotPasswordData || !isset($forgotPasswordData['verified'])) {
+            return redirect()->route('page.forgot-password')->with('error', 'Please complete verification first.');
+        }
+
+        $request->validate([
+            'password' => 'required|min:8',
+        ]);
+
+        try {
+            // Find user and update password
+            if ($forgotPasswordData['email']) {
+                $user = User::where('email', $forgotPasswordData['email'])->first();
+            } else {
+                $user = User::where('phone', $forgotPasswordData['phone'])->first();
+            }
+
+            if (!$user) {
+                return back()->with('error', 'User not found. Please try again.');
+            }
+
+            // Update password
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            // Clean up verification records
+            if ($forgotPasswordData['email']) {
+                EmailVerification::where('email', $forgotPasswordData['email'])->delete();
+            }
+
+            // Clear session
+            session()->forget(['forgot_password_data', 'forgot_phone_otp', 'forgot_email', 'forgot_phone']);
+
+            return redirect()->route('page.login')->with('success', 'Password reset successfully! Please login with your new password.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to reset password. Please try again.');
+        }
+    }
+
     public function login(Request $request)
     {
        

@@ -29,6 +29,15 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/set-password', 'web.set-password')->name('web.register.set-password');
     Route::post('/set-password', [AuthController::class, 'setPassword'])->name('web.register.set-password');
     
+    // Forgot password routes
+    Route::view('/forgot-password', 'web.forgot-password')->name('page.forgot-password');
+    Route::post('/forgot-password/send-otp', [AuthController::class, 'sendForgotPasswordOTP'])->name('web.forgot-password.send-otp');
+    Route::view('/forgot-password/verify-otp', 'web.forgot-password-verify-otp')->name('web.forgot-password.verify-otp');
+    Route::post('/forgot-password/verify-otp', [AuthController::class, 'verifyForgotPasswordOTP'])->name('web.forgot-password.verify-otp');
+    Route::post('/forgot-password/resend-otp', [AuthController::class, 'resendForgotPasswordOTP'])->name('web.forgot-password.resend-otp');
+    Route::view('/forgot-password/reset', 'web.forgot-password-reset')->name('web.forgot-password.reset');
+    Route::post('/forgot-password/reset', [AuthController::class, 'resetPassword'])->name('web.forgot-password.reset');
+    
     // Legacy routes (keep for backward compatibility)
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
     Route::view('/verify-email', 'web.verify-email')->name('page.verify-email');
