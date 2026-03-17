@@ -107,10 +107,146 @@ class AuthController extends Controller
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
 
-            // Auto login with both JWT and Laravel Auth
+            // Auto login with Laravel Auth
             Auth::login($user);
 
+            // Store JWT token in session for frontend
+            session(['jwt_token' => $token]);
+
             return redirect()->route('page.index')->with('success', 'Account created and verified successfully!')->with('jwt_token', $token);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to create account. Please try again.');
+        }
+    }
+
+    public function sendOTP(Request $request)
+    {
+        $request->validate([
+            'email' => 'nullable|required_without:phone|email|unique:users',
+            'phone' => 'nullable|required_without:email|string|unique:users'
+        ]);
+
+        // Generate OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $token = Str::random(60);
+
+        // Store registration data in session
+        $registrationData = [
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'otp' => $otp,
+            'token' => $token
+        ];
+
+        session(['registration_data' => $registrationData]);
+
+        try {
+            if ($request->email) {
+                // Send OTP email
+                Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
+                    $message->to($request->email)
+                        ->subject('Email Verification OTP - StyleHub');
+                });
+
+                // Store OTP in database
+                EmailVerification::updateOrCreate(
+                    ['email' => $request->email],
+                    [
+                        'otp' => $otp,
+                        'token' => $token,
+                        'expires_at' => now()->addMinutes(10)
+                    ]
+                );
+            } else {
+                // For phone OTP, you would integrate with SMS service here
+                // For now, we'll store it in session
+                session(['phone_otp' => $otp]);
+            }
+
+            return redirect()->route('web.register.verify-otp')->with('success', 'OTP sent successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send OTP. Please try again.')->withInput();
+        }
+    }
+
+    public function verifyOTP(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|digits:6'
+        ]);
+
+        $registrationData = session('registration_data');
+        
+        if (!$registrationData) {
+            return redirect()->route('register')->with('error', 'Registration session expired. Please try again.');
+        }
+
+        // Verify OTP
+        if ($registrationData['email']) {
+            $verification = EmailVerification::where('email', $registrationData['email'])
+                ->where('otp', $request->otp)
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if (!$verification) {
+                return back()->with('error', 'Invalid or expired OTP. Please try again.');
+            }
+        } else {
+            // For phone verification
+            $phoneOtp = session('phone_otp');
+            if ($phoneOtp != $request->otp) {
+                return back()->with('error', 'Invalid OTP. Please try again.');
+            }
+        }
+
+        // Update session to mark as verified
+        session(['registration_data.verified' => true]);
+
+        return redirect()->route('web.register.set-password')->with('success', 'Identity verified successfully!');
+    }
+
+    public function setPassword(Request $request)
+    {
+       
+        $registrationData = session('registration_data');
+        //  dd($registrationData);
+        if (!$registrationData || !isset($registrationData['verified'])) {
+            return redirect()->route('register')->with('error', 'Please complete verification first.');
+        }
+
+        $request->validate([
+            'password' => 'required|min:8',
+            'terms' => 'required'
+        ]);
+
+        try {
+            // Create user account
+            $user = User::create([
+                'name' => 'User', // Default name, can be updated later
+                'email' => $registrationData['email'],
+                'phone' => $registrationData['phone'],
+                'password' => Hash::make($request->password),
+                'email_verified_at' => $registrationData['email'] ? now() : null
+            ]);
+
+            // Clean up verification records
+            if ($registrationData['email']) {
+                EmailVerification::where('email', $registrationData['email'])->delete();
+            }
+
+            // Clear session
+            session()->forget(['registration_data', 'phone_otp']);
+
+            // Generate JWT token
+            $token = JWTAuth::fromUser($user);
+
+            // Auto login with Laravel Auth
+            Auth::login($user);
+
+            // Store JWT token in session for frontend
+            session(['jwt_token' => $token]);
+
+            return redirect()->route('web.profile')->with('success', 'Account created successfully! Welcome to StyleHub!')->with('jwt_token', $token);
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to create account. Please try again.');
         }
@@ -121,34 +257,39 @@ class AuthController extends Controller
         $registrationData = session('registration_data');
         
         if (!$registrationData) {
-            return response()->json(['error' => 'Registration session expired'], 400);
+            return redirect()->route('register')->with('error', 'Registration session expired. Please try again.');
         }
 
         // Generate new OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         try {
-            // Send OTP email
-            Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($registrationData) {
-                $message->to($registrationData['email'])
-                    ->subject('Email Verification OTP - Your App Name');
-            });
+            if ($registrationData['email']) {
+                // Send OTP email
+                Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($registrationData) {
+                    $message->to($registrationData['email'])
+                        ->subject('Email Verification OTP - StyleHub');
+                });
 
-            // Update OTP in database
-            EmailVerification::updateOrCreate(
-                ['email' => $registrationData['email']],
-                [
-                    'otp' => $otp,
-                    'expires_at' => now()->addMinutes(10)
-                ]
-            );
+                // Update OTP in database
+                EmailVerification::updateOrCreate(
+                    ['email' => $registrationData['email']],
+                    [
+                        'otp' => $otp,
+                        'expires_at' => now()->addMinutes(10)
+                    ]
+                );
+            } else {
+                // Update phone OTP in session
+                session(['phone_otp' => $otp]);
+            }
 
             // Update session
             session(['registration_data.otp' => $otp]);
 
-            return response()->json(['success' => 'OTP resent successfully']);
+            return redirect()->route('web.register.verify-otp')->with('success', 'OTP resent successfully!');
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to resend OTP'], 500);
+            return back()->with('error', 'Failed to resend OTP. Please try again.');
         }
     }
 

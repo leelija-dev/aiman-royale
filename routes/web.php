@@ -22,6 +22,14 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/login', 'web.login')->name('page.login');
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
+    Route::post('/register/send-otp', [AuthController::class, 'sendOTP'])->name('web.register.send-otp');
+    Route::view('/verify-otp', 'web.verify-otp')->name('web.register.verify-otp');
+    Route::post('/verify-otp', [AuthController::class, 'verifyOTP'])->name('web.register.verify-otp');
+    Route::post('/register/resend-otp', [AuthController::class, 'resendOTP'])->name('web.register.resend-otp');
+    Route::view('/set-password', 'web.set-password')->name('web.register.set-password');
+    Route::post('/set-password', [AuthController::class, 'setPassword'])->name('web.register.set-password');
+    
+    // Legacy routes (keep for backward compatibility)
     Route::post('/register/add', [AuthController::class, 'register'])->name('web.register.add');
     Route::view('/verify-email', 'web.verify-email')->name('page.verify-email');
     Route::post('/verify-email', [AuthController::class, 'verifyEmail'])->name('web.verify-email');
