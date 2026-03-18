@@ -266,10 +266,10 @@ class AuthController extends Controller
 
             // Redirect to stored URL or default to profile
             if ($redirectUrl) {
-                return redirect()->to($redirectUrl)->with('success', 'Account created successfully! Welcome to StyleHub!')->with('jwt_token', $token);
+                return redirect()->to($redirectUrl)->with('success', 'Account created successfully! Welcome to Aiman Royale!')->with('jwt_token', $token);
             }
 
-            return redirect()->route('web.profile')->with('success', 'Account created successfully! Welcome to StyleHub!')->with('jwt_token', $token);
+            return redirect()->route('web.profile')->with('success', 'Account created successfully! Welcome to Aiman Royale!')->with('jwt_token', $token);
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to create account. Please try again.');
         }
