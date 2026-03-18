@@ -1501,6 +1501,7 @@ All Products
     </div>
 </section>
 
+{{--
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -1597,7 +1598,7 @@ All Products
         </div>
     </div>
 </section>
-
+--}}
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
@@ -1614,7 +1615,7 @@ All Products
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Trendy To<br />Traditional Blouses
+                            Lehanga Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
@@ -1655,7 +1656,7 @@ All Products
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Trendy To<br />Traditional Blouses
+                            Lehenga Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
@@ -1674,7 +1675,7 @@ All Products
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Jewellery Edit
+                            For Brides
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:

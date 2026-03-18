@@ -21,19 +21,6 @@ class HomeController extends Controller
     public function home()
     {
         $data = Service::all();
-        // $products = Product::with([
-        //     'variants' => function($query) {
-        //         $query->select('id', 'product_id', 'size', 'color', 'price', 'discount_price', 'stock');
-        //     },
-        //     'images' => function($query) {
-        //         $query->select('product_id', 'image');
-        //     }
-        // ])
-        // ->where('is_active', 1)
-        // ->select('id', 'name', 'brand', 'description', 'is_active')
-        // ->latest()
-        // ->take(10)
-        // ->get();
 
         $products = DB::table('products')
             ->Join('product_variants', function ($join) {
@@ -113,7 +100,18 @@ class HomeController extends Controller
 
         // dd($products);
 
-        $categories = Category::withCount('products')->get();
+        // $categories = Category::withCount('products')->get();
+        $categories = Category::whereHas('products', function($query) {
+            $query->where('is_active', 1)
+                  ->whereHas('variants');
+        })
+        ->withCount(['products' => function($query) {
+            $query->where('is_active', 1)
+                  ->whereHas('variants');
+        }])
+        ->get();
+
+        // dd($categories);
         $occasions = \App\Models\Occasion::active()->get();
         $homeCategories = Category::where('is_home', 1)
             ->whereNotNull('home_position')
@@ -545,7 +543,7 @@ class HomeController extends Controller
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-            // dd($relatedProducts);
+        // dd($relatedProducts);
 
         return view('web.single-product', compact(
             'product',
