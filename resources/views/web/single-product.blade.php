@@ -319,7 +319,7 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+                <div id="action-buttons-section" class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
                      data-product-variants="{{ json_encode($product->variants) }}">
                     <div class="flex items-center gap-4">
                         <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
@@ -858,6 +858,32 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 <!-- Tab Switching JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for scroll position in URL hash and restore it
+    const urlHash = window.location.hash;
+    if (urlHash) {
+        if (urlHash.includes('action-section:')) {
+            // Handle scroll position from previous implementation
+            const scrollPosition = parseInt(urlHash.split('action-section:')[1]) || 0;
+            setTimeout(() => {
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        } else if (urlHash.includes('action-buttons-section')) {
+            // Handle action buttons section anchor
+            setTimeout(() => {
+                const element = document.getElementById('action-buttons-section');
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }, 100);
+        }
+    }
+
     // Desktop tab switching
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = {
@@ -1116,11 +1142,11 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (response.status === 401) {
-                    showNotification('Please login to save custom dimensions', 'error');
-                    setTimeout(() => {
-                        window.location.href = loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
-                    }, 2000);
-                    throw new Error('Authentication required');
+                    // Redirect to action buttons section after login
+                    const currentUrl = window.location.href.split('#')[0]; // Remove any existing hash
+                    const redirectUrl = currentUrl + '#action-buttons-section';
+                    window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+                    return;
                 }
                 return response.json();
             })
@@ -1634,7 +1660,10 @@ function toggleWishlist(productId, button) {
     })
     .then(response => {
         if (response.status === 401) {
-            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
+            // Redirect to action buttons section after login
+            const currentUrl = window.location.href.split('#')[0]; // Remove any existing hash
+            const redirectUrl = currentUrl + '#action-buttons-section';
+            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
             return;
         }
         return response.json();
@@ -1738,7 +1767,10 @@ function addToCart() {
     })
     .then(response => {
         if (response.status === 401) {
-            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(window.location.href);
+            // Redirect to action buttons section after login
+            const currentUrl = window.location.href.split('#')[0]; // Remove any existing hash
+            const redirectUrl = currentUrl + '#action-buttons-section';
+            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
             return;
         }
         return response.json();

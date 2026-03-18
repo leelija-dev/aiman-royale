@@ -15,8 +15,19 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     //
+    public function showLogin(Request $request)
+    {
+        // Store redirect URL in session if present (for registration flow)
+        if ($request->has('redirect') && $request->redirect) {
+            session(['redirect_after_registration' => $request->redirect]);
+        }
+        
+        return view('web.login');
+    }
+
     public function register(Request $request)
     {
+       
         $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -73,7 +84,7 @@ class AuthController extends Controller
         ]);
 
         $registrationData = session('registration_data');
-        
+
         if (!$registrationData) {
             return redirect()->route('page.register')->with('error', 'Registration session expired. Please try again.');
         }
@@ -121,6 +132,7 @@ class AuthController extends Controller
 
     public function sendOTP(Request $request)
     {
+
         $request->validate([
             'email' => 'nullable|required_without:phone|email|unique:users',
             'phone' => 'nullable|required_without:email|string|unique:users'
@@ -176,7 +188,7 @@ class AuthController extends Controller
         ]);
 
         $registrationData = session('registration_data');
-        
+
         if (!$registrationData) {
             return redirect()->route('register')->with('error', 'Registration session expired. Please try again.');
         }
@@ -207,7 +219,7 @@ class AuthController extends Controller
 
     public function setPassword(Request $request)
     {
-       
+
         $registrationData = session('registration_data');
         //  dd($registrationData);
         if (!$registrationData || !isset($registrationData['verified'])) {
@@ -246,6 +258,17 @@ class AuthController extends Controller
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
+            // Check for redirect URL from registration session
+            $redirectUrl = session('redirect_after_registration');
+            
+            // Clean up redirect session
+            session()->forget('redirect_after_registration');
+
+            // Redirect to stored URL or default to profile
+            if ($redirectUrl) {
+                return redirect()->to($redirectUrl)->with('success', 'Account created successfully! Welcome to StyleHub!')->with('jwt_token', $token);
+            }
+
             return redirect()->route('web.profile')->with('success', 'Account created successfully! Welcome to StyleHub!')->with('jwt_token', $token);
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to create account. Please try again.');
@@ -255,7 +278,7 @@ class AuthController extends Controller
     public function resendOTP(Request $request)
     {
         $registrationData = session('registration_data');
-        
+
         if (!$registrationData) {
             return redirect()->route('register')->with('error', 'Registration session expired. Please try again.');
         }
@@ -356,7 +379,7 @@ class AuthController extends Controller
         ]);
 
         $forgotPasswordData = session('forgot_password_data');
-        
+
         if (!$forgotPasswordData) {
             return redirect()->route('page.forgot-password')->with('error', 'Password reset session expired. Please try again.');
         }
@@ -388,7 +411,7 @@ class AuthController extends Controller
     public function resendForgotPasswordOTP(Request $request)
     {
         $forgotPasswordData = session('forgot_password_data');
-        
+
         if (!$forgotPasswordData) {
             return redirect()->route('page.forgot-password')->with('error', 'Password reset session expired. Please try again.');
         }
@@ -429,7 +452,7 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $forgotPasswordData = session('forgot_password_data');
-        
+
         if (!$forgotPasswordData || !isset($forgotPasswordData['verified'])) {
             return redirect()->route('page.forgot-password')->with('error', 'Please complete verification first.');
         }
@@ -470,7 +493,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-       
+
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'

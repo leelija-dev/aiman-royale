@@ -19,7 +19,7 @@ use App\Models\NewsLetter;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
-    Route::view('/login', 'web.login')->name('page.login');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');
     Route::post('/login', [AuthController::class, 'login'])->name('web.login');
     Route::view('/register', 'web.register')->name('page.register');
     Route::post('/register/send-otp', [AuthController::class, 'sendOTP'])->name('web.register.send-otp');
