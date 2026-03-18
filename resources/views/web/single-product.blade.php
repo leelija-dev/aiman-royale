@@ -632,10 +632,12 @@
                             </span>
                             @endif
                         </div>
+                        {{--
                         <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
                                 data-product-id="{{ $variant->product_id }}">
                             <i class="far fa-heart"></i>
                         </button>
+                        --}}
                     </div>
                     <a href="{{route('page.single-product', $relatedProduct->slug)}}">
                         <div class="p-4 space-y-1">
@@ -701,10 +703,12 @@
                             </span>
                             @endif
                         </div>
+                        {{--
                         <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
                                 data-product-id="{{ $variant->product_id }}">
                             <i class="far fa-heart"></i>
                         </button>
+                        --}}
                     </div>
                     <a href="{{route('page.single-product', $relatedProduct->slug)}}">
                         <div class="p-4 space-y-1">
@@ -767,10 +771,12 @@
                             @endif
                             <span class="bg-gray-800 text-white text-xs font-semibold px-2 py-1 rounded">Recently Viewed</span>
                         </div>
+                        {{--
                         <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
                                 data-product-id="{{ $lastViewedProduct['id'] }}">
                             <i class="far fa-heart"></i>
                         </button>
+                        --}}
                     </div>
                     <a href="{{route('page.single-product', $lastViewedProduct['slug'])}}">
                         <div class="p-4 space-y-1">
