@@ -101,7 +101,7 @@ class HomeController extends Controller
         // dd($products);
 
         // $categories = Category::withCount('products')->get();
-        $categories = Category::whereHas('products', function($query) {
+        $categoriesWithProduct = Category::whereHas('products', function($query) {
             $query->where('is_active', 1)
                   ->whereHas('variants');
         })
@@ -120,8 +120,8 @@ class HomeController extends Controller
 
 
         $testimonials = [];
-
-        return view('web.home', compact('data', 'testimonials', 'categories', 'products', 'occasions', 'homeCategories', 'mostWishlisted'));
+// dd($categories);
+        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted'));
     }
 
     public function ShowAllProduct(Request $request)

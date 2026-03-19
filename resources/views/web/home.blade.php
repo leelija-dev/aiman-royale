@@ -456,7 +456,7 @@
         <!-- Owl Carousel Container -->
         <div class="relative px-2">
             <div id="categories-carousel" class="owl-carousel owl-theme">
-                @if (!isset($categories))
+                @if (!isset($categoriesWithProduct))
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
@@ -598,7 +598,7 @@
 
                 @else
                 <!-- Dynamic Categories -->
-                @foreach ($categories as $category)
+                @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
@@ -707,7 +707,8 @@
 
         <!-- Hanging Tags -->
         <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
-            @foreach ($categories->where('parent_id', null) as $category)
+            
+            @foreach ($categoriesWithProduct->where('parent_id', null) as $category)
             <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
                 <!-- String/Hanger -->
                 <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
