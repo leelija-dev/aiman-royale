@@ -73,7 +73,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-secondary text-uppercase">Description</label>
-                                <textarea name="description" rows="4" class="form-control">{{ old('description') }}</textarea>
+                                <textarea name="description" id="description-editor" rows="4" class="form-control">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
@@ -248,6 +248,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // On change
     checkbox.addEventListener('change', toggleDropdown);
+    
+    // Initialize Summernote for description editor
+    // $('#description-editor').summernote({
+    //     height: 200,
+    //     toolbar: [
+    //         ['style', ['bold', 'italic', 'underline', 'clear']],
+    //         ['para', ['ul', 'ol', 'paragraph', 'height']],
+    //         ['insert', ['link', 'picture', 'video']],
+    //         ['view', ['fullscreen', 'codeview', 'help']]
+    //     ],
+    //     placeholder: 'Enter category description...',
+    //     callbacks: {
+    //         onImageUpload: function(files) {
+    //             // Handle image upload if needed
+    //             // For now, just return the URL
+    //             // You can implement server-side upload here
+    //         }
+    //     }
+    // });
+  
+    $(document).ready(function() {
+        $('#description-editor').summernote({
+            height: 200,
+        });
+    });
+
 });
 </script>
 

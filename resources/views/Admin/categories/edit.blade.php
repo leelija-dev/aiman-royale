@@ -79,7 +79,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Description</label>
-              <textarea name="description" rows="4" class="form-control">{{ old('description', $category->description) }}</textarea>
+              <textarea name="description" id="description-editor" rows="4" class="form-control">{{ old('description', $category->description) }}</textarea>
               @error('description')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
@@ -215,6 +215,12 @@
       }
       form.classList.add('was-validated');
     }, false);
+
+     $(document).ready(function() {
+        $('#description-editor').summernote({
+            height: 200,
+        });
+    });
   });
 </script>
 <script>
@@ -246,5 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
     checkbox.addEventListener('change', toggleDropdown);
 });
 </script>
+
 
 @endsection
