@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <style>
 
 </style>

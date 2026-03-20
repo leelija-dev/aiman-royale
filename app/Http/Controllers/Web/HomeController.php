@@ -352,6 +352,13 @@ class HomeController extends Controller
                         case '50+':
                             $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 50)');
                             break;
+                        default:
+                            // Handle custom ranges like "2-100", "50-100", etc.
+                            if (preg_match('/(\d+)-(\d+)/', $range, $matches)) {
+                                $minDiscount = (int)$matches[1];
+                                $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= ' . $minDiscount . ')');
+                            }
+                            break;
                     }
                 }
             });

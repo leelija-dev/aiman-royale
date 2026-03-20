@@ -1034,7 +1034,7 @@
             @foreach ($mainBanners as $banner)
                 <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
                      @if($banner->filter_type === 'multiple' && $banner->filters)
-                        data-filter="{{ json_encode($banner->filters) }}"
+                        data-filter="{{ $banner->filters }}"
                     @else
                         data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
                     @endif>
@@ -1145,7 +1145,7 @@
                         <div class="item flex justify-center items-center">
                             <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer banner-card"
                                  @if($banner->filter_type === 'multiple' && $banner->filters)
-                                    data-filter="{{ json_encode($banner->filters) }}"
+                                    data-filter="{{ $banner->filters }}"
                                 @else
                                     data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
                                 @endif>
