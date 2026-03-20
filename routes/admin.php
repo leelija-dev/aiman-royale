@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\FalseReviewsController;
 
@@ -90,6 +91,18 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::post('product-categories/updateStatus', 'App\Http\Controllers\Admin\CategoryController@updateStatus')
             ->name('admin.categories.updateStatus');
+
+        // Banners
+        Route::resource('banners', BannerController::class, [
+            'names' => [
+                'index' => 'banners.index',
+                'create' => 'banners.create',
+                'store' => 'banners.store',
+                'edit' => 'banners.edit',
+                'update' => 'banners.update',
+                'destroy' => 'banners.destroy'
+            ]
+        ])->except(['show']);
 
         // Occasions
         Route::resource('occasions', AdminOccasionController::class, [

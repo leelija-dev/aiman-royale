@@ -1031,107 +1031,45 @@
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div id="ads-carousel" class="owl-carousel owl-theme">
-            <!-- Banner 1: Autumn Sale -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}" alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">Autumn</span>
-                        <span class="text-[2.7rem] font-bold font-serif uppercase tracking-wider lgg:mb-4 mb-2">
-                            Sale
-                        </span>
-                        <p class="lgg:text-3xl text-[1.2rem] font-serif lgg:mb-6 mb-3">
-                            Up to 50% off
-                        </p>
-                        <a href="#"
-                            class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">Shop
-                            Now</a>
-                        <p class="text-md lgg:mt-4 mt-2 font-sans opacity-80">
-                            www.collegewalk.com
-                        </p>
+            @foreach ($mainBanners as $banner)
+                <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
+                     @if($banner->filter_type === 'multiple' && $banner->filters)
+                        data-filter="{{ json_encode($banner->filters) }}"
+                    @else
+                        data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <div class="absolute top-0 left-0 w-full h-full">
+                        <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
+                            src="{{ asset('uploads/banners/' . $banner->image) }}" 
+                            alt="{{ $banner->title }}" />
                     </div>
-                </div>
-            </div>
-
-            <!-- Banner 2: Summer Skincare Tips -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp') }}"
-                        alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-center items-center text-center lgg:p-8 p-4 h-full text-white">
-                        <h1 class="lgg:text-7xl text-[3rem] font-script italic tracking-wider">
-                            Summer
-                        </h1>
-                        <h2 class="lgg:text-5xl text-[2rem] font-serif-alt italic mt-[-20px]">
-                            Skincare Tips
-                        </h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Banner 3: Summer Dress Sale -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/pink-plazo-1_76_11zon.webp') }}" alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-center p-12 h-full text-white">
-                        <div class="max-w-xs">
-                            <p class="text-sm uppercase tracking-widest font-sans mb-2 opacity-80">
-                                Last Chance
-                            </p>
-                            <h1 class="lgg:text-[2rem] text-[1.3rem] font-serif uppercase leading-tight mb-4">
-                                Summer Dress Sale 35% Off Storewide
-                            </h1>
-                            <p class="text-lg font-sans uppercase tracking-wider bg-white/20 inline-block px-4 py-2">
-                                C-1623B5OFF
-                            </p>
+                    <!-- Blackish overlay that appears on hover -->
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <!-- Content that slides up from bottom -->
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                        <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
+                            @if($banner->subtitle)
+                                <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                            @endif
+                            <span class="text-[2.7rem] font-bold font-serif uppercase tracking-wider lgg:mb-4 mb-2">
+                                {{ $banner->title }}
+                            </span>
+                            @if($banner->description)
+                                <p class="lgg:text-3xl text-[1.2rem] font-serif lgg:mb-6 mb-3">
+                                    {{ $banner->description }}
+                                </p>
+                            @endif
+                            <a href="#"
+                                class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">{{ $banner->button_text }}</a>
+                            @if($banner->discount)
+                                <p class="text-md lgg:mt-4 mt-2 font-sans opacity-80">
+                                    {{ $banner->discount }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Banner 4: Latest Fashion -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/red-plazo-9_95_11zon.webp') }}" alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-end p-8 h-full text-white">
-                        <div class="text-right">
-                            <p class="text-sm uppercase tracking-widest font-sans mb-2">
-                                New Arrival
-                            </p>
-                            <h1 class="text-[2.5rem] font-serif-alt italic leading-none">
-                                Latest Fashion
-                            </h1>
-                            <h2 class="text-[2.2rem] font-serif-alt italic mt-[-10px]">
-                                Vibe
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -1203,136 +1141,37 @@
             </div>
             <div class="w-full lgg:w-[59%] flex justify-center items-center">
                 <div class="second-owl owl-carousel owl-theme relative">
-                    <!-- Product Items (same as before) -->
+                    @foreach ($secondaryBanners as $banner)
+                        <div class="item flex justify-center items-center">
+                            <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer banner-card"
+                                 @if($banner->filter_type === 'multiple' && $banner->filters)
+                                    data-filter="{{ json_encode($banner->filters) }}"
+                                @else
+                                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                                @endif>
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ asset('uploads/banners/' . $banner->image) }}"
+                                        alt="{{ $banner->title }}"
+                                        class="w-full h-[400px] object-cover object-center object-top" />
+                                </div>
+                                <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
+                                    <div class="text-left">
+                                        <!-- Top line: subtitle — title -->
+                                        <div class="flex items-center justify-center gap-4 mb-1">
+                                            <span class="text-[1.1rem] font-medium text-gray-600">{{ $banner->subtitle }}</span>
+                                            <div class="h-px w-4 bg-gray-400"></div>
+                                            <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">{{ $banner->title }}</span>
+                                        </div>
 
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
+                                        <!-- Big discount text -->
+                                        <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
+                                            {{ $banner->discount }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Add more products... -->
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -2765,6 +2604,37 @@ All Products
         autoSlider('slide-top', 'topSliderLink', 3500);
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
+
+        // Banner click handler for filtering and discount
+        document.querySelectorAll('.banner-card').forEach(function(banner) {
+            banner.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                console.log('Banner filter clicked:', filter);
+                if (filter) {
+                    try {
+                        // Try to parse as JSON for multiple filters
+                        const filterData = JSON.parse(filter);
+                        console.log('Parsed filter data:', filterData);
+                        
+                        // For multiple filters, create proper query parameters
+                        if (Array.isArray(filterData)) {
+                            const queryParams = new URLSearchParams();
+                            filterData.forEach(f => {
+                                queryParams.append(`banner_${f.type}`, f.value);
+                            });
+                            window.location.href = '/products?' + queryParams.toString();
+                        } else {
+                            // Single filter case
+                            window.location.href = '/products?filter=' + encodeURIComponent(filter);
+                        }
+                    } catch (e) {
+                        // Not JSON, treat as simple string
+                        console.log('Using simple filter:', filter);
+                        window.location.href = '/products?filter=' + encodeURIComponent(filter);
+                    }
+                }
+            });
+        });
     });
 
 

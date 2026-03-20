@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Service\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
@@ -14,6 +15,7 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -21,6 +23,14 @@ class HomeController extends Controller
     public function home()
     {
         $data = Service::all();
+
+        // Get active banners from database
+        $mainBanners = Banner::active()->main()->ordered()->get();
+        $secondaryBanners = Banner::active()->secondary()->ordered()->get();
+        
+        // Debug: Log the counts
+        \Log::info('Main Banners count: ' . $mainBanners->count());
+        \Log::info('Secondary Banners count: ' . $secondaryBanners->count());
 
         $products = DB::table('products')
             ->Join('product_variants', function ($join) {
@@ -121,7 +131,7 @@ class HomeController extends Controller
 
         $testimonials = [];
 // dd($categories);
-        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted'));
+        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners'));
     }
 
     public function ShowAllProduct(Request $request)
@@ -137,6 +147,112 @@ class HomeController extends Controller
         $search = $request->input('search');
         $priceRanges = $request->input('price_ranges', []);
         $occasions = $request->input('occasions', []);
+        
+        // Handle general filter parameter (from banner clicks)
+        $generalFilter = $request->input('filter');
+        
+        // Handle multiple filters from banner clicks (proper query parameters)
+        $bannerDiscount = $request->input('banner_discount');
+        $bannerCategory = $request->input('banner_category');
+        $bannerColor = $request->input('banner_color');
+        $bannerSize = $request->input('banner_size');
+        $bannerOccasion = $request->input('banner_occasion');
+        $bannerPriceRange = $request->input('banner_price_range');
+        
+        // Process discount filters from banner
+        if ($bannerDiscount) {
+            if (preg_match('/(\d+)/', $bannerDiscount, $matches)) {
+                $discountPercent = (int)$matches[1];
+                $discountRanges = [$discountPercent . '-100'];
+            }
+        }
+        
+        // Process category filters from banner
+        if ($bannerCategory) {
+            $categories[] = $bannerCategory;
+        }
+        
+        // Process color filters from banner
+        if ($bannerColor) {
+            $colors[] = $bannerColor;
+        }
+        
+        // Process size filters from banner
+        if ($bannerSize) {
+            $sizes[] = $bannerSize;
+        }
+        
+        // Process occasion filters from banner
+        if ($bannerOccasion) {
+            $occasions[] = $bannerOccasion;
+        }
+        
+        // Process price range filters from banner
+        if ($bannerPriceRange) {
+            if (strpos($bannerPriceRange, '-') !== false) {
+                list($min, $max) = explode('-', $bannerPriceRange);
+                $priceMin = (int)$min;
+                $priceMax = (int)$max;
+            }
+        }
+        
+        // Handle single filter (backward compatibility)
+        if ($generalFilter) {
+            // Check if filter contains discount percentage (e.g., "50%", "30%")
+            if (preg_match('/(\d+)%/', $generalFilter, $matches)) {
+                $discountPercent = (int)$matches[1];
+                // Set discount range to filter products with this discount or higher
+                $discountRanges = [$discountPercent . '-100'];
+            }
+            // Check if filter is a category name
+            else {
+                // Try to find category by name
+                $categoryExists = DB::table('categories')->where('name', $generalFilter)->exists();
+                if ($categoryExists) {
+                    $categories = [$generalFilter];
+                }
+                // Try to find occasion by name
+                $occasionExists = DB::table('ocassions')->where('name', $generalFilter)->exists();
+                if ($occasionExists) {
+                    $occasions = [$generalFilter];
+                }
+            }
+        }
+
+        // Handle multiple filters from banner data (for future enhancement)
+        // This would be used if we want to process complex filter combinations
+        $bannerFilters = $request->input('banner_filters');
+        if ($bannerFilters && is_array($bannerFilters)) {
+            foreach ($bannerFilters as $filter) {
+                switch ($filter['type']) {
+                    case 'discount':
+                        if (preg_match('/(\d+)/', $filter['value'], $matches)) {
+                            $discountPercent = (int)$matches[1];
+                            $discountRanges = [$discountPercent . '-100'];
+                        }
+                        break;
+                    case 'category':
+                        $categories[] = $filter['value'];
+                        break;
+                    case 'color':
+                        $colors[] = $filter['value'];
+                        break;
+                    case 'size':
+                        $sizes[] = $filter['value'];
+                        break;
+                    case 'occasion':
+                        $occasions[] = $filter['value'];
+                        break;
+                    case 'price_range':
+                        if (strpos($filter['value'], '-') !== false) {
+                            list($min, $max) = explode('-', $filter['value']);
+                            $priceMin = (int)$min;
+                            $priceMax = (int)$max;
+                        }
+                        break;
+                }
+            }
+        }
 
 
         // Start building the query
