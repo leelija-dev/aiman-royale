@@ -11,6 +11,7 @@ class Order extends Model
         'user_id',
         'total_amount',
         'order_status',
+        'is_fake_order',
         'transection_id',
         'payment_status',
         'paid_at', 	

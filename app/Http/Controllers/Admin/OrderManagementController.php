@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -13,10 +14,79 @@ class OrderManagementController extends Controller
     public function index()
     {
         $orders = Order::with(['user', 'orderProducts.product'])
+            ->where('is_fake_order', false)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-            
+
         return view('admin.orders.index', compact('orders'));
+    }
+
+    public function create()
+    {
+        $products = Product::where('status', 'active')->get();
+        return view('admin.orders.create', compact('products'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'total_amount' => 'required|numeric|min:0',
+            'order_status' => 'required|in:pending,confirmed,paid,shipped,delivered,cancelled,returned',
+            'payment_status' => 'required|in:pending,paid,failed,refunded',
+            'products' => 'required|array',
+            'products.*' => 'exists:products,id',
+            'address_1' => 'nullable|string|max:255',
+            'address_2' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'pincode' => 'nullable|string|max:10',
+            'phone_no' => 'nullable|string|max:20',
+            'is_fake_order' => 'boolean'
+        ]);
+
+        // Create the order
+        $order = Order::create([
+            'user_id' => $request->user_id,
+            'total_amount' => $request->total_amount,
+            'order_status' => $request->order_status,
+            'payment_status' => $request->payment_status,
+            'address_1' => $request->address_1,
+            'address_2' => $request->address_2,
+            'state' => $request->state,
+            'city' => $request->city,
+            'pincode' => $request->pincode,
+            'phone_no' => $request->phone_no,
+            'is_fake_order' => $request->boolean('is_fake_order', true),
+            'order_date' => now(),
+            'cod_fee' => '0.00'
+        ]);
+
+        // Attach products to order
+        if ($request->has('products')) {
+            foreach ($request->products as $productId) {
+                // Get product details
+                $product = Product::find($productId);
+
+                if ($product) {
+                    // Create order product entry
+                    OrderProduct::create([
+                        'order_id' => $order->id,
+                        'product_id' => $productId,
+                        'quantity' => 1, // Default quantity
+                        'price' => $product->price,
+                        'total' => $product->price,
+                        'status' => 'pending',
+                        'payment_status' => 'pending',
+                        'order_date' => now(),
+                        'user_id' => $request->user_id
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.sales.index')
+            ->with('success', 'Fake order created successfully!');
     }
 
     public function show(Order $order)
@@ -78,17 +148,17 @@ class OrderManagementController extends Controller
     public function search(Request $request)
     {
         $query = $request->get('search');
-        
+
         $orders = Order::with(['user', 'orderProducts.product'])
-            ->where(function($q) use ($query) {
+            ->where(function ($q) use ($query) {
                 $q->where('id', 'like', "%{$query}%")
-                  ->orWhereHas('user', function($userQuery) use ($query) {
-                      $userQuery->where('name', 'like', "%{$query}%")
-                                ->orWhere('email', 'like', "%{$query}%");
-                  })
-                  ->orWhereHas('orderProducts.product', function($productQuery) use ($query) {
-                      $productQuery->where('name', 'like', "%{$query}%");
-                  });
+                    ->orWhereHas('user', function ($userQuery) use ($query) {
+                        $userQuery->where('name', 'like', "%{$query}%")
+                            ->orWhere('email', 'like', "%{$query}%");
+                    })
+                    ->orWhereHas('orderProducts.product', function ($productQuery) use ($query) {
+                        $productQuery->where('name', 'like', "%{$query}%");
+                    });
             })
             ->orderBy('created_at', 'desc')
             ->paginate(20);
@@ -109,12 +179,12 @@ class OrderManagementController extends Controller
             'returned_orders' => Order::where('order_status', 'returned')->count(),
             'total_revenue' => Order::where('order_status', 'delivered')->sum('total_amount'),
             'this_month_orders' => Order::whereMonth('created_at', now()->month)
-                                          ->whereYear('created_at', now()->year)
-                                          ->count(),
+                ->whereYear('created_at', now()->year)
+                ->count(),
             'this_month_revenue' => Order::whereMonth('created_at', now()->month)
-                                          ->whereYear('created_at', now()->year)
-                                          ->where('order_status', 'delivered')
-                                          ->sum('total_amount'),
+                ->whereYear('created_at', now()->year)
+                ->where('order_status', 'delivered')
+                ->sum('total_amount'),
         ];
 
         return response()->json($stats);

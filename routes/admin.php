@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\BannerController;
@@ -103,6 +104,21 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
                 'destroy' => 'banners.destroy'
             ]
         ])->except(['show']);
+
+        // Sales
+        Route::resource('sales', SaleController::class, [
+            'names' => [
+                'index' => 'admin.sales.index',
+                'create' => 'admin.sales.create',
+                'store' => 'admin.sales.store',
+                'edit' => 'admin.sales.edit',
+                'update' => 'admin.sales.update',
+                'destroy' => 'admin.sales.destroy'
+            ]
+        ])->except(['show']);
+
+        Route::post('sales/{sale}/toggle-status', [SaleController::class, 'toggleStatus'])
+            ->name('admin.sales.toggle-status');
 
         // Occasions
         Route::resource('occasions', AdminOccasionController::class, [
@@ -539,6 +555,8 @@ Route::prefix('shops')->group(function () {
         Route::resource('orders', OrderManagementController::class, [
             'names' => [
                 'index' => 'admin.orders.index',
+                'create' => 'admin.orders.create',
+                'store' => 'admin.orders.store',
                 'show' => 'admin.orders.show',
                 'destroy' => 'admin.orders.destroy'
             ]

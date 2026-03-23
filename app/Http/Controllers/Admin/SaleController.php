@@ -1,0 +1,144 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class SaleController extends Controller
+{
+    public function index()
+    {
+        $sales = Order::withCount('orderProducts')
+            ->with(['orderProducts.product'])
+            ->where('is_fake_order', true)
+            ->latest()
+            ->paginate(10);
+        return view('admin.sales.index', compact('sales'));
+    }
+
+    public function create()
+    {
+        $products = Product::where('status', 'active')->get();
+        return view('admin.sales.create', compact('products'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:200',
+            'description' => 'nullable|string',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'is_active' => 'boolean',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+            'products' => 'required|array',
+            'products.*' => 'exists:products,id',
+        ]);
+
+        $sale = Sale::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'discount_percentage' => $request->discount_percentage,
+            'is_active' => $request->boolean('is_active'),
+            'starts_at' => $request->starts_at ? $request->starts_at : null,
+            'ends_at' => $request->ends_at ? $request->ends_at : null,
+        ]);
+
+        // Handle banner image upload
+        if ($request->hasFile('banner_image')) {
+            $image = $request->file('banner_image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/sales'), $imageName);
+            $sale->banner_image = $imageName;
+        }
+
+        // Attach selected products
+        if ($request->has('products')) {
+            $sale->products()->attach($request->products);
+        }
+
+        return redirect()->route('admin.sales.index')
+            ->with('success', 'Sale created successfully!');
+    }
+
+    public function edit(Sale $sale)
+    {
+        $products = Product::where('status', 'active')->get();
+        $selectedProducts = $sale->products()->pluck('products.id')->toArray();
+        return view('admin.sales.edit', compact('sale', 'products', 'selectedProducts'));
+    }
+
+    public function update(Request $request, Sale $sale)
+    {
+        $request->validate([
+            'name' => 'required|string|max:200',
+            'description' => 'nullable|string',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'is_active' => 'boolean',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+            'products' => 'required|array',
+            'products.*' => 'exists:products,id',
+        ]);
+
+        $sale->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'discount_percentage' => $request->discount_percentage,
+            'is_active' => $request->boolean('is_active'),
+            'starts_at' => $request->starts_at ? $request->starts_at : null,
+            'ends_at' => $request->ends_at ? $request->ends_at : null,
+        ]);
+
+        // Handle banner image upload
+        if ($request->hasFile('banner_image')) {
+            // Delete old image
+            if ($sale->banner_image) {
+                Storage::delete('public/uploads/sales/' . $sale->banner_image);
+            }
+            
+            $image = $request->file('banner_image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/sales'), $imageName);
+            $sale->banner_image = $imageName;
+        }
+
+        // Sync selected products
+        if ($request->has('products')) {
+            $sale->products()->sync($request->products);
+        } else {
+            $sale->products()->detach();
+        }
+
+        return redirect()->route('admin.sales.index')
+            ->with('success', 'Sale updated successfully!');
+    }
+
+    public function destroy(Sale $sale)
+    {
+        // Delete banner image
+        if ($sale->banner_image) {
+            Storage::delete('public/uploads/sales/' . $sale->banner_image);
+        }
+
+        $sale->delete();
+        return redirect()->route('admin.sales.index')
+            ->with('success', 'Sale deleted successfully!');
+    }
+
+    public function toggleStatus(Sale $sale)
+    {
+        $sale->update(['is_active' => !$sale->is_active]);
+        
+        $status = $sale->is_active ? 'activated' : 'deactivated';
+        return redirect()->back()
+            ->with('success', "Sale {$status} successfully!");
+    }
+}
