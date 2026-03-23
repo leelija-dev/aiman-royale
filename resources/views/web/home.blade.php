@@ -2622,6 +2622,7 @@ All Products
                             filterData.forEach(f => {
                                 queryParams.append(`banner_${f.type}`, f.value);
                             });
+                            // Redirect to products page with banner filters
                             window.location.href = '/products?' + queryParams.toString();
                         } else {
                             // Single filter case

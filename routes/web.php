@@ -73,6 +73,7 @@ Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->na
 // Combined Category + Occasion Routes - Exclude admin and products routes
 Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
 Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
+Route::get('/banner-filter', [HomeController::class, 'BannerFilter'])->name('page.banner-filter');
 
 // Occasion Routes
 // Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');

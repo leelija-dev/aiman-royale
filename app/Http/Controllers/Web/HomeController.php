@@ -134,6 +134,152 @@ class HomeController extends Controller
         return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners'));
     }
 
+    public function BannerFilter(Request $request)
+    {
+        $query = Product::with(['variants', 'categories', 'occasions', 'colors', 'sizes'])
+            ->leftJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('ocassions', 'products.occasion_id', '=', 'ocassions.id')
+            ->select(
+                'products.*',
+                'categories.name as category_name',
+                'ocassions.name as occasion_name',
+                DB::raw('MIN(product_variants.price) as min_price'),
+                DB::raw('MAX(product_variants.price) as max_price'),
+                DB::raw('MIN(product_variants.discount_price) as min_discount_price'),
+                DB::raw('MAX(product_variants.discount_price) as max_discount_price')
+            )
+            ->groupBy('products.id')
+            ->where('products.is_active', 1);
+
+        $hasFilters = false;
+
+        // Handle banner discount filter
+        $bannerDiscount = $request->input('banner_discount');
+        if ($bannerDiscount) {
+            $hasFilters = true;
+            if (preg_match('/(\d+)/', $bannerDiscount, $matches)) {
+                $discountPercent = (int)$matches[1];
+                $query->where(function ($q) use ($discountPercent) {
+                    $q->whereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= ' . $discountPercent . ')');
+                });
+            }
+        }
+
+        // Handle banner category filter
+        $bannerCategory = $request->input('banner_category');
+        if ($bannerCategory) {
+            $hasFilters = true;
+            $query->where('categories.name', $bannerCategory);
+        }
+
+        // Handle banner color filter
+        $bannerColor = $request->input('banner_color');
+        if ($bannerColor) {
+            $hasFilters = true;
+            $query->whereHas('colors', function ($q) use ($bannerColor) {
+                $q->where('colors.name', $bannerColor);
+            });
+        }
+
+        // Handle banner size filter
+        $bannerSize = $request->input('banner_size');
+        if ($bannerSize) {
+            $hasFilters = true;
+            $query->whereHas('sizes', function ($q) use ($bannerSize) {
+                $q->where('sizes.name', $bannerSize);
+            });
+        }
+
+        // Handle banner occasion filter
+        $bannerOccasion = $request->input('banner_occasion');
+        if ($bannerOccasion) {
+            $hasFilters = true;
+            $query->where('ocassions.name', $bannerOccasion);
+        }
+
+        // Handle banner price range filter
+        $bannerPriceRange = $request->input('banner_price_range');
+        if ($bannerPriceRange) {
+            $hasFilters = true;
+            if (strpos($bannerPriceRange, '-') !== false) {
+                list($min, $max) = explode('-', $bannerPriceRange);
+                $query->where(function ($q) use ($min, $max) {
+                    $q->whereBetween('product_variants.price', [(int)$min, (int)$max])
+                      ->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
+                });
+            }
+        }
+
+        // Only apply filters if at least one banner filter is present
+        if (!$hasFilters) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No banner filters provided',
+                'products' => []
+            ]);
+        }
+
+        $products = $query->get()->map(function ($product) {
+            // Calculate actual price range
+            $prices = $product->variants->pluck('price')->filter();
+            $discountPrices = $product->variants->pluck('discount_price')->filter();
+            
+            $minPrice = $prices->min() ?? 0;
+            $maxPrice = $prices->max() ?? 0;
+            $minDiscountPrice = $discountPrices->min() ?? 0;
+            $maxDiscountPrice = $discountPrices->max() ?? 0;
+
+            // Calculate discount percentage
+            $discountPercentage = 0;
+            if ($minDiscountPrice > 0 && $minPrice > 0) {
+                $discountPercentage = round((($minPrice - $minDiscountPrice) / $minPrice) * 100);
+            }
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'featured_image' => $product->featured_image,
+                'short_description' => $product->short_description,
+                'category_name' => $product->category_name,
+                'occasion_name' => $product->occasion_name,
+                'min_price' => $minPrice,
+                'max_price' => $maxPrice,
+                'min_discount_price' => $minDiscountPrice,
+                'max_discount_price' => $maxDiscountPrice,
+                'discount_percentage' => $discountPercentage,
+                'is_trending' => $product->is_trending,
+                'variants' => $product->variants->map(function ($variant) {
+                    return [
+                        'id' => $variant->id,
+                        'price' => $variant->price,
+                        'discount_price' => $variant->discount_price,
+                        'color' => $variant->color,
+                        'size' => $variant->size,
+                        'stock' => $variant->stock,
+                        'image' => $variant->image,
+                    ];
+                })
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Products filtered successfully',
+            'filters_applied' => [
+                'banner_discount' => $bannerDiscount,
+                'banner_category' => $bannerCategory,
+                'banner_color' => $bannerColor,
+                'banner_size' => $bannerSize,
+                'banner_occasion' => $bannerOccasion,
+                'banner_price_range' => $bannerPriceRange,
+            ],
+            'total_products' => $products->count(),
+            'products' => $products
+        ]);
+    }
+
     public function ShowAllProduct(Request $request)
     {
         // Get filter parameters from request
