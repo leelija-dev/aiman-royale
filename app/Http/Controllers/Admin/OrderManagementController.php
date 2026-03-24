@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,13 +19,14 @@ class OrderManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('Admin.orders.index', compact('orders'));
+        return view('admin.orders.index', compact('orders'));
     }
 
     public function create()
     {
         $products = Product::where('status', 'active')->get();
-        return view('Admin.orders.create', compact('products'));
+        $variants = ProductVariant::all();
+        return view('admin.orders.create', compact('products', 'variants'));
     }
 
     public function store(Request $request)
@@ -92,7 +94,7 @@ class OrderManagementController extends Controller
     public function show(Order $order)
     {
         $order->load(['user', 'orderProducts.product']);
-        return view('Admin.orders.show', compact('order'));
+        return view('admin.orders.show', compact('order'));
     }
 
     public function updateStatus(Request $request, Order $order)
@@ -163,7 +165,7 @@ class OrderManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('Admin.orders.index', compact('orders'));
+        return view('admin.orders.index', compact('orders'));
     }
 
     public function getStats()

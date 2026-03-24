@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-
+@dd($products)
 @section('title', 'Create Fake Order')
 
 @section('content')
@@ -137,9 +137,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="product">Select Product</label>
-                            <select class="form-control" id="product" name="product" onchange="filterVariants()">
+                            <select class="form-control" id="product" name="product" onchange="filterVariants(); calculateAmount()">
                                 <option value="">Select a product</option>
                                 @foreach($products as $product)
+                               
                                 <option value="{{ $product->id }}"
                                     data-price="{{ $product->price }}"
                                     data-discount-price="{{ $product->discount_price }}">
