@@ -376,8 +376,8 @@
         @foreach($variants as $variant)
         if ({{ $variant->product_id }} == productId) {
             const option = document.createElement('option');
-            option.value = {{ $variant->id }};
-            option.setAttribute('data-price', {{ $variant->effective_price }});
+            option.value = '{{ $variant->id }}';
+            option.setAttribute('data-price', '{{ $variant->effective_price }}');
             option.textContent = '{{ addslashes($variant->display_name) }} - ₹{{ $variant->effective_price }}';
             variantSelect.appendChild(option);
             hasVariants = true;
