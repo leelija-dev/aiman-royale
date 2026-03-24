@@ -16,7 +16,7 @@ class BannerController extends Controller
 
     public function create()
     {
-        return view('admin.banners.create');
+        return view('Admin.banners.create');
     }
 
     public function store(Request $request)
@@ -80,13 +80,13 @@ class BannerController extends Controller
     public function show(string $id)
     {
         $banner = Banner::findOrFail($id);
-        return view('admin.banners.show', compact('banner'));
+        return view('Admin.banners.show', compact('banner'));
     }
 
     public function edit(string $id)
     {
         $banner = Banner::findOrFail($id);
-        return view('admin.banners.edit', compact('banner'));
+        return view('Admin.banners.edit', compact('banner'));
     }
 
     public function update(Request $request, string $id)
