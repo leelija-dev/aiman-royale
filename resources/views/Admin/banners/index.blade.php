@@ -28,16 +28,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($banners as $banner)
+                                @if(!empty($banners))
+                                @foreach($banners as $banner)
                                 <tr>
                                     <td>{{ $banner->id }}</td>
                                     <td>
                                         @if($banner->image)
-                                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" 
-                                                 alt="{{ $banner->title }}" 
-                                                 style="width: 100px; height: 60px; object-fit: cover;">
+                                        <img src="{{ asset('uploads/banners/' . $banner->image) }}"
+                                            alt="{{ $banner->title }}"
+                                            style="width: 100px; height: 60px; object-fit: cover;">
                                         @else
-                                            <span class="text-muted">No Image</span>
+                                        <span class="text-muted">No Image</span>
                                         @endif
                                     </td>
                                     <td>{{ $banner->title }}</td>
@@ -52,9 +53,9 @@
                                     </td>
                                     <td>
                                         @if($banner->is_active)
-                                            <span class="badge badge-success">Active</span>
+                                        <span class="badge badge-success">Active</span>
                                         @else
-                                            <span class="badge badge-danger">Inactive</span>
+                                        <span class="badge badge-danger">Inactive</span>
                                         @endif
                                     </td>
                                     <td>{{ $banner->sort_order }}</td>
@@ -71,11 +72,13 @@
                                         </form>
                                     </td>
                                 </tr>
-                                @empty
+
+                                @endforeach
+                                @else
                                 <tr>
-                                    <td colspan="7" class="text-center">No banners found</td>
+                                    <td colspan="9" class="text-center">No banners found</td>
                                 </tr>
-                                @endforelse
+                                @endif
                             </tbody>
                         </table>
                     </div>
