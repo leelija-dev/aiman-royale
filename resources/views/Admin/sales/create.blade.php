@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-@dd($products)
+@dd($variants)
 @section('title', 'Create Fake Order')
 
 @section('content')
