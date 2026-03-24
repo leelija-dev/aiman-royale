@@ -20,14 +20,14 @@ class SaleController extends Controller
             ->where('is_fake_order', true)
             ->latest()
             ->paginate(10);
-        return view('admin.sales.index', compact('sales'));
+        return view('Admin.sales.index', compact('sales'));
     }
 
     public function create()
     {
         $products = Product::where('status', 'active')->get();
          $variants = ProductVariant::all();
-        return view('admin.sales.create', compact('products', 'variants'));
+        return view('Admin.sales.create', compact('products', 'variants'));
     }
 
     public function getProductVariants($productId)
@@ -121,7 +121,7 @@ class SaleController extends Controller
     {
         $products = Product::where('status', 'active')->get();
         $selectedProducts = $sale->products()->pluck('products.id')->toArray();
-        return view('admin.sales.edit', compact('sale', 'products', 'selectedProducts'));
+        return view('Admin.sales.edit', compact('sale', 'products', 'selectedProducts'));
     }
 
     public function update(Request $request, Sale $sale)
@@ -179,7 +179,7 @@ class SaleController extends Controller
         }
 
         $sale->delete();
-        return redirect()->route('admin.sales.index')
+        return redirect()->route('Admin.sales.index')
             ->with('success', 'Sale deleted successfully!');
     }
 
