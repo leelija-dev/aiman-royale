@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('discount')->nullable();
             $table->string('button_text')->default('Shop Now');
             $table->string('filter')->unique();
-            $table->string('type')->default('main'); // 'main' or 'secondary'
+            $table->string('type')->default('main'); 
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
