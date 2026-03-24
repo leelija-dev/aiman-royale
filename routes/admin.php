@@ -119,6 +119,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::post('sales/{sale}/toggle-status', [SaleController::class, 'toggleStatus'])
             ->name('admin.sales.toggle-status');
+            
+        Route::get('products/{productId}/variants', [SaleController::class, 'getProductVariants'])
+            ->name('admin.products.variants');
 
         // Occasions
         Route::resource('occasions', AdminOccasionController::class, [

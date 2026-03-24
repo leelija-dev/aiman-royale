@@ -28,7 +28,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Fake Orders List</h3>
                             <div class="card-tools">
-                                <a href="{{ route('admin.orders.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('admin.sales.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus"></i> Create Fake Order
                                 </a>
                                 <span class="badge badge-info">Total: {{ $sales->total() }}</span>
@@ -50,7 +50,7 @@
                                         <th>Total Amount</th>
                                         <th>Status</th>
                                         <th>Created At</th>
-                                        <th>Actions</th>
+                                        <!-- <th>Actions</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,6 +77,7 @@
                                                 </span>
                                             </td>
                                             <td>{{ $sale->created_at->format('M d, Y H:i') }}</td>
+                                            {{--
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{{ route('admin.orders.show', $sale->id) }}" class="btn btn-info btn-sm">
@@ -84,6 +85,7 @@
                                                     </a>
                                                 </div>
                                             </td>
+                                            --}}
                                         </tr>
                                     @empty
                                         <tr>

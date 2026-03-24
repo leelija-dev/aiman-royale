@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,47 +26,95 @@ class SaleController extends Controller
     public function create()
     {
         $products = Product::where('status', 'active')->get();
-        return view('admin.sales.create', compact('products'));
+         $variants = ProductVariant::all();
+        return view('admin.sales.create', compact('products', 'variants'));
+    }
+
+    public function getProductVariants($productId)
+    {
+        $product = Product::find($productId);
+        
+        if (!$product) {
+            return response()->json(['variants' => []]);
+        }
+        
+        // Get actual variants from the database
+        $variants = ProductVariant::where('product_id', $productId)
+            ->where('stock', '>', 0) // Only show variants in stock
+            ->get(['id', 'size', 'color', 'sku', 'price', 'discount_price'])
+            ->map(function ($variant) {
+                return [
+                    'id' => $variant->id,
+                    'name' => $variant->display_name ?? ($variant->color ? $variant->color : $variant->size),
+                    'price' => $variant->effective_price,
+                    'sku' => $variant->sku,
+                    'size' => $variant->size,
+                    'color' => $variant->color
+                ];
+            });
+        
+        return response()->json([
+            'variants' => $variants
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:200',
-            'description' => 'nullable|string',
-            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'discount_percentage' => 'nullable|numeric|min:0|max:100',
-            'is_active' => 'boolean',
-            'starts_at' => 'nullable|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
-            'products' => 'required|array',
-            'products.*' => 'exists:products,id',
+            'product' => 'required|exists:products,id',
+            'variant' => 'nullable|string',
+            'quantity' => 'required|integer|min:1',
+            'user_id' => 'required|exists:users,id',
+            'total_amount' => 'required|numeric|min:0',
+            'order_status' => 'required|in:pending,confirmed,paid,shipped,delivered,cancelled,returned',
+            'payment_status' => 'required|in:pending,paid,failed,refunded',
+            'address_1' => 'nullable|string|max:255',
+            'address_2' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'pincode' => 'nullable|string|max:10',
+            'phone_no' => 'nullable|string|max:20',
+            'is_fake_order' => 'boolean'
         ]);
 
-        $sale = Sale::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'discount_percentage' => $request->discount_percentage,
-            'is_active' => $request->boolean('is_active'),
-            'starts_at' => $request->starts_at ? $request->starts_at : null,
-            'ends_at' => $request->ends_at ? $request->ends_at : null,
+        // Create the fake order
+        $order = Order::create([
+            'user_id' => $request->user_id,
+            'total_amount' => $request->total_amount,
+            'order_status' => $request->order_status,
+            'payment_status' => $request->payment_status,
+            'address_1' => $request->address_1,
+            'address_2' => $request->address_2,
+            'state' => $request->state,
+            'city' => $request->city,
+            'pincode' => $request->pincode,
+            'phone_no' => $request->phone_no,
+            'is_fake_order' => $request->boolean('is_fake_order', true),
+            'order_date' => now(),
+            'cod_fee' => '0.00'
         ]);
 
-        // Handle banner image upload
-        if ($request->hasFile('banner_image')) {
-            $image = $request->file('banner_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/sales'), $imageName);
-            $sale->banner_image = $imageName;
-        }
-
-        // Attach selected products
-        if ($request->has('products')) {
-            $sale->products()->attach($request->products);
+        // Get product details
+        $product = Product::find($request->product);
+        
+        if ($product) {
+            // Create order product entry
+            OrderProduct::create([
+                'order_id' => $order->id,
+                'product_id' => $request->product,
+                'variant_id' => $request->variant, // Store variant ID if provided
+                'quantity' => $request->quantity,
+                'price' => $product->price,
+                'total' => $request->total_amount,
+                'status' => 'pending',
+                'payment_status' => 'pending',
+                'order_date' => now(),
+                'user_id' => $request->user_id
+            ]);
         }
 
         return redirect()->route('admin.sales.index')
-            ->with('success', 'Sale created successfully!');
+            ->with('success', 'Fake order created successfully!');
     }
 
     public function edit(Sale $sale)
