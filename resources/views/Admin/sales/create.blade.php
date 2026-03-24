@@ -1,7 +1,7 @@
 @extends('Admin.layouts.master')
 
 @section('title', 'Create Fake Order')
-
+@dd($products)
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -351,82 +351,94 @@
 </script> -->
 
 <script>
-function filterVariants() {
-    const productId = document.getElementById('product').value;
-    const variantSelect = document.getElementById('variant');
-    const options = variantSelect.options;
-    const quantityInput = document.getElementById('quantity');
-    
-    // Reset the variant select
-    variantSelect.innerHTML = '<option value="">Select variant (if available)</option>';
-    
-    if (!productId) {
-        // No product selected, clear amount
-        document.getElementById('total_amount').value = '';
-        return;
-    }
-    
-    // Get the selected product to access its price data
-    const productSelect = document.getElementById('product');
-    const selectedProduct = productSelect.options[productSelect.selectedIndex];
-    
-    // Filter and add variants that belong to this product
-    let hasVariants = false;
-    
-    @foreach($variants as $variant)
-        if ({{ $variant->product_id }} == productId) {
+    function filterVariants() {
+        const productId = document.getElementById('product').value;
+        const variantSelect = document.getElementById('variant');
+        const options = variantSelect.options;
+        const quantityInput = document.getElementById('quantity');
+
+        // Reset the variant select
+        variantSelect.innerHTML = '<option value="">Select variant (if available)</option>';
+
+        if (!productId) {
+            // No product selected, clear amount
+            document.getElementById('total_amount').value = '';
+            return;
+        }
+
+        // Get the selected product to access its price data
+        const productSelect = document.getElementById('product');
+        const selectedProduct = productSelect.options[productSelect.selectedIndex];
+
+        // Filter and add variants that belong to this product
+        let hasVariants = false;
+
+        @foreach($variants as $variant)
+        if ({
+                {
+                    $variant - > product_id
+                }
+            } == productId) {
             const option = document.createElement('option');
-            option.value = {{ $variant->id }};
-            option.setAttribute('data-price', {{ $variant->effective_price }});
+            option.value = {
+                {
+                    $variant - > id
+                }
+            };
+            option.setAttribute('data-price', {
+                {
+                    $variant - > effective_price
+                }
+            });
             option.textContent = '{{ addslashes($variant->display_name) }} - ₹{{ $variant->effective_price }}';
             variantSelect.appendChild(option);
             hasVariants = true;
         }
-    @endforeach
-    
-    // If no variants, show message and calculate with product price
-    if (!hasVariants) {
-        const noVariantOption = document.createElement('option');
-        noVariantOption.value = '';
-        noVariantOption.textContent = 'No variants available';
-        noVariantOption.disabled = true;
-        variantSelect.appendChild(noVariantOption);
-    }
-    
-    // Calculate amount after filtering variants
-    calculateAmount();
-}
+        @endforeach
 
-function calculateAmount() {
-    const productSelect = document.getElementById('product');
-    const variantSelect = document.getElementById('variant');
-    const quantityInput = document.getElementById('quantity');
-    const totalAmountInput = document.getElementById('total_amount');
-    
-    const selectedProduct = productSelect.options[productSelect.selectedIndex];
-    const selectedVariant = variantSelect.options[variantSelect.selectedIndex];
-    const quantity = parseInt(quantityInput.value) || 0;
-    
-    let unitPrice = 0;
-    
-    if (selectedVariant && selectedVariant.value && selectedVariant.getAttribute('data-price')) {
-        // Use variant price if a variant is selected
-        unitPrice = parseFloat(selectedVariant.getAttribute('data-price')) || 0;
-    } else if (selectedProduct && selectedProduct.value) {
-        // Use product price if no variant selected
-        const productPrice = parseFloat(selectedProduct.getAttribute('data-price')) || 0;
-        const discountPrice = parseFloat(selectedProduct.getAttribute('data-discount-price')) || 0;
-        unitPrice = discountPrice > 0 ? discountPrice : productPrice;
-    }
-    
-    const totalAmount = unitPrice * quantity;
-    totalAmountInput.value = totalAmount > 0 ? totalAmount.toFixed(2) : '';
-}
+        // If no variants, show message and calculate with product price
+        if (!hasVariants) {
+            const noVariantOption = document.createElement('option');
+            noVariantOption.value = '';
+            noVariantOption.textContent = 'No variants available';
+            noVariantOption.disabled = true;
+            variantSelect.appendChild(noVariantOption);
+        }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    filterVariants();
-    calculateAmount();
-});
+        // Calculate amount after filtering variants
+        calculateAmount();
+    }
+
+    function calculateAmount() {
+        const productSelect = document.getElementById('product');
+        const variantSelect = document.getElementById('variant');
+        const quantityInput = document.getElementById('quantity');
+        const totalAmountInput = document.getElementById('total_amount');
+
+        const selectedProduct = productSelect.options[productSelect.selectedIndex];
+        const selectedVariant = variantSelect.options[variantSelect.selectedIndex];
+        const quantity = parseInt(quantityInput.value) || 0;
+
+        let unitPrice = 0;
+
+        if (selectedVariant && selectedVariant.value && selectedVariant.getAttribute('data-price')) {
+            // Use variant price if a variant is selected
+            unitPrice = parseFloat(selectedVariant.getAttribute('data-price')) || 0;
+        } else if (selectedProduct && selectedProduct.value) {
+            // Use product price if no variant selected
+            const productPrice = parseFloat(selectedProduct.getAttribute('data-price')) || 0;
+            const discountPrice = parseFloat(selectedProduct.getAttribute('data-discount-price')) || 0;
+            unitPrice = discountPrice > 0 ? discountPrice : productPrice;
+        }
+
+        const totalAmount = unitPrice * quantity;
+        totalAmountInput.value = totalAmount > 0 ? totalAmount.toFixed(2) : '';
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        filterVariants();
+        calculateAmount();
+    });
 </script>
 @endsection
