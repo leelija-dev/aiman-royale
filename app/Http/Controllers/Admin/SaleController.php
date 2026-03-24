@@ -23,21 +23,34 @@ class SaleController extends Controller
         return view('Admin.sales.index', compact('sales'));
     }
 
+    // public function create()
+    // {
+    //     $products = Product::where('status', 'active')->get();
+    //     $variants = ProductVariant::all();
+    //     return view('Admin.sales.create', compact('products', 'variants'));
+    // }
+
     public function create()
     {
-        $products = Product::where('status', 'active')->get();
-         $variants = ProductVariant::all();
-        return view('Admin.sales.create', compact('products', 'variants'));
+        try {
+            $products = Product::where('status', 'active')->get();
+            $variants = ProductVariant::all();
+            return view('Admin.sales.create', compact('products', 'variants'));
+        } catch (\Exception $e) {
+            \Log::error('Error in create method: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            dd($e->getMessage()); // This will show the actual error
+        }
     }
 
     public function getProductVariants($productId)
     {
         $product = Product::find($productId);
-        
+
         if (!$product) {
             return response()->json(['variants' => []]);
         }
-        
+
         // Get actual variants from the database
         $variants = ProductVariant::where('product_id', $productId)
             ->where('stock', '>', 0) // Only show variants in stock
@@ -52,7 +65,7 @@ class SaleController extends Controller
                     'color' => $variant->color
                 ];
             });
-        
+
         return response()->json([
             'variants' => $variants
         ]);
@@ -96,7 +109,7 @@ class SaleController extends Controller
 
         // Get product details
         $product = Product::find($request->product);
-        
+
         if ($product) {
             // Create order product entry
             OrderProduct::create([
@@ -153,7 +166,7 @@ class SaleController extends Controller
             if ($sale->banner_image) {
                 Storage::delete('public/uploads/sales/' . $sale->banner_image);
             }
-            
+
             $image = $request->file('banner_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/sales'), $imageName);
@@ -186,7 +199,7 @@ class SaleController extends Controller
     public function toggleStatus(Sale $sale)
     {
         $sale->update(['is_active' => !$sale->is_active]);
-        
+
         $status = $sale->is_active ? 'activated' : 'deactivated';
         return redirect()->back()
             ->with('success', "Sale {$status} successfully!");

@@ -18,13 +18,13 @@ class OrderManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('admin.orders.index', compact('orders'));
+        return view('Admin.orders.index', compact('orders'));
     }
 
     public function create()
     {
         $products = Product::where('status', 'active')->get();
-        return view('admin.orders.create', compact('products'));
+        return view('Admin.orders.create', compact('products'));
     }
 
     public function store(Request $request)
@@ -92,7 +92,7 @@ class OrderManagementController extends Controller
     public function show(Order $order)
     {
         $order->load(['user', 'orderProducts.product']);
-        return view('admin.orders.show', compact('order'));
+        return view('Admin.orders.show', compact('order'));
     }
 
     public function updateStatus(Request $request, Order $order)
@@ -163,7 +163,7 @@ class OrderManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('admin.orders.index', compact('orders'));
+        return view('Admin.orders.index', compact('orders'));
     }
 
     public function getStats()
