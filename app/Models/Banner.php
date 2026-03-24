@@ -17,7 +17,7 @@ class Banner extends Model
         'filters',
         'filter_type',
         'type',
-        'status',
+        'is_active',
         'sort_order'
     ];
 
