@@ -150,6 +150,7 @@
                             </select>
                         </div>
                     </div>
+                    @dd($variants)
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="variant">Select Variant</label>
@@ -167,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-@dd($variants)
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
