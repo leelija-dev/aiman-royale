@@ -150,7 +150,7 @@
                             </select>
                         </div>
                     </div>
-                    @dd($variants)
+                   
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="variant">Select Variant</label>
@@ -159,8 +159,8 @@
                                 @foreach($variants as $variant)
                                 <option value="{{ $variant->id }}"
                                     data-product-id="{{ $variant->product_id }}"
-                                    data-price="{{ $variant->effective_price }}">
-                                    {{ $variant->display_name }} - ₹{{ $variant->effective_price }}
+                                    data-price="{{ $variant->discount_price }}">
+                                    {{ $variant->display_name }} - ₹{{ $variant->discount_price }}
                                 </option>
                                 @endforeach
                             </select>
