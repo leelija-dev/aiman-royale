@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-@dd($variants)
+
 @section('title', 'Create Fake Order')
 
 @section('content')
@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+@dd($variants)
                                 {{--
                                 <div class="row">
                                     <div class="col-md-6">
