@@ -11,7 +11,7 @@ class BannerController extends Controller
     public function index()
     {
         $banners = Banner::ordered()->get();
-        return view('admin.banners.index', compact('banners'));
+        return view('Admin.banners.index', compact('banners'));
     }
 
     public function create()
