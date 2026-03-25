@@ -115,6 +115,7 @@ class SaleController extends Controller
             OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $request->product,
+                'variant_id' => '1',
                 'quantity' => $request->quantity,
                 'price' => $product->price,
                 'total' => $request->total_amount,
@@ -123,10 +124,9 @@ class SaleController extends Controller
                 'order_date' => now(),
                 'user_id' => $request->user_id
             ]);
-             dd($product);
+           
         }
 
-        dd($product);
 
         // Clear any previous session data to avoid conflicts
 session()->forget(['success', 'error']);
