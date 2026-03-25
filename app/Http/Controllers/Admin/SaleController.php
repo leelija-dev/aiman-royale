@@ -127,7 +127,7 @@ class SaleController extends Controller
                 'quantity' => $request->quantity,
                 'price' => $product->price,
                 'total' => $request->total_amount,
-                'order_date' => now(),
+                // 'order_date' => now(),
                 'user_id' => $request->user_id
             ]);
 
