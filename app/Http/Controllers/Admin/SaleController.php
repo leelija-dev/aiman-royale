@@ -108,7 +108,7 @@ class SaleController extends Controller
 
         // Get product details
         $product = Product::find($request->product);
-        dd($product);
+       
 
         if ($product) {
             // Create order product entry
@@ -123,6 +123,7 @@ class SaleController extends Controller
                 'order_date' => now(),
                 'user_id' => $request->user_id
             ]);
+             dd($product);
         }
 
         dd($product);
