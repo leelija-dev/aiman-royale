@@ -34,8 +34,7 @@ class SaleController extends Controller
     {
         try {
             $products = Product::where('status', 'active')->get();
-            $variants = ProductVariant::all();
-            return view('Admin.sales.create', compact('products', 'variants'));
+            return view('Admin.sales.create', compact('products'));
         } catch (\Exception $e) {
             \Log::error('Error in create method: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
@@ -75,18 +74,17 @@ class SaleController extends Controller
     {
         $request->validate([
             'product' => 'required|exists:products,id',
-            'variant' => 'nullable|string',
             'quantity' => 'required|integer|min:1',
             'user_id' => 'required|exists:users,id',
             'total_amount' => 'required|numeric|min:0',
             'order_status' => 'required|in:pending,confirmed,paid,shipped,delivered,cancelled,returned',
             'payment_status' => 'required|in:pending,paid,failed,refunded',
-            'address_1' => 'nullable|string|max:255',
-            'address_2' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'pincode' => 'nullable|string|max:10',
-            'phone_no' => 'nullable|string|max:20',
+            'address_1' => 'required|string|max:100',
+            'address_2' => 'nullable|string|max:100',
+            'state' => 'required|string|max:50',
+            'city' => 'required|string|max:25',
+            'pincode' => 'required|string|max:6',
+            'phone_no' => 'required|string|max:12',
             'is_fake_order' => 'boolean'
         ]);
 
@@ -115,7 +113,6 @@ class SaleController extends Controller
             OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $request->product,
-                'variant_id' => $request->variant, // Store variant ID if provided
                 'quantity' => $request->quantity,
                 'price' => $product->price,
                 'total' => $request->total_amount,
