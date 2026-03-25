@@ -123,8 +123,11 @@ class SaleController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.sales.create')
-            ->with('success', 'Fake order created successfully!');
+        // Clear any previous session data to avoid conflicts
+session()->forget(['success', 'error']);
+
+return redirect()->to('/admin/sales/create')
+    ->with('success', 'Fake order created successfully!');
     }
 
     public function edit(Sale $sale)
