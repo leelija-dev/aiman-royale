@@ -123,7 +123,7 @@ class SaleController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.sales.index')
+        return redirect()->route('admin.sales.create')
             ->with('success', 'Fake order created successfully!');
     }
 
