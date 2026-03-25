@@ -8,6 +8,7 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -72,7 +73,7 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'product' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -108,11 +109,19 @@ class SaleController extends Controller
 
         // Get product details
         $product = Product::find($request->product);
-       
+
+        // Log the request data for debugging
+        \Log::info('Sale Store Request Data:', [
+            'request_data' => $request->all(),
+            'product_id' => $request->product,
+            'quantity' => $request->quantity,
+            'total_amount' => $request->total_amount,
+            'product_found' => $product ? true : false
+        ]);
 
         if ($product) {
             // Create order product entry
-            OrderProduct::create([
+            $orderProduct = OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $request->product,
                 'variant_id' => '1',
@@ -124,15 +133,24 @@ class SaleController extends Controller
                 'order_date' => now(),
                 'user_id' => $request->user_id
             ]);
-           
+
+            // Log the created order product
+            \Log::info('OrderProduct Created:', [
+                'order_product_id' => $orderProduct->id,
+                'order_id' => $order->id,
+                'product_id' => $request->product,
+                'quantity' => $request->quantity,
+                'total' => $request->total_amount
+            ]);
+        } else {
+            \Log::error('Product not found for ID: ' . $request->product);
         }
 
-
         // Clear any previous session data to avoid conflicts
-session()->forget(['success', 'error']);
+        session()->forget(['success', 'error']);
 
-return redirect()->to('/admin/sales/create')
-    ->with('success', 'Fake order created successfully!');
+        return redirect()->to('/admin/sales/create')
+            ->with('success', 'Fake order created successfully!');
     }
 
     public function edit(Sale $sale)
