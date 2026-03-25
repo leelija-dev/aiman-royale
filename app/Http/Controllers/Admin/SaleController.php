@@ -146,7 +146,7 @@ class SaleController extends Controller
         // Clear any previous session data to avoid conflicts
         session()->forget(['success', 'error']);
 
-        return redirect()->to('/admin/sales/create')
+        return redirect()->route('admin.sales.index')
             ->with('success', 'Fake order created successfully!');
     }
 
