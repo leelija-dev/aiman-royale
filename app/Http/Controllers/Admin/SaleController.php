@@ -123,6 +123,8 @@ class SaleController extends Controller
             ]);
         }
 
+        dd($product);
+
         // Clear any previous session data to avoid conflicts
 session()->forget(['success', 'error']);
 
