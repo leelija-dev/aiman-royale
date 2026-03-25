@@ -72,7 +72,7 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        
         $request->validate([
             'product' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -108,6 +108,7 @@ class SaleController extends Controller
 
         // Get product details
         $product = Product::find($request->product);
+        dd($product);
 
         if ($product) {
             // Create order product entry
