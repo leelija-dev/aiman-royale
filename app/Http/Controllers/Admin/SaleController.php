@@ -124,12 +124,9 @@ class SaleController extends Controller
             $orderProduct = OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $request->product,
-                'variant_id' => '1',
                 'quantity' => $request->quantity,
                 'price' => $product->price,
                 'total' => $request->total_amount,
-                'status' => 'pending',
-                'payment_status' => 'pending',
                 'order_date' => now(),
                 'user_id' => $request->user_id
             ]);
