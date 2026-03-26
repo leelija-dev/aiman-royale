@@ -1969,7 +1969,7 @@ All Products
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href=""
+                            <a href="{{ route('page.appointment') }}"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2062,7 +2062,7 @@ All Products
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href=""
+                            <a href="{{ route('page.appointment') }}"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
