@@ -560,6 +560,7 @@
 
 
 
+@if(request()->route()->getName() === 'page.index')
 <section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
@@ -644,6 +645,100 @@
 
   </div>
 </section>
+
+@elseif(str_contains(request()->path(), 'collections/'))
+@php
+    // Try to get category from URL slug
+    $slug = request()->segment(2);
+    $category = \App\Models\Category::where('slug', $slug)->first();
+@endphp
+@if($category)
+<section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
+
+    <!-- Category Heading -->
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+      {{ $category->name }} - Premium {{ $category->name }} Collection by Aiman Royale
+    </h2>
+
+    <!-- Full Category Description -->
+    <div class="prose prose-lg max-w-none">
+      <div class="mb-6 leading-relaxed text-base md:text-lg">
+        {!! $category->description !!}
+      </div>
+    </div>
+
+    <!-- Additional Benefits Section -->
+    <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg border border-pink-100">
+      <h3 class="text-xl md:text-2xl font-semibold mb-4 text-gray-800">
+        Why Choose Our {{ $category->name }} Collection?
+      </h3>
+      <p class="leading-relaxed text-base md:text-lg mb-4">
+        Our {{ $category->name }} collection represents the perfect blend of traditional craftsmanship and contemporary design. Each piece is carefully selected to ensure the highest quality and authenticity, bringing you garments that celebrate India's rich textile heritage.
+      </p>
+      
+      <div class="grid md:grid-cols-2 gap-4 mt-6">
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+            <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-800">Premium Quality</h4>
+            <p class="text-gray-600">Crafted with finest materials and attention to detail</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+            <svg class="w-3 h-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-800">Authentic Designs</h4>
+            <p class="text-gray-600">Traditional patterns with modern styling</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
+            <svg class="w-3 h-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-800">Expert Craftsmanship</h4>
+            <p class="text-gray-600">Made by skilled artisans with years of experience</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0 mt-1">
+            <svg class="w-3 h-3 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-800">Perfect Fit</h4>
+            <p class="text-gray-600">Tailored sizing for comfortable wear</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-8">
+      <a href="{{ route('category.show', $category->slug) }}" class="inline-block bg-secondary text-white px-8 py-3 rounded-lg hover:bg-secondary/80 font-medium transition">
+        Explore All {{ $category->name }} Designs
+      </a>
+    </div>
+
+  </div>
+</section>
+@endif
+@endif
 
 <footer class="bg-gradient-to-b from-[#FCE7F3] to-[#FCE7F3]/80">
   <div class="container mx-auto px-4 lg:px-8 pt-6">
