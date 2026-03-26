@@ -14,9 +14,10 @@ return new class extends Migration
     {
         // For MySQL
         Schema::table('categories', function (Blueprint $table) {
-            $table->longText('description')->change();
+            // $table->longText('description')->change();
+            $table->longText('description')->nullable()->change();
         });
-        
+
         // Alternative: Using raw SQL (if the above doesn't work)
         // DB::statement('ALTER TABLE categories MODIFY description LONGTEXT');
     }
@@ -30,7 +31,7 @@ return new class extends Migration
         Schema::table('categories', function (Blueprint $table) {
             $table->text('description')->change();
         });
-        
+
         // Alternative: Using raw SQL
         // DB::statement('ALTER TABLE categories MODIFY description TEXT');
     }
