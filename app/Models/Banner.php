@@ -42,6 +42,11 @@ class Banner extends Model
         return $query->where('type', 'secondary');
     }
 
+    public function scopeEditor($query)
+    {
+        return $query->where('type', 'editor');
+    }
+
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'asc');

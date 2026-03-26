@@ -44,9 +44,15 @@
                                     <td>{{ $banner->title }}</td>
                                     <td>{{ $banner->subtitle ?? '-' }}</td>
                                     <td>
-                                        <span class="badge bg-{{ $banner->type == 'main' ? 'primary' : 'info' }}">
-                                            {{ ucfirst($banner->type) }}
-                                        </span>
+                                        @if($banner->type === 'main')
+                                            <span class="badge badge-primary">Main</span>
+                                        @elseif($banner->type === 'secondary')
+                                            <span class="badge badge-info">Secondary</span>
+                                        @elseif($banner->type === 'editor')
+                                            <span class="badge badge-success">Editor's Pick</span>
+                                        @else
+                                            <span class="badge badge-secondary">{{ ucfirst($banner->type) }}</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge badge-info">{{ $banner->filter }}</span>

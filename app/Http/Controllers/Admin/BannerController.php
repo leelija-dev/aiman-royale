@@ -32,7 +32,7 @@ class BannerController extends Controller
             'filter_type' => 'required|in:single,multiple,discount,category',
             'filter_types' => 'nullable|array',
             'filter_values' => 'nullable|array',
-            'type' => 'required|in:main,secondary',
+            'type' => 'required|in:main,secondary,editor',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0'
         ]);
@@ -104,7 +104,7 @@ class BannerController extends Controller
             'filter_type' => 'required|in:single,multiple,discount,category',
             'filter_types' => 'nullable|array',
             'filter_values' => 'nullable|array',
-            'type' => 'required|in:main,secondary',
+            'type' => 'required|in:main,secondary,editor',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0'
         ]);

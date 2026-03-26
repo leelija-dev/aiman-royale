@@ -99,6 +99,7 @@
                                         <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
                                             <option value="main" {{ old('type', $banner->type) == 'main' ? 'selected' : '' }}>Main Banner (Large carousel)</option>
                                             <option value="secondary" {{ old('type', $banner->type) == 'secondary' ? 'selected' : '' }}>Secondary Banner (Small carousel)</option>
+                                            <option value="editor" {{ old('type', $banner->type) == 'editor' ? 'selected' : '' }}>Editor Banner</option>
                                         </select>
                                         @error('type')
                                             <div class="invalid-feedback">{{ $message }}</div>

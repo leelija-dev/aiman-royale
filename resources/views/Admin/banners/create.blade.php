@@ -85,16 +85,18 @@
                                         @enderror
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="type" class="form-label">Banner Type</label>
-                                        <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
-                                            <option value="main">Main Banner (Large carousel)</option>
-                                            <option value="secondary">Secondary Banner (Small carousel)</option>
-                                        </select>
-                                        @error('type')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                    <div class="form-group">
+                                            <label for="type">Position <span class="text-danger">*</span></label>
+                                            <select class="form-control @error('type') is-invalid" id="type" name="type" required>
+                                                <option value="">Select position</option>
+                                                <option value="main" {{ old('type') == 'main' ? 'selected' : '' }}>Main</option>
+                                                <option value="secondary" {{ old('type') == 'secondary' ? 'selected' : '' }}>Secondary</option>
+                                                <option value="editor" {{ old('type') == 'editor' ? 'selected' : '' }}>Editor's Pick</option>
+                                            </select>
+                                            @error('type')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
