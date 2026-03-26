@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Aiman Royale'),
+
+    'wh_number' => env('WHATSAPP_NUMBER', '6295351230'),
 
     /*
     |--------------------------------------------------------------------------

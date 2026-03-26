@@ -331,10 +331,13 @@
                     </div>
                     
                     <!-- WhatsApp Share Button -->
-                    <button id="whatsapp-share-btn" class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full">
+                    <a href="https://wa.me/91{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
                         <i class="fab fa-whatsapp text-xl"></i>
-                        <span>Share on WhatsApp</span>
-                    </button>
+                        <span>Order on WhatsApp</span>
+                    </a>
                 </div>
             </div>
         </div>
