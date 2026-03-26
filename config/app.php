@@ -15,7 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Aiman Royale'),
 
-    'wh_number' => env('WHATSAPP_NUMBER', '6295351230'),
+    'wh_number' => env('WHATSAPP_NUMBER', '7003184741'),
 
     /*
     |--------------------------------------------------------------------------
