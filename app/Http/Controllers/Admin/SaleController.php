@@ -21,6 +21,7 @@ class SaleController extends Controller
             ->where('is_fake_order', true)
             ->latest()
             ->paginate(10);
+            dd($sales);
         return view('Admin.sales.index', compact('sales'));
     }
 
