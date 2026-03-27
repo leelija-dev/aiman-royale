@@ -16,7 +16,7 @@ class FalseReviewsController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.reviews.index', compact('reviews'));
+        return view('Admin.reviews.index', compact('reviews'));
     }
 
     // Show form to create new review
@@ -24,7 +24,7 @@ class FalseReviewsController extends Controller
     {
         $products = Product::where('is_active', 1)->pluck('name', 'id');
         
-        return view('admin.reviews.create', compact('products'));
+        return view('Admin.reviews.create', compact('products'));
     }
 
     // Store new review
@@ -64,7 +64,7 @@ class FalseReviewsController extends Controller
     {
         $review->load(['product', 'user']);
         
-        return view('admin.reviews.show', compact('review'));
+        return view('Admin.reviews.show', compact('review'));
     }
 
     // Show form to edit review
@@ -72,7 +72,7 @@ class FalseReviewsController extends Controller
     {
         $products = Product::where('is_active', 1)->pluck('name', 'id');
         
-        return view('admin.reviews.edit', compact('review', 'products'));
+        return view('Admin.reviews.edit', compact('review', 'products'));
     }
 
     // Update review
