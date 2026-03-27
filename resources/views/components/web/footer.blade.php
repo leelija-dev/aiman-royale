@@ -561,7 +561,7 @@
 
 
 @if(request()->route()->getName() === 'page.index')
-<section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
+<section id="dynamic-content-sec-1" class="w-full bg-white py-12 lg:py-20">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Main Heading -->
@@ -579,7 +579,7 @@
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
         <!-- Show "Read more" when closed, "Show less" when open -->
         <span class="group-open:hidden">Read more</span>
-        <span id="redi-sec-dyna" class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline">Show less</span>
+        <span  class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span>
 
       </summary>
 
@@ -653,7 +653,7 @@
     $category = \App\Models\Category::where('slug', $slug)->first();
 @endphp
 @if($category)
-<section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
+<section id="dynamic-content-sec-2" class="w-full bg-white py-12 lg:py-20">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Category Heading -->
@@ -1412,7 +1412,7 @@
   });
 </script>
 
-<script>
+<!-- <script>
   document.addEventListener('DOMContentLoaded', function() {
     const redirectButton = document.getElementById('redi-sec-dyna');
     const targetSection = document.getElementById('dynamic-content-sec');
@@ -1431,6 +1431,30 @@
         });
       });
     }
+  });
+</script> -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.redi-sec-dyna');
+
+    buttons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const targetId = button.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+
+        if (targetSection) {
+          const headerOffset = 80;
+          const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      });
+    });
   });
 </script>
 <script>
