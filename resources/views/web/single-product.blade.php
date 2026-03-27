@@ -61,7 +61,7 @@
     }
 
     .size-btn.border-secondary {
-        border-color: var(--secondary-color, #8b5cf6) !important;
+        border-color: var(--secondary-color, #8b5cf6) !important; 
         background-color: rgba(139, 92, 246, 0.1);
     }
 </style>
@@ -75,7 +75,7 @@
             <!-- LEFT IMAGE SECTION -->
             <div class="flex flex-col lg:flex-row gap-2">
                 <!-- Thumbnails Container -->
-                <div id="thumbnail-container" class="flex min-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1">
+                <div id="thumbnail-container" class="flex xl:min-w-32 min-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1">
                     @php
                     // Get images of the currently selected variant
                     $currentVariant = $product->variants->first();
@@ -102,14 +102,14 @@
                     @php
                     $imagePath = ltrim($image->image, '/');
                     @endphp
-                    <div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
+                    <div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
                          data-display="{{ asset($imagePath) }}" 
                          data-large="{{ asset($imagePath) }}"
                          onclick="updateMainImage('{{ asset($imagePath) }}', '{{ $product->name }}', this)">
                         <img src="{{ asset($imagePath) }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
                     </div>
                     @empty
-                    <div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
+                    <div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
                          data-display="{{ asset('assets/images/placeholder.jpg') }}" 
                          data-large="{{ asset('assets/images/placeholder.jpg') }}"
                          onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
@@ -1523,7 +1523,7 @@ function updateVariantImages(variant) {
                 }
                 
                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-                thumbnailsHtml += `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                thumbnailsHtml += `<div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
             });
             thumbnailContainer.innerHTML = thumbnailsHtml;
         }
