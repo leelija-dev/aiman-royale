@@ -16,7 +16,7 @@ class FalseReviewsController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.reviews.index', compact('reviews'));
+        return view('Admin.reviews.index', compact('reviews'));
     }
 
     // Show form to create new review

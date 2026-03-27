@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\FalseReviewsController;
+use App\Http\Controllers\Admin\FaqCategoryController;
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -102,6 +103,17 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
                 'edit' => 'banners.edit',
                 'update' => 'banners.update',
                 'destroy' => 'banners.destroy'
+            ]
+        ])->except(['show']);
+
+        Route::resource('faq-categories', FaqCategoryController::class, [
+            'names' => [
+                'index' => 'faqCategory.index',
+                'create' => 'faqCategory.create',
+                'store' => 'faqCategory.store',
+                'edit' => 'faqCategory.edit',
+                'update' => 'faqCategory.update',
+                'destroy' => 'faqCategory.destroy'
             ]
         ])->except(['show']);
 
