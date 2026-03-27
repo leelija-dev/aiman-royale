@@ -70,30 +70,34 @@
                                     @foreach($sales as $sale)
                                     <tr>
                                         <td>{{ $sale->id }}</td>
-                                        <td>{{ $sale->user_id }}</td>
+                                        <td>{{ $sale->user_id ?? 'N/A' }}</td>
                                         <td>
-                                            @foreach($sale->orderProducts as $item)
-                                            <div class="mb-1">
-                                                <strong>{{ $item->product->name }}</strong><br>
-                                                <small class="text-muted">
-                                                    {{ $item->product->design_no }} |
-                                                    Qty: {{ $item->quantity }} |
-                                                    Price: {{ $item->price }}
-                                                </small>
-                                            </div>
-                                            @endforeach
+                                            @if($sale->orderProducts && $sale->orderProducts->isNotEmpty())
+                                                @foreach($sale->orderProducts as $item)
+                                                    @if($item && $item->product)
+                                                    <div class="mb-1">
+                                                        <strong>{{ $item->product->name ?? 'Unknown Product' }}</strong><br>
+                                                        <small class="text-muted">
+                                                            {{ $item->product->design_no ?? 'N/A' }} |
+                                                            Qty: {{ $item->quantity ?? 0 }} |
+                                                            Price: {{ $item->price ?? 0 }}
+                                                        </small>
+                                                    </div>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span class="text-muted">No products</span>
+                                            @endif
                                         </td>
-                                        <td>{{ $sale->total_amount }}</td>
+                                        <td>{{ $sale->total_amount ?? 0 }}</td>
                                         <td>
                                             <span class="badge badge-{{ $sale->order_status == 'completed' ? 'success' : 'warning' }}">
-                                                {{ $sale->order_status }}
+                                                {{ $sale->order_status ?? 'pending' }}
                                             </span>
                                         </td>
-                                        <td>{{ $sale->created_at->format('M d, Y H:i') }}</td>
+                                        <td>{{ $sale->created_at ? $sale->created_at->format('M d, Y H:i') : 'N/A' }}</td>
 
                                     </tr>
-                                   
-                                    
                                     @endforeach
                                     @else
                                     <tr>
