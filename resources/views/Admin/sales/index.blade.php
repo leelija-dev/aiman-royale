@@ -1,5 +1,4 @@
 @extends('Admin.layouts.master')
-
 @section('title', 'Fake Orders Management')
 
 @section('content')
@@ -67,7 +66,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($sales as $sale)
+                                    @if(!empty($sales))
+                                    @foreach($sales as $sale)
                                     <tr>
                                         <td>{{ $sale->id }}</td>
                                         <td>{{ $sale->user_id }}</td>
@@ -92,11 +92,14 @@
                                         <td>{{ $sale->created_at->format('M d, Y H:i') }}</td>
 
                                     </tr>
-                                    @empty
+                                   
+                                    
+                                    @endforeach
+                                    @else
                                     <tr>
                                         <td colspan="7" class="text-center">No fake orders found.</td>
                                     </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
 
                             </table>
