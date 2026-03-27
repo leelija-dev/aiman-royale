@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-
+@dd($sales)
 @section('title', 'Fake Orders Management')
 
 @section('content')
