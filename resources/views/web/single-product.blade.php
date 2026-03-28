@@ -526,7 +526,7 @@
                                 @endif
                                 @if($product->sales_package)
                                 <div class="flex flex-col">
-                                    <span class="text-sm text-gray-500">Sales Package</span>
+                                    <span class="text-sm text-gray-500">Package Contains</span>
                                     <span class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
                                 </div>
                                 @endif
