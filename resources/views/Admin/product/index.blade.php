@@ -384,6 +384,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Lehenga Fabric -->
+                                             {{--
                                             <div class="col-md-6 mb-3">
                                                 <label for="edit_lehenga_fabric_{{ $product->id }}" class="form-label">Lehenga Fabric</label>
                                                 <input type="text" class="form-control" 
@@ -409,8 +410,10 @@
                                                        name="dupatta_fabric" 
                                                        value="{{ $product->dupatta_fabric ?? '' }}" maxlength="100">
                                             </div>
+                                            --}}
 
                                             <!-- Type -->
+                                             {{--
                                             <div class="col-md-6 mb-3">
                                                 <label for="edit_type_{{ $product->id }}" class="form-label">Type</label>
                                                 <input type="text" class="form-control" 
@@ -418,14 +421,15 @@
                                                        name="type" 
                                                        value="{{ $product->type ?? '' }}" maxlength="100">
                                             </div>
+                                            --}}
 
                                             <!-- Stitching Type -->
                                             <div class="col-md-6 mb-3">
                                                 <label for="edit_stitching_type_{{ $product->id }}" class="form-label">Stitching Type</label>
                                                 <input type="text" class="form-control" 
                                                        id="edit_stitching_type_{{ $product->id }}" 
-                                                       name="stitching_type" 
-                                                       value="{{ $product->stitching_type ?? '' }}" maxlength="100">
+                                                       name="type" 
+                                                       value="{{ $product->type ?? '' }}" maxlength="100">
                                             </div>
 
                                             <!-- Pattern -->
