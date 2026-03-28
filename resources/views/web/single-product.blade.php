@@ -37,6 +37,7 @@
 @section('content')
 @if($product == true)
 
+
 <style>
     .custom-color-btn {
         transition: all 0.2s ease;
@@ -391,6 +392,34 @@
                     <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
                         {{ $product->fit }}
                     </p>
+                    @endif
+                    
+                    <!-- Product Parts with Fabric and Stitching Type -->
+                    @if($product->parts && $product->parts->count() > 0)
+                    <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
+                    <div class="space-y-3">
+                        @foreach($product->parts as $part)
+                        <div class="border-l-4 border-gray-300 pl-4 py-2">
+                            <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900">
+                                {{ $part->part_name }}
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">
+                                @if($part->fabric)
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">Fabric</span>
+                                    <span class="text-gray-900">{{ $part->fabric }}</span>
+                                </div>
+                                @endif
+                                @if($part->work_type)
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">Work Type</span>
+                                    <span class="text-gray-900">{{ $part->work_type }}</span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                     @endif
                 </div>
 
