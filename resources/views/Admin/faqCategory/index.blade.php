@@ -71,7 +71,7 @@
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                     <form id="delete-form-{{ $faqCategory->id }}"
-                                        action="{{ route('faq-categories.delete', $faqCategory->id) }}"
+                                        action="{{ route('faqCategory.destroy', $faqCategory->id) }}"
                                         method="POST" style="display:none;">
                                         @csrf
                                         @method('DELETE')
@@ -92,7 +92,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form id="editForm{{ $faqCategory->id }}"
-                                            action="{{ route('admin.faq-categories.update', $faqCategory->id) }}"
+                                            action="{{ route('faqCategory.update', $faqCategory->id) }}"
                                             method="POST">
                                             @csrf
                                             @method('PUT')
