@@ -120,7 +120,7 @@
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full">
+                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[1/2]">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';

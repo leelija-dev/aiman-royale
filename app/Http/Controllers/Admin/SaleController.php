@@ -16,11 +16,12 @@ class SaleController extends Controller
 {
     public function index()
     {
-        $sales = Order::withCount('orderProducts')
-            ->with(['orderProducts.product'])
+        $sales = Order::with(['orderProducts.product'])
             ->where('is_fake_order', true)
             ->latest()
             ->paginate(10);
+       
+            
         return view('Admin.sales.index', compact('sales'));
     }
 
