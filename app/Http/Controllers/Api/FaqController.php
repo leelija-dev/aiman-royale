@@ -19,7 +19,7 @@ class FaqController extends Controller
     {
         try {
             $faqs = Faq::where('is_active', 1)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->get();
 
             return response()->json([
@@ -40,7 +40,7 @@ class FaqController extends Controller
         try {
             $faqs = Faq::where('is_active', 1)
                 ->where('category_id', $categoryId)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->orderBy('sort_order', 'asc')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -63,7 +63,7 @@ class FaqController extends Controller
         try {
             $faq = Faq::where('is_active', 1)
                 ->where('id', $faqId)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->first();
 
             if (!$faq) {
