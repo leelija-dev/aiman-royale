@@ -51,6 +51,21 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="product_id">Product</label>
+                                <select class="form-control @error('product_id') is-invalid @enderror" id="product_id" name="product_id">
+                                    <option value="">Select Product (Optional)</option>
+                                    @foreach($products as $id => $name)
+                                        <option value="{{ $id }}" {{ old('product_id', $faq->product_id) == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('product_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">Optional: Associate this FAQ with a specific product</small>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
