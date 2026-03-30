@@ -62,7 +62,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:10240', // Max 10MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -188,7 +188,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:10240', // Max 10MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',

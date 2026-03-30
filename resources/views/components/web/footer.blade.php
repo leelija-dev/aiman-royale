@@ -877,7 +877,7 @@
       }
 
       const slug = getProductSlugFromUrl();
-      const apiUrl = `http://127.0.0.1:8000/api/faqs/products/${slug}`;
+      const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/faqs/products/${slug}`;
       const container = document.getElementById('faq-dynamic-container');
       const errorDiv = document.getElementById('faq-error-msg');
 
