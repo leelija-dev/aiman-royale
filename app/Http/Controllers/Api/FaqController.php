@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Faq;
+use App\Models\Product;
 
 class FaqController extends Controller
 {
@@ -87,23 +88,31 @@ class FaqController extends Controller
         }
     }
 
-    public function getFaqsUsingproductId($productId): JsonResponse
+    public function getFaqsUsingproductId($productSlug): JsonResponse
     {
         try {
-            // $faq = Faq::where('is_active', 1)
-            //     ->where('product_id', $productId)
-            //     ->with(['category', 'product'])
-            //     ->first();
-            $faqs = Faq::where('is_active', 1)
-                ->where('product_id', $productId)
-                ->with(['category', 'product'])
-                ->get();
-
-            if (!$faqs) {
+            // Get product by slug first
+            $product = Product::where('slug', $productSlug)->first();
+            
+            if (!$product) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'FAQ not found',
+                    'message' => 'Product not found',
                     'data' => null
+                ], 404);
+            }
+
+            // Get FAQs using product ID with only category name and product name
+            $faqs = Faq::where('is_active', 1)
+                ->where('product_id', $product->id)
+                ->with(['category:id,category_name', 'product:id,name'])
+                ->get();
+
+            if ($faqs->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No FAQs found for this product',
+                    'data' => []
                 ], 404);
             }
 

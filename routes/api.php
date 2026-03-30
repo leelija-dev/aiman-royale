@@ -38,7 +38,7 @@ Route::prefix('faqs')->group(function () {
     Route::get('/', [FaqController::class, 'getAllFaqs']);
     Route::get('/category/{categoryId}', [FaqController::class, 'getFaqUsingCategory']);
     Route::get('/{faqId}', [FaqController::class, 'getFaqsUsingId']);
-    Route::get('/products/{productId}', [FaqController::class, 'getFaqsUsingproductId']);
+    Route::get('/products/{productSlug}', [FaqController::class, 'getFaqsUsingproductId']);
 
 });
 
