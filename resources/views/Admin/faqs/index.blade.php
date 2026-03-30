@@ -18,8 +18,8 @@
                         <input type="text" name="search" class="form-control me-2" style="height:40px;width:100%;" placeholder="Search FAQs..." value="{{ request('search') }}">
                         <select name="category_id" class="form-control me-2" style="height:40px;">
                             <option value="">All Categories</option>
-                            @foreach($categoriess as $id => $name)
-                                <option value="{{ $id }}" {{ request('category_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                            @foreach($categories as $id => $name)
+                            <option value="{{ $id }}" {{ request('category_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                         <button type="submit" class="btn btn-primary me-2 mb-sm-3 mb-1" style="height:40px;">Search</button>
@@ -41,6 +41,7 @@
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Question</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created Date</th>
@@ -62,6 +63,13 @@
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
                                             <span class="text-sm">{{ $faq->category->category_name ?? 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <span class="text-sm">{{ $faq->product->name ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -122,23 +130,43 @@
                                             @method('PUT')
                                             <div class="modal-body text-start">
                                                 <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label for="edit_heading_{{ $faq->id }}" class="form-label">FAQ Heading <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="edit_heading_{{ $faq->id }}" name="heading"
+                                                                value="{{ $faq->heading }}" maxlength="255" required>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="edit_product_{{ $faq->id }}" class="form-label">Product</label>
+                                                            <select class="form-control" id="edit_product_{{ $faq->id }}" name="product_id">
+                                                                <option value="">Select Product (Optional)</option>
+                                                                @foreach($products as $id => $name)
+                                                                <option value="{{ $id }}" {{ $faq->product_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="edit_category_{{ $faq->id }}" class="form-label">Category <span class="text-danger">*</span></label>
+                                                            <select class="form-control" id="edit_category_{{ $faq->id }}" name="category_id" required>
+                                                                @foreach($categoriess as $id => $name)
+                                                                <option value="{{ $id }}" {{ $faq->category_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
                                                         <div class="mb-3">
                                                             <label for="edit_question_{{ $faq->id }}" class="form-label">Question <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" id="edit_question_{{ $faq->id }}" name="question"
                                                                 value="{{ $faq->question }}" maxlength="255" required>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label for="edit_category_{{ $faq->id }}" class="form-label">Category <span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="edit_category_{{ $faq->id }}" name="category_id" required>
-                                                                @foreach($categoriess as $id => $name)
-                                                                    <option value="{{ $id }}" {{ $faq->category_id == $id ? 'selected' : '' }}>{{ $name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="edit_answer_{{ $faq->id }}" class="form-label">Answer <span class="text-danger">*</span></label>
@@ -258,4 +286,8 @@
         });
     });
 </script>
+
+@php
+$products = \App\Models\Product::where('status', 'active')->pluck('name', 'id');
+@endphp
 @endsection

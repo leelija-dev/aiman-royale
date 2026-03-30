@@ -165,7 +165,7 @@
                         {{ $product->name }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1">{{ $product->brand ?? 'Brand Name' }}</p>
-                    <p class="text-sm text-gray-500">Sold By: Store</p>
+                    <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
                 </div>
                 
                 <div class="flex items-center gap-2">
