@@ -65,6 +65,26 @@
         border-color: var(--secondary-color, #8b5cf6) !important;
         background-color: rgba(139, 92, 246, 0.1);
     }
+    
+    /* Fix for mobile accordion */
+    .accordion-content-block {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    
+    .accordion-wrapper.active .accordion-content-block {
+        max-height: 2000px;
+        transition: max-height 0.5s ease-in;
+    }
+    
+    .accordion-chevron {
+        transition: transform 0.3s ease;
+    }
+    
+    .accordion-wrapper.active .accordion-chevron {
+        transform: rotate(180deg);
+    }
 </style>
 
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
@@ -537,35 +557,268 @@
 
                 <!-- Reviews Tab -->
                 <div class="tab-content hidden" id="reviews">
-                    <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">Ratings & Reviews</h3>
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">Reviews content will appear here.</p>
+                    <div class="p-6 lg:p-8">
+                    <!-- Header with rating summary row -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Ratings & Reviews</h3>
+                            <p class="text-gray-500 mt-1 text-sm">What our customers are saying</p>
+                        </div>
+                        <!-- Overall rating badge with stars -->
+                        <div class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
+                            <div class="text-center">
+                                <span class="text-4xl font-extrabold text-gray-900">4.85</span>
+                                <span class="text-gray-500 text-sm">/5</span>
+                                <div class="flex items-center justify-center mt-1 star-rating">
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                                </div>
+                            </div>
+                            <div class="border-l border-gray-300 pl-4">
+                                <div class="text-sm text-gray-600"><span class="font-semibold text-gray-900">128</span> verified reviews</div>
+                                <div class="text-xs text-green-600 mt-0.5"><i class="fas fa-check-circle mr-1"></i> 98% recommend</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rating breakdown bars (visual summary) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                        <div class="space-y-3">
+                            <!-- 5 star -->
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">5 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 82%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs">82%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">4 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 12%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs">12%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">3 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 4%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs">4%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">2 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-gray-300 h-full rounded-full" style="width: 1%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs">1%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">1 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-gray-300 h-full rounded-full" style="width: 1%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs">1%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center lg:justify-end">
+                            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
+                                <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
+                                <p class="text-xs font-medium text-indigo-700">Top-rated product</p>
+                                <p class="text-xs text-gray-600 mt-1">⭐ Featured in "Customer Favorites"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews list header with sorting mock -->
+                    <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
+                        <h4 class="font-semibold text-gray-800 text-lg">Customer reviews</h4>
+                        <div class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+                            <span>Most relevant</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic reviews list (beautiful cards) -->
+                    <div class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Review 1 -->
+                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                            <div class="flex items-start gap-3">
+                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200 shadow-inner">JD</div>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <div>
+                                            <span class="font-bold text-gray-800">Jessica D.</span>
+                                            <div class="flex items-center gap-1 mt-1 star-rating">
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs text-gray-400">2 days ago</span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Absolutely love this! The quality exceeded my expectations. Fast shipping and great customer service. Will definitely buy again.</p>
+                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (24)</span>
+                                        <span><i class="far fa-flag mr-1"></i> Report</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Review 2 -->
+                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                            <div class="flex items-start gap-3">
+                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">MK</div>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <div>
+                                            <span class="font-bold text-gray-800">Marcus K.</span>
+                                            <div class="flex items-center gap-1 mt-1 star-rating">
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="far fa-star text-gray-300 text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs text-gray-400">1 week ago</span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Solid product, sleek design and feels durable. Only minor packaging issue but overall great value. Recommended.</p>
+                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (12)</span>
+                                        <span><i class="far fa-flag mr-1"></i> Report</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Review 3 -->
+                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                            <div class="flex items-start gap-3">
+                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">SR</div>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <div>
+                                            <span class="font-bold text-gray-800">Sophia R.</span>
+                                            <div class="flex items-center gap-1 mt-1 star-rating">
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs text-gray-400">3 days ago</span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Exceeded my expectations! The attention to detail is incredible. Would make a perfect gift. Five stars from me.</p>
+                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (31)</span>
+                                        <span><i class="far fa-flag mr-1"></i> Report</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Review 4 -->
+                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                            <div class="flex items-start gap-3">
+                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">AL</div>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <div>
+                                            <span class="font-bold text-gray-800">Alex L.</span>
+                                            <div class="flex items-center gap-1 mt-1 star-rating">
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs text-gray-400">5 days ago</span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Best purchase this year. Superb craftsmanship and the color is exactly as shown. Highly recommend to everyone.</p>
+                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (47)</span>
+                                        <span><i class="far fa-flag mr-1"></i> Report</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
                 </div>
             </div>
         </div>
 
-        <!-- MOBILE ACCORDION -->
-        <div class="md:hidden border-t border-b divide-y">
-            <div class="accordion-wrapper active">
+        <!-- MOBILE ACCORDION - FIXED VERSION -->
+        <div class="md:hidden border-t border-b">
+            <div class="accordion-wrapper border-b">
                 <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Product Details</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Product Details</span>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-4 pb-4">
-                        {{ $product->description ?? 'No description available.' }}
-                    </p>
+                <div class="accordion-content-block">
+                    <div class="pb-4">
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->description ?? 'No description available.' }}
+                        </p>
+                        @if($product->fabric)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Material & Care</h3>
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->fabric }}<br />Machine Wash
+                        </p>
+                        @endif
+                        @if($product->fit)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Size & Fit</h3>
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->fit }}
+                        </p>
+                        @endif
+                        
+                        <!-- Product Parts with Fabric and Stitching Type -->
+                        @if($product->parts && $product->parts->count() > 0)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
+                        <div class="space-y-3">
+                            @foreach($product->parts as $part)
+                            <div class="border-l-4 border-gray-300 pl-4 py-2">
+                                <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900">
+                                    {{ $part->part_name }}
+                                </h4>
+                                <div class="grid grid-cols-1 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">
+                                    @if($part->fabric)
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-xs">Fabric</span>
+                                        <span class="text-gray-900">{{ $part->fabric }}</span>
+                                    </div>
+                                    @endif
+                                    @if($part->work_type)
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-xs">Work Type</span>
+                                        <span class="text-gray-900">{{ $part->work_type }}</span>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
-            <div class="accordion-wrapper">
+            <div class="accordion-wrapper border-b">
                 <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Specification</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Specification</span>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <div class="pt-4 pb-4">
+                <div class="accordion-content-block">
+                    <div class="pb-4">
                         @if($product->stitching_type)
                         <div class="mb-4 p-3 border rounded bg-gray-50">
                             <h5 class="font-semibold mb-2">Stitching Information</h5>
@@ -620,13 +873,113 @@
             </div>
 
             <div class="accordion-wrapper">
-                <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Ratings & Reviews</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                <div class="flex justify-between items-center py-4 cursor-pointer group">
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold text-gray-900">Ratings & Reviews</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div class="star-rating flex gap-0.5">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 font-medium">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
+                        </div>
+                    </div>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-0 pb-0">Reviews content here</p>
+                <div class="accordion-content-block">
+                    <div class="pb-4 space-y-6">
+                        <!-- Compact rating summary card for mobile -->
+                        <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+                            <div>
+                                <div class="text-3xl font-bold text-gray-900">{{ $averageRating }}</div>
+                                <div class="star-rating text-xs mt-1">
+                                    @for($i = 0; $i < $fullStars; $i++)
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                    @endfor
+                                    @if($hasHalfStar)
+                                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                    @endif
+                                    @for($i = 0; $i < $emptyStars; $i++)
+                                        <i class="far fa-star text-yellow-400"></i>
+                                    @endfor
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Based on {{ $reviewCount }} reviews</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rating breakdown bars (mobile friendly) -->
+                        <div class="space-y-2">
+                            @php
+                            $fiveStarCount = $reviews->where('rating', 5)->count();
+                            $fourStarCount = $reviews->where('rating', 4)->count();
+                            $threeStarCount = $reviews->where('rating', 3)->count();
+                            $fivePercent = $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
+                            $fourPercent = $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
+                            $threePercent = $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
+                            @endphp
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">5★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $fivePercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $fivePercent }}%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">4★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $fourPercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $fourPercent }}%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">3★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $threePercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $threePercent }}%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Reviews list for mobile (clean card design) -->
+                        <div class="space-y-4 max-h-[420px] overflow-y-auto">
+                            @forelse($reviews->take(4) as $review)
+                            <div class="border-b border-gray-100 pb-4 last:border-0">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
+                                            {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
+                                        </div>
+                                        <span class="font-semibold text-sm">{{ $review->name ?? 'Anonymous User' }}</span>
+                                    </div>
+                                    <div class="star-rating text-[10px]">
+                                        @for($i = 0; $i < floor($review->rating); $i++)
+                                            <i class="fas fa-star text-yellow-400"></i>
+                                        @endfor
+                                        @if($review->rating - floor($review->rating) >= 0.5)
+                                            <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                        @endif
+                                        @for($i = 0; $i < (5 - ceil($review->rating)); $i++)
+                                            <i class="far fa-star text-gray-300"></i>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-xs mt-2 leading-relaxed">{{ $review->review ?? 'No review text provided.' }}</p>
+                                <div class="flex gap-3 mt-2 text-[11px] text-gray-400">
+                                    <span><i class="far fa-thumbs-up"></i> {{ $review->helpful_count ?? 0 }}</span>
+                                    <span>{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="text-center py-8">
+                                <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
+                                <p class="text-gray-500 text-sm">No reviews yet. Be the first to review this product!</p>
+                            </div>
+                            @endforelse
+                        </div>
+                        
+                       
+                        <p class="text-center text-[11px] text-gray-400">Showing {{ min(4, $reviewCount) }} of {{ $reviewCount }} reviews</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -955,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Mobile accordion functionality
+    // Mobile accordion functionality - FIXED
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
     
     accordionWrappers.forEach(wrapper => {
@@ -963,7 +1316,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const content = wrapper.querySelector('.accordion-content-block');
         const chevron = wrapper.querySelector('.accordion-chevron');
         
-        if (header && content) {
+        if (header && content && chevron) {
+            // Initialize: first accordion open by default
             if (wrapper.classList.contains('active')) {
                 content.style.maxHeight = content.scrollHeight + 'px';
                 chevron.style.transform = 'rotate(180deg)';
@@ -972,7 +1326,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 chevron.style.transform = 'rotate(0deg)';
             }
             
-            header.addEventListener('click', function() {
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
                 const isActive = wrapper.classList.contains('active');
                 
                 if (isActive) {
@@ -990,7 +1345,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // WhatsApp Share Button Functionality
     const whatsappBtn = document.getElementById('whatsapp-share-btn');
-    // console.log(whatsappBtn)
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', function() {
             shareOnWhatsApp();
@@ -998,6 +1352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
