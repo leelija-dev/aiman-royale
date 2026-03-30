@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*','admin.unit','admin.add-unit','admin.colors', 'admin.products.*','admin.products-trashed','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash','admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.product-variants','admin.categories.create','admin.sizes', 'banners.*', 'admin.sales.*') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*','admin.unit','admin.add-unit','admin.colors', 'admin.products.*','admin.products-trashed','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash','admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.product-variants','admin.categories.create','admin.sizes', 'banners.*', 'admin.sales.*', 'faqCategory.*', 'faqs.*') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp
@@ -282,6 +282,14 @@ $isEmailActive = false;
                         <li class="submenu-item">
                             <a class="submenu-link {{ request()->routeIs('admin.sales.*') ? 'active' : '' }} "
                                 href="{{ route('admin.sales.index') }}">Sales (Fake Orders)</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('faqCategory.*') ? 'active' : '' }} "
+                                href="{{ route('faqCategory.index') }}">FAQ Categories</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('faqs.*') ? 'active' : '' }} "
+                                href="{{ route('faqs.index') }}">FAQs</a>
                         </li>
                     </ul>
                 </div>
