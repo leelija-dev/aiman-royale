@@ -1193,41 +1193,111 @@
             <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Editor's Pick</h2>
         </div>
         <div class="grid-container">
+            @php
+            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
+            @endphp
+            <!-- Owl Carousel for mobile/tablet -->
             <div class="owl-carousel banner-carousel lgg:hidden">
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('assets/images/Home-image/pic-8.avif') }}" alt="Traditional Blouse" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                @foreach($editorBanners as $banner)
+                <!-- Slide -->
+                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                     @if($banner->filter_type === 'multiple' && $banner->filters)
+                        data-filter="{{ $banner->filters }}"
+                    @else
+                        data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Trendy To<br />Traditional Blouses</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
+                        @if($banner->subtitle)
+                            <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+
+                        @if($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                           class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
                     </div>
                 </div>
-                <div class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('assets/images/Home-image/pic-9.avif') }}" alt="Jewellery Edit" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Jewellery Edit</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
+                @endforeach
             </div>
+
+            <!-- Original grid layout for desktop -->
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
-                <div class="relative bg-[#b8a89a] overflow-hidden">
-                    <img src="{{ asset('assets/images/Home-image/pic-10.avif') }}" alt="Traditional Blouse" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Trendy To<br />Traditional Blouses</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
-                <div class="relative bg-[#e8dcd6] overflow-hidden">
-                    <img src="{{ asset('assets/images/Home-image/pic-11.avif') }}" alt="Jewellery Edit" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Jewellery Edit</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
+                @foreach($editorBanners as $index => $banner)
+                    @if($index % 2 == 0)
+                        <!-- Left Banner -->
+                        <div class="relative bg-[#b8a89a] overflow-hidden"
+                             @if($banner->filter_type === 'multiple' && $banner->filters)
+                                data-filter="{{ $banner->filters }}"
+                            @else
+                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                            @endif>
+                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                            <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                                @if($banner->subtitle)
+                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                                @endif
+                                <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                                    {{ $banner->title }}
+                                </h2>
+                                @if($banner->description)
+                                <p class="text-sm text-black mb-6">
+                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                                    <span class="text-white font-medium">{{ $banner->discount }}</span>
+                                </p>
+                                @endif
+                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                                    {{ $banner->button_text }}
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+                @foreach($editorBanners as $index => $banner)
+                    @if($index % 2 == 1)
+                        <!-- Right Banner -->
+                        <div class="relative bg-[#e8dcd6] overflow-hidden"
+                             @if($banner->filter_type === 'multiple' && $banner->filters)
+                                data-filter="{{ $banner->filters }}"
+                            @else
+                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                            @endif>
+                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                            <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                                @if($banner->subtitle)
+                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                                @endif
+                                <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                                    {{ $banner->title }}
+                                </h2>
+                                @if($banner->description)
+                                <p class="text-sm text-black mb-6">
+                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                                    <span class="text-[#c28b54] font-medium">{{ $banner->discount }}</span>
+                                </p>
+                                @endif
+                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                                    {{ $banner->button_text }}
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
