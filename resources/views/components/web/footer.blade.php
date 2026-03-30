@@ -673,6 +673,365 @@
 @endif
 @endif
 
+
+  <div class="container mx-auto px-4 sm:px-5 lg:px-6  py-8 md:py-12">
+    <!-- main 2-col grid with extra gap on desktop -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+      
+      <!-- LEFT: FAQ SECTION - Enhanced typography, larger question text, better spacing -->
+      <div class="bg-white border border-gray-200/70 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 card-shadow">
+        <div class="p-6 md:p-7">
+          <!-- header with refined underline -->
+          <div class="text-center mb-6 border-b border-gray-100 pb-4">
+            <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
+              Frequently Asked <span class="text-primary-dark">(FAQs)</span> <br class="hidden sm:block"> On Salwar Suit
+            </h2>
+            <p class="text-sm text-gray-500 mt-2 font-medium">Everything you need to know about our ethnic collection</p>
+          </div>
+
+          <div class="space-y-2" id="faq-container">
+            <!-- FAQ 1 - Larger question font: text-base md:text-lg -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group focus:outline-none rounded-xl px-1 py-0.5 transition-all">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark transition-colors pr-4 leading-tight">What is an Indian salwar suit (salwar kameez)?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70 group-hover:text-primary-dark transition-colors w-7 text-center">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 pl-1 hidden leading-relaxed">A traditional outfit consisting of a kameez (long tunic), salwar (loose trousers), and dupatta (scarf) — a timeless ensemble from South Asia.</p>
+            </div>
+            <!-- FAQ 2 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group focus:outline-none rounded-xl px-1">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">How to take care of salwar suits?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70 group-hover:text-primary-dark">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Dry clean for heavy embroidery or silk; gentle hand wash or machine wash in cold water for cotton/georgette. Always air dry away from direct sunlight.</p>
+            </div>
+            <!-- FAQ 3 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">What is the difference between salwar and churidar?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Salwar is loose and roomy with a narrow ankle; churidar is tighter, with extra length that creates folds (bangles) at the ankle for a sleek fit.</p>
+            </div>
+            <!-- FAQ 4 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">Can I use a salwar suit for office wear especially for interviews?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Absolutely! Crisp straight-cut suits, cotton or linen blends, and subtle pastels project professionalism and elegance — perfect for interviews or daily office.</p>
+            </div>
+            <!-- FAQ 5 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">How can I shop for Indian suits for women on KALKI Fashion?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Browse our curated categories, filter by fabric, size, color, and occasion. Use "Customization" option for bespoke outfits — seamless checkout with easy returns.</p>
+            </div>
+            <!-- FAQ 6 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">What colours are best for wedding salwar suits?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Rich reds, maroon, deep burgundy, royal blue, dusty pink, and gold accents. Pastel shades like mint and lavender are trending for contemporary weddings.</p>
+            </div>
+            <!-- FAQ 7 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">What types of salwar suit would you recommend for plus size women?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">A-line kameez, Anarkali cuts with vertical patterns, straight suits with side slits, and palazzo sets offer flattering silhouettes and comfort.</p>
+            </div>
+            <!-- FAQ 8 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">Do you have XXXL size available in salwar suits?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Yes, we offer inclusive sizing up to XXXL and custom stitched options for a perfect fit across many exclusive collections.</p>
+            </div>
+            <!-- FAQ 9 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">Can customization possible in salwar kameez?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Absolutely! Customization on neckline, sleeve style, length, and even fabric combination is available for selected designs. Contact our support team.</p>
+            </div>
+            <!-- FAQ 10 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">How much do you provide margin normally in salwar suits?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Margins vary by collection, order volume, and partnership tiers. For bulk or wholesale inquiries, reach out to our business team for competitive pricing.</p>
+            </div>
+            <!-- FAQ 11 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">Can I return or exchange if the size is not what I selected?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Yes, we offer hassle-free returns/exchanges within 7 days of delivery, subject to terms (unwashed, tags intact). Customized pieces have limited returns.</p>
+            </div>
+            <!-- FAQ 12 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">What are the different styles of salwar kameez available?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Anarkali, straight cut, A-line, peplum, jacket style, palazzo suits, sharara sets, and high-low designs — all available in our latest arrivals.</p>
+            </div>
+            <!-- FAQ 13 -->
+            <div class="border-b border-gray-100 py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">How should I choose the right fabric for my salwar suit?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Consider occasion & weather: cotton/linen for summers, georgette/chiffon for festive grace, silk/velvet for weddings, and crepe for structured drapes.</p>
+            </div>
+            <!-- FAQ 14 -->
+            <div class="py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group">
+                <span class="text-base md:text-[1.05rem] lg:text-lg font-semibold text-gray-800 group-hover:text-primary-dark pr-4 leading-tight">How long does it take to receive a customised salwar suit?</span>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 hidden leading-relaxed">Typically 7–14 working days, depending on design intricacy and embroidery workload. Expedited options available upon request.</p>
+            </div>
+          </div>
+          <div class="mt-7 pt-2 text-center text-xs text-gray-400 border-t border-gray-100">
+            <span>📘 Need more help? <a href="#" class="text-primary-dark hover:underline font-medium">Contact our fashion experts</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: PRICE LIST - Latest Collection with refined styling & better spacing -->
+      <div class="bg-white border border-gray-200/70 rounded-2xl shadow-sm overflow-hidden card-shadow">
+        <div class="p-6 md:p-7">
+          <div class="text-center mb-6 border-b border-gray-100 pb-4">
+            <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
+              Latest Salwar Kameez <span class="text-primary-dark">Collection</span> With Price
+            </h2>
+            <p class="text-sm text-gray-500 mt-2 font-medium">Handpicked luxury & festive ethnic wear</p>
+          </div>
+
+          <div class="flex justify-between font-semibold text-sm md:text-base uppercase tracking-wide text-gray-700 border-b-2 border-primary-dark/20 pb-3 mb-3">
+            <span>Salwar Kameez List</span>
+            <span>Price (INR)</span>
+          </div>
+
+          <div class="mt-2 space-y-3 text-sm md:text-[0.95rem] max-h-[540px] overflow-y-auto pr-1 custom-scroll">
+            <!-- products with refined interactive hover + emoji enhancement -->
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">✨ Green Zardosi Threadwork Kurta Palazzo Set With Dupatta</span>
+              <span class="font-bold text-primary-dark">₹5,521</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🌸 Purple Georgette Anarkali Set with Sequin Work</span>
+              <span class="font-bold text-primary-dark">₹17,500</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">💙 Navy Blue Georgette Anarkali Suit With Thread And Sequins Embroidery</span>
+              <span class="font-bold text-primary-dark">₹17,500</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🍃 Pista Green Gota Lace Tissue Anarkali Suit Set With Pant And Dupatta</span>
+              <span class="font-bold text-primary-dark">₹8,496</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🌻 Yellow Pakistani Style Sharara Set With Dupatta</span>
+              <span class="font-bold text-primary-dark">₹8,496</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🌼 Yellow Floral Printed Anarkali Suit Set In Silk</span>
+              <span class="font-bold text-primary-dark">₹6,796</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🎀 Pink Zardosi And Moti Work Kurta Palazzo Set With Dupatta</span>
+              <span class="font-bold text-primary-dark">₹6,371</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">💎 Blue Embroidered Kurti Set With Dupatta</span>
+              <span class="font-bold text-primary-dark">₹17,995</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🦚 Teal Pakistani Style Palazzo Suit Set</span>
+              <span class="font-bold text-primary-dark">₹16,995</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+              <span class="text-gray-800 font-medium">🌟 Yellow Crepe Palazzo Suit With Thread And Resham Work</span>
+              <span class="font-bold text-primary-dark">₹15,500</span>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-3 flex flex-wrap justify-between items-center border-t border-gray-200 text-xs text-gray-500 gap-2">
+            <span>🛍️ Prices inclusive of taxes</span>
+            <span class="bg-gray-50 px-3 py-0.5 rounded-full text-primary-dark/80 border border-gray-200">Last updated: 30/03/2026</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-3 text-center">*Customization & bulk order discounts available | Shop now</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced ACCORDION JAVASCRIPT with smooth toggling and plus/minus icon animation -->
+  <script>
+    (function() {
+      const faqButtons = document.querySelectorAll('.faq-btn');
+      
+      function initAccordion() {
+        faqButtons.forEach(btn => {
+          // remove any previous listener to avoid double binding
+          btn.removeEventListener('click', accordionHandler);
+          btn.addEventListener('click', accordionHandler);
+        });
+      }
+      
+      function accordionHandler(event) {
+        const button = event.currentTarget;
+        const answerPara = button.nextElementSibling;
+        const iconSpan = button.querySelector('.icon-span');
+        
+        if (!answerPara || !iconSpan) return;
+        
+        const isHidden = answerPara.classList.contains('hidden');
+        
+        if (isHidden) {
+          // open answer
+          answerPara.classList.remove('hidden');
+          iconSpan.textContent = '−';
+          // gentle opacity fade (already hidden->block)
+          answerPara.style.opacity = '0';
+          answerPara.style.transition = 'opacity 0.2s ease';
+          setTimeout(() => { answerPara.style.opacity = '1'; }, 8);
+        } else {
+          // close answer
+          answerPara.classList.add('hidden');
+          iconSpan.textContent = '+';
+        }
+      }
+      
+      initAccordion();
+      
+      // Optional: retain all closed by default, but if you'd like to keep better UX, all are closed (hidden class exists)
+      // ensure any dynamic elements if needed
+      console.log('✨ KALKI Fashion | Premium FAQ Accordion active — responsive & enhanced');
+      
+      // Bonus: add smooth scroll for price list if needed (just visual polish)
+      const priceContainer = document.querySelector('.custom-scroll');
+      if(priceContainer) {
+        // subtle auto scroll indicator (just for fun, not required)
+      }
+    })();
+  </script>
+  
+  <!-- small style addition for better responsive touch & font consistency -->
+  <style>
+    /* refined card shadow */
+    .card-shadow {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.03);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card-shadow:hover {
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+    }
+    /* Custom scrollbar for price list */
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f0edea;
+      border-radius: 12px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c0392b;
+      border-radius: 12px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #9a2e22;
+    }
+    /* accent colors */
+    .text-primary-dark {
+      color: #b13b2d;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .bg-primary\/20 {
+      background-color: rgba(177, 59, 45, 0.08);
+    }
+    .border-secondary-light {
+      border-color: #fbe9e7;
+    }
+    .hover\:bg-secondary-light\/20:hover {
+      background-color: rgba(253, 227, 221, 0.4);
+    }
+    /* Smooth FAQ transitions */
+    .faq-answer {
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform-origin: top;
+    }
+    .faq-answer:not(.hidden) {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .faq-answer.hidden {
+      display: none;
+    }
+    /* button focus ring refinement */
+    .faq-btn:focus-visible {
+      outline: 2px solid #b13b2d;
+      outline-offset: 2px;
+      border-radius: 12px;
+    }
+    /* larger touch target for mobile */
+    @media (max-width: 640px) {
+      .faq-btn span:first-child {
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+       .faq-btn span:first-child {
+        font-size: 0.95rem !important;
+        line-height: 1.4rem;
+      }
+      .faq-answer {
+        font-size: 0.85rem !important;
+      }
+      .text-primary-dark {
+        font-weight: 700;
+      }
+    }
+    /* subtle brand gradient border */
+    .brand-border-accent {
+      background: linear-gradient(90deg, #f5e1da, #f5ebe6, #fff);
+    }
+  
+    @media (min-width: 768px) {
+      .faq-btn span:first-child {
+        font-size: 1.05rem;
+      }
+    }
+    @media (min-width: 1024px) {
+      .faq-btn span:first-child {
+        font-size: 1.1rem;
+      }
+    }
+    /* brand polish */
+    .text-primary-dark {
+      color: #bc4e3b;
+    }
+    .border-primary-dark\/20 {
+      border-color: rgba(188, 78, 59, 0.2);
+    }
+    .hover\:bg-rose-50\/40:hover {
+      background-color: rgba(255, 228, 225, 0.5);
+    }
+  </style>
+
 <footer class="bg-gradient-to-b from-[#FCE7F3] to-[#FCE7F3]/80">
   <div class="container mx-auto px-4 lg:px-8 pt-6">
 
