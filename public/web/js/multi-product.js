@@ -221,12 +221,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 : 0;
 
             html += `
-            <div class="item flex justify-center items-center">
+            <div class="item ">
                 <a href="/products/${product.slug}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
-                    <div class="relative rounded-xl overflow-hidden">
+                    <div class="relative rounded-xl overflow-hidden bg-gray-100">
                         <img src="${imageUrl}" 
                              alt="${product.name || 'Product'}" 
-                             class="w-full h-[340px] object-cover object-top object-center"
+                             class="aspect-[4/5] object-contain max-h-[500px] w-full h-auto object-top object-center"
                              onerror="this.src='/assets/images/placeholder.jpg'" />
                         
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
