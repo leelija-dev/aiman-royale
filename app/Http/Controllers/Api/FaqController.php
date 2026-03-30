@@ -86,4 +86,37 @@ class FaqController extends Controller
             ], 500);
         }
     }
+
+    public function getFaqsUsingproductId($productId): JsonResponse
+    {
+        try {
+            // $faq = Faq::where('is_active', 1)
+            //     ->where('product_id', $productId)
+            //     ->with(['category', 'product'])
+            //     ->first();
+            $faqs = Faq::where('is_active', 1)
+                ->where('product_id', $productId)
+                ->with(['category', 'product'])
+                ->get();
+
+            if (!$faqs) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'FAQ not found',
+                    'data' => null
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $faqs
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving FAQ: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
 }
