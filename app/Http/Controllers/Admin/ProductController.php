@@ -145,8 +145,10 @@ class ProductController extends Controller
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
             
-            // Compress and save image to ~10KB
-            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+            // Upload image without compression
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+
+            //  $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;
@@ -291,9 +293,12 @@ class ProductController extends Controller
             
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+
+            //without compress image
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
             
             // Compress and save image to ~10KB
-            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+            // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with new featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;

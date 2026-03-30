@@ -18,7 +18,7 @@
                         <input type="text" name="search" class="form-control me-2" style="height:40px;width:100%;" placeholder="Search FAQs..." value="{{ request('search') }}">
                         <select name="category_id" class="form-control me-2" style="height:40px;">
                             <option value="">All Categories</option>
-                            @foreach($categories as $id => $name)
+                            @foreach($categoriess as $id => $name)
                             <option value="{{ $id }}" {{ request('category_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
