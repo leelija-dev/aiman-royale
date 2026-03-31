@@ -193,22 +193,7 @@ html::-webkit-scrollbar-corner {
   opacity: 1;
 }
 
-/* Thumbnail styles */
-.thumbnail {
-  transition: all 0.3s ease;
-  opacity: 0.85;
-}
 
-.thumbnail:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.thumbnail.selected {
-  opacity: 1;
-  border-color: #ec4899 !important;
-  box-shadow: 0 0 0 3px #fce7f3;
-}
 /* Smooth transition for tab content (desktop) */
 .tab-content {
   opacity: 0;
@@ -346,6 +331,25 @@ html::-webkit-scrollbar-corner {
   padding-left: 16px;
 }
 
+@media screen and (min-width:1025px) {
+  /* Thumbnail styles */
+.thumbnail {
+  transition: all 0.3s ease;
+  opacity: 0.85;
+}
+
+.thumbnail:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.thumbnail.selected {
+  opacity: 1;
+  border-color: #ec4899 !important;
+  box-shadow: 0 0 0 3px #fce7f3;
+}
+
+}
 @media screen and (max-width:991px) {
   #categories-wrapper-menu{
     display: none !important;
