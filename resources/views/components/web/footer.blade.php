@@ -759,6 +759,24 @@
     }
 </style>
 
+ @php
+// Check if current URL is a product page with slug
+$currentPath = request()->path();
+$isProductPage = false;
+$productSlug = null;
+
+if (str_contains($currentPath, 'products/')) {
+    $segments = explode('/', $currentPath);
+    $productsIndex = array_search('products', $segments);
+    
+    if ($productsIndex !== false && isset($segments[$productsIndex + 1])) {
+        $productSlug = $segments[$productsIndex + 1];
+        $isProductPage = !empty($productSlug);
+    }
+}
+@endphp
+
+@if($isProductPage)
  <div class="container mx-auto px-4 sm:px-5 lg:px-6 py-8 md:py-12">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
       
@@ -767,7 +785,7 @@
         <div class="p-6 md:p-7">
           <div class="text-center mb-6 border-b border-gray-100 pb-4">
             <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
-              Frequently Asked <span class="text-primary-dark">(FAQs)</span> <br class="hidden sm:block"> On Salwar Suit
+              Frequently Asked <span class="text-primary-dark">(FAQs)</span> <br class="hidden sm:block"> On {{ $productSlug ? ucfirst(str_replace('-', ' ', $productSlug)) : 'This Product' }}
             </h2>
             <p class="text-sm text-gray-500 mt-2 font-medium">Everything you need to know about our ethnic collection</p>
           </div>
@@ -824,28 +842,22 @@
       <script>
         // Fetch and display latest products in footer
         document.addEventListener('DOMContentLoaded', function() {
-          // Get current product slug from URL for context
-          const path = window.location.pathname;
-          const segments = path.split('/').filter(seg => seg.length > 0);
-          const productsIndex = segments.findIndex(seg => seg.toLowerCase() === 'products');
-          let productSlug = null;
+          // Use product slug from server-side detection
+          const productSlug = '{{ $productSlug ?? null }}';
           
-          if (productsIndex !== -1 && segments.length > productsIndex + 1) {
-            productSlug = segments[productsIndex + 1];
+          if (!productSlug) {
+            return; // Exit if no product slug
           }
           
-          // Use latest products API if on product page, otherwise get all products
-          const apiUrl = productSlug 
-            ? `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`
-            : `{{ env('APP_URL', 'http://localhost') }}/api/products`;
-          
+          // Use latest products API for same category
+          const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`;
           const container = document.getElementById('footer-latest-products-container');
           
           fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
               if (data.success && data.data && data.data.length > 0) {
-                // Use latest products if available, otherwise use all products
+                // Use latest products from same category
                 const products = data.data.slice(0, 10); // Limit to 10 products
                 
                 let html = '';
@@ -869,7 +881,7 @@
                 // Fallback message
                 container.innerHTML = `
                   <div class="text-center py-8 text-gray-500">
-                    <p class="text-sm">No products available at the moment.</p>
+                    <p class="text-sm">No more products available in this category.</p>
                     <p class="text-xs mt-1">Check back soon for new arrivals!</p>
                   </div>
                 `;
@@ -888,6 +900,7 @@
       </script>
     </div>
   </div>
+@endif
 
   <script>
     (function() {
