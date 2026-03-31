@@ -567,61 +567,57 @@
                         <!-- Overall rating badge with stars -->
                         <div class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
                             <div class="text-center">
-                                <span class="text-4xl font-extrabold text-gray-900">4.85</span>
+                                <span id="average-rating" class="text-4xl font-extrabold text-gray-900">0.0</span>
                                 <span class="text-gray-500 text-sm">/5</span>
-                                <div class="flex items-center justify-center mt-1 star-rating">
-                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                    <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                                <div id="average-stars" class="flex items-center justify-center mt-1 star-rating">
+                                    <!-- Stars will be generated dynamically -->
                                 </div>
                             </div>
                             <div class="border-l border-gray-300 pl-4">
-                                <div class="text-sm text-gray-600"><span class="font-semibold text-gray-900">128</span> verified reviews</div>
-                                <div class="text-xs text-green-600 mt-0.5"><i class="fas fa-check-circle mr-1"></i> 98% recommend</div>
+                                <div class="text-sm text-gray-600"><span id="total-reviews" class="font-semibold text-gray-900">0</span> verified reviews</div>
+                                <div id="verified-percentage" class="text-xs text-green-600 mt-0.5"><i class="fas fa-check-circle mr-1"></i> 0% recommend</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Rating breakdown bars (visual summary) -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                        <div class="space-y-3">
-                            <!-- 5 star -->
+                        <div id="rating-breakdown" class="space-y-3">
+                            <!-- Rating bars will be generated dynamically -->
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="w-12 text-gray-600 font-medium">5 ★</span>
                                 <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 82%"></div>
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="5" style="width: 0%"></div>
                                 </div>
-                                <span class="w-8 text-gray-500 text-xs">82%</span>
+                                <span class="w-8 text-gray-500 text-xs percentage-5">0%</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="w-12 text-gray-600 font-medium">4 ★</span>
                                 <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 12%"></div>
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="4" style="width: 0%"></div>
                                 </div>
-                                <span class="w-8 text-gray-500 text-xs">12%</span>
+                                <span class="w-8 text-gray-500 text-xs percentage-4">0%</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="w-12 text-gray-600 font-medium">3 ★</span>
                                 <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="bg-yellow-400 h-full rounded-full" style="width: 4%"></div>
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="3" style="width: 0%"></div>
                                 </div>
-                                <span class="w-8 text-gray-500 text-xs">4%</span>
+                                <span class="w-8 text-gray-500 text-xs percentage-3">0%</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="w-12 text-gray-600 font-medium">2 ★</span>
                                 <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="bg-gray-300 h-full rounded-full" style="width: 1%"></div>
+                                    <div class="bg-gray-300 h-full rounded-full" data-rating="2" style="width: 0%"></div>
                                 </div>
-                                <span class="w-8 text-gray-500 text-xs">1%</span>
+                                <span class="w-8 text-gray-500 text-xs percentage-2">0%</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="w-12 text-gray-600 font-medium">1 ★</span>
                                 <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="bg-gray-300 h-full rounded-full" style="width: 1%"></div>
+                                    <div class="bg-gray-300 h-full rounded-full" data-rating="1" style="width: 0%"></div>
                                 </div>
-                                <span class="w-8 text-gray-500 text-xs">1%</span>
+                                <span class="w-8 text-gray-500 text-xs percentage-1">0%</span>
                             </div>
                         </div>
                         <div class="flex items-center justify-center lg:justify-end">
@@ -643,112 +639,199 @@
                     </div>
 
                     <!-- Dynamic reviews list (beautiful cards) -->
-                    <div class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
-                        <!-- Review 1 -->
-                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200 shadow-inner">JD</div>
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center justify-between gap-2">
-                                        <div>
-                                            <span class="font-bold text-gray-800">Jessica D.</span>
-                                            <div class="flex items-center gap-1 mt-1 star-rating">
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs text-gray-400">2 days ago</span>
-                                    </div>
-                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Absolutely love this! The quality exceeded my expectations. Fast shipping and great customer service. Will definitely buy again.</p>
-                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
-                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (24)</span>
-                                        <span><i class="far fa-flag mr-1"></i> Report</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Review 2 -->
-                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">MK</div>
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center justify-between gap-2">
-                                        <div>
-                                            <span class="font-bold text-gray-800">Marcus K.</span>
-                                            <div class="flex items-center gap-1 mt-1 star-rating">
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="far fa-star text-gray-300 text-xs"></i>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs text-gray-400">1 week ago</span>
-                                    </div>
-                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Solid product, sleek design and feels durable. Only minor packaging issue but overall great value. Recommended.</p>
-                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
-                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (12)</span>
-                                        <span><i class="far fa-flag mr-1"></i> Report</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Review 3 -->
-                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">SR</div>
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center justify-between gap-2">
-                                        <div>
-                                            <span class="font-bold text-gray-800">Sophia R.</span>
-                                            <div class="flex items-center gap-1 mt-1 star-rating">
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs text-gray-400">3 days ago</span>
-                                    </div>
-                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Exceeded my expectations! The attention to detail is incredible. Would make a perfect gift. Five stars from me.</p>
-                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
-                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (31)</span>
-                                        <span><i class="far fa-flag mr-1"></i> Report</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Review 4 -->
-                        <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200">AL</div>
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center justify-between gap-2">
-                                        <div>
-                                            <span class="font-bold text-gray-800">Alex L.</span>
-                                            <div class="flex items-center gap-1 mt-1 star-rating">
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                                <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs text-gray-400">5 days ago</span>
-                                    </div>
-                                    <p class="text-gray-700 text-sm mt-2 leading-relaxed">Best purchase this year. Superb craftsmanship and the color is exactly as shown. Highly recommend to everyone.</p>
-                                    <div class="flex gap-4 mt-3 text-xs text-gray-400">
-                                        <span><i class="far fa-thumbs-up mr-1"></i> Helpful (47)</span>
-                                        <span><i class="far fa-flag mr-1"></i> Report</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Loading state -->
+                        <div class="text-center py-12">
+                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark"></div>
+                            <p class="text-gray-500 mt-3">Loading reviews...</p>
                         </div>
                     </div>
+
+                    <script>
+                        // Fetch and display product reviews
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const productSlug = '{{ $product->slug ?? null }}';
+                            
+                            if (!productSlug) {
+                                document.getElementById('reviews-list').innerHTML = `
+                                    <div class="text-center py-12 text-gray-500">
+                                        <p class="text-sm">No product found for reviews.</p>
+                                    </div>
+                                `;
+                                return;
+                            }
+
+                            const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/reviews/products/${productSlug}`;
+                            
+                            fetch(apiUrl)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success && data.data) {
+                                        displayReviews(data.data);
+                                    } else {
+                                        showNoReviews();
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching reviews:', error);
+                                    showError();
+                                });
+                        });
+
+                        function displayReviews(reviewData) {
+                            const { reviews, statistics } = reviewData;
+                            
+                            // Update overall rating
+                            updateOverallRating(statistics);
+                            
+                            // Update rating breakdown
+                            updateRatingBreakdown(statistics);
+                            
+                            // Display reviews list
+                            displayReviewsList(reviews);
+                        }
+
+                        function updateOverallRating(stats) {
+                            document.getElementById('average-rating').textContent = stats.average_rating.toFixed(2);
+                            document.getElementById('total-reviews').textContent = stats.total_reviews;
+                            document.getElementById('verified-percentage').innerHTML = 
+                                `<i class="fas fa-check-circle mr-1"></i> ${stats.verified_percentage}% recommend`;
+                            
+                            // Generate star rating
+                            const starsContainer = document.getElementById('average-stars');
+                            const fullStars = Math.floor(stats.average_rating);
+                            const hasHalfStar = stats.average_rating % 1 >= 0.5;
+                            
+                            let starsHTML = '';
+                            for (let i = 0; i < fullStars; i++) {
+                                starsHTML += '<i class="fas fa-star text-yellow-400 text-sm"></i>';
+                            }
+                            if (hasHalfStar) {
+                                starsHTML += '<i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>';
+                            }
+                            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            for (let i = 0; i < emptyStars; i++) {
+                                starsHTML += '<i class="far fa-star text-yellow-400 text-sm"></i>';
+                            }
+                            starsContainer.innerHTML = starsHTML;
+                        }
+
+                        function updateRatingBreakdown(stats) {
+                            // Update rating bars and percentages
+                            for (let rating = 5; rating >= 1; rating--) {
+                                const percentage = stats.rating_percentages[rating] || 0;
+                                const bar = document.querySelector(`[data-rating="${rating}"]`);
+                                const percentageText = document.querySelector(`.percentage-${rating}`);
+                                
+                                if (bar) {
+                                    bar.style.width = `${percentage}%`;
+                                    // Change color based on rating
+                                    if (rating >= 4) {
+                                        bar.className = 'bg-yellow-400 h-full rounded-full';
+                                    } else {
+                                        bar.className = 'bg-gray-300 h-full rounded-full';
+                                    }
+                                }
+                                
+                                if (percentageText) {
+                                    percentageText.textContent = `${percentage}%`;
+                                }
+                            }
+                        }
+
+                        function displayReviewsList(reviews) {
+                            const container = document.getElementById('reviews-list');
+                            
+                            if (reviews.length === 0) {
+                                showNoReviews();
+                                return;
+                            }
+
+                            let reviewsHTML = '';
+                            reviews.forEach(review => {
+                                const initials = review.reviewer_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                                const stars = generateStarRating(review.rating);
+                                const timeAgo = getTimeAgo(review.created_at);
+                                const verifiedBadge = review.is_verified ? '<span class="text-green-600 text-xs"><i class="fas fa-check-circle mr-1"></i>Verified</span>' : '';
+                                const featuredBadge = review.is_featured ? '<span class="text-indigo-600 text-xs"><i class="fas fa-star mr-1"></i>Featured</span>' : '';
+                                
+                                reviewsHTML += `
+                                    <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                                        <div class="flex items-start gap-3">
+                                            <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200 shadow-inner">${initials}</div>
+                                            <div class="flex-1">
+                                                <div class="flex flex-wrap items-center justify-between gap-2">
+                                                    <div>
+                                                        <span class="font-bold text-gray-800">${review.reviewer_name}</span>
+                                                        <div class="flex items-center gap-1 mt-1 star-rating">
+                                                            ${stars}
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-xs text-gray-400">${timeAgo}</span>
+                                                </div>
+                                                <div class="flex gap-2 mt-1">
+                                                    ${verifiedBadge}
+                                                    ${featuredBadge}
+                                                </div>
+                                                <p class="text-gray-700 text-sm mt-2 leading-relaxed">${review.review_text}</p>
+                                                <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                                    <span><i class="far fa-thumbs-up mr-1"></i> Helpful (0)</span>
+                                                    <span><i class="far fa-flag mr-1"></i> Report</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            
+                            container.innerHTML = reviewsHTML;
+                        }
+
+                        function generateStarRating(rating) {
+                            let stars = '';
+                            for (let i = 1; i <= 5; i++) {
+                                if (i <= rating) {
+                                    stars += '<i class="fas fa-star text-yellow-400 text-xs"></i>';
+                                } else {
+                                    stars += '<i class="far fa-star text-yellow-400 text-xs"></i>';
+                                }
+                            }
+                            return stars;
+                        }
+
+                        function getTimeAgo(dateString) {
+                            const date = new Date(dateString);
+                            const now = new Date();
+                            const diffTime = Math.abs(now - date);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            if (diffDays === 1) return '1 day ago';
+                            if (diffDays < 30) return `${diffDays} days ago`;
+                            if (diffDays < 60) return '1 month ago';
+                            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+                            return `${Math.floor(diffDays / 365)} years ago`;
+                        }
+
+                        function showNoReviews() {
+                            document.getElementById('reviews-list').innerHTML = `
+                                <div class="text-center py-12 text-gray-500">
+                                    <i class="fas fa-star text-gray-300 text-4xl mb-3"></i>
+                                    <p class="text-sm font-medium">No reviews yet</p>
+                                    <p class="text-xs mt-1">Be the first to review this product!</p>
+                                </div>
+                            `;
+                        }
+
+                        function showError() {
+                            document.getElementById('reviews-list').innerHTML = `
+                                <div class="text-center py-12 text-red-500">
+                                    <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
+                                    <p class="text-sm font-medium">Unable to load reviews</p>
+                                    <p class="text-xs mt-1">Please refresh the page to try again.</p>
+                                </div>
+                            `;
+                        }
+                    </script>
                     
                     
                 </div>
