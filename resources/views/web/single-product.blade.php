@@ -92,9 +92,9 @@
     @if($product->variants->first() == true)
 
     <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-[55%_40%] gap-6">
+        <div class="flex md:flex-nowrap flex-wrap gap-6">
             <!-- LEFT IMAGE SECTION -->
-            <div class="flex flex-col lg:flex-row gap-2">
+            <div class="flex flex-col lg:flex-row gap-2 min-w-[40%]">
                 <!-- Thumbnails Container -->
                 <div id="thumbnail-container" class="flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
                     @php
@@ -140,13 +140,13 @@
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[9/13]">
+                <div id="get-zoom-container" class="zoom-container w-auto max-h-[950px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
                     @endphp
                     <img src="{{ asset($mainImagePath) }}" 
-                         class="w-full h-full object-cover object-center object-top" 
+                         class="w-full h-full object-contain object-center object-top" 
                          alt="{{ $product->name ?? 'Product' }}" 
                          id="main-image" />
                     <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
@@ -158,7 +158,7 @@
             </div>
 
             <!-- RIGHT CONTENT -->
-            <div class="space-y-6">
+            <div class="space-y-6 w-full md:max-w-[50%]">
                 <div>
                     <!-- Title -->
                     <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg xl:text-h3-xl 2xl:text-h3-2xl font-semibold">
@@ -2062,7 +2062,7 @@ function updateVariantImages(variant) {
                 }
                 
                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-                thumbnailsHtml += `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px]  h-fit w-full lg:max-w-full  min-w-[64px] max-w-[64px]  overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
             });
             thumbnailContainer.innerHTML = thumbnailsHtml;
         }
@@ -2080,7 +2080,7 @@ function updateVariantImages(variant) {
         // Update thumbnails with single image
         if (thumbnailContainer) {
             const imagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + variant.image.replace(/^\/+/, '');
-            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail  h-fit  w-full  overflow-hidden rounded-lg border-2 cursor-pointer  border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     } else {
         // No images available - show placeholder
@@ -2092,7 +2092,7 @@ function updateVariantImages(variant) {
         }
         
         if (thumbnailContainer) {
-            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px]     h-fit w-full lg:max-w-full  min-w-[64px] max-w-[64px]  overflow-hidden rounded-lg border-2 cursor-pointer  border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     }
 }
@@ -2458,6 +2458,201 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+<script>
+/**
+ * Sets up responsive height synchronization between zoom container and thumbnail container
+ * When screen width > 1023px, thumbnail container height matches zoom container height
+ */
+function setupThumbnailHeightSync() {
+    const zoomContainer = document.getElementById('get-zoom-container');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    
+    if (!zoomContainer || !thumbnailContainer) {
+        console.warn('Required containers not found: get-zoom-container or thumbnail-container');
+        return;
+    }
+    
+    let resizeObserver = null;
+    let imageLoadObserver = null;
+    
+    /**
+     * Gets the accurate height of zoom container considering all content
+     */
+    function getAccurateZoomContainerHeight() {
+        if (!zoomContainer) return 0;
+        
+        // Get computed height including padding, borders, etc.
+        const computedStyle = window.getComputedStyle(zoomContainer);
+        const height = zoomContainer.getBoundingClientRect().height;
+        
+        return height;
+    }
+    
+    /**
+     * Applies the max-height to thumbnail container if screen width > 1023px
+     */
+    function applyThumbnailMaxHeight() {
+        const screenWidth = window.innerWidth;
+        
+        if (screenWidth > 1023) {
+            const zoomHeight = getAccurateZoomContainerHeight();
+            
+            if (zoomHeight > 0) {
+                thumbnailContainer.style.maxHeight = `${zoomHeight}px`;
+                thumbnailContainer.style.overflowY = 'auto'; // Enable scrolling if content exceeds height
+                
+                // Optional: Add a class for styling
+                thumbnailContainer.classList.add('thumbnail-height-synced');
+            } else {
+                console.log('Zoom container height not yet available');
+            }
+        } else {
+            // Reset styles when screen width <= 1023px
+            thumbnailContainer.style.maxHeight = '';
+            thumbnailContainer.style.overflowY = '';
+            thumbnailContainer.classList.remove('thumbnail-height-synced');
+        }
+    }
+    
+    /**
+     * Waits for all images in zoom container to load completely
+     */
+    function waitForImagesInContainer(container) {
+        const images = container.querySelectorAll('img');
+        const imagePromises = Array.from(images).map(img => {
+            if (img.complete) {
+                return Promise.resolve();
+            }
+            return new Promise((resolve) => {
+                img.addEventListener('load', resolve);
+                img.addEventListener('error', resolve); // Resolve even on error to continue
+            });
+        });
+        
+        return Promise.all(imagePromises);
+    }
+    
+    /**
+     * Ensures accurate height after all content is loaded
+     */
+    async function updateHeightAfterContentLoad() {
+        // Wait for images in zoom container to load
+        await waitForImagesInContainer(zoomContainer);
+        
+        // Small delay to ensure layout is updated after images load
+        setTimeout(() => {
+            applyThumbnailMaxHeight();
+        }, 50);
+    }
+    
+    /**
+     * Observes DOM mutations in zoom container to detect content changes
+     */
+    function observeZoomContainerChanges() {
+        if (imageLoadObserver) {
+            imageLoadObserver.disconnect();
+        }
+        
+        imageLoadObserver = new MutationObserver((mutations) => {
+            // Check if any image was added or changed
+            const hasImageChanges = mutations.some(mutation => {
+                return mutation.type === 'childList' && 
+                       mutation.addedNodes.length > 0 && 
+                       Array.from(mutation.addedNodes).some(node => 
+                           node.nodeType === 1 && (node.tagName === 'IMG' || node.querySelectorAll('img').length > 0)
+                       );
+            });
+            
+            if (hasImageChanges) {
+                updateHeightAfterContentLoad();
+            } else {
+                // For other content changes, apply height with slight delay
+                setTimeout(applyThumbnailMaxHeight, 100);
+            }
+        });
+        
+        imageLoadObserver.observe(zoomContainer, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['src', 'style']
+        });
+    }
+    
+    /**
+     * Handles resize events with debouncing
+     */
+    let resizeTimeout;
+    function handleResize() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            applyThumbnailMaxHeight();
+        }, 150);
+    }
+    
+    /**
+     * Sets up resize observer for zoom container size changes
+     */
+    function setupResizeObserver() {
+        if (typeof ResizeObserver !== 'undefined') {
+            resizeObserver = new ResizeObserver(() => {
+                applyThumbnailMaxHeight();
+            });
+            resizeObserver.observe(zoomContainer);
+        }
+    }
+    
+    /**
+     * Initializes the functionality
+     */
+    async function init() {
+        // Initial application of height
+        await updateHeightAfterContentLoad();
+        
+        // Set up event listeners
+        window.addEventListener('resize', handleResize);
+        
+        // Set up resize observer for container size changes
+        setupResizeObserver();
+        
+        // Set up mutation observer for content changes
+        observeZoomContainerChanges();
+        
+        // Also listen for image load events globally
+        document.addEventListener('load', (e) => {
+            if (e.target.tagName === 'IMG' && zoomContainer.contains(e.target)) {
+                updateHeightAfterContentLoad();
+            }
+        }, true);
+    }
+    
+    // Start the functionality
+    init();
+    
+    // Return cleanup function for removing event listeners if needed
+    return function cleanup() {
+        window.removeEventListener('resize', handleResize);
+        if (resizeObserver) {
+            resizeObserver.disconnect();
+        }
+        if (imageLoadObserver) {
+            imageLoadObserver.disconnect();
+        }
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+    };
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setupThumbnailHeightSync();
+    });
+} else {
+    setupThumbnailHeightSync();
+}
 </script>
 
 @endsection
