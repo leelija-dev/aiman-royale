@@ -46,4 +46,5 @@ Route::prefix('faqs')->group(function () {
 // Review related API routes
 Route::prefix('reviews')->group(function () {
     Route::post('/', [ReviewController::class, 'store'])->name('api.reviews.store');
+    Route::get('/products/{productSlug}', [ReviewController::class, 'getProductReviews'])->name('api.reviews.product');
 });

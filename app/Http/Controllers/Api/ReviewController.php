@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\FalseReview;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
@@ -40,5 +42,77 @@ class ReviewController extends Controller
             'message' => 'Review submitted successfully!',
             'review' => $review
         ], 201);
+    }
+
+    /**
+     * Get reviews for a specific product by slug
+     */
+    public function getProductReviews($productSlug): JsonResponse
+    {
+        try {
+            // Get product by slug first
+            $product = Product::where('slug', $productSlug)
+                ->where('status', 'active')
+                ->select('id', 'name')
+                ->first();
+
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found',
+                    'data' => null
+                ], 404);
+            }
+
+            // Get approved reviews for the product
+            $reviews = FalseReview::where('product_id', $product->id)
+                ->with('product:id,name') // ✅ only name (id required internally)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Calculate rating statistics
+            $totalReviews = $reviews->count();
+            $averageRating = $totalReviews > 0 ? round($reviews->avg('rating'), 2) : 0;
+
+            $ratingDistribution = [
+                5 => $reviews->where('rating', 5)->count(),
+                4 => $reviews->where('rating', 4)->count(),
+                3 => $reviews->where('rating', 3)->count(),
+                2 => $reviews->where('rating', 2)->count(),
+                1 => $reviews->where('rating', 1)->count(),
+            ];
+
+            // Calculate percentages
+            $ratingPercentages = [];
+            foreach ($ratingDistribution as $rating => $count) {
+                $ratingPercentages[$rating] = $totalReviews > 0 ? round(($count / $totalReviews) * 100) : 0;
+            }
+
+            // Get verified reviews count
+            $verifiedReviews = $reviews->where('is_verified', true)->count();
+            $verifiedPercentage = $totalReviews > 0 ? round(($verifiedReviews / $totalReviews) * 100) : 0;
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'product' => $product,
+                    'reviews' => $reviews,
+                    'statistics' => [
+                        'total_reviews' => $totalReviews,
+                        'average_rating' => $averageRating,
+                        'verified_reviews' => $verifiedReviews,
+                        'verified_percentage' => $verifiedPercentage,
+                        'rating_distribution' => $ratingDistribution,
+                        'rating_percentages' => $ratingPercentages
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching reviews: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
     }
 }
