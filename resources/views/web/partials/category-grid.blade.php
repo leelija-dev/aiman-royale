@@ -20,7 +20,7 @@
         <img
             src="{{ asset($product->featured_image) }}"
             alt="{{ $product->name }}"
-            class="aspect-[4/5] object-contain max-h-[500px] w-full h-auto object-top object-center" />
+            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
         @else
         <!-- Placeholder -->
         <div class="w-full h-[340px] flex items-center justify-center bg-gray-200">

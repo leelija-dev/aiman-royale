@@ -96,7 +96,7 @@
             <!-- LEFT IMAGE SECTION -->
             <div class="flex flex-col lg:flex-row gap-2">
                 <!-- Thumbnails Container -->
-                <div id="thumbnail-container" class="flex min-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1">
+                <div id="thumbnail-container" class="flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
                     @php
                     // Get images of the currently selected variant
                     $currentVariant = $product->variants->first();
@@ -123,14 +123,14 @@
                     @php
                     $imagePath = ltrim($image->image, '/');
                     @endphp
-                    <div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
+                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
                          data-display="{{ asset($imagePath) }}" 
                          data-large="{{ asset($imagePath) }}"
                          onclick="updateMainImage('{{ asset($imagePath) }}', '{{ $product->name }}', this)">
                         <img src="{{ asset($imagePath) }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
                     </div>
                     @empty
-                    <div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
+                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
                          data-display="{{ asset('assets/images/placeholder.jpg') }}" 
                          data-large="{{ asset('assets/images/placeholder.jpg') }}"
                          onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
@@ -140,7 +140,7 @@
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[1/2]">
+                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[9/13]">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
@@ -1006,7 +1006,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $relatedProduct->name }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($relatedProduct->is_trending ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -1077,7 +1077,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $relatedProduct->name }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($relatedProduct->is_trending ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -1149,7 +1149,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $lastViewedProduct['id'] }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($lastViewedProduct['is_trending'] ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -1977,7 +1977,7 @@ function updateVariantImages(variant) {
                 }
                 
                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-                thumbnailsHtml += `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                thumbnailsHtml += `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
             });
             thumbnailContainer.innerHTML = thumbnailsHtml;
         }
@@ -1995,7 +1995,7 @@ function updateVariantImages(variant) {
         // Update thumbnails with single image
         if (thumbnailContainer) {
             const imagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + variant.image.replace(/^\/+/, '');
-            thumbnailContainer.innerHTML = `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     } else {
         // No images available - show placeholder
@@ -2007,7 +2007,7 @@ function updateVariantImages(variant) {
         }
         
         if (thumbnailContainer) {
-            thumbnailContainer.innerHTML = `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     }
 }
