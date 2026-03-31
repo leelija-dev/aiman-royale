@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Faq;
+use App\Models\Product;
 
 class FaqController extends Controller
 {
@@ -19,7 +20,7 @@ class FaqController extends Controller
     {
         try {
             $faqs = Faq::where('is_active', 1)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->get();
 
             return response()->json([
@@ -40,7 +41,7 @@ class FaqController extends Controller
         try {
             $faqs = Faq::where('is_active', 1)
                 ->where('category_id', $categoryId)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->orderBy('sort_order', 'asc')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -63,7 +64,7 @@ class FaqController extends Controller
         try {
             $faq = Faq::where('is_active', 1)
                 ->where('id', $faqId)
-                ->with(['category'])
+                ->with(['category', 'product'])
                 ->first();
 
             if (!$faq) {
@@ -77,6 +78,47 @@ class FaqController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $faq
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving FAQ: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
+
+    public function getFaqsUsingproductId($productSlug): JsonResponse
+    {
+        try {
+            // Get product by slug first
+            $product = Product::where('slug', $productSlug)->first();
+            
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found',
+                    'data' => null
+                ], 404);
+            }
+
+            // Get FAQs using product ID with only category name and product name
+            $faqs = Faq::where('is_active', 1)
+                ->where('product_id', $product->id)
+                ->with(['category:id,category_name', 'product:id,name'])
+                ->get();
+
+            if ($faqs->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No FAQs found for this product',
+                    'data' => []
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $faqs
             ]);
         } catch (\Exception $e) {
             return response()->json([

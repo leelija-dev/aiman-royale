@@ -10,6 +10,8 @@ class Faq extends Model
         'question',
         'answer',
         'category_id',
+        'product_id',
+        'heading',
         'is_active',
         'sort_order'
     ];
@@ -22,6 +24,11 @@ class Faq extends Model
     public function category()
     {
         return $this->belongsTo(FaqCategory::class, 'category_id');
+    }
+    
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
     }
     
     public function scopeActive($query)

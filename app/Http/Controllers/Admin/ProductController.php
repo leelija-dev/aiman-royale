@@ -62,7 +62,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:10240', // Max 10MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -145,8 +145,10 @@ class ProductController extends Controller
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
             
-            // Compress and save image to ~10KB
-            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+            // Upload image without compression
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+
+            //  $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;
@@ -186,7 +188,7 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:10240', // Max 10MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
@@ -291,9 +293,12 @@ class ProductController extends Controller
             
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+
+            //without compress image
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
             
             // Compress and save image to ~10KB
-            $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+            // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
             
             // Update product with new featured image path
             $product->featured_image = $featuredFolder . '/' . $featuredFilename;

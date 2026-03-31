@@ -676,7 +676,7 @@
         </div> --}}
 
         <!-- Products Container -->
-        <div id="products-container" class="w-full grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6">
+        <div id="products-container" class="w-full grid 2xl:grid-cols-4 xl:grid-cols-3 lgg:grid-cols-2 md:grid-cols-3 sm:grid-cols-2  gap-6">
           @include('web.partials.category-grid', ['products' => $products])
         </div>
 

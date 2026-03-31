@@ -65,6 +65,26 @@
         border-color: var(--secondary-color, #8b5cf6) !important; 
         background-color: rgba(139, 92, 246, 0.1);
     }
+    
+    /* Fix for mobile accordion */
+    .accordion-content-block {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    
+    .accordion-wrapper.active .accordion-content-block {
+        max-height: 2000px;
+        transition: max-height 0.5s ease-in;
+    }
+    
+    .accordion-chevron {
+        transition: transform 0.3s ease;
+    }
+    
+    .accordion-wrapper.active .accordion-chevron {
+        transform: rotate(180deg);
+    }
 </style>
 
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
@@ -76,7 +96,7 @@
             <!-- LEFT IMAGE SECTION -->
             <div class="flex flex-col lg:flex-row gap-2">
                 <!-- Thumbnails Container -->
-                <div id="thumbnail-container" class="flex xl:min-w-32 min-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1">
+                <div id="thumbnail-container" class="flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
                     @php
                     // Get images of the currently selected variant
                     $currentVariant = $product->variants->first();
@@ -103,14 +123,14 @@
                     @php
                     $imagePath = ltrim($image->image, '/');
                     @endphp
-                    <div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
+                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}" 
                          data-display="{{ asset($imagePath) }}" 
                          data-large="{{ asset($imagePath) }}"
                          onclick="updateMainImage('{{ asset($imagePath) }}', '{{ $product->name }}', this)">
                         <img src="{{ asset($imagePath) }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
                     </div>
                     @empty
-                    <div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
+                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected" 
                          data-display="{{ asset('assets/images/placeholder.jpg') }}" 
                          data-large="{{ asset('assets/images/placeholder.jpg') }}"
                          onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
@@ -120,7 +140,7 @@
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[1/2]">
+                <div class="zoom-container w-full relative group order-1 lg:order-2 h-full aspect-[9/13]">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
@@ -145,7 +165,7 @@
                         {{ $product->name }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1">{{ $product->brand ?? 'Brand Name' }}</p>
-                    <p class="text-sm text-gray-500">Sold By: Store</p>
+                    <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
                 </div>
                 
                 <div class="flex items-center gap-2">
@@ -537,35 +557,351 @@
 
                 <!-- Reviews Tab -->
                 <div class="tab-content hidden" id="reviews">
-                    <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">Ratings & Reviews</h3>
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">Reviews content will appear here.</p>
+                    <div class="p-6 lg:p-8">
+                    <!-- Header with rating summary row -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Ratings & Reviews</h3>
+                            <p class="text-gray-500 mt-1 text-sm">What our customers are saying</p>
+                        </div>
+                        <!-- Overall rating badge with stars -->
+                        <div class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
+                            <div class="text-center">
+                                <span id="average-rating" class="text-4xl font-extrabold text-gray-900">0.0</span>
+                                <span class="text-gray-500 text-sm">/5</span>
+                                <div id="average-stars" class="flex items-center justify-center mt-1 star-rating">
+                                    <!-- Stars will be generated dynamically -->
+                                </div>
+                            </div>
+                            <div class="border-l border-gray-300 pl-4">
+                                <div class="text-sm text-gray-600"><span id="total-reviews" class="font-semibold text-gray-900">0</span> verified reviews</div>
+                                <div id="verified-percentage" class="text-xs text-green-600 mt-0.5"><i class="fas fa-check-circle mr-1"></i> 0% recommend</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rating breakdown bars (visual summary) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                        <div id="rating-breakdown" class="space-y-3">
+                            <!-- Rating bars will be generated dynamically -->
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">5 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="5" style="width: 0%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs percentage-5">0%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">4 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="4" style="width: 0%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs percentage-4">0%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">3 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-yellow-400 h-full rounded-full" data-rating="3" style="width: 0%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs percentage-3">0%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">2 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-gray-300 h-full rounded-full" data-rating="2" style="width: 0%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs percentage-2">0%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="w-12 text-gray-600 font-medium">1 ★</span>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="bg-gray-300 h-full rounded-full" data-rating="1" style="width: 0%"></div>
+                                </div>
+                                <span class="w-8 text-gray-500 text-xs percentage-1">0%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center lg:justify-end">
+                            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
+                                <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
+                                <p class="text-xs font-medium text-indigo-700">Top-rated product</p>
+                                <p class="text-xs text-gray-600 mt-1">⭐ Featured in "Customer Favorites"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews list header with sorting mock -->
+                    <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
+                        <h4 class="font-semibold text-gray-800 text-lg">Customer reviews</h4>
+                        <div class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+                            <span>Most relevant</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic reviews list (beautiful cards) -->
+                    <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Loading state -->
+                        <div class="text-center py-12">
+                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark"></div>
+                            <p class="text-gray-500 mt-3">Loading reviews...</p>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Fetch and display product reviews
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const productSlug = '{{ $product->slug ?? null }}';
+                            
+                            if (!productSlug) {
+                                document.getElementById('reviews-list').innerHTML = `
+                                    <div class="text-center py-12 text-gray-500">
+                                        <p class="text-sm">No product found for reviews.</p>
+                                    </div>
+                                `;
+                                return;
+                            }
+
+                            const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/reviews/products/${productSlug}`;
+                            
+                            fetch(apiUrl)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success && data.data) {
+                                        displayReviews(data.data);
+                                    } else {
+                                        showNoReviews();
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching reviews:', error);
+                                    showError();
+                                });
+                        });
+
+                        function displayReviews(reviewData) {
+                            const { reviews, statistics } = reviewData;
+                            
+                            // Update overall rating
+                            updateOverallRating(statistics);
+                            
+                            // Update rating breakdown
+                            updateRatingBreakdown(statistics);
+                            
+                            // Display reviews list
+                            displayReviewsList(reviews);
+                        }
+
+                        function updateOverallRating(stats) {
+                            document.getElementById('average-rating').textContent = stats.average_rating.toFixed(2);
+                            document.getElementById('total-reviews').textContent = stats.total_reviews;
+                            document.getElementById('verified-percentage').innerHTML = 
+                                `<i class="fas fa-check-circle mr-1"></i> ${stats.verified_percentage}% recommend`;
+                            
+                            // Generate star rating
+                            const starsContainer = document.getElementById('average-stars');
+                            const fullStars = Math.floor(stats.average_rating);
+                            const hasHalfStar = stats.average_rating % 1 >= 0.5;
+                            
+                            let starsHTML = '';
+                            for (let i = 0; i < fullStars; i++) {
+                                starsHTML += '<i class="fas fa-star text-yellow-400 text-sm"></i>';
+                            }
+                            if (hasHalfStar) {
+                                starsHTML += '<i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>';
+                            }
+                            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            for (let i = 0; i < emptyStars; i++) {
+                                starsHTML += '<i class="far fa-star text-yellow-400 text-sm"></i>';
+                            }
+                            starsContainer.innerHTML = starsHTML;
+                        }
+
+                        function updateRatingBreakdown(stats) {
+                            // Update rating bars and percentages
+                            for (let rating = 5; rating >= 1; rating--) {
+                                const percentage = stats.rating_percentages[rating] || 0;
+                                const bar = document.querySelector(`[data-rating="${rating}"]`);
+                                const percentageText = document.querySelector(`.percentage-${rating}`);
+                                
+                                if (bar) {
+                                    bar.style.width = `${percentage}%`;
+                                    // Change color based on rating
+                                    if (rating >= 4) {
+                                        bar.className = 'bg-yellow-400 h-full rounded-full';
+                                    } else {
+                                        bar.className = 'bg-gray-300 h-full rounded-full';
+                                    }
+                                }
+                                
+                                if (percentageText) {
+                                    percentageText.textContent = `${percentage}%`;
+                                }
+                            }
+                        }
+
+                        function displayReviewsList(reviews) {
+                            const container = document.getElementById('reviews-list');
+                            
+                            if (reviews.length === 0) {
+                                showNoReviews();
+                                return;
+                            }
+
+                            let reviewsHTML = '';
+                            reviews.forEach(review => {
+                                const initials = review.reviewer_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                                const stars = generateStarRating(review.rating);
+                                const timeAgo = getTimeAgo(review.created_at);
+                                const verifiedBadge = review.is_verified ? '<span class="text-green-600 text-xs"><i class="fas fa-check-circle mr-1"></i>Verified</span>' : '';
+                                const featuredBadge = review.is_featured ? '<span class="text-indigo-600 text-xs"><i class="fas fa-star mr-1"></i>Featured</span>' : '';
+                                
+                                reviewsHTML += `
+                                    <div class="review-card bg-white rounded-xl border border-gray-100 p-5 transition-all">
+                                        <div class="flex items-start gap-3">
+                                            <div class="avatar-placeholder w-10 h-10 rounded-full flex items-center justify-center text-gray-500 font-semibold text-sm bg-gray-200 shadow-inner">${initials}</div>
+                                            <div class="flex-1">
+                                                <div class="flex flex-wrap items-center justify-between gap-2">
+                                                    <div>
+                                                        <span class="font-bold text-gray-800">${review.reviewer_name}</span>
+                                                        <div class="flex items-center gap-1 mt-1 star-rating">
+                                                            ${stars}
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-xs text-gray-400">${timeAgo}</span>
+                                                </div>
+                                                <div class="flex gap-2 mt-1">
+                                                    ${verifiedBadge}
+                                                    ${featuredBadge}
+                                                </div>
+                                                <p class="text-gray-700 text-sm mt-2 leading-relaxed">${review.review_text}</p>
+                                                <div class="flex gap-4 mt-3 text-xs text-gray-400">
+                                                    <span><i class="far fa-thumbs-up mr-1"></i> Helpful (0)</span>
+                                                    <span><i class="far fa-flag mr-1"></i> Report</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            
+                            container.innerHTML = reviewsHTML;
+                        }
+
+                        function generateStarRating(rating) {
+                            let stars = '';
+                            for (let i = 1; i <= 5; i++) {
+                                if (i <= rating) {
+                                    stars += '<i class="fas fa-star text-yellow-400 text-xs"></i>';
+                                } else {
+                                    stars += '<i class="far fa-star text-yellow-400 text-xs"></i>';
+                                }
+                            }
+                            return stars;
+                        }
+
+                        function getTimeAgo(dateString) {
+                            const date = new Date(dateString);
+                            const now = new Date();
+                            const diffTime = Math.abs(now - date);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            if (diffDays === 1) return '1 day ago';
+                            if (diffDays < 30) return `${diffDays} days ago`;
+                            if (diffDays < 60) return '1 month ago';
+                            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+                            return `${Math.floor(diffDays / 365)} years ago`;
+                        }
+
+                        function showNoReviews() {
+                            document.getElementById('reviews-list').innerHTML = `
+                                <div class="text-center py-12 text-gray-500">
+                                    <i class="fas fa-star text-gray-300 text-4xl mb-3"></i>
+                                    <p class="text-sm font-medium">No reviews yet</p>
+                                    <p class="text-xs mt-1">Be the first to review this product!</p>
+                                </div>
+                            `;
+                        }
+
+                        function showError() {
+                            document.getElementById('reviews-list').innerHTML = `
+                                <div class="text-center py-12 text-red-500">
+                                    <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
+                                    <p class="text-sm font-medium">Unable to load reviews</p>
+                                    <p class="text-xs mt-1">Please refresh the page to try again.</p>
+                                </div>
+                            `;
+                        }
+                    </script>
+                    
+                    
+                </div>
                 </div>
             </div>
         </div>
 
-        <!-- MOBILE ACCORDION -->
-        <div class="md:hidden border-t border-b divide-y">
-            <div class="accordion-wrapper active">
+        <!-- MOBILE ACCORDION - FIXED VERSION -->
+        <div class="md:hidden border-t border-b">
+            <div class="accordion-wrapper border-b">
                 <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Product Details</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Product Details</span>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-4 pb-4">
-                        {{ $product->description ?? 'No description available.' }}
-                    </p>
+                <div class="accordion-content-block">
+                    <div class="pb-4">
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->description ?? 'No description available.' }}
+                        </p>
+                        @if($product->fabric)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Material & Care</h3>
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->fabric }}<br />Machine Wash
+                        </p>
+                        @endif
+                        @if($product->fit)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Size & Fit</h3>
+                        <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
+                            {{ $product->fit }}
+                        </p>
+                        @endif
+                        
+                        <!-- Product Parts with Fabric and Stitching Type -->
+                        @if($product->parts && $product->parts->count() > 0)
+                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
+                        <div class="space-y-3">
+                            @foreach($product->parts as $part)
+                            <div class="border-l-4 border-gray-300 pl-4 py-2">
+                                <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900">
+                                    {{ $part->part_name }}
+                                </h4>
+                                <div class="grid grid-cols-1 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">
+                                    @if($part->fabric)
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-xs">Fabric</span>
+                                        <span class="text-gray-900">{{ $part->fabric }}</span>
+                                    </div>
+                                    @endif
+                                    @if($part->work_type)
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-xs">Work Type</span>
+                                        <span class="text-gray-900">{{ $part->work_type }}</span>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
-            <div class="accordion-wrapper">
+            <div class="accordion-wrapper border-b">
                 <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Specification</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Specification</span>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <div class="pt-4 pb-4">
+                <div class="accordion-content-block">
+                    <div class="pb-4">
                         @if($product->stitching_type)
                         <div class="mb-4 p-3 border rounded bg-gray-50">
                             <h5 class="font-semibold mb-2">Stitching Information</h5>
@@ -620,13 +956,113 @@
             </div>
 
             <div class="accordion-wrapper">
-                <div class="flex justify-between items-center py-4 cursor-pointer">
-                    <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">Ratings & Reviews</span>
-                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px] transition-transform duration-300" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                <div class="flex justify-between items-center py-4 cursor-pointer group">
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold text-gray-900">Ratings & Reviews</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div class="star-rating flex gap-0.5">
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 font-medium">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
+                        </div>
+                    </div>
+                    <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
                 </div>
-                <div class="line-border-block h-[1px] bg-[#e5e7eb]"></div>
-                <div class="accordion-content-block overflow-hidden">
-                    <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl pt-0 pb-0">Reviews content here</p>
+                <div class="accordion-content-block">
+                    <div class="pb-4 space-y-6">
+                        <!-- Compact rating summary card for mobile -->
+                        <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+                            <div>
+                                <div class="text-3xl font-bold text-gray-900">{{ $averageRating }}</div>
+                                <div class="star-rating text-xs mt-1">
+                                    @for($i = 0; $i < $fullStars; $i++)
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                    @endfor
+                                    @if($hasHalfStar)
+                                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                    @endif
+                                    @for($i = 0; $i < $emptyStars; $i++)
+                                        <i class="far fa-star text-yellow-400"></i>
+                                    @endfor
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Based on {{ $reviewCount }} reviews</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rating breakdown bars (mobile friendly) -->
+                        <div class="space-y-2">
+                            @php
+                            $fiveStarCount = $reviews->where('rating', 5)->count();
+                            $fourStarCount = $reviews->where('rating', 4)->count();
+                            $threeStarCount = $reviews->where('rating', 3)->count();
+                            $fivePercent = $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
+                            $fourPercent = $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
+                            $threePercent = $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
+                            @endphp
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">5★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $fivePercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $fivePercent }}%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">4★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $fourPercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $fourPercent }}%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="w-8">3★</span>
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full"><div class="bg-yellow-400 h-full rounded-full" style="width: {{ $threePercent }}%"></div></div>
+                                <span class="text-gray-500 w-8">{{ $threePercent }}%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Reviews list for mobile (clean card design) -->
+                        <div class="space-y-4 max-h-[420px] overflow-y-auto">
+                            @forelse($reviews->take(4) as $review)
+                            <div class="border-b border-gray-100 pb-4 last:border-0">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
+                                            {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
+                                        </div>
+                                        <span class="font-semibold text-sm">{{ $review->name ?? 'Anonymous User' }}</span>
+                                    </div>
+                                    <div class="star-rating text-[10px]">
+                                        @for($i = 0; $i < floor($review->rating); $i++)
+                                            <i class="fas fa-star text-yellow-400"></i>
+                                        @endfor
+                                        @if($review->rating - floor($review->rating) >= 0.5)
+                                            <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                        @endif
+                                        @for($i = 0; $i < (5 - ceil($review->rating)); $i++)
+                                            <i class="far fa-star text-gray-300"></i>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-xs mt-2 leading-relaxed">{{ $review->review ?? 'No review text provided.' }}</p>
+                                <div class="flex gap-3 mt-2 text-[11px] text-gray-400">
+                                    <span><i class="far fa-thumbs-up"></i> {{ $review->helpful_count ?? 0 }}</span>
+                                    <span>{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="text-center py-8">
+                                <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
+                                <p class="text-gray-500 text-sm">No reviews yet. Be the first to review this product!</p>
+                            </div>
+                            @endforelse
+                        </div>
+                        
+                       
+                        <p class="text-center text-[11px] text-gray-400">Showing {{ min(4, $reviewCount) }} of {{ $reviewCount }} reviews</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -653,7 +1089,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $relatedProduct->name }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($relatedProduct->is_trending ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -724,7 +1160,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $relatedProduct->name }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($relatedProduct->is_trending ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -796,7 +1232,7 @@
                     <div class="relative rounded-xl overflow-hidden">
                         <img src="{{ asset($imagePath) }}" 
                              alt="{{ $lastViewedProduct['id'] }}" 
-                             class="w-full h-[340px] object-cover object-top object-center" />
+                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             @if($lastViewedProduct['is_trending'] ?? false)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
@@ -840,41 +1276,111 @@
             <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Editor's Pick</h2>
         </div>
         <div class="grid-container">
+            @php
+            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
+            @endphp
+            <!-- Owl Carousel for mobile/tablet -->
             <div class="owl-carousel banner-carousel lgg:hidden">
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('assets/images/Home-image/pic-8.avif') }}" alt="Traditional Blouse" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                @foreach($editorBanners as $banner)
+                <!-- Slide -->
+                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                     @if($banner->filter_type === 'multiple' && $banner->filters)
+                        data-filter="{{ $banner->filters }}"
+                    @else
+                        data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Trendy To<br />Traditional Blouses</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
+                        @if($banner->subtitle)
+                            <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+
+                        @if($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                           class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
                     </div>
                 </div>
-                <div class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('assets/images/Home-image/pic-9.avif') }}" alt="Jewellery Edit" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Jewellery Edit</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
+                @endforeach
             </div>
+
+            <!-- Original grid layout for desktop -->
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
-                <div class="relative bg-[#b8a89a] overflow-hidden">
-                    <img src="{{ asset('assets/images/Home-image/pic-10.avif') }}" alt="Traditional Blouse" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Trendy To<br />Traditional Blouses</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
-                <div class="relative bg-[#e8dcd6] overflow-hidden">
-                    <img src="{{ asset('assets/images/Home-image/pic-11.avif') }}" alt="Jewellery Edit" class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">Jewellery Edit</h2>
-                        <p class="text-sm text-black mb-6">Get <span class="font-semibold">7% OFF</span> | Use Code: <span class="text-[#c28b54] font-medium">GLAM7</span></p>
-                        <button class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">SHOP NOW</button>
-                    </div>
-                </div>
+                @foreach($editorBanners as $index => $banner)
+                    @if($index % 2 == 0)
+                        <!-- Left Banner -->
+                        <div class="relative bg-[#b8a89a] overflow-hidden"
+                             @if($banner->filter_type === 'multiple' && $banner->filters)
+                                data-filter="{{ $banner->filters }}"
+                            @else
+                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                            @endif>
+                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                            <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                                @if($banner->subtitle)
+                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                                @endif
+                                <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                                    {{ $banner->title }}
+                                </h2>
+                                @if($banner->description)
+                                <p class="text-sm text-black mb-6">
+                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                                    <span class="text-white font-medium">{{ $banner->discount }}</span>
+                                </p>
+                                @endif
+                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                                    {{ $banner->button_text }}
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+                @foreach($editorBanners as $index => $banner)
+                    @if($index % 2 == 1)
+                        <!-- Right Banner -->
+                        <div class="relative bg-[#e8dcd6] overflow-hidden"
+                             @if($banner->filter_type === 'multiple' && $banner->filters)
+                                data-filter="{{ $banner->filters }}"
+                            @else
+                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                            @endif>
+                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                            <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                                @if($banner->subtitle)
+                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                                @endif
+                                <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                                    {{ $banner->title }}
+                                </h2>
+                                @if($banner->description)
+                                <p class="text-sm text-black mb-6">
+                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                                    <span class="text-[#c28b54] font-medium">{{ $banner->discount }}</span>
+                                </p>
+                                @endif
+                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                                    {{ $banner->button_text }}
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
@@ -955,7 +1461,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Mobile accordion functionality
+    // Mobile accordion functionality - FIXED
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
     
     accordionWrappers.forEach(wrapper => {
@@ -963,7 +1469,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const content = wrapper.querySelector('.accordion-content-block');
         const chevron = wrapper.querySelector('.accordion-chevron');
         
-        if (header && content) {
+        if (header && content && chevron) {
+            // Initialize: first accordion open by default
             if (wrapper.classList.contains('active')) {
                 content.style.maxHeight = content.scrollHeight + 'px';
                 chevron.style.transform = 'rotate(180deg)';
@@ -972,7 +1479,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 chevron.style.transform = 'rotate(0deg)';
             }
             
-            header.addEventListener('click', function() {
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
                 const isActive = wrapper.classList.contains('active');
                 
                 if (isActive) {
@@ -990,7 +1498,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // WhatsApp Share Button Functionality
     const whatsappBtn = document.getElementById('whatsapp-share-btn');
-    // console.log(whatsappBtn)
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', function() {
             shareOnWhatsApp();
@@ -998,6 +1505,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 
 <script src="{{asset('web/js/single-product.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -1552,7 +2060,7 @@ function updateVariantImages(variant) {
                 }
                 
                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-                thumbnailsHtml += `<div class="thumbnail xl:w-28 w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                thumbnailsHtml += `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
             });
             thumbnailContainer.innerHTML = thumbnailsHtml;
         }
@@ -1570,7 +2078,7 @@ function updateVariantImages(variant) {
         // Update thumbnails with single image
         if (thumbnailContainer) {
             const imagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + variant.image.replace(/^\/+/, '');
-            thumbnailContainer.innerHTML = `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     } else {
         // No images available - show placeholder
@@ -1582,7 +2090,7 @@ function updateVariantImages(variant) {
         }
         
         if (thumbnailContainer) {
-            thumbnailContainer.innerHTML = `<div class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            thumbnailContainer.innerHTML = `<div class="thumbnail  lg:h-[25%] h-full w-full  overflow-hidden rounded-lg border-2 cursor-pointer selected border-secondary" data-display="${placeholderPath}" data-large="${placeholderPath}" onclick="updateMainImage('${placeholderPath}', '{{ $product?->name }}', this)"><img src="${placeholderPath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     }
 }

@@ -26,26 +26,55 @@
                 <form action="{{ route('faqs.store') }}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="question">Question <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('question') is-invalid @enderror"
-                                    id="question" name="question" value="{{ old('question') }}" maxlength="255" required>
+                                <label for="question">Heading <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('heading') is-invalid @enderror"
+                                    id="heading" name="heading" value="{{ old('heading') }}" maxlength="255" required>
                                 @error('question')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
+
+                      <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="product_id">Product <span class="text-danger">*</span></label>
+                                <select class="form-control @error('product_id') is-invalid @enderror" id="product_id" name="product_id" required>
+                                    <option value="">Select Product </option>
+                                    @foreach($products as $id => $name)
+                                        <option value="{{ $id }}" {{ old('product_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('product_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">Associate this FAQ with a specific product</small>
+                            </div>
+                        </div>
+                       
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="category_id">Category <span class="text-danger">*</span></label>
                                 <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
                                     <option value="">Select Category</option>
-                                    @foreach($categories as $id => $name)
+                                    @foreach($categoriess as $id => $name)
                                         <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @error('category_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                      
+
+                         <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question">Question <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('question') is-invalid @enderror"
+                                    id="question" name="question" value="{{ old('question') }}" maxlength="255" required>
+                                @error('question')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

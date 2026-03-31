@@ -821,7 +821,7 @@
       </div>
 
       <!-- Products Grid Container -->
-      <div id="products-container" class="w-full grid xl:grid-cols-4 lg:grid-cols-3 lgg:grid-cols-2 smui:grid-cols-3 xxs:grid-cols-2 grid-cols-1 gap-4">
+      <div id="products-container" class="w-full grid 2xl:grid-cols-4 xl:grid-cols-3 lgg:grid-cols-2 md:grid-cols-3 sm:grid-cols-2  gap-6">
         @include('web.partials.product-grid', ['products' => $products])
       </div>
     </div>
