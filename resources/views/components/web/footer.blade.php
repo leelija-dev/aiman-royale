@@ -795,66 +795,97 @@
         <div class="p-6 md:p-7">
           <div class="text-center mb-6 border-b border-gray-100 pb-4">
             <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
-              Latest Salwar Kameez <span class="text-primary-dark">Collection</span> With Price
+              Latest Products <span class="text-primary-dark">Collection</span> With Price
             </h2>
             <p class="text-sm text-gray-500 mt-2 font-medium">Handpicked luxury & festive ethnic wear</p>
           </div>
 
           <div class="flex justify-between font-semibold text-sm md:text-base uppercase tracking-wide text-gray-700 border-b-2 border-primary-dark/20 pb-3 mb-3">
-            <span>Salwar Kameez List</span>
+            <span>Products List</span>
             <span>Price (INR)</span>
           </div>
 
-          <div class="mt-2 space-y-3 text-sm md:text-[0.95rem] max-h-[540px] overflow-y-auto pr-1 custom-scroll">
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">✨ Green Zardosi Threadwork Kurta Palazzo Set With Dupatta</span>
-              <span class="font-bold text-primary-dark">₹5,521</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🌸 Purple Georgette Anarkali Set with Sequin Work</span>
-              <span class="font-bold text-primary-dark">₹17,500</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">💙 Navy Blue Georgette Anarkali Suit With Thread And Sequins Embroidery</span>
-              <span class="font-bold text-primary-dark">₹17,500</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🍃 Pista Green Gota Lace Tissue Anarkali Suit Set With Pant And Dupatta</span>
-              <span class="font-bold text-primary-dark">₹8,496</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🌻 Yellow Pakistani Style Sharara Set With Dupatta</span>
-              <span class="font-bold text-primary-dark">₹8,496</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🌼 Yellow Floral Printed Anarkali Suit Set In Silk</span>
-              <span class="font-bold text-primary-dark">₹6,796</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🎀 Pink Zardosi And Moti Work Kurta Palazzo Set With Dupatta</span>
-              <span class="font-bold text-primary-dark">₹6,371</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">💎 Blue Embroidered Kurti Set With Dupatta</span>
-              <span class="font-bold text-primary-dark">₹17,995</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🦚 Teal Pakistani Style Palazzo Suit Set</span>
-              <span class="font-bold text-primary-dark">₹16,995</span>
-            </div>
-            <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
-              <span class="text-gray-800 font-medium">🌟 Yellow Crepe Palazzo Suit With Thread And Resham Work</span>
-              <span class="font-bold text-primary-dark">₹15,500</span>
+          <div id="footer-latest-products-container" class="mt-2 space-y-3 text-sm md:text-[0.95rem] max-h-[540px] overflow-y-auto pr-1 custom-scroll">
+            <!-- Loading state -->
+            <div class="text-center py-8 text-gray-500">
+              <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-primary-dark"></div>
+              <p class="text-sm mt-2">Loading latest products...</p>
             </div>
           </div>
 
           <div class="mt-6 pt-3 flex flex-wrap justify-between items-center border-t border-gray-200 text-xs text-gray-500 gap-2">
             <span>🛍️ Prices inclusive of taxes</span>
-            <span class="bg-gray-50 px-3 py-0.5 rounded-full text-primary-dark/80 border border-gray-200">Last updated: 30/03/2026</span>
+            <span class="bg-gray-50 px-3 py-0.5 rounded-full text-primary-dark/80 border border-gray-200">Last updated: {{ date('d/m/Y') }}</span>
           </div>
           <p class="text-xs text-gray-400 mt-3 text-center">*Customization & bulk order discounts available | Shop now</p>
         </div>
       </div>
+
+      <script>
+        // Fetch and display latest products in footer
+        document.addEventListener('DOMContentLoaded', function() {
+          // Get current product slug from URL for context
+          const path = window.location.pathname;
+          const segments = path.split('/').filter(seg => seg.length > 0);
+          const productsIndex = segments.findIndex(seg => seg.toLowerCase() === 'products');
+          let productSlug = null;
+          
+          if (productsIndex !== -1 && segments.length > productsIndex + 1) {
+            productSlug = segments[productsIndex + 1];
+          }
+          
+          // Use latest products API if on product page, otherwise get all products
+          const apiUrl = productSlug 
+            ? `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`
+            : `{{ env('APP_URL', 'http://localhost') }}/api/products`;
+          
+          const container = document.getElementById('footer-latest-products-container');
+          
+          fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.data && data.data.length > 0) {
+                // Use latest products if available, otherwise use all products
+                const products = data.data.slice(0, 10); // Limit to 10 products
+                
+                let html = '';
+                products.forEach(product => {
+                  const emoji = ['✨', '🌸', '💙', '🍃', '🌻', '🌼', '🎀', '💎', '🦚', '🌟'][products.indexOf(product) % 10];
+                  const price = product.price ? `₹${product.price.toLocaleString('en-IN')}` : 'Price on request';
+                  const productUrl = `/products/${product.slug}`;
+                  
+                  html += `
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+                      <a href="${productUrl}" class="text-gray-800 font-medium hover:text-primary-dark flex-1">
+                        ${emoji} ${product.name}
+                      </a>
+                      <span class="font-bold text-primary-dark ml-2">${price}</span>
+                    </div>
+                  `;
+                });
+                
+                container.innerHTML = html;
+              } else {
+                // Fallback message
+                container.innerHTML = `
+                  <div class="text-center py-8 text-gray-500">
+                    <p class="text-sm">No products available at the moment.</p>
+                    <p class="text-xs mt-1">Check back soon for new arrivals!</p>
+                  </div>
+                `;
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching latest products:', error);
+              container.innerHTML = `
+                <div class="text-center py-8 text-red-500">
+                  <p class="text-sm">Unable to load products.</p>
+                  <p class="text-xs mt-1">Please refresh the page.</p>
+                </div>
+              `;
+            });
+        });
+      </script>
     </div>
   </div>
 
