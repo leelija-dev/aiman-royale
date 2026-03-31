@@ -32,6 +32,7 @@ Route::prefix('products')->group(function () {
     Route::get('/filter', [ProductController::class, 'filterProducts']);
     Route::get('/filter-options', [ProductController::class, 'getFilterOptions']);
     Route::get('/search', [ProductController::class, 'searchProducts']);
+    Route::get('/latest/{productSlug}', [ProductController::class, 'getLatestProductUsingProductSlug']);
 });
 
 Route::prefix('faqs')->group(function () {

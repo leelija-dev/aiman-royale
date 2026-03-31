@@ -396,4 +396,43 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function getLatestProductUsingProductSlug($productSlug): JsonResponse
+    {
+        try {
+            // Get the current product by slug
+            $currentProduct = Product::where('slug', $productSlug)
+                ->where('status', 'active')
+                ->first();
+
+            if (!$currentProduct) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found',
+                    'data' => null
+                ], 404);
+            }
+
+            // Get latest 10 products from the same category
+            $latestProducts = Product::where('category_id', $currentProduct->category_id)
+                ->where('status', 'active')
+                ->where('id', '!=', $currentProduct->id) // Exclude current product
+                ->orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $latestProducts,
+                'current_product' => $currentProduct,
+                'total_results' => $latestProducts->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
 }
