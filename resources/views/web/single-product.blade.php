@@ -1076,7 +1076,7 @@
                             --}}
                              <div class="flex items-center gap-2 mt-2 flex-wrap">
                                 <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
-                                @if($lastViewedProduct['discount_price'])
+                                @if($lastViewedProduct['discount_price'] ?? null)
                                 <span class="text-sm text-gray-400 line-through">Rs. {{ $lastViewedProduct['price'] }}</span>
                                 @endif
                             </div>
