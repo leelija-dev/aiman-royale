@@ -657,16 +657,62 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Category Heading -->
+     {{--
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
       {{ $category->name }} - Premium {{ $category->name }} Collection by Aiman Royale
     </h2>
+    --}}
 
     <!-- Full Category Description Only -->
+    <!-- Category Description with Preview -->
     <div class="prose prose-lg max-w-none">
       <div class="leading-relaxed text-base md:text-lg">
-        {!! $category->description !!}
+        <!-- Preview section -->
+        <div id="category-preview" class="mb-2">
+          {!! Str::limit(strip_tags($category->description), 200, '...') !!}
+        </div>
+        
+        <!-- Read more button -->
+        <button id="category-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+          Read more
+        </button>
+        
+        <!-- Full description (initially hidden) -->
+        <div id="category-full-content" class="hidden mt-4">
+          <div class="leading-relaxed text-base md:text-lg">
+            {!! $category->description !!}
+          </div>
+          
+          <!-- Show less button -->
+          <button id="category-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+            Show less
+          </button>
+        </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const readMoreBtn = document.getElementById('category-read-more');
+        const showLessBtn = document.getElementById('category-show-less');
+        const preview = document.getElementById('category-preview');
+        const fullContent = document.getElementById('category-full-content');
+        
+        if (readMoreBtn && showLessBtn && preview && fullContent) {
+          readMoreBtn.addEventListener('click', function() {
+            preview.classList.add('hidden');
+            readMoreBtn.classList.add('hidden');
+            fullContent.classList.remove('hidden');
+          });
+          
+          showLessBtn.addEventListener('click', function() {
+            preview.classList.remove('hidden');
+            readMoreBtn.classList.remove('hidden');
+            fullContent.classList.add('hidden');
+          });
+        }
+      });
+    </script>
 
   </div>
 </section>

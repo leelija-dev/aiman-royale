@@ -1,6 +1,7 @@
 @extends('layout.web.main-layout')
 @section('page-type', 'single-product')
 
+
 @php
     // Pass product category data to navbar for breadcrumbs
     $productCategory = null;
@@ -903,7 +904,7 @@
             <div class="item flex items-center justify-center">
                 <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset($imagePath) }}" 
+                        <img src="{{ asset($relatedProduct->featured_image) }}" 
                              alt="{{ $relatedProduct->name }}" 
                              class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
@@ -1039,7 +1040,7 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @forelse($lastViewedProducts as $lastViewedProduct)
-           
+         
             @php
             $imagePath = $lastViewedProduct['featured_image'] ? ltrim($lastViewedProduct['featured_image'], '/') : 'assets/images/placeholder.jpg';
             @endphp
@@ -1068,8 +1069,16 @@
                             <div class="flex items-center gap-2 text-sm text-gray-600">
                                 <span>{{ $lastViewedProduct->brand ?? '' }}</span>
                             </div>
+                            {{--
                             <div class="flex items-center gap-2 mt-2 flex-wrap">
                                 <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['price'] }}</span>
+                            </div>
+                            --}}
+                             <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
+                                @if($lastViewedProduct['discount_price'] ?? null)
+                                <span class="text-sm text-gray-400 line-through">Rs. {{ $lastViewedProduct['price'] }}</span>
+                                @endif
                             </div>
                         </div>
                     </a>
@@ -1217,6 +1226,9 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 
 <!-- Tab Switching JavaScript -->
 <script>
+// Make product name available globally for breadcrumbs
+window.productName = "{{ $product->name ?? 'Product' }}";
+
 document.addEventListener('DOMContentLoaded', function() {
     // Check for scroll position in URL hash and restore it
     const urlHash = window.location.hash;
