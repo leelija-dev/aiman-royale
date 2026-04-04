@@ -221,24 +221,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 : 0;
 
             html += `
-            <div class="item ">
+            <div class="item  product-card">
                 <a href="/products/${product.slug}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
-                    <div class="relative rounded-xl overflow-hidden bg-gray-100">
+                    <div class="image-wrapper">
                         <img src="${imageUrl}" 
                              alt="${product.name || 'Product'}" 
-                             class="aspect-[4/5] object-contain max-h-[500px] w-full h-auto object-top object-center"
+                             class="product-img"
                              onerror="this.src='/assets/images/placeholder.jpg'" />
                         
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                        <div class="badge-container">
                             ${product.is_featured ? `
-                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Featured</span>
+                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded discount-badge">Featured</span>
                             ` : ''}
                             ${discountPercentage > 0 ? `
-                                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">-${discountPercentage}%</span>
+                                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded discount-badge">-${discountPercentage}%</span>
                             ` : ''}
                         </div>
                         
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                        <button class="wishlist-btn absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>

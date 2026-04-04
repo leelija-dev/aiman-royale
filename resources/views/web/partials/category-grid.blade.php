@@ -1,8 +1,8 @@
 @if($products->count() > 0)
 @foreach($products as $product)
-<div class="group w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card" data-product-slug="{{ $product->slug }}">
+<div class="product-card" data-product-slug="{{ $product->slug }}">
     <!-- Image Wrapper -->
-    <div class="relative rounded-xl overflow-hidden bg-gray-100">
+    <div class="image-wrapper">
         @php
         $imageUrl = null;
         $hasImage = false;
@@ -20,7 +20,7 @@
         <img
             src="{{ asset($product->featured_image) }}"
             alt="{{ $product->name }}"
-            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
+            class="product-img" />
         @else
         <!-- Placeholder -->
         <div class="w-full h-[340px] flex items-center justify-center bg-gray-200">
@@ -31,14 +31,14 @@
         @endif
 
         <!-- Badges -->
-        <div class="absolute top-3 left-3 flex flex-col gap-2">
+        <div class="badge-container">
             @if($product->variants->isNotEmpty() && $product->variants->first()->discount_price && $product->variants->first()->discount_price < $product->variants->first()->price)
                 @php
                 $originalPrice = $product->variants->first()->price;
                 $discountPrice = $product->variants->first()->discount_price;
                 $discountPercentage = round((($originalPrice - $discountPrice) / $originalPrice) * 100);
                 @endphp
-                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                <span class="discount-badge">
                     -{{ $discountPercentage }}%
                 </span>
                 @endif
@@ -66,7 +66,7 @@
             @endif
         </button>
         @else
-        <a href="{{ route('login') }}" onclick="event.stopPropagation()">
+        <a class="wishlist-link" href="{{ route('login') }}" onclick="event.stopPropagation()">
             <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                 <i class="far fa-heart"></i>
             </button>
