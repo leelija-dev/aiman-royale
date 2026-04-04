@@ -667,28 +667,52 @@
     <!-- Category Description with Preview -->
     <div class="prose prose-lg max-w-none">
       <div class="leading-relaxed text-base md:text-lg">
-        <!-- Show preview (first 200 characters) when closed -->
-        <div class="group-closed:block">
+        <!-- Preview section -->
+        <div id="category-preview" class="mb-2">
           {!! Str::limit(strip_tags($category->description), 200, '...') !!}
         </div>
         
-        <!-- Expandable Details Section -->
-        <details class="mt-2 group">
-          <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
-            <!-- Show "Read more" when closed, "Show less" when open -->
-            <span class="group-open:hidden">Read more</span>
-            <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span>
-          </summary>
-
-          <div class="mt-4">
-            <!-- Full description (only visible when expanded) -->
-            <div class="leading-relaxed text-base md:text-lg">
-              {!! $category->description !!}
-            </div>
+        <!-- Read more button -->
+        <button id="category-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+          Read more
+        </button>
+        
+        <!-- Full description (initially hidden) -->
+        <div id="category-full-content" class="hidden mt-4">
+          <div class="leading-relaxed text-base md:text-lg">
+            {!! $category->description !!}
           </div>
-        </details>
+          
+          <!-- Show less button -->
+          <button id="category-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+            Show less
+          </button>
+        </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const readMoreBtn = document.getElementById('category-read-more');
+        const showLessBtn = document.getElementById('category-show-less');
+        const preview = document.getElementById('category-preview');
+        const fullContent = document.getElementById('category-full-content');
+        
+        if (readMoreBtn && showLessBtn && preview && fullContent) {
+          readMoreBtn.addEventListener('click', function() {
+            preview.classList.add('hidden');
+            readMoreBtn.classList.add('hidden');
+            fullContent.classList.remove('hidden');
+          });
+          
+          showLessBtn.addEventListener('click', function() {
+            preview.classList.remove('hidden');
+            readMoreBtn.classList.remove('hidden');
+            fullContent.classList.add('hidden');
+          });
+        }
+      });
+    </script>
 
   </div>
 </section>
