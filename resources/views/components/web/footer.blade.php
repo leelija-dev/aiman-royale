@@ -657,14 +657,36 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Category Heading -->
+     {{--
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
       {{ $category->name }} - Premium {{ $category->name }} Collection by Aiman Royale
     </h2>
+    --}}
 
     <!-- Full Category Description Only -->
+    <!-- Category Description with Preview -->
     <div class="prose prose-lg max-w-none">
       <div class="leading-relaxed text-base md:text-lg">
-        {!! $category->description !!}
+        <!-- Show preview (first 200 characters) when closed -->
+        <div class="group-closed:block">
+          {!! Str::limit(strip_tags($category->description), 200, '...') !!}
+        </div>
+        
+        <!-- Expandable Details Section -->
+        <details class="mt-2 group">
+          <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
+            <!-- Show "Read more" when closed, "Show less" when open -->
+            <span class="group-open:hidden">Read more</span>
+            <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span>
+          </summary>
+
+          <div class="mt-4">
+            <!-- Full description (only visible when expanded) -->
+            <div class="leading-relaxed text-base md:text-lg">
+              {!! $category->description !!}
+            </div>
+          </div>
+        </details>
       </div>
     </div>
 
