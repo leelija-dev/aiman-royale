@@ -735,6 +735,7 @@ class HomeController extends Controller
             'slug' => $product->slug,
             'featured_image' => $product->featured_image,
             'price' => $product->price,
+            'discount_price' => $product->discount_price,
             'is_trending' => $product->is_trending ?? false,
             'viewed_at' => now()->timestamp
         ]);
