@@ -37,9 +37,585 @@
 
 @section('content')
 @if($product == true)
+<style>
+    /* ========================================
+   PRODUCT SECTION STYLES
+   Targeting ONLY #single-right-content
+   Respects Tailwind custom properties
+   ======================================== */
 
+/* #single-right-content {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+} */
+
+/* ========== TYPOGRAPHY & HEADINGS ========== */
+
+#single-right-content .text-h3-xs,
+#single-right-content .text-h3-sm,
+#single-right-content .text-h3-md,
+#single-right-content .text-h3-lg,
+#single-right-content .text-h3-lgg {
+    /* font-family: 'Playfair Display', Georgia, serif; */
+    font-size: 1.75rem;
+    /* font-weight: 700; */
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+/* Brand Name */
+#single-right-content .mt-1.text-gray-500:first-of-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    /* color: #b8652e !important; */
+}
+
+/* Manufacturer Text */
+#single-right-content .text-gray-500:last-of-type {
+    font-size: 0.7rem;
+    /* color: #8b7355 !important; */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ========== RATING SECTION ========== */
+
+#single-right-content .flex.items-center.gap-2 {
+    /* background: #fef6ed; */
+    /* padding: 0.5rem 1rem; */
+    border-radius: 40px;
+    display: inline-flex;
+    width: auto;
+    /* margin: 0.75rem 0; */
+}
+
+#single-right-content .flex.text-yellow-400 {
+    gap: 3px;
+}
+
+#single-right-content .flex.text-yellow-400 i {
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+}
+
+#single-right-content .flex.text-yellow-400 i:hover {
+    transform: scale(1.1);
+}
+
+/* ========== PRICE CONTAINER ========== */
+
+#single-right-content #price-container {
+    /* background: linear-gradient(135deg, #faf8f5 0%, #f5f0ea 100%); */
+    padding: 1rem 1.25rem;
+    border-radius: 20px;
+    /* margin: 1rem 0 1.25rem 0; */
+    /* border: 1px solid rgba(184, 101, 46, 0.15); */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+#single-right-content #price-container .text-xl {
+    font-size: 1.85rem !important;
+    font-weight: 800;
+    color: #2c241a;
+    letter-spacing: -0.5px;
+}
+
+#single-right-content #price-container .line-through {
+    font-size: 1rem;
+    color: #b8a28c;
+}
+
+/* Discount Badge - using Tailwind secondary color */
+#single-right-content .text-green-600.bg-green-50 {
+    background: #e8f3e6 !important;
+    color: #2d6a2d !important;
+    font-weight: 600;
+    padding: 0.25rem 0.85rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+}
+
+/* Trending Badge */
+#single-right-content .bg-\[\\#A13015\] {
+    background: linear-gradient(135deg, #c0392b 0%, #a13015 100%) !important;
+    padding: 0.25rem 1rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 6px rgba(161, 48, 21, 0.3);
+}
+
+/* ========== SECTION HEADERS ========== */
+
+#single-right-content .font-medium.mb-3,
+#single-right-content #size-selection-section h3,
+#single-right-content #color-selection-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d241c;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+#single-right-content .font-medium.mb-3::after,
+#single-right-content #size-selection-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 35px;
+    height: 2px;
+    background:#A10000;
+    border-radius: 2px;
+}
+
+/* ========== TYPE BUTTONS ========== */
+
+#single-right-content .type-btn {
+    /* background: white; */
+    /* border: 1.5px solid #e8dfd7; */
+    border-radius: 50px;
+    padding: 0.75rem 1.75rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+/* Stitched button - using Tailwind secondary */
+/* #single-right-content .type-btn[data-type="stitched"] {
+    background: var(--secondary, #b8652e);
+    background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%);
+    border-color: var(--secondary, #b8652e);
+    color: white;
+} */
+
+#single-right-content .type-btn[data-type="stitched"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(184, 101, 46, 0.2);
+}
+
+/* Custom Dimension Button */
+#single-right-content #custom-dimension-btn {
+    /* background: white; */
+    /* border: 1.5px dashed #c9b8a8; */
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    /* color: #8b6b4f; */
+}
+
+#single-right-content #custom-dimension-btn:hover {
+    /* border-color: var(--secondary, #b8652e); */
+    /* background: #fffaf5; */
+    transform: translateY(-1px);
+    /* color: var(--secondary, #b8652e); */
+}
+
+/* ========== CUSTOM DIMENSION SECTION ========== */
+
+#single-right-content #custom-dimension-section {
+    
+    border: 1px solid #f0e4d8;
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+}
+
+#single-right-content #custom-dimension-section h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    color: #2c241c;
+}
+
+/* Form Inputs */
+#single-right-content #custom-dimension-section input {
+    border: 1.5px solid #e9dfd5;
+    border-radius: 14px;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    background: white;
+    width: 100%;
+}
+
+#single-right-content #custom-dimension-section input:focus {
+    border-color: var(--secondary, #b8652e);
+    box-shadow: 0 0 0 3px rgba(184, 101, 46, 0.1);
+    outline: none;
+}
+
+/* Custom Color Buttons */
+#single-right-content .custom-color-btn {
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+#single-right-content .custom-color-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Save & Cancel Buttons */
+#single-right-content #save-dimension-btn {
+    /* background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%); */
+    border: none;
+    border-radius: 40px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 600;
+    transition: all 0.25s;
+    cursor: pointer;
+    color: white;
+}
+
+#single-right-content #save-dimension-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(184, 101, 46, 0.35);
+}
+
+#single-right-content #cancel-custom-btn {
+    border: 1.5px solid #e0d4c8;
+    background: white;
+    border-radius: 40px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#single-right-content #cancel-custom-btn:hover {
+    background: #f5f0ea;
+    border-color: #c9b8a8;
+}
+
+/* ========== SIZE SELECTION SECTION ========== */
+
+#single-right-content #size-selection-section {
+    background: white;
+    border-radius: 28px;
+    border: 1px solid #f0e8e0;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* Size Guide Button */
+#single-right-content [data-size-guide-trigger] {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+    border-radius: 40px;
+    padding: 0.6rem 1.3rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+}
+
+#single-right-content [data-size-guide-trigger]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Size Buttons - Circular Design */
+#single-right-content .size-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 100px;
+    /* background: white; */
+    border: 1.5px solid #ece2d8;
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#single-right-content .size-btn:hover {
+    border-color: var(--secondary, #b8652e);
+    transform: scale(1.05);
+    background: #fffaf5;
+}
+
+#single-right-content .size-btn span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4a3728;
+    transition: color 0.2s;
+}
+
+#single-right-content .size-btn:hover span {
+    color: var(--secondary, #b8652e);
+}
+
+/* Active Size State - using Tailwind secondary */
+#single-right-content .size-btn.active-size,
+#single-right-content .size-btn[data-selected="true"] {
+    background: var(--secondary, #b8652e);
+    border-color: var(--secondary, #b8652e);
+}
+
+#single-right-content .size-btn.active-size span,
+#single-right-content .size-btn[data-selected="true"] span {
+    color: white !important;
+}
+
+/* ========== COLOR SELECTION ========== */
+
+#single-right-content #color-selection {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+#single-right-content .color-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 100px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+#single-right-content .color-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Selected color border - using Tailwind secondary */
+#single-right-content .color-btn.border-secondary {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--secondary, #b8652e);
+}
+
+/* ========== BEST OFFERS SECTION ========== */
+
+#single-right-content > div:has(.font-medium.mb-2) {
+    /* background: linear-gradient(135deg, #fef9f2 0%, #fcf5ec 100%); */
+    border-radius: 20px;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+}
+
+#single-right-content .font-medium.mb-2 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2c241c;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#single-right-content .font-medium.mb-2::before {
+    content: '🎁';
+    font-size: 1rem;
+}
+
+#single-right-content .text-sm.text-gray-600 li {
+    font-size: 0.8rem;
+    color: #6b5a4a;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* #single-right-content .text-secondary {
+    color: var(--secondary, #b8652e) !important;
+} */
+
+#single-right-content .text-secondary.cursor-pointer {
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+}
+
+#single-right-content .text-secondary.cursor-pointer:hover {
+    color: #9a4d22 !important;
+}
+
+/* ========== ACTION BUTTONS SECTION ========== */
+
+#single-right-content #action-buttons-section {
+    margin-top: 1.5rem;
+    border-radius: 24px;
+}
+
+/* Add to Cart Button - using Tailwind secondary */
+#single-right-content #add-to-cart {
+    /* background: linear-gradient(135deg, #2c241c 0%, #1f1812 100%); */
+    border: none;
+    border-radius: 60px;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#single-right-content #add-to-cart:hover {
+    /* background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%); */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(184, 101, 46, 0.3);
+}
+
+#single-right-content #add-to-cart i {
+    margin-right: 8px;
+}
+
+/* Wishlist Button */
+#single-right-content #wishlist-btn {
+    border-radius: 60px;
+    width: 56px;
+    height: 56px;
+    /* background: white; */
+    /* border: 1.5px solid #ece2d8; */
+    transition: all 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* #single-right-content #wishlist-btn:hover {
+    border-color: #e06c4a;
+    background: #fff8f5;
+    transform: scale(1.02);
+}
+
+#single-right-content #wishlist-btn i {
+    transition: color 0.2s;
+    font-size: 1.3rem;
+    color: #b8a28c;
+}
+
+#single-right-content #wishlist-btn:hover i {
+    color: #e06c4a;
+} */
+
+/* WhatsApp Button */
+#single-right-content .bg-\[\\#25D366\] {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    border-radius: 60px;
+    padding: 0.9rem;
+    font-weight: 600;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#single-right-content .bg-\[\\#25D366\]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+    filter: brightness(1.02);
+}
+
+/* ========== RESPONSIVE ADJUSTMENTS ========== */
+
+@media (max-width: 768px) {
+    #single-right-content .text-h3-xs,
+    #single-right-content .text-h3-sm {
+        font-size: 1.5rem;
+    }
+    
+    #single-right-content #price-container .text-xl {
+        font-size: 1.5rem !important;
+    }
+    
+    #single-right-content .size-btn {
+        width: 48px;
+        height: 48px;
+    }
+    
+    #single-right-content .color-btn {
+        width: 38px;
+        height: 38px;
+    }
+    
+    #single-right-content #add-to-cart {
+        padding: 0.85rem;
+        font-size: 0.9rem;
+    }
+    
+    #single-right-content #wishlist-btn {
+        width: 52px;
+        height: 52px;
+    }
+    
+    #single-right-content .type-btn,
+    #single-right-content #custom-dimension-btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #single-right-content #custom-dimension-section .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #single-right-content #size-selection-section {
+        padding: 1rem;
+    }
+    
+    #single-right-content .size-btn {
+        width: 42px;
+        height: 42px;
+    }
+    
+    #single-right-content .size-btn span {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========== ANIMATIONS & UTILITIES ========== */
+
+/* Smooth transitions for all interactive elements */
+#single-right-content button,
+#single-right-content a,
+#single-right-content .color-btn,
+#single-right-content .size-btn,
+#single-right-content .type-btn {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading skeleton animation (for dynamic content) */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Custom scrollbar for the section */
+#single-right-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+#single-right-content::-webkit-scrollbar-track {
+    background: #f0e8e0;
+    border-radius: 10px;
+}
+
+#single-right-content::-webkit-scrollbar-thumb {
+    background: var(--secondary, #b8652e);
+    border-radius: 10px;
+}
+</style>
 
 <style>
+  
     .custom-color-btn {
         transition: all 0.2s ease;
     }
@@ -159,13 +735,13 @@
             </div>
 
             <!-- RIGHT CONTENT -->
-            <div class="space-y-6 w-full md:max-w-[50%]">
+            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%]">
                 <div>
                     <!-- Title -->
-                    <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg xl:text-h3-xl 2xl:text-h3-2xl font-semibold">
+                    <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
                         {{ $product->name }}
                     </h3>
-                    <p class="text-sm text-gray-500 mt-1">{{ $product->brand ?? 'Brand Name' }}</p>
+                    <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
                     <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
                 </div>
                 
@@ -184,14 +760,14 @@
                     <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                 </div>
                 
-                <div class="flex items-center gap-3 flex-wrap" id="price-container">
+                <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]" id="price-container">
                     @php
                     $firstVariant = $product->variants->first();
                     $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
                     $originalPrice = $firstVariant->price;
                     $discount = $firstVariant->discount;
                     @endphp
-                    <span class="text-2xl font-bold text-gray-900">Rs. {{ $currentPrice }}</span>
+                    <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
                     @if($originalPrice != $currentPrice)
                     <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
                     @endif
@@ -206,7 +782,7 @@
                 <div>
                     <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
                     <div class="flex gap-3 xxs:flex-row flex-col">
-                        <button class="type-btn px-6 py-3 rounded-lg border-2 border-secondary bg-secondary/10 text-secondary transition-all" data-type="stitched">
+                        <button class="type-btn px-6 py-3 rounded-lg border-[1px] border-secondary/25 bg-secondary/10 text-secondary transition-all" data-type="stitched">
                             Stitched
                         </button>
                         <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
@@ -268,7 +844,7 @@
                             <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                                 <i class="fas fa-expand-alt text-secondary"></i> Select Size
                             </h3>
-                            <p class="text-sm text-gray-500 mt-1">Choose your perfect fit</p>
+                            <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
                         </div>
                         <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
                             <i class="fas fa-ruler-combined"></i> View Size Guide
@@ -331,7 +907,7 @@
                 </div>
 
                 <!-- Best Offers Section -->
-                <div>
+                <div class="bg-secondary/5">
                     <h3 class="font-medium mb-2">Best Offers</h3>
                     <ul class="text-sm text-gray-600 space-y-1">
                         <li>• Special offer get 25% off <span class="text-secondary cursor-pointer">T&C</span></li>
@@ -1873,7 +2449,7 @@ function updateCustomPrice() {
     const priceContainer = document.getElementById('price-container');
     if (priceContainer) {
         priceContainer.innerHTML = `
-            <span class="text-2xl font-bold text-gray-900">Rs. ${customPrice}</span>
+            <span class="text-[1.1rem] text-gray-900">Rs. ${customPrice}</span>
             <span class="text-sm text-gray-500 ml-2">(Custom)</span>
         `;
     }
@@ -2129,7 +2705,7 @@ function updatePrice(variant) {
         }
 
         priceContainer.innerHTML = `
-            <span class="text-2xl font-bold text-gray-900">Rs. ${currentPrice}</span>
+            <span class="text-[1.1rem] text-gray-900">Rs. ${currentPrice}</span>
             ${originalPriceHtml}
             ${discountHtml}
         `;
