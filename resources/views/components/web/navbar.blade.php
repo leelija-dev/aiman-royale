@@ -3070,11 +3070,33 @@
                         });
                     }
 
-                    // Try to get product name from page title or meta
-                    const pageTitle = document.title;
-                    if (pageTitle && pageTitle !== 'Aiman') {
+                    // Try to get product name from page content (more reliable than title)
+                    let productName = '';
+                    
+                    // Try to find product name from various sources
+                    // 1. Check if there's a global product name variable (from single-product page)
+                    if (typeof window.productName !== 'undefined' && window.productName) {
+                        productName = window.productName;
+                    }
+                    // 2. Try to get from h3 element (product title)
+                    else {
+                        const productTitleElement = document.querySelector('h3.text-h3-xs, h3.font-semibold');
+                        if (productTitleElement && productTitleElement.textContent.trim()) {
+                            productName = productTitleElement.textContent.trim();
+                        }
+                    }
+                    
+                    // Fallback to page title if no product name found
+                    if (!productName) {
+                        const pageTitle = document.title;
+                        if (pageTitle && pageTitle !== 'Aiman') {
+                            productName = pageTitle.replace(' - Aiman', '');
+                        }
+                    }
+                    
+                    if (productName) {
                         breadcrumbs.push({
-                            name: pageTitle.replace(' - Aiman', ''),
+                            name: productName,
                             url: null
                         });
                     }

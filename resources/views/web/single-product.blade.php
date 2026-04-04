@@ -1226,6 +1226,9 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 
 <!-- Tab Switching JavaScript -->
 <script>
+// Make product name available globally for breadcrumbs
+window.productName = "{{ $product->name ?? 'Product' }}";
+
 document.addEventListener('DOMContentLoaded', function() {
     // Check for scroll position in URL hash and restore it
     const urlHash = window.location.hash;
