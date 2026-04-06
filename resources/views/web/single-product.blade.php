@@ -525,6 +525,19 @@
 
 /* ========== RESPONSIVE ADJUSTMENTS ========== */
 
+@media (max-width: 900px) {
+    #single-right-content [data-size-guide-trigger] {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+    border-radius: 40px;
+    padding: 0.6rem 1.3rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+}
+
+}
 @media (max-width: 768px) {
     #single-right-content .text-h3-xs,
     #single-right-content .text-h3-sm {
@@ -846,7 +859,7 @@
                             </h3>
                             <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
                         </div>
-                        <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+                        <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
                             <i class="fas fa-ruler-combined"></i> View Size Guide
                         </button>
                     </div>
@@ -1510,7 +1523,7 @@
                                 </span>
                             </div>
                             <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
+                                <span class="text-lg font-semibold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
                                 @if($variant->discount_price)
                                 <span class="text-sm text-gray-400 line-through">Rs. {{ $variant->price }}</span>
                                 @endif
@@ -1581,7 +1594,7 @@
                                 </span>
                             </div>
                             <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
+                                <span class="text-lg font-semibold text-gray-900">Rs. {{ $variant->discount_price ?? $variant->price }}</span>
                                 @if($variant->discount_price)
                                 <span class="text-sm text-gray-400 line-through">Rs. {{ $variant->price }}</span>
                                 @endif
@@ -1647,11 +1660,11 @@
                             </div>
                             {{--
                             <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['price'] }}</span>
+                                <span class="text-lg font-semibold text-gray-900">Rs. {{ $lastViewedProduct['price'] }}</span>
                             </div>
                             --}}
                              <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
+                                <span class="text-lg font-semibold text-gray-900">Rs. {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
                                 @if($lastViewedProduct['discount_price'] ?? null)
                                 <span class="text-sm text-gray-400 line-through">Rs. {{ $lastViewedProduct['price'] }}</span>
                                 @endif
@@ -2449,7 +2462,7 @@ function updateCustomPrice() {
     const priceContainer = document.getElementById('price-container');
     if (priceContainer) {
         priceContainer.innerHTML = `
-            <span class="text-[1.1rem] text-gray-900">Rs. ${customPrice}</span>
+            <span class="text-[1.1rem] text-gray-900 font-semibold">Rs. ${customPrice}</span>
             <span class="text-sm text-gray-500 ml-2">(Custom)</span>
         `;
     }
@@ -2705,7 +2718,7 @@ function updatePrice(variant) {
         }
 
         priceContainer.innerHTML = `
-            <span class="text-[1.1rem] text-gray-900">Rs. ${currentPrice}</span>
+            <span class="text-[1.1rem] text-gray-900 font-semibold">Rs. ${currentPrice}</span>
             ${originalPriceHtml}
             ${discountHtml}
         `;
