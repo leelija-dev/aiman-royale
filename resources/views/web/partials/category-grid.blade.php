@@ -62,11 +62,11 @@
             @if($isInWishlist == false)
             <i class="far fa-heart"></i>
             @else
-             <i class="fas fa-heart" style="color:red;"></i>
+            <i class="fas fa-heart" style="color:red;"></i>
             @endif
         </button>
         @else
-        <a class="wishlist-link" href="{{ route('login') }}" onclick="event.stopPropagation()">
+        <a class="wishlist-link" href="{{ route('page.login') }}" onclick="event.stopPropagation()">
             <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                 <i class="far fa-heart"></i>
             </button>
