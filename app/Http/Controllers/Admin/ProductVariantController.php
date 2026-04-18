@@ -20,7 +20,7 @@ class ProductVariantController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ProductVariant::with(['product', 'colorModel', 'sizeModel','images']);
+        $query = ProductVariant::with(['product', 'colorModel', 'sizeModel', 'images']);
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -85,8 +85,8 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-        $discount_price=($data['price'] - (($data['price'] * $data['discount']) / 100));
-        $data['discount_price']=$discount_price;
+        $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
+        $data['discount_price'] = $discount_price;
         // Custom validation for unique combination of product_id, size, and color
         $existingVariant = ProductVariant::where('product_id', $data['product_id'])
             ->where('size', $data['size'] ?? '')
@@ -105,24 +105,23 @@ class ProductVariantController extends Controller
             'stock' => $data['stock'],
             'ready_to_ship' => 1,
         ]);
-        if($variant){
-                    if ($request->hasFile('images')) {
+        if ($variant) {
+            if ($request->hasFile('images')) {
 
-            foreach ($request->file('images') as $image) {
+                foreach ($request->file('images') as $image) {
 
-                $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-                $folder = 'uploads/variants';
-                $image->move(public_path('uploads/variants'), $filename);
-                $imagePath = $folder . '/' . $filename;
-                // dd($variant->id);
-                ProductImage::create([
-                    'product_id' => $variant->product_id,
-                    'variant_id' => $variant->id,
-                    'image' => $imagePath //$filename
-                ]);
+                    $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+                    $folder = 'uploads/variants';
+                    $image->move(public_path('uploads/variants'), $filename);
+                    $imagePath = $folder . '/' . $filename;
+                    // dd($variant->id);
+                    ProductImage::create([
+                        'product_id' => $variant->product_id,
+                        'variant_id' => $variant->id,
+                        'image' => $imagePath //$filename
+                    ]);
+                }
             }
-            }
-            
         }
         // Create stock entry for the new variant
         StockIn::create([
@@ -158,12 +157,13 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
-            // 'stock' => 'required|integer|min:0',
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:5120',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-        $discount_price=($data['price'] - (($data['price'] * $data['discount']) / 100));
-        $data['discount_price']=$discount_price;
+        $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
+        $data['discount_price'] = $discount_price;
 
         // Custom validation for unique combination of product_id, size, and color (excluding current variant)
         $existingVariant = ProductVariant::where('product_id', $data['product_id'])
@@ -194,43 +194,43 @@ class ProductVariantController extends Controller
         $product->update([
             'ready_to_ship' => 1,
         ]);
-    //if removed images
+        //if removed images
         if ($request->removed_images) {
 
-        $removedIds = explode(',', $request->removed_images);
+            $removedIds = explode(',', $request->removed_images);
 
-        foreach ($removedIds as $id) {
+            foreach ($removedIds as $id) {
 
-            $image = ProductImage::find($id);
+                $image = ProductImage::find($id);
 
-            if ($image) {
+                if ($image) {
 
-                $path = public_path('uploads/variants/' . $image->image);
+                    $path = public_path('uploads/variants/' . $image->image);
 
-                if (File::exists($path)) {
-                    File::delete($path);
+                    if (File::exists($path)) {
+                        File::delete($path);
+                    }
+
+                    $image->delete();
                 }
-
-                $image->delete();
             }
         }
-    }
-    //store images
-    if ($request->hasFile('images')) {
+        //store images
+        if ($request->hasFile('images')) {
 
-       foreach ($request->file('images') as $image) {
-$folder = 'uploads/variants';
-        $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-$imagePath = $folder . '/' . $filename;
-            $image->move(public_path('uploads/variants'), $filename);
+            foreach ($request->file('images') as $image) {
+                $folder = 'uploads/variants';
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+                $imagePath = $folder . '/' . $filename;
+                $image->move(public_path('uploads/variants'), $filename);
 
-            ProductImage::create([
-                'product_id' => $request->product_id,
-                'variant_id' => $productVariant->id,
-                'image' => $imagePath //$filename
-            ]);
+                ProductImage::create([
+                    'product_id' => $request->product_id,
+                    'variant_id' => $productVariant->id,
+                    'image' => $imagePath //$filename
+                ]);
+            }
         }
-    }
 
 
         // Note: Stock is managed separately through Stock Management

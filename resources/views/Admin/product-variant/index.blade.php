@@ -520,7 +520,7 @@ let dz{{ $variant->id }} = new Dropzone("#dropzone-{{ $variant->id }}", {
     autoProcessQueue: false,
     maxFiles: 10,
     paramName: "images[]",
-    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp,.avif",
     addRemoveLinks: true,
 
     init: function () {
