@@ -345,7 +345,7 @@ new Dropzone("#multiImageDropzone", {
     parallelUploads: 10,
     maxFiles: 10,
     paramName: "images[]",
-    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp,.avif",
     addRemoveLinks: true,
 
     init: function () {
