@@ -132,7 +132,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="type" class="form-label">Type</label>
                                             <input type="text" class="form-control" id="type" name="type"
-                                                value="{{ old('type') }}" maxlength="100">
+                                                value="{{ old('type') }}" >
                                             @error('type')
                                             <div class="text-danger small">{{ $message }}</div>
                                             @enderror
