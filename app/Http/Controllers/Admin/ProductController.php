@@ -31,7 +31,7 @@ class ProductController extends Controller
         }
 
 
-        $data = $query->paginate(15);
+        $data = $query->paginate(10);
 
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
@@ -52,10 +52,14 @@ class ProductController extends Controller
         
         // Convert back to paginator for pagination
         $data = new \Illuminate\Pagination\LengthAwarePaginator(
-            $dataWithOccasions->forPage(1, $data->perPage()),
+            $dataWithOccasions,
             $data->total(),
-            $data->currentPage(),
-            ['path' => $data->path()]
+            $data->perPage(),
+            request()->get('page', 1),
+            [
+                'path' => $data->path(),
+                'pageName' => 'page'
+            ]
         );
         
         return view('Admin.product.index', compact('data', 'categories', 'occasions', 'brands'));
@@ -81,6 +85,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:500',
             'fabric' => 'nullable|string|max:500',
+            'material_care' => 'nullable|string|max:1000',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
@@ -195,6 +200,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:500',
             'fabric' => 'nullable|string|max:500',
+            'material_care' => 'nullable|string|max:1000',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',

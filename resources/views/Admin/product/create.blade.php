@@ -81,6 +81,16 @@
                                 @enderror
                             </div>
 
+                            <!-- Material Care -->
+                            <div class="mb-3">
+                                <label for="material_care" class="form-label">Material Care Instructions</label>
+                                <textarea class="form-control" id="material_care" name="material_care"
+                                    rows="3" maxlength="1000" placeholder="Enter care instructions such as: Dry clean only, Hand wash cold, Do not bleach, etc.">{{ old('material_care') }}</textarea>
+                                @error('material_care')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <!-- Featured Image -->
                             <div class="mb-3">
                                 <label for="featured_image" class="form-label">Featured Image</label>

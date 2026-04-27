@@ -272,6 +272,15 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="edit_material_care_{{ $product->id }}"
+                                    class="form-label">Material Care Instructions</label>
+                                <textarea class="form-control"
+                                    id="edit_material_care_{{ $product->id }}"
+                                    name="material_care" rows="3"
+                                    maxlength="1000" placeholder="Enter care instructions such as: Dry clean only, Hand wash cold, Do not bleach, etc.">{{ $product->material_care ?? '' }}</textarea>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="edit_featured_image_{{ $product->id }}"
                                     class="form-label">Featured Image</label>
                                 <input type="file" class="form-control"

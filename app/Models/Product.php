@@ -29,6 +29,7 @@ class Product extends Model
         'description',
         'brand',
         'fabric',
+        'material_care',
         'fit',
         'price',
         'discount_price',
