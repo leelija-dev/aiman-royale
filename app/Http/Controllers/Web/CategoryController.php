@@ -430,9 +430,13 @@ class CategoryController extends Controller
             $categoryIds = array_merge($categoryIds, $childCategories);
         }
 
-        // Get products that belong to both the category(ies) and occasion
-        $products = Product::whereIn('category_id', $categoryIds)
-            ->where('ocassion_id', $occasion->id) // Note: ocassion_id with double 's' in database
+        // Get products using occasion_slug -> occasion_id -> product_occasions -> products -> category filtering
+        $products = Product::whereIn('id', function($query) use ($occasion) {
+                $query->select('product_id')
+                      ->from('product_occasions')
+                      ->where('occasion_id', $occasion->id);
+            })
+            ->whereIn('category_id', $categoryIds)
             ->where('is_active', 1)
             ->whereHas('variants')
             ->with(['images' => function ($query) {
