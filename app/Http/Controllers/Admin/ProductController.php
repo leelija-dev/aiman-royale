@@ -91,14 +91,14 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp,avif|max:10240', // Max 10MB
+            'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240', // Max 10MB
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
             'tags' => 'required|string',
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
-            'image' => 'required|image',
+            // 'image' => 'required|image|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
             'lehenga_fabric' => 'nullable|string|max:500',
             'choli_fabric' => 'nullable|string|max:500',
             'dupatta_fabric' => 'nullable|string|max:500',
