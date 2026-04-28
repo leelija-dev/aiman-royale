@@ -2880,6 +2880,13 @@ function addToCart() {
     let requestData = {};
 
     if (customDimensionsAttr) {
+        // Check if product has any variants with stock available
+        const hasStock = productVariants && productVariants.some(variant => variant.stock > 0);
+        if (!hasStock) {
+            alert('This product is currently out of stock. Please check back later.');
+            return;
+        }
+        
         requestData = {
             product_id: {{ $product?->id }},
             custom_dimensions: JSON.parse(customDimensionsAttr),
