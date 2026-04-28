@@ -1673,7 +1673,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
 
                 if (data.success) {
                     // Cache the response
@@ -1878,6 +1878,7 @@
         // }
 
         function renderOccasionSection(categoryData) {
+            // console.log(categoryData)
             const occasionList = document.getElementById('occasion-list');
             const showMoreBtn = document.getElementById('occasion-show-more');
 
@@ -2038,7 +2039,7 @@
                 }
             }
 
-            console.log("Extracted products:", products);
+            // console.log("Extracted products:", products);
 
             if (products.length === 0) {
                 // Show default fallback products

@@ -31,12 +31,37 @@ class ProductController extends Controller
         }
 
 
-        $data = $query->paginate(15);
-         
+        $data = $query->paginate(10);
 
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
+        
+        // Get product occasions for each product
+        $dataCollection = $data->getCollection();
+        $dataWithOccasions = $dataCollection->map(function ($product) {
+            if (is_array($product->occasions)) {
+                // Already an array, use as-is
+                $product->occasions = $product->occasions;
+            } else {
+                // It's a collection, pluck the IDs
+                $product->occasions = $product->occasions->pluck('id')->toArray();
+            }
+            return $product;
+        });
+        
+        // Convert back to paginator for pagination
+        $data = new \Illuminate\Pagination\LengthAwarePaginator(
+            $dataWithOccasions,
+            $data->total(),
+            $data->perPage(),
+            request()->get('page', 1),
+            [
+                'path' => $data->path(),
+                'pageName' => 'page'
+            ]
+        );
+        
         return view('Admin.product.index', compact('data', 'categories', 'occasions', 'brands'));
     }
 
@@ -58,8 +83,9 @@ class ProductController extends Controller
             'name' => 'required|string|max:200',
             'slug' => 'required|string|max:200|unique:products,slug',
             'description' => 'nullable|string',
-            'brand' => 'nullable|string|max:100',
-            'fabric' => 'nullable|string|max:100',
+            'brand' => 'nullable|string|max:500',
+            'fabric' => 'nullable|string|max:500',
+            'material_care' => 'nullable|string|max:1000',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
@@ -73,14 +99,14 @@ class ProductController extends Controller
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
             'image' => 'required|image',
-            'lehenga_fabric' => 'nullable|string|max:100',
-            'choli_fabric' => 'nullable|string|max:100',
-            'dupatta_fabric' => 'nullable|string|max:100',
-            'type' => 'nullable|string|max:100',
-            'stitching_type' => 'nullable|string|max:100',
-            'pattern' => 'nullable|string|max:100',
+            'lehenga_fabric' => 'nullable|string|max:500',
+            'choli_fabric' => 'nullable|string|max:500',
+            'dupatta_fabric' => 'nullable|string|max:500',
+            'type' => 'nullable|string',
+            'stitching_type' => 'nullable|string|max:500',
+            'pattern' => 'nullable|string',
             'sales_package' => 'nullable|string|max:500',
-            'color' => 'nullable|string|max:100',
+            'color' => 'nullable|string',
         ]);
         // $data['ocassion_id'] = $request->occasion_id;
 
@@ -167,35 +193,41 @@ class ProductController extends Controller
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
-            'occasion_id' => 'nullable|exists:ocassions,id',
+            'occasion_id' => 'nullable|array',
+            'occasion_id.*' => 'exists:ocassions,id',
             'name' => 'required|string|max:200',
             'slug' => 'required|string|max:200|unique:products,slug,' . $id,
             'description' => 'nullable|string',
-            'brand' => 'nullable|string|max:100',
-            'fabric' => 'nullable|string|max:100',
+            'brand' => 'nullable|string|max:500',
+            'fabric' => 'nullable|string|max:500',
+            'material_care' => 'nullable|string|max:1000',
             'fit' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:10240', // Max 10MB
+            'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
             'is_featured' => 'required|boolean',
             'meta_title' => 'required|string',
             'keywords' => 'required|string',
             'tags' => 'required|string',
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
-            'type' => 'nullable|string|max:100',
-            'stitching_type' => 'nullable|string|max:100',
-            'pattern' => 'nullable|string|max:100',
+            'type' => 'nullable|string|max:500',
+            'stitching_type' => 'nullable|string|max:500',
+            'pattern' => 'nullable|string|max:500',
             'sales_package' => 'nullable|string|max:500',
-            'color' => 'nullable|string|max:100',
+            'color' => 'nullable|string|max:500',
 
         ]);
-        $data['ocassion_id'] = $request->occasion_id;
 
         $product = Product::findOrFail($id);
         $product->update($data);
+
+        // Handle multiple occasions sync
+        if ($request->has('occasion_id')) {
+            $product->occasions()->sync($request->occasion_id);
+        }
 
         if ($request->hasFile('image')) {
 

@@ -167,7 +167,7 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs me-4"
-                                        onclick="openEditModal({{ $product->id }}, {{ $product->ocassion_id ?? 'null' }})"
+                                        onclick="openEditModal({{ $product->id }}, {{ json_encode($product->occasions ?? []) }})"
                                         title="Edit product">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
@@ -269,6 +269,15 @@
                                     id="edit_fabric_{{ $product->id }}"
                                     name="fabric" value="{{ $product->fabric }}"
                                     maxlength="100">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edit_material_care_{{ $product->id }}"
+                                    class="form-label">Material Care Instructions</label>
+                                <textarea class="form-control"
+                                    id="edit_material_care_{{ $product->id }}"
+                                    name="material_care" rows="3"
+                                    maxlength="1000" placeholder="Enter care instructions such as: Dry clean only, Hand wash cold, Do not bleach, etc.">{{ $product->material_care ?? '' }}</textarea>
                             </div>
 
                             <div class="mb-3">
@@ -392,7 +401,7 @@
                                         value="{{ $occasion->id }}"
                                         id="edit_occasion_{{ $product->id }}_{{ $occasion->id }}"
 
-                                        {{ in_array($occasion->id, $product->occasions->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                        {{ in_array($occasion->id, $product->occasions ?? []) ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="edit_occasion_{{ $product->id }}_{{ $occasion->id }}">
                                         {{ $occasion->name }}
@@ -455,7 +464,7 @@
                                 <input type="text" class="form-control"
                                     id="edit_stitching_type_{{ $product->id }}"
                                     name="type"
-                                    value="{{ $product->type ?? '' }}" maxlength="100">
+                                    value="{{ $product->type ?? '' }}">
                             </div>
 
                             <!-- Pattern -->
@@ -464,7 +473,7 @@
                                 <input type="text" class="form-control"
                                     id="edit_pattern_{{ $product->id }}"
                                     name="pattern"
-                                    value="{{ $product->pattern ?? '' }}" maxlength="100">
+                                    value="{{ $product->pattern ?? '' }}">
                             </div>
 
                             <!-- Color -->
@@ -623,10 +632,10 @@
 
 @section('scripts')
 <script>
+    console.log('Script is executing...');
+    
     // Store existing parts data
-    const productParts = @json($data -> mapWithKeys(function($product) {
-        return [$product -> id => $product -> parts ?? []];
-    }));
+    const productParts = {};
 
     // Initialize when document is ready
     document.addEventListener('DOMContentLoaded', function() {
@@ -656,11 +665,7 @@
                         }
                     });
                 }
-            })({
-                {
-                    $product - > id
-                }
-            });
+            })({{ $product->id }});
         @endforeach
 
         // Form validation for edit modals
@@ -715,19 +720,28 @@
         });
     }
 
-    function openEditModal(productId, occasionId) {
+    function openEditModal(productId, occasionIds) {
+        console.log('openEditModal called with:', productId, occasionIds);
+        
         const modalElement = document.getElementById('editModal' + productId);
         if (modalElement) {
             const modal = new bootstrap.Modal(modalElement);
 
-            const occasionSelect = document.getElementById('edit_occasion_id_' + productId);
-            if (occasionSelect && occasionId && !occasionSelect.value) {
-                occasionSelect.value = occasionId;
+            // Handle checkboxes for multiple occasions
+            if (occasionIds && Array.isArray(occasionIds)) {
+                occasionIds.forEach(occasionId => {
+                    const checkbox = document.getElementById('edit_occasion_' + productId + '_' + occasionId);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
             }
 
             modal.show();
         }
     }
+    
+    console.log('openEditModal function defined');
 
     // Product Parts Functions
     function loadExistingParts(productId) {
@@ -900,6 +914,33 @@
             contentDiv.innerHTML = html;
         } else {
             contentDiv.innerHTML = '<p class="text-muted text-center py-4">No parts available for this product.</p>';
+        }
+
+        modal.show();
+    }
+
+    // Product Parts Functions
+    function loadExistingParts(productId) {
+        const container = document.getElementById('product-parts-container-' + productId);
+        if (!container) return;
+
+        const parts = productParts[productId] || [];
+        
+        if (parts.length > 0) {
+            let html = '<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Part Name</th><th>Quantity</th><th>Actions</th></tr></thead><tbody>';
+            
+            parts.forEach((part, index) => {
+                html += `<tr>
+                    <td><input type="text" class="form-control form-control-sm" name="parts[${productId}][${index}][name]" value="${part.name || ''}" placeholder="Part name"></td>
+                    <td><input type="number" class="form-control form-control-sm" name="parts[${productId}][${index}][quantity]" value="${part.quantity || 1}" min="1"></td>
+                    <td><button type="button" class="btn btn-sm btn-danger" onclick="removePart(this)">Remove</button></td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<p class="text-muted text-center py-4">No parts available for this product.</p>';
         }
 
         modal.show();
