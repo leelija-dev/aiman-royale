@@ -257,6 +257,10 @@ $isEmailActive = false;
                             <a class="submenu-link {{ request()->routeIs('admin.occasions.*','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash') ? 'active' : '' }} "
                                 href="{{ route('admin.occasions.index') }}">Ocassions</a>
                         </li>
+                        <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('admin.category-occasion-content.*') ? 'active' : '' }} "
+                                href="{{ route('admin.category-occasion-content.index') }}">Category Occasion Content</a>
+                        </li>
                     </ul>
                 </div>
                 <div id="marketing-menu"

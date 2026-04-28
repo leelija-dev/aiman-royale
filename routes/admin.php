@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\NewsLetterController;
 // use App\Http\Controllers\Admin\ProductPackageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CategoryOccasionContentController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -171,6 +172,23 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::delete('occasions/{occasion}/force-delete', [AdminOccasionController::class, 'forceDelete'])
             ->name('admin.occasions.force-delete');
+
+        // Category Occasion Content
+        Route::resource('category-occasion-content', CategoryOccasionContentController::class, [
+            'names' => [
+                'index' => 'admin.category-occasion-content.index',
+                'create' => 'admin.category-occasion-content.create',
+                'store' => 'admin.category-occasion-content.store',
+                'show' => 'admin.category-occasion-content.show',
+                'edit' => 'admin.category-occasion-content.edit',
+                'update' => 'admin.category-occasion-content.update',
+                'destroy' => 'admin.category-occasion-content.destroy',
+            ]
+        ]);
+
+        // Category Occasion Content AJAX
+        Route::get('category-occasion-content/get', [CategoryOccasionContentController::class, 'getContent'])
+            ->name('admin.category-occasion-content.get');
 
         // Colors
         Route::resource('colors', ColorController::class, [
