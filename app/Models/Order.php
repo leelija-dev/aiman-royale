@@ -20,8 +20,9 @@ class Order extends Model
         'state',	
         'city',	
         'pincode',	
-        'phone_no'
-
+        'phone_no',
+        'cancelled_at',
+        'cancel_reason'
     ];
     
     public function orderProducts(){
