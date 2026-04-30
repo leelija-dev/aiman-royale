@@ -193,9 +193,9 @@
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">${{ number_format($variant->effective_price, 2) }}</h6>
+                                            <h6 class="mb-0 text-sm">₹{{ number_format($variant->effective_price, 2) }}</h6>
                                             @if($variant->discount_price)
-                                            <p class="text-xs text-success mb-0">${{ number_format($variant->price, 2) }}</p>
+                                            <p class="text-xs text-success mb-0">₹{{ number_format($variant->price, 2) }}</p>
                                             @endif
                                         </div>
                                     </div>

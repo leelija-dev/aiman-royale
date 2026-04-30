@@ -59,7 +59,7 @@ class FaqController extends Controller
         }
     }
 
-    public function getFaqsUsingId($faqId): JsonResponse
+    public function getFaqsUsingId(int $faqId): JsonResponse
     {
         try {
             $faq = Faq::where('is_active', 1)
