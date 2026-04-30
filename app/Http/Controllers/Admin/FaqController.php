@@ -44,7 +44,7 @@ class FaqController extends Controller
             'question' => 'required|string|max:255',
             'answer' => 'required|string',
             // 'category_id' => 'required|exists:faq_category,id',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'product_id' => 'nullable|exists:products,id',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0'
