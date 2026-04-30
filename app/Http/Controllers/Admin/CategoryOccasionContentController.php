@@ -46,7 +46,7 @@ class CategoryOccasionContentController extends Controller
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
 
-        return view('admin.category-occasion-content.index', compact('data', 'categories', 'occasions'));
+        return view('Admin.category-occasion-content.index', compact('data', 'categories', 'occasions'));
     }
 
     /**
@@ -57,7 +57,7 @@ class CategoryOccasionContentController extends Controller
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
 
-        return view('admin.category-occasion-content.create', compact('categories', 'occasions'));
+        return view('Admin.category-occasion-content.create', compact('categories', 'occasions'));
     }
 
     /**
@@ -95,7 +95,7 @@ class CategoryOccasionContentController extends Controller
     {
         $categoryOccasionContent->load(['category', 'occasion']);
         
-        return view('admin.category-occasion-content.show', compact('categoryOccasionContent'));
+        return view('Admin.category-occasion-content.show', compact('categoryOccasionContent'));
     }
 
     /**
@@ -106,7 +106,7 @@ class CategoryOccasionContentController extends Controller
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
 
-        return view('admin.category-occasion-content.edit', compact('categoryOccasionContent', 'categories', 'occasions'));
+        return view('Admin.category-occasion-content.edit', compact('categoryOccasionContent', 'categories', 'occasions'));
     }
 
     /**
