@@ -717,6 +717,84 @@
   </div>
 </section>
 @endif
+@elseif(request()->segment(1) && request()->segment(2) && !str_contains(request()->path(), 'admin') && !str_contains(request()->path(), 'collections/') && !str_contains(request()->path(), 'products/'))
+@php
+    // Try to get category and occasion from URL slugs
+    $categorySlug = request()->segment(1);
+    $occasionSlug = request()->segment(2);
+    
+    $category = \App\Models\Category::where('slug', $categorySlug)->first();
+    $occasion = \App\Models\Occasion::where('slug', $occasionSlug)->first();
+    
+    $categoryOccasionContent = null;
+    if ($category && $occasion) {
+        $categoryOccasionContent = \App\Models\CategoryOccasionContent::where('category_id', $category->id)
+            ->where('occasion_id', $occasion->id)
+            ->first();
+    }
+@endphp
+@if($categoryOccasionContent)
+<section id="dynamic-content-sec-3" class="w-full bg-white py-12 lg:py-20">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
+
+    <!-- Category-Ocassion Heading -->
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+      {{ $category->name }} for {{ $occasion->name }} - Premium Collection by Aiman Royale
+    </h2>
+
+    <!-- Category-Ocassion Content with Preview -->
+    <div class="prose prose-lg max-w-none">
+      <div class="leading-relaxed text-base md:text-lg">
+        <!-- Preview section -->
+        <div id="category-occasion-preview" class="mb-2">
+          {!! Str::limit(strip_tags($categoryOccasionContent->content), 200, '...') !!}
+        </div>
+        
+        <!-- Read more button -->
+        <button id="category-occasion-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+          Read more
+        </button>
+        
+        <!-- Full content (initially hidden) -->
+        <div id="category-occasion-full-content" class="hidden mt-4">
+          <div class="leading-relaxed text-base md:text-lg">
+            {!! $categoryOccasionContent->content !!}
+          </div>
+          
+          <!-- Show less button -->
+          <button id="category-occasion-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+            Show less
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const readMoreBtn = document.getElementById('category-occasion-read-more');
+        const showLessBtn = document.getElementById('category-occasion-show-less');
+        const preview = document.getElementById('category-occasion-preview');
+        const fullContent = document.getElementById('category-occasion-full-content');
+        
+        if (readMoreBtn && showLessBtn && preview && fullContent) {
+          readMoreBtn.addEventListener('click', function() {
+            preview.classList.add('hidden');
+            readMoreBtn.classList.add('hidden');
+            fullContent.classList.remove('hidden');
+          });
+          
+          showLessBtn.addEventListener('click', function() {
+            preview.classList.remove('hidden');
+            readMoreBtn.classList.remove('hidden');
+            fullContent.classList.add('hidden');
+          });
+        }
+      });
+    </script>
+
+  </div>
+</section>
+@endif
 @endif
 <style>
    .card-shadow {
