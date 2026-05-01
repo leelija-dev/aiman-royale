@@ -62,7 +62,7 @@
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <span class="text-sm">{{ $faq->category->category_name ?? 'N/A' }}</span>
+                                            <span class="text-sm">{{ $faq->category->name ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                 </td>

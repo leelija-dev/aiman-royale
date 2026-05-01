@@ -36,7 +36,7 @@ class FaqController extends Controller
         }
     }
 
-    public function getFaqUsingCategory($categoryId): JsonResponse  //http://127.0.0.1:8000/api/faqs/category/2
+    public function getFaqUsingCategory(int $categoryId): JsonResponse  //http://127.0.0.1:8000/api/faqs/category/2
     {
         try {
             $faqs = Faq::where('is_active', 1)
@@ -59,7 +59,7 @@ class FaqController extends Controller
         }
     }
 
-    public function getFaqsUsingId($faqId): JsonResponse
+    public function getFaqsUsingId(int $faqId): JsonResponse
     {
         try {
             $faq = Faq::where('is_active', 1)

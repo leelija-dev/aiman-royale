@@ -129,6 +129,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
+    Route::post('/cancel-order/{orderId}', [UserController::class, 'cancelOrder'])->name('order.cancel');
 
     // Custom Dimensions Routes
     Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('web.custom-request');

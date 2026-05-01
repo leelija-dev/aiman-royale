@@ -8,6 +8,7 @@
 
 
    @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
    <style>
        .fashion-gradient {
@@ -391,9 +392,14 @@
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-times mr-2"></i>Return Product
                                    </button>
-                                   @else
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']))
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium" 
+                                           onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
+                                   </button>
+                                   @else
+                                   <button class="px-4 py-2 bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
+                                       <i class="fas fa-times mr-2"></i>Cannot Cancel
                                    </button>
                                    @endif
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
@@ -697,6 +703,76 @@
                    errorDiv.parentNode.removeChild(errorDiv);
                }
            }, 3000);
+       }
+
+       // Cancel Order Function
+       function cancelOrder(orderId, currentStatus) {
+           if (!confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+               return;
+           }
+
+           // Show loading state
+           const button = event.target;
+           const originalText = button.innerHTML;
+           button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Cancelling...';
+           button.disabled = true;
+
+           // Make AJAX request
+           fetch(`/cancel-order/${orderId}`, {
+               method: 'POST',
+               headers: {
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                   reason: 'Customer requested cancellation'
+               })
+           })
+           .then(response => response.json())
+           .then(data => {
+               if (data.success) {
+                   // Show success message
+                   showNotification(data.message, 'success');
+                   // Reload page after 2 seconds to show updated status
+                   setTimeout(() => {
+                       window.location.reload();
+                   }, 2000);
+               } else {
+                   // Show error message
+                   showNotification(data.message, 'error');
+                   // Restore button
+                   button.innerHTML = originalText;
+                   button.disabled = false;
+               }
+           })
+           .catch(error => {
+               console.error('Error:', error);
+               showNotification('Error cancelling order. Please try again.', 'error');
+               // Restore button
+               button.innerHTML = originalText;
+               button.disabled = false;
+           });
+       }
+
+       // Show notification helper
+       function showNotification(message, type) {
+           const notification = document.createElement('div');
+           const bgColor = type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700';
+           notification.className = `fixed top-4 right-4 ${bgColor} px-4 py-3 rounded-lg z-50 border`;
+           notification.innerHTML = `
+               <div class="flex items-center">
+                   <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} mr-2"></i>
+                   <span>${message}</span>
+               </div>
+           `;
+           
+           document.body.appendChild(notification);
+           
+           setTimeout(() => {
+               if (notification.parentNode) {
+                   notification.parentNode.removeChild(notification);
+               }
+           }, 5000);
        }
    </script>
    @endsection

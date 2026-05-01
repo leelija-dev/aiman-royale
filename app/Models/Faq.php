@@ -23,12 +23,12 @@ class Faq extends Model
     
     public function category()
     {
-        return $this->belongsTo(FaqCategory::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id')->withDefault();
     }
     
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class, 'product_id')->withDefault();
     }
     
     public function scopeActive($query)

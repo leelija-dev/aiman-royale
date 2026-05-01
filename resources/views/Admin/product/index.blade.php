@@ -105,7 +105,7 @@
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">${{ number_format($product->price, 2) }}</h6>
+                                            <h6 class="mb-0 text-sm">₹{{ number_format($product->price, 2) }}</h6>
                                             @if ($product->discount_price)
                                             <p class="text-xs text-success mb-0">
                                                 ${{ number_format($product->discount_price, 2) }}</p>

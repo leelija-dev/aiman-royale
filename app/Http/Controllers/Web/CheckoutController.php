@@ -369,6 +369,30 @@ class CheckoutController extends Controller
 
         Log::info('Order updated in paymentSuccess: ' . $orderId . ' with transaction_id: ' . ($updateData['transaction_id'] ?? 'N/A'));
 
+        // Update stock for ordered items
+        try {
+            $orderItems = DB::table('ordered_products')->where('order_id', $orderId)->get();
+            
+            foreach ($orderItems as $item) {
+                if ($item->variant_id) {
+                    // Decrease stock for the variant
+                    $updated = DB::table('product_variants')
+                        ->where('id', $item->variant_id)
+                        ->where('stock', '>', 0) // Ensure we don't go below 0
+                        ->decrement('stock', $item->quantity);
+                    
+                    if ($updated) {
+                        Log::info('Stock updated for variant ' . $item->variant_id . ', decreased by ' . $item->quantity);
+                    } else {
+                        Log::warning('Failed to update stock for variant ' . $item->variant_id . ' - insufficient stock or variant not found');
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to update stock after payment: ' . $e->getMessage());
+            // Continue with payment success even if stock update fails
+        }
+
         // Clear cart
         DB::table('carts')->where('user_id', auth()->id())->delete();
 
