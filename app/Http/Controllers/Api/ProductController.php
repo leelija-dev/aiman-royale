@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Order;
 use Cashfree\Model\Products;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -431,6 +432,69 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
+
+    public function getShippedProducts(): JsonResponse
+    {
+        try {
+            $shippedProducts = Order::where('order_status', 'shipped')
+                ->with(['orderProducts', 'variants'])
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $shippedProducts,
+                'total_results' => $shippedProducts->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching shipped products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    } 
+    
+    public function getDeliveredProducts(): JsonResponse
+    {
+        try {
+            $deliveredProducts = Order::where('order_status', 'delivered')
+                ->with(['orderProducts', 'variants'])
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $deliveredProducts,
+                'total_results' => $deliveredProducts->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching delivered products: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
+        }
+    }
+
+    public function getCancelledProducts(): JsonResponse
+    {
+        try {
+            $cancelledProducts = Order::where('order_status', 'cancelled')
+                ->with(['orderProducts', 'variants'])
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $cancelledProducts,
+                'total_results' => $cancelledProducts->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching cancelled products: ' . $e->getMessage(),
                 'data' => null
             ], 500);
         }
