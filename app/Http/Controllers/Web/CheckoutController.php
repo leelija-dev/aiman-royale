@@ -266,6 +266,27 @@ class CheckoutController extends Controller
             
             Log::info('COD order processed: ' . $orderId . ', Affected rows: ' . $affected);
 
+            // Get order details to reduce stock
+            $order = DB::table('orders')->where('id', $orderId)->first();
+            if ($order) {
+                // Get ordered products to reduce stock
+                $orderedProducts = DB::table('ordered_products')->where('order_id', $orderId)->get();
+                
+                foreach ($orderedProducts as $orderedProduct) {
+                    if ($orderedProduct->variant_id) {
+                        // Reduce stock from product_variants table
+                        $stockReduced = DB::table('product_variants')
+                            ->where('id', $orderedProduct->variant_id)
+                            ->where('stock', '>=', $orderedProduct->quantity)
+                            ->decrement('stock', $orderedProduct->quantity);
+                            
+                        Log::info('Stock reduced - Variant ID: ' . $orderedProduct->variant_id . 
+                                  ', Quantity: ' . $orderedProduct->quantity . 
+                                  ', Stock Reduced: ' . $stockReduced);
+                    }
+                }
+            }
+
             // Clear cart
             DB::table('carts')->where('user_id', auth()->id())->delete();
 
