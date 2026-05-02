@@ -261,7 +261,8 @@
                                        <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
                                            {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
-                                                   src="{{asset($orderProduct->product->images->first()->image ?? '')}}"
+                                                  {{-- src="{{asset($orderProduct->product->images->first()->image ?? '')}}" --}}
+                                                  src="{{asset($orderProduct->product->featured_image ?? '')}}"
                                                    class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                                                    alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                        </div>
