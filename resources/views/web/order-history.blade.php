@@ -197,7 +197,7 @@
                                </select>
                            </div>
                        </div>
-@dd($orders)
+
                        <!-- Quick Filter Tabs -->
                        <div class="flex flex-wrap gap-2 mt-4">
                            <a href="{{route('user.order-history', base64_encode($user->id))}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition"><button class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">All Orders</button> </a>
@@ -471,7 +471,7 @@
                                 </button>
                             </div> --}}
                    </div>
-
+@dd($orders)
                    {{-- <div class="order-card bg-white rounded-2xl shadow-sm p-6">
                             <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
                                 <div>
