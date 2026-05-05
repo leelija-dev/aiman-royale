@@ -1,7 +1,7 @@
    @extends('layout.web.main-layout')
    <?php
     $user = $user ?? auth()->user();
-    dd($user); exit;
+    // dd($user); exit;
 
     ?>
 
