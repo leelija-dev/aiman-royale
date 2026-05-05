@@ -120,7 +120,7 @@
                        </a>
                        </nav> --}}
                        @include('components.web.profile-sidebar', $user)
-@dd($orders)
+
                        <!-- Order Stats -->
                        <div class="mt-8 pt-6 border-t border-gray-200">
                            <h3 class="font-medium text-gray-900 mb-4">Order Summary</h3>
@@ -197,7 +197,7 @@
                                </select>
                            </div>
                        </div>
-
+@dd($orders)
                        <!-- Quick Filter Tabs -->
                        <div class="flex flex-wrap gap-2 mt-4">
                            <a href="{{route('user.order-history', base64_encode($user->id))}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition"><button class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">All Orders</button> </a>
