@@ -291,7 +291,7 @@
                                    ->where('product_id', $orderProduct->product->id)
                                    ->where('order_id', $ord->id)
                                    ->exists();
-                                   dd($hasReviewed);
+                                  
                                    @endphp
 
                                    @if($hasReviewed)
@@ -392,6 +392,7 @@
                                </div>
                                @endforeach
                                <!-- Order Actions -->
+                                {{--
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
                                    @if($ord->order_status == 'delivered')
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
@@ -414,6 +415,7 @@
                                        <i class="fas fa-receipt mr-2"></i>View Invoice
                                    </button>
                                </div>
+                               --}}
 
                            </div>
                            @endforeach
