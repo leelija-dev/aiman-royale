@@ -1,7 +1,8 @@
    @extends('layout.web.main-layout')
    <?php
     $user = $user ?? auth()->user();
-    dd($user); exit;
+
+    // dd($user); exit;
 
     ?>
 
@@ -119,7 +120,7 @@
                        </a>
                        </nav> --}}
                        @include('components.web.profile-sidebar', $user)
-
+@dd($orders)
                        <!-- Order Stats -->
                        <div class="mt-8 pt-6 border-t border-gray-200">
                            <h3 class="font-medium text-gray-900 mb-4">Order Summary</h3>
