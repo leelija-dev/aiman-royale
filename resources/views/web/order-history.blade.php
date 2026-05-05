@@ -291,6 +291,7 @@
                                    ->where('product_id', $orderProduct->product->id)
                                    ->where('order_id', $ord->id)
                                    ->exists();
+                                   dd($hasReviewed);
                                    @endphp
 
                                    @if($hasReviewed)
