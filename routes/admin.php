@@ -241,6 +241,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             ]
         ])->except(['show', 'destroy']);
 
+        // Product Parts API
+        Route::get('products/{productId}/parts', [AdminProductController::class, 'getParts'])->name('admin.products.parts');
+
         // Custom delete route to use delete method
         Route::delete('products/{id}', [AdminProductController::class, 'delete'])->name('admin.products.delete');
 

@@ -73,6 +73,22 @@ class ProductController extends Controller
 
         return view('Admin.product.create', compact('categories', 'occasions', 'brands'));
     }
+
+    /**
+     * Get product parts for AJAX request
+     */
+    public function getParts($productId)
+    {
+        try {
+            $product = Product::findOrFail($productId);
+            $parts = $product->parts()->orderBy('order')->get();
+            
+            return response()->json($parts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to load parts'], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         // dd($request);
@@ -99,13 +115,13 @@ class ProductController extends Controller
             'meta_description' => 'required|string',
             'schema_markup' => 'nullable|string',
             // 'image' => 'required|image|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
-            'lehenga_fabric' => 'nullable|string|max:500',
-            'choli_fabric' => 'nullable|string|max:500',
-            'dupatta_fabric' => 'nullable|string|max:500',
-            'type' => 'nullable|string',
-            'stitching_type' => 'nullable|string|max:500',
-            'pattern' => 'nullable|string',
-            'sales_package' => 'nullable|string|max:500',
+            // 'lehenga_fabric' => 'nullable|string|max:500',
+            // 'choli_fabric' => 'nullable|string|max:500',
+            // 'dupatta_fabric' => 'nullable|string|max:500',
+            // 'type' => 'nullable|string',
+            // 'stitching_type' => 'nullable|string|max:500',
+            // 'pattern' => 'nullable|string',
+            // 'sales_package' => 'nullable|string|max:500',
             'color' => 'nullable|string',
         ]);
         // $data['ocassion_id'] = $request->occasion_id;
