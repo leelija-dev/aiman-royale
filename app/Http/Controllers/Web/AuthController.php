@@ -57,7 +57,7 @@ class AuthController extends Controller
         try {
             Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
                 $message->to($request->email)
-                    ->subject('Email Verification OTP - Your App Name');
+                    ->subject('Email Verification OTP - Aiman Royale');
             });
             // dd($otp);
 
@@ -157,7 +157,7 @@ class AuthController extends Controller
                 // Send OTP email
                 Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
                     $message->to($request->email)
-                        ->subject('Email Verification OTP - StyleHub');
+                        ->subject('Email Verification OTP - Aiman Royale');
                 });
 
                 // Store OTP in database
@@ -291,7 +291,7 @@ class AuthController extends Controller
                 // Send OTP email
                 Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($registrationData) {
                     $message->to($registrationData['email'])
-                        ->subject('Email Verification OTP - StyleHub');
+                        ->subject('Email Verification OTP - Aiman Royale');
                 });
 
                 // Update OTP in database
@@ -349,7 +349,7 @@ class AuthController extends Controller
                 // Send OTP email
                 Mail::raw("Your OTP for password reset is: {$otp}", function ($message) use ($request) {
                     $message->to($request->email)
-                        ->subject('Password Reset OTP - StyleHub');
+                        ->subject('Password Reset OTP - Aiman Royale');
                 });
 
                 // Store OTP in database
@@ -424,7 +424,7 @@ class AuthController extends Controller
                 // Send OTP email
                 Mail::raw("Your OTP for password reset is: {$otp}", function ($message) use ($forgotPasswordData) {
                     $message->to($forgotPasswordData['email'])
-                        ->subject('Password Reset OTP - StyleHub');
+                        ->subject('Password Reset OTP - Aiman Royale');
                 });
 
                 // Update OTP in database
