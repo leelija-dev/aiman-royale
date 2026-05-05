@@ -257,8 +257,9 @@
                                </div>
 
                                <!-- Order Items -->
+                               
                                @foreach($ord->orderProducts as $orderProduct)
-                               @dd($orderProduct)
+                              
                                <div class="space-y-4 mt-2">
                                    <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
 
@@ -392,6 +393,7 @@
                                 </div> --}}
                                </div>
                                @endforeach
+                              
                                <!-- Order Actions -->
                                
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
