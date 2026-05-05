@@ -105,7 +105,7 @@
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">₹{{ number_format($product->price, 2) }}</h6>
+                                            <h6 class="mb-0 text-sm">${{ number_format($product->price, 2) }}</h6>
                                             @if ($product->discount_price)
                                             <p class="text-xs text-success mb-0">
                                                 ${{ number_format($product->discount_price, 2) }}</p>
@@ -410,6 +410,91 @@
                                 @endforeach
                             </div>
                         </div>
+
+                        <!-- Specifications Section -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">Product Specifications</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Lehenga Fabric -->
+                                    {{--
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_lehenga_fabric_{{ $product->id }}" class="form-label">Lehenga Fabric</label>
+                                    <input type="text" class="form-control"
+                                        id="edit_lehenga_fabric_{{ $product->id }}"
+                                        name="lehenga_fabric"
+                                        value="{{ $product->lehenga_fabric ?? '' }}" maxlength="100">
+                                </div>
+
+                                <!-- Choli Fabric -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_choli_fabric_{{ $product->id }}" class="form-label">Choli Fabric</label>
+                                    <input type="text" class="form-control"
+                                        id="edit_choli_fabric_{{ $product->id }}"
+                                        name="choli_fabric"
+                                        value="{{ $product->choli_fabric ?? '' }}" maxlength="100">
+                                </div>
+
+                                <!-- Dupatta Fabric -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit_dupatta_fabric_{{ $product->id }}" class="form-label">Dupatta Fabric</label>
+                                    <input type="text" class="form-control"
+                                        id="edit_dupatta_fabric_{{ $product->id }}"
+                                        name="dupatta_fabric"
+                                        value="{{ $product->dupatta_fabric ?? '' }}" maxlength="100">
+                                </div>
+                                --}}
+
+                                <!-- Type -->
+                                {{--
+                                            <div class="col-md-6 mb-3">
+                                                <label for="edit_type_{{ $product->id }}" class="form-label">Type</label>
+                                <input type="text" class="form-control"
+                                    id="edit_type_{{ $product->id }}"
+                                    name="type"
+                                    value="{{ $product->type ?? '' }}" maxlength="100">
+                            </div>
+                            --}}
+
+                            <!-- Stitching Type -->
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_stitching_type_{{ $product->id }}" class="form-label">Stitching Type</label>
+                                <input type="text" class="form-control"
+                                    id="edit_stitching_type_{{ $product->id }}"
+                                    name="type"
+                                    value="{{ $product->type ?? '' }}">
+                            </div>
+
+                            <!-- Pattern -->
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_pattern_{{ $product->id }}" class="form-label">Pattern</label>
+                                <input type="text" class="form-control"
+                                    id="edit_pattern_{{ $product->id }}"
+                                    name="pattern"
+                                    value="{{ $product->pattern ?? '' }}">
+                            </div>
+
+                            <!-- Color -->
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_color_{{ $product->id }}" class="form-label">Color</label>
+                                <input type="text" class="form-control"
+                                    id="edit_color_{{ $product->id }}"
+                                    name="color"
+                                    value="{{ $product->color ?? '' }}" maxlength="100">
+                            </div>
+
+                            <!-- Sales Package -->
+                            <div class="col-md-12 mb-3">
+                                <label for="edit_sales_package_{{ $product->id }}" class="form-label">Sales Package</label>
+                                <textarea class="form-control"
+                                    id="edit_sales_package_{{ $product->id }}"
+                                    name="sales_package" rows="2">{{ $product->sales_package ?? '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="mb-3">
                     <label for="edit_price_{{ $product->id }}"
@@ -717,6 +802,47 @@
         return div.innerHTML;
     }
 
+    function addProductPart(productId) {
+        const container = document.getElementById('product-parts-container-' + productId);
+        if (!container) return;
+
+        // Get current part count for index
+        const partCount = container.children.length;
+
+        // Create new part element from scratch (not from template)
+        const newPart = document.createElement('div');
+        newPart.className = 'part-item border rounded p-3 mb-3';
+        newPart.style.background = '#f8f9fa';
+        newPart.setAttribute('data-part-index', partCount);
+        newPart.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0 part-number">Part ${partCount + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removePart(this, ${productId})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Part Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control part-name" name="parts[${partCount}][part_name]" 
+                               placeholder="e.g., Lehenga, Choli, Dupatta">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Fabric</label>
+                        <input type="text" class="form-control" name="parts[${partCount}][fabric]" 
+                               placeholder="e.g., Art Silk, Cotton, Net">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Work Type</label>
+                        <input type="text" class="form-control" name="parts[${partCount}][work_type]" 
+                               placeholder="e.g., Zari Work, Mirror Work, Thread Work">
+                    </div>
+                </div>
+            `;
+
+        container.appendChild(newPart);
+    }
+
     function loadProductParts(productId) {
         const container = document.getElementById('product-parts-container-' + productId);
         if (!container) return;
@@ -788,54 +914,6 @@
         `;
         
         return partDiv;
-    }
-
-    function addProductPart(productId) {
-        const container = document.getElementById('product-parts-container-' + productId);
-        if (!container) return;
-
-        // Remove empty state message if it exists
-        const emptyState = container.querySelector('.text-center.text-muted');
-        if (emptyState) {
-            emptyState.remove();
-        }
-
-        // Get current part count for index (including existing parts)
-        const existingParts = container.querySelectorAll('.part-item');
-        const partCount = existingParts.length;
-
-        // Create new part element from scratch (not from template)
-        const newPart = document.createElement('div');
-        newPart.className = 'part-item border rounded p-3 mb-3';
-        newPart.style.background = '#f8f9fa';
-        newPart.setAttribute('data-part-index', partCount);
-        newPart.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0 part-number">Part ${partCount + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="removePart(this, ${productId})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Part Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control part-name" name="parts[${partCount}][part_name]" 
-                               placeholder="e.g., Lehenga, Choli, Dupatta">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Fabric</label>
-                        <input type="text" class="form-control" name="parts[${partCount}][fabric]" 
-                               placeholder="e.g., Art Silk, Cotton, Net">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Work Type</label>
-                        <input type="text" class="form-control" name="parts[${partCount}][work_type]" 
-                               placeholder="e.g., Zari Work, Mirror Work, Thread Work">
-                    </div>
-                </div>
-            `;
-
-        container.appendChild(newPart);
     }
 
     function removePart(button, productId) {
