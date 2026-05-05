@@ -216,6 +216,7 @@
                            <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
                            {{-- @if($orders->count() > 0) --}}
                            @foreach($orders as $ord)
+                           @dd($ord)
                            {{-- @dd($ord->product); --}}
                            <div class="order-card bg-white rounded-2xl shadow-sm p-6 mb-4">
                                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
@@ -471,7 +472,7 @@
                                 </button>
                             </div> --}}
                    </div>
-@dd($orders)
+
                    {{-- <div class="order-card bg-white rounded-2xl shadow-sm p-6">
                             <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
                                 <div>
