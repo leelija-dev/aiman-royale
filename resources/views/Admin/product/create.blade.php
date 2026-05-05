@@ -102,7 +102,7 @@
                             </div>
 
                             <!-- Specifications Section -->
-                             {{--
+                            
                             <div class="card mb-3">
                                 <div class="card-header">
                                     <h5 class="mb-0">Product Specifications</h5>
@@ -190,7 +190,7 @@
                                     </div>
                                 </div>
                             </div>
-                             --}}
+                            
                             <!-- Product Parts Management -->
                             <div class="card mb-3">
                                 <div class="card-header d-flex justify-content-between align-items-center">
