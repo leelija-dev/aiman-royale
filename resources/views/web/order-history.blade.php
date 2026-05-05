@@ -216,7 +216,7 @@
                            <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
                            {{-- @if($orders->count() > 0) --}}
                            @foreach($orders as $ord)
-                           @dd($ord)
+                          
                            {{-- @dd($ord->product); --}}
                            <div class="order-card bg-white rounded-2xl shadow-sm p-6 mb-4">
                                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
@@ -264,7 +264,7 @@
                                        <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
                                            {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
-                                                  {{-- src="{{asset($orderProduct->product->images->first()->image ?? '')}}" --}}
+                                                  
                                                   src="{{asset($orderProduct->product->featured_image ?? '')}}"
                                                    class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                                                    alt="{{$orderProduct->product->name ?? ''}}" /></a>
