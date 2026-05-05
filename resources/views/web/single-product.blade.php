@@ -1005,6 +1005,7 @@
                     @endif
                     
                     <!-- Product Parts with Fabric and Stitching Type -->
+                     {{--
                     @if($product->parts && $product->parts->count() > 0)
                     <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
                     <div class="space-y-3">
@@ -1031,6 +1032,43 @@
                         @endforeach
                     </div>
                     @endif
+
+                    --}}
+                    <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                            <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @if($product->type)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Type</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->type }}</span>
+                                </div>
+                                @endif
+                                @if($product->color)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Color</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->color }}</span>
+                                </div>
+                                @endif
+                                @if($product->fit)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Fit</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
+                                </div>
+                                @endif
+                                @if($product->fabric && !$product->parts)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Fabric</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
+                                </div>
+                                @endif
+                                @if($product->sales_package)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Package Contains</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
+                                </div>
+                                @endif
+                            </div>
+                    </div>
                 </div>
 
                 <!-- Specification Tab -->
@@ -1107,6 +1145,7 @@
                         @endif
 
                         <!-- Common Specifications -->
+                         {{--
                         <div class="mt-4 p-3 border rounded-lg bg-gray-50">
                             <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1142,6 +1181,7 @@
                                 @endif
                             </div>
                         </div>
+                        --}}
                     </div>
                 </div>
 
@@ -1271,6 +1311,7 @@
                         @endif
                         
                         <!-- Product Parts with Fabric and Stitching Type -->
+                         {{--
                         @if($product->parts && $product->parts->count() > 0)
                         <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
                         <div class="space-y-3">
@@ -1297,6 +1338,42 @@
                             @endforeach
                         </div>
                         @endif
+                        --}}
+                        <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                            <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @if($product->type)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Type</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->type }}</span>
+                                </div>
+                                @endif
+                                @if($product->color)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Color</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->color }}</span>
+                                </div>
+                                @endif
+                                @if($product->fit)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Fit</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
+                                </div>
+                                @endif
+                                @if($product->fabric && !$product->parts)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Fabric</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
+                                </div>
+                                @endif
+                                @if($product->sales_package)
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-gray-500">Package Contains</span>
+                                    <span class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
