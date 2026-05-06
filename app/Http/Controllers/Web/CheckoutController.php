@@ -418,9 +418,11 @@ class CheckoutController extends Controller
         DB::table('carts')->where('user_id', auth()->id())->delete();
 
         // Clear Cashfree session
-        session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']);
+        session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']); 
 
-        return redirect()->route('page.index')->with('success', 'Payment successful! Order placed.');
+        // return redirect()->route('page.index')->with('success', 'Payment successful! Order placed.');
+        return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Payment successful! Order placed.');
+
     }
 
     public function paymentCancel()
