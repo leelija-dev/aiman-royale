@@ -94,7 +94,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <a href="#" class="text-sm text-purple-600 hover:text-purple-500">Forgot password?</a>
+                            <a href="{{ route('page.forgot-password') }}" class="text-sm text-purple-600 hover:text-purple-500">Forgot password?</a>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
