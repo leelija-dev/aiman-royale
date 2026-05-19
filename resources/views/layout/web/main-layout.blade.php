@@ -123,7 +123,7 @@
     <link rel="stylesheet" href="{{asset('web/css/app-popup.css')}}">
 </head>
 
-<body class="overflow-x-hidden ">
+<body class="overflow-x-hidden px-0">
 
     @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
     <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
