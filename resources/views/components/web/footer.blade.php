@@ -2343,7 +2343,7 @@ $isProductPage = !empty($productSlug);
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
 <a href="https://wa.me/919999999999" target="_blank"
-  class="fixed bottom-[7.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
+  class="fixed bottom-[10.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
 

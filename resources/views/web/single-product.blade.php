@@ -679,7 +679,7 @@ error_log('Product Data: ' . json_encode([
     }
 
     .accordion-wrapper.active .accordion-chevron {
-        transform: rotate(180deg);
+        transform: rotate(90deg) !important;
     }
 </style>
 
@@ -969,7 +969,7 @@ error_log('Product Data: ' . json_encode([
 </section>
 
 <!-- Fullscreen Modal -->
-<div class="fixed inset-0 bg-black/95 hidden items-center justify-center z-50" id="zoom-modal">
+<div class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[40000]" id="zoom-modal">
     <button class="absolute top-8 right-8 text-white text-4xl hover:text-gray-300 z-10" id="close-zoom">
         <i class="fas fa-times"></i>
     </button>
@@ -1296,7 +1296,7 @@ error_log('Product Data: ' . json_encode([
         <div class="accordion-wrapper border-b">
             <div class="flex justify-between items-center py-4 cursor-pointer">
                 <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Product Details</span>
-                <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+                <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
             </div>
             <div class="accordion-content-block">
                 <div class="pb-4">
@@ -1387,7 +1387,7 @@ error_log('Product Data: ' . json_encode([
     <div class="accordion-wrapper border-b">
         <div class="flex justify-between items-center py-4 cursor-pointer">
             <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Specification</span>
-            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
         </div>
         <div class="accordion-content-block">
             <div class="pb-4">
@@ -1459,7 +1459,7 @@ error_log('Product Data: ' . json_encode([
                     <span class="text-xs text-gray-500 font-medium">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                 </div>
             </div>
-            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/arrow-down 1.svg') }}" alt="Toggle" />
+            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
         </div>
         <div class="accordion-content-block">
             <div class="pb-4 space-y-6">
