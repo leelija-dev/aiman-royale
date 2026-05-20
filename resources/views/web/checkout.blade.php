@@ -156,7 +156,7 @@
       </div>
 
       <!-- Right Column: Order Summary -->
-      <div class="xl:w-102 w-96">
+      <div class="xl:w-102 lgg:w-96 w-full">
         <div class="bg-white rounded-lg shadow-sm p-6">
           <h2 class="text-xl font-semibold mb-6">Your Cart</h2>
 
