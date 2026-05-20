@@ -736,7 +736,7 @@ error_log('Product Data: ' . json_encode([
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                <div id="get-zoom-container" class="zoom-container w-auto max-h-[950px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
+                <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
