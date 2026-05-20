@@ -121,7 +121,7 @@ error_log('Product Data: ' . json_encode([
 
     #single-right-content #price-container .text-xl {
         font-size: 1.85rem !important;
-        font-weight: 800;
+       
         color: #2c241a;
         letter-spacing: -0.5px;
     }
@@ -687,10 +687,10 @@ error_log('Product Data: ' . json_encode([
 
     @if($product->variants->first() == true)
 
-    <div class="container mx-auto">
+    <div class=" mx-auto max-w-[1400px]">
         <div class="flex md:flex-nowrap flex-wrap gap-6">
             <!-- LEFT IMAGE SECTION -->
-            <div class="flex flex-col lg:flex-row gap-2 min-w-[40%]">
+            <div class="flex flex-col lg:flex-row gap-2 min-w-[59%]">
                 <!-- Thumbnails Container -->
                 <div id="thumbnail-container" class="flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
                     @php
@@ -960,7 +960,7 @@ error_log('Product Data: ' . json_encode([
         </div>
     </div>
     @else
-    <div class="container mx-auto">
+    <div class=" mx-auto max-w-[1400px]">
         <div class="w-full text-center mb-6">
             <h1 class="text-2xl font-semibold mb-2">Product Not Found!</h1>
         </div>
@@ -1296,7 +1296,7 @@ error_log('Product Data: ' . json_encode([
         <div class="accordion-wrapper border-b">
             <div class="flex justify-between items-center py-4 cursor-pointer">
                 <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Product Details</span>
-                <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
+                <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
             </div>
             <div class="accordion-content-block">
                 <div class="pb-4">
@@ -1387,7 +1387,7 @@ error_log('Product Data: ' . json_encode([
     <div class="accordion-wrapper border-b">
         <div class="flex justify-between items-center py-4 cursor-pointer">
             <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Specification</span>
-            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
+            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
         </div>
         <div class="accordion-content-block">
             <div class="pb-4">
@@ -1459,7 +1459,7 @@ error_log('Product Data: ' . json_encode([
                     <span class="text-xs text-gray-500 font-medium">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                 </div>
             </div>
-            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('assets/images/icons/up-arrow.png') }}" alt="Toggle" />
+            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
         </div>
         <div class="accordion-content-block">
             <div class="pb-4 space-y-6">
