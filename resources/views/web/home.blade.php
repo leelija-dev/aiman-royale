@@ -318,7 +318,7 @@
 
                     <h1
                         class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient">
-                        ULTIMATE
+                        PRICE DROP
                     </h1>
 
                     <div class="relative">
@@ -347,7 +347,7 @@
                         </div>
                     </button>
 
-                    <p class="text-sm text-gray-500 mt-2">Limited Time Offer</p>
+                    <p class="text-sm text-gray-500 mt-2">Limited Period Offer</p>
                 </div>
 
                 <!-- Bottom Image -->
@@ -700,8 +700,8 @@
     <div class="container mx-auto px-4">
         <!-- Header -->
         <div class="text-center mb-4">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Tied with Love</h2>
-            <p class="text-gray-500">Occasions wrapped perfectly</p>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Crafted for Celebrations</h2>
+            <p class="text-gray-500">Designed for Perfection</p>
         </div>
 
 
@@ -859,15 +859,14 @@
 
                 <div class="lgg:text-left text-center">
                     <div class="mb-6 ">
-                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Best Price Guarantee</h3>
+                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Lowest Price Ever!</h3>
 
 
                     </div>
 
 
                     <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
-                        We guarantee the lowest prices on premium fashion. If you find it cheaper elsewhere within 30
-                        days, we'll match or beat it.
+                        Shop the latest 150+ designer outfits with confidence. If you see it cheaper elsewhere in 30 days, we’ll beat that price.
                     </p>
 
                 </div>
@@ -879,21 +878,21 @@
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        Price match within 30 days
+                        30-day price protection
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        Always the lowest price guaranteed
+                        Lowest price guaranteed
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        24/7 friendly support
+                        24/7 customer support
                     </li>
                 </ul>
             </div>
@@ -1013,11 +1012,11 @@
             <div class="text-center">
                 <h3
                     class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
-                    Exclusive Deals Just for You</h3>
+                    VIP Deals Just for You</h3>
                 <button
                     class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
-                    Shop Deals Now
+                    Grab now
                 </button>
 
 
@@ -1081,26 +1080,37 @@
                 <!-- Title -->
                 <h2
                     class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
-                    Deals Of The Month
+                    Unbeatable Monthly Steals
                 </h2>
 
                 <!-- Description -->
                 <p
                     class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Scelerisque duis ultrices sollicitudin aliquam sem. Scelerisque
-                    duis ultrices sollicitudin
+                    Summer sale is on!
+
+                </p>
+                <p
+                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    Buy our premium collection of fashion outfits now at exclusive prices.
+
+                </p>
+                <p
+                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    <strong>
+                        Save more with our live sale…
+                    </strong>
+
                 </p>
 
                 <!-- Button -->
                 <button class="mt-6 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-900 transition">
-                    Buy Now
+                    Shop Now
                 </button>
 
                 <!-- Countdown Title -->
                 <h4
                     class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
-                    Hurry, Before It’s Too Late!
+                    Hurry…only 2 days left!
                 </h4>
 
                 <!-- Countdown -->
@@ -1288,10 +1298,10 @@ All Products
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        High Quality
+                        Premium Quality
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        crafted from top materials
+                        Made of the finest material
                     </p>
                 </div>
             </div>
@@ -1302,10 +1312,10 @@ All Products
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Warranty Protection
+                        Buyer Protection
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Over 2 years
+                        2+ years
                     </p>
                 </div>
             </div>
@@ -1319,7 +1329,7 @@ All Products
                         Free Shipping
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Order over 150 $
+                        Over **
                     </p>
                 </div>
             </div>
@@ -1333,7 +1343,7 @@ All Products
                         24 / 7 Support
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Dedicated support
+                        Dedicated guidance
                     </p>
                 </div>
             </div>
@@ -1444,7 +1454,7 @@ All Products
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Editor's Pick
+                Designer’s Pick
             </h2>
         </div>
         <div class="grid-container">
@@ -1456,16 +1466,16 @@ All Products
                 @foreach($editorBanners as $banner)
                 <!-- Slide -->
                 <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
-                     @if($banner->filter_type === 'multiple' && $banner->filters)
-                        data-filter="{{ $banner->filters }}"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
                     @else
-                        data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
                     @endif>
                     <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         @if($banner->subtitle)
-                            <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
                         @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             {{ $banner->title }}
@@ -1479,7 +1489,7 @@ All Products
                         @endif
 
                         <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
-                           class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
                     </div>
@@ -1490,69 +1500,69 @@ All Products
             <!-- Original grid layout for desktop -->
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
                 @foreach($editorBanners as $index => $banner)
-                    @if($index % 2 == 0)
-                        <!-- Left Banner -->
-                        <div class="relative bg-[#b8a89a] overflow-hidden"
-                             @if($banner->filter_type === 'multiple' && $banner->filters)
-                                data-filter="{{ $banner->filters }}"
-                            @else
-                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                            @endif>
-                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
-                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                            <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                                @if($banner->subtitle)
-                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                                @endif
-                                <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                                    {{ $banner->title }}
-                                </h2>
-                                @if($banner->description)
-                                <p class="text-sm text-black mb-6">
-                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                                    <span class="text-white font-medium">{{ $banner->discount }}</span>
-                                </p>
-                                @endif
-                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
-                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                                    {{ $banner->button_text }}
-                                </a>
-                            </div>
-                        </div>
-                    @endif
+                @if($index % 2 == 0)
+                <!-- Left Banner -->
+                <div class="relative bg-[#b8a89a] overflow-hidden"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
                 @endforeach
 
                 @foreach($editorBanners as $index => $banner)
-                    @if($index % 2 == 1)
-                        <!-- Right Banner -->
-                        <div class="relative bg-[#e8dcd6] overflow-hidden"
-                             @if($banner->filter_type === 'multiple' && $banner->filters)
-                                data-filter="{{ $banner->filters }}"
-                            @else
-                                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                            @endif>
-                            <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
-                                class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                            <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                                @if($banner->subtitle)
-                                    <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                                @endif
-                                <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                                    {{ $banner->title }}
-                                </h2>
-                                @if($banner->description)
-                                <p class="text-sm text-black mb-6">
-                                    Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                                    <span class="text-white font-medium">{{ $banner->discount }}</span>
-                                </p>
-                                @endif
-                                <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
-                                   class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                                    {{ $banner->button_text }}
-                                </a>
-                            </div>
-                        </div>
-                    @endif
+                @if($index % 2 == 1)
+                <!-- Right Banner -->
+                <div class="relative bg-[#e8dcd6] overflow-hidden"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
                 @endforeach
             </div>
 </section>
@@ -1872,11 +1882,11 @@ All Products
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <h2
-                class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                Premium Personal Services
+                class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem]  font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Personalized Fashion at Your Fingertips
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-                Choose your preferred way to experience luxury fashion with our experts
+                Customize your outfit with our fashion experts at your home
             </p>
         </div>
 
@@ -1920,14 +1930,13 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                                Virtual Styling Session
+                               Virtual Fashion Consultation
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Connect with our expert stylists via video call for personalized fashion advice and virtual
-                            try-ons from the comfort of your home.
+                            Find your perfect look with our virtual try-ons & connect with our stylists live for tailored one-on-one styling advice.
                         </p>
 
                         <!-- Features -->
@@ -1941,7 +1950,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Personalized styling advice</span>
+                                <span>Video-chat session</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -1952,7 +1961,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Virtual outfit try-ons</span>
+                                <span>Virtual try-ons at home</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -1976,7 +1985,7 @@ All Products
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                 </svg>
-                                <span class="text-lg">Book Video Appointment</span>
+                                <span class="text-lg">Schedule an Appointment</span>
                             </a>
                         </div>
                     </div>
@@ -1999,6 +2008,7 @@ All Products
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 PREMIUM SERVICE
+
                             </span>
                         </div>
 
@@ -2013,14 +2023,14 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                                Bridal Stylist Service
+                               Bridal Styling Service
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Your personal bridal expert guiding you through every step to find the perfect wedding dress
-                            and complete bridal look.
+                            Your go-to bridal stylist, guiding you step-by-step to help you find the perfect wedding outfit for your big day!
+
                         </p>
 
                         <!-- Features -->
@@ -2034,7 +2044,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>One-on-one bridal consultation</span>
+                                <span>Exclusive bridal consultation</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2045,7 +2055,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Complete wedding look planning</span>
+                                <span>Private styling session</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
