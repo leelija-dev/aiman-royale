@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
         filter: 'new-arrival',
         occasion: 'all',
         collection: 'all',
-        search: ''
+        search: '',
+        has_offer: ''
     };
 
     // Get search parameter from URL on page load
@@ -154,6 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (currentFilters.search && currentFilters.search.trim() !== '') {
                 params.append('search', currentFilters.search);
+            }
+
+            if (currentFilters.has_offer && currentFilters.has_offer === '1') {
+                params.append('has_offer', '1');
             }
 
             console.log('Sending filters to API:', params.toString());
@@ -647,7 +652,9 @@ document.addEventListener("DOMContentLoaded", function () {
             sort: 'date-desc',
             filter: 'new-arrival',
             occasion: 'all',
-            collection: 'all'
+            collection: 'all',
+            search: '',
+            has_offer: ''
         };
 
         const filterLabel = document.getElementById('filter-label');
@@ -680,6 +687,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.clearFilters = clearAllFilters;
+
+    // Toggle offer filter
+    window.toggleOfferFilter = function() {
+        currentFilters.has_offer = currentFilters.has_offer === '1' ? '' : '1';
+        updateFilters();
+    };
 
     // Initialize search filter from URL
     currentFilters.search = getSearchFromURL();

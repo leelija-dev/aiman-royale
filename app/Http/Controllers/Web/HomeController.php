@@ -658,6 +658,7 @@ class HomeController extends Controller
     $search = $request->input('search');
     $priceRanges = $request->input('price_ranges', []);
     $occasions = $request->input('occasions', []);
+    $hasOffer = $request->input('has_offer');
 
     // Start building the query
     $query = DB::table('products')
@@ -779,6 +780,12 @@ class HomeController extends Controller
             });
 
         }
+    }
+
+    // Apply offer filter (show only products with discount)
+    if ($hasOffer && $hasOffer == '1') {
+        $query->whereNotNull('product_variants.discount_price')
+            ->whereRaw('product_variants.discount_price < product_variants.price');
     }
 
     // Apply category filters

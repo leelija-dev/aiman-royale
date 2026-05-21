@@ -188,6 +188,12 @@ class ProductController extends Controller
                 });
             }
 
+            // Filter by products with offer (discount applied)
+            if ($request->filled('has_offer') && $request->input('has_offer') == '1') {
+                $query->whereNotNull('discount_price')
+                    ->where('discount_price', '<', 'price');
+            }
+
             // Filter by category slug
             if ($request->filled('category_slug')) {
                 $categorySlug = $request->input('category_slug');
