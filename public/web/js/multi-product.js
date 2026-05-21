@@ -19,8 +19,15 @@ document.addEventListener("DOMContentLoaded", function () {
         sort: 'date-desc',
         filter: 'new-arrival',
         occasion: 'all',
-        collection: 'all'
+        collection: 'all',
+        search: ''
     };
+
+    // Get search parameter from URL on page load
+    function getSearchFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('search') || '';
+    }
 
     // Track if sidebar is open on mobile
     let isSidebarOpen = false;
@@ -143,6 +150,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (currentFilters.collection && currentFilters.collection !== 'all') {
                 params.append('collection', currentFilters.collection);
+            }
+
+            if (currentFilters.search && currentFilters.search.trim() !== '') {
+                params.append('search', currentFilters.search);
             }
 
             console.log('Sending filters to API:', params.toString());
@@ -669,6 +680,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.clearFilters = clearAllFilters;
+
+    // Initialize search filter from URL
+    currentFilters.search = getSearchFromURL();
 
     // Initial fetch
     fetchFilteredProducts();

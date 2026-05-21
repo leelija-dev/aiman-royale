@@ -280,342 +280,746 @@ class HomeController extends Controller
         ]);
     }
 
+    // public function ShowAllProduct(Request $request)
+    // {
+    //     // Get filter parameters from request
+    //     $categories = $request->input('category', []);
+    //     $colors = $request->input('colors', []);
+    //     $sizes = $request->input('sizes', []);
+    //     $discountRanges = $request->input('discount_ranges', []);
+    //     $sortBy = $request->input('sort', 'date-desc');
+    //     $priceMin = $request->input('price_min');
+    //     $priceMax = $request->input('price_max');
+    //     $search = $request->input('search');
+    //     $priceRanges = $request->input('price_ranges', []);
+    //     $occasions = $request->input('occasions', []);
+        
+    //     // Handle general filter parameter (from banner clicks)
+    //     $generalFilter = $request->input('filter');
+        
+    //     // Handle multiple filters from banner clicks (proper query parameters)
+    //     $bannerDiscount = $request->input('banner_discount');
+    //     $bannerCategory = $request->input('banner_category');
+    //     $bannerColor = $request->input('banner_color');
+    //     $bannerSize = $request->input('banner_size');
+    //     $bannerOccasion = $request->input('banner_occasion');
+    //     $bannerPriceRange = $request->input('banner_price_range');
+        
+    //     // Process discount filters from banner
+    //     if ($bannerDiscount) {
+    //         if (preg_match('/(\d+)/', $bannerDiscount, $matches)) {
+    //             $discountPercent = (int)$matches[1];
+    //             $discountRanges = [$discountPercent . '-100'];
+    //         }
+    //     }
+        
+    //     // Process category filters from banner
+    //     if ($bannerCategory) {
+    //         $categories[] = $bannerCategory;
+    //     }
+        
+    //     // Process color filters from banner
+    //     if ($bannerColor) {
+    //         $colors[] = $bannerColor;
+    //     }
+        
+    //     // Process size filters from banner
+    //     if ($bannerSize) {
+    //         $sizes[] = $bannerSize;
+    //     }
+        
+    //     // Process occasion filters from banner
+    //     if ($bannerOccasion) {
+    //         $occasions[] = $bannerOccasion;
+    //     }
+        
+    //     // Process price range filters from banner
+    //     if ($bannerPriceRange) {
+    //         if (strpos($bannerPriceRange, '-') !== false) {
+    //             list($min, $max) = explode('-', $bannerPriceRange);
+    //             $priceMin = (int)$min;
+    //             $priceMax = (int)$max;
+    //         }
+    //     }
+        
+    //     // Handle single filter (backward compatibility)
+    //     if ($generalFilter) {
+    //         // Check if filter contains discount percentage (e.g., "50%", "30%")
+    //         if (preg_match('/(\d+)%/', $generalFilter, $matches)) {
+    //             $discountPercent = (int)$matches[1];
+    //             // Set discount range to filter products with this discount or higher
+    //             $discountRanges = [$discountPercent . '-100'];
+    //         }
+    //         // Check if filter is a category name
+    //         else {
+    //             // Try to find category by name
+    //             $categoryExists = DB::table('categories')->where('name', $generalFilter)->exists();
+    //             if ($categoryExists) {
+    //                 $categories = [$generalFilter];
+    //             }
+    //             // Try to find occasion by name
+    //             $occasionExists = DB::table('ocassions')->where('name', $generalFilter)->exists();
+    //             if ($occasionExists) {
+    //                 $occasions = [$generalFilter];
+    //             }
+    //         }
+    //     }
+
+    //     // Handle multiple filters from banner data (for future enhancement)
+    //     // This would be used if we want to process complex filter combinations
+    //     $bannerFilters = $request->input('banner_filters');
+    //     if ($bannerFilters && is_array($bannerFilters)) {
+    //         foreach ($bannerFilters as $filter) {
+    //             switch ($filter['type']) {
+    //                 case 'discount':
+    //                     if (preg_match('/(\d+)/', $filter['value'], $matches)) {
+    //                         $discountPercent = (int)$matches[1];
+    //                         $discountRanges = [$discountPercent . '-100'];
+    //                     }
+    //                     break;
+    //                 case 'category':
+    //                     $categories[] = $filter['value'];
+    //                     break;
+    //                 case 'color':
+    //                     $colors[] = $filter['value'];
+    //                     break;
+    //                 case 'size':
+    //                     $sizes[] = $filter['value'];
+    //                     break;
+    //                 case 'occasion':
+    //                     $occasions[] = $filter['value'];
+    //                     break;
+    //                 case 'price_range':
+    //                     if (strpos($filter['value'], '-') !== false) {
+    //                         list($min, $max) = explode('-', $filter['value']);
+    //                         $priceMin = (int)$min;
+    //                         $priceMax = (int)$max;
+    //                     }
+    //                     break;
+    //             }
+    //         }
+    //     }
+
+
+    //     // Start building the query
+    //     $query = DB::table('products')
+    //         ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+    //         ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+    //         ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+    //         ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
+    //         ->where('products.is_active', 1)
+    //         ->where('products.ready_to_ship', 1)
+    //         ->select(
+    //             'products.*',
+    //             'product_variants.id as variant_id',
+    //             'product_variants.size',
+    //             'product_variants.color',
+    //             'product_variants.price',
+    //             'product_variants.discount_price as price_after_discount',
+    //             'product_variants.stock',
+    //             'product_images.image as variant_image'
+    //         );
+
+    //     // Apply search filter
+    //     // if ($search && !empty(trim($search))) {
+    //     //     $searchTerm = trim($search);
+    //     //     $query->where(function ($q) use ($searchTerm) {
+    //     //         $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
+    //     //             ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
+    //     //             ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
+    //     //             ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
+    //     //             ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
+    //     //     });
+    //     // }
+
+    //     // Apply search filter
+    //    // Apply search filter
+    //     if ($search && !empty(trim($search))) {
+
+    //  $searchTerm = strtolower(trim($search));
+
+    //  // Special case for trending products
+    //  if ($searchTerm == 'trending') {
+
+    //     $query->where('products.is_featured', 1);
+
+    //  } else {
+
+    //     $query->where(function ($q) use ($searchTerm) {
+
+    //         $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
+    //             ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
+    //             ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
+    //             ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
+    //             ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
+
+    //     });
+
+    //  }
+    //      }
+
+    //     // Apply brand filters
+    //     if (!empty($categories)) {
+    //         $query->whereIn('categories.name', $categories);
+    //     }
+    //     // Apply occasion filters
+    //     if (!empty($occasions)) {
+    //         $query->whereIn('ocassions.name', $occasions);
+    //     }
+    //     // Apply price range filters
+
+    //     if (!empty($priceRanges)) {
+    //         $query->where(function ($q) use ($priceRanges) {
+    //             foreach ($priceRanges as $range) {
+    //                 [$min, $max] = explode('-', $range);
+
+
+    //                 $q->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
+    //             }
+    //         });
+    //     }
+
+    //     // Apply color filters
+    //     if (!empty($colors)) {
+    //         $query->whereIn('product_variants.color', $colors);
+    //     }
+
+    //     // Apply size filters
+    //     if (!empty($sizes)) {
+    //         $query->whereIn('product_variants.size', $sizes);
+    //     }
+    //     if (!empty($price)) {
+    //         $query->where('product_variants.discount_price', $price);
+    //     }
+
+    //     // Apply price range filters
+    //     if ($priceMin) {
+    //         $query->where(function ($q) use ($priceMin) {
+    //             $q->where('product_variants.price', '>=', $priceMin)
+    //                 ->orWhere('product_variants.discount_price', '>=', $priceMin);
+    //         });
+    //     }
+
+    //     if ($priceMax) {
+    //         $query->where(function ($q) use ($priceMax) {
+    //             $q->where('product_variants.price', '<=', $priceMax)
+    //                 ->orWhere('product_variants.discount_price', '<=', $priceMax);
+    //         });
+    //     }
+
+    //     // Apply discount range filters
+    //     if (!empty($discountRanges)) {
+    //         $query->where(function ($q) use ($discountRanges) {
+    //             foreach ($discountRanges as $range) {
+    //                 switch ($range) {
+    //                     case '10+':
+    //                         $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 10)');
+    //                         break;
+    //                     case '20+':
+    //                         $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 20)');
+    //                         break;
+    //                     case '30+':
+    //                         $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 30)');
+    //                         break;
+    //                     case '50+':
+    //                         $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 50)');
+    //                         break;
+    //                     default:
+    //                         // Handle custom ranges like "2-100", "50-100", etc.
+    //                         if (preg_match('/(\d+)-(\d+)/', $range, $matches)) {
+    //                             $minDiscount = (int)$matches[1];
+    //                             $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= ' . $minDiscount . ')');
+    //                         }
+    //                         break;
+    //                 }
+    //             }
+    //         });
+    //     }
+
+    //     // Apply sorting
+    //     switch ($sortBy) {
+    //         case 'name-asc':
+    //             $query->orderBy('products.name', 'asc');
+    //             break;
+    //         case 'name-desc':
+    //             $query->orderBy('products.name', 'desc');
+    //             break;
+    //         case 'price-low':
+    //             $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) ASC');
+    //             break;
+    //         case 'price-high':
+    //             $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) DESC');
+    //             break;
+    //         case 'date-asc':
+    //             $query->orderBy('products.created_at', 'asc');
+    //             break;
+    //         case 'date-desc':
+    //         default:
+    //             $query->orderBy('products.created_at', 'desc');
+    //             break;
+    //     }
+
+    //     // dd($query); 
+
+    //     // Get filtered products
+    //     $products = $query->get();
+
+    //     // Group products by ID to avoid duplicates
+    //     $groupedProducts = [];
+    //     foreach ($products as $product) {
+    //         $productId = $product->id;
+
+    //         if (!isset($groupedProducts[$productId])) {
+    //             // Create main product entry
+    //             $groupedProducts[$productId] = [
+    //                 'id' => $product->id,
+    //                 'design_no' => $product->design_no,
+    //                 'category_id' => $product->category_id,
+    //                 'ocassion_id' => $product->ocassion_id,
+    //                 'name' => $product->name,
+    //                 'slug' => $product->slug,
+    //                 'description' => $product->description,
+    //                 'brand' => $product->brand,
+    //                 'fabric' => $product->fabric,
+    //                 'fit' => $product->fit,
+    //                 'price' => $product->price,
+    //                 'discount_price' => $product->discount_price,
+    //                 'stock' => $product->stock,
+    //                 'status' => $product->status,
+    //                 'created_at' => $product->created_at,
+    //                 'updated_at' => $product->updated_at,
+    //                 'deleted_at' => $product->deleted_at,
+    //                 'is_active' => $product->is_active,
+    //                 'unit_id' => $product->unit_id,
+    //                 'variants' => [],
+    //                 'images' => [],
+    //             ];
+    //         }
+
+    //         // Add variant if not already added
+    //         $variantId = $product->variant_id;
+    //         if (!isset($groupedProducts[$productId]['variants'][$variantId])) {
+    //             $groupedProducts[$productId]['variants'][$variantId] = [
+    //                 'variant_id' => $product->variant_id,
+    //                 'size' => $product->size,
+    //                 'color' => $product->color,
+    //                 'price' => $product->price,
+    //                 'price_after_discount' => $product->price_after_discount,
+    //                 'stock' => $product->stock,
+    //             ];
+    //         }
+
+    //         // Add image if not already added
+    //         if ($product->variant_image && !in_array($product->variant_image, $groupedProducts[$productId]['images'])) {
+    //             $groupedProducts[$productId]['images'][] = $product->variant_image;
+    //         }
+    //     }
+
+    //     // Convert to collection for easier handling in view
+    //     $products = collect(array_values($groupedProducts));
+
+    //     // Get filter options for sidebar
+    //     $filterOptions = [
+    //         // 'brands' => DB::table('products')->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand')->filter()->toArray(),
+    //         'categories' => DB::table('categories')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
+    //         'colors' => DB::table('product_variants')->whereNotNull('color')->where('color', '!=', '')->distinct()->pluck('color')->filter()->toArray(),
+    //         // 'sizes' => DB::table('product_variants')->whereNotNull('size')->where('size', '!=', '')->distinct()->pluck('size')->filter()->toArray(),
+    //         'sizes' => DB::table('sizes')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('code')->filter()->toArray(),
+    //         'occasions' => DB::table('ocassions')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
+    //     ];
+
+    //     // Get price range
+    //     $priceRange = DB::table('product_variants')
+    //         ->selectRaw('MIN(COALESCE(discount_price, price)) as min_price, MAX(COALESCE(discount_price, price)) as max_price')
+    //         ->first();
+    //     $selectedFilters = [
+    //         'categories' => $categories,
+    //         'colors' => $colors,
+    //         'sizes' => $sizes,
+    //         'occasions' => $occasions,
+    //         'price_ranges' => array_unique($priceRanges),
+    //         'discount_ranges' => $discountRanges,
+    //     ];
+
+
+    //     return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
+    // }
+
     public function ShowAllProduct(Request $request)
-    {
-        // Get filter parameters from request
-        $categories = $request->input('category', []);
-        $colors = $request->input('colors', []);
-        $sizes = $request->input('sizes', []);
-        $discountRanges = $request->input('discount_ranges', []);
-        $sortBy = $request->input('sort', 'date-desc');
-        $priceMin = $request->input('price_min');
-        $priceMax = $request->input('price_max');
-        $search = $request->input('search');
-        $priceRanges = $request->input('price_ranges', []);
-        $occasions = $request->input('occasions', []);
-        
-        // Handle general filter parameter (from banner clicks)
-        $generalFilter = $request->input('filter');
-        
-        // Handle multiple filters from banner clicks (proper query parameters)
-        $bannerDiscount = $request->input('banner_discount');
-        $bannerCategory = $request->input('banner_category');
-        $bannerColor = $request->input('banner_color');
-        $bannerSize = $request->input('banner_size');
-        $bannerOccasion = $request->input('banner_occasion');
-        $bannerPriceRange = $request->input('banner_price_range');
-        
-        // Process discount filters from banner
-        if ($bannerDiscount) {
-            if (preg_match('/(\d+)/', $bannerDiscount, $matches)) {
-                $discountPercent = (int)$matches[1];
-                $discountRanges = [$discountPercent . '-100'];
-            }
-        }
-        
-        // Process category filters from banner
-        if ($bannerCategory) {
-            $categories[] = $bannerCategory;
-        }
-        
-        // Process color filters from banner
-        if ($bannerColor) {
-            $colors[] = $bannerColor;
-        }
-        
-        // Process size filters from banner
-        if ($bannerSize) {
-            $sizes[] = $bannerSize;
-        }
-        
-        // Process occasion filters from banner
-        if ($bannerOccasion) {
-            $occasions[] = $bannerOccasion;
-        }
-        
-        // Process price range filters from banner
-        if ($bannerPriceRange) {
-            if (strpos($bannerPriceRange, '-') !== false) {
-                list($min, $max) = explode('-', $bannerPriceRange);
-                $priceMin = (int)$min;
-                $priceMax = (int)$max;
-            }
-        }
-        
-        // Handle single filter (backward compatibility)
-        if ($generalFilter) {
-            // Check if filter contains discount percentage (e.g., "50%", "30%")
-            if (preg_match('/(\d+)%/', $generalFilter, $matches)) {
-                $discountPercent = (int)$matches[1];
-                // Set discount range to filter products with this discount or higher
-                $discountRanges = [$discountPercent . '-100'];
-            }
-            // Check if filter is a category name
-            else {
-                // Try to find category by name
-                $categoryExists = DB::table('categories')->where('name', $generalFilter)->exists();
-                if ($categoryExists) {
-                    $categories = [$generalFilter];
-                }
-                // Try to find occasion by name
-                $occasionExists = DB::table('ocassions')->where('name', $generalFilter)->exists();
-                if ($occasionExists) {
-                    $occasions = [$generalFilter];
-                }
-            }
-        }
+{
+    // Get filter parameters from request
+    $categories = $request->input('category', []);
+    $colors = $request->input('colors', []);
+    $sizes = $request->input('sizes', []);
+    $discountRanges = $request->input('discount_ranges', []);
+    $sortBy = $request->input('sort', 'date-desc');
+    $priceMin = $request->input('price_min');
+    $priceMax = $request->input('price_max');
+    $search = $request->input('search');
+    $priceRanges = $request->input('price_ranges', []);
+    $occasions = $request->input('occasions', []);
 
-        // Handle multiple filters from banner data (for future enhancement)
-        // This would be used if we want to process complex filter combinations
-        $bannerFilters = $request->input('banner_filters');
-        if ($bannerFilters && is_array($bannerFilters)) {
-            foreach ($bannerFilters as $filter) {
-                switch ($filter['type']) {
-                    case 'discount':
-                        if (preg_match('/(\d+)/', $filter['value'], $matches)) {
-                            $discountPercent = (int)$matches[1];
-                            $discountRanges = [$discountPercent . '-100'];
-                        }
-                        break;
-                    case 'category':
-                        $categories[] = $filter['value'];
-                        break;
-                    case 'color':
-                        $colors[] = $filter['value'];
-                        break;
-                    case 'size':
-                        $sizes[] = $filter['value'];
-                        break;
-                    case 'occasion':
-                        $occasions[] = $filter['value'];
-                        break;
-                    case 'price_range':
-                        if (strpos($filter['value'], '-') !== false) {
-                            list($min, $max) = explode('-', $filter['value']);
-                            $priceMin = (int)$min;
-                            $priceMax = (int)$max;
-                        }
-                        break;
-                }
-            }
-        }
+    // Start building the query
+    $query = DB::table('products')
+        ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
+        ->where('products.is_active', 1)
+        ->where('products.ready_to_ship', 1)
+        ->select(
+            'products.id',
+            'products.design_no',
+            'products.category_id',
+            'products.ocassion_id',
+            'products.name',
+            'products.slug',
+            'products.description',
+            'products.brand',
+            'products.fabric',
+            'products.fit',
+            'products.price',
+            'products.discount_price',
+            'products.stock',
+            'products.status',
+            'products.featured_image',
+            'products.ready_to_ship',
+            'products.is_featured',
+            'products.meta_title',
+            'products.keywords',
+            'products.tags',
+            'products.meta_description',
+            'products.schema_markup',
+            'products.created_at',
+            'products.updated_at',
+            'products.deleted_at',
+            'products.is_active',
+            'products.unit_id',
+            'products.lehenga_fabric',
+            'products.choli_fabric',
+            'products.dupatta_fabric',
+            'products.type',
+            'products.stitching_type',
+            'products.pattern',
+            'products.sales_package',
 
+            'product_variants.id as variant_id',
+            'product_variants.size',
+            'product_variants.color',
+            'product_variants.price as variant_price',
+            'product_variants.discount_price as price_after_discount',
+            'product_variants.stock as variant_stock',
 
-        // Start building the query
-        $query = DB::table('products')
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
-            ->where('products.is_active', 1)
-            ->where('products.ready_to_ship', 1)
-            ->select(
-                'products.*',
-                'product_variants.id as variant_id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price',
-                'product_variants.discount_price as price_after_discount',
-                'product_variants.stock',
-                'product_images.image as variant_image'
-            );
+            DB::raw('MIN(product_images.image) as variant_image')
+        )
+        ->groupBy(
+            'products.id',
+            'products.design_no',
+            'products.category_id',
+            'products.ocassion_id',
+            'products.name',
+            'products.slug',
+            'products.description',
+            'products.brand',
+            'products.fabric',
+            'products.fit',
+            'products.price',
+            'products.discount_price',
+            'products.stock',
+            'products.status',
+            'products.featured_image',
+            'products.ready_to_ship',
+            'products.is_featured',
+            'products.meta_title',
+            'products.keywords',
+            'products.tags',
+            'products.meta_description',
+            'products.schema_markup',
+            'products.created_at',
+            'products.updated_at',
+            'products.deleted_at',
+            'products.is_active',
+            'products.unit_id',
+            'products.lehenga_fabric',
+            'products.choli_fabric',
+            'products.dupatta_fabric',
+            'products.type',
+            'products.stitching_type',
+            'products.pattern',
+            'products.sales_package',
 
-        // Apply search filter
-        if ($search && !empty(trim($search))) {
-            $searchTerm = trim($search);
+            'product_variants.id',
+            'product_variants.size',
+            'product_variants.color',
+            'product_variants.price',
+            'product_variants.discount_price',
+            'product_variants.stock'
+        );
+
+    // Apply search filter
+    if ($search && !empty(trim($search))) {
+
+        $searchTerm = strtolower(trim($search));
+
+        // Trending products
+        if ($searchTerm == 'trending') {
+
+            $query->where('products.is_featured', 1);
+
+        } else {
+
             $query->where(function ($q) use ($searchTerm) {
+
                 $q->where('products.name', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('products.description', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('products.brand', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('categories.name', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('ocassions.name', 'LIKE', '%' . $searchTerm . '%');
+
             });
+
         }
-
-        // Apply brand filters
-        if (!empty($categories)) {
-            $query->whereIn('categories.name', $categories);
-        }
-        // Apply occasion filters
-        if (!empty($occasions)) {
-            $query->whereIn('ocassions.name', $occasions);
-        }
-        // Apply price range filters
-
-        if (!empty($priceRanges)) {
-            $query->where(function ($q) use ($priceRanges) {
-                foreach ($priceRanges as $range) {
-                    [$min, $max] = explode('-', $range);
-
-
-                    $q->orWhereBetween('product_variants.discount_price', [(int)$min, (int)$max]);
-                }
-            });
-        }
-
-        // Apply color filters
-        if (!empty($colors)) {
-            $query->whereIn('product_variants.color', $colors);
-        }
-
-        // Apply size filters
-        if (!empty($sizes)) {
-            $query->whereIn('product_variants.size', $sizes);
-        }
-        if (!empty($price)) {
-            $query->where('product_variants.discount_price', $price);
-        }
-
-        // Apply price range filters
-        if ($priceMin) {
-            $query->where(function ($q) use ($priceMin) {
-                $q->where('product_variants.price', '>=', $priceMin)
-                    ->orWhere('product_variants.discount_price', '>=', $priceMin);
-            });
-        }
-
-        if ($priceMax) {
-            $query->where(function ($q) use ($priceMax) {
-                $q->where('product_variants.price', '<=', $priceMax)
-                    ->orWhere('product_variants.discount_price', '<=', $priceMax);
-            });
-        }
-
-        // Apply discount range filters
-        if (!empty($discountRanges)) {
-            $query->where(function ($q) use ($discountRanges) {
-                foreach ($discountRanges as $range) {
-                    switch ($range) {
-                        case '10+':
-                            $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 10)');
-                            break;
-                        case '20+':
-                            $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 20)');
-                            break;
-                        case '30+':
-                            $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 30)');
-                            break;
-                        case '50+':
-                            $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= 50)');
-                            break;
-                        default:
-                            // Handle custom ranges like "2-100", "50-100", etc.
-                            if (preg_match('/(\d+)-(\d+)/', $range, $matches)) {
-                                $minDiscount = (int)$matches[1];
-                                $q->orWhereRaw('(product_variants.discount_price > 0 AND ((product_variants.price - product_variants.discount_price) / product_variants.price * 100) >= ' . $minDiscount . ')');
-                            }
-                            break;
-                    }
-                }
-            });
-        }
-
-        // Apply sorting
-        switch ($sortBy) {
-            case 'name-asc':
-                $query->orderBy('products.name', 'asc');
-                break;
-            case 'name-desc':
-                $query->orderBy('products.name', 'desc');
-                break;
-            case 'price-low':
-                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) ASC');
-                break;
-            case 'price-high':
-                $query->orderByRaw('COALESCE(product_variants.discount_price, product_variants.discount_price) DESC');
-                break;
-            case 'date-asc':
-                $query->orderBy('products.created_at', 'asc');
-                break;
-            case 'date-desc':
-            default:
-                $query->orderBy('products.created_at', 'desc');
-                break;
-        }
-
-        // Get filtered products
-        $products = $query->get();
-
-        // Group products by ID to avoid duplicates
-        $groupedProducts = [];
-        foreach ($products as $product) {
-            $productId = $product->id;
-
-            if (!isset($groupedProducts[$productId])) {
-                // Create main product entry
-                $groupedProducts[$productId] = [
-                    'id' => $product->id,
-                    'design_no' => $product->design_no,
-                    'category_id' => $product->category_id,
-                    'ocassion_id' => $product->ocassion_id,
-                    'name' => $product->name,
-                    'slug' => $product->slug,
-                    'description' => $product->description,
-                    'brand' => $product->brand,
-                    'fabric' => $product->fabric,
-                    'fit' => $product->fit,
-                    'price' => $product->price,
-                    'discount_price' => $product->discount_price,
-                    'stock' => $product->stock,
-                    'status' => $product->status,
-                    'created_at' => $product->created_at,
-                    'updated_at' => $product->updated_at,
-                    'deleted_at' => $product->deleted_at,
-                    'is_active' => $product->is_active,
-                    'unit_id' => $product->unit_id,
-                    'variants' => [],
-                    'images' => [],
-                ];
-            }
-
-            // Add variant if not already added
-            $variantId = $product->variant_id;
-            if (!isset($groupedProducts[$productId]['variants'][$variantId])) {
-                $groupedProducts[$productId]['variants'][$variantId] = [
-                    'variant_id' => $product->variant_id,
-                    'size' => $product->size,
-                    'color' => $product->color,
-                    'price' => $product->price,
-                    'price_after_discount' => $product->price_after_discount,
-                    'stock' => $product->stock,
-                ];
-            }
-
-            // Add image if not already added
-            if ($product->variant_image && !in_array($product->variant_image, $groupedProducts[$productId]['images'])) {
-                $groupedProducts[$productId]['images'][] = $product->variant_image;
-            }
-        }
-
-        // Convert to collection for easier handling in view
-        $products = collect(array_values($groupedProducts));
-
-        // Get filter options for sidebar
-        $filterOptions = [
-            // 'brands' => DB::table('products')->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand')->filter()->toArray(),
-            'categories' => DB::table('categories')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
-            'colors' => DB::table('product_variants')->whereNotNull('color')->where('color', '!=', '')->distinct()->pluck('color')->filter()->toArray(),
-            // 'sizes' => DB::table('product_variants')->whereNotNull('size')->where('size', '!=', '')->distinct()->pluck('size')->filter()->toArray(),
-            'sizes' => DB::table('sizes')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('code')->filter()->toArray(),
-            'occasions' => DB::table('ocassions')->whereNotNull('name')->where('name', '!=', '')->distinct()->pluck('name')->filter()->toArray(),
-        ];
-
-        // Get price range
-        $priceRange = DB::table('product_variants')
-            ->selectRaw('MIN(COALESCE(discount_price, price)) as min_price, MAX(COALESCE(discount_price, price)) as max_price')
-            ->first();
-        $selectedFilters = [
-            'categories' => $categories,
-            'colors' => $colors,
-            'sizes' => $sizes,
-            'occasions' => $occasions,
-            'price_ranges' => array_unique($priceRanges),
-            'discount_ranges' => $discountRanges,
-        ];
-
-
-        return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
     }
+
+    // Apply category filters
+    if (!empty($categories)) {
+        $query->whereIn('categories.name', $categories);
+    }
+
+    // Apply occasion filters
+    if (!empty($occasions)) {
+        $query->whereIn('ocassions.name', $occasions);
+    }
+
+    // Apply color filters
+    if (!empty($colors)) {
+        $query->whereIn('product_variants.color', $colors);
+    }
+
+    // Apply size filters
+    if (!empty($sizes)) {
+        $query->whereIn('product_variants.size', $sizes);
+    }
+
+    // Apply price range filters
+    if (!empty($priceRanges)) {
+
+        $query->where(function ($q) use ($priceRanges) {
+
+            foreach ($priceRanges as $range) {
+
+                [$min, $max] = explode('-', $range);
+
+                $q->orWhereBetween(
+                    'product_variants.discount_price',
+                    [(int)$min, (int)$max]
+                );
+            }
+        });
+    }
+
+    // Apply min price
+    if ($priceMin) {
+
+        $query->where(function ($q) use ($priceMin) {
+
+            $q->where('product_variants.price', '>=', $priceMin)
+                ->orWhere('product_variants.discount_price', '>=', $priceMin);
+
+        });
+    }
+
+    // Apply max price
+    if ($priceMax) {
+
+        $query->where(function ($q) use ($priceMax) {
+
+            $q->where('product_variants.price', '<=', $priceMax)
+                ->orWhere('product_variants.discount_price', '<=', $priceMax);
+
+        });
+    }
+
+    // Apply discount filters
+    if (!empty($discountRanges)) {
+
+        $query->where(function ($q) use ($discountRanges) {
+
+            foreach ($discountRanges as $range) {
+
+                if (preg_match('/(\d+)/', $range, $matches)) {
+
+                    $minDiscount = (int)$matches[1];
+
+                    $q->orWhereRaw("
+                        (
+                            product_variants.discount_price > 0
+                            AND
+                            (
+                                (product_variants.price - product_variants.discount_price)
+                                / product_variants.price * 100
+                            ) >= ?
+                        )
+                    ", [$minDiscount]);
+                }
+            }
+        });
+    }
+
+    // Sorting
+    switch ($sortBy) {
+
+        case 'name-asc':
+            $query->orderBy('products.name', 'asc');
+            break;
+
+        case 'name-desc':
+            $query->orderBy('products.name', 'desc');
+            break;
+
+        case 'price-low':
+            $query->orderBy('product_variants.discount_price', 'asc');
+            break;
+
+        case 'price-high':
+            $query->orderBy('product_variants.discount_price', 'desc');
+            break;
+
+        case 'date-asc':
+            $query->orderBy('products.created_at', 'asc');
+            break;
+
+        case 'date-desc':
+        default:
+            $query->orderBy('products.created_at', 'desc');
+            break;
+    }
+
+    // Get products
+    // $products = $query->get();
+    // Get products
+$rawProducts = $query->get();
+
+// Convert products to old array structure
+$products = collect();
+
+foreach ($rawProducts as $product) {
+
+    $products->push([
+
+        'id' => $product->id,
+        'design_no' => $product->design_no,
+        'category_id' => $product->category_id,
+        'ocassion_id' => $product->ocassion_id,
+        'name' => $product->name,
+        'slug' => $product->slug,
+        'description' => $product->description,
+        'brand' => $product->brand,
+        'fabric' => $product->fabric,
+        'fit' => $product->fit,
+        'price' => $product->price,
+        'discount_price' => $product->discount_price,
+        'stock' => $product->stock,
+        'status' => $product->status,
+        'featured_image' => $product->featured_image,
+        'ready_to_ship' => $product->ready_to_ship,
+        'is_featured' => $product->is_featured,
+        'meta_title' => $product->meta_title,
+        'keywords' => $product->keywords,
+        'tags' => $product->tags,
+        'meta_description' => $product->meta_description,
+        'schema_markup' => $product->schema_markup,
+        'created_at' => $product->created_at,
+        'updated_at' => $product->updated_at,
+        'deleted_at' => $product->deleted_at,
+        'is_active' => $product->is_active,
+        'unit_id' => $product->unit_id,
+
+        // images structure expected in blade
+        'images' => [
+            [
+                'image' => $product->variant_image
+            ]
+        ],
+
+        // variants structure expected in blade
+        'variants' => [
+            [
+                'variant_id' => $product->variant_id,
+                'size' => $product->size,
+                'color' => $product->color,
+                'price' => $product->variant_price,
+                'discount_price' => $product->price_after_discount,
+                'stock' => $product->variant_stock,
+            ]
+        ]
+    ]);
+}
+
+    // Filter options
+    $filterOptions = [
+        'categories' => DB::table('categories')
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->distinct()
+            ->pluck('name')
+            ->filter()
+            ->toArray(),
+
+        'colors' => DB::table('product_variants')
+            ->whereNotNull('color')
+            ->where('color', '!=', '')
+            ->distinct()
+            ->pluck('color')
+            ->filter()
+            ->toArray(),
+
+        'sizes' => DB::table('sizes')
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->distinct()
+            ->pluck('code')
+            ->filter()
+            ->toArray(),
+
+        'occasions' => DB::table('ocassions')
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->distinct()
+            ->pluck('name')
+            ->filter()
+            ->toArray(),
+    ];
+
+    // Price range
+    $priceRange = DB::table('product_variants')
+        ->selectRaw('
+            MIN(COALESCE(discount_price, price)) as min_price,
+            MAX(COALESCE(discount_price, price)) as max_price
+        ')
+        ->first();
+
+    // Selected filters
+    $selectedFilters = [
+        'categories' => $categories,
+        'colors' => $colors,
+        'sizes' => $sizes,
+        'occasions' => $occasions,
+        'price_ranges' => array_unique($priceRanges),
+        'discount_ranges' => $discountRanges,
+    ];
+    // dd($products);
+
+    return view(
+        'web.multi-product',
+        compact(
+            'products',
+            'filterOptions',
+            'priceRange',
+            'selectedFilters'
+        )
+    );
+}
 
     // public function ShowSingleProduct($slug)
     // {
