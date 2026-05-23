@@ -873,13 +873,13 @@
         <!-- Category Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                {{ $category->name ?? 'Products' }}
+                {{ $category->title ?? $category->name ?? 'Products' }}
             </h1>
-            {{--
-          @if(isset($category->description))
-            <p class="text-gray-600">{{ $category->description }}</p>
+           
+           @if(isset($category->about))
+            <p class="text-gray-600">{{ $category->about }}</p>
             @endif
-            --}}
+           
         </div>
 
         <!-- Products Count -->

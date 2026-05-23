@@ -96,9 +96,13 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
+        // dd($request); 
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
+            $data['title'] = $request->title;
+            $data['about'] = $request->about;
+            // print_r($data); exit;
             
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -220,6 +224,8 @@ class CategoryController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
+            $data['title'] = $request->title;
+            $data['about'] = $request->about;
             // dd($data['image']);
              // CHECK IF NEW IMAGE UPLOADED
         if ($request->hasFile('image')) {
