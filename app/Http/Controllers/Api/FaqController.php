@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Faq;
 use App\Models\Product;
+use App\Models\Category;
 
 class FaqController extends Controller
 {
@@ -36,9 +37,12 @@ class FaqController extends Controller
         }
     }
 
-    public function getFaqUsingCategory(int $categoryId): JsonResponse  //http://127.0.0.1:8000/api/faqs/category/2
+    public function getFaqUsingCategory($categorySlug): JsonResponse  //http://127.0.0.1:8000/api/faqs/category/2
     {
         try {
+
+            $categoryId = Category::where('slug', $categorySlug)->value('id');
+            // dd($category_id); 
             $faqs = Faq::where('is_active', 1)
                 ->where('category_id', $categoryId)
                 ->with(['category', 'product'])
