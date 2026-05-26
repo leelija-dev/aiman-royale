@@ -107,6 +107,9 @@ class CategoryController extends Controller
             $data['title'] = $request->title;
             $data['about'] = $request->about;
             // print_r($data); exit;
+            if ($request->has('description')) {
+                $data['description'] = $this->removeHtmlStyles($request->description);
+            }
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
