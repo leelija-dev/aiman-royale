@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use DOMDocument;
+use DOMXPath;
+use LibXMLError;
+
 class CategoryController extends Controller
 {
     /**
@@ -103,18 +107,18 @@ class CategoryController extends Controller
             $data['title'] = $request->title;
             $data['about'] = $request->about;
             // print_r($data); exit;
-            
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
 
                 // CREATE FOLDER IF NOT EXISTS
                 $path = public_path('uploads/category');
-                
+
                 // Ensure directory exists with proper permissions
                 if (!File::exists($path)) {
                     try {
                         File::makeDirectory($path, 0775, true, true);
-                        
+
                         // Set ownership if possible (for Linux servers)
                         if (function_exists('chown')) {
                             @chown($path, 'www-data');
@@ -158,7 +162,6 @@ class CategoryController extends Controller
 
             return redirect()->route('admin.categories.index')
                 ->with('success', 'Product category created successfully.');
-                
         } catch (\Exception $e) {
             Log::error('Error creating product category', [
                 'error' => $e->getMessage(),
@@ -184,7 +187,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         try {
-           
+
             Log::info('Editing product category', ['id' => $category->id, 'name' => $category->name]);
 
             if (!$category) {
@@ -193,14 +196,14 @@ class CategoryController extends Controller
             }
 
             $categories = Category::where('id', '!=', $category->id)->latest()->get();
-            
+
             // Debug: Log categories data
             Log::info('Categories for edit dropdown', [
                 'current_category_id' => $category->id,
                 'categories_count' => $categories->count(),
                 'categories' => $categories->toArray()
             ]);
-            
+
             return view('Admin.categories.edit', compact('category', 'categories'));
         } catch (\Exception $e) {
             Log::error('Error in CategoryController@edit', [
@@ -221,36 +224,41 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
+        // dd($request);
         try {
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
             $data['title'] = $request->title;
             $data['about'] = $request->about;
+
+            if ($request->has('description')) {
+                $data['description'] = $this->removeHtmlStyles($request->description);
+            }
             // dd($data['image']);
-             // CHECK IF NEW IMAGE UPLOADED
-        if ($request->hasFile('image')) {
+            // CHECK IF NEW IMAGE UPLOADED
+            if ($request->hasFile('image')) {
 
-            $image = $request->file('image');
+                $image = $request->file('image');
 
-            // CREATE FOLDER IF NOT EXISTS
-            $path = public_path('uploads/category');
+                // CREATE FOLDER IF NOT EXISTS
+                $path = public_path('uploads/category');
 
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0777, true, true);
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, 0777, true, true);
+                }
+
+                // DELETE OLD IMAGE
+                if ($category->image && File::exists($path . '/' . $category->image)) {
+                    File::delete($path . '/' . $category->image);
+                }
+
+                // SAVE NEW IMAGE
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+
+                $image->move($path, $filename);
+
+                $data['image'] = $filename;
             }
-
-            // DELETE OLD IMAGE
-            if ($category->image && File::exists($path.'/'.$category->image)) {
-                File::delete($path.'/'.$category->image);
-            }
-
-            // SAVE NEW IMAGE
-            $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-
-            $image->move($path, $filename);
-
-            $data['image'] = $filename;
-        }
             if ($data['is_home'] == 0) {
                 $data['home_position'] = null;
             }
@@ -317,5 +325,45 @@ class CategoryController extends Controller
             return back()
                 ->with('error', 'An error occurred while permanently deleting the category.');
         }
+    }
+
+    private function removeHtmlStyles($html)
+    {
+        if (empty($html)) {
+            return $html;
+        }
+
+        $dom = new \DOMDocument();
+        // Suppress warnings for malformed HTML
+        libxml_use_internal_errors(true);
+        $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        // Remove style attributes from all elements
+        $xpath = new \DOMXPath($dom);
+        $elements = $xpath->query('//*[@style]');
+
+        foreach ($elements as $element) {
+            if ($element instanceof \DOMElement) {
+                $element->removeAttribute('style');
+            }
+        }
+
+        // Remove class attributes if you want (optional)
+        $elementsWithClass = $xpath->query('//*[@class]');
+        foreach ($elementsWithClass as $element) {
+            if ($element instanceof \DOMElement) {
+                $element->removeAttribute('class');
+            }
+        }
+
+        // Get the cleaned HTML
+        $cleanedHtml = $dom->saveHTML();
+
+        // Remove the outer HTML wrapper if any
+        $cleanedHtml = preg_replace('/^<!DOCTYPE.+?>/', '', $cleanedHtml);
+        $cleanedHtml = str_replace(['<html>', '</html>', '<body>', '</body>'], '', $cleanedHtml);
+
+        return trim($cleanedHtml);
     }
 }
