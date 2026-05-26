@@ -1,30 +1,44 @@
 @if($products->count() > 0)
   @foreach($products as $product)
   <div class="item ">
-    <a href="/products/{{ $product['slug'] }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
+    <a href="/products/{{ $product->slug ?? $product['slug'] ?? '' }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card">
       <!-- Image Wrapper -->
       <div class="relative rounded-xl overflow-hidden bg-gray-100">
         @php
-          // Handle different image structures
+          // Handle different image structures for both object and array
           $imageUrl = null;
           $hasImage = false;
           
-          if (!empty($product['images'])) {
-              if (is_array($product['images'])) {
-                  // If it's an array of objects
-                  $firstImage = $product['images'][0] ?? null;
+          // Get product name (works for both object and array)
+          $productName = is_object($product) ? ($product->name ?? 'Product') : ($product['name'] ?? 'Product');
+          
+          // Get images - handle different formats
+          $images = null;
+          if (is_object($product)) {
+              $images = $product->images ?? null;
+          } else {
+              $images = $product['images'] ?? null;
+          }
+          
+          if (!empty($images)) {
+              if (is_array($images)) {
+                  // If it's an array of objects/arrays
+                  $firstImage = $images[0] ?? null;
                   if ($firstImage && is_object($firstImage) && !empty($firstImage->image)) {
                       $imageUrl = asset($firstImage->image);
                       $hasImage = true;
                   } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
                       $imageUrl = asset($firstImage['image']);
                       $hasImage = true;
+                  } elseif (is_string($firstImage)) {
+                      $imageUrl = asset($firstImage);
+                      $hasImage = true;
                   }
-              } elseif (is_string($product['images'])) {
+              } elseif (is_string($images)) {
                   // If it's a JSON string
-                  $images = json_decode($product['images'], true);
-                  if (is_array($images) && !empty($images)) {
-                      $firstImage = $images[0];
+                  $decodedImages = json_decode($images, true);
+                  if (is_array($decodedImages) && !empty($decodedImages)) {
+                      $firstImage = $decodedImages[0];
                       if (is_array($firstImage) && !empty($firstImage['image'])) {
                           $imageUrl = asset($firstImage['image']);
                           $hasImage = true;
@@ -37,16 +51,50 @@
           }
           
           // If no image found, try product image field
-          if (!$hasImage && !empty($product['image'])) {
-              $imageUrl = asset($product['image']);
-              $hasImage = true;
+          if (!$hasImage) {
+              $productImage = is_object($product) ? ($product->image ?? null) : ($product['image'] ?? null);
+              if (!empty($productImage)) {
+                  $imageUrl = asset($productImage);
+                  $hasImage = true;
+              }
+          }
+          
+          // Get product data (works for both object and array)
+          $isFeatured = is_object($product) ? ($product->is_featured ?? false) : ($product['is_featured'] ?? false);
+          $price = is_object($product) ? ($product->price ?? 0) : ($product['price'] ?? 0);
+          $discountPrice = is_object($product) ? ($product->discount_price ?? null) : ($product['discount_price'] ?? null);
+          $brand = is_object($product) ? ($product->brand ?? 'Brand') : ($product['brand'] ?? 'Brand');
+          $rating = is_object($product) ? ($product->rating ?? '4.4') : ($product['rating'] ?? '4.4');
+          
+          // Handle variants
+          $variants = is_object($product) ? ($product->variants ?? null) : ($product['variants'] ?? null);
+          
+          $displayPrice = $discountPrice ?? $price;
+          $originalPrice = $price;
+          
+          if (!empty($variants) && is_array($variants)) {
+              $firstVariant = $variants[0] ?? null;
+              if ($firstVariant) {
+                  if (is_object($firstVariant)) {
+                      $displayPrice = $firstVariant->discount_price ?? $firstVariant->price ?? $displayPrice;
+                      $originalPrice = $firstVariant->price ?? $originalPrice;
+                  } else {
+                      $displayPrice = $firstVariant['discount_price'] ?? $firstVariant['price'] ?? $displayPrice;
+                      $originalPrice = $firstVariant['price'] ?? $originalPrice;
+                  }
+              }
+          }
+          
+          $discountPercentage = 0;
+          if ($displayPrice < $originalPrice && $originalPrice > 0) {
+              $discountPercentage = round((($originalPrice - $displayPrice) / $originalPrice) * 100);
           }
         @endphp
         
         @if($hasImage && $imageUrl)
           <img
             src="{{ $imageUrl }}"
-            alt="{{ $product['name'] ?? 'Product' }}"
+            alt="{{ $productName }}"
             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center "
             onerror="this.parentElement.innerHTML = this.parentElement.innerHTML.replace(this.outerHTML, '<div class=\'w-full h-[340px] flex items-center justify-center bg-gray-200\'><svg class=\'w-16 h-16 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\' /></svg><span class=\'text-gray-500 text-sm mt-2\'>No image</span></div>')"
           />
@@ -62,16 +110,13 @@
 
         <!-- Badges -->
         <div class="absolute top-3 left-3 flex flex-col gap-2">
-          @if(!empty($product['is_featured']) && $product['is_featured'])
+          @if($isFeatured)
           <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
             Featured
           </span>
           @endif
           
-          @if(isset($product['discount_price']) && $product['discount_price'] < $product['price'])
-          @php
-            $discountPercentage = round((($product['price'] - $product['discount_price']) / $product['price']) * 100);
-          @endphp
+          @if($discountPercentage > 0)
           <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
             -{{ $discountPercentage }}%
           </span>
@@ -99,33 +144,20 @@
       <!-- Content -->
       <div class="p-4 space-y-1">
         <h3 class="text-[15px] font-semibold text-gray-900">
-          {{ $product['name'] ?? 'Product Name' }}
+          {{ $productName }}
         </h3>
 
         <div class="flex items-center gap-2 text-sm text-gray-600">
-          <span>{{ $product['brand'] ?? 'Brand' }}</span>
+          <span>{{ $brand }}</span>
           <span class="flex items-center gap-1 text-gray-700">
-            <span class="text-sm font-medium">4.4</span>
+            <span class="text-sm font-medium">{{ $rating }}</span>
           </span>
         </div>
 
         <div class="flex items-center gap-2 mt-2 flex-wrap">
-          @php
-            $displayPrice = $product['discount_price'] ?? $product['price'] ?? 0;
-            $originalPrice = $product['price'] ?? 0;
-            
-            // Check variants if available
-            if (!empty($product['variants']) && is_array($product['variants'])) {
-                $firstVariant = $product['variants'][0] ?? null;
-                if ($firstVariant) {
-                    $displayPrice = $firstVariant['discount_price'] ?? $firstVariant['price'] ?? $displayPrice;
-                    $originalPrice = $firstVariant['price'] ?? $originalPrice;
-                }
-            }
-          @endphp
-          <span class="text-lg font-bold text-gray-900">Rs. {{ number_format($displayPrice, 2) }}</span>
+          <span class="text-lg font-bold text-gray-900">{{ config('app.currency') }} {{ number_format($displayPrice, 2) }}</span>
           @if($displayPrice < $originalPrice)
-          <span class="text-sm text-gray-400 line-through">Rs. {{ number_format($originalPrice, 2) }}</span>
+          <span class="text-sm text-gray-400 line-through">{{ config('app.currency') }} {{ number_format($originalPrice, 2) }}</span>
           @endif
         </div>
         

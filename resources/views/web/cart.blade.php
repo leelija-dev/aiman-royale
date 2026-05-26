@@ -204,7 +204,7 @@
                 <span class="block text-xs text-gray-500">Free shipping over {{config('app.currency')}}400</span>
                 @endif
                 @endif
-                <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a>
+                <!-- <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a> -->
               </div>
             </div>
 

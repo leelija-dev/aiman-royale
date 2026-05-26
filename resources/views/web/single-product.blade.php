@@ -1000,7 +1000,7 @@ error_log('Product Data: ' . json_encode([
                     @if($product->fabric)
                     <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Material & Care</h3>
                     <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                        {{ $product->fabric }}<br />{{ $product->material_care }}
+                       {{ $product->material_care }}
                     </p>
                     @endif
                     @if($product->fit)
