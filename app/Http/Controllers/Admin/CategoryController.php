@@ -314,7 +314,7 @@ class CategoryController extends Controller
                 }
 
                 // UPLOAD NEW IMAGE TO CLOUDINARY
-                $uploadResult = $this->uploadToCloudinary($image, 'Thefastbill/categories', [
+                $uploadResult = $this->uploadToCloudinary($image, 'categories', [
                     'quality' => 'auto:good',
                     'fetch_format' => 'auto',
                     'transformation' => [

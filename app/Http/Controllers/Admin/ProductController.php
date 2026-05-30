@@ -577,79 +577,122 @@ class ProductController extends Controller
     //     return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
     // }
 
-    public function update(Request $request, Category $category)
+      public function update(Request $request, $id)
     {
-        try {
-            $data = $request->validated();
-            $data['slug'] = Str::slug($data['name']);
-            $data['title'] = $request->title;
-            $data['about'] = $request->about;
+        $data = $request->validate([
+            'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
+            'category_id' => 'required|exists:categories,id',
+            'occasion_id' => 'nullable|array',
+            'occasion_id.*' => 'exists:ocassions,id',
+            'name' => 'required|string|max:200',
+            'slug' => 'required|string|max:200|unique:products,slug,' . $id,
+            'description' => 'nullable|string',
+            'brand' => 'nullable|string|max:500',
+            'fabric' => 'nullable|string|max:500',
+            'material_care' => 'nullable|string|max:1000',
+            'fit' => 'nullable|string|max:50',
+            'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'status' => 'required|in:active,inactive',
+            'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
+            'is_featured' => 'required|boolean',
+            'meta_title' => 'required|string',
+            'keywords' => 'required|string',
+            'tags' => 'required|string',
+            'meta_description' => 'required|string',
+            'schema_markup' => 'nullable|string',
+            'type' => 'nullable|string|max:500',
+            'stitching_type' => 'nullable|string|max:500',
+            'pattern' => 'nullable|string|max:500',
+            'sales_package' => 'nullable|string|max:500',
+            'color' => 'nullable|string|max:500',
+        ]);
 
-            if ($request->has('description')) {
-                $data['description'] = $this->removeHtmlStyles($request->description);
+        $product = Product::findOrFail($id);
+        $product->update($data);
+
+        // Handle multiple occasions sync
+        if ($request->has('occasion_id')) {
+            $product->occasions()->sync($request->occasion_id);
+        }
+
+        // Handle product images update with Cloudinary
+        if ($request->hasFile('image')) {
+            // Delete existing images from Cloudinary
+            $existingImages = ProductImage::where('product_id', $id)->get();
+            foreach ($existingImages as $existingImage) {
+                if ($existingImage->public_id) {
+                    $this->deleteFromCloudinary($existingImage->public_id);
+                }
+                $existingImage->delete();
             }
 
-            // CHECK IF NEW IMAGE UPLOADED
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+            // Upload new images to Cloudinary
+            $images = $request->file('image');
+            if (!is_array($images)) {
+                $images = [$images];
+            }
 
-                // DELETE OLD IMAGE FROM CLOUDINARY
-                if ($category->image_public_id) {
-                    try {
-                        $this->deleteFromCloudinary($category->image_public_id);
-                        Log::info('Old category image deleted from Cloudinary', [
-                            'category_id' => $category->id,
-                            'public_id' => $category->image_public_id
-                        ]);
-                    } catch (\Exception $e) {
-                        Log::warning('Failed to delete old image from Cloudinary: ' . $e->getMessage());
-                    }
-                }
-
-                // UPLOAD NEW IMAGE TO CLOUDINARY
-                $uploadResult = $this->uploadToCloudinary($image, 'Thefastbill/categories', [
+            foreach ($images as $index => $image) {
+                $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
                     'quality' => 'auto:good',
                     'fetch_format' => 'auto',
-                    'transformation' => [
-                        'width' => 800,
-                        'height' => 800,
-                        'crop' => 'limit',
-                    ],
                 ]);
 
                 if ($uploadResult) {
-                    $data['image'] = $uploadResult['url']; // Store the Cloudinary URL
-                    $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
-                    Log::info('New category image uploaded to Cloudinary', [
-                        'category_id' => $category->id,
-                        'public_id' => $uploadResult['public_id']
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image' => $uploadResult['path'],
+                        'public_id' => $uploadResult['public_id'],
+                        'is_primary' => $index === 0,
                     ]);
-                } else {
-                    throw new \Exception('Failed to upload image to Cloudinary');
                 }
             }
+        }
 
-            // Set home_position to null if is_home is 0
-            if ($data['is_home'] == 0) {
-                $data['home_position'] = null;
+        // Handle featured image update
+        if ($request->hasFile('featured_image')) {
+            // Delete old featured image from Cloudinary
+            if ($product->featured_image_public_id) {
+                $this->deleteFromCloudinary($product->featured_image_public_id);
             }
 
-            // Update the category
-            $category->update($data);
-
-            return redirect()->route('admin.categories.index')
-                ->with('success', 'Product category updated successfully with Cloudinary!');
-        } catch (\Exception $e) {
-            Log::error('Error updating product category', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'category_id' => $category->id
+            $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
+                'quality' => 'auto:best',
+                'fetch_format' => 'auto',
+                'transformation' => [
+                    'width' => 800,
+                    'height' => 800,
+                    'crop' => 'limit',
+                ],
             ]);
 
-            return back()->withInput()
-                ->with('error', 'An error occurred while updating the product category: ' . $e->getMessage());
+            if ($uploadResult) {
+                $product->featured_image = $uploadResult['path'];
+                $product->featured_image_public_id = $uploadResult['public_id'];
+                $product->save();
+            }
         }
-    }
+
+        // Handle product parts
+        if ($request->has('parts') && is_array($request->parts)) {
+            $product->parts()->delete();
+
+            foreach ($request->parts as $partData) {
+                if (!empty($partData['part_name'])) {
+                    $product->parts()->create([
+                        'part_name' => $partData['part_name'],
+                        'fabric' => $partData['fabric'] ?? null,
+                        'work_type' => $partData['work_type'] ?? null,
+                        'order' => $partData['order'] ?? 1
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
+        }
 
     public function delete($id)
     {
