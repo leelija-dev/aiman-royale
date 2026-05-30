@@ -722,7 +722,7 @@
 
                     <!-- Image -->
                     <div class="h-32 overflow-hidden">
-                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
                             alt="{{ $category->name }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
                     </div>

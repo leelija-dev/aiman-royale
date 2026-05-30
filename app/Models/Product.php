@@ -174,4 +174,28 @@ class Product extends Model
     {
         return $this->hasMany('App\\Models\\OrderProduct', 'product_id');
     }
+    
+    /**
+     * Get featured image URL with optimization
+     */
+    public function getFeaturedImageUrl($width = 500, $height = 500)
+    {
+        if ($this->featured_image && str_contains($this->featured_image, 'cloudinary')) {
+            // Extract public_id and apply transformations
+            $publicId = $this->getCloudinaryPublicId($this->featured_image);
+            return "https://res.cloudinary.com/your-cloud-name/image/upload/c_fill,w_{$width},h_{$height},q_auto,f_auto/{$publicId}";
+        }
+        
+        return $this->featured_image ? asset($this->featured_image) : null;
+    }
+    
+    /**
+     * Extract Cloudinary public ID from URL
+     */
+    private function getCloudinaryPublicId($url)
+    {
+        // Extract everything after '/upload/' and before version if exists
+        preg_match('/\/upload\/(?:v\d+\/)?(.+)$/', $url, $matches);
+        return $matches[1] ?? null;
+    }
 }

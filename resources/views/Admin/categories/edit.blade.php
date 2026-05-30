@@ -70,7 +70,7 @@
               {{-- Show existing image (edit page) --}}
               @if(!empty($category->image))
               <div class="mb-2">
-                <img src="{{ asset('uploads/category/'.$category->image) }}"
+                <img src="{{ $category->image }}"
                   alt="Category Image"
                   style="width:120px;height:auto;border:1px solid #ddd;padding:5px;border-radius:6px;">
               </div>
