@@ -101,88 +101,69 @@ class CategoryController extends Controller
      * @param  \App\Http\Requests\Admin\CategoryRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CategoryRequest $request)
-    {
-        // dd($request); 
-        try {
-            $data = $request->validated();
-            $data['slug'] = Str::slug($data['name']);
-            $data['title'] = $request->title;
-            $data['about'] = $request->about;
-            // print_r($data); exit;
-            if ($request->has('description')) {
-                $data['description'] = $this->removeHtmlStyles($request->description);
-            }
+   public function store(CategoryRequest $request)
+{
+    try {
+        $data = $request->validated();
+        $data['slug'] = Str::slug($data['name']);
+        $data['title'] = $request->title;
+        $data['about'] = $request->about;
+        
+        if ($request->has('description')) {
+            $data['description'] = $this->removeHtmlStyles($request->description);
+        }
 
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+        // Handle image upload to Cloudinary
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
 
-                // CREATE FOLDER IF NOT EXISTS
-                $path = public_path('uploads/category');
-
-                // Ensure directory exists with proper permissions
-                if (!File::exists($path)) {
-                    try {
-                        File::makeDirectory($path, 0775, true, true);
-
-                        // Set ownership if possible (for Linux servers)
-                        if (function_exists('chown')) {
-                            @chown($path, 'www-data');
-                            @chgrp($path, 'www-data');
-                        }
-                    } catch (\Exception $e) {
-                        Log::error('Failed to create upload directory: ' . $e->getMessage());
-                        throw new \Exception('Unable to create upload directory. Please check server permissions.');
-                    }
-                }
-
-                // Check if directory is writable
-                if (!is_writable($path)) {
-                    Log::error('Upload directory is not writable: ' . $path);
-                    throw new \Exception('Upload directory is not writable. Please check server permissions.');
-                }
-
-                // CREATE UNIQUE NAME
-                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
-
-                // MOVE FILE with error handling
-                try {
-                    $image->move($path, $filename);
-                    Log::info('File uploaded successfully: ' . $filename);
-                } catch (\Exception $e) {
-                    Log::error('Failed to move uploaded file: ' . $e->getMessage());
-                    throw new \Exception('Failed to save uploaded file. Please check server permissions and disk space.');
-                }
-
-                $data['image'] = $filename;
-            }
-
-            // Create category with error handling
-            try {
-                $category = Category::create($data);
-                Log::info('Category created successfully with ID: ' . $category->id);
-            } catch (\Exception $e) {
-                Log::error('Failed to create category in database: ' . $e->getMessage());
-                throw new \Exception('Failed to save category to database: ' . $e->getMessage());
-            }
-
-            return redirect()->route('admin.categories.index')
-                ->with('success', 'Product category created successfully.');
-        } catch (\Exception $e) {
-            Log::error('Error creating product category', [
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'request_data' => $request->all(),
-                'upload_path' => public_path('uploads/category'),
-                'directory_exists' => File::exists(public_path('uploads/category')),
-                'directory_writable' => is_writable(public_path('uploads/category')) ? 'Yes' : 'No'
+            // UPLOAD NEW IMAGE TO CLOUDINARY
+            $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
+                'quality' => 'auto:good',
+                'fetch_format' => 'auto',
+                'transformation' => [
+                    'width' => 800,
+                    'height' => 800,
+                    'crop' => 'limit',
+                ],
             ]);
 
-            return back()->withInput()
-                ->with('error', 'Error: ' . $e->getMessage());
+            if ($uploadResult) {
+                $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+                $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+                Log::info('Category image uploaded to Cloudinary', [
+                    'public_id' => $uploadResult['public_id'],
+                    'path' => $uploadResult['path']
+                ]);
+            } else {
+                throw new \Exception('Failed to upload image to Cloudinary');
+            }
         }
+
+        // Create category with error handling
+        try {
+            $category = Category::create($data);
+            Log::info('Category created successfully with ID: ' . $category->id);
+        } catch (\Exception $e) {
+            Log::error('Failed to create category in database: ' . $e->getMessage());
+            throw new \Exception('Failed to save category to database: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Product category created successfully with Cloudinary!');
+            
+    } catch (\Exception $e) {
+        Log::error('Error creating product category', [
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'request_data' => $request->all(),
+        ]);
+
+        return back()->withInput()
+            ->with('error', 'Error: ' . $e->getMessage());
     }
+}
 
     /**
      * Show the form for editing the specified product category.
@@ -314,7 +295,7 @@ class CategoryController extends Controller
                 }
 
                 // UPLOAD NEW IMAGE TO CLOUDINARY
-                $uploadResult = $this->uploadToCloudinary($image, 'categories', [
+                $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
                     'quality' => 'auto:good',
                     'fetch_format' => 'auto',
                     'transformation' => [
