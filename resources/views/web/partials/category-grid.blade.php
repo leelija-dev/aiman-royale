@@ -18,7 +18,7 @@
 
         @if($hasImage && $imageUrl)
         <img
-            src="{{ asset($product->featured_image) }}"
+            src="{{ $product->featured_image }}"
             alt="{{ $product->name }}"
             class="product-img" />
         @else

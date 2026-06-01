@@ -54,7 +54,7 @@
           if (!$hasImage) {
               $productImage = is_object($product) ? ($product->image ?? null) : ($product['image'] ?? null);
               if (!empty($productImage)) {
-                  $imageUrl = asset($productImage);
+                  $imageUrl = $productImage;
                   $hasImage = true;
               }
           }
