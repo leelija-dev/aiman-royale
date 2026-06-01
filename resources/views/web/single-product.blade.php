@@ -1582,7 +1582,7 @@ error_log('Product Data: ' . json_encode([
             <div class="item flex items-center justify-center">
                 <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset($relatedProduct->featured_image) }}"
+                        <img src="{{ $relatedProduct->featured_image }}"
                             alt="{{ $relatedProduct->name }}"
                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
@@ -1653,7 +1653,7 @@ error_log('Product Data: ' . json_encode([
             <div class="item flex items-center justify-center">
                 <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset($imagePath) }}"
+                        <img src="{{ $imagePath }}"
                             alt="{{ $relatedProduct->name }}"
                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
@@ -1725,7 +1725,7 @@ error_log('Product Data: ' . json_encode([
             <div class="item flex items-center justify-center">
                 <div class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="relative rounded-xl overflow-hidden">
-                        <img src="{{ asset($imagePath) }}"
+                        <img src="{{ $imagePath }}"
                             alt="{{ $lastViewedProduct['id'] }}"
                             class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
