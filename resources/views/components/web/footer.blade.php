@@ -2146,15 +2146,15 @@ $isProductPage = !empty($productSlug);
           </div>
         </div>
         <div id="account" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ config('app.url') }}/login" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Login / Register</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{route('cart.index')}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Shopping Bag</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ config('app.url') }}/wishlist" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Wishlist</span>
           </a>
@@ -2162,7 +2162,7 @@ $isProductPage = !empty($productSlug);
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Order Tracking</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Order History</span>
           </a>
@@ -2409,7 +2409,7 @@ $isProductPage = !empty($productSlug);
     </a>
 
     <!-- Trending Button (Active/Featured) -->
-    <a href="/" class="nav-item mt-[-5px] active-nav flex flex-col items-center justify-center w-16 py-2  rounded-2xl bg-gradient-to-br from-[#A10000] via-[#EC4899] to-[#FF6B9D] border-2 border-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 relative group">
+    <a href="{{ config('app.url') }}/products?search=trending" class="nav-item mt-[-5px] active-nav flex flex-col items-center justify-center w-16 py-2  rounded-2xl bg-gradient-to-br from-[#A10000] via-[#EC4899] to-[#FF6B9D] border-2 border-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 relative group">
       <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div class="relative mb-0.5">
         <i class="fas fa-fire text-xl text-white group-hover:animate-pulse"></i>
