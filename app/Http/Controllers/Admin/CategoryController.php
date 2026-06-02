@@ -267,7 +267,7 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
-        dd($request);
+        
         try {
             $data = $request->validated();
             $data['slug']  = Str::slug($data['name']);
