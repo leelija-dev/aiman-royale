@@ -337,6 +337,7 @@ class ProductVariantController extends Controller
 
     public function update(Request $request, ProductVariant $productVariant)
     {
+        // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'size' => 'nullable|string|max:20',

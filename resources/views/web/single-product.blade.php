@@ -715,27 +715,29 @@ error_log('Product Data: ' . json_encode([
                     }
                     @endphp
 
-                    @forelse($variantImages as $index => $image)
-                    @php
-                    $imagePath = ltrim($image->image, '/');
-                    @endphp
-                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}"
-                        data-display="{{ asset($imagePath) }}"
-                        data-large="{{ asset($imagePath) }}"
-                        onclick="updateMainImage('{{ asset($imagePath) }}', '{{ $product->name }}', this)">
-                        <img src="{{ asset($imagePath) }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
-                    </div>
-                    @empty
-                    <div class="thumbnail  lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
-                        data-display="{{ asset('assets/images/placeholder.jpg') }}"
-                        data-large="{{ asset('assets/images/placeholder.jpg') }}"
-                        onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
-                        <img src="{{ asset('assets/images/placeholder.jpg') }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name ?? 'Product' }}" />
-                    </div>
-                    @endforelse
+                   @forelse($variantImages as $index => $image)
+@php
+// Use the accessor directly - it will handle both local and Cloudinary URLs
+$fullImagePath = $image->image_url;
+@endphp
+<div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}"
+    data-display="{{ $fullImagePath }}"
+    data-large="{{ $fullImagePath }}"
+    onclick="updateMainImage('{{ $fullImagePath }}', '{{ $product->name }}', this)">
+    <img src="{{ $fullImagePath }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
+</div>
+@empty
+<div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
+    data-display="{{ asset('assets/images/placeholder.jpg') }}"
+    data-large="{{ asset('assets/images/placeholder.jpg') }}"
+    onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
+    <img src="{{ asset('assets/images/placeholder.jpg') }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name ?? 'Product' }}" />
+</div>
+@endforelse
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
+                 {{--
                 <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
                     @php
                     $firstImage = $variantImages->first();
@@ -751,6 +753,23 @@ error_log('Product Data: ' . json_encode([
                         </button>
                     </div>
                 </div>
+                --}}
+                <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
+    @php
+    $firstImage = $variantImages->first();
+    // Use the accessor - it handles both local and Cloudinary URLs
+    $mainImagePath = $firstImage ? $firstImage->image_url : asset('assets/images/placeholder.jpg');
+    @endphp
+    <img src="{{ $mainImagePath }}"
+        class="w-full h-full object-contain object-center object-top"
+        alt="{{ $product->name ?? 'Product' }}"
+        id="main-image" />
+    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
+        <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
+            <i class="fas fa-expand text-xl"></i>
+        </button>
+    </div>
+</div>
             </div>
 
             <!-- RIGHT CONTENT -->
@@ -895,22 +914,21 @@ error_log('Product Data: ' . json_encode([
 
                         @forelse($colorsForSize as $index => $variant)
                         @php
-                        $isSelected = ($index == 0);
+$isSelected = ($index == 0);
 
-                        // Get variant image with proper path
-                        $variantImage = '';
-                        if ($variant->images && $variant->images->isNotEmpty()) {
-                        $firstImage = $variant->images->first();
-                        // Remove any leading slashes to avoid double slashes
-                        $imagePath = ltrim($firstImage->image, '/');
-                        $variantImage = asset($imagePath);
-                        } elseif ($variant->image) {
-                        $imagePath = ltrim($variant->image, '/');
-                        $variantImage = asset($imagePath);
-                        } else {
-                        $variantImage = asset('assets/images/placeholder.jpg');
-                        }
-                        @endphp
+// Get variant image with proper path using the accessor
+$variantImage = '';
+if ($variant->images && $variant->images->isNotEmpty()) {
+    $firstImage = $variant->images->first();
+    $variantImage = $firstImage->image_url; // Use accessor
+} elseif ($variant->image) {
+    // If variant has direct image property, check if it's a URL
+    $imagePath = trim($variant->image);
+    $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL) ? $imagePath : asset(ltrim($imagePath, '/'));
+} else {
+    $variantImage = asset('assets/images/placeholder.jpg');
+}
+@endphp
                         <button class="color-btn w-10 h-10 rounded-full border-2 {{ $isSelected ? 'border-secondary' : 'border-gray-300' }} transition-all hover:scale-110"
                             style="background-color: {{ $variant->color }};"
                             data-color="{{ $variant->color }}"
@@ -2259,6 +2277,7 @@ function shareOnWhatsApp() {
 // Image functions
 function updateMainImage(imageSrc, altText, thumbnailElement) {
     const mainImage = document.getElementById('main-image');
+    
     if (mainImage) {
         mainImage.src = imageSrc;
         mainImage.alt = altText;
@@ -2450,22 +2469,36 @@ function updateColorOptions(size) {
         
         // Generate correct image URL
         let variantImage = '{{ asset("assets/images/placeholder.jpg") }}';
-        
+       
+        // if (variant.images && variant.images.length > 0) {
+        //     if (typeof variant.images[0] === 'object' && variant.images[0].image) {
+        //         let imagePath = variant.images[0].image;
+        //         imagePath = imagePath.replace(/^\/+/, '');
+        //         variantImage = imagePath; //'{{ url("") }}/' + imagePath;
+        //     } 
+        //     else if (typeof variant.images[0] === 'string') {
+        //         let imagePath = variant.images[0];
+        //         imagePath = imagePath.replace(/^\/+/, '');
+        //         variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url("") }}/' + imagePath;
+        //     }
+        // } else if (variant.image) {
+        //     let imagePath = variant.image;
+        //     imagePath = imagePath.replace(/^\/+/, '');
+        //     variantImage = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+        // }
+
         if (variant.images && variant.images.length > 0) {
             if (typeof variant.images[0] === 'object' && variant.images[0].image) {
-                let imagePath = variant.images[0].image;
-                imagePath = imagePath.replace(/^\/+/, '');
-                variantImage = '{{ url("") }}/' + imagePath;
+                  // Cloudinary URL - no need to modify
+                 variantImage = variant.images[0].image;
             } 
             else if (typeof variant.images[0] === 'string') {
-                let imagePath = variant.images[0];
-                imagePath = imagePath.replace(/^\/+/, '');
-                variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url("") }}/' + imagePath;
+               // Cloudinary URL - use as is
+               variantImage = variant.images[0];
             }
         } else if (variant.image) {
-            let imagePath = variant.image;
-            imagePath = imagePath.replace(/^\/+/, '');
-            variantImage = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+              // Cloudinary URL - use as is
+            variantImage = variant.image;
         }
         
         colorBtn.setAttribute('data-variant-image', variantImage);
@@ -2488,58 +2521,60 @@ function updateColorOptions(size) {
 }
 
 // Select color when size is already selected - IMAGES SHOULD CHANGE HERE
-function selectColor(color, size, variantId, element) {
-    selectedColor = color;
-    selectedVariantId = variantId;
+// function selectColor(color, size, variantId, element) {
+//     selectedColor = color;
+//     selectedVariantId = variantId;
 
-    // Update color button styling
-    document.querySelectorAll('.color-btn').forEach(btn => {
-        if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
-            btn.classList.add('border-secondary');
-            btn.classList.remove('border-gray-300');
-        } else {
-            btn.classList.remove('border-secondary');
-            btn.classList.add('border-gray-300');
-        }
-    });
+//     // Update color button styling
+//     document.querySelectorAll('.color-btn').forEach(btn => {
+//         if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
+//             btn.classList.add('border-secondary');
+//             btn.classList.remove('border-gray-300');
+//         } else {
+//             btn.classList.remove('border-secondary');
+//             btn.classList.add('border-gray-300');
+//         }
+//     });
 
-    // Update size options based on selected color
-    updateSizeOptionsForColor(color, variantId);
+//     // Update size options based on selected color
+//     updateSizeOptionsForColor(color, variantId);
 
-    const addToCartBtn = document.getElementById('add-to-cart');
-    if (addToCartBtn) {
-        addToCartBtn.setAttribute('data-variant-id', variantId);
-    }
+//     const addToCartBtn = document.getElementById('add-to-cart');
+//     if (addToCartBtn) {
+//         addToCartBtn.setAttribute('data-variant-id', variantId);
+//     }
 
-    if (customDimensions) {
-        customDimensions = null;
-        selectedCustomColor = null;
-        if (addToCartBtn) {
-            addToCartBtn.removeAttribute('data-custom-dimensions');
-            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-            addToCartBtn.classList.remove('bg-green-600');
-            addToCartBtn.classList.add('bg-secondary');
-            addToCartBtn.disabled = false;
-        }
-    }
+//     if (customDimensions) {
+//         customDimensions = null;
+//         selectedCustomColor = null;
+//         if (addToCartBtn) {
+//             addToCartBtn.removeAttribute('data-custom-dimensions');
+//             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+//             addToCartBtn.classList.remove('bg-green-600');
+//             addToCartBtn.classList.add('bg-secondary');
+//             addToCartBtn.disabled = false;
+//         }
+//     }
 
-    const variantImage = element.getAttribute('data-variant-image');
-    if (variantImage) {
-        const mainImage = document.getElementById('main-image');
-        if (mainImage) {
-            mainImage.src = variantImage;
-        }
-    }
+//     const variantImage = element.getAttribute('data-variant-image');
+   
+//     if (variantImage) {
+//         const mainImage = document.getElementById('main-image');
+         
+//         if (mainImage) {
+//             mainImage.src = variantImage;
+//         }
+//     }
 
-    const selectedVariant = productVariants.find(v => v.id == variantId);
-    if (selectedVariant) {
-        updatePrice(selectedVariant);
-        // Update images when color changes (NOT when size changes)
-        updateVariantImages(selectedVariant);
-    }
+//     const selectedVariant = productVariants.find(v => v.id == variantId);
+//     if (selectedVariant) {
+//         updatePrice(selectedVariant);
+//         // Update images when color changes (NOT when size changes)
+//         updateVariantImages(selectedVariant);
+//     }
 
-    checkVariantInCart(variantId);
-}
+//     checkVariantInCart(variantId);
+// }
 
 // Original selectSize function for initial load - IMAGES SHOULD NOT CHANGE
 function selectSize(size) {
@@ -2589,6 +2624,62 @@ function selectSize(size) {
     }
 }
 
+// function updateVariantImages(variant) {
+//     const mainImage = document.getElementById('main-image');
+//     const thumbnailContainer = document.getElementById('thumbnail-container');
+    
+//     if (!variant) return;
+    
+//     if (variant.images && variant.images.length > 0) {
+//         if (mainImage) {
+//             const firstImage = variant.images[0];
+//             let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+            
+//             if (typeof firstImage === 'object' && firstImage.image) {
+//                 let imagePath = firstImage.image.replace(/^\/+/, '');
+//                 firstImagePath = '{{ url("") }}/' + imagePath;
+//             } else if (typeof firstImage === 'string') {
+//                 let imagePath = firstImage.replace(/^\/+/, '');
+//                 firstImagePath = firstImage.startsWith('http') ? firstImage : '{{ url("") }}/' + imagePath;
+//             }
+            
+//             mainImage.src = firstImagePath;
+//             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+//         }
+        
+//         if (thumbnailContainer) {
+//             let thumbnailsHtml = '';
+//             variant.images.forEach((image, index) => {
+//                 let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+                
+//                 if (typeof image === 'object' && image.image) {
+//                     let path = image.image.replace(/^\/+/, '');
+//                     imagePath = '{{ url("") }}/' + path;
+//                 } else if (typeof image === 'string') {
+//                     let path = image.replace(/^\/+/, '');
+//                     imagePath = image.startsWith('http') ? image : '{{ url("") }}/' + path;
+//                 }
+                
+//                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
+//                 thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+//             });
+//             thumbnailContainer.innerHTML = thumbnailsHtml;
+//         }
+//     } else if (variant.image) {
+//         let imagePath = variant.image.replace(/^\/+/, '');
+//         const fullImagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+        
+//         if (mainImage) {
+//             mainImage.src = fullImagePath;
+//             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+//         }
+        
+//         if (thumbnailContainer) {
+//             thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+//         }
+//     }
+// }
+
 function updateVariantImages(variant) {
     const mainImage = document.getElementById('main-image');
     const thumbnailContainer = document.getElementById('thumbnail-container');
@@ -2600,12 +2691,17 @@ function updateVariantImages(variant) {
             const firstImage = variant.images[0];
             let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
             
-            if (typeof firstImage === 'object' && firstImage.image) {
-                let imagePath = firstImage.image.replace(/^\/+/, '');
-                firstImagePath = '{{ url("") }}/' + imagePath;
+            // Check if it's an object with image property
+            if (typeof firstImage === 'object' && firstImage.image_url) {
+                // Use image_url if available
+                firstImagePath = firstImage.image_url;
+            } else if (typeof firstImage === 'object' && firstImage.image) {
+                // Fallback to image property
+                let imagePath = firstImage.image;
+                firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
             } else if (typeof firstImage === 'string') {
-                let imagePath = firstImage.replace(/^\/+/, '');
-                firstImagePath = firstImage.startsWith('http') ? firstImage : '{{ url("") }}/' + imagePath;
+                let imagePath = firstImage;
+                firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
             }
             
             mainImage.src = firstImagePath;
@@ -2617,12 +2713,14 @@ function updateVariantImages(variant) {
             variant.images.forEach((image, index) => {
                 let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
                 
-                if (typeof image === 'object' && image.image) {
-                    let path = image.image.replace(/^\/+/, '');
-                    imagePath = '{{ url("") }}/' + path;
+                if (typeof image === 'object' && image.image_url) {
+                    imagePath = image.image_url;
+                } else if (typeof image === 'object' && image.image) {
+                    let path = image.image;
+                    imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
                 } else if (typeof image === 'string') {
-                    let path = image.replace(/^\/+/, '');
-                    imagePath = image.startsWith('http') ? image : '{{ url("") }}/' + path;
+                    let path = image;
+                    imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
                 }
                 
                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
@@ -2631,8 +2729,8 @@ function updateVariantImages(variant) {
             thumbnailContainer.innerHTML = thumbnailsHtml;
         }
     } else if (variant.image) {
-        let imagePath = variant.image.replace(/^\/+/, '');
-        const fullImagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+        let imagePath = variant.image;
+        const fullImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
         
         if (mainImage) {
             mainImage.src = fullImagePath;
@@ -2643,6 +2741,61 @@ function updateVariantImages(variant) {
             thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
         }
     }
+}
+
+// Simplified selectColor function
+function selectColor(color, size, variantId, element) {
+    selectedColor = color;
+    selectedVariantId = variantId;
+
+    // Update color button styling
+    document.querySelectorAll('.color-btn').forEach(btn => {
+        if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
+            btn.classList.add('border-secondary');
+            btn.classList.remove('border-gray-300');
+        } else {
+            btn.classList.remove('border-secondary');
+            btn.classList.add('border-gray-300');
+        }
+    });
+
+    // Update size options based on selected color
+    updateSizeOptionsForColor(color, variantId);
+
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.setAttribute('data-variant-id', variantId);
+    }
+
+    if (customDimensions) {
+        customDimensions = null;
+        selectedCustomColor = null;
+        if (addToCartBtn) {
+            addToCartBtn.removeAttribute('data-custom-dimensions');
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            addToCartBtn.classList.remove('bg-green-600');
+            addToCartBtn.classList.add('bg-secondary');
+            addToCartBtn.disabled = false;
+        }
+    }
+
+    const variantImage = element.getAttribute('data-variant-image');
+   
+    if (variantImage) {
+        const mainImage = document.getElementById('main-image');
+        if (mainImage) {
+            mainImage.src = variantImage;
+        }
+    }
+
+    const selectedVariant = productVariants.find(v => v.id == variantId);
+    if (selectedVariant) {
+        console.log('selected', selectedVariant);
+        updatePrice(selectedVariant);
+        updateVariantImages(selectedVariant);
+    }
+
+    checkVariantInCart(variantId);
 }
 
 function updatePrice(variant) {

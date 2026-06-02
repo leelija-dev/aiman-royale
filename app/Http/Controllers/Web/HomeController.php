@@ -1115,6 +1115,7 @@ foreach ($rawProducts as $product) {
     {
         $data = Product::where('slug', $slug)->first();
 
+       
         if (!$data) {
             abort(404);
         }
@@ -1224,8 +1225,7 @@ foreach ($rawProducts as $product) {
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-        // dd($relatedProducts);
-
+        
         return view('web.single-product', compact(
             'product',
             'sizes',

@@ -155,3 +155,5 @@ Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWi
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+
+

@@ -2162,10 +2162,12 @@ $isProductPage = !empty($productSlug);
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Order Tracking</span>
           </a>
-          <a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Order History</span>
-          </a>
+          @auth
+<a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+    <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+    <span class="font-medium">Order History</span>
+</a>
+@endauth
         </div>
       </div>
 

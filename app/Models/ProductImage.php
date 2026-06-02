@@ -8,6 +8,7 @@ class ProductImage extends Model
 {
     protected $fillable = [
         'product_id',
+        'variant_id',
         'image',      // Store Cloudinary URL
         'public_id',  // Store Cloudinary public ID for deletion
         'is_primary'
@@ -49,4 +50,15 @@ class ProductImage extends Model
         $transString = implode(',', $transformations);
         return "https://res.cloudinary.com/your-cloud-name/image/upload/{$transString}/{$this->public_id}";
     }
+
+    public function getImageUrlAttribute()
+{
+    $path = trim($this->image);
+    
+    if (filter_var($path, FILTER_VALIDATE_URL)) {
+        return $path;
+    }
+    
+    return asset(ltrim($path, '/'));
+}
 }
