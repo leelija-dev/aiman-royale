@@ -64,6 +64,12 @@ Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
+Route::view('/contact-us', 'web.contact-us')->name('page.contact-us');
+Route::view('/about-us', 'web.about-us')->name('page.about-us');
+Route::view('/privacy-policy', 'web.privacy-policy')->name('page.privacy-policy');
+Route::view('/terms-condition', 'web.terms-condition')->name('page.terms-condition');
+Route::view('/return-refund-policy', 'web.refund-cancelation-policy')->name('page.refund-cancelation-policy');
+
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');

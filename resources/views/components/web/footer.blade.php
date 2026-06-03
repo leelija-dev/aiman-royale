@@ -2072,11 +2072,11 @@ $isProductPage = !empty($productSlug);
           </div>
         </div>
         <div id="vastram" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Our Story</span>
+            <span class="font-medium">About Us</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="contact-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Contact Us</span>
           </a>
@@ -2109,26 +2109,20 @@ $isProductPage = !empty($productSlug);
           </div>
         </div>
         <div id="policies" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+          <a href="terms-condition" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Terms & Conditions</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+         
+          <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Shipping Policy</span>
+            <span class="font-medium">Return & Refund Policy</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Return & Exchange</span>
-          </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+          <a href="privacy-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Privacy Policy</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Payment Security</span>
-          </a>
+        
         </div>
       </div>
 
