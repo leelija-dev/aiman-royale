@@ -783,12 +783,21 @@
         </div>
 
         <!-- Calendly Widget Container -->
+        {{--
         <div class="">
             <div class="calendly-inline-widget"
                 data-url="https://calendly.com/susmitaghosh-leelija/30min?primary_color={{ config('colors.primary', 'A10000') }}&text_color={{ config('colors.secondary', 'EC4899') }}&background_color={{ config('colors.secondary-light', 'FCE7F3') }}&hide_gdpr_banner=1"
-                style="min-width:320px;height:700px;">
-            </div>
+        style="min-width:320px;height:700px;">
+    </div>
+    </div>
+    --}}
+    <!-- Calendly Widget Container -->
+    <div class="">
+        <div class="calendly-inline-widget"
+            data-url="{{ env('CALENDLY_URL') }}?primary_color={{ env('CALENDLY_PRIMARY_COLOR') }}&text_color={{ env('CALENDLY_TEXT_COLOR') }}&background_color={{ env('CALENDLY_BACKGROUND_COLOR') }}&hide_gdpr_banner=1"
+            style="min-width:320px;height:700px;">
         </div>
+    </div>
     </div>
 </section>
 
