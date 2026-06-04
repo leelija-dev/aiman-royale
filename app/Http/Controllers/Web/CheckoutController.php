@@ -109,7 +109,7 @@ class CheckoutController extends Controller
         // $shipping = 7.00;
         // $tax = $subtotal * 0.05;
         if($subtotal <= 400) {
-            $shipping = 50;
+            $shipping = 0;
         } else {
             $shipping = 0;
         }
