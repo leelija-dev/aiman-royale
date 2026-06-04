@@ -184,7 +184,7 @@
             $shippingCost =0;
             if($total <= 400)
             {
-              $shippingCost =50;
+              $shippingCost =0;
             }
             @endphp
             @endforeach
