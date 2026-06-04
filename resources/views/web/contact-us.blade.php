@@ -45,12 +45,12 @@
                         </div>
                         <div>
                             <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Visit Our Atelier</h3>
-                            <p class="text-stone-600 text-sm leading-relaxed">123 Fashion Avenue, Andheri West,</p>
-                            <p class="text-stone-600 text-sm">Mumbai – 400058, Maharashtra, India</p>
-                            <div class="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium border-b border-transparent hover:border-primary transition-all cursor-pointer group/dir">
+                            <p class="text-stone-600 text-sm leading-relaxed">Islampur, Kadambagachhi,</p>
+                            <p class="text-stone-600 text-sm">North 24 Parganas, Kol-700125, West Bengal, India</p>
+                            <!-- <div class="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium border-b border-transparent hover:border-primary transition-all cursor-pointer group/dir">
                                 <span>Get Directions</span>
                                 <i class="fas fa-arrow-right text-xs group-hover/dir:translate-x-1 transition-transform"></i>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -63,8 +63,8 @@
                         </div>
                         <div>
                             <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Concierge Hotline</h3>
-                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+919876543210" class="hover:text-primary transition-colors">+91 98765 43210</a></p>
-                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/919876543210" class="hover:text-primary transition-colors">+91 98765 43210</a></p>
+                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+917003184741" class="hover:text-primary transition-colors">+91 7003184741</a></p>
+                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/917003184741" class="hover:text-primary transition-colors">+91 7003184741</a></p>
                             <div class="flex items-center gap-1.5 mt-4 text-stone-500 text-xs">
                                 <i class="far fa-clock"></i>
                                 <span>Mon – Sat, 10:00 – 19:00 IST</span>
@@ -81,7 +81,7 @@
                         </div>
                         <div>
                             <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">E-mail Atelier</h3>
-                            <p class="text-stone-600 text-sm"><span class="font-medium">General:</span> <a href="mailto:support@aimanfashion.com" class="hover:text-primary transition-colors">support@aimanfashion.com</a></p>
+                            <p class="text-stone-600 text-sm"><span class="font-medium">General:</span> <a href="mailto:contact.aimanroyale@gmail.com" class="hover:text-primary transition-colors">contact.aimanroyale@gmail.com</a></p>
                             
                         </div>
                     </div>

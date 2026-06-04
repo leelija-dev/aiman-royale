@@ -2182,8 +2182,8 @@ $isProductPage = !empty($productSlug);
               </svg>
             </div>
             <div>
-              <p class="font-medium text-gray-900">Our Store</p>
-              <p class="text-sm text-gray-600 mt-1">123 Fashion Street, Mumbai, India</p>
+              <p class="font-medium text-gray-900">Our Location</p>
+              <p class="text-sm text-gray-600 mt-1">Islampur, Kadambagachhi, North 24 Parganas, Kol-700125, West Bengal, India</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -2194,7 +2194,7 @@ $isProductPage = !empty($productSlug);
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <p class="text-sm text-gray-600 mt-1">+91 98765 43210</p>
+              <a href="tel:+917003184741" class="text-sm text-gray-600 mt-1">+91 7003184741</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -2205,7 +2205,7 @@ $isProductPage = !empty($productSlug);
             </div>
             <div>
               <p class="font-medium text-gray-900">Email Us</p>
-              <p class="text-sm text-gray-600 mt-1 break-all">support@aimanfashion.com</p>
+              <a href="mailto:contact.aimanroyale@gmail.com" class="text-sm text-gray-600 mt-1 break-all">contact.aimanroyale@gmail.com</a>
             </div>
           </div>
         </div>
