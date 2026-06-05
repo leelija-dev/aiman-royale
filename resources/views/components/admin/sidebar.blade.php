@@ -359,6 +359,7 @@ $isEmailActive = false;
             $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index');
             $isNewsletterActive = request()->routeIs('admin.newsletter.index');
             $isEmailActive = request()->routeIs('admin.email-group');
+            $isContactsActive = request()->routeIs('admin.contact');
 
 
             @endphp
@@ -383,6 +384,9 @@ $isEmailActive = false;
                     <li class="submenu-item"><a
                             class="submenu-link {{ $isNewsletterActive ? 'active' : '' }} "
                             href="{{route('admin.newsletter.index')}}">News Letter</a></li>
+                            <li class="submenu-item"><a
+                            class="submenu-link {{ $isContactsActive ? 'active' : '' }} "
+                            href="{{route('admin.contact')}}">Contacts</a></li>
                     </ul>
                     </div>
                     <div id="marketing-menu"

@@ -62,6 +62,7 @@
                     <a href="{{ route('admin.contact.show', $contact->id) }}" class="btn btn-info mb-0 px-3 d-flex justify-content-center align-items-center" title="View Details">
                       <i class="fas fa-eye"></i>
                     </a>
+                    {{--
                     <form id="delete-form-{{$contact->id}}" action="{{ route('admin.categories.destroy', $contact->id) }}" 
                           method="POST" >
                       @csrf
@@ -70,7 +71,7 @@
                       <button type="submit" class="btn btn-danger mb-0 px-3 d-flex justify-content-center align-items-center" title="Move to Trash" onclick="confirmDelete({{$contact->id}})">
                         <i class="fas fa-trash"></i>
                       </button>
-                    
+                    --}}
                   </div>
                 </td>
               </tr>
