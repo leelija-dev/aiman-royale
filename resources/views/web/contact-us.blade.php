@@ -115,7 +115,7 @@
                     <p class="text-stone-500 text-sm mt-1">Our style advisors reply within hours.</p>
                 </div>
 
-                <form action="" method="POST" id="luxuryContactForm" novalidate>
+                <form action="{{ route('contact-us.store') }}" method="POST" id="luxuryContactForm" novalidate>
                     @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                         <div>

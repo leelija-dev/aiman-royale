@@ -8,17 +8,15 @@ class ContactUs extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'contact';
+    protected $table = 'contact_us';
     // public $timestamps = true;
 
     protected $fillable = [
-        'f_name',
-        'l_name',
+        'name',
         'email',
-        'phone',
-        'services',
+        'mobile',
+        'inquiry_type',
         'message',
-        'status'
     ];
-    protected $dates = ['deleted_at'];
+    // protected $dates = ['deleted_at'];
 }
