@@ -335,6 +335,21 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             })->name('admin.brands.generate-slug');
         });
 
+        Route::middleware(['auth:admin'])->prefix('contacts')->group(function () {
+
+            Route::get('/', [ContactController::class, 'index'])->name('admin.contact');
+            Route::get('/{id}', [ContactController::class, 'show'])->name('admin.contact.show');
+            // Route::get('/sendmail/{id}', [ContactController::class, 'mail'])->name('admin.sendmail');
+            // Route::post('/sendmail/{id}', [ContactController::class, 'Sendmail'])->name('admin.sendmail.send');
+            // // Route::post('/insert-contact', [ContactController::class, 'insertContact'])->name('admin.insert-contact');
+            // //  Route::get('contact', [ContactController::class, 'showForm'])->name('admin.contact');
+            // Route::get('single-contact/{id}', [ContactController::class, 'showContact'])->name('admin.show-contact');
+            // Route::get('edit-contact/{id}', [ContactController::class, 'editContact'])->name('admin.edit-contact');
+            // Route::post('update-contact/{id}', [ContactController::class, 'updateStatus'])->name('admin.update-contact');
+            // Route::post('reply-contact/{id}', [ContactController::class, 'Reply'])->name('admin.reply-contact');
+            // Route::post('delete-contact/{id}', [ContactController::class, 'deleteContact'])->name('admin.delete-contact');
+        });
+
 
         // Bill Routes
         Route::get('/new-bill', [BillController::class, 'index'])->name('admin.new-bill')->middleware('auth:admin');

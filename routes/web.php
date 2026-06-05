@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
+use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
 
 // Public routes (accessible without authentication)
@@ -64,7 +65,9 @@ Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
-Route::view('/contact-us', 'web.contact-us')->name('page.contact-us');
+// Route::view('/contact-us', 'web.contact-us')->name('page.contact-us');
+Route::get('/contact-us', [ContactUsController::class, 'index'])->name('page.contact-us');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
 Route::view('/about-us', 'web.about-us')->name('page.about-us');
 Route::view('/privacy-policy', 'web.privacy-policy')->name('page.privacy-policy');
 Route::view('/terms-condition', 'web.terms-condition')->name('page.terms-condition');
