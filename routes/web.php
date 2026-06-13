@@ -165,4 +165,11 @@ Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
 
+// Pincode check (AJAX)
+Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
 
+// Order tracking
+Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth');
+
+// Delhivery webhook (no auth, called by Delhivery)
+Route::post('/delhivery-webhook', [CheckoutController::class, 'delhiveryWebhook']);

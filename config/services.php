@@ -29,6 +29,13 @@ return [
         'webhook_url' => env('CASHFREE_WEBHOOK_URL'),
     ],
 
+    'delhivery' => [
+        'api_key' => env('DELHIVERY_API_KEY'),
+        'sandbox' => env('DELHIVERY_SANDBOX', true),
+        'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse'),
+        'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE', '110001'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

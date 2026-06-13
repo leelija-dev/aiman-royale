@@ -265,4 +265,49 @@
             }, false);
         })();
     </script>
+    <script>
+$(document).ready(function() {
+    let pincodeTimeout;
+   
+    $('#pinCode').on('input', function() {
+        clearTimeout(pincodeTimeout);
+        let pincode = $(this).val();
+       
+        if (pincode.length === 6 && /^\d+$/.test(pincode)) {
+            pincodeTimeout = setTimeout(function() {
+                checkPincode(pincode);
+            }, 500);
+        }
+    });
+   
+    function checkPincode(pincode) {
+        $('#pincode-status').html('<span class="text-info">Checking delivery availability...</span>');
+        $('#place-order-btn').prop('disabled', true);
+       
+        $.ajax({
+            url: '{{ route("check.pincode") }}',
+            method: 'POST',
+            data: {
+                pincode: pincode,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.serviceable) {
+                    $('#pincode-status').html('<span class="text-success">✓ ' + response.message + '</span>');
+                    $('#place-order-btn').prop('disabled', false);
+                } else {
+                    $('#pincode-status').html('<span class="text-danger">✗ ' + response.message + '</span>');
+                    $('#place-order-btn').prop('disabled', true);
+                }
+            },
+            error: function() {
+                $('#pincode-status').html('<span class="text-warning">⚠ Unable to verify pincode</span>');
+                $('#place-order-btn').prop('disabled', true);
+            }
+        });
+    }
+});
+</script>
+
+
 @endsection
