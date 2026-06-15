@@ -155,6 +155,21 @@ Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsle
 
 // Admin Reviews Routes - MOVED TO routes/admin.php
 
+// Pincode check (AJAX)
+Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
+
+// Order tracking
+Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth');
+
+// Direct waybill tracking for staging/test Delhivery
+Route::get('/track-waybill/{waybill}', [CheckoutController::class, 'trackWaybill'])->name('track.waybill');
+
+// Public tracking page
+Route::view('/track', 'web.track')->name('track.page');
+
+// Delhivery webhook (no auth, called by Delhivery)
+Route::post('/delhivery-webhook', [CheckoutController::class, 'delhiveryWebhook']);
+
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
 
 Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
@@ -164,12 +179,3 @@ Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWi
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
-
-// Pincode check (AJAX)
-Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
-
-// Order tracking
-Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth');
-
-// Delhivery webhook (no auth, called by Delhivery)
-Route::post('/delhivery-webhook', [CheckoutController::class, 'delhiveryWebhook']);

@@ -77,12 +77,14 @@ class CheckoutController extends Controller
 
 
         $result = $this->delhiveryService->isPincodeServiceable($request->pincode);
+        
         return response()->json($result);
     }
 
 
     public function placeOrder(Request $request)
     {
+        // dd($request);
         // In tinker
 
         $request->validate([
@@ -848,6 +850,20 @@ class CheckoutController extends Controller
         }
 
         return response()->json(['error' => 'Tracking information unavailable'], 404);
+    }
+
+    /**
+     * Track Delhivery shipment directly by waybill
+     */
+    public function trackWaybill($waybill)
+    {
+        $tracking = $this->delhiveryService->trackShipment($waybill);
+
+        if ($tracking) {
+            return response()->json(['success' => true, 'waybill' => $waybill, 'tracking' => $tracking]);
+        }
+
+        return response()->json(['error' => 'Tracking information unavailable for waybill ' . $waybill], 404);
     }
 
 

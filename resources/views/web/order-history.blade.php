@@ -237,9 +237,9 @@
                                        <p class="text-gray-600 text-bold">Total Price: <strong>{{config('app.currency')}}{{$ord->total_amount ?? '0'}}</strong> </p>
                                    </div>
                                    <div class="mt-3 lg:mt-0">
-                                       <button class="px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
+                                       <a href="{{ route('track.page') }}?order_id={{ $ord->id }}" class="inline-block px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
                                            Track Order
-                                       </button>
+                                       </a>
                                    </div>
                                </div>
 

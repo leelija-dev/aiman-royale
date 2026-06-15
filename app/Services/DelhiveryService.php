@@ -116,63 +116,98 @@ class DelhiveryService
 
     public function isPincodeServiceable($deliveryPincode)
     {
-        Log::info('Delhivery Config', [
-            'base_url' => $this->baseUrl,
-            'pickup_location' => env('DELHIVERY_PICKUP_LOCATION'),
-            'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE'),
-        ]);
-        //   dd($deliveryPincode);
-        try {
+       
+        // Log::info('Delhivery Pincode Check request', [
+        //     'base_url' => $this->baseUrl,
+        //     'endpoint' => '/c/api/pin-codes/json/',
+        //     'pickup_pincode' => $this->pickupPincode,
+        //     'delivery_pincode' => $deliveryPincode,
+        //     'sandbox' => $this->isSandbox,
+        // ]);
 
+        try {
             $cacheKey = "pincode_serviceable_{$deliveryPincode}";
             if (Cache::has($cacheKey)) {
-                return Cache::get($cacheKey);
+                $cached = Cache::get($cacheKey);
+                Log::info('Delhivery pincode cache hit', [
+                    'pincode' => $deliveryPincode,
+                    'cached_result' => $cached,
+                ]);
+                return $cached;
             }
 
-            $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . $deliveryPincode;
-
+            $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . urlencode($deliveryPincode);
+            
             $response = Http::withHeaders([
                 'Authorization' => 'Token ' . $this->apiKey,
             ])->get($url);
 
+            // Log::info('Delhivery pincode check response', [
+            //     'url' => $url,
+            //     'status' => $response->status(),
+            //     'body' => $response->body(),
+            // ]);
+
             if ($response->successful()) {
                 $data = $response->json();
-                // dd($data['serviceable']);
-                // Check if pincode exists and get serviceability details
-                if (isset($data['delivery_codes'][0]['postal_code'])) {
-                    $postalData = $data['delivery_codes'][0]['postal_code'];
+               
 
-                    $isServiceable = (
-                        ($postalData['cod'] ?? 'N') === 'Y' ||
-                        ($postalData['pre_paid'] ?? 'N') === 'Y'
-                    );
+                if (isset($data['delivery_codes']) && is_array($data['delivery_codes']) && count($data['delivery_codes']) > 0) {
+                    
+                    $deliveryItem = $data['delivery_codes'][0];
+                    $postalData = $deliveryItem['postal_code'] ?? $deliveryItem;
 
-                    $result = [
-                        'serviceable' => $isServiceable,
-                        'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
-                        'courier_name' => 'Delhivery',
-                        'cod' => $postalData['cod'] ?? 'N',
-                        'pre_paid' => $postalData['pre_paid'] ?? 'N',
-                        'pickup' => $postalData['pickup'] ?? 'N',
-                        'city' => $postalData['city'] ?? 'N/A',
-                        'state' => $postalData['state_code'] ?? 'N/A'
+                    if (isset($postalData['pin']) || isset($postalData['postal_code'])) {
+                        
+                        $isServiceable = (
+                            ($postalData['cod'] ?? 'N') === 'Y' ||
+                            ($postalData['pre_paid'] ?? 'N') === 'Y'
+                        );
+// dd($isServiceable);
+                        $result = [
+                            'serviceable' => $isServiceable,
+                            'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
+                            'courier_name' => 'Delhivery',
+                            'cod' => $postalData['cod'] ?? 'N',
+                            'pre_paid' => $postalData['pre_paid'] ?? 'N',
+                            'pickup' => $postalData['pickup'] ?? 'N',
+                            'city' => $postalData['city'] ?? 'N/A',
+                            'state' => $postalData['state_code'] ?? $postalData['state'] ?? 'N/A'
+                        ];
+// dd($result);
+                        Cache::put($cacheKey, $result, 86400);
+                        Log::info('Delhivery pincode check result', $result);
+                        return $result;
+                    }
+
+                    Log::error('Delhivery pincode payload missing nested postal_code properties', [
+                        'delivery_codes' => $deliveryItem,
+                        'pincode' => $deliveryPincode,
+                    ]);
+                } else {
+                    // Log::warning('Delhivery pincode not found in response', [
+                    //     'response' => $data,
+                    //     'pincode' => $deliveryPincode,
+                    // ]);
+
+                    return [
+                        'serviceable' => false,
+                        'message' => 'Delivery information not found for this pincode',
+                        'courier_name' => 'Delhivery'
                     ];
-                    Log::info('Pincode Check Result', $result);
-
-
-                    Cache::put($cacheKey, $result, 86400);
-                    return $result;
                 }
             }
 
-            // Fallback for failed API call
             return [
                 'serviceable' => false,
                 'message' => 'Unable to verify delivery availability',
                 'courier_name' => null
             ];
         } catch (\Exception $e) {
-            Log::error('Delhivery Exception: ' . $e->getMessage());
+            Log::error('Delhivery Exception: ' . $e->getMessage(), [
+                'pincode' => $deliveryPincode,
+                'trace' => $e->getTraceAsString(),
+            ]);
             return [
                 'serviceable' => false,
                 'message' => 'Service temporarily unavailable',
@@ -263,7 +298,7 @@ class DelhiveryService
                     ]
                 ]
             ];
-            Log::info('Shipment Data', $shipmentData);
+            // Log::info('Shipment Data', $shipmentData);
             // ✅ CRITICAL FIX: Send as multipart/form-data, NOT as JSON
             $response = Http::withHeaders([
                 'Authorization' => 'Token ' . $this->apiKey,
@@ -274,11 +309,11 @@ class DelhiveryService
             // dd($response->json());
             $result = $response->json();
 
-            Log::info('Delhivery Shipment Response:', [
-                'status' => $response->status(),
-                'success' => $response->successful(),
-                'result' => $result
-            ]);
+            // Log::info('Delhivery Shipment Response:', [
+            //     'status' => $response->status(),
+            //     'success' => $response->successful(),
+            //     'result' => $result
+            // ]);
 
             // Check if shipment was created successfully
             if ($response->successful() && isset($result['success']) && $result['success'] === true) {
@@ -341,25 +376,130 @@ class DelhiveryService
      */
     public function trackShipment($waybillNumber)
     {
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $this->apiKey,
-            ])->get($this->baseUrl . '/api/packages/json/', [
-                'waybill' => $waybillNumber
-            ]);
+        $endpoints = [
+            '/api/v1/packages/json/',
+            '/api/packages/json/',
+            '/c/api/packages/json/'
+        ];
 
-            if ($response->successful()) {
-                return $response->json();
+        $queryKeys = [
+            'waybill',
+            'ref_ids',
+            'ref_nos',
+            'waybill_number'
+        ];
+
+        foreach ($endpoints as $endpoint) {
+            foreach ($queryKeys as $queryKey) {
+                try {
+                    $url = $this->baseUrl . $endpoint;
+                    $response = Http::withHeaders([
+                        'Authorization' => 'Token ' . $this->apiKey,
+                    ])->get($url, [
+                        $queryKey => $waybillNumber
+                    ]);
+
+                    // Log::info('Delhivery trackShipment attempt', [
+                    //     'waybill' => $waybillNumber,
+                    //     'endpoint' => $endpoint,
+                    //     'param' => $queryKey,
+                    //     'status' => $response->status(),
+                    //     'body' => $response->body()
+                    // ]);
+
+                    if ($response->successful()) {
+                        $body = $response->body();
+
+                        if (stripos($body, '<html') !== false) {
+                            Log::warning('Delhivery tracking response was HTML, skipping', [
+                                'waybill' => $waybillNumber,
+                                'endpoint' => $endpoint,
+                                'param' => $queryKey,
+                            ]);
+                            continue;
+                        }
+
+                        $data = $response->json();
+
+                        if (!empty($data['Error']) || !empty($data['error'])) {
+                            Log::warning('Delhivery tracking response returned error payload', [
+                                'waybill' => $waybillNumber,
+                                'endpoint' => $endpoint,
+                                'param' => $queryKey,
+                                'response' => $data,
+                            ]);
+                            continue;
+                        }
+
+                        if (isset($data['ShipmentData']) || isset($data['packages']) || isset($data['shipments'])) {
+                            return $data;
+                        }
+
+                        if (is_array($data) && isset($data[0]['Status'])) {
+                            return $data;
+                        }
+
+                        Log::warning('Delhivery tracking response did not contain expected payload', [
+                            'waybill' => $waybillNumber,
+                            'endpoint' => $endpoint,
+                            'param' => $queryKey,
+                            'response' => $data,
+                        ]);
+                        continue;
+                    }
+
+                    if ($response->status() === 405 && stripos($endpoint, '/api/v1/') !== false) {
+                        $response = Http::withHeaders([
+                            'Authorization' => 'Token ' . $this->apiKey,
+                        ])->asForm()->post($url, [
+                            $queryKey => $waybillNumber
+                        ]);
+
+                        Log::info('Delhivery trackShipment POST fallback attempt', [
+                            'waybill' => $waybillNumber,
+                            'endpoint' => $endpoint,
+                            'param' => $queryKey,
+                            'status' => $response->status(),
+                            'body' => $response->body()
+                        ]);
+
+                        if ($response->successful()) {
+                            $body = $response->body();
+                            if (stripos($body, '<html') !== false) {
+                                continue;
+                            }
+
+                            $data = $response->json();
+                            if (!empty($data['Error']) || !empty($data['error'])) {
+                                continue;
+                            }
+
+                            if (isset($data['ShipmentData']) || isset($data['packages']) || isset($data['shipments']) || (is_array($data) && isset($data[0]['Status']))) {
+                                return $data;
+                            }
+                        }
+                    }
+
+                    if ($response->status() !== 404) {
+                        Log::error('Tracking failed for waybill: ' . $waybillNumber, [
+                            'endpoint' => $endpoint,
+                            'param' => $queryKey,
+                            'status' => $response->status(),
+                            'response' => $response->body()
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Tracking exception for waybill: ' . $waybillNumber, [
+                        'endpoint' => $endpoint,
+                        'param' => $queryKey,
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
             }
-
-            Log::error('Tracking failed for waybill: ' . $waybillNumber, [
-                'response' => $response->body()
-            ]);
-            return null;
-        } catch (\Exception $e) {
-            Log::error('Tracking exception: ' . $e->getMessage());
-            return null;
         }
+
+        return null;
     }
 
     /**
