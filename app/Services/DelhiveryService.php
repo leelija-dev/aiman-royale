@@ -224,8 +224,9 @@ class DelhiveryService
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Token ' . $this->apiKey,
-            ])->get($this->baseUrl . '/api/cmu/create.json', [
-                'count' => $count
+            ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+                'count' => $count,
+                'format' => 'json'
             ]);
 
             if ($response->successful()) {
