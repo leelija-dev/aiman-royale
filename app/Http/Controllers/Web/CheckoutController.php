@@ -264,12 +264,29 @@ class CheckoutController extends Controller
         ]);
 
         // Check pincode serviceability
+        // $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
+
+        // if (!$serviceability['serviceable']) {
+        //     return back()
+        //         ->withInput()
+        //         ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
+        // }
+
+        // Check pincode serviceability
         $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
 
         if (!$serviceability['serviceable']) {
             return back()
                 ->withInput()
                 ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
+        }
+
+        // For COD orders, specifically check COD availability
+        $paymentMethod = $request->input('payment_method', 'cashfree');
+        if ($paymentMethod === 'cod' && isset($serviceability['cod_available']) && !$serviceability['cod_available']) {
+            return back()
+                ->withInput()
+                ->with('error', 'Cash on Delivery is not available for this pincode. Please choose online payment.');
         }
 
         $user_id = auth()->id();
@@ -388,37 +405,37 @@ class CheckoutController extends Controller
         }
 
         // 🔔 SEND WHATSAPP CONFIRMATION
-//         try {
-//             $whatsappService = new \App\Services\WhatsAppService();
+        //         try {
+        //             $whatsappService = new \App\Services\WhatsAppService();
 
-//             // Format phone number (remove any non-numeric characters)
-//             $phone = preg_replace('/[^0-9]/', '', $request->phone);
+        //             // Format phone number (remove any non-numeric characters)
+        //             $phone = preg_replace('/[^0-9]/', '', $request->phone);
 
-//             // Send order confirmation
-//             $whatsappSent = $whatsappService->sendOrderConfirmation(
-//                 $phone,
-//                 $fullName,
-//                 $order_id
-//             );
-// // dd($whatsappSent);
-//             if ($whatsappSent) {
-//                 Log::info('WhatsApp order confirmation sent', [
-//                     'order_id' => $order_id,
-//                     'phone' => $phone,
-//                     'message_id' => $whatsappService->getLastMessageId()
-//                 ]);
-//             } else {
-//                 Log::warning('WhatsApp order confirmation failed', [
-//                     'order_id' => $order_id,
-//                     'phone' => $phone
-//                 ]);
-//             }
-//         } catch (\Exception $e) {
-//             // Don't fail the order if WhatsApp fails
-//             Log::error('WhatsApp send error: ' . $e->getMessage(), [
-//                 'order_id' => $order_id
-//             ]);
-//         }
+        //             // Send order confirmation
+        //             $whatsappSent = $whatsappService->sendOrderConfirmation(
+        //                 $phone,
+        //                 $fullName,
+        //                 $order_id
+        //             );
+        // // dd($whatsappSent);
+        //             if ($whatsappSent) {
+        //                 Log::info('WhatsApp order confirmation sent', [
+        //                     'order_id' => $order_id,
+        //                     'phone' => $phone,
+        //                     'message_id' => $whatsappService->getLastMessageId()
+        //                 ]);
+        //             } else {
+        //                 Log::warning('WhatsApp order confirmation failed', [
+        //                     'order_id' => $order_id,
+        //                     'phone' => $phone
+        //                 ]);
+        //             }
+        //         } catch (\Exception $e) {
+        //             // Don't fail the order if WhatsApp fails
+        //             Log::error('WhatsApp send error: ' . $e->getMessage(), [
+        //                 'order_id' => $order_id
+        //             ]);
+        //         }
 
         // Store order details in session
         session([
@@ -879,7 +896,7 @@ class CheckoutController extends Controller
         //     'Susmita',
         //     'ORD-12345'
         // );
-         try {
+        try {
             $whatsappService = new \App\Services\WhatsAppService();
 
             // Format phone number (remove any non-numeric characters)
@@ -891,7 +908,7 @@ class CheckoutController extends Controller
                 $customerName,
                 $orderId
             );
-// dd($whatsappSent);
+            // dd($whatsappSent);
             if ($whatsappSent) {
                 Log::info('WhatsApp order confirmation sent', [
                     'order_id' => $orderId,

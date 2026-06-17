@@ -114,263 +114,487 @@ class DelhiveryService
     //     }
     // }
 
-    public function isPincodeServiceable($deliveryPincode)
-    {
-       
-        // Log::info('Delhivery Pincode Check request', [
-        //     'base_url' => $this->baseUrl,
-        //     'endpoint' => '/c/api/pin-codes/json/',
-        //     'pickup_pincode' => $this->pickupPincode,
-        //     'delivery_pincode' => $deliveryPincode,
-        //     'sandbox' => $this->isSandbox,
-        // ]);
+public function isPincodeServiceable($deliveryPincode)
+{
+    try {
+        $cacheKey = "pincode_serviceable_{$deliveryPincode}";
+        if (Cache::has($cacheKey)) {
+            $cached = Cache::get($cacheKey);
+            return $cached;
+        }
 
-        try {
-            $cacheKey = "pincode_serviceable_{$deliveryPincode}";
-            if (Cache::has($cacheKey)) {
-                $cached = Cache::get($cacheKey);
-                Log::info('Delhivery pincode cache hit', [
-                    'pincode' => $deliveryPincode,
-                    'cached_result' => $cached,
-                ]);
-                return $cached;
-            }
+        $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . urlencode($deliveryPincode);
+        
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $this->apiKey,
+        ])->get($url);
 
-            $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . urlencode($deliveryPincode);
-            
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $this->apiKey,
-            ])->get($url);
+        if ($response->successful()) {
+            $data = $response->json();
 
-            // Log::info('Delhivery pincode check response', [
-            //     'url' => $url,
-            //     'status' => $response->status(),
-            //     'body' => $response->body(),
-            // ]);
+            if (isset($data['delivery_codes']) && is_array($data['delivery_codes']) && count($data['delivery_codes']) > 0) {
+                $deliveryItem = $data['delivery_codes'][0];
+                $postalData = $deliveryItem['postal_code'] ?? $deliveryItem;
 
-            if ($response->successful()) {
-                $data = $response->json();
-               
+                if (isset($postalData['pin']) || isset($postalData['postal_code'])) {
+                    // IMPORTANT: Check COD specifically
+                    $isServiceable = (
+                        ($postalData['cod'] ?? 'N') === 'Y' &&
+                        ($postalData['pickup'] ?? 'N') === 'Y'
+                    );
 
-                if (isset($data['delivery_codes']) && is_array($data['delivery_codes']) && count($data['delivery_codes']) > 0) {
-                    
-                    $deliveryItem = $data['delivery_codes'][0];
-                    $postalData = $deliveryItem['postal_code'] ?? $deliveryItem;
+                    // Also check if COD is actually available
+                    $codAvailable = ($postalData['cod'] ?? 'N') === 'Y';
+                    $pickupAvailable = ($postalData['pickup'] ?? 'N') === 'Y';
 
-                    if (isset($postalData['pin']) || isset($postalData['postal_code'])) {
-                        
-                        $isServiceable = (
-                            ($postalData['cod'] ?? 'N') === 'Y' ||
-                            ($postalData['pre_paid'] ?? 'N') === 'Y'
-                        );
-// dd($isServiceable);
-                        $result = [
-                            'serviceable' => $isServiceable,
-                            'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
-                            'courier_name' => 'Delhivery',
-                            'cod' => $postalData['cod'] ?? 'N',
-                            'pre_paid' => $postalData['pre_paid'] ?? 'N',
-                            'pickup' => $postalData['pickup'] ?? 'N',
-                            'city' => $postalData['city'] ?? 'N/A',
-                            'state' => $postalData['state_code'] ?? $postalData['state'] ?? 'N/A'
-                        ];
-// dd($result);
-                        Cache::put($cacheKey, $result, 86400);
-                        Log::info('Delhivery pincode check result', $result);
-                        return $result;
-                    }
-
-                    Log::error('Delhivery pincode payload missing nested postal_code properties', [
-                        'delivery_codes' => $deliveryItem,
-                        'pincode' => $deliveryPincode,
-                    ]);
-                } else {
-                    // Log::warning('Delhivery pincode not found in response', [
-                    //     'response' => $data,
-                    //     'pincode' => $deliveryPincode,
-                    // ]);
-
-                    return [
-                        'serviceable' => false,
-                        'message' => 'Delivery information not found for this pincode',
-                        'courier_name' => 'Delhivery'
+                    $result = [
+                        'serviceable' => $isServiceable,
+                        'cod_available' => $codAvailable,
+                        'pickup_available' => $pickupAvailable,
+                        'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
+                        'courier_name' => 'Delhivery',
+                        'cod' => $postalData['cod'] ?? 'N',
+                        'pre_paid' => $postalData['pre_paid'] ?? 'N',
+                        'pickup' => $postalData['pickup'] ?? 'N',
+                        'city' => $postalData['city'] ?? 'N/A',
+                        'state' => $postalData['state_code'] ?? $postalData['state'] ?? 'N/A'
                     ];
+
+                    Cache::put($cacheKey, $result, 86400);
+                    return $result;
                 }
             }
 
             return [
                 'serviceable' => false,
-                'message' => 'Unable to verify delivery availability',
-                'courier_name' => null
-            ];
-        } catch (\Exception $e) {
-            Log::error('Delhivery Exception: ' . $e->getMessage(), [
-                'pincode' => $deliveryPincode,
-                'trace' => $e->getTraceAsString(),
-            ]);
-            return [
-                'serviceable' => false,
-                'message' => 'Service temporarily unavailable',
-                'courier_name' => null
+                'cod_available' => false,
+                'pickup_available' => false,
+                'message' => 'Delivery information not found for this pincode',
+                'courier_name' => 'Delhivery'
             ];
         }
+
+        return [
+            'serviceable' => false,
+            'cod_available' => false,
+            'pickup_available' => false,
+            'message' => 'Unable to verify delivery availability',
+            'courier_name' => null
+        ];
+    } catch (\Exception $e) {
+        Log::error('Delhivery Exception: ' . $e->getMessage());
+        return [
+            'serviceable' => false,
+            'cod_available' => false,
+            'pickup_available' => false,
+            'message' => 'Service temporarily unavailable',
+            'courier_name' => null
+        ];
     }
+}
 
     /**
      * Generate waybill number - REMOVED dd()
      */
-    public function generateWaybill($count = 1)
-    {
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $this->apiKey,
-            ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
-                'count' => $count,
-                'format' => 'json'
-            ]);
+    // public function generateWaybill($count = 1)
+    // {
+    //     try {
+    //         $response = Http::withHeaders([
+    //             'Authorization' => 'Token ' . $this->apiKey,
+    //         ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+    //             'count' => $count,
+    //             'format' => 'json'
+    //         ]);
 
-            if ($response->successful()) {
-                $waybills = $response->json();
+    //         if ($response->successful()) {
+    //             $waybills = $response->json();
 
-                // Handle different response formats
-                if (is_array($waybills)) {
-                    if (isset($waybills['waybills'])) {
-                        return $waybills['waybills'][0] ?? null;
-                    } elseif (isset($waybills[0])) {
-                        return $waybills[0];
-                    } elseif (isset($waybills['waybill'])) {
-                        return $waybills['waybill'];
-                    }
+    //             // Handle different response formats
+    //             if (is_array($waybills)) {
+    //                 if (isset($waybills['waybills'])) {
+    //                     return $waybills['waybills'][0] ?? null;
+    //                 } elseif (isset($waybills[0])) {
+    //                     return $waybills[0];
+    //                 } elseif (isset($waybills['waybill'])) {
+    //                     return $waybills['waybill'];
+    //                 }
+    //             }
+
+    //             return $waybills;
+    //         }
+
+    //         Log::error('Delhivery waybill generation failed', [
+    //             'response' => $response->body(),
+    //             'status' => $response->status()
+    //         ]);
+    //         return null;
+    //     } catch (\Exception $e) {
+    //         Log::error('Waybill generation exception: ' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
+
+    /**
+ * Generate waybill number
+ * Correct endpoint: GET /waybill/api/bulk/json/?count=1
+ */
+public function generateWaybill($count = 1)
+{
+    try {
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $this->apiKey,
+            'Accept' => 'application/json',
+        ])->get($this->baseUrl . '/waybill/api/bulk/json/', [
+            'count' => (int)$count
+        ]);
+
+        Log::info('Delhivery waybill generation response', [
+            'status' => $response->status(),
+            'body' => $response->body()
+        ]);
+
+        if ($response->successful()) {
+            $waybills = $response->json();
+
+            // Handle different response formats
+            if (is_array($waybills)) {
+                // Check for waybills array
+                if (isset($waybills['waybills']) && is_array($waybills['waybills'])) {
+                    return $waybills['waybills'][0] ?? null;
                 }
+                
+                // Check for bulk response format
+                if (isset($waybills['bulk_waybill']) && is_array($waybills['bulk_waybill'])) {
+                    return $waybills['bulk_waybill'][0] ?? null;
+                }
+                
+                // Check for direct waybill
+                if (isset($waybills['waybill'])) {
+                    return $waybills['waybill'];
+                }
+                
+                // If response is a simple array of waybills
+                if (isset($waybills[0])) {
+                    return $waybills[0];
+                }
+            }
 
+            // If response is a string that looks like a waybill number
+            if (is_string($waybills) && preg_match('/^\d+$/', $waybills)) {
                 return $waybills;
             }
 
-            Log::error('Delhivery waybill generation failed', [
-                'response' => $response->body(),
-                'status' => $response->status()
-            ]);
-            return null;
-        } catch (\Exception $e) {
-            Log::error('Waybill generation exception: ' . $e->getMessage());
+            Log::warning('Unexpected waybill response format', ['response' => $waybills]);
             return null;
         }
-    }
 
-    /**
-     * Create shipment in Delhivery - CORRECTED payload format
-     */
+        Log::error('Delhivery waybill generation failed', [
+            'response' => $response->body(),
+            'status' => $response->status()
+        ]);
+        return null;
+    } catch (\Exception $e) {
+        Log::error('Waybill generation exception: ' . $e->getMessage());
+        return null;
+    }
+}
+
+   
     /**
      * Create shipment in Delhivery - CORRECTED for Delhivery's API requirements
      */
-    public function createShipment($orderData, $orderItems)
-    {
+    // public function createShipment($orderData, $orderItems)
+    // {
 
-        try {
-            // Format products
-            $products = [];
-            foreach ($orderItems as $item) {
-                $products[] = [
-                    'name' => $item->name ?? 'Product',
-                    'sku' => (string) ($item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
-                    'quantity' => (int) $item->quantity,
-                    'price' => (float) $item->price,
+    //     try {
+    //         // Format products
+    //         $products = [];
+    //         foreach ($orderItems as $item) {
+    //             $products[] = [
+    //                 'name' => $item->name ?? 'Product',
+    //                 'sku' => (string) ($item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
+    //                 'quantity' => (int) $item->quantity,
+    //                 'price' => (float) $item->price,
+    //             ];
+    //         }
+
+    //         // Prepare shipment data as per Delhivery format
+    //         // $shipmentData = [
+    //         //     'shipments' => [
+    //         //         [
+    //         //             'name' => $orderData['customer_name'],
+    //         //             'add' => $orderData['address'],
+    //         //             'city' => $orderData['city'],
+    //         //             'state' => $orderData['state'],
+    //         //             'country' => 'India',
+    //         //             'pin' => $orderData['pincode'],
+    //         //             'phone' => $orderData['phone'],
+    //         //             'order' => (string) $orderData['order_id'],
+    //         //             'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
+    //         //             'total_amount' => (float) $orderData['total_amount'],
+    //         //             'pickup_location' => $this->pickupLocation,
+    //         //             'declared_value' => (float) $orderData['total_amount'],
+    //         //             'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
+    //         //             'products' => $products
+    //         //         ]
+    //         //     ]
+    //         // ];
+
+    //         $shipmentData = [
+    //             'shipments' => [
+    //                 [
+    //                     'name' => $orderData['customer_name'],
+    //                     'add' => $orderData['address'],
+    //                     'city' => $orderData['city'],
+    //                     'state' => $orderData['state'],
+    //                     'country' => 'India',
+    //                     'pin' => $orderData['pincode'],
+    //                     'phone' => $orderData['phone'],
+    //                     'order' => (string) $orderData['order_id'],
+    //                     'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
+    //                     'total_amount' => (float) $orderData['total_amount'],
+    //                     'pickup_location' => $this->pickupLocation,
+    //                     'declared_value' => (float) $orderData['total_amount'],
+    //                     'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
+    //                     'products' => $products
+    //                 ]
+    //             ]
+    //         ];
+    //         // Log::info('Shipment Data', $shipmentData);
+    //         // ✅ CRITICAL FIX: Send as multipart/form-data, NOT as JSON
+    //         $response = Http::withHeaders([
+    //             'Authorization' => 'Token ' . $this->apiKey,
+    //         ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+    //             'format' => 'json',
+    //             'data' => json_encode($shipmentData)  // Must be JSON string, not array
+    //         ]);
+    //         // dd($response->json());
+    //         $result = $response->json();
+
+    //         // Log::info('Delhivery Shipment Response:', [
+    //         //     'status' => $response->status(),
+    //         //     'success' => $response->successful(),
+    //         //     'result' => $result
+    //         // ]);
+
+    //         // Check if shipment was created successfully
+    //         if ($response->successful() && isset($result['success']) && $result['success'] === true) {
+    //             // Extract waybill from response
+    //             $waybill = null;
+    //             $shipmentId = null;
+
+    //             if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
+    //                 $waybill = $result['packages'][0]['waybill'] ?? null;
+    //                 $shipmentId = $result['packages'][0]['shipment_id'] ?? null;
+    //             } elseif (isset($result['shipments']) && is_array($result['shipments']) && count($result['shipments']) > 0) {
+    //                 $waybill = $result['shipments'][0]['waybill'] ?? null;
+    //                 $shipmentId = $result['shipments'][0]['shipment_id'] ?? null;
+    //             }
+
+    //             if ($waybill) {
+    //                 return [
+    //                     'success' => true,
+    //                     'waybill' => $waybill,
+    //                     'shipment_id' => $shipmentId,
+    //                     'message' => 'Shipment created successfully'
+    //                 ];
+    //             }
+    //         }
+
+    //         // Handle error messages
+    //         $errorMessage = 'Failed to create shipment';
+    //         if (isset($result['message'])) {
+    //             $errorMessage = $result['message'];
+    //         } elseif (isset($result['error'])) {
+    //             $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
+    //         } elseif (isset($result['rmk'])) {
+    //             $errorMessage = $result['rmk'];
+    //         }
+
+    //         Log::error('Delhivery shipment creation failed', [
+    //             'response' => $response->body(),
+    //             'payload' => $shipmentData
+    //         ]);
+
+    //         return [
+    //             'success' => false,
+    //             'message' => $errorMessage,
+    //             'waybill' => null
+    //         ];
+    //     } catch (\Exception $e) {
+    //         Log::error('Shipment creation exception: ' . $e->getMessage(), [
+    //             'trace' => $e->getTraceAsString()
+    //         ]);
+    //         return [
+    //             'success' => false,
+    //             'message' => $e->getMessage(),
+    //             'waybill' => null
+    //         ];
+    //     }
+    // }
+
+    /**
+ * Create shipment in Delhivery - With better error handling
+ */
+public function createShipment($orderData, $orderItems)
+{
+    try {
+        // Format products
+        $products = [];
+        foreach ($orderItems as $item) {
+            $products[] = [
+                'name' => $item->name ?? 'Product',
+                'sku' => (string) ($item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
+                'quantity' => (int) $item->quantity,
+                'price' => (float) $item->price,
+            ];
+        }
+
+        // Prepare shipment data
+        $shipmentData = [
+            'shipments' => [
+                [
+                    'name' => $orderData['customer_name'],
+                    'add' => $orderData['address'],
+                    'city' => $orderData['city'],
+                    'state' => $orderData['state'],
+                    'country' => 'India',
+                    'pin' => $orderData['pincode'],
+                    'phone' => $orderData['phone'],
+                    'order' => (string) $orderData['order_id'],
+                    'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
+                    'total_amount' => (float) $orderData['total_amount'],
+                    'pickup_location' => $this->pickupLocation,
+                    'declared_value' => (float) $orderData['total_amount'],
+                    'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
+                    'products' => $products
+                ]
+            ]
+        ];
+
+        Log::info('Delhivery shipment payload', [
+            'payload' => $shipmentData
+        ]);
+
+        // Send as form data
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $this->apiKey,
+        ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+            'format' => 'json',
+            'data' => json_encode($shipmentData)
+        ]);
+
+        $result = $response->json();
+
+        Log::info('Delhivery Shipment Response:', [
+            'status' => $response->status(),
+            'result' => $result
+        ]);
+
+        // Check if shipment was created successfully
+        if ($response->successful()) {
+            // Check for error messages in the response
+            if (isset($result['rmk']) && $result['success'] === false) {
+                // Get detailed error from packages
+                $errorMessage = $result['rmk'];
+                if (isset($result['packages']) && is_array($result['packages'])) {
+                    foreach ($result['packages'] as $package) {
+                        if (isset($package['remarks']) && is_array($package['remarks'])) {
+                            foreach ($package['remarks'] as $remark) {
+                                if (isset($remark['message'])) {
+                                    $errorMessage .= ' - ' . $remark['message'];
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                return [
+                    'success' => false,
+                    'message' => $errorMessage,
+                    'waybill' => null
                 ];
             }
 
-            // Prepare shipment data as per Delhivery format
-            $shipmentData = [
-                'shipments' => [
-                    [
-                        'name' => $orderData['customer_name'],
-                        'add' => $orderData['address'],
-                        'city' => $orderData['city'],
-                        'state' => $orderData['state'],
-                        'country' => 'India',
-                        'pin' => $orderData['pincode'],
-                        'phone' => $orderData['phone'],
-                        'order' => (string) $orderData['order_id'],
-                        'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
-                        'total_amount' => (float) $orderData['total_amount'],
-                        'pickup_location' => $this->pickupLocation,
-                        'declared_value' => (float) $orderData['total_amount'],
-                        'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
-                        'products' => $products
-                    ]
-                ]
-            ];
-            // Log::info('Shipment Data', $shipmentData);
-            // ✅ CRITICAL FIX: Send as multipart/form-data, NOT as JSON
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $this->apiKey,
-            ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
-                'format' => 'json',
-                'data' => json_encode($shipmentData)  // Must be JSON string, not array
-            ]);
-            // dd($response->json());
-            $result = $response->json();
-
-            // Log::info('Delhivery Shipment Response:', [
-            //     'status' => $response->status(),
-            //     'success' => $response->successful(),
-            //     'result' => $result
-            // ]);
-
-            // Check if shipment was created successfully
-            if ($response->successful() && isset($result['success']) && $result['success'] === true) {
-                // Extract waybill from response
-                $waybill = null;
-                $shipmentId = null;
-
-                if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
-                    $waybill = $result['packages'][0]['waybill'] ?? null;
-                    $shipmentId = $result['packages'][0]['shipment_id'] ?? null;
-                } elseif (isset($result['shipments']) && is_array($result['shipments']) && count($result['shipments']) > 0) {
-                    $waybill = $result['shipments'][0]['waybill'] ?? null;
-                    $shipmentId = $result['shipments'][0]['shipment_id'] ?? null;
-                }
-
-                if ($waybill) {
+            // Check if we have packages with waybills
+            if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
+                $package = $result['packages'][0];
+                
+                // Check if package status is success
+                if (isset($package['status']) && $package['status'] === 'Success') {
+                    $waybill = $package['waybill'] ?? null;
+                    $shipmentId = $package['shipment_id'] ?? null;
+                    
+                    if ($waybill) {
+                        return [
+                            'success' => true,
+                            'waybill' => $waybill,
+                            'shipment_id' => $shipmentId,
+                            'message' => 'Shipment created successfully'
+                        ];
+                    }
+                } else {
+                    // Package failed - get the error message
+                    $errorMessage = 'Shipment creation failed';
+                    if (isset($package['remarks']) && is_array($package['remarks'])) {
+                        foreach ($package['remarks'] as $remark) {
+                            if (isset($remark['message'])) {
+                                $errorMessage = $remark['message'];
+                                break;
+                            }
+                        }
+                    }
+                    
                     return [
-                        'success' => true,
-                        'waybill' => $waybill,
-                        'shipment_id' => $shipmentId,
-                        'message' => 'Shipment created successfully'
+                        'success' => false,
+                        'message' => $errorMessage,
+                        'waybill' => null
                     ];
                 }
             }
 
-            // Handle error messages
-            $errorMessage = 'Failed to create shipment';
-            if (isset($result['message'])) {
-                $errorMessage = $result['message'];
-            } elseif (isset($result['error'])) {
-                $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
-            } elseif (isset($result['rmk'])) {
-                $errorMessage = $result['rmk'];
+            // Check for success flag
+            if (isset($result['success']) && $result['success'] === true) {
+                return [
+                    'success' => true,
+                    'waybill' => $result['waybill'] ?? null,
+                    'shipment_id' => $result['shipment_id'] ?? null,
+                    'message' => 'Shipment created successfully'
+                ];
             }
-
-            Log::error('Delhivery shipment creation failed', [
-                'response' => $response->body(),
-                'payload' => $shipmentData
-            ]);
-
-            return [
-                'success' => false,
-                'message' => $errorMessage,
-                'waybill' => null
-            ];
-        } catch (\Exception $e) {
-            Log::error('Shipment creation exception: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-                'waybill' => null
-            ];
         }
+
+        // Handle error messages
+        $errorMessage = 'Failed to create shipment';
+        if (isset($result['rmk'])) {
+            $errorMessage = $result['rmk'];
+        } elseif (isset($result['message'])) {
+            $errorMessage = $result['message'];
+        } elseif (isset($result['error'])) {
+            $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
+        }
+
+        Log::error('Delhivery shipment creation failed', [
+            'response' => $response->body(),
+            'payload' => $shipmentData
+        ]);
+
+        return [
+            'success' => false,
+            'message' => $errorMessage,
+            'waybill' => null
+        ];
+    } catch (\Exception $e) {
+        Log::error('Shipment creation exception: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString()
+        ]);
+        return [
+            'success' => false,
+            'message' => $e->getMessage(),
+            'waybill' => null
+        ];
     }
+}
 
     /**
      * Track shipment
@@ -543,11 +767,9 @@ class DelhiveryService
                 'response' => $response->body()
             ]);
             return null;
-
         } catch (\Exception $e) {
             Log::error('Exception fetching waybill details: ' . $e->getMessage());
             return null;
         }
     }
-
 }

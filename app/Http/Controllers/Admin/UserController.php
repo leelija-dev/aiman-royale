@@ -276,13 +276,98 @@ class UserController extends Controller implements HasMiddleware
 /**
  * Cancel an order
  */
+// public function cancelOrder(Request $request, $orderId)
+// {
+//     try {
+//         \Log::info('=== CANCEL ORDER DEBUG START ===');
+//         \Log::info('Order ID: ' . $orderId);
+        
+//         // Test basic functionality first
+//         $order = Order::find($orderId);
+//         if (!$order) {
+//             \Log::error('Order not found: ' . $orderId);
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'Order not found.'
+//             ], 404);
+//         }
+        
+//         \Log::info('Order found successfully');
+//         \Log::info('Order ID: ' . $order->id);
+//         \Log::info('Order Status: ' . $order->order_status);
+//         \Log::info('Order User ID: ' . $order->user_id);
+        
+//         // Check authentication
+//         $userId = auth('web')->id();
+//         \Log::info('Auth User ID: ' . $userId);
+        
+//         if (!$userId) {
+//             \Log::error('User not authenticated');
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'User not authenticated.'
+//             ], 401);
+//         }
+        
+//         // Simple status check
+//         $cancelableStatuses = ['pending', 'confirmed', 'paid'];
+//         if (!in_array($order->order_status, $cancelableStatuses)) {
+//             \Log::error('Order not cancellable. Status: ' . $order->order_status);
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'Order cannot be cancelled. Current status: ' . $order->order_status
+//             ], 400);
+//         }
+        
+//         // Test basic update
+//         \Log::info('Attempting to update order status...');
+//         $order->order_status = 'cancelled';
+//         $result = $order->save();
+        
+//         \Log::info('Save result: ' . ($result ? 'SUCCESS' : 'FAILED'));
+//         \Log::info('Updated order status: ' . $order->order_status);
+        
+//         \Log::info('=== CANCEL ORDER DEBUG END ===');
+        
+//         return response()->json([
+//             'success' => true,
+//             'message' => 'Order cancelled successfully (simplified version).',
+//             'order_id' => $order->id,
+//             'debug_info' => [
+//                 'order_status' => $order->order_status,
+//                 'user_id' => $userId,
+//                 'save_result' => $result
+//             ]
+//         ]);
+        
+//     } catch (\Exception $e) {
+//         \Log::error('=== CANCEL ORDER ERROR ===');
+//         \Log::error('Error Message: ' . $e->getMessage());
+//         \Log::error('Error Code: ' . $e->getCode());
+//         \Log::error('File: ' . $e->getFile());
+//         \Log::error('Line: ' . $e->getLine());
+//         \Log::error('Stack Trace: ' . $e->getTraceAsString());
+//         \Log::error('=== END ERROR ===');
+        
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'Debug error: ' . $e->getMessage(),
+//             'debug_info' => [
+//                 'file' => $e->getFile(),
+//                 'line' => $e->getLine(),
+//                 'code' => $e->getCode()
+//             ]
+//         ], 500);
+//     }
+// }
+
 public function cancelOrder(Request $request, $orderId)
 {
     try {
         \Log::info('=== CANCEL ORDER DEBUG START ===');
         \Log::info('Order ID: ' . $orderId);
         
-        // Test basic functionality first
+        // Find the order
         $order = Order::find($orderId);
         if (!$order) {
             \Log::error('Order not found: ' . $orderId);
@@ -309,7 +394,7 @@ public function cancelOrder(Request $request, $orderId)
             ], 401);
         }
         
-        // Simple status check
+        // Check if order is cancellable
         $cancelableStatuses = ['pending', 'confirmed', 'paid'];
         if (!in_array($order->order_status, $cancelableStatuses)) {
             \Log::error('Order not cancellable. Status: ' . $order->order_status);
@@ -319,8 +404,35 @@ public function cancelOrder(Request $request, $orderId)
             ], 400);
         }
         
-        // Test basic update
-        \Log::info('Attempting to update order status...');
+        // Check if waybill exists and cancel it
+        $waybillCancelled = false;
+        $waybillError = null;
+        
+        if (!empty($order->waybill_number)) {
+            \Log::info('Waybill number found: ' . $order->waybill_number);
+            
+            try {
+                // Call Delhivery API to cancel waybill
+                $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
+                
+                if ($waybillCancelled) {
+                    \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
+                } else {
+                    \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
+                    $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
+                }
+                
+            } catch (\Exception $e) {
+                \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
+                $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
+                // Continue with database cancellation even if waybill API fails
+            }
+        } else {
+            \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+        }
+        
+        // Update order status in database
+        \Log::info('Attempting to update order status to cancelled...');
         $order->order_status = 'cancelled';
         $result = $order->save();
         
@@ -331,12 +443,16 @@ public function cancelOrder(Request $request, $orderId)
         
         return response()->json([
             'success' => true,
-            'message' => 'Order cancelled successfully (simplified version).',
+            'message' => 'Order cancelled successfully.',
             'order_id' => $order->id,
+            'waybill_cancelled' => $waybillCancelled,
+            'waybill_error' => $waybillError,
             'debug_info' => [
                 'order_status' => $order->order_status,
                 'user_id' => $userId,
-                'save_result' => $result
+                'save_result' => $result,
+                'waybill_number' => $order->waybill_number,
+                'waybill_cancellation_status' => $waybillCancelled
             ]
         ]);
         
@@ -351,13 +467,103 @@ public function cancelOrder(Request $request, $orderId)
         
         return response()->json([
             'success' => false,
-            'message' => 'Debug error: ' . $e->getMessage(),
+            'message' => 'Error cancelling order: ' . $e->getMessage(),
             'debug_info' => [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'code' => $e->getCode()
             ]
         ], 500);
+    }
+}
+
+/**
+ * Cancel waybill with Delhivery API
+ * 
+ * @param string $waybillNumber
+ * @return bool
+ */
+private function cancelWaybillWithDelhivery($waybillNumber)
+{
+    try {
+        $apiToken = env('DELHIVERY_API_TOKEN'); // Store your API token in .env
+        
+        if (empty($apiToken)) {
+            \Log::error('Delhivery API token not configured');
+            return false;
+        }
+        
+        $apiUrl = "https://staging-express.delhivery.com/api/p/edit";
+        
+        $payload = [
+            'waybill' => $waybillNumber,
+            'cancellation' => true
+        ];
+        
+        \Log::info('Delhivery API Request URL: ' . $apiUrl);
+        \Log::info('Delhivery API Request Payload: ' . json_encode($payload));
+        
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: Token ' . $apiToken
+        ]);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For staging only, enable in production
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        
+        curl_close($ch);
+        
+        \Log::info('Delhivery API Response HTTP Code: ' . $httpCode);
+        \Log::info('Delhivery API Response: ' . $response);
+        
+        if ($curlError) {
+            \Log::error('Curl Error: ' . $curlError);
+            return false;
+        }
+        
+        // Check if request was successful
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $responseData = json_decode($response, true);
+            
+            // Check if cancellation was successful
+            if (isset($responseData['success']) && $responseData['success'] === true) {
+                \Log::info('Waybill cancellation successful');
+                return true;
+            } elseif (isset($responseData['cancelled']) && $responseData['cancelled'] === true) {
+                \Log::info('Waybill cancellation successful');
+                return true;
+            } elseif (isset($responseData['status']) && $responseData['status'] === 'success') {
+                \Log::info('Waybill cancellation successful');
+                return true;
+            } else {
+                \Log::warning('Waybill cancellation API returned unexpected response: ' . json_encode($responseData));
+                // Some APIs return success without explicit success flag
+                // Check if there's any error message
+                if (isset($responseData['message']) && strpos(strtolower($responseData['message']), 'error') !== false) {
+                    \Log::error('API Error: ' . $responseData['message']);
+                    return false;
+                }
+                // Assume success if no error and response is valid
+                return true;
+            }
+        } else {
+            \Log::error('Delhivery API returned error HTTP code: ' . $httpCode);
+            return false;
+        }
+        
+    } catch (\Exception $e) {
+        \Log::error('Exception in cancelWaybillWithDelhivery: ' . $e->getMessage());
+        return false;
     }
 }
 
