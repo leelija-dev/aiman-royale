@@ -179,3 +179,87 @@ Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWi
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
     ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+
+//     Route::get('/whatsapp-template-info', function () {
+//     $token = config('services.whatsapp.access_token');
+//     $businessId = config('services.whatsapp.business_account_id');
+    
+//     if (!$token || !$businessId) {
+//         return response()->json([
+//             'error' => 'WhatsApp not configured',
+//             'missing' => [
+//                 'token' => empty($token) ? '❌ Missing' : '✅ Set',
+//                 'business_id' => empty($businessId) ? '❌ Missing' : '✅ Set'
+//             ]
+//         ]);
+//     }
+    
+//     $response = Http::withToken($token)
+//         ->get("https://graph.facebook.com/v18.0/{$businessId}/message_templates");
+    
+//     if (!$response->successful()) {
+//         return response()->json([
+//             'error' => 'Failed to fetch templates',
+//             'status' => $response->status(),
+//             'details' => $response->json()
+//         ]);
+//     }
+    
+//     $templates = $response->json('data', []);
+    
+//     // Find your confirm_order template
+//     $confirmOrder = collect($templates)->firstWhere('name', 'confirm_order');
+    
+//     if ($confirmOrder) {
+//         return response()->json([
+//             'template_name' => $confirmOrder['name'],
+//             'language' => $confirmOrder['language'], // This tells you the correct language
+//             'status' => $confirmOrder['status'],
+//             'category' => $confirmOrder['category'],
+//             'components' => $confirmOrder['components']
+//         ]);
+//     }
+    
+//     return response()->json([
+//         'message' => 'Template "confirm_order" not found',
+//         'all_templates' => collect($templates)->map(fn($t) => [
+//             'name' => $t['name'],
+//             'language' => $t['language'],
+//             'status' => $t['status']
+//         ])->toArray()
+//     ]);
+// });
+
+Route::get('/test-whatsapp', function () {
+    $whatsapp = new \App\Services\WhatsAppService();
+    
+    // Log the full request and response
+    \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
+    
+    $result = $whatsapp->sendOrderConfirmation(
+        '6295351230', // Your test number
+        'Pavan',
+        'ORD-' . date('YmdHis')
+    );
+    
+    return [
+        'success' => $result,
+        'message_id' => $whatsapp->getLastMessageId(),
+        'phone_number_id' => config('services.whatsapp.phone_number_id')
+    ];
+});
+
+// In routes/web.php
+Route::get('/orders/{id}', function ($id) {
+    // Fetch order details
+    $order = DB::table('orders')
+        ->where('id', $id)
+        ->where('user_id', auth()->id())
+        ->first();
+    
+    if (!$order) {
+        abort(404);
+    }
+    
+    return view('orders.show', compact('order'));
+})->name('orders.show')->middleware('auth');

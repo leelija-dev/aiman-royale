@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Services\CashfreeService;
 use App\Services\DelhiveryService;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,12 @@ use App\Models\Address;
 class CheckoutController extends Controller
 {
     protected $delhiveryService;
+    protected $whatsAppService;
 
-
-    public function __construct(DelhiveryService $delhiveryService)
+    public function __construct(DelhiveryService $delhiveryService, WhatsAppService $whatsAppService)
     {
         $this->delhiveryService = $delhiveryService;
+        $this->whatsAppService = $whatsAppService;
     }
 
 
@@ -77,16 +79,179 @@ class CheckoutController extends Controller
 
 
         $result = $this->delhiveryService->isPincodeServiceable($request->pincode);
-        
+
         return response()->json($result);
     }
 
 
+    // public function placeOrder(Request $request)
+    // {
+    //     // dd($request);
+    //     // In tinker
+
+    //     $request->validate([
+    //         'firstName' => 'required|string|max:255',
+    //         'lastName' => 'required|string|max:255',
+    //         'email' => 'required|email',
+    //         'phone' => 'required|string|max:20',
+    //         'address1' => 'required|string|max:255',
+    //         'city' => 'required|string|max:255',
+    //         'state' => 'required|string|max:255',
+    //         'pinCode' => 'required|string|size:6',
+    //     ]);
+
+
+    //     // Check pincode serviceability BEFORE creating order
+    //     $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
+    //     // dd($serviceability);
+
+    //     if (!$serviceability['serviceable']) {
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
+    //     }
+
+
+    //     $user_id = auth()->id();
+
+
+    //     // Save address if not exists
+    //     $checkItsAddress = Address::where('user_id', $user_id)->exists();
+    //     if (!$checkItsAddress) {
+    //         DB::table('addresses')->insert([
+    //             'user_id' => $user_id,
+    //             'full_name' => $request->firstName . " " . $request->lastName,
+    //             'phone' => $request->phone,
+    //             'address_1' => $request->address1,
+    //             'address_2' => $request->address2 ?? '',
+    //             'city' => $request->city,
+    //             'state' => $request->state,
+    //             'country' => $request->country ?? 'India',
+    //             'pincode' => $request->pinCode,
+    //             'is_default' => 1,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ]);
+    //     }
+
+
+    //     // Get cart items
+    //     $carts = DB::table('carts')
+    //         ->join('products', 'carts.product_id', '=', 'products.id')
+    //         ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
+    //         ->where('user_id', $user_id)
+    //         ->select(
+    //             'carts.*',
+    //             'products.name',
+    //             'product_variants.price as variant_price',
+    //             'product_variants.discount as discount',
+    //             'product_variants.discount_price'
+    //         )
+    //         ->get();
+
+
+    //     if ($carts->isEmpty()) {
+    //         return back()->with('error', 'Your cart is empty');
+    //     }
+
+
+    //     // Calculate total
+    //     $subtotal = $carts->sum(function ($cart) {
+    //         return (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
+    //     });
+
+
+    //     $shipping = 0;
+    //     $total = $subtotal + $shipping;
+
+
+    //     // Get payment method from request (default to cashfree if not set)
+    //     $paymentMethod = $request->input('payment_method', 'cashfree');
+
+
+    //     // Create order
+    //     $order_id = DB::table('orders')->insertGetId([
+    //         'user_id' => $user_id,
+    //         'phone_no' => $request->phone,
+    //         'address_1' => $request->address1,
+    //         'address_2' => $request->address2,
+    //         'city' => $request->city,
+    //         'state' => $request->state,
+    //         'pincode' => $request->pinCode,
+    //         'payment_status' => 'pending',
+    //         'payment_method' => $paymentMethod === 'cod' ? 'cod' : null,
+    //         'total_amount' => $total,
+    //         'order_status' => 'pending',
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
+
+
+    //     // Create order items and prepare for shipment
+    //     $orderItems = [];
+    //     foreach ($carts as $cart) {
+    //         $itemTotal = (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
+    //         DB::table('ordered_products')->insert([
+    //             'user_id' => $user_id,
+    //             'order_id' => $order_id,
+    //             'product_id' => $cart->product_id,
+    //             'variant_id' => $cart->variant_id,
+    //             'quantity' => $cart->count,
+    //             'price' => $cart->discount_price,
+    //             'total' => $itemTotal,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ]);
+
+    //         // Store for Delhivery shipment
+    //         $orderItems[] = (object)[
+    //             'variant_id' => $cart->variant_id,
+    //             'product_id' => $cart->product_id,
+    //             'quantity' => $cart->count,
+    //             'price' => $cart->discount_price,
+    //             'name' => $cart->name
+    //         ];
+    //     }
+
+
+    //     // For COD orders, create Delhivery shipment immediately
+    //     if ($paymentMethod === 'cod') {
+    //         $shipmentResult = $this->createDelhiveryShipment($order_id, $request, $orderItems, $total, 'cod');
+
+    //         if (!$shipmentResult['success']) {
+    //             // Delete order if shipment creation fails
+    //             DB::table('orders')->where('id', $order_id)->delete();
+    //             DB::table('ordered_products')->where('order_id', $order_id)->delete();
+    //             return back()->with('error', 'Unable to create shipment: ' . $shipmentResult['message']);
+    //         }
+    //     }
+
+
+    //     // Store order details in session
+    //     session([
+    //         'cashfree_order_id' => $order_id,
+    //         'cashfree_total' => $total,
+    //         'cashfree_currency' => 'INR',
+    //         'payment_method' => $paymentMethod
+    //     ]);
+
+
+    //     // For COD, process immediately
+    //     if ($paymentMethod === 'cod') {
+    //         return $this->processCOD(new Request([
+    //             'order_id' => $order_id,
+    //             'total' => $total,
+    //             'currency' => 'INR'
+    //         ]));
+    //     }
+
+
+    //     // For online payment, redirect to payment
+    //     return redirect()->route('checkout.payment');
+    // }
+
     public function placeOrder(Request $request)
     {
-        // dd($request);
-        // In tinker
-
         $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -98,10 +263,8 @@ class CheckoutController extends Controller
             'pinCode' => 'required|string|size:6',
         ]);
 
-
-        // Check pincode serviceability BEFORE creating order
+        // Check pincode serviceability
         $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
-        // dd($serviceability);
 
         if (!$serviceability['serviceable']) {
             return back()
@@ -109,16 +272,15 @@ class CheckoutController extends Controller
                 ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
         }
 
-
         $user_id = auth()->id();
-
+        $fullName = $request->firstName . " " . $request->lastName;
 
         // Save address if not exists
         $checkItsAddress = Address::where('user_id', $user_id)->exists();
         if (!$checkItsAddress) {
             DB::table('addresses')->insert([
                 'user_id' => $user_id,
-                'full_name' => $request->firstName . " " . $request->lastName,
+                'full_name' => $fullName,
                 'phone' => $request->phone,
                 'address_1' => $request->address1,
                 'address_2' => $request->address2 ?? '',
@@ -131,7 +293,6 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
         }
-
 
         // Get cart items
         $carts = DB::table('carts')
@@ -147,25 +308,20 @@ class CheckoutController extends Controller
             )
             ->get();
 
-
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
-
 
         // Calculate total
         $subtotal = $carts->sum(function ($cart) {
             return (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
         });
 
-
         $shipping = 0;
         $total = $subtotal + $shipping;
 
-
-        // Get payment method from request (default to cashfree if not set)
+        // Get payment method
         $paymentMethod = $request->input('payment_method', 'cashfree');
-
 
         // Create order
         $order_id = DB::table('orders')->insertGetId([
@@ -184,7 +340,6 @@ class CheckoutController extends Controller
             'updated_at' => now(),
         ]);
 
-
         // Create order items and prepare for shipment
         $orderItems = [];
         foreach ($carts as $cart) {
@@ -201,7 +356,6 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // Store for Delhivery shipment
             $orderItems[] = (object)[
                 'variant_id' => $cart->variant_id,
                 'product_id' => $cart->product_id,
@@ -211,6 +365,8 @@ class CheckoutController extends Controller
             ];
         }
 
+        // Clear cart after order placement
+        DB::table('carts')->where('user_id', $user_id)->delete();
 
         // For COD orders, create Delhivery shipment immediately
         if ($paymentMethod === 'cod') {
@@ -222,8 +378,47 @@ class CheckoutController extends Controller
                 DB::table('ordered_products')->where('order_id', $order_id)->delete();
                 return back()->with('error', 'Unable to create shipment: ' . $shipmentResult['message']);
             }
+
+            // Update order with waybill number if available
+            if (isset($shipmentResult['waybill'])) {
+                DB::table('orders')
+                    ->where('id', $order_id)
+                    ->update(['waybill_number' => $shipmentResult['waybill']]);
+            }
         }
 
+        // 🔔 SEND WHATSAPP CONFIRMATION
+//         try {
+//             $whatsappService = new \App\Services\WhatsAppService();
+
+//             // Format phone number (remove any non-numeric characters)
+//             $phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+//             // Send order confirmation
+//             $whatsappSent = $whatsappService->sendOrderConfirmation(
+//                 $phone,
+//                 $fullName,
+//                 $order_id
+//             );
+// // dd($whatsappSent);
+//             if ($whatsappSent) {
+//                 Log::info('WhatsApp order confirmation sent', [
+//                     'order_id' => $order_id,
+//                     'phone' => $phone,
+//                     'message_id' => $whatsappService->getLastMessageId()
+//                 ]);
+//             } else {
+//                 Log::warning('WhatsApp order confirmation failed', [
+//                     'order_id' => $order_id,
+//                     'phone' => $phone
+//                 ]);
+//             }
+//         } catch (\Exception $e) {
+//             // Don't fail the order if WhatsApp fails
+//             Log::error('WhatsApp send error: ' . $e->getMessage(), [
+//                 'order_id' => $order_id
+//             ]);
+//         }
 
         // Store order details in session
         session([
@@ -233,7 +428,6 @@ class CheckoutController extends Controller
             'payment_method' => $paymentMethod
         ]);
 
-
         // For COD, process immediately
         if ($paymentMethod === 'cod') {
             return $this->processCOD(new Request([
@@ -242,13 +436,10 @@ class CheckoutController extends Controller
                 'currency' => 'INR'
             ]));
         }
-
-
+        // $this->sendOrderWhatsAppConfirmation($order_id, $request->phone, $fullName);
         // For online payment, redirect to payment
         return redirect()->route('checkout.payment');
     }
-
-
     /**
      * Create Delhivery shipment helper method
      */
@@ -683,7 +874,44 @@ class CheckoutController extends Controller
             'paid_at' => now(),
             'updated_at' => now()
         ];
+        // $serviceability = $this->whatsAppService->sendOrderConfirmation(
+        //     '+916295351230',
+        //     'Susmita',
+        //     'ORD-12345'
+        // );
+         try {
+            $whatsappService = new \App\Services\WhatsAppService();
 
+            // Format phone number (remove any non-numeric characters)
+            $phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+            // Send order confirmation
+            $whatsappSent = $whatsappService->sendOrderConfirmation(
+                $phone,
+                $customerName,
+                $orderId
+            );
+// dd($whatsappSent);
+            if ($whatsappSent) {
+                Log::info('WhatsApp order confirmation sent', [
+                    'order_id' => $orderId,
+                    'phone' => $phone,
+                    'message_id' => $whatsappService->getLastMessageId()
+                ]);
+            } else {
+                Log::warning('WhatsApp order confirmation failed', [
+                    'order_id' => $orderId,
+                    'phone' => $phone
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Don't fail the order if WhatsApp fails
+            Log::error('WhatsApp send error: ' . $e->getMessage(), [
+                'order_id' => $orderId
+            ]);
+        }
+        // dd($serviceability);
+        // $serviceability = $this->whatsAppService->sendTextMessage($order->phone_no, "Your order #{$orderId} has been placed successfully! We will notify you once it's shipped. Thank you for shopping with us!");
         if ($request->has('transaction_id')) {
             $updateData['transaction_id'] = $request->input('transaction_id');
         }
@@ -993,5 +1221,31 @@ class CheckoutController extends Controller
 
 
         return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * Send order confirmation WhatsApp message
+     */
+    private function sendOrderWhatsAppConfirmation($orderId, $phone, $customerName)
+    {
+        try {
+            $whatsappService = new \App\Services\WhatsAppService();
+
+            // Format phone number
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+
+            // Send confirmation
+            return $whatsappService->sendOrderConfirmation(
+                $phone,
+                $customerName,
+                $orderId
+            );
+        } catch (\Exception $e) {
+            Log::error('WhatsApp send error: ' . $e->getMessage(), [
+                'order_id' => $orderId,
+                'phone' => $phone
+            ]);
+            return false;
+        }
     }
 }
