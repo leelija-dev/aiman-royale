@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\FalseReviewsController;
 use App\Http\Controllers\Admin\FaqCategoryController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PickupRequestController; 
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -144,7 +145,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::post('sales/{sale}/toggle-status', [SaleController::class, 'toggleStatus'])
             ->name('admin.sales.toggle-status');
-            
+
         Route::get('products/{productId}/variants', [SaleController::class, 'getProductVariants'])
             ->name('admin.products.variants');
 
@@ -281,7 +282,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             Route::delete('/delete-role/{id}', [RoleController::class, 'delete'])->name('admin.delete-role');
         });
 
-        Route::prefix('false-reviews')->group(function (){
+        Route::prefix('false-reviews')->group(function () {
             Route::get('/', [FalseReviewsController::class, 'index'])->name('reviews.index');
             Route::get('/create', [FalseReviewsController::class, 'create'])->name('reviews.create');
             Route::post('/create', [FalseReviewsController::class, 'store'])->name('reviews.store');
@@ -629,5 +630,10 @@ Route::prefix('shops')->group(function () {
         Route::post('orders/{order}/tracking', [OrderManagementController::class, 'updateTracking'])->name('admin.orders.update-tracking');
         Route::post('orders/bulk-update', [OrderManagementController::class, 'bulkUpdateStatus'])->name('admin.orders.bulk-update');
         Route::get('orders/stats', [OrderManagementController::class, 'getStats'])->name('admin.orders.stats');
+
+
+        Route::get('pickup', [PickupRequestController::class, 'index'])->name('pickup.index');
+        Route::post('/pickup/create', [PickupRequestController::class, 'createPickupRequest'])->name('pickup.create');
+        // Route::get('/pickup', [PickupRequestController::class, 'index'])->name('pickup.index');
     });
 });

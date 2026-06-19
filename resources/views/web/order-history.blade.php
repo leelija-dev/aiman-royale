@@ -406,6 +406,11 @@
                                            onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
                                    </button>
+                                   @elseif(in_array($ord->order_status, ['delivered']))
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium" 
+                                           onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       <i class="fas fa-times mr-2"></i>Return Order
+                                   </button>
                                    @else
                                    <button class="px-4 py-2 bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
                                        <i class="fas fa-times mr-2"></i>Cannot Cancel
