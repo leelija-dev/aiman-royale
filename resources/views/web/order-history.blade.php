@@ -10,7 +10,7 @@
 
 
    @section('content')
-<meta name="csrf-token" content="{{ csrf_token() }}">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
 
    <style>
        .fashion-gradient {
@@ -216,7 +216,7 @@
                            <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
                            {{-- @if($orders->count() > 0) --}}
                            @foreach($orders as $ord)
-                          
+
                            {{-- @dd($ord->product); --}}
                            <div class="order-card bg-white rounded-2xl shadow-sm p-6 mb-4">
                                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
@@ -257,17 +257,17 @@
                                </div>
 
                                <!-- Order Items -->
-                               
+
                                @foreach($ord->orderProducts as $orderProduct)
-                              
+
                                <div class="space-y-4 mt-2">
                                    <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
 
                                        <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
                                            {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
-                                                  
-                                                  src="{{asset($orderProduct->product->featured_image ?? '')}}"
+
+                                                   src="{{asset($orderProduct->product->featured_image ?? '')}}"
                                                    class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                                                    alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                        </div>
@@ -293,7 +293,7 @@
                                    ->where('product_id', $orderProduct->product->id)
                                    ->where('order_id', $ord->id)
                                    ->exists();
-                                  
+
                                    @endphp
 
                                    @if($hasReviewed)
@@ -393,23 +393,24 @@
                                 </div> --}}
                                </div>
                                @endforeach
-                              
+
                                <!-- Order Actions -->
-                               
+
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
                                    @if($ord->order_status == 'delivered')
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                       <i class="fas fa-times mr-2"></i>Return Product
+                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="returnOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']))
-                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium" 
-                                           onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
                                    </button>
                                    @elseif(in_array($ord->order_status, ['delivered']))
-                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium" 
-                                           onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
-                                       <i class="fas fa-times mr-2"></i>Return Order
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="returnOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @else
                                    <button class="px-4 py-2 bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
@@ -423,11 +424,11 @@
                                        <i class="fas fa-receipt mr-2"></i>View Invoice
                                    </button>
                                </div>
-                               
+
 
                            </div>
                            @endforeach
-                          
+
                            {{-- @endif --}}
                        </div>
 
@@ -735,39 +736,148 @@
 
            // Make AJAX request
            fetch(`/cancel-order/${orderId}`, {
-               method: 'POST',
-               headers: {
-                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                   reason: 'Customer requested cancellation'
+                   method: 'POST',
+                   headers: {
+                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                       'Content-Type': 'application/json',
+                   },
+                   body: JSON.stringify({
+                       reason: 'Customer requested cancellation'
+                   })
                })
-           })
-           .then(response => response.json())
-           .then(data => {
-               if (data.success) {
-                   // Show success message
-                   showNotification(data.message, 'success');
-                   // Reload page after 2 seconds to show updated status
-                   setTimeout(() => {
-                       window.location.reload();
-                   }, 2000);
-               } else {
-                   // Show error message
-                   showNotification(data.message, 'error');
+               .then(response => response.json())
+               .then(data => {
+                   if (data.success) {
+                       // Show success message
+                       showNotification(data.message, 'success');
+                       // Reload page after 2 seconds to show updated status
+                       setTimeout(() => {
+                           window.location.reload();
+                       }, 2000);
+                   } else {
+                       // Show error message
+                       showNotification(data.message, 'error');
+                       // Restore button
+                       button.innerHTML = originalText;
+                       button.disabled = false;
+                   }
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+                   showNotification('Error cancelling order. Please try again.', 'error');
                    // Restore button
                    button.innerHTML = originalText;
                    button.disabled = false;
-               }
-           })
-           .catch(error => {
-               console.error('Error:', error);
-               showNotification('Error cancelling order. Please try again.', 'error');
-               // Restore button
-               button.innerHTML = originalText;
-               button.disabled = false;
-           });
+               });
+       }
+
+       // Return Order Function
+       function returnOrder(orderId, currentStatus) {
+           // Use Swal or custom confirm dialog
+           if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
+               return;
+           }
+
+           // Get the button element
+           const button = event.currentTarget || event.target;
+           const originalText = button.innerHTML;
+
+           // Show loading state
+           button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+           button.disabled = true;
+
+           // Make AJAX request
+           fetch(`/refund/${orderId}`, {
+                   method: 'POST',
+                   headers: {
+                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                       'Content-Type': 'application/json',
+                       'Accept': 'application/json', // Important: Tell server we want JSON
+                   },
+                   body: JSON.stringify({
+                       reason: 'Customer requested return'
+                   })
+               })
+               .then(response => {
+                   // Check if response is OK
+                   if (!response.ok) {
+                       return response.json().then(data => {
+                           throw new Error(data.message || 'Request failed');
+                       });
+                   }
+                   return response.json();
+               })
+               .then(data => {
+                   console.log('Return response:', data);
+
+                   if (data.success) {
+                       // Show success notification
+                       showNotification(data.message, 'success');
+
+                       // Update button text to show success
+                       button.innerHTML = '<i class="fas fa-check mr-2"></i>Returned';
+                       button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium';
+
+                       // Reload page after 2 seconds
+                       setTimeout(() => {
+                           window.location.reload();
+                       }, 2000);
+                   } else {
+                       // Show error
+                       showNotification(data.message || 'Failed to process return', 'error');
+
+                       // Restore button
+                       button.innerHTML = originalText;
+                       button.disabled = false;
+                   }
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+
+                   // Show error notification
+                   showNotification(error.message || 'Error processing return request. Please try again.', 'error');
+
+                   // Restore button
+                   button.innerHTML = originalText;
+                   button.disabled = false;
+               });
+       }
+
+       // Notification function (if you don't have one)
+       function showNotification(message, type = 'success') {
+           // Check if we have a notification container
+           let container = document.getElementById('notification-container');
+           if (!container) {
+               container = document.createElement('div');
+               container.id = 'notification-container';
+               container.className = 'fixed top-4 right-4 z-50 space-y-2';
+               document.body.appendChild(container);
+           }
+
+           // Create notification element
+           const notification = document.createElement('div');
+           notification.className = `px-6 py-4 rounded-lg shadow-lg text-white transition-all duration-500 ${
+        type === 'success' ? 'bg-green-500' : 
+        type === 'error' ? 'bg-red-500' : 
+        'bg-blue-500'
+    }`;
+           notification.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+           container.appendChild(notification);
+
+           // Auto remove after 5 seconds
+           setTimeout(() => {
+               notification.style.opacity = '0';
+               notification.style.transform = 'translateX(100px)';
+               setTimeout(() => {
+                   notification.remove();
+               }, 500);
+           }, 5000);
        }
 
        // Show notification helper
@@ -781,9 +891,9 @@
                    <span>${message}</span>
                </div>
            `;
-           
+
            document.body.appendChild(notification);
-           
+
            setTimeout(() => {
                if (notification.parentNode) {
                    notification.parentNode.removeChild(notification);

@@ -114,84 +114,84 @@ class DelhiveryService
     //     }
     // }
 
-public function isPincodeServiceable($deliveryPincode)
-{
-    try {
-        $cacheKey = "pincode_serviceable_{$deliveryPincode}";
-        if (Cache::has($cacheKey)) {
-            $cached = Cache::get($cacheKey);
-            return $cached;
-        }
+    public function isPincodeServiceable($deliveryPincode)
+    {
+        try {
+            $cacheKey = "pincode_serviceable_{$deliveryPincode}";
+            if (Cache::has($cacheKey)) {
+                $cached = Cache::get($cacheKey);
+                return $cached;
+            }
 
-        $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . urlencode($deliveryPincode);
-        
-        $response = Http::withHeaders([
-            'Authorization' => 'Token ' . $this->apiKey,
-        ])->get($url);
+            $url = $this->baseUrl . '/c/api/pin-codes/json/?filter_codes=' . urlencode($deliveryPincode);
 
-        if ($response->successful()) {
-            $data = $response->json();
+            $response = Http::withHeaders([
+                'Authorization' => 'Token ' . $this->apiKey,
+            ])->get($url);
 
-            if (isset($data['delivery_codes']) && is_array($data['delivery_codes']) && count($data['delivery_codes']) > 0) {
-                $deliveryItem = $data['delivery_codes'][0];
-                $postalData = $deliveryItem['postal_code'] ?? $deliveryItem;
+            if ($response->successful()) {
+                $data = $response->json();
 
-                if (isset($postalData['pin']) || isset($postalData['postal_code'])) {
-                    // IMPORTANT: Check COD specifically
-                    $isServiceable = (
-                        ($postalData['cod'] ?? 'N') === 'Y' &&
-                        ($postalData['pickup'] ?? 'N') === 'Y'
-                    );
+                if (isset($data['delivery_codes']) && is_array($data['delivery_codes']) && count($data['delivery_codes']) > 0) {
+                    $deliveryItem = $data['delivery_codes'][0];
+                    $postalData = $deliveryItem['postal_code'] ?? $deliveryItem;
 
-                    // Also check if COD is actually available
-                    $codAvailable = ($postalData['cod'] ?? 'N') === 'Y';
-                    $pickupAvailable = ($postalData['pickup'] ?? 'N') === 'Y';
+                    if (isset($postalData['pin']) || isset($postalData['postal_code'])) {
+                        // IMPORTANT: Check COD specifically
+                        $isServiceable = (
+                            ($postalData['cod'] ?? 'N') === 'Y' &&
+                            ($postalData['pickup'] ?? 'N') === 'Y'
+                        );
 
-                    $result = [
-                        'serviceable' => $isServiceable,
-                        'cod_available' => $codAvailable,
-                        'pickup_available' => $pickupAvailable,
-                        'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
-                        'courier_name' => 'Delhivery',
-                        'cod' => $postalData['cod'] ?? 'N',
-                        'pre_paid' => $postalData['pre_paid'] ?? 'N',
-                        'pickup' => $postalData['pickup'] ?? 'N',
-                        'city' => $postalData['city'] ?? 'N/A',
-                        'state' => $postalData['state_code'] ?? $postalData['state'] ?? 'N/A'
-                    ];
+                        // Also check if COD is actually available
+                        $codAvailable = ($postalData['cod'] ?? 'N') === 'Y';
+                        $pickupAvailable = ($postalData['pickup'] ?? 'N') === 'Y';
 
-                    Cache::put($cacheKey, $result, 86400);
-                    return $result;
+                        $result = [
+                            'serviceable' => $isServiceable,
+                            'cod_available' => $codAvailable,
+                            'pickup_available' => $pickupAvailable,
+                            'message' => $isServiceable ? 'Delivery available to this pincode' : 'Delivery not available for this pincode',
+                            'courier_name' => 'Delhivery',
+                            'cod' => $postalData['cod'] ?? 'N',
+                            'pre_paid' => $postalData['pre_paid'] ?? 'N',
+                            'pickup' => $postalData['pickup'] ?? 'N',
+                            'city' => $postalData['city'] ?? 'N/A',
+                            'state' => $postalData['state_code'] ?? $postalData['state'] ?? 'N/A'
+                        ];
+
+                        Cache::put($cacheKey, $result, 86400);
+                        return $result;
+                    }
                 }
+
+                return [
+                    'serviceable' => false,
+                    'cod_available' => false,
+                    'pickup_available' => false,
+                    'message' => 'Delivery information not found for this pincode',
+                    'courier_name' => 'Delhivery'
+                ];
             }
 
             return [
                 'serviceable' => false,
                 'cod_available' => false,
                 'pickup_available' => false,
-                'message' => 'Delivery information not found for this pincode',
-                'courier_name' => 'Delhivery'
+                'message' => 'Unable to verify delivery availability',
+                'courier_name' => null
+            ];
+        } catch (\Exception $e) {
+            Log::error('Delhivery Exception: ' . $e->getMessage());
+            return [
+                'serviceable' => false,
+                'cod_available' => false,
+                'pickup_available' => false,
+                'message' => 'Service temporarily unavailable',
+                'courier_name' => null
             ];
         }
-
-        return [
-            'serviceable' => false,
-            'cod_available' => false,
-            'pickup_available' => false,
-            'message' => 'Unable to verify delivery availability',
-            'courier_name' => null
-        ];
-    } catch (\Exception $e) {
-        Log::error('Delhivery Exception: ' . $e->getMessage());
-        return [
-            'serviceable' => false,
-            'cod_available' => false,
-            'pickup_available' => false,
-            'message' => 'Service temporarily unavailable',
-            'courier_name' => null
-        ];
     }
-}
 
     /**
      * Generate waybill number - REMOVED dd()
@@ -235,71 +235,71 @@ public function isPincodeServiceable($deliveryPincode)
     // }
 
     /**
- * Generate waybill number
- * Correct endpoint: GET /waybill/api/bulk/json/?count=1
- */
-public function generateWaybill($count = 1)
-{
-    try {
-        $response = Http::withHeaders([
-            'Authorization' => 'Token ' . $this->apiKey,
-            'Accept' => 'application/json',
-        ])->get($this->baseUrl . '/waybill/api/bulk/json/', [
-            'count' => (int)$count
-        ]);
+     * Generate waybill number
+     * Correct endpoint: GET /waybill/api/bulk/json/?count=1
+     */
+    public function generateWaybill($count = 1)
+    {
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Token ' . $this->apiKey,
+                'Accept' => 'application/json',
+            ])->get($this->baseUrl . '/waybill/api/bulk/json/', [
+                'count' => (int)$count
+            ]);
 
-        Log::info('Delhivery waybill generation response', [
-            'status' => $response->status(),
-            'body' => $response->body()
-        ]);
+            Log::info('Delhivery waybill generation response', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
 
-        if ($response->successful()) {
-            $waybills = $response->json();
+            if ($response->successful()) {
+                $waybills = $response->json();
 
-            // Handle different response formats
-            if (is_array($waybills)) {
-                // Check for waybills array
-                if (isset($waybills['waybills']) && is_array($waybills['waybills'])) {
-                    return $waybills['waybills'][0] ?? null;
+                // Handle different response formats
+                if (is_array($waybills)) {
+                    // Check for waybills array
+                    if (isset($waybills['waybills']) && is_array($waybills['waybills'])) {
+                        return $waybills['waybills'][0] ?? null;
+                    }
+
+                    // Check for bulk response format
+                    if (isset($waybills['bulk_waybill']) && is_array($waybills['bulk_waybill'])) {
+                        return $waybills['bulk_waybill'][0] ?? null;
+                    }
+
+                    // Check for direct waybill
+                    if (isset($waybills['waybill'])) {
+                        return $waybills['waybill'];
+                    }
+
+                    // If response is a simple array of waybills
+                    if (isset($waybills[0])) {
+                        return $waybills[0];
+                    }
                 }
-                
-                // Check for bulk response format
-                if (isset($waybills['bulk_waybill']) && is_array($waybills['bulk_waybill'])) {
-                    return $waybills['bulk_waybill'][0] ?? null;
+
+                // If response is a string that looks like a waybill number
+                if (is_string($waybills) && preg_match('/^\d+$/', $waybills)) {
+                    return $waybills;
                 }
-                
-                // Check for direct waybill
-                if (isset($waybills['waybill'])) {
-                    return $waybills['waybill'];
-                }
-                
-                // If response is a simple array of waybills
-                if (isset($waybills[0])) {
-                    return $waybills[0];
-                }
+
+                Log::warning('Unexpected waybill response format', ['response' => $waybills]);
+                return null;
             }
 
-            // If response is a string that looks like a waybill number
-            if (is_string($waybills) && preg_match('/^\d+$/', $waybills)) {
-                return $waybills;
-            }
-
-            Log::warning('Unexpected waybill response format', ['response' => $waybills]);
+            Log::error('Delhivery waybill generation failed', [
+                'response' => $response->body(),
+                'status' => $response->status()
+            ]);
+            return null;
+        } catch (\Exception $e) {
+            Log::error('Waybill generation exception: ' . $e->getMessage());
             return null;
         }
-
-        Log::error('Delhivery waybill generation failed', [
-            'response' => $response->body(),
-            'status' => $response->status()
-        ]);
-        return null;
-    } catch (\Exception $e) {
-        Log::error('Waybill generation exception: ' . $e->getMessage());
-        return null;
     }
-}
 
-   
+
     /**
      * Create shipment in Delhivery - CORRECTED for Delhivery's API requirements
      */
@@ -434,167 +434,167 @@ public function generateWaybill($count = 1)
     // }
 
     /**
- * Create shipment in Delhivery - With better error handling
- */
-public function createShipment($orderData, $orderItems)
-{
-    try {
-        // Format products
-        $products = [];
-        foreach ($orderItems as $item) {
-            $products[] = [
-                'name' => $item->name ?? 'Product',
-                'sku' => (string) ($item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
-                'quantity' => (int) $item->quantity,
-                'price' => (float) $item->price,
-            ];
-        }
+     * Create shipment in Delhivery - With better error handling
+     */
+    public function createShipment($orderData, $orderItems)
+    {
+        try {
+            // Format products
+            $products = [];
+            foreach ($orderItems as $item) {
+                $products[] = [
+                    'name' => $item->name ?? 'Product',
+                    'sku' => (string) ($item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
+                    'quantity' => (int) $item->quantity,
+                    'price' => (float) $item->price,
+                ];
+            }
 
-        // Prepare shipment data
-        $shipmentData = [
-            'shipments' => [
-                [
-                    'name' => $orderData['customer_name'],
-                    'add' => $orderData['address'],
-                    'city' => $orderData['city'],
-                    'state' => $orderData['state'],
-                    'country' => 'India',
-                    'pin' => $orderData['pincode'],
-                    'phone' => $orderData['phone'],
-                    'order' => (string) $orderData['order_id'],
-                    'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
-                    'total_amount' => (float) $orderData['total_amount'],
-                    'pickup_location' => $this->pickupLocation,
-                    'declared_value' => (float) $orderData['total_amount'],
-                    'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
-                    'products' => $products
+            // Prepare shipment data
+            $shipmentData = [
+                'shipments' => [
+                    [
+                        'name' => $orderData['customer_name'],
+                        'add' => $orderData['address'],
+                        'city' => $orderData['city'],
+                        'state' => $orderData['state'],
+                        'country' => 'India',
+                        'pin' => $orderData['pincode'],
+                        'phone' => $orderData['phone'],
+                        'order' => (string) $orderData['order_id'],
+                        'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
+                        'total_amount' => (float) $orderData['total_amount'],
+                        'pickup_location' => $this->pickupLocation,
+                        'declared_value' => (float) $orderData['total_amount'],
+                        'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
+                        'products' => $products
+                    ]
                 ]
-            ]
-        ];
+            ];
 
-        Log::info('Delhivery shipment payload', [
-            'payload' => $shipmentData
-        ]);
+            Log::info('Delhivery shipment payload', [
+                'payload' => $shipmentData
+            ]);
 
-        // Send as form data
-        $response = Http::withHeaders([
-            'Authorization' => 'Token ' . $this->apiKey,
-        ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
-            'format' => 'json',
-            'data' => json_encode($shipmentData)
-        ]);
+            // Send as form data
+            $response = Http::withHeaders([
+                'Authorization' => 'Token ' . $this->apiKey,
+            ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+                'format' => 'json',
+                'data' => json_encode($shipmentData)
+            ]);
 
-        $result = $response->json();
+            $result = $response->json();
 
-        Log::info('Delhivery Shipment Response:', [
-            'status' => $response->status(),
-            'result' => $result
-        ]);
+            Log::info('Delhivery Shipment Response:', [
+                'status' => $response->status(),
+                'result' => $result
+            ]);
 
-        // Check if shipment was created successfully
-        if ($response->successful()) {
-            // Check for error messages in the response
-            if (isset($result['rmk']) && $result['success'] === false) {
-                // Get detailed error from packages
-                $errorMessage = $result['rmk'];
-                if (isset($result['packages']) && is_array($result['packages'])) {
-                    foreach ($result['packages'] as $package) {
-                        if (isset($package['remarks']) && is_array($package['remarks'])) {
-                            foreach ($package['remarks'] as $remark) {
-                                if (isset($remark['message'])) {
-                                    $errorMessage .= ' - ' . $remark['message'];
+            // Check if shipment was created successfully
+            if ($response->successful()) {
+                // Check for error messages in the response
+                if (isset($result['rmk']) && $result['success'] === false) {
+                    // Get detailed error from packages
+                    $errorMessage = $result['rmk'];
+                    if (isset($result['packages']) && is_array($result['packages'])) {
+                        foreach ($result['packages'] as $package) {
+                            if (isset($package['remarks']) && is_array($package['remarks'])) {
+                                foreach ($package['remarks'] as $remark) {
+                                    if (isset($remark['message'])) {
+                                        $errorMessage .= ' - ' . $remark['message'];
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                
-                return [
-                    'success' => false,
-                    'message' => $errorMessage,
-                    'waybill' => null
-                ];
-            }
 
-            // Check if we have packages with waybills
-            if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
-                $package = $result['packages'][0];
-                
-                // Check if package status is success
-                if (isset($package['status']) && $package['status'] === 'Success') {
-                    $waybill = $package['waybill'] ?? null;
-                    $shipmentId = $package['shipment_id'] ?? null;
-                    
-                    if ($waybill) {
-                        return [
-                            'success' => true,
-                            'waybill' => $waybill,
-                            'shipment_id' => $shipmentId,
-                            'message' => 'Shipment created successfully'
-                        ];
-                    }
-                } else {
-                    // Package failed - get the error message
-                    $errorMessage = 'Shipment creation failed';
-                    if (isset($package['remarks']) && is_array($package['remarks'])) {
-                        foreach ($package['remarks'] as $remark) {
-                            if (isset($remark['message'])) {
-                                $errorMessage = $remark['message'];
-                                break;
-                            }
-                        }
-                    }
-                    
                     return [
                         'success' => false,
                         'message' => $errorMessage,
                         'waybill' => null
                     ];
                 }
+
+                // Check if we have packages with waybills
+                if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
+                    $package = $result['packages'][0];
+
+                    // Check if package status is success
+                    if (isset($package['status']) && $package['status'] === 'Success') {
+                        $waybill = $package['waybill'] ?? null;
+                        $shipmentId = $package['shipment_id'] ?? null;
+
+                        if ($waybill) {
+                            return [
+                                'success' => true,
+                                'waybill' => $waybill,
+                                'shipment_id' => $shipmentId,
+                                'message' => 'Shipment created successfully'
+                            ];
+                        }
+                    } else {
+                        // Package failed - get the error message
+                        $errorMessage = 'Shipment creation failed';
+                        if (isset($package['remarks']) && is_array($package['remarks'])) {
+                            foreach ($package['remarks'] as $remark) {
+                                if (isset($remark['message'])) {
+                                    $errorMessage = $remark['message'];
+                                    break;
+                                }
+                            }
+                        }
+
+                        return [
+                            'success' => false,
+                            'message' => $errorMessage,
+                            'waybill' => null
+                        ];
+                    }
+                }
+
+                // Check for success flag
+                if (isset($result['success']) && $result['success'] === true) {
+                    return [
+                        'success' => true,
+                        'waybill' => $result['waybill'] ?? null,
+                        'shipment_id' => $result['shipment_id'] ?? null,
+                        'message' => 'Shipment created successfully'
+                    ];
+                }
             }
 
-            // Check for success flag
-            if (isset($result['success']) && $result['success'] === true) {
-                return [
-                    'success' => true,
-                    'waybill' => $result['waybill'] ?? null,
-                    'shipment_id' => $result['shipment_id'] ?? null,
-                    'message' => 'Shipment created successfully'
-                ];
+            // Handle error messages
+            $errorMessage = 'Failed to create shipment';
+            if (isset($result['rmk'])) {
+                $errorMessage = $result['rmk'];
+            } elseif (isset($result['message'])) {
+                $errorMessage = $result['message'];
+            } elseif (isset($result['error'])) {
+                $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
             }
+
+            Log::error('Delhivery shipment creation failed', [
+                'response' => $response->body(),
+                'payload' => $shipmentData
+            ]);
+
+            return [
+                'success' => false,
+                'message' => $errorMessage,
+                'waybill' => null
+            ];
+        } catch (\Exception $e) {
+            Log::error('Shipment creation exception: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'waybill' => null
+            ];
         }
-
-        // Handle error messages
-        $errorMessage = 'Failed to create shipment';
-        if (isset($result['rmk'])) {
-            $errorMessage = $result['rmk'];
-        } elseif (isset($result['message'])) {
-            $errorMessage = $result['message'];
-        } elseif (isset($result['error'])) {
-            $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
-        }
-
-        Log::error('Delhivery shipment creation failed', [
-            'response' => $response->body(),
-            'payload' => $shipmentData
-        ]);
-
-        return [
-            'success' => false,
-            'message' => $errorMessage,
-            'waybill' => null
-        ];
-    } catch (\Exception $e) {
-        Log::error('Shipment creation exception: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-        ]);
-        return [
-            'success' => false,
-            'message' => $e->getMessage(),
-            'waybill' => null
-        ];
     }
-}
 
     /**
      * Track shipment
@@ -771,5 +771,150 @@ public function createShipment($orderData, $orderItems)
             Log::error('Exception fetching waybill details: ' . $e->getMessage());
             return null;
         }
+    }
+
+
+    // In app/Services/DelhiveryService.php
+
+    // In app/Services/DelhiveryService.php
+
+    public function getShippingCost($originPincode, $destinationPincode, $items, $paymentMethod = 'prepaid')
+    {
+        try {
+            // Calculate total chargeable weight
+            $totalWeight = $this->calculateChargeableWeight($items);
+
+            // Determine mode (Express/Surface based on payment method)
+            $mode = $paymentMethod === 'cod' ? 'S' : 'E'; // S = Surface, E = Express
+
+            // Determine payment type
+            $pt = $paymentMethod === 'cod' ? 'COD' : 'Pre-paid';
+
+            // Prepare API request - Using the correct endpoint
+            $response = Http::withHeaders([
+                'Authorization' => 'Token ' . config('delhivery.api_token'),
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->get('https://staging-express.delhivery.com/api/kinko/v1/invoice/charges/.json', [
+                'md' => $mode,              // Mode: E (Express) or S (Surface)
+                'ss' => 'Delivered',        // Shipment status
+                'd_pin' => $destinationPincode,
+                'o_pin' => $originPincode,
+                'cgm' => $totalWeight,      // Chargeable weight in grams
+                'pt' => $pt                 // Payment type: Pre-paid or COD
+            ]);
+
+            Log::info('Delhivery Shipping Cost Request', [
+                'url' => 'https://staging-express.delhivery.com/api/kinko/v1/invoice/charges/.json',
+                'params' => [
+                    'md' => $mode,
+                    'ss' => 'Delivered',
+                    'd_pin' => $destinationPincode,
+                    'o_pin' => $originPincode,
+                    'cgm' => $totalWeight,
+                    'pt' => $pt
+                ]
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                Log::info('Delhivery Shipping Cost Response', [
+                    'status' => $response->status(),
+                    'data' => $data
+                ]);
+
+                // Parse the response - format may vary
+                if (isset($data['total_amount'])) {
+                    return [
+                        'success' => true,
+                        'shipping_charge' => (float) $data['total_amount'],
+                        'data' => $data
+                    ];
+                }
+
+                // Alternative response format
+                if (isset($data['data']['total_amount'])) {
+                    return [
+                        'success' => true,
+                        'shipping_charge' => (float) $data['data']['total_amount'],
+                        'data' => $data
+                    ];
+                }
+
+                // Sometimes the response might have a different structure
+                if (isset($data['charges'])) {
+                    return [
+                        'success' => true,
+                        'shipping_charge' => (float) $data['charges'],
+                        'data' => $data
+                    ];
+                }
+
+                return [
+                    'success' => false,
+                    'message' => 'Could not parse shipping charges from response',
+                    'data' => $data
+                ];
+            }
+
+            Log::error('Delhivery Shipping Cost Error', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Failed to get shipping charges: ' . $response->body()
+            ];
+        } catch (\Exception $e) {
+            Log::error('Delhivery Shipping Cost Exception: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function calculateChargeableWeight($items)
+    {
+        $deadWeight = 0;
+        $volumetricWeight = 0;
+
+        foreach ($items as $item) {
+            // Get product/variant dimensions
+            $product = \DB::table('product_variants')
+                ->where('id', $item->variant_id)
+                ->first();
+
+            // Dead weight in grams (convert kg to grams)
+            // Use default 0.5kg if weight is missing
+            $itemWeight = $product->weight ?? 0.5;
+            $itemDeadWeight = $itemWeight * 1000; // Convert to grams
+            $deadWeight += $itemDeadWeight * $item->quantity;
+
+            // Volumetric weight - skip if dimensions missing
+            if (isset($product->length) && isset($product->breadth) && isset($product->height)) {
+                $length = (float) $product->length;
+                $breadth = (float) $product->breadth;
+                $height = (float) $product->height;
+
+                // Only calculate if all dimensions are > 0
+                if ($length > 0 && $breadth > 0 && $height > 0) {
+                    $dimensionWeight = ($length * $breadth * $height) / 5000;
+                    $volumetricWeight += $dimensionWeight * 1000 * $item->quantity; // Convert to grams
+                }
+            }
+        }
+
+        // If volumetric weight is 0 (no dimensions), use dead weight only
+        $chargeableWeight = $volumetricWeight > 0
+            ? max($deadWeight, $volumetricWeight)
+            : $deadWeight;
+
+        // Ensure minimum weight is 10g (as per Delhivery API)
+        return max(10, $chargeableWeight);
     }
 }

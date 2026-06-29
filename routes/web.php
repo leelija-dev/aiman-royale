@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
+use App\Http\Controllers\Web\RefundController;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
@@ -49,23 +50,19 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/api/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
     Route::post('/api/auth/refresh', [AuthController::class, 'refresh'])->name('api.auth.refresh');
 });
+
 Route::view('/addresses', 'web.addresses');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
-    // Route::view('/custom-request', 'web.custom-request');
 });
 
-
-
 // Authenticated routes (require login)
-// Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
-// Route::view('/contact-us', 'web.contact-us')->name('page.contact-us');
 Route::get('/contact-us', [ContactUsController::class, 'index'])->name('page.contact-us');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
 Route::view('/about-us', 'web.about-us')->name('page.about-us');
@@ -76,16 +73,12 @@ Route::view('/return-refund-policy', 'web.refund-cancelation-policy')->name('pag
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
-// In your web.php routes file
 Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->name('category.filter');
 
-// Combined Category + Occasion Routes - Exclude admin and products routes
+// Product Routes
 Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
 Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 Route::get('/banner-filter', [HomeController::class, 'BannerFilter'])->name('page.banner-filter');
-
-// Occasion Routes
-// Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
 // Test route
 Route::get('/test-occasion', function () {
@@ -101,15 +94,14 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add')->midd
 Route::post('/cart/update/', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
-// Route::post('/checkout/store',[CartController::class, 'store'])->name('c.store');
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');;
-Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');;
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');
 Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
-//Checkout route
+// Checkout route
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
@@ -125,7 +117,6 @@ Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook']
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
     // Profile Routes
-    // Route::get('/profile', [Profile::class, 'profile'])->name('profile');
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
 
@@ -147,13 +138,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
     Route::get('/pay-custom-order/{id}', [CustomDimensionController::class, 'payment'])->name('custom-order.payment');
-    
 });
 
-
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
-
-// Admin Reviews Routes - MOVED TO routes/admin.php
 
 // Pincode check (AJAX)
 Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
@@ -171,73 +158,22 @@ Route::view('/track', 'web.track')->name('track.page');
 Route::post('/delhivery-webhook', [CheckoutController::class, 'delhiveryWebhook']);
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
-
 Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
     ->name('category.occasion.show')
-    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+    ->where('categorySlug', '[a-zA-Z0-9-]+');
 
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
-    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+    ->where('categorySlug', '[a-zA-Z0-9-]+');
 
-//     Route::get('/whatsapp-template-info', function () {
-//     $token = config('services.whatsapp.access_token');
-//     $businessId = config('services.whatsapp.business_account_id');
-    
-//     if (!$token || !$businessId) {
-//         return response()->json([
-//             'error' => 'WhatsApp not configured',
-//             'missing' => [
-//                 'token' => empty($token) ? '❌ Missing' : '✅ Set',
-//                 'business_id' => empty($businessId) ? '❌ Missing' : '✅ Set'
-//             ]
-//         ]);
-//     }
-    
-//     $response = Http::withToken($token)
-//         ->get("https://graph.facebook.com/v18.0/{$businessId}/message_templates");
-    
-//     if (!$response->successful()) {
-//         return response()->json([
-//             'error' => 'Failed to fetch templates',
-//             'status' => $response->status(),
-//             'details' => $response->json()
-//         ]);
-//     }
-    
-//     $templates = $response->json('data', []);
-    
-//     // Find your confirm_order template
-//     $confirmOrder = collect($templates)->firstWhere('name', 'confirm_order');
-    
-//     if ($confirmOrder) {
-//         return response()->json([
-//             'template_name' => $confirmOrder['name'],
-//             'language' => $confirmOrder['language'], // This tells you the correct language
-//             'status' => $confirmOrder['status'],
-//             'category' => $confirmOrder['category'],
-//             'components' => $confirmOrder['components']
-//         ]);
-//     }
-    
-//     return response()->json([
-//         'message' => 'Template "confirm_order" not found',
-//         'all_templates' => collect($templates)->map(fn($t) => [
-//             'name' => $t['name'],
-//             'language' => $t['language'],
-//             'status' => $t['status']
-//         ])->toArray()
-//     ]);
-// });
-
+// Test WhatsApp route
 Route::get('/test-whatsapp', function () {
     $whatsapp = new \App\Services\WhatsAppService();
     
-    // Log the full request and response
     \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
     
     $result = $whatsapp->sendOrderConfirmation(
-        '6295351230', // Your test number
+        '6295351230',
         'Pavan',
         'ORD-' . date('YmdHis')
     );
@@ -249,9 +185,8 @@ Route::get('/test-whatsapp', function () {
     ];
 });
 
-// In routes/web.php
+// Order details route
 Route::get('/orders/{id}', function ($id) {
-    // Fetch order details
     $order = DB::table('orders')
         ->where('id', $id)
         ->where('user_id', auth()->id())
@@ -263,3 +198,7 @@ Route::get('/orders/{id}', function ($id) {
     
     return view('orders.show', compact('order'));
 })->name('orders.show')->middleware('auth');
+
+// Refund Routes
+Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
+Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');

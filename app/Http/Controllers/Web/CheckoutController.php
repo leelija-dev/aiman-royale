@@ -83,173 +83,6 @@ class CheckoutController extends Controller
         return response()->json($result);
     }
 
-
-    // public function placeOrder(Request $request)
-    // {
-    //     // dd($request);
-    //     // In tinker
-
-    //     $request->validate([
-    //         'firstName' => 'required|string|max:255',
-    //         'lastName' => 'required|string|max:255',
-    //         'email' => 'required|email',
-    //         'phone' => 'required|string|max:20',
-    //         'address1' => 'required|string|max:255',
-    //         'city' => 'required|string|max:255',
-    //         'state' => 'required|string|max:255',
-    //         'pinCode' => 'required|string|size:6',
-    //     ]);
-
-
-    //     // Check pincode serviceability BEFORE creating order
-    //     $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
-    //     // dd($serviceability);
-
-    //     if (!$serviceability['serviceable']) {
-    //         return back()
-    //             ->withInput()
-    //             ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
-    //     }
-
-
-    //     $user_id = auth()->id();
-
-
-    //     // Save address if not exists
-    //     $checkItsAddress = Address::where('user_id', $user_id)->exists();
-    //     if (!$checkItsAddress) {
-    //         DB::table('addresses')->insert([
-    //             'user_id' => $user_id,
-    //             'full_name' => $request->firstName . " " . $request->lastName,
-    //             'phone' => $request->phone,
-    //             'address_1' => $request->address1,
-    //             'address_2' => $request->address2 ?? '',
-    //             'city' => $request->city,
-    //             'state' => $request->state,
-    //             'country' => $request->country ?? 'India',
-    //             'pincode' => $request->pinCode,
-    //             'is_default' => 1,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
-    //     }
-
-
-    //     // Get cart items
-    //     $carts = DB::table('carts')
-    //         ->join('products', 'carts.product_id', '=', 'products.id')
-    //         ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
-    //         ->where('user_id', $user_id)
-    //         ->select(
-    //             'carts.*',
-    //             'products.name',
-    //             'product_variants.price as variant_price',
-    //             'product_variants.discount as discount',
-    //             'product_variants.discount_price'
-    //         )
-    //         ->get();
-
-
-    //     if ($carts->isEmpty()) {
-    //         return back()->with('error', 'Your cart is empty');
-    //     }
-
-
-    //     // Calculate total
-    //     $subtotal = $carts->sum(function ($cart) {
-    //         return (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
-    //     });
-
-
-    //     $shipping = 0;
-    //     $total = $subtotal + $shipping;
-
-
-    //     // Get payment method from request (default to cashfree if not set)
-    //     $paymentMethod = $request->input('payment_method', 'cashfree');
-
-
-    //     // Create order
-    //     $order_id = DB::table('orders')->insertGetId([
-    //         'user_id' => $user_id,
-    //         'phone_no' => $request->phone,
-    //         'address_1' => $request->address1,
-    //         'address_2' => $request->address2,
-    //         'city' => $request->city,
-    //         'state' => $request->state,
-    //         'pincode' => $request->pinCode,
-    //         'payment_status' => 'pending',
-    //         'payment_method' => $paymentMethod === 'cod' ? 'cod' : null,
-    //         'total_amount' => $total,
-    //         'order_status' => 'pending',
-    //         'created_at' => now(),
-    //         'updated_at' => now(),
-    //     ]);
-
-
-    //     // Create order items and prepare for shipment
-    //     $orderItems = [];
-    //     foreach ($carts as $cart) {
-    //         $itemTotal = (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
-    //         DB::table('ordered_products')->insert([
-    //             'user_id' => $user_id,
-    //             'order_id' => $order_id,
-    //             'product_id' => $cart->product_id,
-    //             'variant_id' => $cart->variant_id,
-    //             'quantity' => $cart->count,
-    //             'price' => $cart->discount_price,
-    //             'total' => $itemTotal,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
-
-    //         // Store for Delhivery shipment
-    //         $orderItems[] = (object)[
-    //             'variant_id' => $cart->variant_id,
-    //             'product_id' => $cart->product_id,
-    //             'quantity' => $cart->count,
-    //             'price' => $cart->discount_price,
-    //             'name' => $cart->name
-    //         ];
-    //     }
-
-
-    //     // For COD orders, create Delhivery shipment immediately
-    //     if ($paymentMethod === 'cod') {
-    //         $shipmentResult = $this->createDelhiveryShipment($order_id, $request, $orderItems, $total, 'cod');
-
-    //         if (!$shipmentResult['success']) {
-    //             // Delete order if shipment creation fails
-    //             DB::table('orders')->where('id', $order_id)->delete();
-    //             DB::table('ordered_products')->where('order_id', $order_id)->delete();
-    //             return back()->with('error', 'Unable to create shipment: ' . $shipmentResult['message']);
-    //         }
-    //     }
-
-
-    //     // Store order details in session
-    //     session([
-    //         'cashfree_order_id' => $order_id,
-    //         'cashfree_total' => $total,
-    //         'cashfree_currency' => 'INR',
-    //         'payment_method' => $paymentMethod
-    //     ]);
-
-
-    //     // For COD, process immediately
-    //     if ($paymentMethod === 'cod') {
-    //         return $this->processCOD(new Request([
-    //             'order_id' => $order_id,
-    //             'total' => $total,
-    //             'currency' => 'INR'
-    //         ]));
-    //     }
-
-
-    //     // For online payment, redirect to payment
-    //     return redirect()->route('checkout.payment');
-    // }
-
     public function placeOrder(Request $request)
     {
         $request->validate([
@@ -523,6 +356,75 @@ class CheckoutController extends Controller
     }
 
 
+    // public function createPaymentSession(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'order_id' => 'required|string',
+    //             'total' => 'required|numeric|min:1',
+    //             'currency' => 'required|string|max:3'
+    //         ]);
+
+
+    //         $orderId = $request->order_id;
+    //         $total = $request->total;
+    //         $currency = $request->currency;
+
+
+    //         $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
+    //         $cashfreeService = new CashfreeService();
+
+
+    //         $user = Auth::user();
+    //         $customerDetails = [
+    //             'customer_id' => (string) $user->id,
+    //             'customer_name' => $user->name,
+    //             'customer_email' => $user->email ?? 'customer@example.com',
+    //             'customer_phone' => $user->phone ?? '9999999999',
+    //         ];
+
+
+    //         $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
+
+
+    //         if (!$orderResponse) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Failed to create payment order. Please try again.'
+    //             ], 500);
+    //         }
+
+
+    //         $paymentSessionId = $orderResponse['payment_session_id'] ?? null;
+    //         $transactionId = $orderResponse['order_id'] ?? $orderResponse['cf_order_id'] ?? null;
+    //         if ($transactionId) {
+    //             session(['transaction_id' => $transactionId]);
+    //         }
+
+
+    //         if (!$paymentSessionId) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Failed to initiate payment. Please try again.'
+    //             ], 500);
+    //         }
+
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'payment_session_id' => $paymentSessionId,
+    //             'order_id' => $orderId,
+    //             'transaction_id' => $transactionId
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Payment session creation error: ' . $e->getMessage());
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Payment initiation failed. Please try again.'
+    //         ], 500);
+    //     }
+    // }
+
     public function createPaymentSession(Request $request)
     {
         try {
@@ -532,15 +434,12 @@ class CheckoutController extends Controller
                 'currency' => 'required|string|max:3'
             ]);
 
-
             $orderId = $request->order_id;
             $total = $request->total;
             $currency = $request->currency;
 
-
             $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
             $cashfreeService = new CashfreeService();
-
 
             $user = Auth::user();
             $customerDetails = [
@@ -550,10 +449,8 @@ class CheckoutController extends Controller
                 'customer_phone' => '9999999999',
             ];
 
-
             $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
-
-
+             // Debugging line to check the response
             if (!$orderResponse) {
                 return response()->json([
                     'success' => false,
@@ -561,9 +458,18 @@ class CheckoutController extends Controller
                 ], 500);
             }
 
-
+            // ✅ Store the actual Cashfree transaction ID
+            $cfTransactionId = $orderResponse['cf_order_id'] ?? null;
             $paymentSessionId = $orderResponse['payment_session_id'] ?? null;
 
+            // ✅ Store both IDs in session
+            if ($cfTransactionId) {
+                session([
+                    'cashfree_transaction_id' => $cfTransactionId,
+                    'cashfree_order_id' => $orderId,
+                    'cf_order_id' => $cashfreeOrderId // Store the CF_ order ID too
+                ]);
+            }
 
             if (!$paymentSessionId) {
                 return response()->json([
@@ -572,11 +478,12 @@ class CheckoutController extends Controller
                 ], 500);
             }
 
-
             return response()->json([
                 'success' => true,
                 'payment_session_id' => $paymentSessionId,
-                'order_id' => $orderId
+                'order_id' => $orderId,
+                'cf_order_id' => $cfTransactionId,
+                'cf_transaction_id' => $cfTransactionId // Both are the same
             ]);
         } catch (\Exception $e) {
             Log::error('Payment session creation error: ' . $e->getMessage());
@@ -701,257 +608,7 @@ class CheckoutController extends Controller
     }
 
 
-    // public function paymentSuccess(Request $request)
-    // {
-    //     Log::info('Payment success request received:', $request->all());
 
-
-    //     $orderId = session('cashfree_order_id');
-
-
-    //     if (!$orderId) {
-    //         return redirect()->route('checkout.index')->with('error', 'No order found');
-    //     }
-
-
-    //     // Get order details
-    //     $order = DB::table('orders')->where('id', $orderId)->first();
-
-    //     if (!$order) {
-    //         return redirect()->route('checkout.index')->with('error', 'Order not found');
-    //     }
-
-
-    //     // Get ordered products with names for shipment
-    //     $orderedProducts = DB::table('ordered_products')
-    //         ->join('products', 'ordered_products.product_id', '=', 'products.id')
-    //         ->where('ordered_products.order_id', $orderId)
-    //         ->select('ordered_products.*', 'products.name')
-    //         ->get();
-
-
-    //     // Create Delhivery shipment for paid order if not already created
-    //     if (!$order->waybill_number) {
-    //         $customerName = DB::table('addresses')
-    //             ->where('user_id', $order->user_id)
-    //             ->where('is_default', 1)
-    //             ->value('full_name') ?? 'Customer';
-
-
-    //         $waybill = $this->delhiveryService->generateWaybill();
-
-    //         if ($waybill) {
-    //             $orderData = [
-    //                 'order_id' => $orderId,
-    //                 'customer_name' => $customerName,
-    //                 'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
-    //                 'city' => $order->city,
-    //                 'state' => $order->state,
-    //                 'pincode' => $order->pincode,
-    //                 'phone' => $order->phone_no,
-    //                 'email' => $request->input('email', 'customer@example.com'),
-    //                 'total_amount' => $order->total_amount,
-    //                 'payment_method' => 'prepaid',
-    //             ];
-
-    //             $shipment = $this->delhiveryService->createShipment($orderData, $orderedProducts);
-
-    //             if ($shipment['success'] && $shipment['waybill']) {
-    //                 DB::table('orders')->where('id', $orderId)->update([
-    //                     'waybill_number' => $shipment['waybill'],
-    //                     'shipment_id' => $shipment['shipment_id'],
-    //                     'tracking_status' => 'Shipment Created',
-    //                     'courier_name' => 'Delhivery'
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-
-    //     // Update order status
-    //     $updateData = [
-    //         'order_status' => 'paid',
-    //         'payment_status' => 'paid',
-    //         'payment_method' => 'cashfree',
-    //         'paid_at' => now(),
-    //         'updated_at' => now()
-    //     ];
-
-
-    //     if ($request->has('transaction_id')) {
-    //         $updateData['transaction_id'] = $request->input('transaction_id');
-    //     }
-
-
-    //     DB::table('orders')->where('id', $orderId)->update($updateData);
-
-
-    //     // Update stock
-    //     foreach ($orderedProducts as $item) {
-    //         if ($item->variant_id) {
-    //             DB::table('product_variants')
-    //                 ->where('id', $item->variant_id)
-    //                 ->where('stock', '>', 0)
-    //                 ->decrement('stock', $item->quantity);
-    //         }
-    //     }
-
-
-    //     // Clear cart and session
-    //     DB::table('carts')->where('user_id', auth()->id())->delete();
-    //     session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
-
-
-    //     return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Payment successful! Order placed.');
-    // }
-    public function paymentSuccess(Request $request)
-    {
-        Log::info('Payment success request received:', $request->all());
-
-        $orderId = session('cashfree_order_id');
-
-        if (!$orderId) {
-            return redirect()->route('checkout.index')->with('error', 'No order found');
-        }
-
-        // Get order details
-        $order = DB::table('orders')->where('id', $orderId)->first();
-
-        if (!$order) {
-            return redirect()->route('checkout.index')->with('error', 'Order not found');
-        }
-
-        // ✅ Create Delhivery shipment for prepaid order if not already created
-        if (!$order->waybill_number) {
-            Log::info('Creating Delhivery shipment for prepaid order: ' . $orderId);
-
-            // Get ordered products with names
-            $orderedProducts = DB::table('ordered_products')
-                ->join('products', 'ordered_products.product_id', '=', 'products.id')
-                ->where('ordered_products.order_id', $orderId)
-                ->select('ordered_products.*', 'products.name')
-                ->get();
-
-            if ($orderedProducts->isEmpty()) {
-                Log::error('No products found for order: ' . $orderId);
-                return redirect()->route('checkout.index')->with('error', 'Order products not found');
-            }
-
-            // Get customer name from address
-            $customerName = DB::table('addresses')
-                ->where('user_id', $order->user_id)
-                ->where('is_default', 1)
-                ->value('full_name');
-
-            if (!$customerName) {
-                $customerName = 'Customer';
-            }
-
-            // ✅ DON'T call generateWaybill() separately
-            // The createShipment method will automatically get a waybill
-
-            $orderData = [
-                'order_id' => $orderId,
-                'customer_name' => $customerName,
-                'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
-                'city' => $order->city,
-                'state' => $order->state,
-                'pincode' => $order->pincode,
-                'phone' => $order->phone_no,
-                'email' => $request->input('email', 'customer@example.com'),
-                'total_amount' => $order->total_amount,
-                'payment_method' => 'prepaid',
-            ];
-
-            // This will automatically generate and return a waybill
-            $shipment = $this->delhiveryService->createShipment($orderData, $orderedProducts);
-
-            if ($shipment['success'] && $shipment['waybill']) {
-                DB::table('orders')->where('id', $orderId)->update([
-                    'waybill_number' => $shipment['waybill'],
-                    'shipment_id' => $shipment['shipment_id'],
-                    'tracking_status' => 'Shipment Created',
-                    'courier_name' => 'Delhivery'
-                ]);
-                Log::info('Delhivery shipment created for prepaid order: ' . $orderId . ', Waybill: ' . $shipment['waybill']);
-            } else {
-                Log::error('Failed to create Delhivery shipment for prepaid order: ' . $orderId, [
-                    'shipment_response' => $shipment
-                ]);
-            }
-        } else {
-            Log::info('Shipment already exists for order: ' . $orderId . ', Waybill: ' . $order->waybill_number);
-        }
-
-        // Update order status
-        $updateData = [
-            'order_status' => 'paid',
-            'payment_status' => 'paid',
-            'payment_method' => 'cashfree',
-            'paid_at' => now(),
-            'updated_at' => now()
-        ];
-        // $serviceability = $this->whatsAppService->sendOrderConfirmation(
-        //     '+916295351230',
-        //     'Susmita',
-        //     'ORD-12345'
-        // );
-        try {
-            $whatsappService = new \App\Services\WhatsAppService();
-
-            // Format phone number (remove any non-numeric characters)
-            $phone = preg_replace('/[^0-9]/', '', $request->phone);
-
-            // Send order confirmation
-            $whatsappSent = $whatsappService->sendOrderConfirmation(
-                $phone,
-                $customerName,
-                $orderId
-            );
-            // dd($whatsappSent);
-            if ($whatsappSent) {
-                Log::info('WhatsApp order confirmation sent', [
-                    'order_id' => $orderId,
-                    'phone' => $phone,
-                    'message_id' => $whatsappService->getLastMessageId()
-                ]);
-            } else {
-                Log::warning('WhatsApp order confirmation failed', [
-                    'order_id' => $orderId,
-                    'phone' => $phone
-                ]);
-            }
-        } catch (\Exception $e) {
-            // Don't fail the order if WhatsApp fails
-            Log::error('WhatsApp send error: ' . $e->getMessage(), [
-                'order_id' => $orderId
-            ]);
-        }
-        // dd($serviceability);
-        // $serviceability = $this->whatsAppService->sendTextMessage($order->phone_no, "Your order #{$orderId} has been placed successfully! We will notify you once it's shipped. Thank you for shopping with us!");
-        if ($request->has('transaction_id')) {
-            $updateData['transaction_id'] = $request->input('transaction_id');
-        }
-
-        DB::table('orders')->where('id', $orderId)->update($updateData);
-
-        // Update stock
-        $orderItems = DB::table('ordered_products')->where('order_id', $orderId)->get();
-        foreach ($orderItems as $item) {
-            if ($item->variant_id) {
-                DB::table('product_variants')
-                    ->where('id', $item->variant_id)
-                    ->where('stock', '>', 0)
-                    ->decrement('stock', $item->quantity);
-            }
-        }
-
-        // Clear cart and session
-        DB::table('carts')->where('user_id', auth()->id())->delete();
-        session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
-
-        return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Payment successful! Order placed.');
-    }
     // public function paymentSuccess(Request $request)
     // {
     //     Log::info('Payment success request received:', $request->all());
@@ -969,9 +626,8 @@ class CheckoutController extends Controller
     //         return redirect()->route('checkout.index')->with('error', 'Order not found');
     //     }
 
-    //     // ✅ CRITICAL: Create Delhivery shipment for prepaid order if not already created
+    //     // ✅ Create Delhivery shipment for prepaid order if not already created
     //     if (!$order->waybill_number) {
-
     //         Log::info('Creating Delhivery shipment for prepaid order: ' . $orderId);
 
     //         // Get ordered products with names
@@ -996,43 +652,39 @@ class CheckoutController extends Controller
     //             $customerName = 'Customer';
     //         }
 
-    //         // Generate waybill
-    //         $waybill = $this->delhiveryService->generateWaybill();
+    //         // ✅ DON'T call generateWaybill() separately
+    //         // The createShipment method will automatically get a waybill
 
-    //         if ($waybill) {
-    //             $orderData = [
-    //                 'order_id' => $orderId,
-    //                 'customer_name' => $customerName,
-    //                 'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
-    //                 'city' => $order->city,
-    //                 'state' => $order->state,
-    //                 'pincode' => $order->pincode,
-    //                 'phone' => $order->phone_no,
-    //                 'email' => $request->input('email', 'customer@example.com'),
-    //                 'total_amount' => $order->total_amount,
-    //                 'payment_method' => 'prepaid',
-    //             ];
+    //         $orderData = [
+    //             'order_id' => $orderId,
+    //             'customer_name' => $customerName,
+    //             'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
+    //             'city' => $order->city,
+    //             'state' => $order->state,
+    //             'pincode' => $order->pincode,
+    //             'phone' => $order->phone_no,
+    //             'email' => $request->input('email', 'customer@example.com'),
+    //             'total_amount' => $order->total_amount,
+    //             'payment_method' => 'prepaid',
+    //         ];
 
-    //             $shipment = $this->delhiveryService->createShipment($orderData, $orderedProducts);
+    //         // This will automatically generate and return a waybill
+    //         $shipment = $this->delhiveryService->createShipment($orderData, $orderedProducts);
 
-    //             if ($shipment['success'] && $shipment['waybill']) {
-    //                 DB::table('orders')->where('id', $orderId)->update([
-    //                     'waybill_number' => $shipment['waybill'],
-    //                     'shipment_id' => $shipment['shipment_id'],
-    //                     'tracking_status' => 'Shipment Created',
-    //                     'courier_name' => 'Delhivery'
-    //                 ]);
-    //                 Log::info('Delhivery shipment created for prepaid order: ' . $orderId . ', Waybill: ' . $shipment['waybill']);
-    //             } else {
-    //                 Log::error('Failed to create Delhivery shipment for prepaid order: ' . $orderId, [
-    //                     'shipment_response' => $shipment
-    //                 ]);
-    //             }
+    //         if ($shipment['success'] && $shipment['waybill']) {
+    //             DB::table('orders')->where('id', $orderId)->update([
+    //                 'waybill_number' => $shipment['waybill'],
+    //                 'shipment_id' => $shipment['shipment_id'],
+    //                 'tracking_status' => 'Shipment Created',
+    //                 'courier_name' => 'Delhivery'
+    //             ]);
+    //             Log::info('Delhivery shipment created for prepaid order: ' . $orderId . ', Waybill: ' . $shipment['waybill']);
     //         } else {
-    //             Log::error('Failed to generate waybill for prepaid order: ' . $orderId);
+    //             Log::error('Failed to create Delhivery shipment for prepaid order: ' . $orderId, [
+    //                 'shipment_response' => $shipment
+    //             ]);
     //         }
     //     } else {
-    //         dd("error");
     //         Log::info('Shipment already exists for order: ' . $orderId . ', Waybill: ' . $order->waybill_number);
     //     }
 
@@ -1044,7 +696,44 @@ class CheckoutController extends Controller
     //         'paid_at' => now(),
     //         'updated_at' => now()
     //     ];
+    //     // $serviceability = $this->whatsAppService->sendOrderConfirmation(
+    //     //     '+916295351230',
+    //     //     'Susmita',
+    //     //     'ORD-12345'
+    //     // );
+    //     try {
+    //         $whatsappService = new \App\Services\WhatsAppService();
 
+    //         // Format phone number (remove any non-numeric characters)
+    //         $phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+    //         // Send order confirmation
+    //         $whatsappSent = $whatsappService->sendOrderConfirmation(
+    //             $phone,
+    //             $customerName,
+    //             $orderId
+    //         );
+    //         // dd($whatsappSent);
+    //         if ($whatsappSent) {
+    //             Log::info('WhatsApp order confirmation sent', [
+    //                 'order_id' => $orderId,
+    //                 'phone' => $phone,
+    //                 'message_id' => $whatsappService->getLastMessageId()
+    //             ]);
+    //         } else {
+    //             Log::warning('WhatsApp order confirmation failed', [
+    //                 'order_id' => $orderId,
+    //                 'phone' => $phone
+    //             ]);
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Don't fail the order if WhatsApp fails
+    //         Log::error('WhatsApp send error: ' . $e->getMessage(), [
+    //             'order_id' => $orderId
+    //         ]);
+    //     }
+    //     // dd($serviceability);
+    //     // $serviceability = $this->whatsAppService->sendTextMessage($order->phone_no, "Your order #{$orderId} has been placed successfully! We will notify you once it's shipped. Thank you for shopping with us!");
     //     if ($request->has('transaction_id')) {
     //         $updateData['transaction_id'] = $request->input('transaction_id');
     //     }
@@ -1065,9 +754,146 @@ class CheckoutController extends Controller
     //     // Clear cart and session
     //     DB::table('carts')->where('user_id', auth()->id())->delete();
     //     session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
-    //     dd($customerName);
+
     //     return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Payment successful! Order placed.');
     // }
+
+    public function paymentSuccess(Request $request)
+{
+    Log::info('Payment success request received:', $request->all());
+
+    $orderId = session('cashfree_order_id');
+
+    if (!$orderId) {
+        return redirect()->route('checkout.index')->with('error', 'No order found');
+    }
+
+    // Get order details
+    $order = DB::table('orders')->where('id', $orderId)->first();
+
+    if (!$order) {
+        return redirect()->route('checkout.index')->with('error', 'Order not found');
+    }
+
+    // ✅ Get the actual transaction ID from session
+    $transactionId = session('cashfree_transaction_id');
+    
+    // If not in session, try to get it from the request
+    if (!$transactionId) {
+        if ($request->has('transaction_id')) {
+            $transactionId = $request->input('transaction_id');
+        } elseif ($request->has('cf_transaction_id')) {
+            $transactionId = $request->input('cf_transaction_id');
+        }
+    }
+
+    // ✅ Create Delhivery shipment for prepaid order if not already created
+    if (!$order->waybill_number) {
+        Log::info('Creating Delhivery shipment for prepaid order: ' . $orderId);
+
+        // Get ordered products with names
+        $orderedProducts = DB::table('ordered_products')
+            ->join('products', 'ordered_products.product_id', '=', 'products.id')
+            ->where('ordered_products.order_id', $orderId)
+            ->select('ordered_products.*', 'products.name')
+            ->get();
+
+        if ($orderedProducts->isEmpty()) {
+            Log::error('No products found for order: ' . $orderId);
+            return redirect()->route('checkout.index')->with('error', 'Order products not found');
+        }
+
+        // Get customer name from address
+        $customerName = DB::table('addresses')
+            ->where('user_id', $order->user_id)
+            ->where('is_default', 1)
+            ->value('full_name');
+
+        if (!$customerName) {
+            $customerName = 'Customer';
+        }
+
+        $orderData = [
+            'order_id' => $orderId,
+            'customer_name' => $customerName,
+            'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
+            'city' => $order->city,
+            'state' => $order->state,
+            'pincode' => $order->pincode,
+            'phone' => $order->phone_no,
+            'email' => $request->input('email', 'customer@example.com'),
+            'total_amount' => $order->total_amount,
+            'payment_method' => 'prepaid',
+        ];
+
+        $shipment = $this->delhiveryService->createShipment($orderData, $orderedProducts);
+
+        if ($shipment['success'] && $shipment['waybill']) {
+            DB::table('orders')->where('id', $orderId)->update([
+                'waybill_number' => $shipment['waybill'],
+                'shipment_id' => $shipment['shipment_id'],
+                'tracking_status' => 'Shipment Created',
+                'courier_name' => 'Delhivery'
+            ]);
+            Log::info('Delhivery shipment created for prepaid order: ' . $orderId . ', Waybill: ' . $shipment['waybill']);
+        } else {
+            Log::error('Failed to create Delhivery shipment for prepaid order: ' . $orderId);
+        }
+    }
+
+    // Update order status with the correct transaction ID
+    $updateData = [
+        'order_status' => 'paid',
+        'payment_status' => 'paid',
+        'payment_method' => 'cashfree',
+        'paid_at' => now(),
+        'updated_at' => now()
+    ];
+
+    // ✅ Save the actual Cashfree transaction ID (cf_order_id)
+    if ($transactionId) {
+        $updateData['transaction_id'] = $transactionId;
+        Log::info('Transaction ID saved: ' . $transactionId . ' for order: ' . $orderId);
+    } else {
+        Log::warning('No transaction ID found for order: ' . $orderId);
+    }
+
+    DB::table('orders')->where('id', $orderId)->update($updateData);
+
+    // Update stock
+    $orderItems = DB::table('ordered_products')->where('order_id', $orderId)->get();
+    foreach ($orderItems as $item) {
+        if ($item->variant_id) {
+            DB::table('product_variants')
+                ->where('id', $item->variant_id)
+                ->where('stock', '>', 0)
+                ->decrement('stock', $item->quantity);
+        }
+    }
+
+    // Get customer name for WhatsApp
+    $customerName = DB::table('addresses')
+        ->where('user_id', $order->user_id)
+        ->where('is_default', 1)
+        ->value('full_name') ?? 'Customer';
+
+    // ✅ Send WhatsApp confirmation with proper phone number
+    $this->sendOrderWhatsAppConfirmation($orderId, $order->phone_no, $customerName);
+
+    // Clear cart and session
+    DB::table('carts')->where('user_id', auth()->id())->delete();
+    session()->forget([
+        'cashfree_order_id', 
+        'cashfree_total', 
+        'cashfree_currency', 
+        'payment_method',
+        'cashfree_transaction_id',
+        'cf_order_id'
+    ]);
+
+    return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
+        ->with('success', 'Payment successful! Order placed.');
+}
 
     /**
      * Track order via API
@@ -1218,12 +1044,27 @@ class CheckoutController extends Controller
             ];
 
 
+            // if (isset($data['transaction_id'])) {
+            //     $updateData['transaction_id'] = $data['transaction_id'];
+            // } elseif (isset($data['cf_transaction_id'])) {
+            //     $updateData['transaction_id'] = $data['cf_transaction_id'];
+            // }
+
             if (isset($data['transaction_id'])) {
-                $updateData['transaction_id'] = $data['transaction_id'];
+                $transactionId = $data['transaction_id'];
             } elseif (isset($data['cf_transaction_id'])) {
-                $updateData['transaction_id'] = $data['cf_transaction_id'];
+                $transactionId = $data['cf_transaction_id'];
+            } elseif (isset($data['order_id'])) {
+                $transactionId = $data['order_id'];
             }
 
+            if ($transactionId) {
+                $updateData['transaction_id'] = $transactionId;
+            }
+
+            if (isset($data['cf_transaction_id']) && !$transactionId) {
+                $updateData['transaction_id'] = $data['cf_transaction_id'];
+            }
 
             DB::table('orders')->where('id', $orderId)->update($updateData);
             Log::info('Order marked as paid via webhook: ' . $orderId);

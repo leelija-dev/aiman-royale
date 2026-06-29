@@ -174,6 +174,7 @@
                 })
                 .then(response => {
                     if (!response.ok) {
+                        console.log('Network response was not ok', response);
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
@@ -229,6 +230,7 @@
                     }),
                 })
                 .then(response => {
+                    console.log('Response:', response);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
