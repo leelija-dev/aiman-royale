@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Order;
+use App\Models\Refund;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class CashfreeRefundService
 {
@@ -43,11 +46,12 @@ class CashfreeRefundService
     /**
      * Process a refund for an order using Cashfree PG Refund API
      *
-     * @param string $orderId - The Cashfree Order ID
+     * @param string $orderId - The Cashfree Order ID (e.g., CF_195_1782729631)
      * @param float $amount - Refund amount
-     * @param string $refundId - Unique refund ID (optional)
-     * @param string $refundNote - Refund note (optional)
+     * @param string|null $refundId - Unique refund ID (optional)
+     * @param string|null $refundNote - Refund note (optional)
      * @param string $refundSpeed - STANDARD or INSTANT (default: STANDARD)
+     * @param int|null $internalOrderId - Your internal order ID (optional)
      * @return array
      * @throws \Exception
      */
@@ -56,7 +60,8 @@ class CashfreeRefundService
         float $amount, 
         ?string $refundId = null, 
         ?string $refundNote = null,
-        string $refundSpeed = 'STANDARD'
+        string $refundSpeed = 'STANDARD',
+        ?int $internalOrderId = null
     ): array {
         try {
             // Validate credentials
@@ -90,7 +95,8 @@ class CashfreeRefundService
                 'refund_id' => $refundId,
                 'amount' => $amount,
                 'refund_speed' => $refundSpeed,
-                'endpoint' => $endpoint
+                'endpoint' => $endpoint,
+                'internal_order_id' => $internalOrderId
             ]);
 
             // Make the API request
@@ -138,9 +144,17 @@ class CashfreeRefundService
             $responseData = $response->json();
 
             // Check if refund was successful
-            if (!isset($responseData['refund_id']) && !isset($responseData['refund']['refund_id'])) {
+            if (!isset($responseData['refund_id']) && !isset($responseData['cf_refund_id'])) {
                 Log::error('Unexpected refund response structure', ['response' => $responseData]);
                 throw new \Exception('Refund response format unexpected');
+            }
+
+            // ✅ Save refund record to database
+            if ($internalOrderId) {
+                $this->saveRefundRecord($internalOrderId, $responseData, $orderId, $refundNote);
+            } else {
+                // Try to find order by Cashfree order reference
+                $this->saveRefundRecordByOrderRef($orderId, $responseData, $refundNote);
             }
 
             return $responseData;
@@ -152,6 +166,111 @@ class CashfreeRefundService
                 'trace' => $e->getTraceAsString()
             ]);
             throw $e;
+        }
+    }
+
+    /**
+     * Save refund record to database using internal order ID
+     */
+    protected function saveRefundRecord(int $orderId, array $responseData, string $cashfreeOrderRef, ?string $refundNote): void
+    {
+        try {
+            // Extract refund data
+            $refundId = $responseData['refund_id'] ?? null;
+            $cfRefundId = $responseData['cf_refund_id'] ?? null;
+            $cfPaymentId = $responseData['cf_payment_id'] ?? null;
+            $amount = $responseData['refund_amount'] ?? 0;
+            $status = strtolower($responseData['refund_status'] ?? Refund::STATUS_PENDING);
+
+            // Check if refund already exists
+            $existingRefund = Refund::where('refund_id', $refundId)
+                ->orWhere('cf_refund_id', $cfRefundId)
+                ->first();
+
+            if ($existingRefund) {
+                Log::info('Refund record already exists, updating instead', [
+                    'refund_id' => $refundId,
+                    'order_id' => $orderId
+                ]);
+                
+                $existingRefund->update([
+                    'status' => $status,
+                    'refund_data' => $responseData,
+                    'processed_at' => $status === Refund::STATUS_SUCCESS ? now() : null,
+                ]);
+                
+                return;
+            }
+
+            // Create new refund record
+            Refund::create([
+                'order_id' => $orderId,
+                'refund_id' => $refundId ?? 'REF-' . uniqid(),
+                'cf_refund_id' => $cfRefundId,
+                'cf_payment_id' => $cfPaymentId,
+                'amount' => $amount,
+                'status' => $status,
+                'reason' => $refundNote,
+                'refund_data' => $responseData,
+                'processed_at' => $status === Refund::STATUS_SUCCESS ? now() : null,
+            ]);
+
+            // Update order status
+            $order = Order::find($orderId);
+            if ($order) {
+                $order->update([
+                    'order_status' => 'refunded',
+                    'refund_status' => $status === Refund::STATUS_SUCCESS ? 'completed' : 'processing',
+                ]);
+            }
+
+            Log::info('Refund record saved successfully', [
+                'order_id' => $orderId,
+                'refund_id' => $refundId,
+                'cf_refund_id' => $cfRefundId,
+                'status' => $status
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to save refund record', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage()
+            ]);
+            // Don't throw exception, just log the error
+        }
+    }
+
+    /**
+     * Save refund record by finding order from Cashfree order reference
+     */
+    protected function saveRefundRecordByOrderRef(string $cashfreeOrderRef, array $responseData, ?string $refundNote): void
+    {
+        try {
+            // Try to find order by cashfree_order_ref or parse from the reference
+            $order = Order::where('cashfree_order_ref', $cashfreeOrderRef)->first();
+            
+            if (!$order) {
+                // Try to parse internal ID from CF_xxx_yyyy format
+                if (preg_match('/CF_(\d+)_/', $cashfreeOrderRef, $matches)) {
+                    $internalOrderId = $matches[1];
+                    $order = Order::find($internalOrderId);
+                }
+            }
+
+            if ($order) {
+                $this->saveRefundRecord($order->id, $responseData, $cashfreeOrderRef, $refundNote);
+            } else {
+                Log::warning('Could not find order for refund record', [
+                    'cashfree_order_ref' => $cashfreeOrderRef,
+                    'response' => $responseData
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Failed to save refund record by order ref', [
+                'cashfree_order_ref' => $cashfreeOrderRef,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 
@@ -179,7 +298,12 @@ class CashfreeRefundService
                 throw new \Exception('Failed to get refund status: ' . $response->body());
             }
 
-            return $response->json();
+            $responseData = $response->json();
+
+            // ✅ Update refund status in database if exists
+            $this->updateRefundStatusFromApi($refundId, $responseData);
+
+            return $responseData;
 
         } catch (\Exception $e) {
             Log::error('Cashfree refund status error', [
@@ -188,6 +312,54 @@ class CashfreeRefundService
                 'error' => $e->getMessage()
             ]);
             throw $e;
+        }
+    }
+
+    /**
+     * Update refund status from API response
+     */
+    protected function updateRefundStatusFromApi(string $refundId, array $apiResponse): void
+    {
+        try {
+            $refund = Refund::where('refund_id', $refundId)
+                ->orWhere('cf_refund_id', $refundId)
+                ->first();
+
+            if (!$refund) {
+                Log::warning('Refund not found for status update', ['refund_id' => $refundId]);
+                return;
+            }
+
+            $newStatus = strtolower($apiResponse['refund_status'] ?? $refund->status);
+            
+            // Update refund record
+            $refund->update([
+                'status' => $newStatus,
+                'refund_data' => array_merge($refund->refund_data ?? [], $apiResponse),
+                'processed_at' => $newStatus === Refund::STATUS_SUCCESS ? now() : $refund->processed_at,
+            ]);
+
+            // Update order if refund is completed
+            if ($newStatus === Refund::STATUS_SUCCESS) {
+                $order = $refund->order;
+                if ($order) {
+                    $order->update([
+                        'order_status' => 'refunded',
+                        'refund_status' => 'completed',
+                    ]);
+                }
+            }
+
+            Log::info('Refund status updated from API', [
+                'refund_id' => $refundId,
+                'new_status' => $newStatus
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to update refund status from API', [
+                'refund_id' => $refundId,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 
@@ -223,5 +395,72 @@ class CashfreeRefundService
             ]);
             throw $e;
         }
+    }
+
+    /**
+     * Process a full refund for an order
+     *
+     * @param Order $order
+     * @param string|null $reason
+     * @param string $refundSpeed
+     * @return array
+     * @throws \Exception
+     */
+    public function processFullRefund(Order $order, ?string $reason = null, string $refundSpeed = 'STANDARD'): array
+    {
+        // Get Cashfree order reference
+        $cashfreeOrderRef = $order->cashfree_order_ref ?? 'CF_' . $order->id . '_' . strtotime($order->created_at);
+        
+        return $this->processRefund(
+            $cashfreeOrderRef,
+            $order->total_amount,
+            null,
+            $reason ?? 'Full refund for order #' . $order->id,
+            $refundSpeed,
+            $order->id
+        );
+    }
+
+    /**
+     * Process a partial refund for an order
+     *
+     * @param Order $order
+     * @param float $amount
+     * @param string|null $reason
+     * @param string $refundSpeed
+     * @return array
+     * @throws \Exception
+     */
+    public function processPartialRefund(Order $order, float $amount, ?string $reason = null, string $refundSpeed = 'STANDARD'): array
+    {
+        // Validate amount
+        if ($amount <= 0) {
+            throw new \Exception('Refund amount must be greater than 0');
+        }
+
+        if ($amount > $order->total_amount) {
+            throw new \Exception('Refund amount cannot exceed order total');
+        }
+
+        // Check if already refunded
+        $totalRefunded = $order->refunds()
+            ->where('status', Refund::STATUS_SUCCESS)
+            ->sum('amount');
+
+        if (($totalRefunded + $amount) > $order->total_amount) {
+            throw new \Exception('Total refund amount cannot exceed order total');
+        }
+
+        // Get Cashfree order reference
+        $cashfreeOrderRef = $order->cashfree_order_ref ?? 'CF_' . $order->id . '_' . strtotime($order->created_at);
+        
+        return $this->processRefund(
+            $cashfreeOrderRef,
+            $amount,
+            null,
+            $reason ?? 'Partial refund for order #' . $order->id,
+            $refundSpeed,
+            $order->id
+        );
     }
 }

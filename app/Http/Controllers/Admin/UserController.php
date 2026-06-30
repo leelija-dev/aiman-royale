@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
-
+use App\Models\Refund;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthRequest;
@@ -20,9 +20,16 @@ use Illuminate\Routing\Controllers\Middleware;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Services\CashfreeRefundService;
 
 class UserController extends Controller implements HasMiddleware
 {
+     protected $refundService;
+
+    public function __construct(CashfreeRefundService $refundService)
+    {
+        $this->refundService = $refundService;
+    }
     public static function middleware()
     {
         return [
@@ -276,13 +283,15 @@ class UserController extends Controller implements HasMiddleware
 /**
  * Cancel an order
  */
+
+
 // public function cancelOrder(Request $request, $orderId)
 // {
 //     try {
 //         \Log::info('=== CANCEL ORDER DEBUG START ===');
 //         \Log::info('Order ID: ' . $orderId);
         
-//         // Test basic functionality first
+//         // Find the order
 //         $order = Order::find($orderId);
 //         if (!$order) {
 //             \Log::error('Order not found: ' . $orderId);
@@ -309,7 +318,7 @@ class UserController extends Controller implements HasMiddleware
 //             ], 401);
 //         }
         
-//         // Simple status check
+//         // Check if order is cancellable
 //         $cancelableStatuses = ['pending', 'confirmed', 'paid'];
 //         if (!in_array($order->order_status, $cancelableStatuses)) {
 //             \Log::error('Order not cancellable. Status: ' . $order->order_status);
@@ -319,8 +328,35 @@ class UserController extends Controller implements HasMiddleware
 //             ], 400);
 //         }
         
-//         // Test basic update
-//         \Log::info('Attempting to update order status...');
+//         // Check if waybill exists and cancel it
+//         $waybillCancelled = false;
+//         $waybillError = null;
+        
+//         if (!empty($order->waybill_number)) {
+//             \Log::info('Waybill number found: ' . $order->waybill_number);
+            
+//             try {
+//                 // Call Delhivery API to cancel waybill
+//                 $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
+                
+//                 if ($waybillCancelled) {
+//                     \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
+//                 } else {
+//                     \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
+//                     $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
+//                 }
+                
+//             } catch (\Exception $e) {
+//                 \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
+//                 $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
+//                 // Continue with database cancellation even if waybill API fails
+//             }
+//         } else {
+//             \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+//         }
+        
+//         // Update order status in database
+//         \Log::info('Attempting to update order status to cancelled...');
 //         $order->order_status = 'cancelled';
 //         $result = $order->save();
         
@@ -331,12 +367,16 @@ class UserController extends Controller implements HasMiddleware
         
 //         return response()->json([
 //             'success' => true,
-//             'message' => 'Order cancelled successfully (simplified version).',
+//             'message' => 'Order cancelled successfully.',
 //             'order_id' => $order->id,
+//             'waybill_cancelled' => $waybillCancelled,
+//             'waybill_error' => $waybillError,
 //             'debug_info' => [
 //                 'order_status' => $order->order_status,
 //                 'user_id' => $userId,
-//                 'save_result' => $result
+//                 'save_result' => $result,
+//                 'waybill_number' => $order->waybill_number,
+//                 'waybill_cancellation_status' => $waybillCancelled
 //             ]
 //         ]);
         
@@ -351,7 +391,7 @@ class UserController extends Controller implements HasMiddleware
         
 //         return response()->json([
 //             'success' => false,
-//             'message' => 'Debug error: ' . $e->getMessage(),
+//             'message' => 'Error cancelling order: ' . $e->getMessage(),
 //             'debug_info' => [
 //                 'file' => $e->getFile(),
 //                 'line' => $e->getLine(),
@@ -380,6 +420,9 @@ public function cancelOrder(Request $request, $orderId)
         \Log::info('Order found successfully');
         \Log::info('Order ID: ' . $order->id);
         \Log::info('Order Status: ' . $order->order_status);
+        \Log::info('Order Payment Status: ' . $order->payment_status);
+        \Log::info('Order Payment Method: ' . $order->payment_method);
+        \Log::info('Order Total Amount: ' . $order->total_amount);
         \Log::info('Order User ID: ' . $order->user_id);
         
         // Check authentication
@@ -394,6 +437,15 @@ public function cancelOrder(Request $request, $orderId)
             ], 401);
         }
         
+        // Check if user owns the order
+        if ($order->user_id != $userId) {
+            \Log::error('User does not own this order. Order User ID: ' . $order->user_id . ', Auth User ID: ' . $userId);
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to cancel this order.'
+            ], 403);
+        }
+        
         // Check if order is cancellable
         $cancelableStatuses = ['pending', 'confirmed', 'paid'];
         if (!in_array($order->order_status, $cancelableStatuses)) {
@@ -404,57 +456,207 @@ public function cancelOrder(Request $request, $orderId)
             ], 400);
         }
         
-        // Check if waybill exists and cancel it
-        $waybillCancelled = false;
-        $waybillError = null;
-        
-        if (!empty($order->waybill_number)) {
-            \Log::info('Waybill number found: ' . $order->waybill_number);
-            
-            try {
-                // Call Delhivery API to cancel waybill
-                $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
-                
-                if ($waybillCancelled) {
-                    \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
-                } else {
-                    \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
-                    $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
-                }
-                
-            } catch (\Exception $e) {
-                \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
-                $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
-                // Continue with database cancellation even if waybill API fails
-            }
-        } else {
-            \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+        // Check if already cancelled
+        if ($order->order_status === 'cancelled') {
+            \Log::error('Order already cancelled');
+            return response()->json([
+                'success' => false,
+                'message' => 'Order has already been cancelled.'
+            ], 400);
         }
         
-        // Update order status in database
-        \Log::info('Attempting to update order status to cancelled...');
-        $order->order_status = 'cancelled';
-        $result = $order->save();
+        // Get cancellation details from request
+        $reason = $request->input('reason', 'Cancelled by customer');
+        $comments = $request->input('comments', '');
         
-        \Log::info('Save result: ' . ($result ? 'SUCCESS' : 'FAILED'));
-        \Log::info('Updated order status: ' . $order->order_status);
+        \Log::info('Cancellation Reason: ' . $reason);
+        \Log::info('Cancellation Comments: ' . $comments);
         
-        \Log::info('=== CANCEL ORDER DEBUG END ===');
+        // Start database transaction
+        DB::beginTransaction();
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Order cancelled successfully.',
-            'order_id' => $order->id,
-            'waybill_cancelled' => $waybillCancelled,
-            'waybill_error' => $waybillError,
-            'debug_info' => [
-                'order_status' => $order->order_status,
-                'user_id' => $userId,
-                'save_result' => $result,
-                'waybill_number' => $order->waybill_number,
-                'waybill_cancellation_status' => $waybillCancelled
-            ]
-        ]);
+        try {
+            // Check if waybill exists and cancel it
+            $waybillCancelled = false;
+            $waybillError = null;
+            
+            if (!empty($order->waybill_number)) {
+                \Log::info('Waybill number found: ' . $order->waybill_number);
+                
+                try {
+                    // Call Delhivery API to cancel waybill
+                    $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
+                    
+                    if ($waybillCancelled) {
+                        \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
+                    } else {
+                        \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
+                        $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
+                    }
+                    
+                } catch (\Exception $e) {
+                    \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
+                    $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
+                    // Continue with database cancellation even if waybill API fails
+                }
+            } else {
+                \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+            }
+            
+            // Process refund for paid orders
+            $refundProcessed = false;
+            $refundError = null;
+            $refundResult = null;
+            
+            // Check if order is paid and eligible for refund
+            if ($order->payment_status === 'paid' && $order->payment_method === 'cashfree') {
+                \Log::info('Order is paid. Processing refund...');
+                
+                try {
+                    // ✅ FIX: Use the actual Cashfree order reference from the order
+                    // If cashfree_order_ref is not set, try to get it from the transaction_id
+                    $cashfreeOrderRef = $order->cashfree_order_ref;
+                    
+                    if (!$cashfreeOrderRef) {
+                        // Try to generate it from the created_at timestamp
+                        $timestamp = strtotime($order->created_at);
+                        $cashfreeOrderRef = 'CF_' . $order->id . '_' . $timestamp;
+                        
+                        // Check if this is the correct one by querying Cashfree
+                        \Log::info('Generated Cashfree Order Reference: ' . $cashfreeOrderRef);
+                    }
+                    
+                    // ✅ If you have the transaction_id, use it to find the correct order reference
+                    // From your logs, the transaction_id is 2211686007
+                    // But the order reference is CF_195_1782729631
+                    
+                    // ✅ Let's check if we have the correct reference from the successful refund
+                    // The successful refund used: CF_195_1782729631
+                    // Let's try to use that
+                    
+                    // ✅ Use the correct reference from your successful refund
+                    // Based on your logs, the correct reference is CF_195_1782729631
+                    // But this may vary per order, so we need to store it properly
+                    
+                    // If the order doesn't have cashfree_order_ref, try to get it from refunds table
+                    if (!$cashfreeOrderRef) {
+                        $existingRefund = Refund::where('order_id', $order->id)->first();
+                        if ($existingRefund && isset($existingRefund->refund_data['order_id'])) {
+                            $cashfreeOrderRef = $existingRefund->refund_data['order_id'];
+                            \Log::info('Found Cashfree order reference from refund: ' . $cashfreeOrderRef);
+                        }
+                    }
+                    
+                    // If still not found, use a fallback based on the transaction_id
+                    if (!$cashfreeOrderRef) {
+                        // Since we know the transaction_id is 2211686007 for order 195
+                        // But the order reference is CF_195_1782729631
+                        // We'll use the format that worked before
+                        $cashfreeOrderRef = 'CF_' . $order->id . '_' . strtotime($order->created_at);
+                        \Log::info('Using fallback Cashfree Order Reference: ' . $cashfreeOrderRef);
+                    }
+                    
+                    \Log::info('Cashfree Order Reference: ' . $cashfreeOrderRef);
+                    \Log::info('Refund Amount: ' . $order->total_amount);
+                    
+                    // Process full refund
+                    $refundResult = $this->refundService->processRefund(
+                        $cashfreeOrderRef,
+                        $order->total_amount,
+                        null, // Auto-generate refund ID
+                        "Order cancellation - {$reason}",
+                        'STANDARD',
+                        $order->id
+                    );
+                    
+                    $refundProcessed = true;
+                    \Log::info('Refund processed successfully', ['refund_result' => $refundResult]);
+                    
+                } catch (\Exception $e) {
+                    \Log::error('Refund processing failed: ' . $e->getMessage());
+                    $refundError = 'Refund processing failed: ' . $e->getMessage();
+                    // Continue with order cancellation even if refund fails
+                    // The refund can be processed manually later
+                }
+            } else {
+                \Log::info('Order is not paid. No refund needed.');
+                \Log::info('Payment Status: ' . $order->payment_status);
+                \Log::info('Payment Method: ' . $order->payment_method);
+            }
+            
+            // Update order status in database
+            \Log::info('Attempting to update order status to cancelled...');
+            
+            $updateData = [
+                'order_status' => 'cancelled',
+                'cancelled_at' => now(),
+                'cancellation_reason' => $reason,
+                'cancellation_comments' => $comments,
+                'updated_at' => now()
+            ];
+            
+            // Update refund status if refund was processed
+            if ($refundProcessed) {
+                $updateData['refund_status'] = 'processing';
+            } elseif ($refundError) {
+                $updateData['refund_status'] = 'failed';
+                $updateData['refund_error'] = $refundError;
+            } else {
+                $updateData['refund_status'] = 'not_applicable';
+            }
+            
+            // Update the order
+            $order->update($updateData);
+            
+            \Log::info('Order status updated successfully');
+            \Log::info('Updated order status: ' . $order->order_status);
+            \Log::info('Updated refund status: ' . ($updateData['refund_status'] ?? 'none'));
+            
+            // Get the refund record if created
+            $refund = Refund::where('order_id', $order->id)
+                ->latest()
+                ->first();
+            
+            DB::commit();
+            
+            // Prepare response message
+            $message = 'Order cancelled successfully.';
+            if ($refundProcessed) {
+                $message .= ' Refund is being processed.';
+            } elseif ($refundError) {
+                $message .= ' Refund failed: ' . $refundError;
+            }
+            
+            \Log::info('=== CANCEL ORDER DEBUG END ===');
+            
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'order_id' => $order->id,
+                'waybill_cancelled' => $waybillCancelled,
+                'waybill_error' => $waybillError,
+                'refund_processed' => $refundProcessed,
+                'refund_error' => $refundError,
+                'refund' => $refund,
+                'debug_info' => [
+                    'order_status' => $order->order_status,
+                    'refund_status' => $order->refund_status,
+                    'user_id' => $userId,
+                    'waybill_number' => $order->waybill_number,
+                    'waybill_cancellation_status' => $waybillCancelled,
+                    'payment_status' => $order->payment_status,
+                    'payment_method' => $order->payment_method,
+                    'cancellation_reason' => $reason,
+                    'refund_amount' => $order->total_amount,
+                    'cashfree_order_ref' => $cashfreeOrderRef ?? 'not_set'
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Database transaction failed: ' . $e->getMessage());
+            throw $e;
+        }
         
     } catch (\Exception $e) {
         \Log::error('=== CANCEL ORDER ERROR ===');

@@ -199,6 +199,28 @@ Route::get('/orders/{id}', function ($id) {
     return view('orders.show', compact('order'));
 })->name('orders.show')->middleware('auth');
 
+Route::middleware(['auth'])->prefix('refunds')->group(function () {
+    // Process refund
+    Route::post('/orders/{orderId}', [RefundController::class, 'refund'])->name('refunds.process');
+    
+    // Full refund
+    Route::post('/order/{orderId}/full', [RefundController::class, 'fullRefund'])->name('refunds.full');
+    
+    // Partial refund
+    Route::post('/order/{orderId}/partial', [RefundController::class, 'partialRefund'])->name('refunds.partial');
+    
+    // Get order refunds
+    Route::get('/order/{orderId}', [RefundController::class, 'orderRefunds'])->name('refunds.order');
+    
+    // Get refund status
+    Route::get('/order/{orderId}/refund/{refundId}', [RefundController::class, 'refundStatus'])->name('refunds.status');
+    
+    // Cancel refund
+    Route::post('/order/{orderId}/refund/{refundId}/cancel', [RefundController::class, 'cancelRefund'])->name('refunds.cancel');
+    
+    // Refund statistics
+    Route::get('/statistics', [RefundController::class, 'statistics'])->name('refunds.statistics');
+});
 // Refund Routes
-Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
-Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
+// Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
+// Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
