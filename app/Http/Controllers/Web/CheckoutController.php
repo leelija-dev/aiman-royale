@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CashfreeService;
 use App\Services\DelhiveryService;
 use App\Services\WhatsAppService;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -427,6 +428,7 @@ class CheckoutController extends Controller
 
     public function createPaymentSession(Request $request)
     {
+        // dd($request);
         try {
             $request->validate([
                 'order_id' => 'required|string',
@@ -446,7 +448,7 @@ class CheckoutController extends Controller
                 'customer_id' => (string) $user->id,
                 'customer_name' => $user->name,
                 'customer_email' => $user->email ?? 'customer@example.com',
-                'customer_phone' => '9999999999',
+                'customer_phone' => $user->phone ?? '9999999999',
             ];
 
             $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
@@ -477,6 +479,7 @@ class CheckoutController extends Controller
                     'message' => 'Failed to initiate payment. Please try again.'
                 ], 500);
             }
+            Order::class::where('id', $orderId)->update(['cashfree_order_ref' => $cashfreeOrderId]);
 
             return response()->json([
                 'success' => true,
