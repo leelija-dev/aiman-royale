@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class PickupRequestController extends Controller
 {
-    //
+    
     public function index()
     {
         // $orders = Order::where('pick_up_request_added', false)
@@ -40,379 +40,647 @@ class PickupRequestController extends Controller
     }
 
 
-    // public function createPickupRequest(Request $request)
-    // {
-    //     try {
-    //         $waybills = $request->waybills;
-    //         $orderIds = $request->order_ids;
+//     // public function createPickupRequest(Request $request)
+//     // {
+//     //     try {
+//     //         $waybills = $request->waybills;
+//     //         $orderIds = $request->order_ids;
 
-    //         if (empty($waybills)) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'No waybills provided'
-    //             ], 400);
-    //         }
+//     //         if (empty($waybills)) {
+//     //             return response()->json([
+//     //                 'success' => false,
+//     //                 'message' => 'No waybills provided'
+//     //             ], 400);
+//     //         }
 
-    //         // ✅ CORRECT ENDPOINT FOR PICKUP REQUEST
-    //         $url = config('delhivery.sandbox_url') . '/fm/request/new/';
+//     //         // GET ORDER DETAILS FOR REQUIRED FIELDS
+//     //         $orders = Order::whereIn('id', $orderIds)->get();
 
-    //         // ✅ CORRECT PAYLOAD STRUCTURE based on the curl example
-    //         $pickupData = [
-    //             'pickup_time' => "11:00:00",//now()->format('H:i:s'), // Current time in 24-hour format
-    //             'pickup_date' => "2026-06-29",//now()->format('Y-m-d'), // Current date
-    //             'pickup_location' => config('delhivery.pickup_location'), // Your warehouse name
-    //             'expected_package_count' => count($waybills), // Number of packages
-    //         ];
+//     //         if ($orders->isEmpty()) {
+//     //             return response()->json([
+//     //                 'success' => false,
+//     //                 'message' => 'Orders not found'
+//     //             ], 404);
+//     //         }
 
-    //         // Optional: Add waybill numbers if the API supports it
-    //         // Some versions of the API accept waybills in the payload
-    //         // If not, you might need to add them after pickup is created
-    //         // $pickupData['waybills'] = implode(',', $waybills);
+//     //         // Get the first order for client details
+//     //         $firstOrder = $orders->first();
 
-    //         Log::info('Sending pickup request to Delhivery', [
-    //             'url' => $url,
-    //             'payload' => $pickupData,
-    //             'waybills' => $waybills
-    //         ]);
+//     //         $url = config('delhivery.sandbox_url') . '/fm/request/new/';
 
-    //         // Make the API call with proper authentication
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Token ' . config('delhivery.api_token'), // Note: 'Token' not 'Bearer'
-    //             'Content-Type' => 'application/json',
-    //             'Accept' => 'application/json',
-    //         ])->post($url, $pickupData);
 
-    //         Log::info('Delhivery Pickup API Response', [
-    //             'status' => $response->status(),
-    //             'body' => $response->body()
-    //         ]);
+//     //         $pickupDateTime = now()->addMinutes(30); // Add 30 minutes buffer
+//     //         $pickupDate = $pickupDateTime->format('Y-m-d');
+//     //         $pickupTime = $pickupDateTime->format('H:i:s');
 
-    //         if ($response->successful()) {
-    //             $responseData = $response->json();
+//     //         $pickupData = [
+//     //             'pickup_location' => config('delhivery.pickup_location', 'Your Warehouse'),
+//     //             'pickup_date' => $pickupDate, // Date with buffer
+//     //             'pickup_time' => $pickupTime, // Time with buffer
+//     //             'expected_package_count' => count($waybills),
+//     //             'client_name' => $firstOrder->name ?? 'Customer',
+//     //             'client_address' => $firstOrder->address ?? 'Address',
+//     //             'client_city' => $firstOrder->city ?? 'City',
+//     //             'client_pincode' => $firstOrder->pincode ?? '123456',
+//     //             'client_phone' => $firstOrder->customer_phone ?? '6295351230',
+//     //             'waybills' => implode(',', $waybills),
+//     //         ];
 
-    //             // Check if pickup was created successfully
-    //             if (isset($responseData['status']) && $responseData['status'] === 'success') {
-    //                 // Update orders as pickup requested
-    //                 Order::whereIn('id', $orderIds)
-    //                     ->update(['pick_up_request_added' => true]);
+//     //         Log::info('Sending pickup request to Delhivery', [
+//     //             'url' => $url,
+//     //             'payload' => $pickupData,
+//     //             'waybills' => $waybills,
+//     //             'server_time' => now()->format('Y-m-d H:i:s'),
+//     //             'pickup_time_sent' => $pickupDateTime->format('Y-m-d H:i:s')
+//     //         ]);
 
-    //                 return response()->json([
-    //                     'success' => true,
-    //                     'message' => 'Pickup request created successfully',
-    //                     'count' => count($waybills),
-    //                     'pickup_id' => $responseData['pickup_id'] ?? null,
-    //                     'data' => $responseData
-    //                 ]);
-    //             } else {
-    //                 // API returned error response
-    //                 return response()->json([
-    //                     'success' => false,
-    //                     'message' => $responseData['message'] ?? 'Pickup request failed',
-    //                     'data' => $responseData
-    //                 ], 400);
-    //             }
-    //         }
+//     //         $response = Http::withHeaders([
+//     //             'Authorization' => 'Token ' . config('delhivery.api_token'),
+//     //             'Content-Type' => 'application/json',
+//     //             'Accept' => 'application/json',
+//     //         ])->post($url, $pickupData);
 
-    //         // Handle specific HTTP status codes
-    //         if ($response->status() === 401) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Authentication failed. Please check your API token.'
-    //             ], 401);
-    //         }
+//     //         Log::info('Delhivery Pickup API Response', [
+//     //             'status' => $response->status(),
+//     //             'body' => $response->body()
+//     //         ]);
 
-    //         if ($response->status() === 422) {
-    //             $errors = $response->json();
-    //             $errorMessage = 'Validation error: ';
-    //             if (isset($errors['errors'])) {
-    //                 foreach ($errors['errors'] as $field => $messages) {
-    //                     $errorMessage .= $field . ': ' . implode(', ', $messages) . '; ';
-    //                 }
-    //             } else {
-    //                 $errorMessage .= $response->body();
-    //             }
+//     //         if ($response->successful()) {
+//     //             $responseData = $response->json();
 
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => $errorMessage
-    //             ], 422);
-    //         }
+//     //             if (isset($responseData['status']) && $responseData['status'] === 'success') {
+//     //                 Order::whereIn('id', $orderIds)
+//     //                     ->update(['pick_up_request_added' => true]);
 
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Failed to create pickup request: ' . $response->body()
-    //         ], $response->status());
+//     //                 return response()->json([
+//     //                     'success' => true,
+//     //                     'message' => 'Pickup request created successfully',
+//     //                     'count' => count($waybills),
+//     //                     'pickup_id' => $responseData['pickup_id'] ?? null,
+//     //                     'data' => $responseData
+//     //                 ]);
+//     //             } else {
+//     //                 $errorMsg = $responseData['message'] ?? 'Pickup request failed';
+//     //                 if (isset($responseData['errors'])) {
+//     //                     $errorMsg .= ': ' . json_encode($responseData['errors']);
+//     //                 }
 
-    //     } catch (\Exception $e) {
-    //         Log::error('Pickup Request Error', [
-    //             'message' => $e->getMessage(),
-    //             'trace' => $e->getTraceAsString()
-    //         ]);
+//     //                 return response()->json([
+//     //                     'success' => false,
+//     //                     'message' => $errorMsg,
+//     //                     'data' => $responseData
+//     //                 ], 400);
+//     //             }
+//     //         }
 
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'An error occurred: ' . $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
+//     //         $status = $response->status();
+//     //         $errorMessage = $this->handleErrorResponse($response, $status);
 
-    // public function createPickupRequest(Request $request)
-    // {
-    //     try {
-    //         $waybills = $request->waybills;
-    //         $orderIds = $request->order_ids;
+//     //         return response()->json([
+//     //             'success' => false,
+//     //             'message' => $errorMessage,
+//     //             'status_code' => $status
+//     //         ], $status);
+//     //     } catch (\Exception $e) {
+//     //         Log::error('Pickup Request Error', [
+//     //             'message' => $e->getMessage(),
+//     //             'trace' => $e->getTraceAsString()
+//     //         ]);
 
-    //         if (empty($waybills)) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'No waybills provided'
-    //             ], 400);
-    //         }
+//     //         return response()->json([
+//     //             'success' => false,
+//     //             'message' => 'An error occurred: ' . $e->getMessage()
+//     //         ], 500);
+//     //     }
+//     // }
 
-    //         // ✅ FIXED: GET ORDER DETAILS FOR REQUIRED FIELDS
-    //         $orders = Order::whereIn('id', $orderIds)->get();
+//     public function createPickupRequest(Request $request)
+//     {
+//         try {
+//             // dd($request->all()); // Debugging line to inspect the request payload
+//             $waybills = $request->waybills;
+//             $orderIds = $request->order_ids;
 
-    //         if ($orders->isEmpty()) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Orders not found'
-    //             ], 404);
-    //         }
+//             if (empty($waybills)) {
+//                 return response()->json([
+//                     'success' => false,
+//                     'message' => 'No waybills provided'
+//                 ], 400);
+//             }
 
-    //         // Get the first order for client details
-    //         $firstOrder = $orders->first();
+//             // GET ORDER DETAILS FOR REQUIRED FIELDS
+//             $orders = Order::whereIn('id', $orderIds)->get();
 
-    //         // ✅ CORRECT ENDPOINT
-    //         $url = config('delhivery.sandbox_url') . '/fm/request/new/';
+//             if ($orders->isEmpty()) {
+//                 return response()->json([
+//                     'success' => false,
+//                     'message' => 'Orders not found'
+//                 ], 404);
+//             }
 
-    //         // ✅ CORRECT PAYLOAD WITH ALL REQUIRED FIELDS
-    //         $pickupData = [
-    //             'pickup_location' => config('delhivery.pickup_location', 'Your Warehouse'),
-    //             'pickup_date' => now()->format('Y-m-d'), // ✅ FIXED: Proper date format
-    //             'pickup_time' => now()->format('H:i:s'), // ✅ FIXED: Use current time
-    //             'expected_package_count' => count($waybills),
-    //             // ✅ ADD REQUIRED CLIENT DETAILS
-    //             'client_name' => $firstOrder->customer_name ?? 'Customer',
-    //             'client_address' => $firstOrder->customer_address ?? 'Address',
-    //             'client_city' => $firstOrder->customer_city ?? 'City',
-    //             'client_pincode' => $firstOrder->customer_pincode ?? '123456',
-    //             'client_phone' => $firstOrder->customer_phone ?? '0000000000',
-    //             // ✅ ADD WAYBILLS AS COMMA-SEPARATED STRING
-    //             'waybills' => implode(',', $waybills),
-    //         ];
+//             // Get the first order for client details
+//             $firstOrder = $orders->first();
 
-    //         Log::info('Sending pickup request to Delhivery', [
-    //             'url' => $url,
-    //             'payload' => $pickupData,
-    //             'waybills' => $waybills
-    //         ]);
+//             $url = config('delhivery.sandbox_url') . '/fm/request/new/';
 
-    //         // ✅ FIXED: USE 'Bearer' OR 'Token' BASED ON YOUR DELHIVERY VERSION
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Token ' . config('delhivery.api_token'),
-    //             'Content-Type' => 'application/json',
-    //             'Accept' => 'application/json',
-    //         ])->post($url, $pickupData);
+//             // IMPORTANT: Add at least 3 hours buffer for Delhivery
+//             // Delhivery typically requires 2-3 hours advance notice
+//             $pickupDateTime = now()->addHours(3); // Changed from 30 minutes to 3 hours
 
-    //         Log::info('Delhivery Pickup API Response', [
-    //             'status' => $response->status(),
-    //             'body' => $response->body()
-    //         ]);
+//             // Format the pickup time
+//             $pickupDate = $pickupDateTime->format('Y-m-d');
+//             $pickupTime = $pickupDateTime->format('H:i:s');
 
-    //         if ($response->successful()) {
-    //             $responseData = $response->json();
+//             // Log the order details for debugging
+//             Log::info('Preparing pickup request', [
+//                 'order_count' => $orders->count(),
+//                 'first_order' => $firstOrder->toArray(),
+//                 'pickup_datetime' => $pickupDateTime->format('Y-m-d H:i:s')
+//             ]);
 
-    //             // ✅ CHECK FOR SUCCESS IN DELHIVERY RESPONSE
-    //             if (isset($responseData['status']) && $responseData['status'] === 'success') {
-    //                 // Update orders as pickup requested
-    //                 Order::whereIn('id', $orderIds)
-    //                     ->update(['pick_up_request_added' => true]);
+//             $pickupData = [
+//                 'pickup_location' => config('delhivery.pickup_location', 'Your Warehouse'),
+//                 'pickup_date' => $pickupDate,
+//                 'pickup_time' => $pickupTime,
+//                 'expected_package_count' => count($waybills),
+//                 'client_name' => $firstOrder->name ?? 'Customer',
+//                 'client_address' => $firstOrder->address ?? 'Address',
+//                 'client_city' => $firstOrder->city ?? 'City',
+//                 'client_pincode' => $firstOrder->pincode ?? '123456',
+//                 'client_phone' => $firstOrder->customer_phone ?? '6295351230',
+//                 'waybills' => implode(',', $waybills), // Delhivery expects comma-separated waybills
+//             ];
 
-    //                 return response()->json([
-    //                     'success' => true,
-    //                     'message' => 'Pickup request created successfully',
-    //                     'count' => count($waybills),
-    //                     'pickup_id' => $responseData['pickup_id'] ?? null,
-    //                     'data' => $responseData
-    //                 ]);
-    //             } else {
-    //                 // ✅ BETTER ERROR HANDLING
-    //                 $errorMsg = $responseData['message'] ?? 'Pickup request failed';
-    //                 if (isset($responseData['errors'])) {
-    //                     $errorMsg .= ': ' . json_encode($responseData['errors']);
-    //                 }
+//             Log::info('Sending pickup request to Delhivery', [
+//                 'url' => $url,
+//                 'payload' => $pickupData,
+//                 'waybills' => $waybills,
+//                 'server_time' => now()->format('Y-m-d H:i:s'),
+//                 'pickup_time_sent' => $pickupDateTime->format('Y-m-d H:i:s')
+//             ]);
 
-    //                 return response()->json([
-    //                     'success' => false,
-    //                     'message' => $errorMsg,
-    //                     'data' => $responseData
-    //                 ], 400);
-    //             }
-    //         }
+//             $response = Http::withHeaders([
+//                 'Authorization' => 'Token ' . config('delhivery.api_token'),
+//                 'Content-Type' => 'application/json',
+//                 'Accept' => 'application/json',
+//             ])->post($url, $pickupData);
 
-    //         // ✅ HANDLE SPECIFIC HTTP CODES
-    //         $status = $response->status();
-    //         $errorMessage = $this->handleErrorResponse($response, $status);
+//             $responseBody = $response->body();
 
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => $errorMessage,
-    //             'status_code' => $status
-    //         ], $status);
-    //     } catch (\Exception $e) {
-    //         Log::error('Pickup Request Error', [
-    //             'message' => $e->getMessage(),
-    //             'trace' => $e->getTraceAsString()
-    //         ]);
+//             Log::info('Delhivery Pickup API Response', [
+//                 'status' => $response->status(),
+//                 'body' => $responseBody,
+//                 'headers' => $response->headers()
+//             ]);
 
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'An error occurred: ' . $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
+//             // Handle successful response
+//             if ($response->successful()) {
+//                 $responseData = $response->json();
 
-    public function createPickupRequest(Request $request)
-    {
-        try {
-            $waybills = $request->waybills;
-            $orderIds = $request->order_ids;
+//                 // Check if pickup was created successfully
+//                 if (isset($responseData['pickup_id'])) {
+//                     // Get the actual pickup time from Delhivery's response
+//                     $actualPickupTime = $responseData['pickup_time'] ?? $pickupTime;
+//                     $actualPickupDate = $responseData['pickup_date'] ?? $pickupDate;
 
-            if (empty($waybills)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No waybills provided'
-                ], 400);
-            }
+//                     // Check if Delhivery changed the pickup time
+//                     if ($actualPickupTime != $pickupTime) {
+//                         Log::warning('Pickup time adjusted by Delhivery', [
+//                             'requested_time' => $pickupTime,
+//                             'actual_time' => $actualPickupTime,
+//                             'pickup_id' => $responseData['pickup_id']
+//                         ]);
+//                     }
 
-            // GET ORDER DETAILS FOR REQUIRED FIELDS
-            $orders = Order::whereIn('id', $orderIds)->get();
+//                     // Update orders with pickup details
+//                     Order::whereIn('id', $orderIds)
+//                         ->update([
+//                             'pick_up_request_added' => true,
+//                             'pickup_id' => $responseData['pickup_id'],
+//                             'pickup_scheduled_date' => $actualPickupDate,
+//                             'pickup_scheduled_time' => $actualPickupTime
+//                         ]);
 
-            if ($orders->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Orders not found'
-                ], 404);
-            }
+//                     return response()->json([
+//                         'success' => true,
+//                         'message' => 'Pickup request created successfully',
+//                         'count' => count($waybills),
+//                         'pickup_id' => $responseData['pickup_id'],
+//                         'pickup_location_name' => $responseData['pickup_location_name'] ?? null,
+//                         'incoming_center_name' => $responseData['incoming_center_name'] ?? null,
+//                         'requested_pickup_time' => $pickupTime,
+//                         'actual_pickup_time' => $actualPickupTime,
+//                         'pickup_date' => $actualPickupDate,
+//                         'data' => $responseData
+//                     ]);
+//                 }
+//                 // Handle success response with 'status' field
+//                 elseif (isset($responseData['status']) && $responseData['status'] === 'success') {
+//                     Order::whereIn('id', $orderIds)
+//                         ->update(['pick_up_request_added' => true]);
 
-            // Get the first order for client details
-            $firstOrder = $orders->first();
+//                     return response()->json([
+//                         'success' => true,
+//                         'message' => 'Pickup request created successfully',
+//                         'count' => count($waybills),
+//                         'pickup_id' => $responseData['pickup_id'] ?? null,
+//                         'data' => $responseData
+//                     ]);
+//                 }
+//                 // Handle unexpected success response
+//                 else {
+//                     Log::warning('Unexpected success response format', [
+//                         'response' => $responseData
+//                     ]);
 
-            $url = config('delhivery.sandbox_url') . '/fm/request/new/';
+//                     // Still consider it successful if status is 201 (Created)
+//                     Order::whereIn('id', $orderIds)
+//                         ->update(['pick_up_request_added' => true]);
 
+//                     return response()->json([
+//                         'success' => true,
+//                         'message' => 'Pickup request created (unexpected response format)',
+//                         'count' => count($waybills),
+//                         'data' => $responseData
+//                     ]);
+//                 }
+//             }
+
+//             // Handle error responses
+//             $status = $response->status();
+//             $errorMessage = $this->handleErrorResponse($response, $status);
+
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => $errorMessage,
+//                 'status_code' => $status,
+//                 'response_body' => $response->body() // Include raw response for debugging
+//             ], $status);
+//         } catch (\Exception $e) {
+//             Log::error('Pickup Request Error', [
+//                 'message' => $e->getMessage(),
+//                 'trace' => $e->getTraceAsString()
+//             ]);
+
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'An error occurred while creating pickup request: ' . $e->getMessage()
+//             ], 500);
+//         }
+//     }
+
+//     // Add this helper method to your controller
+//     private function handleErrorResponse($response, $status)
+//     {
+//         $errorMessage = 'Pickup request failed';
+//         $responseBody = $response->body();
+
+//         try {
+//             $errorData = json_decode($responseBody, true);
+
+//             if ($errorData) {
+//                 // Check for common error response formats
+//                 if (isset($errorData['message'])) {
+//                     $errorMessage = $errorData['message'];
+//                 } elseif (isset($errorData['error'])) {
+//                     $errorMessage = $errorData['error'];
+//                 } elseif (isset($errorData['errors'])) {
+//                     if (is_array($errorData['errors'])) {
+//                         $errorMessage = implode(', ', $errorData['errors']);
+//                     } else {
+//                         $errorMessage = $errorData['errors'];
+//                     }
+//                 }
+
+//                 // Add additional error details if available
+//                 if (isset($errorData['status'])) {
+//                     $errorMessage .= ' (Status: ' . $errorData['status'] . ')';
+//                 }
+//             } else {
+//                 $errorMessage = $responseBody ?: 'Unknown error occurred';
+//             }
+//         } catch (\Exception $e) {
+//             Log::error('Error parsing Delhivery error response', [
+//                 'error' => $e->getMessage(),
+//                 'response_body' => $responseBody
+//             ]);
+//         }
+
+//         // Handle specific status codes
+//         switch ($status) {
+//             case 400:
+//                 $errorMessage = 'Bad Request: ' . $errorMessage;
+//                 break;
+//             case 401:
+//                 $errorMessage = 'Authentication failed. Please check API token.';
+//                 break;
+//             case 403:
+//                 $errorMessage = 'Access forbidden. Please check your permissions.';
+//                 break;
+//             case 404:
+//                 $errorMessage = 'Endpoint not found. Please check the URL.';
+//                 break;
+//             case 422:
+//                 $errorMessage = 'Validation error: ' . $errorMessage;
+//                 break;
+//             case 429:
+//                 $errorMessage = 'Rate limit exceeded. Please try again later.';
+//                 break;
+//             case 500:
+//                 $errorMessage = 'Delhivery server error. Please try again later.';
+//                 break;
+//         }
+
+//         return $errorMessage;
+//     }
+
+//     // ✅ ADD HELPER METHOD FOR ERROR HANDLING
+//     // private function handleErrorResponse($response, $status)
+//     // {
+//     //     $body = $response->body();
+//     //     $json = json_decode($body, true);
+
+//     //     if ($json && isset($json['message'])) {
+//     //         return $json['message'];
+//     //     }
+
+//     //     switch ($status) {
+//     //         case 400:
+//     //             return 'Bad request: ' . $body;
+//     //         case 401:
+//     //             return 'Authentication failed. Please check your API token.';
+//     //         case 422:
+//     //             $errors = json_decode($body, true);
+//     //             if (isset($errors['errors'])) {
+//     //                 $messages = [];
+//     //                 foreach ($errors['errors'] as $field => $fieldErrors) {
+//     //                     $messages[] = $field . ': ' . implode(', ', $fieldErrors);
+//     //                 }
+//     //                 return 'Validation errors: ' . implode('; ', $messages);
+//     //             }
+//     //             return 'Validation error: ' . $body;
+//     //         default:
+//     //             return 'Failed to create pickup request: ' . $body;
+//     //     }
+//     // }
+// }
+public function createPickupRequest(Request $request)
+{
+    try {
+        // Validate input
+        $validated = $request->validate([
+            'waybills' => 'required|array|min:1',
+            'waybills.*' => 'string',
+            'order_ids' => 'required|array|min:1',
+            'order_ids.*' => 'integer|exists:orders,id',
+            'pickup_date' => 'required|date',
+            'pickup_time' => 'required|date_format:H:i:s',
+        ]);
+
+        $waybills = $request->waybills;
+        $orderIds = $request->order_ids;
+
+        // GET ORDER DETAILS FOR REQUIRED FIELDS
+        $orders = Order::whereIn('id', $orderIds)->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orders not found'
+            ], 404);
+        }
+
+        // Get the first order for client details
+        $firstOrder = $orders->first();
+
+        // Log order details for debugging
+        Log::info('Preparing pickup request', [
+            'order_count' => $orders->count(),
+            'first_order' => $firstOrder->toArray(),
+            'pickup_datetime' => $request->pickup_date . ' ' . $request->pickup_time
+        ]);
+
+        $url = config('delhivery.sandbox_url') . '/fm/request/new/';
+
+        // Use the date and time from the request
+        $pickupDateTime = \Carbon\Carbon::parse($request->pickup_date . ' ' . $request->pickup_time);
+        $pickupDate = $pickupDateTime->format('Y-m-d');
+        $pickupTime = $pickupDateTime->format('H:i:s');
+
+        // Prepare pickup data
+        $pickupData = [
+            'pickup_location' => config('delhivery.pickup_location', 'c3a7c4-RJFASHIONS-do'),
+            'pickup_date' => $pickupDate,
+            'pickup_time' => $pickupTime,
+            'expected_package_count' => count($waybills),
+            'client_name' => $firstOrder->name ?? 'Customer',
+            'client_address' => $firstOrder->address_1 ?? 'Address',
+            'client_city' => $firstOrder->city ?? 'hooghly',
+            'client_pincode' => $firstOrder->pincode ?? '712134',
+            'client_phone' => $firstOrder->phone_no ?? '6295351230',
+            'waybills' => implode(',', $waybills),
+        ];
+
+        Log::info('Sending pickup request to Delhivery', [
+            'url' => $url,
+            'payload' => $pickupData,
+            'waybills' => $waybills,
+            'server_time' => now()->format('Y-m-d H:i:s'),
+            'pickup_time_sent' => $pickupDateTime->format('Y-m-d H:i:s')
+        ]);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . config('delhivery.api_token'),
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])->post($url, $pickupData);
+
+        $responseBody = $response->body();
+
+        Log::info('Delhivery Pickup API Response', [
+            'status' => $response->status(),
+            'body' => $responseBody,
+            'headers' => $response->headers()
+        ]);
+
+        // Handle successful response
+        if ($response->successful()) {
+            $responseData = $response->json();
             
-            $pickupDateTime = now()->addMinutes(30); // Add 30 minutes buffer
-            $pickupDate = $pickupDateTime->format('Y-m-d');
-            $pickupTime = $pickupDateTime->format('H:i:s');
-
-            $pickupData = [
-                'pickup_location' => config('delhivery.pickup_location', 'Your Warehouse'),
-                'pickup_date' => $pickupDate, // Date with buffer
-                'pickup_time' => $pickupTime, // Time with buffer
-                'expected_package_count' => count($waybills),
-                'client_name' => $firstOrder->name ?? 'Customer',
-                'client_address' => $firstOrder->address ?? 'Address',
-                'client_city' => $firstOrder->city ?? 'City',
-                'client_pincode' => $firstOrder->pincode ?? '123456',
-                'client_phone' => $firstOrder->customer_phone ?? '6295351230',
-                'waybills' => implode(',', $waybills),
-            ];
-
-            Log::info('Sending pickup request to Delhivery', [
-                'url' => $url,
-                'payload' => $pickupData,
-                'waybills' => $waybills,
-                'server_time' => now()->format('Y-m-d H:i:s'),
-                'pickup_time_sent' => $pickupDateTime->format('Y-m-d H:i:s')
-            ]);
-
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . config('delhivery.api_token'),
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ])->post($url, $pickupData);
-
-            Log::info('Delhivery Pickup API Response', [
-                'status' => $response->status(),
-                'body' => $response->body()
-            ]);
-
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                if (isset($responseData['status']) && $responseData['status'] === 'success') {
-                    Order::whereIn('id', $orderIds)
-                        ->update(['pick_up_request_added' => true]);
-
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Pickup request created successfully',
-                        'count' => count($waybills),
-                        'pickup_id' => $responseData['pickup_id'] ?? null,
-                        'data' => $responseData
+            // Check if pickup was created successfully
+            if (isset($responseData['pickup_id'])) {
+                // Get the actual pickup time from Delhivery's response
+                $actualPickupTime = $responseData['pickup_time'] ?? $pickupTime;
+                $actualPickupDate = $responseData['pickup_date'] ?? $pickupDate;
+                
+                // Check if Delhivery changed the pickup time
+                if ($actualPickupTime != $pickupTime || $actualPickupDate != $pickupDate) {
+                    Log::warning('Pickup time adjusted by Delhivery', [
+                        'requested_time' => $pickupTime,
+                        'actual_time' => $actualPickupTime,
+                        'requested_date' => $pickupDate,
+                        'actual_date' => $actualPickupDate,
+                        'pickup_id' => $responseData['pickup_id']
                     ]);
-                } else {
-                    $errorMsg = $responseData['message'] ?? 'Pickup request failed';
-                    if (isset($responseData['errors'])) {
-                        $errorMsg .= ': ' . json_encode($responseData['errors']);
-                    }
+                }
 
-                    return response()->json([
-                        'success' => false,
-                        'message' => $errorMsg,
-                        'data' => $responseData
-                    ], 400);
+                // UPDATE ORDERS WITH PICKUP DETAILS
+                $updated = Order::whereIn('id', $orderIds)
+                    ->update([
+                        'pick_up_request_added' => 1, // Changed to 1 (integer)
+                        'pickup_id' => $responseData['pickup_id'],
+                        'pickup_scheduled_date' => $actualPickupDate,
+                        'pickup_scheduled_time' => $actualPickupTime
+                    ]);
+
+                // Log the update result
+                Log::info('Orders updated with pickup details', [
+                    'updated_count' => $updated,
+                    'order_ids' => $orderIds,
+                    'pickup_id' => $responseData['pickup_id']
+                ]);
+
+                // Verify the update
+                $updatedOrders = Order::whereIn('id', $orderIds)->get();
+                Log::info('Verification of updated orders', [
+                    'orders' => $updatedOrders->toArray()
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pickup request created successfully',
+                    'count' => count($waybills),
+                    'pickup_id' => $responseData['pickup_id'],
+                    'pickup_location_name' => $responseData['pickup_location_name'] ?? null,
+                    'incoming_center_name' => $responseData['incoming_center_name'] ?? null,
+                    'requested_pickup_time' => $pickupTime,
+                    'actual_pickup_time' => $actualPickupTime,
+                    'requested_pickup_date' => $pickupDate,
+                    'actual_pickup_date' => $actualPickupDate,
+                    'data' => $responseData
+                ]);
+            } 
+            // Handle success response with 'status' field
+            elseif (isset($responseData['status']) && $responseData['status'] === 'success') {
+                Order::whereIn('id', $orderIds)
+                    ->update([
+                        'pick_up_request_added' => 1,
+                        'pickup_id' => $responseData['pickup_id'] ?? null,
+                    ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pickup request created successfully',
+                    'count' => count($waybills),
+                    'pickup_id' => $responseData['pickup_id'] ?? null,
+                    'data' => $responseData
+                ]);
+            } 
+            // Handle unexpected success response
+            else {
+                Log::warning('Unexpected success response format', [
+                    'response' => $responseData
+                ]);
+
+                // Still consider it successful if status is 201 (Created)
+                Order::whereIn('id', $orderIds)
+                    ->update([
+                        'pick_up_request_added' => 1,
+                        'pickup_id' => $responseData['pickup_id'] ?? null,
+                    ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pickup request created (unexpected response format)',
+                    'count' => count($waybills),
+                    'data' => $responseData
+                ]);
+            }
+        }
+
+        // Handle error responses
+        $status = $response->status();
+        $errorMessage = $this->handleErrorResponse($response, $status);
+
+        return response()->json([
+            'success' => false,
+            'message' => $errorMessage,
+            'status_code' => $status,
+            'response_body' => $response->body()
+        ], $status);
+
+    } catch (\Exception $e) {
+        Log::error('Pickup Request Error', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while creating pickup request: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+// Add this helper method to your controller
+private function handleErrorResponse($response, $status)
+{
+    $errorMessage = 'Pickup request failed';
+    $responseBody = $response->body();
+    
+    try {
+        $errorData = json_decode($responseBody, true);
+        
+        if ($errorData) {
+            if (isset($errorData['message'])) {
+                $errorMessage = $errorData['message'];
+            } elseif (isset($errorData['error'])) {
+                $errorMessage = $errorData['error'];
+            } elseif (isset($errorData['errors'])) {
+                if (is_array($errorData['errors'])) {
+                    $errorMessage = implode(', ', $errorData['errors']);
+                } else {
+                    $errorMessage = $errorData['errors'];
                 }
             }
-
-            $status = $response->status();
-            $errorMessage = $this->handleErrorResponse($response, $status);
-
-            return response()->json([
-                'success' => false,
-                'message' => $errorMessage,
-                'status_code' => $status
-            ], $status);
-        } catch (\Exception $e) {
-            Log::error('Pickup Request Error', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
+            
+            if (isset($errorData['status'])) {
+                $errorMessage .= ' (Status: ' . $errorData['status'] . ')';
+            }
+        } else {
+            $errorMessage = $responseBody ?: 'Unknown error occurred';
         }
+    } catch (\Exception $e) {
+        Log::error('Error parsing Delhivery error response', [
+            'error' => $e->getMessage(),
+            'response_body' => $responseBody
+        ]);
     }
-
-    // ✅ ADD HELPER METHOD FOR ERROR HANDLING
-    private function handleErrorResponse($response, $status)
-    {
-        $body = $response->body();
-        $json = json_decode($body, true);
-
-        if ($json && isset($json['message'])) {
-            return $json['message'];
-        }
-
-        switch ($status) {
-            case 400:
-                return 'Bad request: ' . $body;
-            case 401:
-                return 'Authentication failed. Please check your API token.';
-            case 422:
-                $errors = json_decode($body, true);
-                if (isset($errors['errors'])) {
-                    $messages = [];
-                    foreach ($errors['errors'] as $field => $fieldErrors) {
-                        $messages[] = $field . ': ' . implode(', ', $fieldErrors);
-                    }
-                    return 'Validation errors: ' . implode('; ', $messages);
-                }
-                return 'Validation error: ' . $body;
-            default:
-                return 'Failed to create pickup request: ' . $body;
-        }
+    
+    switch ($status) {
+        case 400:
+            $errorMessage = 'Bad Request: ' . $errorMessage;
+            break;
+        case 401:
+            $errorMessage = 'Authentication failed. Please check API token.';
+            break;
+        case 403:
+            $errorMessage = 'Access forbidden. Please check your permissions.';
+            break;
+        case 404:
+            $errorMessage = 'Endpoint not found. Please check the URL.';
+            break;
+        case 422:
+            $errorMessage = 'Validation error: ' . $errorMessage;
+            break;
+        case 429:
+            $errorMessage = 'Rate limit exceeded. Please try again later.';
+            break;
+        case 500:
+            $errorMessage = 'Delhivery server error. Please try again later.';
+            break;
     }
+    
+    return $errorMessage;
+}
 }

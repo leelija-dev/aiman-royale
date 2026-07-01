@@ -511,32 +511,18 @@ class UserController extends Controller implements HasMiddleware
                     \Log::info('Order is paid. Processing refund...');
 
                     try {
-                        // ✅ FIX: Use the actual Cashfree order reference from the order
-                        // If cashfree_order_ref is not set, try to get it from the transaction_id
+                        
                         $cashfreeOrderRef = $order->cashfree_order_ref;
 
                         if (!$cashfreeOrderRef) {
-                            // Try to generate it from the created_at timestamp
                             $timestamp = strtotime($order->created_at);
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . $timestamp;
 
-                            // Check if this is the correct one by querying Cashfree
+                        
                             \Log::info('Generated Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
 
-                        // ✅ If you have the transaction_id, use it to find the correct order reference
-                        // From your logs, the transaction_id is 2211686007
-                        // But the order reference is CF_195_1782729631
-
-                        // ✅ Let's check if we have the correct reference from the successful refund
-                        // The successful refund used: CF_195_1782729631
-                        // Let's try to use that
-
-                        // ✅ Use the correct reference from your successful refund
-                        // Based on your logs, the correct reference is CF_195_1782729631
-                        // But this may vary per order, so we need to store it properly
-
-                        // If the order doesn't have cashfree_order_ref, try to get it from refunds table
+                       
                         if (!$cashfreeOrderRef) {
                             $existingRefund = Refund::where('order_id', $order->id)->first();
                             if ($existingRefund && isset($existingRefund->refund_data['order_id'])) {
@@ -547,9 +533,7 @@ class UserController extends Controller implements HasMiddleware
 
                         // If still not found, use a fallback based on the transaction_id
                         if (!$cashfreeOrderRef) {
-                            // Since we know the transaction_id is 2211686007 for order 195
-                            // But the order reference is CF_195_1782729631
-                            // We'll use the format that worked before
+                            
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . strtotime($order->created_at);
                             \Log::info('Using fallback Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
