@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
+use App\Http\Controllers\Api\ReturnOrderController;
 use App\Http\Controllers\Web\RefundController;
 
 // Public routes (accessible without authentication)
@@ -56,6 +57,9 @@ Route::view('/addresses', 'web.addresses');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
+
+    Route::post('/refund/{orderId}', [ReturnOrderController::class, 'store'])
+        ->name('web.return.order');
 });
 
 // Authenticated routes (require login)

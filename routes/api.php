@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\ReturnOrderController;
 
 Route::prefix('blog')->group(function () {
     Route::get('/posts', [BlogApiController::class, 'posts']);
@@ -43,6 +44,11 @@ Route::prefix('faqs')->group(function () {
     Route::get('/category/{categoryId}', [FaqController::class, 'getFaqUsingCategory']);
     Route::get('/{faqId}', [FaqController::class, 'getFaqsUsingId']);
     Route::get('/products/{productSlug}', [FaqController::class, 'getFaqsUsingproductId']);
+});
+
+Route::prefix('returns')->group(function () {
+    Route::post('/', [ReturnOrderController::class, 'store'])->name('api.returns.store');
+    Route::get('/{reverseOrder}', [ReturnOrderController::class, 'show'])->name('api.returns.show');
 });
 
 // Review related API routes

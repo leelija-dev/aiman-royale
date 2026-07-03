@@ -397,20 +397,29 @@
                                <!-- Order Actions -->
 
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                                   @if($ord->order_status == 'delivered')
+                                   @php $hasActiveReturn = isset($ord->active_return_requests_count) && $ord->active_return_requests_count > 0; @endphp
+                                   @if($ord->order_status == 'delivered' && !$hasActiveReturn)
                                     <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
+                                   </button>
+                                   @elseif($ord->order_status == 'delivered' && $hasActiveReturn)
+                                   <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
+                                       <i class="fas fa-undo mr-2"></i>Return Requested
                                    </button>
                                    @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']))
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
                                        onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
                                    </button>
-                                   @elseif(in_array($ord->order_status, ['delivered']))
+                                   @elseif(in_array($ord->order_status, ['delivered']) && !$hasActiveReturn)
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
+                                   </button>
+                                   @elseif(in_array($ord->order_status, ['delivered']) && $hasActiveReturn)
+                                   <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
+                                       <i class="fas fa-undo mr-2"></i>Return Requested
                                    </button>
                                    @else
                                    <button class="px-4 py-2 bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
@@ -772,14 +781,14 @@
        }
 
        // Return Order Function
-       function returnOrder(orderId, currentStatus) {
+       function returnOrder(event, orderId, currentStatus) {
            // Use Swal or custom confirm dialog
            if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
                return;
            }
 
            // Get the button element
-           const button = event.currentTarget || event.target;
+           const button = (event && (event.currentTarget || event.target)) || document.activeElement;
            const originalText = button.innerHTML;
 
            // Show loading state
@@ -795,7 +804,7 @@
                        'Accept': 'application/json', // Important: Tell server we want JSON
                    },
                    body: JSON.stringify({
-                       reason: 'Customer requested return'
+                       return_reason: 'Customer requested return'
                    })
                })
                .then(response => {

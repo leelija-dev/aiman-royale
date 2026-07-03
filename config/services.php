@@ -34,6 +34,13 @@ return [
         'sandbox' => env('DELHIVERY_SANDBOX', true),
         'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse'),
         'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE', '110001'),
+        'return_name' => env('DELHIVERY_RETURN_NAME', env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse')),
+        'return_add' => env('DELHIVERY_RETURN_ADDRESS', env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse')),
+        'return_city' => env('DELHIVERY_RETURN_CITY', 'Default City'),
+        'return_state' => env('DELHIVERY_RETURN_STATE', 'Default State'),
+        'return_pin' => env('DELHIVERY_RETURN_PINCODE', env('DELHIVERY_PICKUP_PINCODE', '110001')),
+        'return_phone' => env('DELHIVERY_RETURN_PHONE', '0000000000'),
+        'shipping_mode' => env('DELHIVERY_SHIPPING_MODE', 'Express'),
     ],
 
     'ses' => [

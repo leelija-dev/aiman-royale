@@ -246,7 +246,10 @@ class UserController extends Controller implements HasMiddleware
         $id = base64_decode($id);
         $user = User::findOrFail($id);
         $query = Order::where('user_id', $id)
-            ->with('orderProducts.product');
+            ->with('orderProducts.product')
+            ->withCount(['reverseOrders as active_return_requests_count' => function ($q) {
+                $q->whereIn('status', ['ready_for_pickup', 'in_transit', 'out_for_delivery']);
+            }]);
 
         //  Search
 

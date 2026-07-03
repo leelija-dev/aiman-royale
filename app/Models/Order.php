@@ -44,4 +44,9 @@ class Order extends Model
     {
         return $this->hasMany(Refund::class, 'order_id');
     }
+
+    public function reverseOrders(): HasMany
+    {
+        return $this->hasMany(ReverseOrder::class, 'order_id');
+    }
 }
