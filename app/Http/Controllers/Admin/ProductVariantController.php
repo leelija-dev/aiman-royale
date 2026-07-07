@@ -338,6 +338,7 @@ class ProductVariantController extends Controller
     public function update(Request $request, ProductVariant $productVariant)
     {
    
+    dd($request);
         // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -351,6 +352,7 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
+        
 
         $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
         $data['discount_price'] = $discount_price;
