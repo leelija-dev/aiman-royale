@@ -149,7 +149,7 @@ class ProductVariantController extends Controller
             'stock' => 'required|integer|min:0',
             'video_url' => 'nullable|url|max:500',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:5120',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
@@ -337,6 +337,7 @@ class ProductVariantController extends Controller
 
     public function update(Request $request, ProductVariant $productVariant)
     {
+   
         // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -346,7 +347,7 @@ class ProductVariantController extends Controller
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
             'images' => 'nullable|array',
-            'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:5120',
+            'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
@@ -411,9 +412,10 @@ class ProductVariantController extends Controller
                 }
             }
         }
-
+        
         // Store new images to Cloudinary
         if ($request->hasFile('images')) {
+        //    dd($request->file('images'));
             foreach ($request->file('images') as $image) {
                 // Upload to Cloudinary
                 $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$productVariant->id}", [
