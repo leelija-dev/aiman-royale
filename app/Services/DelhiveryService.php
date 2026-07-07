@@ -614,27 +614,31 @@ class DelhiveryService
         $shipmentData = [
             'shipments' => [
                 [
-                    'name' => config('services.delhivery.return_name'),
-                    'add' => config('services.delhivery.return_add'),
-                    'city' => config('services.delhivery.return_city'),
-                    'state' => config('services.delhivery.return_state'),
+                    // PICKUP LOCATION: Where Delhivery picks up from (Customer's address)
+                    'name' => $reverseOrderData['return_contact_name'] ?? 'Customer',
+                    'add' => trim(($reverseOrderData['return_address_1'] ?? '') . ' ' . ($reverseOrderData['return_address_2'] ?? '')),
+                    'city' => $reverseOrderData['return_city'] ?? '',
+                    'state' => $reverseOrderData['return_state'] ?? '',
                     'country' => 'India',
-                    'pin' => config('services.delhivery.return_pin'),
-                    'phone' => config('services.delhivery.return_phone'),
+                    'pin' => $reverseOrderData['return_pincode'] ?? '',
+                    'phone' => $reverseOrderData['return_phone_no'] ?? '',
                     'order' => (string) ($reverseOrderData['reverse_order_number'] ?? $reverseOrderData['order_id'] ?? ''),
                     'payment_mode' => 'Prepaid',
                     'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
                     'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
                     'declared_value' => (float) ($reverseOrderData['declared_value'] ?? $reverseOrderData['total_amount'] ?? 0),
                     'cod_amount' => 0,
+                    // PICKUP LOCATION: Customer's address as object for reverse shipment
                     'pickup_location' => [
                         'name' => $reverseOrderData['return_contact_name'] ?? 'Customer',
                         'add' => trim(($reverseOrderData['return_address_1'] ?? '') . ' ' . ($reverseOrderData['return_address_2'] ?? '')),
                         'city' => $reverseOrderData['return_city'] ?? '',
                         'state' => $reverseOrderData['return_state'] ?? '',
+                        'country' => 'India',
                         'pin' => $reverseOrderData['return_pincode'] ?? '',
                         'phone' => $reverseOrderData['return_phone_no'] ?? '',
                     ],
+                    // RETURN/WAREHOUSE ADDRESS: Where Delhivery delivers to (Your warehouse)
                     'return_name' => config('services.delhivery.return_name'),
                     'return_add' => config('services.delhivery.return_add'),
                     'return_city' => config('services.delhivery.return_city'),

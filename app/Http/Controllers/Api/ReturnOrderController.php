@@ -173,6 +173,12 @@ class ReturnOrderController extends Controller
                 throw new \Exception($shipmentResult['message'] ?? 'Delhivery reverse shipment creation failed');
             }
 
+            $reverseOrder->update([
+                'waybill' => $shipmentResult['waybill'] ?? null,
+                'delhivery_response' => $shipmentResult['result'] ?? null,
+                'awb_status' => 'generated',
+            ]);
+
             DB::commit();
 
             return response()->json([

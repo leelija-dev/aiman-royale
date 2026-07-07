@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PickupRequestController;
 use App\Http\Controllers\Admin\DelhiveryController;
 use App\Http\Controllers\Admin\ShippingLabelController;
+use App\Http\Controllers\Admin\ReturnOrder;
 
 
 use App\Http\Controllers\Admin\ServicesController;
@@ -338,7 +339,6 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
             Route::get('/', [ContactController::class, 'index'])->name('admin.contact');
             Route::get('/{id}', [ContactController::class, 'show'])->name('admin.contact.show');
-            
         });
 
 
@@ -370,7 +370,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         });
 
 
-       
+
 
 
         // routes/admin.php
@@ -390,7 +390,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
 
-        
+
 
 
         // Stock Management Routes
@@ -499,12 +499,32 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             ->name('admin.orders.shipping-label');
     });
 
-   // Shipping Label Routes
-Route::get('/shipping-label', [ShippingLabelController::class, 'index'])->name('shipping-label.index');
-Route::get('/shipping-label/generate', [ShippingLabelController::class, 'generateLabel'])->name('shipping-label.generate');
-Route::get('/shipping-label/bulk', [ShippingLabelController::class, 'generateBulkLabels'])->name('shipping-label.bulk');
-Route::get('/shipping-label/download', [ShippingLabelController::class, 'downloadPdf'])->name('shipping-label.download');
-Route::get('/shipping-label/preview', [ShippingLabelController::class, 'previewLabel'])->name('shipping-label.preview');
-Route::get('/shipping-label/debug', [ShippingLabelController::class, 'debugApi'])->name('shipping-label.debug');
-Route::get('/shipping-label/direct/{waybill}', [ShippingLabelController::class, 'getPdfDirect'])->name('shipping-label.direct');
+    // Shipping Label Routes
+    Route::get('/shipping-label', [ShippingLabelController::class, 'index'])->name('shipping-label.index');
+    Route::get('/shipping-label/generate', [ShippingLabelController::class, 'generateLabel'])->name('shipping-label.generate');
+    Route::get('/shipping-label/bulk', [ShippingLabelController::class, 'generateBulkLabels'])->name('shipping-label.bulk');
+    Route::get('/shipping-label/download', [ShippingLabelController::class, 'downloadPdf'])->name('shipping-label.download');
+    Route::get('/shipping-label/preview', [ShippingLabelController::class, 'previewLabel'])->name('shipping-label.preview');
+    Route::get('/shipping-label/debug', [ShippingLabelController::class, 'debugApi'])->name('shipping-label.debug');
+    Route::get('/shipping-label/direct/{waybill}', [ShippingLabelController::class, 'getPdfDirect'])->name('shipping-label.direct');
+
+    Route::prefix('return-orders')->group(function () {
+        // List all return orders
+        Route::get('/', [ReturnOrder::class, 'index'])->name('return-orders.index');
+
+        // Create return request
+        Route::post('/create', [ReturnOrder::class, 'create'])->name('return-orders.create');
+
+        // Process refund
+        Route::post('/refund', [ReturnOrder::class, 'refund'])->name('return-orders.refund');
+
+        // Process bulk refund
+        Route::post('/bulk-refund', [ReturnOrder::class, 'bulkRefund'])->name('return-orders.bulk-refund');
+
+        // Get return details
+        Route::get('/details', [ReturnOrder::class, 'details'])->name('return-orders.details');
+
+        // Update return status (webhook)
+        Route::post('/webhook', [ReturnOrder::class, 'webhook'])->name('return-orders.webhook');
+    });
 });
