@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Refund;
+use App\Models\ReverseOrder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +64,8 @@ class CashfreeRefundService
         string $refundSpeed = 'STANDARD',
         ?int $internalOrderId = null
     ): array {
+
+        
         try {
             // Validate credentials
             if (!$this->clientId || !$this->clientSecret) {
@@ -215,12 +218,14 @@ class CashfreeRefundService
                 'processed_at' => $status === Refund::STATUS_SUCCESS ? now() : null,
             ]);
 
+            ReverseOrder::where('order_id', $orderId)->update(['refund_request_added' => true]);
+
             // Update order status
             $order = Order::find($orderId);
             if ($order) {
                 $order->update([
-                    'order_status' => 'refunded',
-                    'refund_status' => $status === Refund::STATUS_SUCCESS ? 'completed' : 'processing',
+                    'order_status' => 'returned',
+                    // 'refund_status' => $status === Refund::STATUS_SUCCESS ? 'completed' : 'processing',
                 ]);
             }
 

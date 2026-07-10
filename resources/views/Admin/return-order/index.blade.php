@@ -529,7 +529,9 @@
     }
     // Submit refund
     function submitRefund() {
+        
         const orderId = document.getElementById('refund_order_id').value;
+        console.log('Submitting refund...', orderId);
         const amount = document.getElementById('refund_amount').value;
         const reason = document.getElementById('refund_reason').value;
         const comments = document.getElementById('refund_comments').value;
