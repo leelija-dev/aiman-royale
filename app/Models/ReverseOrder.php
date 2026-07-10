@@ -16,9 +16,9 @@ class ReverseOrder extends Model
         'order_id',
         'requested_by_user_id',
         'reverse_order_number',
-        'waybill',  // ✅ Add this
-        'delhivery_response',  // ✅ Add this
-        'awb_status',  // ✅ Add this
+        'waybill', 
+        'delhivery_response',  
+        'awb_status',  
         'status',
         'return_contact_name',
         'return_phone_no',
@@ -39,11 +39,15 @@ class ReverseOrder extends Model
     ];
 
     // Relationship with order
-    public function order()
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
+     public function user()
+    {
+        return $this->hasOneThrough(User::class, Order::class, 'id', 'id', 'order_id', 'user_id');
+    }
     // Relationship with reverse order items
     public function items(): HasMany
     {
@@ -84,4 +88,9 @@ class ReverseOrder extends Model
     {
         return $this->belongsTo(User::class, 'requested_by_user_id');
     }
+
+    //  public function refunds(): HasMany
+    // {
+    //     return $this->hasMany(Refund::class, 'reverse_order_id');
+    // }
 }

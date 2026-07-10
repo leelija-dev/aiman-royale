@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Refund extends Model
 {
@@ -50,7 +52,7 @@ class Refund extends Model
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     /**
@@ -262,5 +264,10 @@ class Refund extends Model
         return (float) $this->refunds()
             ->where('status', Refund::STATUS_SUCCESS)
             ->sum('amount');
+    }
+
+     public function reverseOrder(): BelongsTo
+    {
+        return $this->belongsTo(ReverseOrder::class, 'reverse_order_id');
     }
 }

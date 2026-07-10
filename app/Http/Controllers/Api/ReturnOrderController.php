@@ -222,4 +222,105 @@ class ReturnOrderController extends Controller
 
         return $number;
     }
+
+    public function getDetails(Request $request)
+    {
+        try {
+            $orderId = $request->query('order_id');
+// dd($orderId);
+            if (!$orderId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order ID is required'
+                ], 400);
+            }
+
+            // Find the reverse order - NO 'reverseOrder' relationship here
+            // Just load the related order and refunds
+            $returnOrder = ReverseOrder::with(['order'])->find($orderId);
+            // dd($returnOrder);
+
+            if (!$returnOrder) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Return order not found'
+                ], 404);
+            }
+
+            // Get the associated order
+            $order = $returnOrder->order;
+
+            // Prepare response data
+            return response()->json([
+                'success' => true,
+                'order' => [
+                    'id' => $returnOrder->id,
+                    'order_id' => $returnOrder->order_id ?? $order->order_id ?? $returnOrder->id,
+                    'waybill_number' => $returnOrder->waybill ?? 'N/A',
+                    'customer_name' => $order->user->name ?? 'N/A',
+                    'total_amount' => $returnOrder->total_amount ?? $order->total_amount ?? 0,
+                    'refund_status' => $returnOrder->refund_status ?? 'pending',
+                    'status' => $returnOrder->status,
+                    'created_at' => $returnOrder->created_at,
+                ],
+                'reverse_order' => [
+                    'id' => $returnOrder->id,
+                    'reverse_order_id' => $returnOrder->reverse_order_id ?? $returnOrder->id,
+                    'status' => $returnOrder->status,
+                    'status_color' => $this->getStatusColor($returnOrder->status),
+                    'waybill' => $returnOrder->waybill,
+                    'return_reason' => $returnOrder->return_reason,
+                    'created_at' => $returnOrder->created_at,
+                    'payload' => $returnOrder->payload,
+                    'delivered_at' => $returnOrder->delivered_at,
+                    'pickup_date' => $returnOrder->pickup_date,
+                ],
+                'refunds' => $returnOrder->refunds ? $returnOrder->refunds->map(function ($refund) {
+                    return [
+                        'id' => $refund->id,
+                        'amount' => $refund->amount,
+                        'reason' => $refund->reason,
+                        'status' => $refund->status,
+                        'transaction_id' => $refund->transaction_id,
+                        'created_at' => $refund->created_at,
+                    ];
+                }) : [],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching return order details: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch order details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get status color for badge
+     */
+    private function getStatusColor($status)
+    {
+        $colors = [
+            'pending' => 'warning',
+            'processing' => 'info',
+            'delivered' => 'success',
+            'completed' => 'success',
+            'failed' => 'danger',
+            'cancelled' => 'secondary',
+            'return_initiated' => 'primary',
+            'pickup_scheduled' => 'info',
+            'picked_up' => 'info',
+            'return_in_transit' => 'warning',
+            'return_delivered' => 'success',
+            'initiated' => 'primary',
+            'approved' => 'success',
+            'rejected' => 'danger',
+            'pickup_assigned' => 'info',
+            'picked' => 'info',
+            'in_transit' => 'warning',
+        ];
+
+        return $colors[$status] ?? 'secondary';
+    }
 }

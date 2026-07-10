@@ -115,11 +115,12 @@
 
                         <tbody>
                             @forelse($orders as $order)
+                        
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="order-checkbox" value="{{ $order->id }}"
-                                        data-waybill="{{ $order->waybill_number }}"
-                                        data-amount="{{ $order->total_amount }}"
+                                    <input type="checkbox" class="order-checkbox" value="{{ $order->order_id }}"
+                                        data-waybill="{{ $order->waybill }}"
+                                        data-amount="{{ $order->order->total_amount ?? 0 }}"
                                         data-order-id="{{ $order->order_id }}"
                                         {{ $order->refund_status === 'refunded' ? 'disabled' : '' }}>
                                 </td>
@@ -127,31 +128,23 @@
                                     <div class="d-flex flex-column">
                                         <h6 class="mb-0 text-sm">Order #{{ $order->order_id }}</h6>
                                         <small class="text-muted">Waybill: {{ $order->waybill }}</small>
-                                        <small class="text-muted">{{ $order->customer_name ?? 'N/A' }}</small>
+                                        <small class="text-muted">{{ $order->order->user->name ?? 'N/A' }}</small>
                                     </div>
                                 </td>
                                 <td>
-                                    @if($order->order_id)
                                     <div class="d-flex flex-column">
-                                        <span class="text-sm">{{ $order->reverse_order_number }}</span>
+                                        <span class="text-sm">{{ $order->reverse_order_id ?? $order->id }}</span>
                                         <small class="text-muted">AWB: {{ $order->waybill ?? 'N/A' }}</small>
                                         <small class="text-muted">{{ $order->created_at->format('M d, Y') }}</small>
                                     </div>
-                                    @else
-                                    <span class="text-muted">Not created</span>
-                                    @endif
                                 </td>
                                 <td>
-                                    <span class="fw-bold">₹{{ number_format($order->order->total_amount, 2) }}</span>
+                                    <span class="fw-bold">₹{{ number_format($order->order->total_amount ?? 0, 2) }}</span>
                                 </td>
                                 <td>
-                                    @if($order->reverseOrder)
-                                    <span class="badge bg-{{ $order->reverseOrder->status_color ?? 'secondary' }}">
-                                        {{ ucfirst(str_replace('_', ' ', $order->reverseOrder->status ?? 'pending')) }}
+                                    <span class="badge bg-{{ $order->status_color ?? 'secondary' }}">
+                                        {{ ucfirst(str_replace('_', ' ', $order->status ?? 'pending')) }}
                                     </span>
-                                    @else
-                                    <span class="badge bg-secondary">Not Initiated</span>
-                                    @endif
                                 </td>
                                 <td>
                                     @php
@@ -172,40 +165,28 @@
                                 <td class="align-middle text-center">
                                     <div class="d-flex justify-content-center gap-1">
                                         <!-- View Details Button -->
-                                        @if($order->reverseOrder)
-                                        <button type="button" class="btn btn-sm btn-info" 
-                                            onclick="viewReturnDetails({{ $order->id }})" title="View Details">
+                                        <button type="button" class="btn btn-sm btn-info"
+                                            onclick="viewReturnDetails({{ $order->order_id }})" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        @endif
 
-                                        <!-- Refund Button - Show in all cases except when already refunded -->
+                                        <!-- Refund Button -->
                                         @if($order->refund_status !== 'refunded')
-                                            @if($order->reverseOrder)
-                                                <!-- If reverse order exists, show regular refund button -->
-                                                <button type="button" class="btn btn-sm btn-success" 
-                                                    onclick="showRefundModal({{ $order->id }}, '{{ $order->waybill_number }}', {{ $order->total_amount }})" 
-                                                    title="Process Refund">
-                                                    <i class="fas fa-coins"></i> Refund
-                                                </button>
-                                            @else
-                                                <!-- If no reverse order, show disabled button with tooltip -->
-                                                <button type="button" class="btn btn-sm btn-secondary" disabled 
-                                                    title="Return order not created yet">
-                                                    <i class="fas fa-coins"></i> Refund
-                                                </button>
-                                            @endif
+                                        <button type="button" class="btn btn-sm btn-success"
+                                            onclick="showRefundModal({{ $order->id }}, '{{ $order->waybill }}', {{ $order->order->total_amount ?? 0 }})"
+                                            title="Process Refund">
+                                            <i class="fas fa-coins"></i> Refund
+                                        </button>
                                         @else
-                                            <!-- Already refunded -->
-                                            <span class="text-success small">
-                                                <i class="fas fa-check-circle"></i> Refunded
-                                            </span>
+                                        <span class="text-success small">
+                                            <i class="fas fa-check-circle"></i> Refunded
+                                        </span>
                                         @endif
 
-                                        <!-- Auto Refund Button - Only for delivered returns that are not refunded -->
-                                        @if($order->reverseOrder && $order->reverseOrder->status === 'delivered' && $order->refund_status !== 'refunded')
-                                        <button type="button" class="btn btn-sm btn-warning" 
-                                            onclick="processAutoRefund({{ $order->id }})" 
+                                        <!-- Auto Refund Button -->
+                                        @if($order->status === 'delivered' && $order->refund_status !== 'refunded')
+                                        <button type="button" class="btn btn-sm btn-warning"
+                                            onclick="processAutoRefund({{ $order->id }})"
                                             title="Auto Refund">
                                             <i class="fas fa-robot"></i>
                                         </button>
@@ -251,6 +232,7 @@
                 <form id="refundForm">
                     @csrf
                     <input type="hidden" id="refund_order_id" name="order_id">
+                    <input type="hidden" id="real_order_id" name="real_order_id">
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Order</label>
@@ -454,39 +436,97 @@
     }
 
     // Show refund modal with order details
-    function showRefundModal(orderId, waybill, amount) {
-        // Get reverse order details
-        fetch(`{{ route("return-orders.details") }}?order_id=${orderId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const reverseOrder = data.reverse_order;
-                    document.getElementById('refund_order_id').value = orderId;
-                    document.getElementById('refund_order_display').textContent = `Order #${data.order.order_id}`;
-                    document.getElementById('refund_waybill').textContent = waybill;
-                    document.getElementById('refund_reverse_order').textContent = reverseOrder ? reverseOrder.reverse_order_id : 'N/A';
-                    document.getElementById('refund_amount').value = amount;
-                    document.getElementById('refund_amount').max = amount;
+    // function showRefundModal(orderId, waybill, amount) {
+    //     // Get reverse order details
+    //     fetch(`{{ route("return-orders.details") }}?order_id=${orderId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 const reverseOrder = data.reverse_order;
+    //                 document.getElementById('refund_order_id').value = orderId;
+    //                 document.getElementById('refund_order_display').textContent = `Order #${data.order.order_id}`;
+    //                 document.getElementById('refund_waybill').textContent = waybill;
+    //                 document.getElementById('refund_reverse_order').textContent = reverseOrder ? reverseOrder.reverse_order_id : 'N/A';
+    //                 document.getElementById('refund_amount').value = amount;
+    //                 document.getElementById('refund_amount').max = amount;
 
-                    const modal = new bootstrap.Modal(document.getElementById('refundModal'));
-                    modal.show();
+    //                 const modal = new bootstrap.Modal(document.getElementById('refundModal'));
+    //                 modal.show();
+    //             }
+    //         })
+    //         .catch(error => {
+    //             // Fallback: Show modal without reverse order details
+    //             document.getElementById('refund_order_id').value = orderId;
+    //             document.getElementById('refund_order_display').textContent = `Order #${orderId}`;
+    //             document.getElementById('refund_waybill').textContent = waybill;
+    //             document.getElementById('refund_reverse_order').textContent = 'Loading...';
+    //             document.getElementById('refund_amount').value = amount;
+    //             document.getElementById('refund_amount').max = amount;
+
+    //             const modal = new bootstrap.Modal(document.getElementById('refundModal'));
+    //             modal.show();
+    //             console.error('Error fetching reverse order details:', error);
+    //         });
+    // }
+
+    function showRefundModal(orderId, waybill, amount) {
+        console.log('Opening refund modal for order:', orderId);
+
+        // Use the correct API URL
+        const url = `/api/return-orders/details?order_id=${orderId}`;
+
+        fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
                 }
             })
-            .catch(error => {
-                // Fallback: Show modal without reverse order details
-                document.getElementById('refund_order_id').value = orderId;
-                document.getElementById('refund_order_display').textContent = `Order #${orderId}`;
-                document.getElementById('refund_waybill').textContent = waybill;
-                document.getElementById('refund_reverse_order').textContent = 'Loading...';
-                document.getElementById('refund_amount').value = amount;
-                document.getElementById('refund_amount').max = amount;
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Order details response:', data);
+
+                if (data.success) {
+                    document.getElementById('refund_order_id').value = data.order.order_id;
+                    document.getElementById('refund_order_display').textContent = data.order ? `Order #${data.order.order_id}` : `Order #${data.order.order_id}`;
+                    document.getElementById('refund_waybill').textContent = data.order?.waybill_number || waybill || 'N/A';
+                    document.getElementById('refund_reverse_order').textContent = data.reverse_order?.reverse_order_id || 'N/A';
+                    document.getElementById('refund_amount').value = data.order?.total_amount || amount || 0;
+                    document.getElementById('refund_amount').max = data.order?.total_amount || amount || 0;
+                } else {
+                    // Fallback
+                    document.getElementById('refund_order_id').value = orderId;
+                    document.getElementById('refund_order_display').textContent = `Order #${orderId}`;
+                    document.getElementById('refund_waybill').textContent = waybill || 'N/A';
+                    document.getElementById('refund_reverse_order').textContent = 'Not available';
+                    document.getElementById('refund_amount').value = amount || 0;
+                    document.getElementById('refund_amount').max = amount || 0;
+                }
 
                 const modal = new bootstrap.Modal(document.getElementById('refundModal'));
                 modal.show();
-                console.error('Error fetching reverse order details:', error);
+            })
+            .catch(error => {
+                console.error('Error fetching details:', error);
+
+                // Show modal with basic info
+                document.getElementById('refund_order_id').value = orderId;
+                document.getElementById('refund_order_display').textContent = `Order #${orderId}`;
+                document.getElementById('refund_waybill').textContent = waybill || 'N/A';
+                document.getElementById('refund_reverse_order').textContent = 'Unable to load';
+                document.getElementById('refund_amount').value = amount || 0;
+                document.getElementById('refund_amount').max = amount || 0;
+
+                const modal = new bootstrap.Modal(document.getElementById('refundModal'));
+                modal.show();
             });
     }
-
     // Submit refund
     function submitRefund() {
         const orderId = document.getElementById('refund_order_id').value;
@@ -539,6 +579,7 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Refund response:', data);
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
@@ -703,6 +744,7 @@
         fetch(`{{ route("return-orders.details") }}?order_id=${orderId}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Return details response:', data);
                 if (data.success) {
                     document.getElementById('returnDetailsContent').innerHTML = generateReturnDetailsHTML(data);
                 } else {

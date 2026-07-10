@@ -50,6 +50,11 @@ Route::prefix('returns')->group(function () {
     Route::post('/', [ReturnOrderController::class, 'store'])->name('api.returns.store');
     Route::get('/{reverseOrder}', [ReturnOrderController::class, 'show'])->name('api.returns.show');
 });
+// Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails'])->name('return-orders.details');
+
+Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails']);
+Route::post('/return-orders/refund', [ReturnOrderController::class, 'processRefund']);
+Route::post('/return-orders/bulk-refund', [ReturnOrderController::class, 'bulkRefund']);
 
 // Review related API routes
 Route::prefix('reviews')->group(function () {
