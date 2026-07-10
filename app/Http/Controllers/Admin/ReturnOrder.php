@@ -22,7 +22,7 @@ class ReturnOrder extends Controller
 
     public function index()
     {
-        $orders = ReverseOrder::with('order', 'items', 'requestedBy')->get();
+        $orders = ReverseOrder::with('order', 'items', 'requestedBy')->where('refund_request_added', false)->get();
         // dd($orders);
         return view('admin.return-order.index', compact('orders'));
     }
