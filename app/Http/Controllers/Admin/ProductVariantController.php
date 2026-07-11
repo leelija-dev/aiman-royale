@@ -53,7 +53,7 @@ class ProductVariantController extends Controller
         $data = $query->orderBy('product_id')->orderBy('color')->orderBy('size')->paginate(15);
 
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
 
         return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes'));
@@ -67,7 +67,7 @@ class ProductVariantController extends Controller
     public function create()
     {
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
 
         return view('Admin.product-variant.create', compact('products', 'colors', 'sizes'));
@@ -140,10 +140,11 @@ class ProductVariantController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'size' => 'required|string|max:20',
-            'color' => 'required|string|max:50',
+            'color' => 'required',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -153,6 +154,9 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
+
+        $data['color_code'] = Color::where('id', $data['color'])->value('code');
+        $data['color'] = Color::where('id', $data['color'])->value('name');
 
         $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
         $data['discount_price'] = $discount_price;
@@ -168,7 +172,7 @@ class ProductVariantController extends Controller
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
         }
-
+// dd($data);
         $variant = ProductVariant::create($data);
         $product = Product::find($data['product_id']);
         $product->update([
@@ -234,7 +238,7 @@ class ProductVariantController extends Controller
     public function edit(ProductVariant $productVariant)
     {
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->pluck('name', 'code');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
 
         return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes'));
@@ -337,13 +341,12 @@ class ProductVariantController extends Controller
 
     public function update(Request $request, ProductVariant $productVariant)
     {
-   
-   
+        // dd($request->all());
         // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'size' => 'nullable|string|max:20',
-            'color' => 'nullable|string|max:50',
+            'color_code' => 'nullable|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
@@ -352,7 +355,11 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-        
+
+        $color = Color::Where('code', $data['color_code'])->select('name')->first();
+        if ($color) {
+            $data['color'] = $color->name;
+        }
 
         $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
         $data['discount_price'] = $discount_price;
@@ -376,7 +383,8 @@ class ProductVariantController extends Controller
             'price'           => $request->price,
             'discount_price'  => $discount_price,
             'discount'        => $request->discount,
-            'color'           => $request->color,
+            'color'           => $color ? $color->name : null,
+            'color_code'      => $data['color_code'],
             'size'            => $request->size,
             'video_url'       => $request->video_url,
         ]);
@@ -414,10 +422,10 @@ class ProductVariantController extends Controller
                 }
             }
         }
-        
+
         // Store new images to Cloudinary
         if ($request->hasFile('images')) {
-        //    dd($request->file('images'));
+            //    dd($request->file('images'));
             foreach ($request->file('images') as $image) {
                 // Upload to Cloudinary
                 $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$productVariant->id}", [

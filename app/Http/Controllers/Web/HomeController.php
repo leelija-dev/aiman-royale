@@ -67,6 +67,7 @@ class HomeController extends Controller
                 'product_variants.id as variant_id',
                 'product_variants.size',
                 'product_variants.color',
+                'product_variants.color_code',
                 'product_variants.price',
                 'product_variants.discount_price as price_after_discount',
                 'product_variants.stock',

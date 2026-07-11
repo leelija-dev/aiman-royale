@@ -28,6 +28,7 @@ class ProductVariant extends Model
         'product_id',
         'size',
         'color',
+        'color_code',
         'sku',
         'price',
         'discount',

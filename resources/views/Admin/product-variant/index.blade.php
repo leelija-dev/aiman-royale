@@ -74,6 +74,7 @@
 
 
 </style>
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
@@ -117,7 +118,7 @@
                             <select name="color" class="form-control" onchange="this.form.submit()">
                                 <option value="">All Colors</option>
                                 @foreach($colors as $color)
-                                <option value="{{ $color }}" {{ request('color') == $color ? 'selected' : '' }}>
+                                <option value="{{ $color->code }}" {{ request('color') == $color->code ? 'selected' : '' }}>
                                     {{ $color }}
                                 </option>
                                 @endforeach
@@ -286,11 +287,12 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="edit_color_{{ $variant->id }}" class="form-label">Color</label>
-                                                            <select class="form-control" id="edit_color_{{ $variant->id }}" name="color">
+                                                            <select class="form-control" id="edit_color_{{ $variant->id }}" name="color_code">
                                                                 <option value="">No Color</option>
                                                                 @foreach($colors as $color)
-                                                                <option value="{{ $color }}" {{ $variant->color == $color ? 'selected' : '' }}>
-                                                                    {{ $color }}
+                                                              
+                                                                <option value="{{ $color->code }}" {{ $variant->color_code == $color->code ? 'selected' : '' }}>
+                                                                    {{ $color->name }} ({{ $color->code }})
                                                                 </option>
                                                                 @endforeach
                                                             </select>
