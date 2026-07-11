@@ -602,7 +602,7 @@
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
-                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
                                 alt="{{ $category->name }}"
                                 class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
 

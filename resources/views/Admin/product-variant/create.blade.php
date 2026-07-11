@@ -93,8 +93,8 @@
                                 <select class="form-control" id="color" name="color">
                                     <option value="" selected hidden>Select Color</option>
                                     @foreach($colors as $color)
-                                    <option value="{{ $color }}" {{ old('color') == $color ? 'selected' : '' }}>
-                                        {{ $color }}
+                                    <option value="{{ $color->id }}" {{ old('color') == $color->id ? 'selected' : '' }}>
+                                        {{ $color->name }}
                                     </option>
                                     @endforeach
                                 </select>

@@ -930,8 +930,9 @@ if ($variant->images && $variant->images->isNotEmpty()) {
 }
 @endphp
                         <button class="color-btn w-10 h-10 rounded-full border-2 {{ $isSelected ? 'border-secondary' : 'border-gray-300' }} transition-all hover:scale-110"
-                            style="background-color: {{ $variant->color }};"
+                            style="background-color: {{ $variant->color_code ?? $variant->color ?? '#CCCCCC' }};"
                             data-color="{{ $variant->color }}"
+                            data-color-code="{{ $variant->color_code }}"
                             data-size="{{ $variant->size }}"
                             data-variant-id="{{ $variant->id }}"
                             data-variant-image="{{ $variantImage }}"
@@ -2462,7 +2463,9 @@ function updateColorOptions(size) {
     colorsForSize.forEach((variant, index) => {
         const colorBtn = document.createElement('button');
         colorBtn.className = `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
-        colorBtn.style.backgroundColor = variant.color;
+        const bgColor = variant.color_code || variant.color || '#CCCCCC';
+        colorBtn.style.backgroundColor = bgColor;
+        // colorBtn.style.backgroundColor = variant.color;
         colorBtn.setAttribute('data-color', variant.color);
         colorBtn.setAttribute('data-size', size);
         colorBtn.setAttribute('data-variant-id', variant.id);
