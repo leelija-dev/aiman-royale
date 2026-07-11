@@ -374,7 +374,7 @@ class ProductVariantController extends Controller
         
 
         if ($existingVariant) {
-            dd($existingVariant);
+            // dd($existingVariant);
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
