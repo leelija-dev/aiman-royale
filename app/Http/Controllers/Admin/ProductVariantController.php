@@ -355,7 +355,7 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-        dd($data);
+        
         $color = Color::Where('code', $data['color_code'])->select('name')->first();
         if ($color) {
             $data['color'] = $color->name;
@@ -371,7 +371,10 @@ class ProductVariantController extends Controller
             ->where('id', '!=', $productVariant->id)
             ->first();
 
+        
+
         if ($existingVariant) {
+            dd($existingVariant);
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
