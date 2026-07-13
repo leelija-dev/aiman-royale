@@ -19,6 +19,10 @@ use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
 use App\Http\Controllers\Api\ReturnOrderController;
 use App\Http\Controllers\Web\RefundController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\GoogleAuthController;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
@@ -228,3 +232,29 @@ Route::middleware(['auth'])->prefix('refunds')->group(function () {
 // Refund Routes
 // Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
 // Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
+
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+
+    $user = User::updateOrCreate([
+        'email' => $googleUser->email,
+    ], [
+        'name' => $googleUser->name,
+        'google_id' => $googleUser->id,
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+});
+
+// Route::get('/auth/google/redirect', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
+
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+Route::post('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('google.disconnect')->middleware('auth');

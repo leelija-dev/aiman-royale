@@ -28,6 +28,64 @@
         background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
         color: white;
     }
+
+    /* Google Button Styles */
+    .google-btn {
+        background: #ffffff;
+        color: #333;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        width: 100%;
+        text-decoration: none;
+    }
+
+    .google-btn:hover {
+        background: #f8f9fa;
+        border-color: #a855f7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+        text-decoration: none;
+        color: #333;
+    }
+
+    .google-btn i {
+        font-size: 20px;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .divider:not(:empty)::before {
+        margin-right: 15px;
+    }
+
+    .divider:not(:empty)::after {
+        margin-left: 15px;
+    }
+
+    .divider-text {
+        color: #9ca3af;
+        font-size: 14px;
+        font-weight: 500;
+    }
 </style>
 
 <main class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -39,6 +97,17 @@
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-900">Create Your Account</h2>
                     <p class="mt-2 text-gray-600">Join StyleHub and discover your perfect style</p>
+                </div>
+
+                <!-- Google Registration Button -->
+                <a href="{{ url('auth/google/redirect') }}" class="google-btn">
+                    <i class="fab fa-google" style="color: #ea4335;"></i>
+                    <span>Continue with Google</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span class="divider-text">or register with</span>
                 </div>
 
                 <!-- Tab Selection -->

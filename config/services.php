@@ -75,4 +75,10 @@ return [
         'verify_token' => env('WHATSAPP_VERIFY_TOKEN'), // For webhook verification
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+    ],
+
 ];
