@@ -23,6 +23,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
+// use App\Http\Controllers\Auth\GoogleAuthController;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
@@ -255,6 +256,16 @@ Route::get('/auth/google/callback', function () {
 // Route::get('/auth/google/redirect', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
 // Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
 
+// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+// Route::post('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('google.disconnect')->middleware('auth');
+
+// // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
-Route::post('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('google.disconnect')->middleware('auth');
+Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
+
+// Google OAuth Routes
+// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+// Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');

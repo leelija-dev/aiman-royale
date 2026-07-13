@@ -576,4 +576,37 @@ class AuthController extends Controller
             'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
+
+
+     public function completeGoogleRegistration(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'google_id' => 'required|string|unique:users,google_id',
+            ]);
+
+            // Create user with Google data
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'google_id' => $request->google_id,
+                'password' => Hash::make(Str::random(24)),
+                'email_verified_at' => now(),
+            ]);
+
+            Auth::login($user);
+            
+            // Clear Google session data
+            session()->forget('google_data');
+            
+            return redirect()->route('home')->with('success', 'Account created successfully with Google!');
+            
+        } catch (\Exception $e) {
+            Log::error('Google registration error: ' . $e->getMessage());
+            return redirect()->route('page.register')
+                ->with('error', 'Failed to create account. Please try again.');
+        }
+    }
 }
