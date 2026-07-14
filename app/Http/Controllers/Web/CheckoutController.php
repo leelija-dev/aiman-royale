@@ -115,7 +115,7 @@ class CheckoutController extends Controller
             $shipping = 0;
         }
         $total = $subtotal + $shipping; //+ $shipping + $tax;
-dd($user_id);
+// dd($user_id);
         // Create order
         $order_id = DB::table('orders')->insertGetId([
             'user_id' => $user_id,
