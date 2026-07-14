@@ -969,6 +969,7 @@ foreach ($rawProducts as $product) {
         'categories' => DB::table('categories')
             ->whereNotNull('name')
             ->where('name', '!=', '')
+            ->whereNull('deleted_at')
             ->distinct()
             ->pluck('name')
             ->filter()
@@ -1016,7 +1017,7 @@ foreach ($rawProducts as $product) {
         'price_ranges' => array_unique($priceRanges),
         'discount_ranges' => $discountRanges,
     ];
-    // dd($products);
+    
 
     return view(
         'web.multi-product',
