@@ -54,7 +54,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        
+        dd($request->all());
 
         $request->validate([
             'firstName' => 'required|string|max:255',
