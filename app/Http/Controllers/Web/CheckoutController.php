@@ -97,7 +97,7 @@ class CheckoutController extends Controller
             ->select('carts.*', 'products.name', 'product_variants.price as variant_price', 'product_variants.discount as discount', 'product_variants.discount_price')
             ->get();
 
-             dd($carts);
+            
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
@@ -138,6 +138,7 @@ class CheckoutController extends Controller
             'updated_at' => now(),
         ]);
 
+        dd($order_id);
         // Create order items
         foreach ($carts as $cart) {
             DB::table('ordered_products')->insert([
