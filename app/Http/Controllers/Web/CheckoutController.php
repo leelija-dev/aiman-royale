@@ -54,7 +54,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        dd($request->all());
+       
 
         $request->validate([
             'firstName' => 'required|string|max:255',
@@ -97,6 +97,7 @@ class CheckoutController extends Controller
             ->select('carts.*', 'products.name', 'product_variants.price as variant_price', 'product_variants.discount as discount', 'product_variants.discount_price')
             ->get();
 
+             dd($carts);
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
