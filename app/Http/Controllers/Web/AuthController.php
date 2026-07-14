@@ -501,7 +501,7 @@ class AuthController extends Controller
 
         // Attempt login with JWT
         if (!$token = JWTAuth::attempt($credentials)) {
-            dd($credentials);
+            // dd($credentials);
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
