@@ -127,7 +127,19 @@ class CategoryController extends Controller
         // Calculate dynamic price ranges based on actual product data
         $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
 
-        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges'));
+        $latestProducts = Product::where('is_active', 1)
+            ->whereHas('variants')
+            ->with(['images' => function ($query) {
+                $query->select('product_id', 'image');
+            }])
+            ->select('products.*')
+            ->latest()
+            ->take(5)
+            ->get();
+
+            // dd($latestProducts);
+
+        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts'));
     }
 
     // Helper function to check if string is JSON

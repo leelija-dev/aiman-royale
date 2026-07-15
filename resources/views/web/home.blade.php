@@ -708,7 +708,7 @@
         <!-- Hanging Tags -->
         <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
 
-            @foreach ($categoriesWithProduct->where('parent_id', null) as $category)
+            @foreach ($categories as $category)
             <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
                 <!-- String/Hanger -->
                 <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
@@ -730,9 +730,10 @@
                     <!-- Content -->
                     <div class="p-3 text-center">
                         <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
-                        <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
+                        {{-- <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
                             {{ $category->products_count }} items
                         </span>
+                        --}}
                     </div>
                 </div>
             </a>
