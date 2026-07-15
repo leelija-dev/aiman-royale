@@ -39,7 +39,6 @@
                     </p> -->
         </div>
     </div>
-
     <!-- Horizontal Scroll with Enhanced Styling -->
     <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
         <!-- Gradient fade edges -->

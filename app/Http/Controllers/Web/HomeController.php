@@ -7,6 +7,7 @@ use App\Http\Service\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Banner;
+use App\Models\BannerDetails;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
@@ -27,10 +28,10 @@ class HomeController extends Controller
         // Get active banners from database
         $mainBanners = Banner::active()->main()->ordered()->get();
         $secondaryBanners = Banner::active()->secondary()->ordered()->get();
-        
+        $bannerHeroSection = BannerDetails::where('is_active', true)->get();   //banner hero section
         // Debug: Log the counts
-        \Log::info('Main Banners count: ' . $mainBanners->count());
-        \Log::info('Secondary Banners count: ' . $secondaryBanners->count());
+        Log::info('Main Banners count: ' . $mainBanners->count());
+        Log::info('Secondary Banners count: ' . $secondaryBanners->count());
 
         $products = DB::table('products')
             ->Join('product_variants', function ($join) {
@@ -132,7 +133,7 @@ class HomeController extends Controller
 
         $testimonials = [];
 // dd($categories);
-        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners'));
+        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners','bannerHeroSection'));
     }
 
     public function BannerFilter(Request $request)
