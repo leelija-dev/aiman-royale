@@ -15,6 +15,36 @@
             <div class="border-t pt-6">
                 <h2 class="text-lg font-semibold mb-4">Select Payment Method</h2>
                 
+                <!-- Cash on Delivery Option -->
+                <div class="mb-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-blue-600 rounded-md flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Cash on Delivery (COD)</h3>
+                                <p class="text-sm text-gray-600">Pay when you receive your order. Available for all orders.</p>
+                            </div>
+                        </div>
+                        
+                        <form id="cod-payment-form" method="POST" action="{{ route('checkout.cod.process') }}">
+                            @csrf
+                            <input type="hidden" name="order_id" value="{{ $orderId }}">
+                            <input type="hidden" name="total" value="{{ $total }}">
+                            <input type="hidden" name="currency" value="{{ $currency }}">
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                                    Place Order with COD
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
                 <!-- Cashfree Payment Option -->
                 <div class="mb-6">
                     <div class="bg-green-50 border border-green-200 rounded-lg p-6">
@@ -178,7 +208,7 @@
                 
                 // Initialize Cashfree payment - v3 API
                 const cashfree = new Cashfree({
-                    mode: 'sandbox'
+                    mode: 'production'
                 });
                 
                 console.log('Cashfree initialized, available methods:', Object.getOwnPropertyNames(cashfree));

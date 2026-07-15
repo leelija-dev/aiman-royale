@@ -54,7 +54,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        
+
 
         $request->validate([
             'firstName' => 'required|string|max:255',
@@ -97,6 +97,7 @@ class CheckoutController extends Controller
             ->select('carts.*', 'products.name', 'product_variants.price as variant_price', 'product_variants.discount as discount', 'product_variants.discount_price')
             ->get();
 
+
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
@@ -108,8 +109,8 @@ class CheckoutController extends Controller
         });
         // $shipping = 7.00;
         // $tax = $subtotal * 0.05;
-        if($subtotal <= 400) {
-            $shipping = 50;
+        if ($subtotal <= 400) {
+            $shipping = 0;
         } else {
             $shipping = 0;
         }
@@ -137,6 +138,7 @@ class CheckoutController extends Controller
             'updated_at' => now(),
         ]);
 
+
         // Create order items
         foreach ($carts as $cart) {
             DB::table('ordered_products')->insert([
@@ -162,6 +164,204 @@ class CheckoutController extends Controller
         // Redirect to Cashfree payment page
         return redirect()->route('checkout.payment');
     }
+
+    // public function placeOrder(Request $request)
+    // {
+    //     try {
+    //         // Log the start of the process
+    //         \Log::info('PlaceOrder started for user: ' . auth()->id());
+
+    //         $request->validate([
+    //             'firstName' => 'required|string|max:255',
+    //             'lastName' => 'required|string|max:255',
+    //             'email' => 'required|email',
+    //             'phone' => 'required|string|max:20',
+    //             'address1' => 'required|string|max:255',
+    //             'city' => 'required|string|max:255',
+    //             'state' => 'required|string|max:255',
+    //             'pinCode' => 'required|string|max:10',
+    //         ]);
+
+    //         $user_id = auth()->id();
+    //         \Log::info('User ID: ' . $user_id);
+
+    //         // Check if user exists
+    //         if (!$user_id) {
+    //             \Log::error('User not authenticated');
+    //             return back()->with('error', 'User not authenticated');
+    //         }
+
+    //         // Address handling
+    //         try {
+    //             $checkItsAddress = Address::where('user_id', $user_id)->exists();
+    //             \Log::info('Address exists: ' . ($checkItsAddress ? 'Yes' : 'No'));
+
+    //             if (!$checkItsAddress) {
+    //                 $addressData = [
+    //                     'user_id' => $user_id,
+    //                     'full_name' => $request->firstName . " " . $request->lastName,
+    //                     'phone' => $request->phone,
+    //                     'address_1' => $request->address1,
+    //                     'address_2' => $request->address2 ?? '',
+    //                     'city' => $request->city,
+    //                     'state' => $request->state,
+    //                     'country' => $request->country ?? '',
+    //                     'pincode' => $request->pinCode,
+    //                     'is_default' => 1,
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ];
+    //                 \Log::info('Address data to insert: ', $addressData);
+
+    //                 DB::table('addresses')->insert($addressData);
+    //                 \Log::info('Address inserted successfully');
+    //             }
+    //         } catch (\Exception $e) {
+    //             \Log::error('Address insertion failed: ' . $e->getMessage());
+    //             \Log::error('Address insertion trace: ' . $e->getTraceAsString());
+    //             throw $e; // Re-throw to be caught by outer try-catch
+    //         }
+
+    //         // Get cart items
+    //         try {
+    //             \Log::info('Fetching cart items for user: ' . $user_id);
+
+    //             $carts = DB::table('carts')
+    //                 ->join('products', 'carts.product_id', '=', 'products.id')
+    //                 ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
+    //                 ->where('user_id', $user_id)
+    //                 ->select('carts.*', 'products.name', 'product_variants.price as variant_price', 'product_variants.discount as discount', 'product_variants.discount_price')
+    //                 ->get();
+
+    //             \Log::info('Cart items found: ' . $carts->count());
+
+    //             if ($carts->isEmpty()) {
+    //                 \Log::warning('Cart is empty for user: ' . $user_id);
+    //                 return back()->with('error', 'Your cart is empty');
+    //             }
+    //         } catch (\Exception $e) {
+    //             \Log::error('Failed to fetch cart: ' . $e->getMessage());
+    //             \Log::error('Cart fetch trace: ' . $e->getTraceAsString());
+    //             throw $e;
+    //         }
+
+    //         // Calculate total
+    //         try {
+    //             $subtotal = $carts->sum(function ($cart) {
+    //                 // Log each cart item for debugging
+    //                 \Log::debug('Cart item: ', [
+    //                     'product_id' => $cart->product_id,
+    //                     'variant_id' => $cart->variant_id,
+    //                     'variant_price' => $cart->variant_price,
+    //                     'discount' => $cart->discount,
+    //                     'discount_price' => $cart->discount_price,
+    //                     'count' => $cart->count
+    //                 ]);
+
+    //                 $priceAfterDiscount = $cart->variant_price - (($cart->variant_price * $cart->discount) / 100);
+    //                 return $priceAfterDiscount * $cart->count;
+    //             });
+
+    //             \Log::info('Subtotal calculated: ' . $subtotal);
+
+    //             $shipping = 0; // Your shipping logic
+    //             $total = $subtotal + $shipping;
+    //             \Log::info('Total calculated: ' . $total);
+    //         } catch (\Exception $e) {
+    //             \Log::error('Total calculation failed: ' . $e->getMessage());
+    //             \Log::error('Total calc trace: ' . $e->getTraceAsString());
+    //             throw $e;
+    //         }
+
+    //         // Create order
+    //         try {
+    //             \Log::info('Creating order for user: ' . $user_id);
+
+    //             $orderData = [
+    //                 'user_id' => $user_id,
+    //                 'phone_no' => $request->phone,
+    //                 'address_1' => $request->address1,
+    //                 'address_2' => $request->address2 ?? '',
+    //                 'city' => $request->city,
+    //                 'state' => $request->state,
+    //                 'pincode' => $request->pinCode,
+    //                 'payment_status' => 'pending',
+    //                 'total_amount' => $total,
+    //                 'order_status' => 'pending',
+    //                 'created_at' => now(),
+    //                 'updated_at' => now(),
+    //             ];
+
+    //             \Log::info('Order data: ', $orderData);
+
+    //             $order_id = DB::table('orders')->insertGetId($orderData);
+    //             \Log::info('Order created with ID: ' . $order_id);
+    //         } catch (\Exception $e) {
+    //             \Log::error('Order creation failed: ' . $e->getMessage());
+    //             \Log::error('Order creation trace: ' . $e->getTraceAsString());
+    //             throw $e;
+    //         }
+
+    //         // Create order items
+    //         try {
+    //             \Log::info('Creating order items for order: ' . $order_id);
+
+    //             foreach ($carts as $index => $cart) {
+    //                 $orderItemData = [
+    //                     'user_id' => $user_id,
+    //                     'order_id' => $order_id,
+    //                     'product_id' => $cart->product_id,
+    //                     'variant_id' => $cart->variant_id,
+    //                     'quantity' => $cart->count,
+    //                     'price' => $cart->discount_price,
+    //                     'total' => (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count),
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ];
+
+    //                 \Log::info('Order item ' . $index . ': ', $orderItemData);
+    //                 DB::table('ordered_products')->insert($orderItemData);
+    //             }
+
+    //             \Log::info('All order items created successfully');
+    //         } catch (\Exception $e) {
+    //             \Log::error('Order items creation failed: ' . $e->getMessage());
+    //             \Log::error('Order items trace: ' . $e->getTraceAsString());
+    //             throw $e;
+    //         }
+
+    //         // Store in session
+    //         try {
+    //             session([
+    //                 'cashfree_order_id' => $order_id,
+    //                 'cashfree_total' => $total,
+    //                 'cashfree_currency' => 'INR'
+    //             ]);
+    //             \Log::info('Session data stored successfully');
+    //         } catch (\Exception $e) {
+    //             \Log::error('Session storage failed: ' . $e->getMessage());
+    //             throw $e;
+    //         }
+
+    //         \Log::info('PlaceOrder completed successfully for user: ' . $user_id);
+    //         return redirect()->route('checkout.payment');
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         \Log::error('Validation failed: ' . json_encode($e->errors()));
+    //         return back()->withErrors($e->errors())->withInput();
+    //     } catch (\Exception $e) {
+    //         \Log::error('PlaceOrder failed with error: ' . $e->getMessage());
+    //         \Log::error('Error trace: ' . $e->getTraceAsString());
+
+    //         // Log the request data for debugging (excluding sensitive info)
+    //         \Log::error('Request data: ', [
+    //             'user_id' => auth()->id(),
+    //             'request_data' => $request->except(['_token', 'password'])
+    //         ]);
+
+    //         // Return a more informative error message
+    //         return back()->with('error', 'Failed to place order: ' . $e->getMessage());
+    //     }
+    // }
 
     public function payment()
     {
@@ -237,6 +437,69 @@ class CheckoutController extends Controller
         }
     }
 
+    public function processCOD(Request $request)
+    {
+        // dd($request);
+        try {
+            $request->validate([
+                'order_id' => 'required|string',
+                'total' => 'required|numeric|min:1',
+                'currency' => 'required|string|max:3'
+            ]);
+
+            $orderId = $request->order_id;
+            $total = $request->total;
+            $currency = $request->currency;
+
+            // Debug logging
+            Log::info('COD Processing - Order ID: ' . $orderId . ', Total: ' . $total . ', Currency: ' . $currency);
+
+            // Update order status for COD
+            $updateData = [
+                'order_status' => 'confirmed',
+                'payment_status' => 'cod',
+                'payment_method' => 'cash_on_delivery',
+                'updated_at' => now()
+            ];
+
+            $affected = DB::table('orders')->where('id', $orderId)->update($updateData);
+
+            Log::info('COD order processed: ' . $orderId . ', Affected rows: ' . $affected);
+
+            // Get order details to reduce stock
+            $order = DB::table('orders')->where('id', $orderId)->first();
+            if ($order) {
+                // Get ordered products to reduce stock
+                $orderedProducts = DB::table('ordered_products')->where('order_id', $orderId)->get();
+
+                foreach ($orderedProducts as $orderedProduct) {
+                    if ($orderedProduct->variant_id) {
+                        // Reduce stock from product_variants table
+                        $stockReduced = DB::table('product_variants')
+                            ->where('id', $orderedProduct->variant_id)
+                            ->where('stock', '>=', $orderedProduct->quantity)
+                            ->decrement('stock', $orderedProduct->quantity);
+
+                        Log::info('Stock reduced - Variant ID: ' . $orderedProduct->variant_id .
+                            ', Quantity: ' . $orderedProduct->quantity .
+                            ', Stock Reduced: ' . $stockReduced);
+                    }
+                }
+            }
+
+            // Clear cart
+            DB::table('carts')->where('user_id', auth()->id())->delete();
+
+            // Clear session
+            session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']);
+
+            return redirect()->route('page.index')->with('success', 'Order placed successfully! You will pay cash on delivery.');
+        } catch (\Exception $e) {
+            Log::error('COD processing error: ' . $e->getMessage());
+            return redirect()->route('checkout.payment')->with('error', 'Failed to process COD order. Please try again.');
+        }
+    }
+
     public function paymentSuccess(Request $request)
     {
         // Log all request data for debugging
@@ -260,6 +523,7 @@ class CheckoutController extends Controller
         $updateData = [
             'order_status' => 'paid',
             'payment_status' => 'paid',
+            'payment_method' => 'cashfree',
             'paid_at' => now(),
             'updated_at' => now()
         ];
@@ -326,13 +590,38 @@ class CheckoutController extends Controller
 
         Log::info('Order updated in paymentSuccess: ' . $orderId . ' with transaction_id: ' . ($updateData['transaction_id'] ?? 'N/A'));
 
+        // Update stock for ordered items
+        try {
+            $orderItems = DB::table('ordered_products')->where('order_id', $orderId)->get();
+
+            foreach ($orderItems as $item) {
+                if ($item->variant_id) {
+                    // Decrease stock for the variant
+                    $updated = DB::table('product_variants')
+                        ->where('id', $item->variant_id)
+                        ->where('stock', '>', 0) // Ensure we don't go below 0
+                        ->decrement('stock', $item->quantity);
+
+                    if ($updated) {
+                        Log::info('Stock updated for variant ' . $item->variant_id . ', decreased by ' . $item->quantity);
+                    } else {
+                        Log::warning('Failed to update stock for variant ' . $item->variant_id . ' - insufficient stock or variant not found');
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to update stock after payment: ' . $e->getMessage());
+            // Continue with payment success even if stock update fails
+        }
+
         // Clear cart
         DB::table('carts')->where('user_id', auth()->id())->delete();
 
         // Clear Cashfree session
         session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency']);
 
-        return redirect()->route('page.index')->with('success', 'Payment successful! Order placed.');
+        // return redirect()->route('page.index')->with('success', 'Payment successful! Order placed.');
+        return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Payment successful! Order placed.');
     }
 
     public function paymentCancel()

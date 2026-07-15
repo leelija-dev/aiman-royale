@@ -14,7 +14,12 @@ class OrderProduct extends Model
         'variant_id', 
         'quantity',	
         'price',	
-        'total'
+        'total',
+        'request_id',
+        'status',
+        'payment_status',
+        'order_date',
+        'custom_measurements'
     ];
 
     public function order()
@@ -24,7 +29,7 @@ class OrderProduct extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
     public function variant()
     {

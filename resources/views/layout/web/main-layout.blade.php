@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @if(request()->getHttpHost() === 'leelija.projectshub.net')
+    @if(in_array(request()->getHost(), ['aimanroyale.com','www.aimanroyale.com']))
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
     <meta name="googlebot-news" content="noindex, nofollow">
@@ -39,20 +39,22 @@
     @if(isset($ogMeta['section']))
     <meta property="article:section" content="{{ $ogMeta['section'] }}">
     @endif
-    
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
     <meta name="twitter:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.' }}">
     <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Dynamic Schema Markup -->
     @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
     <script type="application/ld+json">
-    {!! $pageMeta->schema_markup !!}
+        {
+            !!$pageMeta - > schema_markup!!
+        }
     </script>
     @endif
 
@@ -88,7 +90,7 @@
     <!-- Owl Carousel CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
     <link rel="stylesheet" href="{{asset('web/css/home-page.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
@@ -121,7 +123,7 @@
     <link rel="stylesheet" href="{{asset('web/css/app-popup.css')}}">
 </head>
 
-<body class="overflow-x-hidden ">
+<body class="overflow-x-hidden px-0">
 
     @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
     <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
@@ -181,7 +183,7 @@
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-     
+
 
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
     <!-- <script src="{{asset('web/js/pwa-installation.js')}}"></script> -->

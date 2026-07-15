@@ -1,5 +1,552 @@
+<!-- <style>
+/* 
+ * Aiman Fashion - Salwar Kameez Category Page Styles
+ * FULLY RESPONSIVE - Optimized for all devices
+ * Fixed: Unwanted bold text in paragraphs
+ */
+
+/* ============================================
+   ROOT VARIABLES (Easy customization)
+   ============================================ */
+
+#category-full-content {
+  /* Font sizes - responsive breakpoints */
+  --text-base-mobile: 0.9375rem;    /* 15px */
+  --text-base-tablet: 1rem;         /* 16px */
+  --text-base-desktop: 1.0625rem;   /* 17px */
+  --text-base-large: 1.4rem;      /* 18px */
+  
+  /* Heading sizes */
+  --h2-mobile: 1.5rem;      /* 24px */
+  --h2-tablet: 1.6rem;      /* 25.6px */
+  --h2-desktop: 1.75rem;    /* 28px */
+  --h2-large: 2rem;         /* 32px */
+  
+  --h3-mobile: 1.2rem;      /* 19.2px */
+  --h3-tablet: 1.3rem;      /* 20.8px */
+  --h3-desktop: 1.35rem;    /* 21.6px */
+  
+  --h4-mobile: 1.05rem;     /* 16.8px */
+  --h4-tablet: 1.1rem;      /* 17.6px */
+  --h4-desktop: 1.2rem;     /* 19.2px */
+  
+  /* Colors */
+  --text-color: #2d2d3f;
+  --heading-color: #1a1a2e;
+  --accent-color: #c9a87c;
+  --secondary-color: #3a5a7a;
+  --border-color: #f0f0f0;
+  
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  --transition-default: all 0.2s ease;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   BASE CONTAINER STYLES
+   ============================================ */
+
+#category-full-content .leading-relaxed {
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-color);
+}
+
+/* ============================================
+   PARAGRAPH TEXT STYLES - FIXED BOLD ISSUE
+   ============================================ */
+
+/* Normal paragraph text - NO BOLD */
+#category-full-content p span,
+#category-full-content p span[style*="font-size:10.5pt"],
+#category-full-content p span[style*="font-size:11pt"] {
+  font-size: var(--text-base-mobile) !important;
+  line-height: 1.65 !important;
+  color: var(--text-color) !important;
+  margin: 0px 2px;
+  font-weight: 400 !important;  /* NORMAL weight - fixes bold issue */
+  font-style: normal !important;
+}
+
+/* Tablet devices */
+@media (min-width: 768px) {
+  #category-full-content p span,
+  #category-full-content p span[style*="font-size:10.5pt"],
+  #category-full-content p span[style*="font-size:11pt"] {
+    font-size: var(--text-base-tablet) !important;
+  }
+}
+
+/* Desktop devices */
+@media (min-width: 1024px) {
+  #category-full-content p span,
+  #category-full-content p span[style*="font-size:10.5pt"],
+  #category-full-content p span[style*="font-size:11pt"] {
+    font-size: var(--text-base-desktop) !important;
+  }
+}
+
+/* Large desktop devices */
+@media (min-width: 1440px) {
+  #category-full-content p span,
+  #category-full-content p span[style*="font-size:10.5pt"],
+  #category-full-content p span[style*="font-size:11pt"] {
+    font-size: var(--text-base-large) !important;
+  }
+}
+
+/* BOLD text in paragraphs - ONLY where explicitly needed */
+#category-full-content p span[style*="font-weight:700"],
+#category-full-content p span[style*="font-weight: bold"],
+#category-full-content p strong span,
+#category-full-content p b span {
+  font-weight: 600 !important;  /* Semi-bold, not too heavy */
+  color: var(--accent-color) !important;
+ 
+}
+
+/* Fix: Remove bold from any parent elements */
+#category-full-content p,
+#category-full-content p b,
+#category-full-content p strong {
+  font-weight: 400 !important;
+}
+
+/* Specific fix for spans with inline bold styling */
+#category-full-content p span[style*="font-weight:700"] {
+  font-weight: 600 !important;
+}
+
+/* ============================================
+   HEADING STYLES (H2) - FULLY RESPONSIVE
+   ============================================ */
+
+#category-full-content h2 span,
+#category-full-content h2 span[style*="font-size:16pt"],
+#category-full-content h2 span[style*="font-size:20pt"] {
+  font-size: var(--h2-mobile) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--heading-color) !important;
+  display: inline-block;
+  letter-spacing: -0.01em;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  #category-full-content h2 span,
+  #category-full-content h2 span[style*="font-size:16pt"] {
+    font-size: var(--h2-tablet) !important;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  #category-full-content h2 span,
+  #category-full-content h2 span[style*="font-size:16pt"] {
+    font-size: var(--h2-desktop) !important;
+  }
+}
+
+/* Main "Brighten your Wardrobe" heading - larger */
+#category-full-content h2 span[style*="font-size:20pt"] {
+  font-size: calc(var(--h2-mobile) + 0.25rem) !important;
+  font-weight: 650 !important;
+}
+
+@media (min-width: 768px) {
+  #category-full-content h2 span[style*="font-size:20pt"] {
+    font-size: calc(var(--h2-tablet) + 0.3rem) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #category-full-content h2 span[style*="font-size:20pt"] {
+    font-size: var(--h2-large) !important;
+  }
+}
+
+/* Quality Fabrics heading */
+#category-full-content h2 span[style*="font-size:15pt"] {
+  font-size: calc(var(--h2-mobile) - 0.1rem) !important;
+  font-weight: 650 !important;
+  background: linear-gradient(135deg, #1a1a2e, #2c3e6d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (min-width: 768px) {
+  #category-full-content h2 span[style*="font-size:15pt"] {
+    font-size: calc(var(--h2-tablet) - 0.1rem) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #category-full-content h2 span[style*="font-size:15pt"] {
+    font-size: calc(var(--h2-desktop) - 0.25rem) !important;
+  }
+}
+
+/* ============================================
+   HEADING STYLES (H3) - FULLY RESPONSIVE
+   ============================================ */
+
+#category-full-content h3 span,
+#category-full-content h3 span[style*="font-size:13.999999999999998pt"] {
+  font-size: var(--h3-mobile) !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: var(--secondary-color) !important;
+}
+
+@media (min-width: 768px) {
+  #category-full-content h3 span,
+  #category-full-content h3 span[style*="font-size:13.999999999999998pt"] {
+    font-size: var(--h3-tablet) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #category-full-content h3 span,
+  #category-full-content h3 span[style*="font-size:13.999999999999998pt"] {
+    font-size: var(--h3-desktop) !important;
+  }
+}
+
+#category-full-content h3 {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+/* ============================================
+   HEADING STYLES (H4) - FULLY RESPONSIVE
+   ============================================ */
+
+#category-full-content h4 span,
+#category-full-content h4 span[style*="font-size:12pt"] {
+  font-size: var(--h4-mobile) !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: var(--secondary-color) !important;
+}
+
+@media (min-width: 768px) {
+  #category-full-content h4 span,
+  #category-full-content h4 span[style*="font-size:12pt"] {
+    font-size: var(--h4-tablet) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #category-full-content h4 span,
+  #category-full-content h4 span[style*="font-size:12pt"] {
+    font-size: var(--h4-desktop) !important;
+  }
+}
+
+#category-full-content h4 {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================
+   LIST ITEMS (UL, LI) - FIXED BOLD ISSUE
+   ============================================ */
+
+/* Normal list text - NO BOLD */
+#category-full-content li span,
+#category-full-content ul li span,
+#category-full-content li span[style*="font-size:10.5pt"],
+#category-full-content li span[style*="font-size:11pt"] {
+  font-size: var(--text-base-mobile) !important;
+  line-height: 1.6 !important;
+  font-weight: 400 !important;  /* NORMAL weight */
+}
+
+@media (min-width: 768px) {
+  #category-full-content li span,
+  #category-full-content ul li span {
+    font-size: var(--text-base-tablet) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #category-full-content li span,
+  #category-full-content ul li span {
+    font-size: var(--text-base-desktop) !important;
+  }
+}
+
+/* Bold text in lists - ONLY where needed */
+#category-full-content li span[style*="font-weight:700"] {
+  font-weight: 600 !important;
+  color: var(--accent-color) !important;
+}
+
+/* Fix: Remove bold from list parent elements */
+#category-full-content li,
+#category-full-content ul li {
+  font-weight: 400 !important;
+}
+
+#category-full-content ul {
+  margin: var(--space-sm) 0 var(--space-md) var(--space-lg);
+  padding-left: 0;
+}
+
+#category-full-content li {
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================
+   SPECIAL TEXT ELEMENTS
+   ============================================ */
+
+/* Remove background color from spans */
+#category-full-content span[style*="background-color:#ffffff"] {
+  background-color: transparent !important;
+}
+
+/* Ensure consistent font family */
+#category-full-content span {
+  font-family: inherit;
+}
+
+/* Direct paragraph text (not in spans) */
+#category-full-content p {
+  margin-bottom: 0.875rem;
+  font-size: var(--text-base-mobile);
+  line-height: 1.6;
+  font-weight: 400 !important;
+}
+
+@media (min-width: 768px) {
+  #category-full-content p {
+    font-size: var(--text-base-tablet);
+  }
+}
+
+/* ============================================
+   SPACING & LAYOUT - RESPONSIVE
+   ============================================ */
+
+#category-full-content h2 {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-sm);
+}
+
+#category-full-content h2:first-of-type {
+  margin-top: 0;
+}
+
+/* Visual separation for sections */
+#category-full-content h2:not(:first-of-type) {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-lg);
+}
+
+/* Fix inline spacing issues */
+#category-full-content p[style*="padding:0pt 0pt 12pt 0pt"] {
+  padding-bottom: var(--space-sm) !important;
+}
+
+#category-full-content p[style*="padding:0pt 0pt 15pt 0pt"] {
+  padding-bottom: var(--space-md) !important;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS SUMMARY
+   Mobile: 320px - 767px
+   Tablet: 768px - 1023px  
+   Desktop: 1024px - 1439px
+   Large: 1440px+
+   ============================================ */
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  #category-full-content .leading-relaxed {
+    font-size: 0.875rem;
+  }
+  
+  #category-full-content ul {
+    margin-left: var(--space-sm);
+  }
+  
+  #category-full-content h2 {
+    margin-top: var(--space-lg);
+  }
+}
+
+/* Mobile devices (default) */
+@media (max-width: 767px) {
+  #category-full-content p span,
+  #category-full-content li span {
+    font-size: 0.9375rem !important;
+  }
+  
+  #category-full-content h2 span {
+    font-size: 1.4rem !important;
+  }
+  
+  #category-full-content h3 span {
+    font-size: 1.2rem !important;
+  }
+  
+  #category-full-content h4 span {
+    font-size: 1rem !important;
+  }
+  
+  #category-full-content ul {
+    margin-left: var(--space-sm);
+  }
+}
+
+/* Tablet devices */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #category-full-content .leading-relaxed {
+    font-size: 1rem;
+  }
+}
+
+/* Desktop devices */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  #category-full-content .leading-relaxed {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Large desktop devices */
+@media (min-width: 1440px) {
+  #category-full-content .leading-relaxed {
+    font-size: 1.125rem;
+  }
+  
+  #category-full-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ============================================
+   SHOW LESS BUTTON - RESPONSIVE
+   ============================================ */
+
+#category-show-less {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: var(--text-base-mobile);
+  font-weight: 500;
+  color: #6b4c3a;
+  background: transparent;
+  border: none;
+  padding: var(--space-sm) 0;
+  margin-top: var(--space-lg);
+  cursor: pointer;
+  transition: var(--transition-default);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  #category-show-less {
+    font-size: var(--text-base-tablet);
+  }
+}
+
+#category-show-less:hover {
+  color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+#category-show-less:active {
+  transform: translateY(1px);
+}
+
+#category-show-less::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e0d5c0, transparent);
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+
+#category-show-less:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media print {
+  #category-full-content p span,
+  #category-full-content li span {
+    font-size: 11pt !important;
+    color: #000 !important;
+    font-weight: 400 !important;
+  }
+  
+  #category-full-content h2 span {
+    font-size: 16pt !important;
+  }
+  
+  #category-full-content h3 span {
+    font-size: 14pt !important;
+  }
+  
+  #category-show-less {
+    display: none;
+  }
+}
+
+/* ============================================
+   UTILITY & FIXES
+   ============================================ */
+
+/* Remove inline text-decoration */
+#category-full-content span[style*="text-decoration:none"] {
+  text-decoration: none;
+}
+
+/* Fix white-space handling */
+#category-full-content span[style*="white-space:pre"] {
+  white-space: normal !important;
+}
+
+/* Text rendering optimization */
+#category-full-content {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Additional fix: Remove any unexpected bold from containers */
+#category-full-content b,
+#category-full-content strong {
+  font-weight: 400 !important;
+}
+
+/* But preserve intentional bold using class or data attribute if needed */
+#category-full-content [data-bold="true"],
+#category-full-content .text-bold {
+  font-weight: 600 !important;
+}
+</style> -->
+
 <div id="sizeGuideModal" class="fixed inset-0 bg-black/60 z-[30000] hidden items-start justify-center p-4 overflow-y-auto modal-overlay">
-  <div class="bg-white w-full container rounded-xl shadow-2xl relative modal-container my-8">
+  <div class="bg-white w-full container rounded-xl shadow-2xl relative modal-container my-8 overflow-hidden">
 
     <!-- Header -->
     <div class="flex flex-col smxl:flex-row items-start smxl:items-center justify-between px-6 sm:px-8 py-5 border-b gap-4">
@@ -18,7 +565,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex md:flex-row flex-col  gap-8 pt-[10px] pb-6 sm:pb-8 px-6 sm:px-8 ">
+    <div class="flex lgg:flex-row flex-col  gap-8 pt-[10px] pb-6 sm:pb-8 px-6 sm:px-8 ">
 
       <!-- LEFT — SIZE TABLE -->
       <div class="w-full">
@@ -56,7 +603,7 @@
                   <td class="p-3 border-b border-r text-center" data-inches="{{$size->arm ?? 0}}" data-cm="{{$size->arm * 2.54 ?? 0}}"">{{ floor($size->arm) == $size->arm 
                   ? (int) $size->arm : $size->arm }}</td>
 
-                  <td class="p-3 border-b border-r text-center" data-inches="{{$size->uk_size ?? 0}}" data-cm="{{$size->uk_size * 2.54 ?? 0}}">{{ floor($size->uk_size) == $size->uk_size 
+                  <td class=" p-3 border-b border-r text-center" data-inches="{{$size->uk_size ?? 0}}" data-cm="{{$size->uk_size * 2.54 ?? 0}}">{{ floor($size->uk_size) == $size->uk_size 
                   ? (int) $size->uk_size : $size->uk_size }}</td>
 
 
@@ -84,7 +631,7 @@
       </div>
 
       <!-- RIGHT — MEASURE GUIDE WITH SCROLLABLE CONTENT -->
-      <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4 lgg:min-w-[380px] md:min-w-[330px] min-w-full lgg:max-w-[380px] md:max-w-[330px] max-w-full">
+      <div class="lg:border-l lg:pl-8 h-[600px] lg:h-auto lg:max-h-[calc(100vh-300px)] overflow-y-auto pr-2 lg:pr-4 lgg:min-w-[380px]  min-w-full lgg:max-w-[380px] max-w-full">
         <div class="sticky top-0 bg-white pt-2 pb-4 z-10">
           <h3 class="text-lg sm:text-xl font-semibold mb-2 text-center">How to Measure Yourself</h3>
         </div>
@@ -92,11 +639,11 @@
         <div class="space-y-6 pb-4">
           <!-- Image 1 -->
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
               <h4 class="font-semibold text-gray-800 text-base">Bust Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
 
 
               <img src="{{asset('web/images/size-guide/bust.webp')}}"
@@ -104,87 +651,87 @@
                 class=" w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
 
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure around the fullest part of your bust, keeping the tape parallel to the floor and snug but not tight.</p>
           </div>
 
           <!-- Image 2 -->
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
               <h4 class="font-semibold text-gray-800 text-base">Waist Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/waist.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Find the smallest part of your natural waist (above belly button) and measure around it without holding your breath.</p>
           </div>
 
           <!-- Image 3 -->
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
               <h4 class="font-semibold text-gray-800 text-base">Hip Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/hip.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure around the fullest part of your hips and buttocks, approximately 8 inches below your waistline.</p>
           </div>
 
           <!-- Image 4 -->
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
               <h4 class="font-semibold text-gray-800 text-base">Armhole Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/arm-round.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure from the shoulder seam down through the armpit and back up to the starting point.</p>
           </div>
 
           <!-- Image 5 -->
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
               <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
               <h4 class="font-semibold text-gray-800 text-base">Shoulder Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/shoulder.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
-              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">6</div>
               <h4 class="font-semibold text-gray-800 text-base">Arm Length Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/arm-length.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
           <div class="measurement-step">
-            <div class="flex md:justify-start justify-center  items-center gap-3 mb-3 ">
-              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">5</div>
+            <div class="flex lgg:justify-start justify-center  items-center gap-3 mb-3 ">
+              <div class="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">7</div>
               <h4 class="font-semibold text-gray-800 text-base">Height Measurement</h4>
             </div>
-            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] md:mx-0 mx-auto ">
+            <div class="max-h-[400px] w-auto overflow-hidden aspect-[11/12] lgg:mx-0 mx-auto ">
               <img src="{{asset('web/images/size-guide/height.webp')}}"
                 alt="Bust measurement guide"
                 class="w-full h-full object-cover  rounded-md mb-2 mx-auto object-top">
             </div>
-            <p class="text-sm text-gray-600 px-1 mt-2 md:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
+            <p class="text-sm text-gray-600 px-1 mt-2 lgg:text-left text-center">Measure from the edge of one shoulder bone to the other, across the upper back while standing straight.</p>
           </div>
 
           <!-- Tips Section -->
@@ -560,17 +1107,21 @@
 
 
 
-<section id="dynamic-content-sec" class="w-full bg-white py-12 lg:py-20">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
+@if(request()->route()->getName() === 'page.index')
+<section id="dynamic-content-sec-1" class="w-full bg-white py-12 lg:py-20">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
     <!-- Main Heading -->
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
-      Aiman Royale - Buy Premium Traditional Indian Clothing and Ethnic Wear Online in India
+      Aiman Royale - Buy Exclusive Designer Ethnic Collection Online in India
+
     </h2>
 
     <!-- Intro Paragraph (Always Visible) -->
     <p class="mb-3 leading-relaxed text-base md:text-lg">
-      Founded in 2007 in New Delhi, Aiman Royale embodies timeless elegance with a contemporary vision. Our brand celebrates the rich heritage of Indian craftsmanship while embracing modern aesthetics. Specializing in exquisite women's ethnic wear including designer sarees, lehengas, salwar suits, palazzo sets, and fusion ensembles, we bring you premium collections that blend tradition with contemporary style...
+     Founded in 2007 in New Delhi, Aiman Royale is passionate about combining modern simplicity with the timeless creativity of Indian artistry and craftsmanship. We specialize in women’s ethnic outfits, including designer sarees, exclusive lehengas, premium salwar suits, comfy palazzos & fusion ensembles. We bring you luxury that seamlessly blends heritage & convenience.  
+
+
     </p>
 
     <!-- Expandable Details Section -->
@@ -578,14 +1129,14 @@
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
         <!-- Show "Read more" when closed, "Show less" when open -->
         <span class="group-open:hidden">Read more</span>
-        <span id="redi-sec-dyna" class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline">Show less</span>
+        <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span>
 
       </summary>
 
       <div class="mt-4 space-y-6">
         <!-- Continued Intro Content -->
         <p class="leading-relaxed text-base md:text-lg">
-          Aiman Royale has gained recognition for its impeccable craftsmanship and attention to detail. Each piece in our collection features intricate embroidery, luxurious fabrics, and contemporary silhouettes that redefine ethnic fashion. From bridal lehengas that make every bride feel like royalty to ready-to-wear sarees for modern women on-the-go, our designs cater to diverse tastes while maintaining the essence of Indian tradition.
+          Aiman Royale redefines ethnic fashion through masterful craftsmanship and intricate detail. From luxurious, contemporary bridal lehengas with intricate embroidery to ready-to-wear salwar suits for everyday, our extensive contemporary collections celebrate the sophistication of Indian traditional outfits with a modern blend of comfort.
         </p>
 
         <!-- Subheading -->
@@ -594,49 +1145,56 @@
         </h3>
 
         <p class="leading-relaxed text-base md:text-lg">
-          At Aiman Royale, we understand that today's woman seeks clothing that reflects her personality while honoring her cultural roots. Our collection includes:
+          At Aiman Royale, we believe that today’s woman should own outfits that celebrate her individuality without compromising her cultural pride. Our collection includes:
         </p>
 
         <ul class="list-disc pl-6 space-y-3 text-base md:text-lg leading-relaxed">
-          <li><span class="font-medium">Designer Sarees:</span> Silk, Georgette, Chiffon, and Banarasi sarees with contemporary blouse designs</li>
-          <li><span class="font-medium">Lehenga Cholis:</span> Bridal and festive lehengas with intricate embroidery and modern cuts</li>
-          <li><span class="font-medium">Salwar Suits:</span> Anarkalis, straight-cut suits, and fusion styles for everyday elegance</li>
-          <li><span class="font-medium">Palazzo Sets:</span> Comfortable yet stylish ensembles perfect for modern occasions</li>
-          <li><span class="font-medium">Indo-Western Fusion:</span> Contemporary takes on traditional silhouettes</li>
+          <li><span class="font-medium">Gowns:</span> Machine embroidered long anarkali gowns made of georgette & chinon with floor-length, elegant, voluminous flared skirts, mid-cut suits with taffeta pants, & chinon dupatta available in size X & XL & gorgeous colors like wine, rust, maroon, firoji, white, green, rose gold, coffee, & more. </li>
+          <li><span class="font-medium">Lehengas:</span> 3-piece bridal and festive lehengas with flared ankle-length skirt, fitted choli, & matching dupatta. These machine-embroidered lahengas feature unique zari work, intricate zardosi detailing, & beautiful gota patti work. Available in L and XL sizes, these lahengas are designed to elevate your complete look on special occasions.</li>
+          <li><span class="font-medium">Salwar Kameez:</span> A wide range of traditional 3-piece salwar suits made of chinon, georgette, shimmer, viscose organza, paired with taffeta unstitched pants, palazzos, ghararas, straight mid-cut pants, & matching dupatta with four-side borders and decorated with hand-embroidered buttis, perfect for regular or casual events.</li>
+          <li><span class="font-medium">Palazzo Sets:</span>Comfortable yet stylish everyday wear, perfect for on-the-go events. Coordinated 2-piece outfits with wide-legged flared trousers paired with a matching dupatta, available in L & XL with multiple color options like turquoise blue, maroon, mint green, wine, purple, rose gold, mauve, copper, rust, olive green, & more.</li>
+          <li><span class="font-medium">Anarkali:</span> Long, flowing kurtas paired with a fitted bottom and a matching dupatta, made of chinnon and georgette. Available in a wide range of color options like maroon, black, red, orange, mustard, mauve, firoji, & more, these outfits feature intricate machine-embroidered patterns for an elegant look. </li>
+          <li><span class="font-medium">Kurta Sets: </span> Traditional, loose-fitting regular kurtas with full sleeves and a dupatta, made of breathable fabrics for everyday use. Available in L and XL sizes & soothing pastel color shades, the kurta sets are just the perfect picks for this summer.  </li>
+          <li><span class="font-medium">Sharara Suits: </span> South-Asian wide-legged & straight outfit with heavily flared trousers and a matching dupatta, designed for weddings and festivals. Made of chinnon & georgette, these shararas are available in exciting color variants like rani, mint green, rust, turquoise blue, maroon, & rose gold. 
+</li>
         </ul>
 
         <!-- Subheading -->
         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
-          Why Choose Aiman Royale for Your Ethnic Wardrobe?
+         Why Aiman Royale for A Complete Ethnic Wardrobe Revamp?
         </h3>
 
         <p class="leading-relaxed text-base md:text-lg">
-          In an era where fast fashion dominates, Aiman Royale stands apart by offering heirloom-quality pieces that celebrate India's textile heritage. Our commitment to quality ensures that every garment:
+         Designed to create a lasting impression, Aiman Royale’s luxury outfits celebrate the intricate textiles and rich artistry of India. Our commitment to the finest quality & elegant designs ensures that each outfit:
+
         </p>
 
         <!-- Bullet Points -->
         <ul class="list-disc pl-6 space-y-4 text-base md:text-lg leading-relaxed mb-4">
           <li>
-            Features authentic craftsmanship by skilled artisans from across India, preserving traditional techniques while incorporating modern design elements
+            Is designed by the expert artisans across India, especially skilled in blending traditional craftsmanship with modern elegance
           </li>
           <li>
-            Uses premium fabrics including pure silks, organic cottons, and luxurious blends that ensure comfort without compromising on elegance
+           Is made of premium-quality fabrics such as pure silk, naturally-derived cotton, & luxurious georgette blends that ensure all-day comfort
+
           </li>
           <li>
-            Offers versatile styling options - our pieces transition seamlessly from formal weddings to casual gatherings with simple accessory changes
+           Is versatile and can be styled in different ways by pairing it with the right set of jewelry
           </li>
           <li>
-            Provides perfect fits with our tailored sizing options and customization services for special occasions
+           Is embroidered with classy & contemporary patterns that never fall out of fashion
+
           </li>
           <li>
-            Delivers exceptional value through timeless designs that remain fashionable season after season
+           Will give you the perfect fit with our customization & tailored virtual fashion consultation services
+
           </li>
         </ul>
 
         <!-- Closing Paragraph -->
         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
           <p class="leading-relaxed text-base md:text-lg text-gray-700">
-            Whether you're preparing for your wedding day, attending a festive celebration, or seeking elegant everyday ethnic wear, Aiman Royale offers curated collections that blend tradition with contemporary style. Experience the perfect harmony of heritage and modernity with every piece from our collection.
+           Explore the beauty of Indian traditional and ethnic outfits at Aiman Royale. Whether it’s your big day, a festive event, or a casual evening celebration, we always have something for you. Experience luxury curated with comfort at its finest.  
           </p>
         </div>
       </div>
@@ -644,6 +1202,604 @@
 
   </div>
 </section>
+
+@elseif(str_contains(request()->path(), 'collections/'))
+@php
+// Try to get category from URL slug
+$slug = request()->segment(2);
+$category = \App\Models\Category::where('slug', $slug)->first();
+@endphp
+@if($category)
+<section id="dynamic-content-sec-2" class="w-full bg-white py-12 lg:py-20">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
+
+    <!-- Category Heading -->
+    {{--
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+      {{ $category->name }} - Premium {{ $category->name }} Collection by Aiman Royale
+    </h2>
+    --}}
+
+    <!-- Full Category Description Only -->
+    <!-- Category Description with Preview -->
+    <div class="prose prose-lg max-w-none">
+      <div class="leading-relaxed text-base md:text-lg">
+        <!-- Preview section -->
+        <div id="category-preview" class="mb-2">
+          {!! Str::limit(strip_tags($category->description), 200, '...') !!}
+        </div>
+
+        <!-- Read more button -->
+        <button id="category-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+          Read more
+        </button>
+
+        <!-- Full description (initially hidden) -->
+        <div id="category-full-content" class="hidden mt-4">
+          <div class="leading-relaxed text-base md:text-lg">
+            {!! $category->description !!}
+          </div>
+
+          <!-- Show less button -->
+          <button id="category-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+            Show less
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const readMoreBtn = document.getElementById('category-read-more');
+        const showLessBtn = document.getElementById('category-show-less');
+        const preview = document.getElementById('category-preview');
+        const fullContent = document.getElementById('category-full-content');
+
+        if (readMoreBtn && showLessBtn && preview && fullContent) {
+          readMoreBtn.addEventListener('click', function() {
+            preview.classList.add('hidden');
+            readMoreBtn.classList.add('hidden');
+            fullContent.classList.remove('hidden');
+          });
+
+          showLessBtn.addEventListener('click', function() {
+            preview.classList.remove('hidden');
+            readMoreBtn.classList.remove('hidden');
+            fullContent.classList.add('hidden');
+          });
+        }
+      });
+    </script>
+
+  </div>
+</section>
+@endif
+@elseif(request()->segment(1) && request()->segment(2) && !str_contains(request()->path(), 'admin') && !str_contains(request()->path(), 'collections/') && !str_contains(request()->path(), 'products/'))
+@php
+// Try to get category and occasion from URL slugs
+$categorySlug = request()->segment(1);
+$occasionSlug = request()->segment(2);
+
+$category = \App\Models\Category::where('slug', $categorySlug)->first();
+$occasion = \App\Models\Occasion::where('slug', $occasionSlug)->first();
+
+$categoryOccasionContent = null;
+if ($category && $occasion) {
+$categoryOccasionContent = \App\Models\CategoryOccasionContent::where('category_id', $category->id)
+->where('occasion_id', $occasion->id)
+->first();
+}
+@endphp
+@if($categoryOccasionContent)
+<section id="dynamic-content-sec-3" class="w-full bg-white py-12 lg:py-20">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
+
+    <!-- Category-Ocassion Heading -->
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+      {{ $category->name }} for {{ $occasion->name }} - Premium Collection by Aiman Royale
+    </h2>
+
+    <!-- Category-Ocassion Content with Preview -->
+    <div class="prose prose-lg max-w-none">
+      <div class="leading-relaxed text-base md:text-lg">
+        <!-- Preview section -->
+        <div id="category-occasion-preview" class="mb-2">
+          {!! Str::limit(strip_tags($categoryOccasionContent->content), 200, '...') !!}
+        </div>
+
+        <!-- Read more button -->
+        <button id="category-occasion-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+          Read more
+        </button>
+
+        <!-- Full content (initially hidden) -->
+        <div id="category-occasion-full-content" class="hidden mt-4">
+          <div class="leading-relaxed text-base md:text-lg">
+            {!! $categoryOccasionContent->content !!}
+          </div>
+
+          <!-- Show less button -->
+          <button id="category-occasion-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+            Show less
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const readMoreBtn = document.getElementById('category-occasion-read-more');
+        const showLessBtn = document.getElementById('category-occasion-show-less');
+        const preview = document.getElementById('category-occasion-preview');
+        const fullContent = document.getElementById('category-occasion-full-content');
+
+        if (readMoreBtn && showLessBtn && preview && fullContent) {
+          readMoreBtn.addEventListener('click', function() {
+            preview.classList.add('hidden');
+            readMoreBtn.classList.add('hidden');
+            fullContent.classList.remove('hidden');
+          });
+
+          showLessBtn.addEventListener('click', function() {
+            preview.classList.remove('hidden');
+            readMoreBtn.classList.remove('hidden');
+            fullContent.classList.add('hidden');
+          });
+        }
+      });
+    </script>
+
+  </div>
+</section>
+@endif
+@endif
+<style>
+  .card-shadow {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card-shadow:hover {
+    box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+  }
+
+  .custom-scroll::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-track {
+    background: #f0edea;
+    border-radius: 12px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #c0392b;
+    border-radius: 12px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #9a2e22;
+  }
+
+  .text-primary-dark {
+    color: #bc4e3b;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .faq-answer {
+    transition: opacity 0.2s ease;
+  }
+
+  .faq-answer:not(.hidden) {
+    display: block;
+  }
+
+  .faq-answer.hidden {
+    display: none;
+  }
+
+  .faq-btn:focus-visible {
+    outline: 2px solid #bc4e3b;
+    outline-offset: 2px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .faq-question-text {
+      font-size: 0.95rem !important;
+      line-height: 1.4rem;
+    }
+
+    .faq-answer {
+      font-size: 0.85rem !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .faq-question-text {
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .faq-question-text {
+      font-size: 1.1rem;
+    }
+  }
+
+  .hover\:bg-rose-50\/40:hover {
+    background-color: rgba(255, 228, 225, 0.5);
+  }
+
+  .loading-spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #bc4e3b;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .faq-category-badge {
+    background: #fef2e8;
+    color: #bc4e3b;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: 500;
+  }
+</style>
+
+@php
+// Check if current URL is a product page with slug
+$currentPath = request()->path();
+$isProductPage = false;
+$productSlug = null;
+
+if (str_contains($currentPath, 'products/')) {
+$segments = explode('/', $currentPath);
+$productsIndex = array_search('products', $segments);
+
+if ($productsIndex !== false && isset($segments[$productsIndex + 1])) {
+$productSlug = $segments[$productsIndex + 1];
+$isProductPage = !empty($productSlug);
+}
+}
+@endphp
+
+@if($isProductPage)
+<div class="container mx-auto px-4 sm:px-5 lg:px-6 py-8 md:py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+
+    <!-- LEFT: FAQ SECTION - Dynamic API Driven -->
+    <div class="bg-white border border-gray-200/70 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 card-shadow">
+      <div class="p-6 md:p-7">
+        <div class="text-center mb-6 border-b border-gray-100 pb-4">
+          <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
+            Frequently Asked <span class="text-primary-dark">(FAQs)</span> <br class="hidden sm:block"> On {{ $productSlug ? ucfirst(str_replace('-', ' ', $productSlug)) : 'This Product' }}
+          </h2>
+          <p class="text-sm text-gray-500 mt-2 font-medium">Everything you need to know about our ethnic collection</p>
+        </div>
+
+        <!-- Dynamic FAQ Container -->
+        <div id="faq-dynamic-container" class="space-y-2">
+          <!-- Loading State -->
+          <div class="flex justify-center items-center py-12">
+            <div class="loading-spinner"></div>
+            <span class="ml-3 text-gray-500 text-sm">Loading FAQs...</span>
+          </div>
+        </div>
+
+        <!-- Fallback / error message placeholder -->
+        <div id="faq-error-msg" class="hidden text-center py-6 text-gray-500 text-sm"></div>
+
+        <div class="mt-7 pt-2 text-center text-xs text-gray-400 border-t border-gray-100">
+          <span>📘 Need more help? <a href="#" class="text-primary-dark hover:underline font-medium">Contact our fashion experts</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PRICE LIST - Latest Collection (Static) -->
+    <div class="bg-white border border-gray-200/70 rounded-2xl shadow-sm overflow-hidden card-shadow">
+      <div class="p-6 md:p-7">
+        <div class="text-center mb-6 border-b border-gray-100 pb-4">
+          <h2 class="font-extrabold tracking-tight text-gray-800" style="font-size: clamp(1.65rem, 6vw, 2.2rem); line-height: 1.3;">
+            Latest Products <span class="text-primary-dark">Collection</span> With Price
+          </h2>
+          <p class="text-sm text-gray-500 mt-2 font-medium">Handpicked luxury & festive ethnic wear</p>
+        </div>
+
+        <div class="flex justify-between font-semibold text-sm md:text-base uppercase tracking-wide text-gray-700 border-b-2 border-primary-dark/20 pb-3 mb-3">
+          <span>Products List</span>
+          <span>Price (INR)</span>
+        </div>
+
+        <div id="footer-latest-products-container" class="mt-2 space-y-3 text-sm md:text-[0.95rem] max-h-[540px] overflow-y-auto pr-1 custom-scroll">
+          <!-- Loading state -->
+          <div class="text-center py-8 text-gray-500">
+            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-primary-dark"></div>
+            <p class="text-sm mt-2">Loading latest products...</p>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-3 flex flex-wrap justify-between items-center border-t border-gray-200 text-xs text-gray-500 gap-2">
+          <span>🛍️ Prices inclusive of taxes</span>
+          <span class="bg-gray-50 px-3 py-0.5 rounded-full text-primary-dark/80 border border-gray-200">Last updated: {{ date('d/m/Y') }}</span>
+        </div>
+        <p class="text-xs text-gray-400 mt-3 text-center">*Customization & bulk order discounts available | Shop now</p>
+      </div>
+    </div>
+
+    <script>
+      // Fetch and display latest products in footer
+      document.addEventListener('DOMContentLoaded', function() {
+        // Use product slug from server-side detection
+        const productSlug = '{{ $productSlug ?? null }}';
+
+        if (!productSlug) {
+          return; // Exit if no product slug
+        }
+
+        // Use latest products API for same category
+        const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`;
+        const container = document.getElementById('footer-latest-products-container');
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && data.data && data.data.length > 0) {
+              // Use latest products from same category
+              const products = data.data.slice(0, 10); // Limit to 10 products
+
+              let html = '';
+              products.forEach(product => {
+                const emoji = ['✨', '🌸', '💙', '🍃', '🌻', '🌼', '🎀', '💎', '🦚', '🌟'][products.indexOf(product) % 10];
+                const price = product.price ? `₹${product.price.toLocaleString('en-IN')}` : 'Price on request';
+                const productUrl = `/products/${product.slug}`;
+
+                html += `
+                    <div class="flex justify-between items-center py-2 border-b border-gray-100 hover:bg-rose-50/40 transition px-2 rounded-lg">
+                      <a href="${productUrl}" class="text-gray-800 font-medium hover:text-primary-dark flex-1">
+                        ${emoji} ${product.name}
+                      </a>
+                      <span class="font-bold text-primary-dark ml-2">${price}</span>
+                    </div>
+                  `;
+              });
+
+              container.innerHTML = html;
+            } else {
+              // Fallback message
+              container.innerHTML = `
+                  <div class="text-center py-8 text-gray-500">
+                    <p class="text-sm">No more products available in this category.</p>
+                    <p class="text-xs mt-1">Check back soon for new arrivals!</p>
+                  </div>
+                `;
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching latest products:', error);
+            container.innerHTML = `
+                <div class="text-center py-8 text-red-500">
+                  <p class="text-sm">Unable to load products.</p>
+                  <p class="text-xs mt-1">Please refresh the page.</p>
+                </div>
+              `;
+          });
+      });
+    </script>
+  </div>
+</div>
+@endif
+
+<script>
+  (function() {
+    // Helper: extract product slug from current URL path
+    function getProductSlugFromUrl() {
+      const path = window.location.pathname; // e.g., "/products/salwar-kameez" or "/products/salwar-kameez/"
+      const segments = path.split('/').filter(seg => seg.length > 0);
+      // Find segment after 'products' if exists, otherwise last segment as fallback
+      const productsIndex = segments.findIndex(seg => seg.toLowerCase() === 'products');
+      if (productsIndex !== -1 && segments.length > productsIndex + 1) {
+        return segments[productsIndex + 1];
+      }
+      // fallback: return last segment (salwar-kameez)
+      if (segments.length > 0) {
+        return segments[segments.length - 1];
+      }
+      return null;
+    }
+
+    const slug = getProductSlugFromUrl();
+    const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/faqs/products/${slug}`;
+    const container = document.getElementById('faq-dynamic-container');
+    const errorDiv = document.getElementById('faq-error-msg');
+
+    // Function to render FAQ items dynamically with accordion
+    function renderFaqs(faqsData) {
+      if (!faqsData || faqsData.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <p class="text-sm">No FAQs available for this product yet.</p>
+              <p class="text-xs mt-1">Check back soon for more details!</p>
+            </div>
+          `;
+        return;
+      }
+
+      // Build HTML for each faq with improved typography & category badge
+      let faqHtml = '';
+      faqsData.forEach((faq, index) => {
+        const heading = faq.heading || '';
+        const question = faq.question || '';
+        const answer = faq.answer || '';
+        const categoryName = faq.category?.category_name || 'General';
+        const displayQuestion = heading && heading.trim() !== '' ? heading : question;
+        const finalQuestion = displayQuestion && displayQuestion.trim() !== '' ? displayQuestion : 'Helpful information';
+
+        // Add border-bottom except last item
+        const borderClass = index !== faqsData.length - 1 ? 'border-b border-gray-100' : '';
+
+        faqHtml += `
+            <div class="${borderClass} py-3">
+              <button class="faq-btn flex justify-between items-center w-full text-left group focus:outline-none rounded-xl px-1 py-0.5 transition-all">
+                <div class="flex flex-col flex-1 pr-3">
+                  <span class="faq-question-text font-semibold text-gray-800 group-hover:text-primary-dark transition-colors leading-tight">
+                    ${escapeHtml(finalQuestion)}
+                  </span>
+                  <span class="faq-category-badge inline-block mt-1.5 w-fit">${escapeHtml(categoryName)}</span>
+                </div>
+                <span class="icon-span text-2xl font-semibold text-primary-dark/70 group-hover:text-primary-dark transition-colors w-7 text-center flex-shrink-0">+</span>
+              </button>
+              <p class="faq-answer text-sm md:text-[0.95rem] text-gray-600 mt-2 pl-1 hidden leading-relaxed">
+                ${escapeHtml(answer)}
+              </p>
+            </div>
+          `;
+      });
+
+      container.innerHTML = faqHtml;
+
+      // Re-attach accordion event listeners to newly created buttons
+      attachAccordionEvents();
+    }
+
+    // Helper: escape HTML to avoid XSS
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Accordion handler
+    function attachAccordionEvents() {
+      const faqButtons = document.querySelectorAll('#faq-dynamic-container .faq-btn');
+
+      function accordionHandler(event) {
+        const button = event.currentTarget;
+        const answerPara = button.nextElementSibling;
+        const iconSpan = button.querySelector('.icon-span');
+
+        if (!answerPara || !iconSpan) return;
+
+        const isHidden = answerPara.classList.contains('hidden');
+
+        if (isHidden) {
+          // open
+          answerPara.classList.remove('hidden');
+          iconSpan.textContent = '−';
+          answerPara.style.opacity = '0';
+          answerPara.style.transition = 'opacity 0.2s ease';
+          setTimeout(() => {
+            answerPara.style.opacity = '1';
+          }, 8);
+        } else {
+          // close
+          answerPara.classList.add('hidden');
+          iconSpan.textContent = '+';
+        }
+      }
+
+      faqButtons.forEach(btn => {
+        btn.removeEventListener('click', accordionHandler);
+        btn.addEventListener('click', accordionHandler);
+      });
+    }
+
+    // Fetch FAQs from API
+    async function fetchFaqs() {
+      if (!slug) {
+        // If no slug found, try a fallback message or show demo/default? But we show error gracefully.
+        container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <p class="text-sm">Unable to identify product from URL.</p>
+              <p class="text-xs mt-1">Please visit a product page like /products/salwar-kameez</p>
+            </div>
+          `;
+        return;
+      }
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: Failed to load FAQs`);
+        }
+
+        const result = await response.json();
+
+        // Validate API response structure as per given spec: { success: true, data: [...] }
+        if (result && result.success === true && Array.isArray(result.data)) {
+          renderFaqs(result.data);
+        } else if (result && result.data && Array.isArray(result.data)) {
+          // fallback for API that returns directly data array without success flag
+          renderFaqs(result.data);
+        } else {
+          throw new Error('Invalid API response format');
+        }
+      } catch (error) {
+        console.error('FAQ fetch error:', error);
+        container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <p class="text-sm text-red-500">⚠️ Unable to load FAQs at the moment.</p>
+              <p class="text-xs mt-2 text-gray-400">${error.message || 'Please check API connection or try again later.'}</p>
+            </div>
+          `;
+        errorDiv.classList.remove('hidden');
+        errorDiv.innerHTML = '<span class="text-xs">💡 Tip: Ensure backend server is running at http://127.0.0.1:8000</span>';
+      }
+    }
+
+    // Initial fetch
+    fetchFaqs();
+  })();
+</script>
+
+<!-- Additional style for category badge positioning and responsive spacing -->
+<style>
+  .faq-category-badge {
+    background: #fef2e8;
+    color: #bc4e3b;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.7rem;
+    border-radius: 30px;
+    display: inline-block;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .faq-btn .flex-col {
+    gap: 0.2rem;
+  }
+
+  .faq-btn:hover .faq-category-badge {
+    background: #ffe6db;
+  }
+</style>
 
 <footer class="bg-gradient-to-b from-[#FCE7F3] to-[#FCE7F3]/80">
   <div class="container mx-auto px-4 lg:px-8 pt-6">
@@ -698,14 +1854,15 @@
         <div class="text-center lg:text-left">
           <div class="inline-flex items-center gap-2 mb-3 lg:mb-4">
             <div class="w-6 h-6 rounded-full bg-gradient-to-r from-[#A10000] to-[#EC4899]"></div>
-            <span class="text-sm font-semibold text-[#A10000] tracking-wider uppercase">Stay Updated</span>
+            <span class="text-sm font-semibold text-[#A10000] tracking-wider uppercase">Never miss an update</span>
           </div>
           <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 lg:mb-6 leading-tight">
             Subscribe to Our
             <span class="text-[#A10000]">Newsletter</span>
           </h2>
           <p class="text-gray-600 mb-6 lg:mb-8 text-sm lg:text-base">
-            Get exclusive updates on new arrivals, special offers, and fashion tips delivered to your inbox.
+            Join us for exclusive discounts on new arrivals, seasonal deals, & daily styling tips delivered right in your inbox
+
           </p>
         </div>
 
@@ -721,10 +1878,10 @@
                 placeholder="Your email address"
                 autocomplete="off" />
 
-            
+
               <div class="absolute inset-0 rounded-2xl lg:rounded-3xl bg-gradient-to-r from-[#A10000]/0 via-[#EC4899]/0 to-[#EC4899]/0 group-focus-within:from-[#A10000]/5 group-focus-within:via-[#EC4899]/5 group-focus-within:to-[#EC4899]/5 transition-all duration-500 -z-10"></div>
             </div>
-            
+
             <button
               type="button"
               id="newsletterSubmitBtn"
@@ -735,9 +1892,9 @@
             </button>
           </div>
           <!-- Error Message Container -->
-              <div id="email-error" class="text-red-500 text-sm mt-1 hidden"></div>
-               <!-- Success Message Container -->
-              <div id="email-success" class="text-green-500 text-sm mt-1 hidden"></div>
+          <div id="email-error" class="text-red-500 text-sm mt-1 hidden"></div>
+          <!-- Success Message Container -->
+          <div id="email-success" class="text-green-500 text-sm mt-1 hidden"></div>
         </form>
       </div>
       <!-- Divider - Hidden on mobile -->
@@ -833,8 +1990,7 @@
           </a>
         </div>
         <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed md:mx-0 mx-auto md:text-left text-center">
-          We are a fashion brand that offers the best of contemporary, ethnic Indian fashion,
-          and fusion-wear styles. Redefining elegance with every stitch.
+          We are an Indian fashion brand known for our exquisite collection of ethnic & fusion outfits. Explore the timeless art of traditional textiles.
         </p>
       </div>
 
@@ -916,11 +2072,11 @@
           </div>
         </div>
         <div id="vastram" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Our Story</span>
+            <span class="font-medium">About Us</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="contact-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Contact Us</span>
           </a>
@@ -953,26 +2109,20 @@
           </div>
         </div>
         <div id="policies" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+          <a href="terms-condition" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Terms & Conditions</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+         
+          <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Shipping Policy</span>
+            <span class="font-medium">Return & Refund Policy</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Return & Exchange</span>
-          </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
+          <a href="privacy-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Privacy Policy</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Payment Security</span>
-          </a>
+        
         </div>
       </div>
 
@@ -990,15 +2140,15 @@
           </div>
         </div>
         <div id="account" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ config('app.url') }}/login" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Login / Register</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{route('cart.index')}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Shopping Bag</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ config('app.url') }}/wishlist" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Wishlist</span>
           </a>
@@ -1006,10 +2156,12 @@
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Order Tracking</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Order History</span>
-          </a>
+          @auth
+<a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+    <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+    <span class="font-medium">Order History</span>
+</a>
+@endauth
         </div>
       </div>
 
@@ -1030,8 +2182,8 @@
               </svg>
             </div>
             <div>
-              <p class="font-medium text-gray-900">Our Store</p>
-              <p class="text-sm text-gray-600 mt-1">123 Fashion Street, Mumbai, India</p>
+              <p class="font-medium text-gray-900">Our Location</p>
+              <p class="text-sm text-gray-600 mt-1">Islampur, Kadambagachhi, North 24 Parganas, Kol-700125, West Bengal, India</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -1042,7 +2194,7 @@
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <p class="text-sm text-gray-600 mt-1">+91 98765 43210</p>
+              <a href="tel:+917003184741" class="text-sm text-gray-600 mt-1">+91 7003184741</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -1053,7 +2205,7 @@
             </div>
             <div>
               <p class="font-medium text-gray-900">Email Us</p>
-              <p class="text-sm text-gray-600 mt-1 break-all">support@aimanfashion.com</p>
+              <a href="mailto:contact.aimanroyale@gmail.com" class="text-sm text-gray-600 mt-1 break-all">contact.aimanroyale@gmail.com</a>
             </div>
           </div>
         </div>
@@ -1066,10 +2218,10 @@
     <!-- LATEST ETHNIC COLLECTION -->
     <div class="w-full">
       <span class="font-semibold uppercase tracking-wide text-gray-900 block mb-2">
-        Latest Ethnic Collection
+       Latest Ethnic Collection
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-        Premium collections like Zehn Couture, Mushk Couture '24, and The Atelier Couture featuring exquisite traditional and contemporary designs.
+        Gowns, Lahengas, Anarkali, Kurta Sets, Salwar Kameez, Palazzo, & Sharara suits 
       </p>
     </div>
 
@@ -1079,7 +2231,7 @@
         New Arrival
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-        Fresh additions of salwar suits, sarees, lehengas, and men's wear showcasing latest seasonal trends and styles.
+      Anarkali, Salwar Kameez, Palazzos, Gowns
       </p>
     </div>
 
@@ -1089,7 +2241,8 @@
         Best Seller
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-        Our most loved salwar suits, sarees, lehengas, gowns, and men's wear based on customer reviews and timeless appeal.
+       Gowns, Lahengas, Anarkalis, & Shararas
+
       </p>
     </div>
 
@@ -1099,7 +2252,8 @@
         Measurement
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-        Detailed guides for saree/blouse, salwar/kameez, lehenga/choli, gowns, plus size charts and maternity fitting tips.
+       S, M, L, XL, XXL, Plus size, Maternity & Customized fitting options
+
       </p>
     </div>
 
@@ -1197,7 +2351,7 @@
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
 <a href="https://wa.me/919999999999" target="_blank"
-  class="fixed bottom-[7.5rem] right-4 md:bottom-6 md:right-6 z-[60] group">
+  class="fixed {{ $isProductPage ? 'bottom-[10.5rem]' : 'bottom-6' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
 
@@ -1235,23 +2389,23 @@
   <div class="px-2 py-2 flex items-center justify-between gap-0 max-w-screen-sm mx-auto">
 
     <!-- Home Button -->
-    <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-[#FCE7F3] active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="/" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-[#FCE7F3] active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-home text-xl text-gray-600 mb-1 group-hover:text-[#EC4899] group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-[#EC4899] transition-colors relative z-10">Home</span>
       <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-[#EC4899] rounded-full transition-all duration-300"></div>
-    </button>
+    </a>
 
     <!-- Categories Button -->
-    <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-blue-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="/" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-blue-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-th-large text-xl text-gray-600 mb-1 group-hover:text-blue-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-blue-600 transition-colors relative z-10">Categories</span>
       <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-blue-600 rounded-full transition-all duration-300"></div>
-    </button>
+    </a>
 
     <!-- Trending Button (Active/Featured) -->
-    <button class="nav-item mt-[-5px] active-nav flex flex-col items-center justify-center w-16 py-2  rounded-2xl bg-gradient-to-br from-[#A10000] via-[#EC4899] to-[#FF6B9D] border-2 border-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 relative group">
+    <a href="{{ config('app.url') }}/products?search=trending" class="nav-item mt-[-5px] active-nav flex flex-col items-center justify-center w-16 py-2  rounded-2xl bg-gradient-to-br from-[#A10000] via-[#EC4899] to-[#FF6B9D] border-2 border-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 relative group">
       <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div class="relative mb-0.5">
         <i class="fas fa-fire text-xl text-white group-hover:animate-pulse"></i>
@@ -1261,10 +2415,10 @@
       <span class="text-xs font-bold text-white drop-shadow-sm">Trending</span>
       <div class="absolute -top-1 inset-x-1/4 w-8 h-1 bg-gradient-to-r from-white/90 to-white/60 rounded-full shadow-sm"></div>
       <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full blur-sm"></div>
-    </button>
+    </a>
 
     <!-- Offers Button -->
-    <button class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="/" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div class="relative">
         <i class="fas fa-percent text-xl text-gray-600 mb-1 group-hover:text-amber-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
@@ -1272,21 +2426,23 @@
       </div>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-amber-600 transition-colors relative z-10">Offers</span>
       <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-amber-600 rounded-full transition-all duration-300"></div>
-    </button>
+    </a>
 
     <!-- Book Appointment Button -->
-    <button class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="/" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
       <div class="absolute bottom-0 w-6 h-0.5 bg-transparent group-hover:bg-emerald-600 rounded-full transition-all duration-300"></div>
-    </button>
+    </a>
 
   </div>
 
   <!-- Safe area padding for iPhone bottom notch -->
   <div class="h-[env(safe-area-inset-bottom)] bg-gradient-to-b from-white to-gray-50/50"></div>
 </div>
+
+
 
 
 <!-- Add this script at the end of your HTML -->
@@ -1384,7 +2540,7 @@
   });
 </script>
 
-<script>
+<!-- <script>
   document.addEventListener('DOMContentLoaded', function() {
     const redirectButton = document.getElementById('redi-sec-dyna');
     const targetSection = document.getElementById('dynamic-content-sec');
@@ -1404,273 +2560,297 @@
       });
     }
   });
+</script> -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.redi-sec-dyna');
+
+    buttons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const targetId = button.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+
+        if (targetSection) {
+          const headerOffset = 80;
+          const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      });
+    });
+  });
 </script>
 <script>
-// Newsletter Validation Function
-window.validateAndSubmitNewsletter = function() {
-  try {
-    console.log('Newsletter validation triggered');
+  // Newsletter Validation Function
+  window.validateAndSubmitNewsletter = function() {
+    try {
+      console.log('Newsletter validation triggered');
 
-    // Get form elements
-    const form = document.getElementById('newsletterForm');
+      // Get form elements
+      const form = document.getElementById('newsletterForm');
+      const emailInput = document.getElementById('newsletterEmail');
+      const emailError = document.getElementById('email-error');
+      const emailSuccess = document.getElementById('email-success');
+      const submitBtn = document.getElementById('newsletterSubmitBtn');
+
+      // Reset previous states
+      resetValidationStates(emailInput, emailError, emailSuccess);
+
+      // Get email value
+      const emailValue = emailInput.value.trim();
+
+      // Validation checks
+      const validationResult = validateEmail(emailValue);
+
+      if (!validationResult.isValid) {
+        // Show error message
+        showError(emailInput, emailError, validationResult.message);
+
+        // Shake animation for error
+        emailInput.classList.add('animate-shake');
+        setTimeout(() => {
+          emailInput.classList.remove('animate-shake');
+        }, 500);
+
+        return false; // Don't submit
+      }
+
+      // If validation passes, disable button to prevent double submission
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Submitting... <span class="ml-2">⏳</span>';
+
+      // Show success message (optional)
+      showSuccess(emailSuccess, 'Valid email! Submitting...');
+
+      // Submit the form after a short delay (for UX)
+      setTimeout(() => {
+        form.submit();
+      }, 300);
+
+      return true;
+
+    } catch (error) {
+      console.error('Newsletter validation error:', error);
+      // Fallback: submit the form anyway
+      const fallbackForm = document.getElementById('newsletterForm');
+      if (fallbackForm) {
+        fallbackForm.submit();
+      }
+    }
+  };
+
+  // Email validation function with custom messages
+  function validateEmail(email) {
+    // Check if email is empty
+    if (!email) {
+      return {
+        isValid: false,
+        message: 'Please enter your email address.'
+      };
+    }
+
+    // Check email format using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return {
+        isValid: false,
+        message: 'Please enter a valid email address (e.g., name@example.com).'
+      };
+    }
+
+    // Check for common typos
+    if (email.includes('..') || email.includes('@.') || email.includes('.@')) {
+      return {
+        isValid: false,
+        message: 'Email address contains invalid characters or format.'
+      };
+    }
+
+    // Check domain part
+    const domain = email.split('@')[1];
+    if (domain && !domain.includes('.')) {
+      return {
+        isValid: false,
+        message: 'Email domain must include a dot (e.g., .com, .org).'
+      };
+    }
+
+    // Check for spaces
+    if (email.includes(' ')) {
+      return {
+        isValid: false,
+        message: 'Email address cannot contain spaces.'
+      };
+    }
+
+    // All validations passed
+    return {
+      isValid: true,
+      message: 'Email is valid!'
+    };
+  }
+
+  // Reset validation states
+  function resetValidationStates(emailInput, emailError, emailSuccess) {
+    // Remove error states
+    emailInput.classList.remove('border-red-500', 'border-green-500', 'animate-shake');
+
+    // Hide error and success messages
+    if (emailError) {
+      emailError.classList.add('hidden');
+      emailError.textContent = '';
+    }
+
+    if (emailSuccess) {
+      emailSuccess.classList.add('hidden');
+      emailSuccess.textContent = '';
+    }
+  }
+
+  // Show error message
+  function showError(emailInput, emailError, message) {
+    emailInput.classList.add('border-red-500');
+    emailInput.classList.remove('border-green-500');
+
+    if (emailError) {
+      emailError.textContent = message;
+      emailError.classList.remove('hidden');
+
+      // Add icon to error message (optional)
+      emailError.innerHTML = `⚠️ ${message}`;
+    }
+  }
+
+  // Show success message
+  function showSuccess(emailSuccess, message) {
+    if (emailSuccess) {
+      emailSuccess.textContent = message;
+      emailSuccess.classList.remove('hidden');
+
+      // Add icon to success message (optional)
+      emailSuccess.innerHTML = `✅ ${message}`;
+    }
+  }
+
+  // DOM Content Loaded - Set up real-time validation
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Setting up real-time validation');
+
     const emailInput = document.getElementById('newsletterEmail');
     const emailError = document.getElementById('email-error');
     const emailSuccess = document.getElementById('email-success');
     const submitBtn = document.getElementById('newsletterSubmitBtn');
 
-    // Reset previous states
-    resetValidationStates(emailInput, emailError, emailSuccess);
+    if (emailInput && emailError) {
 
-    // Get email value
-    const emailValue = emailInput.value.trim();
-    
-    // Validation checks
-    const validationResult = validateEmail(emailValue);
-    
-    if (!validationResult.isValid) {
-      // Show error message
-      showError(emailInput, emailError, validationResult.message);
-      
-      // Shake animation for error
-      emailInput.classList.add('animate-shake');
-      setTimeout(() => {
-        emailInput.classList.remove('animate-shake');
-      }, 500);
-      
-      return false; // Don't submit
-    }
+      // Real-time validation with debounce
+      let debounceTimer;
+      emailInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
 
-    // If validation passes, disable button to prevent double submission
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Submitting... <span class="ml-2">⏳</span>';
-    
-    // Show success message (optional)
-    showSuccess(emailSuccess, 'Valid email! Submitting...');
-    
-    // Submit the form after a short delay (for UX)
-    setTimeout(() => {
-      form.submit();
-    }, 300);
+        const emailValue = this.value.trim();
 
-    return true;
+        // Reset styles
+        this.classList.remove('border-red-500', 'border-green-500');
+        emailError.classList.add('hidden');
 
-  } catch (error) {
-    console.error('Newsletter validation error:', error);
-    // Fallback: submit the form anyway
-    const fallbackForm = document.getElementById('newsletterForm');
-    if (fallbackForm) {
-      fallbackForm.submit();
-    }
-  }
-};
+        if (emailSuccess) {
+          emailSuccess.classList.add('hidden');
+        }
 
-// Email validation function with custom messages
-function validateEmail(email) {
-  // Check if email is empty
-  if (!email) {
-    return {
-      isValid: false,
-      message: 'Please enter your email address.'
-    };
-  }
+        // Debounce validation to improve performance
+        debounceTimer = setTimeout(() => {
+          if (emailValue.length > 0) {
+            const validationResult = validateEmail(emailValue);
 
-  // Check email format using regex
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return {
-      isValid: false,
-      message: 'Please enter a valid email address (e.g., name@example.com).'
-    };
-  }
+            if (validationResult.isValid) {
+              this.classList.add('border-green-500');
+              if (emailSuccess) {
+                showSuccess(emailSuccess, '✓ Valid email');
+              }
+            } else {
+              this.classList.add('border-red-500');
+              if (emailError) {
+                emailError.textContent = validationResult.message;
+                emailError.classList.remove('hidden');
+              }
+            }
+          }
+        }, 300);
+      });
 
-  // Check for common typos
-  if (email.includes('..') || email.includes('@.') || email.includes('.@')) {
-    return {
-      isValid: false,
-      message: 'Email address contains invalid characters or format.'
-    };
-  }
+      // Clear validation on focus
+      emailInput.addEventListener('focus', function() {
+        this.classList.remove('border-red-500', 'border-green-500');
+        emailError.classList.add('hidden');
+        if (emailSuccess) {
+          emailSuccess.classList.add('hidden');
+        }
+      });
 
-  // Check domain part
-  const domain = email.split('@')[1];
-  if (domain && !domain.includes('.')) {
-    return {
-      isValid: false,
-      message: 'Email domain must include a dot (e.g., .com, .org).'
-    };
-  }
+      // Validate on blur (when user leaves the input)
+      emailInput.addEventListener('blur', function() {
+        const emailValue = this.value.trim();
 
-  // Check for spaces
-  if (email.includes(' ')) {
-    return {
-      isValid: false,
-      message: 'Email address cannot contain spaces.'
-    };
-  }
-
-  // All validations passed
-  return {
-    isValid: true,
-    message: 'Email is valid!'
-  };
-}
-
-// Reset validation states
-function resetValidationStates(emailInput, emailError, emailSuccess) {
-  // Remove error states
-  emailInput.classList.remove('border-red-500', 'border-green-500', 'animate-shake');
-  
-  // Hide error and success messages
-  if (emailError) {
-    emailError.classList.add('hidden');
-    emailError.textContent = '';
-  }
-  
-  if (emailSuccess) {
-    emailSuccess.classList.add('hidden');
-    emailSuccess.textContent = '';
-  }
-}
-
-// Show error message
-function showError(emailInput, emailError, message) {
-  emailInput.classList.add('border-red-500');
-  emailInput.classList.remove('border-green-500');
-  
-  if (emailError) {
-    emailError.textContent = message;
-    emailError.classList.remove('hidden');
-    
-    // Add icon to error message (optional)
-    emailError.innerHTML = `⚠️ ${message}`;
-  }
-}
-
-// Show success message
-function showSuccess(emailSuccess, message) {
-  if (emailSuccess) {
-    emailSuccess.textContent = message;
-    emailSuccess.classList.remove('hidden');
-    
-    // Add icon to success message (optional)
-    emailSuccess.innerHTML = `✅ ${message}`;
-  }
-}
-
-// DOM Content Loaded - Set up real-time validation
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Setting up real-time validation');
-  
-  const emailInput = document.getElementById('newsletterEmail');
-  const emailError = document.getElementById('email-error');
-  const emailSuccess = document.getElementById('email-success');
-  const submitBtn = document.getElementById('newsletterSubmitBtn');
-
-  if (emailInput && emailError) {
-    
-    // Real-time validation with debounce
-    let debounceTimer;
-    emailInput.addEventListener('input', function() {
-      clearTimeout(debounceTimer);
-      
-      const emailValue = this.value.trim();
-      
-      // Reset styles
-      this.classList.remove('border-red-500', 'border-green-500');
-      emailError.classList.add('hidden');
-      
-      if (emailSuccess) {
-        emailSuccess.classList.add('hidden');
-      }
-      
-      // Debounce validation to improve performance
-      debounceTimer = setTimeout(() => {
-        if (emailValue.length > 0) {
+        if (emailValue) {
           const validationResult = validateEmail(emailValue);
-          
-          if (validationResult.isValid) {
+
+          if (!validationResult.isValid) {
+            showError(this, emailError, validationResult.message);
+          } else {
             this.classList.add('border-green-500');
             if (emailSuccess) {
               showSuccess(emailSuccess, '✓ Valid email');
             }
-          } else {
-            this.classList.add('border-red-500');
-            if (emailError) {
-              emailError.textContent = validationResult.message;
-              emailError.classList.remove('hidden');
-            }
           }
         }
-      }, 300);
-    });
+      });
 
-    // Clear validation on focus
-    emailInput.addEventListener('focus', function() {
-      this.classList.remove('border-red-500', 'border-green-500');
-      emailError.classList.add('hidden');
-      if (emailSuccess) {
-        emailSuccess.classList.add('hidden');
-      }
-    });
-
-    // Validate on blur (when user leaves the input)
-    emailInput.addEventListener('blur', function() {
-      const emailValue = this.value.trim();
-      
-      if (emailValue) {
-        const validationResult = validateEmail(emailValue);
-        
-        if (!validationResult.isValid) {
-          showError(this, emailError, validationResult.message);
-        } else {
-          this.classList.add('border-green-500');
-          if (emailSuccess) {
-            showSuccess(emailSuccess, '✓ Valid email');
-          }
+      // Prevent form submission on Enter key if invalid
+      emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          validateAndSubmitNewsletter();
         }
-      }
-    });
-    
-    // Prevent form submission on Enter key if invalid
-    emailInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        validateAndSubmitNewsletter();
-      }
-    });
-  }
-  
-  // Handle existing session errors (if any)
-  @isset($errors)
-    @if ($errors->has('email'))
-      const errorMessage = "{{ $errors->first('email') }}";
-      if (emailInput && emailError) {
-        showError(emailInput, emailError, errorMessage);
-      }
+      });
+    }
+
+    // Handle existing session errors (if any)
+    @isset($errors)
+    @if($errors->has('email'))
+    const errorMessage = "{{ $errors->first('email') }}";
+    if (emailInput && emailError) {
+      showError(emailInput, emailError, errorMessage);
+    }
     @endif
-  @endisset
-  
-  // Handle success message from session
-  @if (session('success'))
+    @endisset
+
+    // Handle success message from session
+    @if(session('success'))
     if (emailInput && emailSuccess) {
       emailInput.classList.add('border-green-500');
       showSuccess(emailSuccess, "{{ session('success') }}");
-      
+
       // Clear input after success
       emailInput.value = '';
-      
+
       // Hide success message after 5 seconds
       setTimeout(() => {
         emailSuccess.classList.add('hidden');
         emailInput.classList.remove('border-green-500');
       }, 5000);
     }
-  @endif
-});
+    @endif
+  });
 
-// Add shake animation for error feedback
-const style = document.createElement('style');
-style.textContent = `
+  // Add shake animation for error feedback
+  const style = document.createElement('style');
+  style.textContent = `
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -1710,7 +2890,7 @@ style.textContent = `
     box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
   }
 `;
-document.head.appendChild(style);
+  document.head.appendChild(style);
 </script>
 
 

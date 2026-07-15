@@ -234,9 +234,9 @@
 
                     </a>
                     @else
-                        {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
-                        class="block h-full w-full relative"> --}}
-                        <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
+                    {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
+                    class="block h-full w-full relative"> --}}
+                    <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
                             src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
@@ -283,9 +283,9 @@
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
-                        alt="Glow Pink Dress">
+                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                            src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
+                            alt="Glow Pink Dress">
                     </a>
                     @endif
                     {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
@@ -318,7 +318,7 @@
 
                     <h1
                         class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient">
-                        ULTIMATE
+                        PRICE DROP
                     </h1>
 
                     <div class="relative">
@@ -347,7 +347,7 @@
                         </div>
                     </button>
 
-                    <p class="text-sm text-gray-500 mt-2">Limited Time Offer</p>
+                    <p class="text-sm text-gray-500 mt-2">Limited Period Offer</p>
                 </div>
 
                 <!-- Bottom Image -->
@@ -374,9 +374,9 @@
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
-                    <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                        alt="Gray Lahenga">
+                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                            src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
+                            alt="Gray Lahenga">
                     </a>
                     @endif
                     <div
@@ -413,10 +413,10 @@
                     @else
                     <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
-                     
-                    <img class="object-cover h-full w-full"
-                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
-                     </a>
+
+                        <img class="object-cover h-full w-full"
+                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
+                    </a>
                     @endif
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -456,7 +456,7 @@
         <!-- Owl Carousel Container -->
         <div class="relative px-2">
             <div id="categories-carousel" class="owl-carousel owl-theme">
-                @if (!isset($categories))
+                @if (!isset($categoriesWithProduct))
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
@@ -598,11 +598,11 @@
 
                 @else
                 <!-- Dynamic Categories -->
-                @foreach ($categories as $category)
+                @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
-                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                            <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
                                 alt="{{ $category->name }}"
                                 class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
 
@@ -699,33 +699,34 @@
 <section class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
         <!-- Header -->
-         <div class="text-center mb-4">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Tied with Love</h2>
-            <p class="text-gray-500">Occasions wrapped perfectly</p>
+        <div class="text-center mb-4">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Crafted for Celebrations</h2>
+            <p class="text-gray-500">Designed for Perfection</p>
         </div>
 
 
         <!-- Hanging Tags -->
         <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
-            @foreach ($categories->where('parent_id', null) as $category)
+
+            @foreach ($categoriesWithProduct->where('parent_id', null) as $category)
             <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
                 <!-- String/Hanger -->
                 <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
                 <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
-                
+
                 <!-- Tag -->
                 <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
-                    
+
                     <!-- Tag Hole -->
                     <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10"></div>
-                    
+
                     <!-- Image -->
                     <div class="h-32 overflow-hidden">
-                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
                             alt="{{ $category->name }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
                     </div>
-                    
+
                     <!-- Content -->
                     <div class="p-3 text-center">
                         <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
@@ -761,14 +762,14 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
-           
+
             @foreach ($products as $product)
             <div class="item flex justify-center items-center">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                        <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
@@ -789,27 +790,26 @@
                         {{-- <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleHomeWishlist({{ $product->id }}, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                                id="wishlist-heart-{{ $product->id }}">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
+                            id="wishlist-heart-{{ $product->id }}">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                         </button> --}}
                         @if(Auth::check())
                         <button
-             
+
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleWishlist({{ $product->id }}, this,event);">
                             <i class="far fa-heart"></i>
                         </button>
                         @else
-                        <a href="{{ route('page.login') }}" >
-                           
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                            >
-                            <i class="far fa-heart"></i>
-                        </button>
+                        <a href="{{ route('page.login') }}">
+
+                            <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </a>
                         @endif
                     </div>
@@ -859,15 +859,14 @@
 
                 <div class="lgg:text-left text-center">
                     <div class="mb-6 ">
-                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Best Price Guarantee</h3>
+                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Lowest Price Ever!</h3>
 
 
                     </div>
 
 
                     <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
-                        We guarantee the lowest prices on premium fashion. If you find it cheaper elsewhere within 30
-                        days, we'll match or beat it.
+                        Shop the latest 150+ designer outfits with confidence. If you see it cheaper elsewhere in 30 days, we’ll beat that price.
                     </p>
 
                 </div>
@@ -879,21 +878,21 @@
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        Price match within 30 days
+                        30-day price protection
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        Always the lowest price guaranteed
+                        Lowest price guaranteed
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        24/7 friendly support
+                        24/7 customer support
                     </li>
                 </ul>
             </div>
@@ -1013,11 +1012,11 @@
             <div class="text-center">
                 <h3
                     class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
-                    Exclusive Deals Just for You</h3>
+                    VIP Deals Just for You</h3>
                 <button
                     class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
-                    Shop Deals Now
+                    Grab now
                 </button>
 
 
@@ -1031,107 +1030,45 @@
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div id="ads-carousel" class="owl-carousel owl-theme">
-            <!-- Banner 1: Autumn Sale -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
+            @foreach ($mainBanners as $banner)
+            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
+                @if($banner->filter_type === 'multiple' && $banner->filters)
+                data-filter="{{ $banner->filters }}"
+                @else
+                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                @endif>
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}" alt="" />
+                        src="{{ asset('uploads/banners/' . $banner->image) }}"
+                        alt="{{ $banner->title }}" />
                 </div>
                 <!-- Blackish overlay that appears on hover -->
                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <!-- Content that slides up from bottom -->
                 <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">Autumn</span>
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
                         <span class="text-[2.7rem] font-bold font-serif uppercase tracking-wider lgg:mb-4 mb-2">
-                            Sale
+                            {{ $banner->title }}
                         </span>
+                        @if($banner->description)
                         <p class="lgg:text-3xl text-[1.2rem] font-serif lgg:mb-6 mb-3">
-                            Up to 50% off
+                            {{ $banner->description }}
                         </p>
+                        @endif
                         <a href="#"
-                            class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">Shop
-                            Now</a>
+                            class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">{{ $banner->button_text }}</a>
+                        @if($banner->discount)
                         <p class="text-md lgg:mt-4 mt-2 font-sans opacity-80">
-                            www.collegewalk.com
+                            {{ $banner->discount }}
                         </p>
+                        @endif
                     </div>
                 </div>
             </div>
-
-            <!-- Banner 2: Summer Skincare Tips -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp') }}"
-                        alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-center items-center text-center lgg:p-8 p-4 h-full text-white">
-                        <h1 class="lgg:text-7xl text-[3rem] font-script italic tracking-wider">
-                            Summer
-                        </h1>
-                        <h2 class="lgg:text-5xl text-[2rem] font-serif-alt italic mt-[-20px]">
-                            Skincare Tips
-                        </h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Banner 3: Summer Dress Sale -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/pink-plazo-1_76_11zon.webp') }}" alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-center p-12 h-full text-white">
-                        <div class="max-w-xs">
-                            <p class="text-sm uppercase tracking-widest font-sans mb-2 opacity-80">
-                                Last Chance
-                            </p>
-                            <h1 class="lgg:text-[2rem] text-[1.3rem] font-serif uppercase leading-tight mb-4">
-                                Summer Dress Sale 35% Off Storewide
-                            </h1>
-                            <p class="text-lg font-sans uppercase tracking-wider bg-white/20 inline-block px-4 py-2">
-                                C-1623B5OFF
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Banner 4: Latest Fashion -->
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group">
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('web/images/product-images/red-plazo-9_95_11zon.webp') }}" alt="" />
-                </div>
-                <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-end p-8 h-full text-white">
-                        <div class="text-right">
-                            <p class="text-sm uppercase tracking-widest font-sans mb-2">
-                                New Arrival
-                            </p>
-                            <h1 class="text-[2.5rem] font-serif-alt italic leading-none">
-                                Latest Fashion
-                            </h1>
-                            <h2 class="text-[2.2rem] font-serif-alt italic mt-[-10px]">
-                                Vibe
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -1143,26 +1080,37 @@
                 <!-- Title -->
                 <h2
                     class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
-                    Deals Of The Month
+                    Unbeatable Monthly Steals
                 </h2>
 
                 <!-- Description -->
                 <p
                     class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Scelerisque duis ultrices sollicitudin aliquam sem. Scelerisque
-                    duis ultrices sollicitudin
+                    Summer sale is on!
+
+                </p>
+                <p
+                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    Buy our premium collection of fashion outfits now at exclusive prices.
+
+                </p>
+                <p
+                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    <strong>
+                        Save more with our live sale…
+                    </strong>
+
                 </p>
 
                 <!-- Button -->
                 <button class="mt-6 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-900 transition">
-                    Buy Now
+                    Shop Now
                 </button>
 
                 <!-- Countdown Title -->
                 <h4
                     class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
-                    Hurry, Before It’s Too Late!
+                    Hurry…only 2 days left!
                 </h4>
 
                 <!-- Countdown -->
@@ -1203,136 +1151,37 @@
             </div>
             <div class="w-full lgg:w-[59%] flex justify-center items-center">
                 <div class="second-owl owl-carousel owl-theme relative">
-                    <!-- Product Items (same as before) -->
-
+                    @foreach ($secondaryBanners as $banner)
                     <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer banner-card"
+                            @if($banner->filter_type === 'multiple' && $banner->filters)
+                            data-filter="{{ $banner->filters }}"
+                            @else
+                            data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                            @endif>
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/dark-red-plazo-2_12_11zon.webp') }}"
-                                    alt="Silver Lehenga"
+                                <img src="{{ asset('uploads/banners/' . $banner->image) }}"
+                                    alt="{{ $banner->title }}"
                                     class="w-full h-[400px] object-cover object-center object-top" />
                             </div>
                             <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
                                 <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
+                                    <!-- Top line: subtitle — title -->
                                     <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
+                                        <span class="text-[1.1rem] font-medium text-gray-600">{{ $banner->subtitle }}</span>
                                         <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
+                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">{{ $banner->title }}</span>
                                     </div>
 
                                     <!-- Big discount text -->
                                     <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
+                                        {{ $banner->discount }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/light-pink-salwar-s-3_65_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/red-plazo-1_87_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/purple-plazo-4_84_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item flex justify-center items-center">
-                        <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow">
-                            <div class="relative overflow-hidden">
-                                <img src="{{ asset('web/images/product-images/short-plazo-2_100_11zon.webp') }}"
-                                    alt="Silver Lehenga"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
-                            </div>
-                            <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
-                                <div class="text-left">
-                                    <!-- Top line: 01 — Spring Sale -->
-                                    <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">01</span>
-                                        <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">Spring
-                                            Sale</span>
-                                    </div>
-
-                                    <!-- Big discount text -->
-                                    <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
-                                        30% OFF
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Add more products... -->
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -1366,7 +1215,7 @@ All Products
             data-product-id="{{ $product->id }}">
             <!-- Image Wrapper -->
             <div class="relative rounded-[6px] overflow-hidden">
-                <img src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                     alt="{{ $product->name }}"
                     class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
@@ -1449,10 +1298,10 @@ All Products
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        High Quality
+                        Premium Quality
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        crafted from top materials
+                        Made of the finest material
                     </p>
                 </div>
             </div>
@@ -1463,10 +1312,10 @@ All Products
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Warranty Protection
+                        Buyer Protection
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Over 2 years
+                        2+ years
                     </p>
                 </div>
             </div>
@@ -1480,7 +1329,7 @@ All Products
                         Free Shipping
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Order over 150 $
+                        Over **
                     </p>
                 </div>
             </div>
@@ -1494,7 +1343,7 @@ All Products
                         24 / 7 Support
                     </h3>
                     <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Dedicated support
+                        Dedicated guidance
                     </p>
                 </div>
             </div>
@@ -1502,6 +1351,7 @@ All Products
     </div>
 </section>
 
+{{--
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -1522,174 +1372,199 @@ All Products
             @foreach ($categories as $category)
             <div class="item flex justify-center items-center">
                 <a href="{{ route('category.show', $category->slug) }}">
-                    <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card"
-                        data-category-id="{{ $category->id }}">
-                        <!-- Image Wrapper -->
-                        <div class="relative rounded-[6px] overflow-hidden">
-                            <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                                alt="{{ $category->name }}"
-                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+<div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card"
+    data-category-id="{{ $category->id }}">
+    <!-- Image Wrapper -->
+    <div class="relative rounded-[6px] overflow-hidden">
+        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+            alt="{{ $category->name }}"
+            class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
 
-                            <!-- Category Badge -->
-                            <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                @if ($category->products_count ?? false)
-                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                    {{ $category->products_count }} Products
-                                </span>
-                                @endif
-                                @if ($category->is_active)
-                                <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                    Active
-                                </span>
-                                @endif
-                            </div>
+        <!-- Category Badge -->
+        <div class="absolute top-3 left-3 flex flex-col gap-2">
+            @if ($category->products_count ?? false)
+            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                {{ $category->products_count }} Products
+            </span>
+            @endif
+            @if ($category->is_active)
+            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                Active
+            </span>
+            @endif
+        </div>
 
-                            <!-- View Products Button (Top Right) -->
-                            <button
-                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </button>
+        <!-- View Products Button (Top Right) -->
+        <button
+            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+        </button>
 
-                            <!-- View Category (Hidden → Hover Show) -->
-                            <div
-                                class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                                <a href="{{ route('category.show', $category->slug) }}"
-                                    class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
-                                    View Category
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Content -->
-                        <div class="p-4 space-y-1">
-                            <h3 class="text-[15px] font-semibold text-gray-900">
-                                {{ $category->name }}
-                            </h3>
-
-                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
-                            </div>
-
-                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                @if ($category->products_count)
-                                <span class="text-lg font-bold text-gray-900">{{ $category->products_count }}
-                                    Items</span>
-                                @else
-                                <span class="text-lg font-bold text-gray-900">Browse Collection</span>
-                                @endif
-                            </div>
-                            <div class="lgg:hidden block">
-                                <a href="{{ route('category.show', $category->slug) }}"
-                                    class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            @endforeach
+        <!-- View Category (Hidden → Hover Show) -->
+        <div
+            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+            <a href="{{ route('category.show', $category->slug) }}"
+                class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
+                View Category
+            </a>
         </div>
     </div>
+
+    <!-- Content -->
+    <div class="p-4 space-y-1">
+        <h3 class="text-[15px] font-semibold text-gray-900">
+            {{ $category->name }}
+        </h3>
+
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+            <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
+        </div>
+
+        <div class="flex items-center gap-2 mt-2 flex-wrap">
+            @if ($category->products_count)
+            <span class="text-lg font-bold text-gray-900">{{ $category->products_count }}
+                Items</span>
+            @else
+            <span class="text-lg font-bold text-gray-900">Browse Collection</span>
+            @endif
+        </div>
+        <div class="lgg:hidden block">
+            <a href="{{ route('category.show', $category->slug) }}"
+                class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
+                View
+            </a>
+        </div>
+    </div>
+</div>
+</a>
+</div>
+@endforeach
+</div>
+</div>
 </section>
+--}}
 
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Editor's Pick
+                Designer’s Pick
             </h2>
         </div>
         <div class="grid-container">
+            @php
+            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
+            @endphp
             <!-- Owl Carousel for mobile/tablet -->
             <div class="owl-carousel banner-carousel lgg:hidden">
-                <!-- Slide 1 -->
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                @foreach($editorBanners as $banner)
+                <!-- Slide -->
+                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Trendy To<br />Traditional Blouses
+                            {{ $banner->title }}
                         </h2>
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-white font-medium">GLAM7</span>
-                        </p>
-                        <button
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
-                            SHOP NOW
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Slide 2 -->
-                <div class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
-                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Jewellery Edit
-                        </h2>
+                        @if($banner->description)
                         <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-white font-medium">GLAM7</span>
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
-                        <button
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
-                            SHOP NOW
-                        </button>
+                        @endif
+
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
                     </div>
                 </div>
+                @endforeach
             </div>
 
             <!-- Original grid layout for desktop -->
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
+                @foreach($editorBanners as $index => $banner)
+                @if($index % 2 == 0)
                 <!-- Left Banner -->
-                <div class="relative bg-[#b8a89a] overflow-hidden">
-                    <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Traditional Blouse"
+                <div class="relative bg-[#b8a89a] overflow-hidden"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Trendy To<br />Traditional Blouses
+                            {{ $banner->title }}
                         </h2>
+                        @if($banner->description)
                         <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-white font-medium">GLAM7</span>
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
-                        <button
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
-                            SHOP NOW
-                        </button>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
                     </div>
                 </div>
+                @endif
+                @endforeach
 
+                @foreach($editorBanners as $index => $banner)
+                @if($index % 2 == 1)
                 <!-- Right Banner -->
-                <div class="relative bg-[#e8dcd6] overflow-hidden">
-                    <img src="{{ asset('web/images/banner-images/gray-lahenga-2.webp') }}" alt="Jewellery Edit"
+                <div class="relative bg-[#e8dcd6] overflow-hidden"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
+                    @endif>
+                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                        @if($banner->subtitle)
+                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            Jewellery Edit
+                            {{ $banner->title }}
                         </h2>
+                        @if($banner->description)
                         <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-white font-medium">GLAM7</span>
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
-                        <button
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
-                            SHOP NOW
-                        </button>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
                     </div>
                 </div>
+                @endif
+                @endforeach
             </div>
-        </div>
-    </div>
 </section>
 
 <section class="px-4 lgg:py-8 py-6">
@@ -1715,8 +1590,10 @@ All Products
                     <div class="relative rounded-[6px] overflow-hidden">
 
                         <a href="{{route('category.show', $product->category->slug)}}">
-                            <img src="{{ asset($product->images->first()->image) }}"
+                            <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
                                 alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                            {{--<img src="{{ asset($product->images->first()->image) }}"
+                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />--}}
                         </a>
 
                         <!-- Badges -->
@@ -1753,7 +1630,7 @@ All Products
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
 
 
-                            <a href="{{route('category.show', $product->category->slug)}}">
+                            <a href="{{route('page.single-product', $product->slug)}}">
                                 <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                     View
                                 </button>
@@ -2005,11 +1882,11 @@ All Products
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <h2
-                class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                Premium Personal Services
+                class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem]  font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Personalized Fashion at Your Fingertips
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-                Choose your preferred way to experience luxury fashion with our experts
+                Customize your outfit with our fashion experts at your home
             </p>
         </div>
 
@@ -2053,14 +1930,13 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                                Virtual Styling Session
+                               Virtual Fashion Consultation
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Connect with our expert stylists via video call for personalized fashion advice and virtual
-                            try-ons from the comfort of your home.
+                            Find your perfect look with our virtual try-ons & connect with our stylists live for tailored one-on-one styling advice.
                         </p>
 
                         <!-- Features -->
@@ -2074,7 +1950,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Personalized styling advice</span>
+                                <span>Video-chat session</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2085,7 +1961,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Virtual outfit try-ons</span>
+                                <span>Virtual try-ons at home</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2102,14 +1978,14 @@ All Products
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href=""
+                            <a href="{{ route('page.appointment') }}"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                 </svg>
-                                <span class="text-lg">Book Video Appointment</span>
+                                <span class="text-lg">Schedule an Appointment</span>
                             </a>
                         </div>
                     </div>
@@ -2132,6 +2008,7 @@ All Products
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 PREMIUM SERVICE
+
                             </span>
                         </div>
 
@@ -2146,14 +2023,14 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                                Bridal Stylist Service
+                               Bridal Styling Service
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Your personal bridal expert guiding you through every step to find the perfect wedding dress
-                            and complete bridal look.
+                            Your go-to bridal stylist, guiding you step-by-step to help you find the perfect wedding outfit for your big day!
+
                         </p>
 
                         <!-- Features -->
@@ -2167,7 +2044,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>One-on-one bridal consultation</span>
+                                <span>Exclusive bridal consultation</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2178,7 +2055,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Complete wedding look planning</span>
+                                <span>Private styling session</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2195,7 +2072,7 @@ All Products
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href=""
+                            <a href="{{ route('page.appointment') }}"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2762,85 +2639,117 @@ All Products
         autoSlider('slide-top', 'topSliderLink', 3500);
         autoSlider('slide-right', 'rightSliderLink', 4500);
         autoSlider('slide-bottom', 'bottomSliderLink', 4500);
-    });
 
+        // Banner click handler for filtering and discount
+        document.querySelectorAll('.banner-card').forEach(function(banner) {
+            banner.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                console.log('Banner filter clicked:', filter);
+                if (filter) {
+                    try {
+                        // Try to parse as JSON for multiple filters
+                        const filterData = JSON.parse(filter);
+                        console.log('Parsed filter data:', filterData);
 
-    
-function toggleWishlist(productId, button, event) {
-
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    if (!productId) {
-        alert('Product ID not found');
-        return;
-    }
-
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-    const isInWishlist = button.classList.contains('text-red-500');
-    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
-    // Show loading
-    const originalContent = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    button.disabled = true;
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({
-            product_id: productId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-        if (data.success) {
-
-            // Toggle UI
-            if (isInWishlist) {
-                button.classList.remove('text-red-500');
-                button.innerHTML = '<i class="far fa-heart"></i>';
-            } else {
-                button.classList.add('text-red-500');
-                button.innerHTML = '<i class="fas fa-heart"></i>';
-            }
-
-        } else {
-
-    
-
-        Swal.fire({
-            icon: 'info',
-            title: 'Already Added',
-            text: data.message,
-            // showConfirmButton: false,
-            ConfirmButtonText: 'Ok',
-            timer: 1800
+                        // For multiple filters, create proper query parameters
+                        if (Array.isArray(filterData)) {
+                            const queryParams = new URLSearchParams();
+                            filterData.forEach(f => {
+                                queryParams.append(`banner_${f.type}`, f.value);
+                            });
+                            // Redirect to products page with banner filters
+                            window.location.href = '/products?' + queryParams.toString();
+                        } else {
+                            // Single filter case
+                            window.location.href = '/products?filter=' + encodeURIComponent(filter);
+                        }
+                    } catch (e) {
+                        // Not JSON, treat as simple string
+                        console.log('Using simple filter:', filter);
+                        window.location.href = '/products?filter=' + encodeURIComponent(filter);
+                    }
+                }
+            });
         });
-
-        // Keep heart filled
-        button.classList.add('text-red-500');
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-
-    
-}
-
-
-    })
-    .catch(error => {
-        console.error(error);
-    })
-    .finally(() => {
-        button.disabled = false;
     });
-}
+
+
+
+    function toggleWishlist(productId, button, event) {
+
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        const isInWishlist = button.classList.contains('text-red-500');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+        // Show loading
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.success) {
+
+                    // Toggle UI
+                    if (isInWishlist) {
+                        button.classList.remove('text-red-500');
+                        button.innerHTML = '<i class="far fa-heart"></i>';
+                    } else {
+                        button.classList.add('text-red-500');
+                        button.innerHTML = '<i class="fas fa-heart"></i>';
+                    }
+
+                } else {
+
+
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Already Added',
+                        text: data.message,
+                        // showConfirmButton: false,
+                        ConfirmButtonText: 'Ok',
+                        timer: 1800
+                    });
+
+                    // Keep heart filled
+                    button.classList.add('text-red-500');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+
+
+                }
+
+
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+    }
 </script>
 
 @endsection

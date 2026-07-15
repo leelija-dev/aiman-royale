@@ -79,20 +79,25 @@ class Occasion extends Model
     {
         $path = collect([$this->name]);
         $parent = $this->parent;
-        
+
         while ($parent) {
             $path->prepend($parent->name);
             $parent = $parent->parent;
         }
-        
+
         return $path->join(' > ');
     }
 
     /**
      * Get the products for the occasion.
      */
+    // public function products()
+    // {
+    //     return $this->hasMany(Product::class, 'ocassion_id');
+    // }
+
     public function products()
     {
-        return $this->hasMany(Product::class, 'ocassion_id');
+        return $this->belongsToMany(Product::class, 'product_occasions', 'occasion_id', 'product_id');
     }
 }

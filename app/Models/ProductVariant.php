@@ -4,10 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\ProductImage;
 
 class ProductVariant extends Model
 {
     use HasFactory;
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = ['images'];
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +28,7 @@ class ProductVariant extends Model
         'product_id',
         'size',
         'color',
+        'color_code',
         'sku',
         'price',
         'discount',

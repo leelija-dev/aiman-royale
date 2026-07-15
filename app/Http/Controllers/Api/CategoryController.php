@@ -36,14 +36,18 @@ class CategoryController extends Controller
                 ->withCount('products') // Include product count if needed
                 ->get(['id', 'name', 'slug', 'description', 'image', 'parent_id', 'products_count']);
 
-            $occasions = \App\Models\Occasion::whereHas('products', function ($query) use ($categoryId) {
-                $query->where('category_id', $categoryId);
-            })
-                ->where('is_active', true)
-                ->withCount(['products' => function ($query) use ($categoryId) {
-                    $query->where('category_id', $categoryId);
-                }])
-                ->get(['id', 'name', 'slug', 'description', 'parent_id']);
+            // Alternative approach using direct join with product_occasions table
+            $occasions = \App\Models\Occasion::join('product_occasions', 'ocassions.id', '=', 'product_occasions.occasion_id')
+                ->join('products', 'product_occasions.product_id', '=', 'products.id')
+                ->where('products.category_id', $categoryId)
+                ->where('products.status', 'active')
+                ->where('ocassions.is_active', true)
+                ->whereNull('products.deleted_at')
+                ->whereNull('ocassions.deleted_at')
+                ->select('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
+                ->selectRaw('COUNT(DISTINCT products.id) as products_count')
+                ->groupBy('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
+                ->get();
 
             // Get all category IDs (parent + children)
             $categoryIds = collect([$categoryId])->merge($childCategories->pluck('id'));
@@ -106,15 +110,18 @@ class CategoryController extends Controller
                 ], 404);
             }
 
-            // Get occasions that have products belonging to the specific category
-            $occasions = \App\Models\Occasion::whereHas('products', function ($query) use ($categoryId) {
-                $query->where('category_id', $categoryId);
-            })
-                ->where('is_active', true)
-                ->withCount(['products' => function ($query) use ($categoryId) {
-                    $query->where('category_id', $categoryId);
-                }])
-                ->get(['id', 'name', 'slug', 'description', 'parent_id']);
+            // Get occasions that have products belonging to the specific category using direct join
+            $occasions = \App\Models\Occasion::join('product_occasions', 'occasions.id', '=', 'product_occasions.occasion_id')
+                ->join('products', 'product_occasions.product_id', '=', 'products.id')
+                ->where('products.category_id', $categoryId)
+                ->where('products.status', 'active')
+                ->where('occasions.is_active', true)
+                ->whereNull('products.deleted_at')
+                ->whereNull('occasions.deleted_at')
+                ->select('occasions.id', 'occasions.name', 'occasions.slug', 'occasions.description', 'occasions.parent_id')
+                ->selectRaw('COUNT(DISTINCT products.id) as products_count')
+                ->groupBy('occasions.id', 'occasions.name', 'occasions.slug', 'occasions.description', 'occasions.parent_id')
+                ->get();
 
             return response()->json([
                 'success' => true,

@@ -11,6 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -266,9 +268,97 @@ class UserController extends Controller implements HasMiddleware
         $query->where('created_at', '>=', now()->subDays($days));
     }
 
-    $orders = $query->latest()->paginate(10);
+    $orders = $query->latest()->paginate(5, '*', 'page');
 
     return view('web.order-history', compact('user','orders'));
+}
+
+/**
+ * Cancel an order
+ */
+public function cancelOrder(Request $request, $orderId)
+{
+    try {
+        \Log::info('=== CANCEL ORDER DEBUG START ===');
+        \Log::info('Order ID: ' . $orderId);
+        
+        // Test basic functionality first
+        $order = Order::find($orderId);
+        if (!$order) {
+            \Log::error('Order not found: ' . $orderId);
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found.'
+            ], 404);
+        }
+        
+        \Log::info('Order found successfully');
+        \Log::info('Order ID: ' . $order->id);
+        \Log::info('Order Status: ' . $order->order_status);
+        \Log::info('Order User ID: ' . $order->user_id);
+        
+        // Check authentication
+        $userId = auth('web')->id();
+        \Log::info('Auth User ID: ' . $userId);
+        
+        if (!$userId) {
+            \Log::error('User not authenticated');
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated.'
+            ], 401);
+        }
+        
+        // Simple status check
+        $cancelableStatuses = ['pending', 'confirmed', 'paid'];
+        if (!in_array($order->order_status, $cancelableStatuses)) {
+            \Log::error('Order not cancellable. Status: ' . $order->order_status);
+            return response()->json([
+                'success' => false,
+                'message' => 'Order cannot be cancelled. Current status: ' . $order->order_status
+            ], 400);
+        }
+        
+        // Test basic update
+        \Log::info('Attempting to update order status...');
+        $order->order_status = 'cancelled';
+        $result = $order->save();
+        
+        \Log::info('Save result: ' . ($result ? 'SUCCESS' : 'FAILED'));
+        \Log::info('Updated order status: ' . $order->order_status);
+        
+        \Log::info('=== CANCEL ORDER DEBUG END ===');
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Order cancelled successfully (simplified version).',
+            'order_id' => $order->id,
+            'debug_info' => [
+                'order_status' => $order->order_status,
+                'user_id' => $userId,
+                'save_result' => $result
+            ]
+        ]);
+        
+    } catch (\Exception $e) {
+        \Log::error('=== CANCEL ORDER ERROR ===');
+        \Log::error('Error Message: ' . $e->getMessage());
+        \Log::error('Error Code: ' . $e->getCode());
+        \Log::error('File: ' . $e->getFile());
+        \Log::error('Line: ' . $e->getLine());
+        \Log::error('Stack Trace: ' . $e->getTraceAsString());
+        \Log::error('=== END ERROR ===');
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Debug error: ' . $e->getMessage(),
+            'debug_info' => [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'code' => $e->getCode()
+            ]
+        ], 500);
+    }
 }
 
 // user customer index page

@@ -11,6 +11,7 @@ class Order extends Model
         'user_id',
         'total_amount',
         'order_status',
+        'is_fake_order',
         'transection_id',
         'payment_status',
         'paid_at', 	
@@ -19,12 +20,17 @@ class Order extends Model
         'state',	
         'city',	
         'pincode',	
-        'phone_no'
-
+        'phone_no',
+        'cancelled_at',
+        'cancel_reason'
     ];
     
     public function orderProducts(){
         return $this->hasMany(OrderProduct::class ,'order_id');
+    }
+    
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
     }
     public function variant()
     {

@@ -29,18 +29,28 @@ class Product extends Model
         'description',
         'brand',
         'fabric',
+        'material_care',
         'fit',
         'price',
         'discount_price',
         'stock',
         'status',
+        'featured_image',
         'is_featured',
         'meta_title',
         'keywords',
         'tags',
         'meta_description',
         'schema_markup',
-        'ready_to_ship'
+        'ready_to_ship',
+        'lehenga_fabric',
+        'choli_fabric',
+        'dupatta_fabric',
+        'type',
+        'stitching_type',
+        'pattern',
+        'sales_package',
+        'color'
     ];
 
     /**
@@ -103,7 +113,7 @@ class Product extends Model
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo('App\\Models\\Category','category_id');
+        return $this->belongsTo('App\\Models\\Category', 'category_id');
     }
 
     /**
@@ -112,6 +122,18 @@ class Product extends Model
     public function occasion(): BelongsTo
     {
         return $this->belongsTo('App\\Models\\Occasion', 'ocassion_id');
+    }
+
+    public function occasions()
+    {
+        return $this->belongsToMany(Occasion::class, 'product_occasions');
+    }
+    /**
+     * Get the parts for the product.
+     */
+    public function parts()
+    {
+        return $this->hasMany(ProductPart::class)->ordered();
     }
 
     /**
@@ -152,5 +174,29 @@ class Product extends Model
     public function orderProducts(): HasMany
     {
         return $this->hasMany('App\\Models\\OrderProduct', 'product_id');
+    }
+    
+    /**
+     * Get featured image URL with optimization
+     */
+    public function getFeaturedImageUrl($width = 500, $height = 500)
+    {
+        if ($this->featured_image && str_contains($this->featured_image, 'cloudinary')) {
+            // Extract public_id and apply transformations
+            $publicId = $this->getCloudinaryPublicId($this->featured_image);
+            return "https://res.cloudinary.com/your-cloud-name/image/upload/c_fill,w_{$width},h_{$height},q_auto,f_auto/{$publicId}";
+        }
+        
+        return $this->featured_image ? asset($this->featured_image) : null;
+    }
+    
+    /**
+     * Extract Cloudinary public ID from URL
+     */
+    private function getCloudinaryPublicId($url)
+    {
+        // Extract everything after '/upload/' and before version if exists
+        preg_match('/\/upload\/(?:v\d+\/)?(.+)$/', $url, $matches);
+        return $matches[1] ?? null;
     }
 }

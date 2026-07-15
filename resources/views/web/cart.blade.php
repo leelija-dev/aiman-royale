@@ -204,7 +204,7 @@
                 <span class="block text-xs text-gray-500">Free shipping over {{config('app.currency')}}400</span>
                 @endif
                 @endif
-                <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a>
+                <!-- <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a> -->
               </div>
             </div>
 
@@ -322,6 +322,7 @@ function increaseQuantity(cartId) {
     subTotal.textContent = "{{config('app.currency')}}" + newSubtotal.toFixed(2);
 
     updateCartTotal(); // recalculate everything
+    updateCheckoutButton(); // check stock and update button
 }
 
 function decreaseQuantity(cartId) {
@@ -345,6 +346,7 @@ function decreaseQuantity(cartId) {
     subTotal.textContent = "{{config('app.currency')}}" + newSubtotal.toFixed(2);
 
     updateCartTotal(); //  recalculate everything
+    updateCheckoutButton(); // check stock and update button
 }
 
 function updateCartTotal() {
@@ -464,9 +466,26 @@ function updateNavbarCartCount(count) {
 
   function showNotification(message, type) {
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    }`;
+    let bgColor = 'bg-gray-500'; // default
+    
+    switch(type) {
+        case 'success':
+            bgColor = 'bg-green-500';
+            break;
+        case 'error':
+            bgColor = 'bg-red-500';
+            break;
+        case 'warning':
+            bgColor = 'bg-orange-500';
+            break;
+        case 'info':
+            bgColor = 'bg-blue-500';
+            break;
+        default:
+            bgColor = 'bg-gray-500';
+    }
+    
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${bgColor}`;
     notification.textContent = message;
 
     document.body.appendChild(notification);
@@ -545,6 +564,124 @@ window.addEventListener("pageshow", function (event) {
 
 
 });
+
+// Stock validation functions
+function checkAllItemsStock() {
+    let hasOutOfStock = false;
+    const quantityInputs = document.querySelectorAll('input[name="quantity"]');
+    
+    quantityInputs.forEach(input => {
+        const cartId = input.id.replace('quantity-', '');
+        const stock = parseInt(input.getAttribute('data-stock') || 0);
+        const quantity = parseInt(input.value);
+        const row = input.closest('tr');
+        
+        // Remove existing stock status
+        const existingStatus = row.querySelector('.stock-status');
+        if (existingStatus) {
+            existingStatus.remove();
+        }
+        
+        // Add stock status indicator
+        const stockStatus = document.createElement('div');
+        stockStatus.className = 'stock-status text-xs mt-1';
+        
+        if (quantity > stock) {
+            hasOutOfStock = true;
+            stockStatus.innerHTML = `<span class="text-red-600 font-medium">⚠️ Out of Stock (Available: ${stock})</span>`;
+            row.classList.add('bg-red-50');
+        } else if (stock <= 0) {
+            hasOutOfStock = true;
+            stockStatus.innerHTML = `<span class="text-red-600 font-medium">❌ Out of Stock</span>`;
+            row.classList.add('bg-red-50');
+        } else if (stock <= 5) {
+            stockStatus.innerHTML = `<span class="text-orange-600">Only ${stock} left</span>`;
+            row.classList.add('bg-orange-50');
+        } else {
+            stockStatus.innerHTML = `<span class="text-green-600">✓ In Stock (${stock})</span>`;
+            row.classList.remove('bg-red-50', 'bg-orange-50');
+        }
+        
+        // Insert stock status after quantity cell
+        const quantityCell = input.closest('td');
+        quantityCell.appendChild(stockStatus);
+    });
+    
+    return hasOutOfStock;
+}
+
+function updateCheckoutButton() {
+    const checkoutBtn = document.querySelector('button[type="submit"]');
+    const hasOutOfStock = checkAllItemsStock();
+    
+    if (checkoutBtn) {
+        if (hasOutOfStock) {
+            checkoutBtn.disabled = true;
+            checkoutBtn.textContent = 'Remove out-of-stock items to checkout';
+            checkoutBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+            checkoutBtn.classList.remove('bg-black', 'hover:bg-gray-800');
+        } else {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = 'Proceed to checkout';
+            checkoutBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            checkoutBtn.classList.add('bg-black', 'hover:bg-gray-800');
+        }
+    }
+}
+
+// Check stock on page load
+document.addEventListener('DOMContentLoaded', function() {
+    adjustQuantitiesToStock();
+    updateCheckoutButton();
+});
+
+// Function to adjust quantities to match available stock
+function adjustQuantitiesToStock() {
+    const quantityInputs = document.querySelectorAll('input[name="quantity"]');
+    let hasZeroStockItems = false;
+    let itemsUpdated = false;
+    
+    quantityInputs.forEach(input => {
+        const cartId = input.id.replace('quantity-', '');
+        const stock = parseInt(input.getAttribute('data-stock') || 0);
+        const currentQty = parseInt(input.value);
+        const subTotal = document.getElementById('subtotal-' + cartId);
+        const price = parseFloat(subTotal.getAttribute('data-price'));
+        
+        // If stock is 0, remove the item from cart
+        if (stock <= 0) {
+            hasZeroStockItems = true;
+            // Show notification for removal
+            showNotification(`Item removed from cart: ${input.closest('tr').querySelector('.font-medium').textContent} (Out of stock)`, 'error');
+            // Remove the item
+            setTimeout(() => removeFromCart(cartId), 1000);
+            return;
+        }
+        
+        // If current quantity exceeds available stock, reduce it
+        if (currentQty > stock) {
+            input.value = stock;
+            const newSubtotal = stock * price;
+            subTotal.textContent = "{{config('app.currency')}}" + newSubtotal.toFixed(2);
+            itemsUpdated = true;
+            
+            // Show notification for quantity adjustment
+            showNotification(`Quantity adjusted for ${input.closest('tr').querySelector('.font-medium').textContent}: ${currentQty} → ${stock} (Stock limit)`, 'info');
+        }
+    });
+    
+    // Recalculate totals if items were updated
+    if (itemsUpdated) {
+        updateCartTotal();
+    }
+    
+    // If there are zero stock items, show warning and prevent checkout
+    if (hasZeroStockItems) {
+        setTimeout(() => {
+            showNotification('Some items were removed from cart due to zero stock. Please review your cart before checkout.', 'warning');
+        }, 1500);
+    }
+}
 
 </script>
 

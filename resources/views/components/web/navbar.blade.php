@@ -1057,7 +1057,7 @@
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <i class="fa-regular fa-clipboard text-gray-500 w-4"></i>
                             <span>Orders</span>
-                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">{{ Auth::user()->order->count() }}</span>
+                            <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">{{ Auth::user()->orders()->count() }}</span>
                         </a>
                         <a href="{{route('wishlist.index')}}"
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
@@ -1673,7 +1673,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
 
                 if (data.success) {
                     // Cache the response
@@ -1878,6 +1878,7 @@
         // }
 
         function renderOccasionSection(categoryData) {
+            // console.log(categoryData)
             const occasionList = document.getElementById('occasion-list');
             const showMoreBtn = document.getElementById('occasion-show-more');
 
@@ -2038,7 +2039,7 @@
                 }
             }
 
-            console.log("Extracted products:", products);
+            // console.log("Extracted products:", products);
 
             if (products.length === 0) {
                 // Show default fallback products
@@ -2084,7 +2085,7 @@
                         price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
                         originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
                         // image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                        image: product.images && product.images[0] ? (product.images[0].image.startsWith('http') ? product.images[0].image : getBaseUrl() + '/' + product.images[0].image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        image: product.featured_image ? (product.featured_image.startsWith('http') ? product.featured_image : getBaseUrl() + '/' + product.featured_image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
                         slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
                     });
                     collectionList.appendChild(productCard);
@@ -3070,11 +3071,33 @@
                         });
                     }
 
-                    // Try to get product name from page title or meta
-                    const pageTitle = document.title;
-                    if (pageTitle && pageTitle !== 'Aiman') {
+                    // Try to get product name from page content (more reliable than title)
+                    let productName = '';
+                    
+                    // Try to find product name from various sources
+                    // 1. Check if there's a global product name variable (from single-product page)
+                    if (typeof window.productName !== 'undefined' && window.productName) {
+                        productName = window.productName;
+                    }
+                    // 2. Try to get from h3 element (product title)
+                    else {
+                        const productTitleElement = document.querySelector('h3.text-h3-xs, h3.font-semibold');
+                        if (productTitleElement && productTitleElement.textContent.trim()) {
+                            productName = productTitleElement.textContent.trim();
+                        }
+                    }
+                    
+                    // Fallback to page title if no product name found
+                    if (!productName) {
+                        const pageTitle = document.title;
+                        if (pageTitle && pageTitle !== 'Aiman') {
+                            productName = pageTitle.replace(' - Aiman', '');
+                        }
+                    }
+                    
+                    if (productName) {
                         breadcrumbs.push({
-                            name: pageTitle.replace(' - Aiman', ''),
+                            name: productName,
                             url: null
                         });
                     }

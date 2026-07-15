@@ -2,13 +2,225 @@
 
 @section('content')
 
-
 <style>
+  /* MAIN CONTAINER — proper grid, no flex override issues */
+  .products-container {
+    width: 100%;
+    /* max-width: 1600px; */
+    margin: 0 auto;
+    display: grid;
+    /* Responsive columns: consistent card widths, no flex-wrap quirks */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    /* 24px gap consistent */
+  }
 
+  /* CARD — each card has identical structure & fixed ratio behavior */
+  .product-card {
+    width: 100%;
+    background: white;
+    border-radius: 1rem;
+    /* rounded-xl */
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .product-card:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* IMAGE WRAPPER — enforces consistent aspect ratio (4/6) regardless of screen */
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    /* ASPECT RATIO 4:6 → same as original (4/6 = 0.666) -> height = width * 1.5 */
+    /* Using aspect-ratio property guarantees same ratio on every screen size */
+    aspect-ratio: 4 / 6;
+    background-color: #f3f4f6;
+    /* gray-100 */
+    overflow: hidden;
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+  /* IMAGE styling — object-contain preserves full image visibility, object-top aligns nicely */
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-img {
+    transform: scale(1.02);
+  }
+
+  /* BADGES (discount) */
+  .badge-container {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .discount-badge {
+    background-color: #dc2626;
+    /* primary red-like but modern */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    letter-spacing: 0.3px;
+  }
+
+  /* WISHLIST BUTTON */
+  .wishlist-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(2px);
+    border-radius: 9999px;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .wishlist-btn:hover {
+    background-color: white;
+    transform: scale(1.1);
+  }
+
+  .wishlist-btn i {
+    font-size: 1rem;
+    color: #1f2937;
+    transition: color 0.2s;
+  }
+
+  .wishlist-btn:hover i {
+    color: #ef4444;
+  }
+
+  /* CONTENT AREA */
+  .card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .product-title {
+    font-size: 0.9375rem;
+    /* 15px */
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .brand-text {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .current-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .old-price {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  /* Fix for any anchor interference */
+  a.wishlist-link {
+    text-decoration: none;
+    display: flex;
+  }
+
+  /* MEDIA QUERIES: grid adjusts column count automatically,
+           but card ratio remains identical due to aspect-ratio on wrapper */
+  @media (max-width: 640px) {
+    body {
+      padding: 1rem;
+    }
+
+    .products-container {
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .card-content {
+      padding: 0.75rem;
+    }
+
+    .product-title {
+      font-size: 0.85rem;
+    }
+
+    .current-price {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .products-container {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.875rem;
+    }
+  }
+
+  /* For very large screens, cards won't stretch beyond comfortable size,
+           but each card's image ratio stays locked. No height distortion */
+  @media (min-width: 1680px) {
+    .products-container {
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+    }
+  }
+
+  /* keep hover transition consistent */
+  .product-card {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
 </style>
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
-    <div class="mb-4 flex flex-row lgg:justify-end justify-between gap-3 flex-wrap">
+    <div class="mb-4 flex flex-row lgg:justify-end justify-between gap-3 flex-wrap lgg:px-6 px-4">
       <!-- Mobile Filter Button -->
       <button
         id="open-filter"
@@ -66,7 +278,7 @@
 
           <div
             id="filter-menu"
-            class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+            class="absolute lgg:right-0 left-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="filter-dropdown-button">
@@ -186,7 +398,7 @@
 
           <div
             id="occasion-menu"
-            class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+            class="absolute right-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="occasion-dropdown-button">
@@ -348,7 +560,7 @@
 
           <div
             id="collection-menu"
-            class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+            class="absolute right-0 z-[201] mt-2  w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="collection-dropdown-button">
@@ -487,7 +699,7 @@
 
           <div
             id="sort-menu"
-            class="absolute right-0 z-20 mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+            class="absolute lg:right-0 left-0 z-[201] mt-2 w-64 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="sort-button">
@@ -616,8 +828,11 @@
       <!-- Filter Sidebar -->
       <div
         id="filter-sidebar"
-        class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 z-[20003] transition-all duration-300 ease-in-out">
-        <form id="filter-form">
+        class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] lgg:min-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 lgg:z-[200] z-[20003] transition-all duration-300 ease-in-out">
+        <button id="close-filter" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <form id="filter-form" class="mt-8">
           @csrf
           <div class="space-y-6 h-full overflow-auto px-2">
             <!-- Header -->
@@ -822,8 +1037,11 @@
       </div>
 
       <!-- Products Grid Container -->
-      <div id="products-container" class="w-full grid xl:grid-cols-4 lg:grid-cols-3 lgg:grid-cols-2 smui:grid-cols-3 xxs:grid-cols-2 grid-cols-1 gap-4">
-        @include('web.partials.product-grid', ['products' => $products])
+      <div class="w-full">
+        <div id="products-container" class="products-container">
+          @include('web.partials.product-grid', ['products' => $products])
+        </div>
+
       </div>
     </div>
   </div>

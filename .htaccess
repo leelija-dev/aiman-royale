@@ -10,3 +10,13 @@
     RewriteRule (.*) public/$1 [L]
 
 </IfModule>
+
+<IfModule mod_mime.c>
+    # Add proper MIME types for images
+    AddType image/webp .webp
+    AddType image/jpeg .jpg .jpeg .jfif .pjpeg .pjp
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/svg+xml .svg
+</IfModule>
+

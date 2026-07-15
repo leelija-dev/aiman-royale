@@ -13,7 +13,24 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Aiman Royale'),
+
+    'wh_number' => env('WHATSAPP_NUMBER', '7003184741'),
+
+    'cashfree' => [
+    'mode' =>  env('CASHFREE_MODE', 'sandbox'),    
+
+    'test_mode' => env('CASHFREE_TEST_MODE', true),
+
+    'test_app_id' => env('CASHFREE_TEST_APP_ID'),
+
+    'test_secret_key' => env('CASHFREE_TEST_SECRET_KEY'),
+
+    'app_id' => env('CASHFREE_APP_ID'),
+
+    'secret_key' => env('CASHFREE_SECRET_KEY'),
+
+],
 
     /*
     |--------------------------------------------------------------------------

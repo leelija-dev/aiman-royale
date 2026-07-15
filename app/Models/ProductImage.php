@@ -2,41 +2,63 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductImage extends Model
 {
-    use HasFactory;
-
-    /**
-     * Explicitly set the table name because the migration uses a non-standard camelCase table.
-     * Default for this model would be `product_images`.
-     */
-    protected $table = 'product_images';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'product_id',
         'variant_id',
-        'image',
+        'image',      // Store Cloudinary URL
+        'public_id',  // Store Cloudinary public ID for deletion
+        'is_primary'
+    ];
+
+    protected $casts = [
+        'is_primary' => 'boolean',
     ];
 
     /**
-     * Get the product that owns this image.
+     * Get the product that owns the image
      */
-    public function product(): BelongsTo
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
-    public function variant()
-{
-    return $this->belongsTo(ProductVariant::class, 'variant_id');
-}
 
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
+    }
+
+    /**
+     * Get optimized version of this image
+     */
+    public function getOptimizedUrl($width = null, $height = null)
+    {
+        if (!$this->public_id) {
+            return $this->image;
+        }
+
+        $transformations = [];
+        if ($width && $height) {
+            $transformations[] = "c_fill,w_{$width},h_{$height}";
+        }
+        $transformations[] = 'q_auto';
+        $transformations[] = 'f_auto';
+
+        $transString = implode(',', $transformations);
+        return "https://res.cloudinary.com/your-cloud-name/image/upload/{$transString}/{$this->public_id}";
+    }
+
+    public function getImageUrlAttribute()
+{
+    $path = trim($this->image);
+    
+    if (filter_var($path, FILTER_VALIDATE_URL)) {
+        return $path;
+    }
+    
+    return asset(ltrim($path, '/'));
+}
 }

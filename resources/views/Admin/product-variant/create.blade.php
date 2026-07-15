@@ -93,8 +93,8 @@
                                 <select class="form-control" id="color" name="color">
                                     <option value="" selected hidden>Select Color</option>
                                     @foreach($colors as $color)
-                                    <option value="{{ $color }}" {{ old('color') == $color ? 'selected' : '' }}>
-                                        {{ $color }}
+                                    <option value="{{ $color->id }}" {{ old('color') == $color->id ? 'selected' : '' }}>
+                                        {{ $color->name }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -345,7 +345,7 @@ new Dropzone("#multiImageDropzone", {
     parallelUploads: 10,
     maxFiles: 10,
     paramName: "images[]",
-    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp,.avif",
     addRemoveLinks: true,
 
     init: function () {

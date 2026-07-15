@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\BlogApiController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\FaqController;
 
 Route::prefix('blog')->group(function () {
     Route::get('/posts', [BlogApiController::class, 'posts']);
@@ -30,4 +32,21 @@ Route::prefix('products')->group(function () {
     Route::get('/filter', [ProductController::class, 'filterProducts']);
     Route::get('/filter-options', [ProductController::class, 'getFilterOptions']);
     Route::get('/search', [ProductController::class, 'searchProducts']);
+    Route::get('/latest/{productSlug}', [ProductController::class, 'getLatestProductUsingProductSlug']);
+    Route::get('/shipped', [ProductController::class, 'getShippedProducts']);
+    Route::get('/delivered', [ProductController::class, 'getDeliveredProducts']);
+    Route::get('/cancelled', [ProductController::class, 'getCancelledProducts']);
+});
+
+Route::prefix('faqs')->group(function () {
+    Route::get('/', [FaqController::class, 'getAllFaqs']);
+    Route::get('/category/{categoryId}', [FaqController::class, 'getFaqUsingCategory']);
+    Route::get('/{faqId}', [FaqController::class, 'getFaqsUsingId']);
+    Route::get('/products/{productSlug}', [FaqController::class, 'getFaqsUsingproductId']);
+});
+
+// Review related API routes
+Route::prefix('reviews')->group(function () {
+    Route::post('/', [ReviewController::class, 'store'])->name('api.reviews.store');
+    Route::get('/products/{productSlug}', [ReviewController::class, 'getProductReviews'])->name('api.reviewsRoutr.product');
 });

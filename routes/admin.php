@@ -20,14 +20,21 @@ use App\Http\Controllers\Admin\NewsLetterController;
 // use App\Http\Controllers\Admin\ProductPackageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CategoryOccasionContentController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\OrderManagementController;
+use App\Http\Controllers\Admin\FalseReviewsController;
+use App\Http\Controllers\Admin\FaqCategoryController;
+use App\Http\Controllers\Admin\FaqController;
 
 use App\Http\Controllers\Admin\ServicesController;
 use App\Models\NewsLetter;
@@ -41,6 +48,7 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\CustomDimensionController;
 // use App\Http\Controllers\ShopController;
 
 
@@ -88,6 +96,58 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::post('product-categories/updateStatus', 'App\Http\Controllers\Admin\CategoryController@updateStatus')
             ->name('admin.categories.updateStatus');
 
+        // Banners
+        Route::resource('banners', BannerController::class, [
+            'names' => [
+                'index' => 'banners.index',
+                'create' => 'banners.create',
+                'store' => 'banners.store',
+                'edit' => 'banners.edit',
+                'update' => 'banners.update',
+                'destroy' => 'banners.destroy'
+            ]
+        ])->except(['show']);
+
+        Route::resource('faq-categories', FaqCategoryController::class, [
+            'names' => [
+                'index' => 'faqCategory.index',
+                'create' => 'faqCategory.create',
+                'store' => 'faqCategory.store',
+                'edit' => 'faqCategory.edit',
+                'update' => 'faqCategory.update',
+                'destroy' => 'faqCategory.destroy'
+            ]
+        ])->except(['show']);
+
+        Route::resource('faqs', FaqController::class, [
+            'names' => [
+                'index' => 'faqs.index',
+                'create' => 'faqs.create',
+                'store' => 'faqs.store',
+                'edit' => 'faqs.edit',
+                'update' => 'faqs.update',
+                'destroy' => 'faqs.destroy'
+            ]
+        ])->except(['show']);
+
+        // Sales
+        Route::resource('sales', SaleController::class, [
+            'names' => [
+                'index' => 'admin.sales.index',
+                'create' => 'admin.sales.create',
+                'store' => 'admin.sales.store',
+                'edit' => 'admin.sales.edit',
+                'update' => 'admin.sales.update',
+                'destroy' => 'admin.sales.destroy'
+            ]
+        ])->except(['show']);
+
+        Route::post('sales/{sale}/toggle-status', [SaleController::class, 'toggleStatus'])
+            ->name('admin.sales.toggle-status');
+            
+        Route::get('products/{productId}/variants', [SaleController::class, 'getProductVariants'])
+            ->name('admin.products.variants');
+
         // Occasions
         Route::resource('occasions', AdminOccasionController::class, [
             'parameters' => ['occasions' => 'occasion:id'],
@@ -112,6 +172,23 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::delete('occasions/{occasion}/force-delete', [AdminOccasionController::class, 'forceDelete'])
             ->name('admin.occasions.force-delete');
+
+        // Category Occasion Content
+        Route::resource('category-occasion-content', CategoryOccasionContentController::class, [
+            'names' => [
+                'index' => 'admin.category-occasion-content.index',
+                'create' => 'admin.category-occasion-content.create',
+                'store' => 'admin.category-occasion-content.store',
+                'show' => 'admin.category-occasion-content.show',
+                'edit' => 'admin.category-occasion-content.edit',
+                'update' => 'admin.category-occasion-content.update',
+                'destroy' => 'admin.category-occasion-content.destroy',
+            ]
+        ]);
+
+        // Category Occasion Content AJAX
+        Route::get('category-occasion-content/get', [CategoryOccasionContentController::class, 'getContent'])
+            ->name('admin.category-occasion-content.get');
 
         // Colors
         Route::resource('colors', ColorController::class, [
@@ -164,6 +241,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             ]
         ])->except(['show', 'destroy']);
 
+        // Product Parts API
+        Route::get('products/{productId}/parts', [AdminProductController::class, 'getParts'])->name('admin.products.parts');
+
         // Custom delete route to use delete method
         Route::delete('products/{id}', [AdminProductController::class, 'delete'])->name('admin.products.delete');
 
@@ -199,6 +279,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             Route::get('/edit-role/{id}', [RoleController::class, 'edit'])->name('admin.roles.edit-role');
             Route::post('/update/{id}', [RoleController::class, 'update'])->name('admin.roles.update');
             Route::delete('/delete-role/{id}', [RoleController::class, 'delete'])->name('admin.delete-role');
+        });
+
+        Route::prefix('false-reviews')->group(function (){
+            Route::get('/', [FalseReviewsController::class, 'index'])->name('reviews.index');
+            Route::get('/create', [FalseReviewsController::class, 'create'])->name('reviews.create');
+            Route::post('/create', [FalseReviewsController::class, 'store'])->name('reviews.store');
         });
 
 
@@ -247,6 +333,21 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
                 $slug = \Illuminate\Support\Str::slug($request->name);
                 return response()->json(['slug' => $slug]);
             })->name('admin.brands.generate-slug');
+        });
+
+        Route::middleware(['auth:admin'])->prefix('contacts')->group(function () {
+
+            Route::get('/', [ContactController::class, 'index'])->name('admin.contact');
+            Route::get('/{id}', [ContactController::class, 'show'])->name('admin.contact.show');
+            // Route::get('/sendmail/{id}', [ContactController::class, 'mail'])->name('admin.sendmail');
+            // Route::post('/sendmail/{id}', [ContactController::class, 'Sendmail'])->name('admin.sendmail.send');
+            // // Route::post('/insert-contact', [ContactController::class, 'insertContact'])->name('admin.insert-contact');
+            // //  Route::get('contact', [ContactController::class, 'showForm'])->name('admin.contact');
+            // Route::get('single-contact/{id}', [ContactController::class, 'showContact'])->name('admin.show-contact');
+            // Route::get('edit-contact/{id}', [ContactController::class, 'editContact'])->name('admin.edit-contact');
+            // Route::post('update-contact/{id}', [ContactController::class, 'updateStatus'])->name('admin.update-contact');
+            // Route::post('reply-contact/{id}', [ContactController::class, 'Reply'])->name('admin.reply-contact');
+            // Route::post('delete-contact/{id}', [ContactController::class, 'deleteContact'])->name('admin.delete-contact');
         });
 
 
@@ -424,11 +525,109 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // routes/admin.php
         Route::prefix('seo')->group(function () {
             Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
+        });
+
+        // Bill Routes
+        Route::get('/new-bill', [BillController::class, 'index'])->name('admin.new-bill')->middleware('auth:admin');
+        Route::post('/bill/save', [BillController::class, 'store'])->name('admin.bill.save')->middleware('auth:admin');
+
+        // Print Bill Routes
+        Route::prefix('print-bill')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\PrintBillController::class, 'index'])->name('admin.print-bill');
+            Route::get('/{id}', [\App\Http\Controllers\Admin\PrintBillController::class, 'getInvoice'])->name('admin.print-bill.get');
+        });
+
+        Route::get('/newsletter', [NewsLetterController::class, 'ShowNewsLetter'])->name('admin.newsletter.index')->middleware('auth:admin');
+
+        // ProductPackage routes (commented out - controller doesn't exist)
+        // Route::prefix('product-package')->group(function(){
+        //     Route::get('/',[ProductPackageController::class,'index'])->name('admin.product-package.index');
+        //     Route::get('/create',[ProductPackageController::class,'create'])->name('admin.product-package.create');
+        //     Route::post('/create',[ProductPackageController::class,'store'])->name('admin.product-package.store');
+        //     Route::get('/edit/{id}',[ProductPackageController::class,'edit'])->name('admin.product-package.edit');
+        //     Route::post('/update/{id}',[ProductPackageController::class,'update'])->name('admin.product-package.update');
+        //     Route::delete('/{id}', [ProductPackageController::class, 'delete'])->name('admin.product-package.delete');
+        // });
+
+        // Shop Routes (commented out - controller doesn't exist)
+        /*
+Route::prefix('shops')->group(function () {
+    Route::get('/', [ShopController::class, 'index'])->name('shops.index');
+    Route::get('/create', [ShopController::class, 'create'])->name('shops.create');
+    Route::post('/', [ShopController::class, 'store'])->name('shops.store');
+    Route::get('/{shop}', [ShopController::class, 'show'])->name('shops.show');
+    Route::get('/{shop}/edit', [ShopController::class, 'edit'])->name('shops.edit');
+    Route::put('/{shop}', [ShopController::class, 'update'])->name('shops.update');
+    Route::put('/{shop}/update-due-amount', [ShopController::class, 'updateDueAmount'])->name('shops.update-due-amount');
+    Route::delete('/{shop}', [ShopController::class, 'destroy'])->name('shops.destroy');
+   //trashed shop
+    Route::get('/trashed/shops', [ShopController::class, 'trashed'])->name('shops.trashed');
+    Route::patch('/trashed/{id}/restore', [ShopController::class, 'restore'])->name('shops.restore');
+    Route::delete('/trashed/{id}/force-delete', [ShopController::class, 'deletePermanently'])->name('shops.force-delete');
+});
+*/
+
+        // Stock Management Routes
+        Route::prefix('stocks')->name('stocks.')->group(function () {
+            Route::get('/', [StockController::class, 'index'])->name('index');
+            Route::get('/create', [StockController::class, 'create'])->name('create');
+            Route::post('/', [StockController::class, 'store'])->name('store');
+            Route::get('/{stock}/edit', [StockController::class, 'edit'])->name('edit');
+            Route::put('/{stock}', [StockController::class, 'update'])->name('update');
+            Route::delete('/{stock}', [StockController::class, 'destroy'])->name('destroy');
+
+            // Stock operations
+            Route::post('/{stock}/add-stock', [StockController::class, 'addStock'])->name('add-stock');
+            Route::post('/{stock}/deduct-stock', [StockController::class, 'deductStock'])->name('deduct-stock');
+        });
+
+        // Custom Dimensions Management Routes
+        Route::get('/custom-dimensions', [CustomDimensionController::class, 'index'])->name('admin.custom-dimensions.index');
+        Route::post('/custom-dimensions/{id}/status', [CustomDimensionController::class, 'updateStatus'])->name('admin.custom-dimensions.update-status');
+        Route::post('/custom-dimensions/{id}/price', [CustomDimensionController::class, 'updatePrice'])->name('admin.custom-dimensions.update-price');
+
+        // SEO Management Routes
+        Route::prefix('seo')->group(function () {
+            Route::get('/', [PageSeoController::class, 'index'])->name('seo.pages.index');
             Route::get('/create', [PageSeoController::class, 'create'])->name('seo.pages.create');
             Route::post('/', [PageSeoController::class, 'store'])->name('seo.pages.store');
             Route::get('{slug}/edit', [PageSeoController::class, 'edit'])->name('seo.pages.edit');
             Route::put('{slug}', [PageSeoController::class, 'update'])->name('seo.pages.update');
             Route::delete('{id}', [PageSeoController::class, 'destroy'])->name('seo.pages.destroy');
         });
+
+        // False Reviews Management Routes
+        Route::resource('reviews', FalseReviewsController::class, [
+            'names' => [
+                'index' => 'admin.reviews.index',
+                'create' => 'admin.reviews.create',
+                'store' => 'admin.reviews.store',
+                'show' => 'admin.reviews.show',
+                'edit' => 'admin.reviews.edit',
+                'update' => 'admin.reviews.update',
+                'destroy' => 'admin.reviews.destroy'
+            ]
+        ]);
+
+        Route::post('reviews/bulk-action', [FalseReviewsController::class, 'bulkAction'])->name('reviews.bulk-action');
+        Route::post('reviews/{review}/toggle-status', [FalseReviewsController::class, 'toggleStatus'])->name('reviews.toggle-status');
+        Route::post('reviews/{review}/toggle-featured', [FalseReviewsController::class, 'toggleFeatured'])->name('reviews.toggle-featured');
+        Route::post('reviews/{review}/toggle-verified', [FalseReviewsController::class, 'toggleVerified'])->name('reviews.toggle-verified');
+
+        // Orders Management Routes
+        Route::resource('orders', OrderManagementController::class, [
+            'names' => [
+                'index' => 'admin.orders.index',
+                'create' => 'admin.orders.create',
+                'store' => 'admin.orders.store',
+                'show' => 'admin.orders.show',
+                'destroy' => 'admin.orders.destroy'
+            ]
+        ]);
+
+        Route::post('orders/{order}/status', [OrderManagementController::class, 'updateStatus'])->name('admin.orders.update-status');
+        Route::post('orders/{order}/tracking', [OrderManagementController::class, 'updateTracking'])->name('admin.orders.update-tracking');
+        Route::post('orders/bulk-update', [OrderManagementController::class, 'bulkUpdateStatus'])->name('admin.orders.bulk-update');
+        Route::get('orders/stats', [OrderManagementController::class, 'getStats'])->name('admin.orders.stats');
     });
 });
