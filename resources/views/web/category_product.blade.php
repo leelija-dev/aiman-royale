@@ -1333,7 +1333,7 @@
 
         // Get category slug from the page
         const categorySlug = window.location.pathname.split('/').pop();
-        
+        console.log('Applying filters for category:', categorySlug, 'with params:', params.toString());
         try {
             const response = await fetch(`/category/${categorySlug}/filter?${params.toString()}`, {
                 headers: {
