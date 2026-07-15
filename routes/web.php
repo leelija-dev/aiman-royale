@@ -17,6 +17,13 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
+use App\Http\Controllers\Api\ReturnOrderController;
+use App\Http\Controllers\Web\RefundController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\GoogleAuthController;
+// use App\Http\Controllers\Auth\GoogleAuthController;
 
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
@@ -49,23 +56,22 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/api/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
     Route::post('/api/auth/refresh', [AuthController::class, 'refresh'])->name('api.auth.refresh');
 });
+
 Route::view('/addresses', 'web.addresses');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
-    // Route::view('/custom-request', 'web.custom-request');
+
+    Route::post('/refund/{orderId}', [ReturnOrderController::class, 'store'])
+        ->name('web.return.order');
 });
 
-
-
 // Authenticated routes (require login)
-// Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
-// Route::view('/contact-us', 'web.contact-us')->name('page.contact-us');
 Route::get('/contact-us', [ContactUsController::class, 'index'])->name('page.contact-us');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
 Route::view('/about-us', 'web.about-us')->name('page.about-us');
@@ -76,16 +82,12 @@ Route::view('/return-refund-policy', 'web.refund-cancelation-policy')->name('pag
 // Category Routes
 Route::get('/collections/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/collections', [CategoryController::class, 'collection'])->name('category.collection');
-// In your web.php routes file
 Route::get('/category/{slug}/filter', [CategoryController::class, 'filter'])->name('category.filter');
 
-// Combined Category + Occasion Routes - Exclude admin and products routes
+// Product Routes
 Route::get('/products/{slug}', [HomeController::class, 'ShowSingleProduct'])->name('page.single-product');
 Route::get('/products', [HomeController::class, 'ShowAllProduct'])->name('page.multi-product');
 Route::get('/banner-filter', [HomeController::class, 'BannerFilter'])->name('page.banner-filter');
-
-// Occasion Routes
-// Route::get('/occasion/{slug}', [OccasionController::class, 'show'])->name('occasion.show');
 
 // Test route
 Route::get('/test-occasion', function () {
@@ -101,15 +103,14 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add')->midd
 Route::post('/cart/update/', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name('cart.check');
-// Route::post('/checkout/store',[CartController::class, 'store'])->name('c.store');
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');;
-Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');;
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');
+Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');
 Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
-//Checkout route
+// Checkout route
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
@@ -125,7 +126,6 @@ Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook']
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
     // Profile Routes
-    // Route::get('/profile', [Profile::class, 'profile'])->name('profile');
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
 
@@ -147,22 +147,125 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
     Route::get('/pay-custom-order/{id}', [CustomDimensionController::class, 'payment'])->name('custom-order.payment');
-    
 });
-
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
 
-// Admin Reviews Routes - MOVED TO routes/admin.php
+// Pincode check (AJAX)
+Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
+
+// Order tracking
+Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth');
+
+// Direct waybill tracking for staging/test Delhivery
+Route::get('/track-waybill/{waybill}', [CheckoutController::class, 'trackWaybill'])->name('track.waybill');
+
+// Public tracking page
+Route::view('/track', 'web.track')->name('track.page');
+
+// Delhivery webhook (no auth, called by Delhivery)
+Route::post('/delhivery-webhook', [CheckoutController::class, 'delhiveryWebhook']);
 
 // Combined Category + Occasion Routes - Must be at the end to avoid conflicts
-
 Route::get('/{categorySlug}/{occasionSlug}', [CategoryController::class, 'showWithOccasion'])
     ->name('category.occasion.show')
-    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+    ->where('categorySlug', '[a-zA-Z0-9-]+');
 
 Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 'filterWithOccasion'])
     ->name('category.occasion.filter')
-    ->where('categorySlug', '^(?!admin$|products$)[a-zA-Z0-9-]+$'); // Exclude 'admin' and 'products'
+    ->where('categorySlug', '[a-zA-Z0-9-]+');
 
+// Test WhatsApp route
+Route::get('/test-whatsapp', function () {
+    $whatsapp = new \App\Services\WhatsAppService();
+    
+    \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
+    
+    $result = $whatsapp->sendOrderConfirmation(
+        '6295351230',
+        'Pavan',
+        'ORD-' . date('YmdHis')
+    );
+    
+    return [
+        'success' => $result,
+        'message_id' => $whatsapp->getLastMessageId(),
+        'phone_number_id' => config('services.whatsapp.phone_number_id')
+    ];
+});
 
+// Order details route
+Route::get('/orders/{id}', function ($id) {
+    $order = DB::table('orders')
+        ->where('id', $id)
+        ->where('user_id', auth()->id())
+        ->first();
+    
+    if (!$order) {
+        abort(404);
+    }
+    
+    return view('orders.show', compact('order'));
+})->name('orders.show')->middleware('auth');
+
+Route::middleware(['auth'])->prefix('refunds')->group(function () {
+    // Process refund
+    Route::post('/orders/{orderId}', [RefundController::class, 'refund'])->name('refunds.process');
+    
+    // Full refund
+    Route::post('/order/{orderId}/full', [RefundController::class, 'fullRefund'])->name('refunds.full');
+    
+    // Partial refund
+    Route::post('/order/{orderId}/partial', [RefundController::class, 'partialRefund'])->name('refunds.partial');
+    
+    // Get order refunds
+    Route::get('/order/{orderId}', [RefundController::class, 'orderRefunds'])->name('refunds.order');
+    
+    // Get refund status
+    Route::get('/order/{orderId}/refund/{refundId}', [RefundController::class, 'refundStatus'])->name('refunds.status');
+    
+    // Cancel refund
+    Route::post('/order/{orderId}/refund/{refundId}/cancel', [RefundController::class, 'cancelRefund'])->name('refunds.cancel');
+    
+    // Refund statistics
+    Route::get('/statistics', [RefundController::class, 'statistics'])->name('refunds.statistics');
+});
+// Refund Routes
+// Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
+// Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
+
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+
+    $user = User::updateOrCreate([
+        'email' => $googleUser->email,
+    ], [
+        'name' => $googleUser->name,
+        'google_id' => $googleUser->id,
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+});
+
+// Route::get('/auth/google/redirect', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
+
+// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+// Route::post('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('google.disconnect')->middleware('auth');
+
+// // Google OAuth Routes
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
+
+// Google OAuth Routes
+// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+// Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');

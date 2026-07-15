@@ -42,6 +42,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'google_id',
         'phone',
         'date_of_birth',
         'profile_image',
@@ -101,5 +102,10 @@ class User extends Authenticatable implements JWTSubject
     public function emailVerifications()
     {
         return $this->hasMany(EmailVerification::class);
+    }
+
+    public function hasGoogleAccount()
+    {
+        return !is_null($this->google_id);
     }
 }

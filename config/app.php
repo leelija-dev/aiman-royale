@@ -18,19 +18,34 @@ return [
     'wh_number' => env('WHATSAPP_NUMBER', '7003184741'),
 
     'cashfree' => [
-    'mode' =>  env('CASHFREE_MODE', 'sandbox'),    
+        'mode' =>  env('CASHFREE_MODE', 'sandbox'),
 
-    'test_mode' => env('CASHFREE_TEST_MODE', true),
+        'test_mode' => env('CASHFREE_TEST_MODE', true),
 
-    'test_app_id' => env('CASHFREE_TEST_APP_ID'),
+        'test_app_id' => env('CASHFREE_TEST_APP_ID'),
 
-    'test_secret_key' => env('CASHFREE_TEST_SECRET_KEY'),
+        'test_secret_key' => env('CASHFREE_TEST_SECRET_KEY'),
 
-    'app_id' => env('CASHFREE_APP_ID'),
+        'app_id' => env('CASHFREE_APP_ID'),
 
-    'secret_key' => env('CASHFREE_SECRET_KEY'),
+        'secret_key' => env('CASHFREE_SECRET_KEY'),
 
-],
+    ],
+
+    'delhivery' => [
+        'api_key' => env('DELHIVERY_API_KEY'),
+        'sandbox' => env('DELHIVERY_SANDBOX', true),
+        'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse'),
+        'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE', '700125'),
+    ],
+
+     'whatsapp' => [
+        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
+        'api_version' => env('WHATSAPP_API_VERSION', 'v18.0'),
+        'verify_token' => env('WHATSAPP_VERIFY_TOKEN'), // For webhook verification
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +97,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Kolkata',//'UTC',
+    'timezone' => 'Asia/Kolkata', //'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,9 +156,12 @@ return [
     ],
 
     'rupees' => env('RUPEES', '₹'),
-    'business_mail' => env('BUSINESS_MAIL','support@businessname.com'),
-    'business_contact'=> env('BUSINESS_CONTACT','91-123-456-7890'),
-    'business_website'=> env('BUSINESS_WEBSITE','www.businessname.com'),
+    'business_mail' => env('BUSINESS_MAIL', 'support@businessname.com'),
+    'business_contact' => env('BUSINESS_CONTACT', '91-123-456-7890'),
+    'business_website' => env('BUSINESS_WEBSITE', 'www.businessname.com'),
     'currency' => env('CURRENCY', '₹'),
+
+    
+
 
 ];

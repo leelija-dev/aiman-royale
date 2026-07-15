@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\ReturnOrderController;
 
 Route::prefix('blog')->group(function () {
     Route::get('/posts', [BlogApiController::class, 'posts']);
@@ -44,6 +45,16 @@ Route::prefix('faqs')->group(function () {
     Route::get('/{faqId}', [FaqController::class, 'getFaqsUsingId']);
     Route::get('/products/{productSlug}', [FaqController::class, 'getFaqsUsingproductId']);
 });
+
+Route::prefix('returns')->group(function () {
+    Route::post('/', [ReturnOrderController::class, 'store'])->name('api.returns.store');
+    Route::get('/{reverseOrder}', [ReturnOrderController::class, 'show'])->name('api.returns.show');
+});
+// Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails'])->name('return-orders.details');
+
+Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails']);
+Route::post('/return-orders/refund', [ReturnOrderController::class, 'processRefund']);
+Route::post('/return-orders/bulk-refund', [ReturnOrderController::class, 'bulkRefund']);
 
 // Review related API routes
 Route::prefix('reviews')->group(function () {

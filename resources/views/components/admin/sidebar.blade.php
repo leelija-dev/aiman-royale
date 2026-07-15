@@ -185,33 +185,33 @@ $isEmailActive = false;
             </li>
             @endif --}}
 
-            
+
             {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('admin.new-bill') ? 'active' : '' }}" href="{{ route('admin.new-bill') }}">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Generate Bill</span>
-                </a>
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Generate Bill</span>
+            </a>
             </li> --}}
             {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('admin.print-bill') ? 'active' : '' }}" href="{{ route('admin.print-bill') }}">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Bill History</span>
-                </a>
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Bill History</span>
+            </a>
             </li> --}}
 
             {{-- <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('stocks.*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Stock Management</span>
-                </a>
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-boxes"></i>
+            </div>
+            <span class="nav-link-text ms-1">Stock Management</span>
+            </a>
             </li> --}}
 
             <li class="nav-item has-submenu">
@@ -308,175 +308,237 @@ $isEmailActive = false;
                         </li>
                     </ul>
                 </div>
-                
+
                 {{-- <div id="marketing-menu"
                     class="collapse submenu {{$productAndUnit ? 'show' : ''}} "
-                    data-bs-parent="#menu-accordion">
-                    <ul class="submenu-list list-unstyled">
-                        <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.product-package.*') ? 'active' : '' }} "
-                                href="{{ route('admin.product-package.index') }}">Package Units</a>
-                        </li>
-                    </ul>
-                </div> --}}
-            </li>
+                data-bs-parent="#menu-accordion">
+                <ul class="submenu-list list-unstyled">
+                    <li class="submenu-item">
+                        <a class="submenu-link {{ request()->routeIs('admin.product-package.*') ? 'active' : '' }} "
+                            href="{{ route('admin.product-package.index') }}">Package Units</a>
+                    </li>
+                </ul>
+    </div> --}}
+    </li>
 
-            {{-- <li class="nav-item">
+    {{-- <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('shops.*') ? 'active' : '' }}" href="{{ route('shops.index') }}">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Shops</span>
-                </a>
-            </li> --}}
+    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+        <i class="fas fa-store"></i>
+    </div>
+    <span class="nav-link-text ms-1">Shops</span>
+    </a>
+    </li> --}}
 
-            <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('admin.customers.show') ? 'active' : '' }}" href="{{ route('admin.customers.show') }}">
+    <li class="nav-item ">
+        <a class="nav-link {{ request()->routeIs('admin.customers.show') ? 'active' : '' }}" href="{{ route('admin.customers.show') }}">
             <div
                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-user" aria-hidden="true"></i>
             </div>
             <span class="nav-link-text ms-1">Users</span>
-            </a>
-            </li>
+        </a>
+    </li>
 
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.custom-dimensions.*') ? 'active' : '' }}" href="{{ route('admin.custom-dimensions.index') }}">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-ruler-combined" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Custom Dimensions</span>
-                </a>
-            </li>
-            
-            {{-- @if($admin->hasPermissionTo('view newsletter')|| $roles[0]=='superadmin') --}}
-            
-            @php 
-            // $isMarketingActive = str_contains(request()->path(), 'newsletter') || request()->routeIs();
-            // $isNewsletterActive=request()->routeIs('admin.news-letter');
-            // $isEmailActive=request()->routeIs('admin.email-group');
-           
-            $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index');
-            $isNewsletterActive = request()->routeIs('admin.newsletter.index');
-            $isEmailActive = request()->routeIs('admin.email-group');
-            $isContactsActive = request()->routeIs('admin.contact');
+    <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.custom-dimensions.*') ? 'active' : '' }}" href="{{ route('admin.custom-dimensions.index') }}">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-ruler-combined" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Custom Dimensions</span>
+        </a>
+    </li>
+
+    {{-- @if($admin->hasPermissionTo('view newsletter')|| $roles[0]=='superadmin') --}}
+
+    @php
+    // $isMarketingActive = str_contains(request()->path(), 'newsletter') || request()->routeIs();
+    // $isNewsletterActive=request()->routeIs('admin.news-letter');
+    // $isEmailActive=request()->routeIs('admin.email-group');
+
+    $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index');
+    $isNewsletterActive = request()->routeIs('admin.newsletter.index');
+    $isEmailActive = request()->routeIs('admin.email-group');
+    $isContactsActive = request()->routeIs('admin.contact');
 
 
-            @endphp
-                   <li class="nav-item has-submenu">
-                <a class="nav-link submenu-toggle {{ $isMarketingActive ? 'active' : '' }}"
-                    href="#"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#newsletter-menu"
-                    aria-expanded="{{ $isMarketingActive ? 'true' : 'false' }}"
-                    aria-controls="newsletter-menu">
+    @endphp
+    <li class="nav-item has-submenu">
+        <a class="nav-link submenu-toggle {{ $isMarketingActive ? 'active' : '' }}"
+            href="#"
+            data-bs-toggle="collapse"
+            data-bs-target="#newsletter-menu"
+            aria-expanded="{{ $isMarketingActive ? 'true' : 'false' }}"
+            aria-controls="newsletter-menu">
 
             <div
                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fas fa-cart-arrow-down"></i>
             </div>
             <span class="nav-link-text ms-1">Markerting Tools</span>
-            </a>
-           <div id="newsletter-menu"
-                class="collapse submenu {{ $isMarketingActive ? 'show' : '' }}"
-                data-bs-parent="#menu-accordion">
-                <ul class="submenu-list list-unstyled">
-                    <li class="submenu-item"><a
-                            class="submenu-link {{ $isNewsletterActive ? 'active' : '' }} "
-                            href="{{route('admin.newsletter.index')}}">News Letter</a></li>
-                            <li class="submenu-item"><a
-                            class="submenu-link {{ $isContactsActive ? 'active' : '' }} "
-                            href="{{route('admin.contact')}}">Contacts</a></li>
-                    </ul>
-                    </div>
-                    <div id="marketing-menu"
-                    class="collapse submenu marketing-menu {{$isEmailActive ? 'show' : ''}} "
-                    data-bs-parent="#menu-accordion"> 
-                     {{-- <ul class="submenu-list list-unstyled">
+        </a>
+        <div id="newsletter-menu"
+            class="collapse submenu {{ $isMarketingActive ? 'show' : '' }}"
+            data-bs-parent="#menu-accordion">
+            <ul class="submenu-list list-unstyled">
+                <li class="submenu-item"><a
+                        class="submenu-link {{ $isNewsletterActive ? 'active' : '' }} "
+                        href="{{route('admin.newsletter.index')}}">News Letter</a></li>
+                <li class="submenu-item"><a
+                        class="submenu-link {{ $isContactsActive ? 'active' : '' }} "
+                        href="{{route('admin.contact')}}">Contacts</a></li>
+            </ul>
+        </div>
+        <div id="marketing-menu"
+            class="collapse submenu marketing-menu {{$isEmailActive ? 'show' : ''}} "
+            data-bs-parent="#menu-accordion">
+            {{-- <ul class="submenu-list list-unstyled">
                    <li class="submenu-item"><a
                                 class="submenu-link {{ $isEmailActive ? 'active' : '' }}"
-                    href="{{route('admin.email-group')}}">E-mail Group</a></li>
-                </ul> --}}
-            </div>
-            </li> 
-            {{-- @endif --}}
+            href="{{route('admin.email-group')}}">E-mail Group</a>
+    </li>
+    </ul> --}}
+    </div>
+    </li>
+    {{-- @endif --}}
 
-            {{-- SEO Management --}}
-            @php
-            $isSeoActive = request()->routeIs('seo.pages.*');
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link {{ $isSeoActive ? 'active' : '' }}" href="{{ route('seo.pages.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    <span class="nav-link-text ms-1">SEO Pages</span>
+    <!-- Add this section in your sidebar after the Orders section -->
+
+<!-- Delhivery Section -->
+@php
+$isDelhiveryActive = request()->routeIs('pickup.*', 'delhivery.*');
+$isPickupActive = request()->routeIs('pickup.index');
+$isPickupHistoryActive = request()->routeIs('pickup.history');
+$isManifestActive = request()->routeIs('delhivery.manifest.*');
+$isTrackingActive = request()->routeIs('delhivery.tracking.*');
+@endphp
+
+<li class="nav-item mt-3">
+    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Delhivery</h6>
+</li>
+
+<li class="nav-item has-submenu">
+    <a class="nav-link submenu-toggle {{ $isDelhiveryActive ? 'active' : '' }}"
+       href="#"
+       data-bs-toggle="collapse"
+       data-bs-target="#delhivery-menu"
+       aria-expanded="{{ $isDelhiveryActive ? 'true' : 'false' }}"
+       aria-controls="delhivery-menu">
+        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="fas fa-truck"></i>
+        </div>
+        <span class="nav-link-text ms-1">Delhivery</span>
+    </a>
+    <div id="delhivery-menu"
+         class="collapse submenu {{ $isDelhiveryActive ? 'show' : '' }}"
+         data-bs-parent="#menu-accordion">
+        <ul class="submenu-list list-unstyled">
+            <li class="submenu-item">
+                <a class="submenu-link {{ $isPickupActive ? 'active' : '' }}"
+                   href="{{ route('pickup.index') }}">
+                    <i class="fas fa-box-open me-1"></i> Pickup Requests
                 </a>
-            </li>
-
-            {{-- Reviews Management --}}
-            @php
-            $isReviewsActive = request()->routeIs('admin.reviews.*');
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link {{ $isReviewsActive ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-star" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Reviews</span>
-                </a>
-            </li>
-
-            {{-- Orders Management --}}
-            @php
-            $isOrdersActive = request()->routeIs('admin.orders.*');
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link {{ $isOrdersActive ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Orders</span>
-                </a>
-            </li>
-
-            @if ($admin->hasPermissionTo('view reports') || $admin->hasPermissionTo('view roles') || $admin->hasPermissionTo('view page') || $roles[0] == 'superadmin')
-            @php
-            $isUserManagement = request()->routeIs('admin.roles*','admin.roles.edit-role', 'admin.users*', "admin.permissions*");
-
-            $isRolesActive=request()->routeIs('admin.roles','admin.roles.create','admin.roles.edit-role');
-            $isUserActive=request()->routeIs('admin.users*');
-            $ispermissionActive = request()->routeIs('admin.permissions', 'admin.create','admin.edit-permission');
-            @endphp
-
-            <li class="nav-item has-submenu ">
-                <a class="nav-link  submenu-toggle {{$isUserManagement ? 'active' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#users-items-menu" aria-expanded="{{$isUserManagement ? 'true' : 'false'}}" aria-controls="users-items-menu">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-users-line"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Admin</span>
-                </a>
-
-                <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : '' }}" data-bs-parent="#menu-accordion">
-                    <ul class="submenu-list list-unstyled">
-                        <li class="submenu-item">
-                            <a class="submenu-link {{ $isUserActive ?  'active' : ''}}"
-                                href="{{ route('admin.users.show') }}">Admin</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
             {{--
-                @if ($admin->hasPermissionTo('view roles') || $roles[0] == 'superadmin')
-                    <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : ''}}" data-bs-parent="#menu-accordion">
+            <li class="submenu-item">
+                <a class="submenu-link {{ $isPickupHistoryActive ? 'active' : '' }}"
+                   href="{{ route('pickup.history') }}">
+                    <i class="fas fa-history me-1"></i> Pickup History
+                </a>
+            </li>
+            <li class="submenu-item">
+                <a class="submenu-link {{ $isManifestActive ? 'active' : '' }}"
+                   href="{{ route('delhivery.manifest.index') }}">
+                    <i class="fas fa-file-alt me-1"></i> Manifest
+                </a>
+            </li>
+            <li class="submenu-item">
+                <a class="submenu-link {{ $isTrackingActive ? 'active' : '' }}"
+                   href="{{ route('delhivery.tracking.index') }}">
+                    <i class="fas fa-search me-1"></i> Track Shipments
+                </a>
+            </li>
+            --}}
+        </ul>
+    </div>
+</li>
+
+    {{-- SEO Management --}}
+    @php
+    $isSeoActive = request()->routeIs('seo.pages.*');
+    @endphp
+    <li class="nav-item">
+        <a class="nav-link {{ $isSeoActive ? 'active' : '' }}" href="{{ route('seo.pages.index') }}">
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <span class="nav-link-text ms-1">SEO Pages</span>
+        </a>
+    </li>
+
+    {{-- Reviews Management --}}
+    @php
+    $isReviewsActive = request()->routeIs('admin.reviews.*');
+    @endphp
+    <li class="nav-item">
+        <a class="nav-link {{ $isReviewsActive ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-star" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Reviews</span>
+        </a>
+    </li>
+
+    {{-- Orders Management --}}
+    @php
+    $isOrdersActive = request()->routeIs('admin.orders.*');
+    @endphp
+    <li class="nav-item">
+        <a class="nav-link {{ $isOrdersActive ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+            <div
+                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Orders</span>
+        </a>
+    </li>
+
+    @if ($admin->hasPermissionTo('view reports') || $admin->hasPermissionTo('view roles') || $admin->hasPermissionTo('view page') || $roles[0] == 'superadmin')
+    @php
+    $isUserManagement = request()->routeIs('admin.roles*','admin.roles.edit-role', 'admin.users*', "admin.permissions*");
+
+    $isRolesActive=request()->routeIs('admin.roles','admin.roles.create','admin.roles.edit-role');
+    $isUserActive=request()->routeIs('admin.users*');
+    $ispermissionActive = request()->routeIs('admin.permissions', 'admin.create','admin.edit-permission');
+    @endphp
+
+    <li class="nav-item has-submenu ">
+        <a class="nav-link  submenu-toggle {{$isUserManagement ? 'active' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#users-items-menu" aria-expanded="{{$isUserManagement ? 'true' : 'false'}}" aria-controls="users-items-menu">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-users-line"></i>
+            </div>
+            <span class="nav-link-text ms-1">Admin</span>
+        </a>
+
+        <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : '' }}" data-bs-parent="#menu-accordion">
             <ul class="submenu-list list-unstyled">
                 <li class="submenu-item">
-                    <a class="submenu-link {{request()->routeIs('admin.roles') ? 'active' : ''}}"
-                        href="{{ route('admin.roles') }}">Roles</a>
+                    <a class="submenu-link {{ $isUserActive ?  'active' : ''}}"
+                        href="{{ route('admin.users.show') }}">Admin</a>
                 </li>
             </ul>
+        </div>
+    </li>
+    {{--
+                @if ($admin->hasPermissionTo('view roles') || $roles[0] == 'superadmin')
+                    <div id="users-items-menu" class="collapse submenu users-items-menu {{$isUserManagement ? 'show' : ''}}" data-bs-parent="#menu-accordion">
+    <ul class="submenu-list list-unstyled">
+        <li class="submenu-item">
+            <a class="submenu-link {{request()->routeIs('admin.roles') ? 'active' : ''}}"
+                href="{{ route('admin.roles') }}">Roles</a>
+        </li>
+    </ul>
     </div>
     @endif
 
@@ -640,7 +702,7 @@ $isEmailActive = false;
     </li> --}}
     {{-- @endif --}}
 
-    
+
 
     </ul>
     </div>
@@ -648,8 +710,8 @@ $isEmailActive = false;
         <form method="POST" action="{{ route('logout') }}" class="w-100 px-2">
             @csrf
             <button type="submit" class="nav-link text-white font-weight-bold btn btn-sm btn-secondary px-5 py-2 mt-3 w-100">
-                 <i class="fa-solid fa-power-off me-2" style="font-size: 14px !important;"></i>  
-                 <!-- <i class="fa fa-sign-out me-2" style="font-size: 14px !important;"></i>   -->
+                <i class="fa-solid fa-power-off me-2" style="font-size: 14px !important;"></i>
+                <!-- <i class="fa fa-sign-out me-2" style="font-size: 14px !important;"></i>   -->
                 Logout
                 <!-- <span class="d-sm-inline d-none">Sign In</span> -->
             </button>

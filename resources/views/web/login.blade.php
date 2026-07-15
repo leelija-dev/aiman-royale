@@ -28,52 +28,149 @@
         box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
         border-color: #a855f7;
     }
+
+    /* Google Button Styles */
+    .google-btn {
+        background: #ffffff;
+        color: #333;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        width: 100%;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    .google-btn:hover {
+        background: #f8f9fa;
+        border-color: #a855f7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+        text-decoration: none;
+        color: #333;
+    }
+
+    .google-btn:active {
+        transform: translateY(0);
+    }
+
+    .google-btn i {
+        font-size: 22px;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .divider:not(:empty)::before {
+        margin-right: 15px;
+    }
+
+    .divider:not(:empty)::after {
+        margin-left: 15px;
+    }
+
+    .divider-text {
+        color: #9ca3af;
+        font-size: 14px;
+        font-weight: 500;
+        background: white;
+        padding: 0 10px;
+    }
+
+    /* Alert Messages */
+    .alert {
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-success {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+    }
+
+    .alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .alert i {
+        font-size: 18px;
+    }
 </style>
 
 <section class="px-4 lgg:py-12 py-6">
     <div class="container mx-auto">
 
         <!-- Login Form -->
-        <div class="w-full max-w-md mx-auto ">
+        <div class="w-full max-w-md mx-auto">
             <div class="bg-white rounded-2xl shadow-xl p-8">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-900">Welcome Back</h2>
                     <p class="mt-2 text-gray-600">Sign in to your account</p>
                 </div>
 
-                <!-- Social Login Options -->
-                {{--
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <button class="flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-200">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
-                        <span class="text-sm font-medium">Google</span>
-                    </button>
-                    <button class="flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition duration-200">
-                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                        </svg>
-                        <span class="text-sm font-medium">Facebook</span>
-                    </button>
-                </div>
-               
+                <!-- Display Success/Error Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
 
-                <div class="relative my-6">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
+                @if(session('error'))
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ session('error') }}</span>
                     </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Or continue with email</span>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ $errors->first() }}</span>
                     </div>
+                @endif
+
+                <!-- Google Login Button -->
+                <a href="{{ route('google.redirect') }}" class="google-btn">
+                    <i class="fab fa-google" style="color: #ea4335;"></i>
+                    <span>Continue with Google</span>
+                </a>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span class="divider-text">or continue with email</span>
                 </div>
- --}}
+
+                <!-- Email/Password Login Form -->
                 <form action="{{ route('web.login') }}" method="post" class="space-y-5" id="loginForm" novalidate>
                     @csrf
                     <input type="hidden" name="redirect" value="{{ request('redirect') }}">
+                    
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <div class="relative">
@@ -82,13 +179,11 @@
                             </div>
                             <input type="email" id="email" name="email" required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition duration-200"
-                                placeholder="you@example.com">
-
+                                placeholder="you@example.com" value="{{ old('email') }}">
                         </div>
                         @error('email')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-
                     </div>
 
                     <div>
@@ -106,10 +201,9 @@
                             <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                 <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
                             </button>
-
                         </div>
                         @error('password')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -142,57 +236,45 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
-                        Don’t have an account?
+                        Don't have an account?
                         <a href="{{ route('page.register') }}"
                             class="text-purple-600 font-medium hover:text-purple-500">
                             Create one
                         </a>
                     </p>
                 </div>
-
-
             </div>
-
-
         </div>
-
-
     </div>
 </section>
 
-
-
-<!-- <script src="{{asset('web/js/login.js')}}"></script> -->
-
-
 @endsection
+
 <script>
     (function() {
         'use strict'
         const form = document.getElementById('loginForm');
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }
     })();
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
 
+    document.addEventListener("DOMContentLoaded", function() {
         const togglePassword = document.getElementById("togglePassword");
         const passwordInput = document.getElementById("password");
 
         if (togglePassword && passwordInput) {
-
             togglePassword.addEventListener("click", function() {
-
                 const icon = this.querySelector("i");
-
                 if (passwordInput.type === "password") {
                     passwordInput.type = "text";
                     icon.classList.remove("fa-eye");
@@ -202,10 +284,7 @@
                     icon.classList.remove("fa-eye-slash");
                     icon.classList.add("fa-eye");
                 }
-
             });
-
         }
-
     });
 </script>
