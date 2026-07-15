@@ -1817,11 +1817,11 @@ $isProductPage = !empty($productSlug);
               <span class="text-sm font-semibold text-[#A10000] tracking-wider uppercase">Stay Updated</span>
             </div>
             <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 lg:mb-6 leading-tight">
-              Subscribe to Our
+              Save massive in every purchase
               <span class="text-[#A10000]">Newsletter</span>
             </h2>
             <p class="text-gray-600 mb-6 lg:mb-8 text-sm lg:text-base">
-              Get exclusive updates on new arrivals, special offers, and fashion tips delivered to your inbox.
+             We regularly send our customers promo codes, stock updates, and discount offers on our premium collections. Get that delivered in your inbox right away.
             </p>
           </div>
 
@@ -1990,7 +1990,9 @@ $isProductPage = !empty($productSlug);
           </a>
         </div>
         <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed md:mx-0 mx-auto md:text-left text-center">
-          We are an Indian fashion brand known for our exquisite collection of ethnic & fusion outfits. Explore the timeless art of traditional textiles.
+         The only brand that makes sure that you look your best rather than making our pockets. Our goal is simple: To make you witness what elite clothing looks like so that you can differentiate 
+art from fake trails.
+
         </p>
       </div>
 
@@ -2021,58 +2023,93 @@ $isProductPage = !empty($productSlug);
 
     <!-- Links Section with Accordion -->
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6">
-      <!-- Quick Links -->
+      <!-- Top Categories -->
       <div class="lg:col-span-1">
-        <div class="accordion-header lg:cursor-default group" data-target="quick-links">
+        <div class="accordion-header lg:cursor-default group" data-target="top-categories">
           <div class="flex items-center justify-between lg:justify-start">
             <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
               <div class="w-2 h-8 bg-gradient-to-b from-[#A10000] to-[#EC4899] rounded-full"></div>
-              Quick Links
+             Top Categories
             </h3>
             <svg class="lg:hidden w-5 h-5 text-gray-600 group-[.active]:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
         </div>
-        <div id="quick-links" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+        <div id="top-categories" class="accordion-content mt-6 lg:mt-8 space-y-4">
+          
+          
+         
+         
+          <a href="{{ route('category.show', ['slug' => 'salwar-kameez']) }}"
+            class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Men's Collection</span>
+            <span class="font-medium">Salwar Kameez</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ route('category.show', ['slug' => 'anarkali']) }}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Women's Collection</span>
+            <span class="font-medium">Anarkali</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ route('category.show', ['slug' => 'plazzo-suits']) }}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">New Arrivals</span>
+            <span class="font-medium">Plazzo Suits</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ route('category.show', ['slug' => 'gown']) }}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Couples Wear</span>
-          </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Kids Collection</span>
+            <span class="font-medium">Gown</span>
           </a>
         </div>
       </div>
 
-      <!-- Vastram -->
+      <!-- Occaisions -->
       <div class="lg:col-span-1">
-        <div class="accordion-header lg:cursor-default group" data-target="vastram">
+        <div class="accordion-header lg:cursor-default group" data-target="Occaisions">
           <div class="flex items-center justify-between lg:justify-start">
             <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
               <div class="w-2 h-8 bg-gradient-to-b from-[#EC4899] to-[#EC4899]/60 rounded-full"></div>
-              Vastram
+              Occaisions
             </h3>
             <svg class="lg:hidden w-5 h-5 text-gray-600 group-[.active]:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </div>
         </div>
-        <div id="vastram" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+        <div id="Occaisions" class="accordion-content mt-6 lg:mt-8 space-y-4">
+         
+          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+            <span class="font-medium">Casual</span>
+          </a>
+          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+            <span class="font-medium">Festival</span>
+          </a>
+          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+            <span class="font-medium">Party</span>
+          </a>
+          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+            <span class="font-medium">Wedding</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- explore -->
+      <div class="lg:col-span-1">
+        <div class="accordion-header lg:cursor-default group" data-target="explore">
+          <div class="flex items-center justify-between lg:justify-start">
+            <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+              <div class="w-2 h-8 bg-gradient-to-b from-[#EC4899]/60 to-[#FCE7F3] rounded-full"></div> Explore
+              
+            </h3>
+            <svg class="lg:hidden w-5 h-5 text-gray-600 group-[.active]:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div id="explore" class="accordion-content mt-6 lg:mt-8 space-y-4">
+           <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">About Us</span>
           </a>
@@ -2080,46 +2117,17 @@ $isProductPage = !empty($productSlug);
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Contact Us</span>
           </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="terms-condition" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Fashion Blog</span>
-          </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Press & Media</span>
-          </a>
-          <a href="#" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-            <span class="font-medium">Join Our Team</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Policies -->
-      <div class="lg:col-span-1">
-        <div class="accordion-header lg:cursor-default group" data-target="policies">
-          <div class="flex items-center justify-between lg:justify-start">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
-              <div class="w-2 h-8 bg-gradient-to-b from-[#EC4899]/60 to-[#FCE7F3] rounded-full"></div>
-              Policies
-            </h3>
-            <svg class="lg:hidden w-5 h-5 text-gray-600 group-[.active]:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
-        </div>
-        <div id="policies" class="accordion-content mt-6 lg:mt-8 space-y-4">
-          <a href="terms-condition" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Terms & Conditions</span>
           </a>
 
-          <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+          <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Return & Refund Policy</span>
           </a>
-          <a href="privacy-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
-            <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+          <a href="privacy-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Privacy Policy</span>
           </a>
 
@@ -2319,7 +2327,7 @@ $isProductPage = !empty($productSlug);
 
         <div class="flex flex-wrap items-center gap-2.5">
           <span class="inline-flex items-center gap-1.5 bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/40 text-xs font-medium text-gray-700 shadow-sm hover:bg-white/70 transition">
-            <i class="fas fa-box text-gray-500 text-[10px]"></i> Delhivery
+            <img src="{{ asset('images/icons/delhivery.png') }}" alt="Delhivery" class="w-full h-auto max-h-[18px] object-contain rounded-sm"> Delhivery
           </span>
         
         </div>
@@ -2331,12 +2339,6 @@ $isProductPage = !empty($productSlug);
           <span class="text-[10px] bg-white/60 backdrop-blur-sm px-2 py-0.5 rounded-full text-gray-600 border border-white/30">all pin codes</span>
         </div>
       </div>
-
-      <!-- subtle extra note -->
-      <div class="mt-3 text-[10px] text-gray-600/70 text-right italic border-t border-white/20 pt-2">
-        <i class="fas fa-shield-alt mr-1"></i> secured by SSL
-      </div>
-
     </div>
   </div>
 
