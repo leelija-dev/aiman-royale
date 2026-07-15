@@ -59,7 +59,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::view('/addresses', 'web.addresses');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'refresh.jwt'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 
@@ -124,7 +124,7 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
 
 // Authenticated Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'refresh.jwt'])->group(function () {
     // Profile Routes
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
