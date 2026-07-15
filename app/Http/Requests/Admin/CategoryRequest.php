@@ -20,7 +20,7 @@ class CategoryRequest extends FormRequest
             // 'slug' => ['required', 'string', 'max:120', 'unique:categories,slug,' . $id],
             'description' => ['nullable', 'string'],
             'parent_id' => ['nullable', 'exists:categories,id'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:1024'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:10240'],
             'is_active' => ['boolean'],
             'is_home' => ['boolean'],
             //'home_position' => ['nullable', 'string'],

@@ -24,7 +24,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
 // use App\Http\Controllers\Auth\GoogleAuthController;
-
+use Illuminate\Support\Facades\DB;
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');
