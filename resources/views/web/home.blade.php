@@ -816,7 +816,7 @@
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
+                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{ $product->name }}
                         </h3>
 
@@ -1078,28 +1078,19 @@
         <div class="flex flex-col lgg:flex-row gap-8 lgg:gap-12">
             <div class="w-full lgg:w-2/5 px-4 lgg:text-left text-center">
                 <!-- Title -->
-                <h2
-                    class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
+                <h2 class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
                     Unbeatable Monthly Steals
                 </h2>
 
                 <!-- Description -->
-                <p
-                    class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                <p class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
                     Summer sale is on!
-
                 </p>
-                <p
-                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
                     Buy our premium collection of fashion outfits now at exclusive prices.
-
                 </p>
-                <p
-                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    <strong>
-                        Save more with our live sale…
-                    </strong>
-
+                <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    <strong>Save more with our live sale…</strong>
                 </p>
 
                 <!-- Button -->
@@ -1108,47 +1099,44 @@
                 </button>
 
                 <!-- Countdown Title -->
-                <h4
-                    class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
-                    Hurry…only 2 days left!
+                <h4 class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
+                    Hurry…only <span id="daysLabel">30</span> days left!
                 </h4>
 
                 <!-- Countdown -->
                 <div class="mt-6 flex gap-4 flex-wrap lgg:justify-start justify-center">
                     <!-- Box -->
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            02
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="daysBox">
+                            30
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Days</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            06
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="hoursBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Hr</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            05
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="minutesBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Mins</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            30
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="secondsBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Sec</p>
                     </div>
                 </div>
             </div>
+
+
             <div class="w-full lgg:w-[59%] flex justify-center items-center">
                 <div class="second-owl owl-carousel owl-theme relative">
                     @foreach ($secondaryBanners as $banner)
@@ -1641,7 +1629,7 @@ All Products
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
+                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{$product->name ?? ''}}
                         </h3>
 
@@ -1930,7 +1918,7 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                               Virtual Fashion Consultation
+                                Virtual Fashion Consultation
                             </h3>
                         </div>
 
@@ -2023,7 +2011,7 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                               Bridal Styling Service
+                                Bridal Styling Service
                             </h3>
                         </div>
 
@@ -2750,6 +2738,79 @@ All Products
                 button.disabled = false;
             });
     }
+</script>
+
+<script>
+    // Targeting JS - Countdown timer with 30 days default
+    (function() {
+        // Set target date to 30 days from now (midnight)
+        const TARGET_DATE = new Date();
+        TARGET_DATE.setDate(TARGET_DATE.getDate() + 30);
+        TARGET_DATE.setHours(0, 0, 0, 0);
+
+        // DOM elements
+        const daysBox = document.getElementById('daysBox');
+        const hoursBox = document.getElementById('hoursBox');
+        const minutesBox = document.getElementById('minutesBox');
+        const secondsBox = document.getElementById('secondsBox');
+        const daysLabel = document.getElementById('daysLabel');
+
+        // Helper: format number with leading zero
+        function pad(num) {
+            return String(num).padStart(2, '0');
+        }
+
+        // Update countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diffMs = TARGET_DATE - now;
+
+            // If countdown finished, show zeros
+            let remainingSeconds = Math.max(0, Math.floor(diffMs / 1000));
+            const days = Math.floor(remainingSeconds / 86400);
+            remainingSeconds %= 86400;
+            const hours = Math.floor(remainingSeconds / 3600);
+            remainingSeconds %= 3600;
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+
+            // Format
+            const daysStr = String(days);
+            const hoursStr = pad(hours);
+            const minsStr = pad(minutes);
+            const secsStr = pad(seconds);
+
+            // Update days label
+            if (daysLabel) {
+                daysLabel.textContent = daysStr;
+            }
+
+            // Update boxes without animation
+            if (daysBox) {
+                daysBox.textContent = daysStr;
+            }
+            if (hoursBox) {
+                hoursBox.textContent = hoursStr;
+            }
+            if (minutesBox) {
+                minutesBox.textContent = minsStr;
+            }
+            if (secondsBox) {
+                secondsBox.textContent = secsStr;
+            }
+        }
+
+        // Initial call
+        updateCountdown();
+
+        // Update every second
+        const timerInterval = setInterval(updateCountdown, 1000);
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            clearInterval(timerInterval);
+        });
+    })();
 </script>
 
 @endsection
