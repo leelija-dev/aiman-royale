@@ -773,7 +773,7 @@ $fullImagePath = $image->image_url;
             </div>
 
             <!-- RIGHT CONTENT -->
-            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%]">
+            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%] sm:min-w-[270px]">
                 <div>
                     <!-- Title -->
                     <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
@@ -819,11 +819,11 @@ $fullImagePath = $image->image_url;
                 <!-- Type Selection -->
                 <div>
                     <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
-                    <div class="flex gap-3 xxs:flex-row flex-col">
+                    <div class="flex gap-3 flex-wrap ">
                         <button class="type-btn px-6 py-3 rounded-lg border-[1px] border-secondary/25 bg-secondary/10 text-secondary transition-all" data-type="stitched">
                             Stitched
                         </button>
-                        <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
+                        <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-ruler-combined"></i> Custom Dimension
                         </button>
                     </div>
@@ -877,14 +877,14 @@ $fullImagePath = $image->image_url;
 
                 <!-- Size Selection -->
                 <div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                        <div>
+                    <div class="flex items-center justify-between gap-4 mb-6 flex-wrap ">
+                        <div class="w-fit">
                             <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                                 <i class="fas fa-expand-alt text-secondary"></i> Select Size
                             </h3>
                             <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
                         </div>
-                        <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+                        <button type="button" data-size-guide-trigger class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
                             <i class="fas fa-ruler-combined"></i> View Size Guide
                         </button>
                     </div>
@@ -967,13 +967,13 @@ if ($variant->images && $variant->images->isNotEmpty()) {
 
     <!-- Coupon Input Block (Hidden by default) -->
     <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
-        <div class="flex gap-2 xxs:flex-row flex-col">
+        <div class="flex gap-2 flex-col xxs:flex-row">
             <input type="text" 
                    id="coupon-input" 
                    placeholder="Enter coupon code" 
-                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
+                   class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
             <button id="apply-coupon-btn" 
-                    class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
+                    class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
                 Apply
             </button>
         </div>
