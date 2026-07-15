@@ -1119,7 +1119,7 @@
 
     <!-- Intro Paragraph (Always Visible) -->
     <p class="mb-3 leading-relaxed text-base md:text-lg">
-     Founded in 2007 in New Delhi, Aiman Royale is passionate about combining modern simplicity with the timeless creativity of Indian artistry and craftsmanship. We specialize in women’s ethnic outfits, including designer sarees, exclusive lehengas, premium salwar suits, comfy palazzos & fusion ensembles. We bring you luxury that seamlessly blends heritage & convenience.  
+      Founded in 2007 in New Delhi, Aiman Royale is passionate about combining modern simplicity with the timeless creativity of Indian artistry and craftsmanship. We specialize in women’s ethnic outfits, including designer sarees, exclusive lehengas, premium salwar suits, comfy palazzos & fusion ensembles. We bring you luxury that seamlessly blends heritage & convenience.
 
 
     </p>
@@ -1154,18 +1154,18 @@
           <li><span class="font-medium">Salwar Kameez:</span> A wide range of traditional 3-piece salwar suits made of chinon, georgette, shimmer, viscose organza, paired with taffeta unstitched pants, palazzos, ghararas, straight mid-cut pants, & matching dupatta with four-side borders and decorated with hand-embroidered buttis, perfect for regular or casual events.</li>
           <li><span class="font-medium">Palazzo Sets:</span>Comfortable yet stylish everyday wear, perfect for on-the-go events. Coordinated 2-piece outfits with wide-legged flared trousers paired with a matching dupatta, available in L & XL with multiple color options like turquoise blue, maroon, mint green, wine, purple, rose gold, mauve, copper, rust, olive green, & more.</li>
           <li><span class="font-medium">Anarkali:</span> Long, flowing kurtas paired with a fitted bottom and a matching dupatta, made of chinnon and georgette. Available in a wide range of color options like maroon, black, red, orange, mustard, mauve, firoji, & more, these outfits feature intricate machine-embroidered patterns for an elegant look. </li>
-          <li><span class="font-medium">Kurta Sets: </span> Traditional, loose-fitting regular kurtas with full sleeves and a dupatta, made of breathable fabrics for everyday use. Available in L and XL sizes & soothing pastel color shades, the kurta sets are just the perfect picks for this summer.  </li>
-          <li><span class="font-medium">Sharara Suits: </span> South-Asian wide-legged & straight outfit with heavily flared trousers and a matching dupatta, designed for weddings and festivals. Made of chinnon & georgette, these shararas are available in exciting color variants like rani, mint green, rust, turquoise blue, maroon, & rose gold. 
-</li>
+          <li><span class="font-medium">Kurta Sets: </span> Traditional, loose-fitting regular kurtas with full sleeves and a dupatta, made of breathable fabrics for everyday use. Available in L and XL sizes & soothing pastel color shades, the kurta sets are just the perfect picks for this summer. </li>
+          <li><span class="font-medium">Sharara Suits: </span> South-Asian wide-legged & straight outfit with heavily flared trousers and a matching dupatta, designed for weddings and festivals. Made of chinnon & georgette, these shararas are available in exciting color variants like rani, mint green, rust, turquoise blue, maroon, & rose gold.
+          </li>
         </ul>
 
         <!-- Subheading -->
         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
-         Why Aiman Royale for A Complete Ethnic Wardrobe Revamp?
+          Why Aiman Royale for A Complete Ethnic Wardrobe Revamp?
         </h3>
 
         <p class="leading-relaxed text-base md:text-lg">
-         Designed to create a lasting impression, Aiman Royale’s luxury outfits celebrate the intricate textiles and rich artistry of India. Our commitment to the finest quality & elegant designs ensures that each outfit:
+          Designed to create a lasting impression, Aiman Royale’s luxury outfits celebrate the intricate textiles and rich artistry of India. Our commitment to the finest quality & elegant designs ensures that each outfit:
 
         </p>
 
@@ -1175,18 +1175,18 @@
             Is designed by the expert artisans across India, especially skilled in blending traditional craftsmanship with modern elegance
           </li>
           <li>
-           Is made of premium-quality fabrics such as pure silk, naturally-derived cotton, & luxurious georgette blends that ensure all-day comfort
+            Is made of premium-quality fabrics such as pure silk, naturally-derived cotton, & luxurious georgette blends that ensure all-day comfort
 
           </li>
           <li>
-           Is versatile and can be styled in different ways by pairing it with the right set of jewelry
+            Is versatile and can be styled in different ways by pairing it with the right set of jewelry
           </li>
           <li>
-           Is embroidered with classy & contemporary patterns that never fall out of fashion
+            Is embroidered with classy & contemporary patterns that never fall out of fashion
 
           </li>
           <li>
-           Will give you the perfect fit with our customization & tailored virtual fashion consultation services
+            Will give you the perfect fit with our customization & tailored virtual fashion consultation services
 
           </li>
         </ul>
@@ -1194,7 +1194,7 @@
         <!-- Closing Paragraph -->
         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
           <p class="leading-relaxed text-base md:text-lg text-gray-700">
-           Explore the beauty of Indian traditional and ethnic outfits at Aiman Royale. Whether it’s your big day, a festive event, or a casual evening celebration, we always have something for you. Experience luxury curated with comfort at its finest.  
+            Explore the beauty of Indian traditional and ethnic outfits at Aiman Royale. Whether it’s your big day, a festive event, or a casual evening celebration, we always have something for you. Experience luxury curated with comfort at its finest.
           </p>
         </div>
       </div>
@@ -2113,7 +2113,7 @@ $isProductPage = !empty($productSlug);
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Terms & Conditions</span>
           </a>
-         
+
           <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899]/80 transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Return & Refund Policy</span>
@@ -2122,7 +2122,7 @@ $isProductPage = !empty($productSlug);
             <div class="w-1 h-1 rounded-full bg-[#FCE7F3] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Privacy Policy</span>
           </a>
-        
+
         </div>
       </div>
 
@@ -2157,11 +2157,11 @@ $isProductPage = !empty($productSlug);
             <span class="font-medium">Order Tracking</span>
           </a>
           @auth
-<a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
-    <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
-    <span class="font-medium">Order History</span>
-</a>
-@endauth
+          <a href="{{route('user.order-history', base64_encode(Auth::user()->id))}}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+            <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
+            <span class="font-medium">Order History</span>
+          </a>
+          @endauth
         </div>
       </div>
 
@@ -2213,15 +2213,17 @@ $isProductPage = !empty($productSlug);
     </div>
   </div>
 
-  <div class="space-y-2">
+<div class="flex flex-col lgg:flex-row gap-6 md:gap-10">
 
+  <!-- LEFT: Existing blocks (category info) – distinct background & styling -->
+  <div class="space-y-2 flex-1 ">
     <!-- LATEST ETHNIC COLLECTION -->
     <div class="w-full">
       <span class="font-semibold uppercase tracking-wide text-gray-900 block mb-2">
        Latest Ethnic Collection
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-        Gowns, Lahengas, Anarkali, Kurta Sets, Salwar Kameez, Palazzo, & Sharara suits 
+        Gowns, Lahengas, Anarkali, Kurta Sets, Salwar Kameez, Palazzo, &amp; Sharara suits 
       </p>
     </div>
 
@@ -2241,8 +2243,7 @@ $isProductPage = !empty($productSlug);
         Best Seller
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-       Gowns, Lahengas, Anarkalis, & Shararas
-
+       Gowns, Lahengas, Anarkalis, &amp; Shararas
       </p>
     </div>
 
@@ -2252,12 +2253,94 @@ $isProductPage = !empty($productSlug);
         Measurement
       </span>
       <p class="text-gray-700 text-sm leading-relaxed">
-       S, M, L, XL, XXL, Plus size, Maternity & Customized fitting options
-
+       S, M, L, XL, XXL, Plus size, Maternity &amp; Customized fitting options
       </p>
     </div>
-
   </div>
+
+  <!-- RIGHT: Payment & Delivery block -->
+  <div class="w-full lgg:max-w-[450px] flex-shrink-0">
+    <div style="border-radius: 1rem; border: 1px solid rgba(255,255,255,0.3); padding: 1.25rem; backdrop-filter: blur(4px); background: rgba(255,255,255,0.25); box-shadow: 0 8px 20px rgba(0,0,0,0.02);">
+
+      <!-- Safe & Secure Payment -->
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-sm font-semibold uppercase tracking-wide text-gray-800">
+          <i class="fas fa-lock text-indigo-600 mr-1.5 text-xs"></i> Safe &amp; Secure Payment
+        </span>
+        <span style="background: rgba(255,255,255,0.5); border-radius: 30px; padding: 0.2rem 0.8rem; font-size: 0.7rem; font-weight: 500; color: #1e293b; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(2px);">trusted</span>
+      </div>
+
+      <!-- Payment icons – now includes Cashfree, PhonePe, Google Pay -->
+      <div class="grid grid-cols-3 gap-2.5 mb-4">
+        <!-- Mastercard -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+          <i class="fab fa-cc-mastercard text-2xl text-[#1a1f36]"></i>
+        </div>
+        <!-- Visa -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+          <i class="fab fa-cc-visa text-2xl text-[#1a1f71]"></i>
+        </div>
+        <!-- COD -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[11px] font-medium text-gray-700 gap-1">
+          <i class="fas fa-truck text-gray-500 text-xs"></i> <span>COD</span>
+        </div>
+        <!-- RuPay -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+          <span class="font-bold text-[#1f3a6b] text-sm tracking-tight">RuPay</span>
+        </div>
+       
+        <!-- Cashfree (custom text + icon) -->
+        <div class="flex items-center overflow-hidden justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[10px] font-semibold text-gray-700 gap-1">
+          <img src="{{ asset('images/icons/cashfree.png') }}" alt="Cashfree" class="w-full h-auto max-h-[23px] object-contain">
+        </div>
+        <!-- PhonePe (custom) -->
+        <div class="flex items-center overflow-hidden justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[10px] font-semibold text-gray-700 gap-1">
+          <img src="{{ asset('images/icons/phonepe.png') }}" alt="PhonePe" class="w-full h-auto max-h-[23px] object-contain">
+        </div>
+        <!-- Google Pay (custom) -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[10px] font-semibold text-gray-700 gap-1">
+          <img src="{{ asset('images/icons/gpay.png') }}" alt="Google Pay" class="w-full h-auto max-h-[23px] object-contain">
+        </div>
+        <!-- + more -->
+        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[10px] text-gray-400">
+          <span class="opacity-60">+ more</span>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="border-top: 1px solid rgba(255,255,255,0.3);" class="my-1"></div>
+
+      <!-- Delivery partners -->
+      <div class="mt-3">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-shipping-fast text-indigo-600/80 text-sm"></i>
+          <span class="text-sm font-medium text-gray-700 uppercase tracking-wide">Delivery partners</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="inline-flex items-center gap-1.5 bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/40 text-xs font-medium text-gray-700 shadow-sm hover:bg-white/70 transition">
+            <i class="fas fa-box text-gray-500 text-[10px]"></i> Delhivery
+          </span>
+        
+        </div>
+
+        <!-- Cash on Delivery available -->
+        <div class="mt-3 flex items-center gap-2 text-xs text-gray-500 bg-blue-50/50 backdrop-blur-sm px-3 py-1.5 rounded-full w-fit border border-blue-100/40 shadow-sm">
+          <i class="fas fa-hand-holding-usd text-blue-600/70"></i>
+          <span>Cash on Delivery available</span>
+          <span class="text-[10px] bg-white/60 backdrop-blur-sm px-2 py-0.5 rounded-full text-gray-600 border border-white/30">all pin codes</span>
+        </div>
+      </div>
+
+      <!-- subtle extra note -->
+      <div class="mt-3 text-[10px] text-gray-600/70 text-right italic border-t border-white/20 pt-2">
+        <i class="fas fa-shield-alt mr-1"></i> secured by SSL
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
   <!-- Extended Services Row -->
   <div class="container mx-auto px-0 py-6 mt-3">
@@ -2327,8 +2410,8 @@ $isProductPage = !empty($productSlug);
 
   <!-- Bottom Bar -->
   <div class="border-t border-[#EC4899]/30 pt-8 pb-12">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="text-center md:text-left">
+    <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+      <div class="text-center ">
         <p class="text-gray-600 text-sm">
           &copy; {{now()->format('Y')}} Aiman Fashion. All rights reserved.
         </p>
@@ -2336,14 +2419,7 @@ $isProductPage = !empty($productSlug);
           Crafted with ❤️ in India
         </p>
       </div>
-      <div class="flex items-center gap-8">
-        <div class="flex items-center gap-4">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/visa.svg" class="w-10 h-6" alt="Visa">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mastercard.svg" class="w-10 h-6" alt="Mastercard">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/paypal.svg" class="w-10 h-6" alt="PayPal">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/razorpay.svg" class="w-10 h-6" alt="Razorpay">
-        </div>
-      </div>
+     
     </div>
   </div>
   </div>
@@ -2351,7 +2427,7 @@ $isProductPage = !empty($productSlug);
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
 <a href="https://wa.me/919999999999" target="_blank"
-  class="fixed {{ $isProductPage ? 'bottom-[10.5rem]' : 'bottom-6' }} right-4 md:bottom-6 md:right-6 z-[60] group">
+  class="fixed {{ $isProductPage ? 'bottom-[10.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
 
@@ -2364,10 +2440,6 @@ $isProductPage = !empty($productSlug);
     <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
   </div>
 
-  <!-- Fashion Tooltip -->
-  <div class="absolute right-16 md:right-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#111] to-[#333] text-white text-xs px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap shadow-xl tracking-wide">
-    Chat Now on WhatsApp
-  </div>
 </a>
 
 
@@ -2397,7 +2469,7 @@ $isProductPage = !empty($productSlug);
     </a>
 
     <!-- Categories Button -->
-    <a href="/" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-blue-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ config('app.url') }}/collections" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-blue-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-th-large text-xl text-gray-600 mb-1 group-hover:text-blue-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-blue-600 transition-colors relative z-10">Categories</span>
@@ -2418,7 +2490,7 @@ $isProductPage = !empty($productSlug);
     </a>
 
     <!-- Offers Button -->
-    <a href="/" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ config('app.url') }}/products?search=trending" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div class="relative">
         <i class="fas fa-percent text-xl text-gray-600 mb-1 group-hover:text-amber-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
@@ -2429,7 +2501,7 @@ $isProductPage = !empty($productSlug);
     </a>
 
     <!-- Book Appointment Button -->
-    <a href="/" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ config('app.url') }}/appointment" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
