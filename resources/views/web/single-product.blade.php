@@ -121,7 +121,7 @@ error_log('Product Data: ' . json_encode([
 
     #single-right-content #price-container .text-xl {
         font-size: 1.85rem !important;
-
+       
         color: #2c241a;
         letter-spacing: -0.5px;
     }
@@ -715,291 +715,291 @@ error_log('Product Data: ' . json_encode([
                     }
                     @endphp
 
-                    @forelse($variantImages as $index => $image)
-                    @php
-                    // Use the accessor directly - it will handle both local and Cloudinary URLs
-                    $fullImagePath = $image->image_url;
-                    @endphp
-                    <div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}"
-                        data-display="{{ $fullImagePath }}"
-                        data-large="{{ $fullImagePath }}"
-                        onclick="updateMainImage('{{ $fullImagePath }}', '{{ $product->name }}', this)">
-                        <img src="{{ $fullImagePath }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
-                    </div>
-                    @empty
-                    <div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
-                        data-display="{{ asset('assets/images/placeholder.jpg') }}"
-                        data-large="{{ asset('assets/images/placeholder.jpg') }}"
-                        onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
-                        <img src="{{ asset('assets/images/placeholder.jpg') }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name ?? 'Product' }}" />
-                    </div>
-                    @endforelse
+                   @forelse($variantImages as $index => $image)
+@php
+// Use the accessor directly - it will handle both local and Cloudinary URLs
+$fullImagePath = $image->image_url;
+@endphp
+<div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}"
+    data-display="{{ $fullImagePath }}"
+    data-large="{{ $fullImagePath }}"
+    onclick="updateMainImage('{{ $fullImagePath }}', '{{ $product->name }}', this)">
+    <img src="{{ $fullImagePath }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name }}" />
+</div>
+@empty
+<div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
+    data-display="{{ asset('assets/images/placeholder.jpg') }}"
+    data-large="{{ asset('assets/images/placeholder.jpg') }}"
+    onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
+    <img src="{{ asset('assets/images/placeholder.jpg') }}" class="w-full h-full object-cover object-center object-top" alt="{{ $product->name ?? 'Product' }}" />
+</div>
+@endforelse
                 </div>
 
                 <!-- Main Image with Hover Pan Zoom -->
-                {{--
+                 {{--
                 <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
                     @endphp
                     <img src="{{ asset($mainImagePath) }}"
-                class="w-full h-full object-contain object-center object-top"
-                alt="{{ $product->name ?? 'Product' }}"
-                id="main-image" />
-                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
-                    <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
-                        <i class="fas fa-expand text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            --}}
-            <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
-                @php
-                $firstImage = $variantImages->first();
-                // Use the accessor - it handles both local and Cloudinary URLs
-                $mainImagePath = $firstImage ? $firstImage->image_url : asset('assets/images/placeholder.jpg');
-                @endphp
-                <img src="{{ $mainImagePath }}"
-                    class="w-full h-full object-contain object-center object-top"
-                    alt="{{ $product->name ?? 'Product' }}"
-                    id="main-image" />
-                <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
-                    <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
-                        <i class="fas fa-expand text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT CONTENT -->
-        <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%]">
-            <div>
-                <!-- Title -->
-                <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
-                    {{ $product->name }}
-                </h3>
-                <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
-                <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
-            </div>
-
-            <div class="flex items-center gap-2">
-                <div class="flex text-yellow-400 text-sm">
-                    @for($i = 0; $i < $fullStars; $i++)
-                        <i class="fas fa-star"></i>
-                        @endfor
-                        @if($hasHalfStar)
-                        <i class="fas fa-star-half-alt"></i>
-                        @endif
-                        @for($i = 0; $i < $emptyStars; $i++)
-                            <i class="far fa-star"></i>
-                            @endfor
-                </div>
-                <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
-            </div>
-
-            <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]" id="price-container">
-                @php
-                $firstVariant = $product->variants->first();
-                $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
-                $originalPrice = $firstVariant->price;
-                $discount = $firstVariant->discount;
-                @endphp
-                <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
-                @if($originalPrice != $currentPrice)
-                <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
-                @endif
-                @if($discount > 0)
-                <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ $discount }}% off)</span>
-                @else
-                <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>
-                @endif
-            </div>
-
-            <!-- Type Selection -->
-            <div>
-                <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
-                <div class="flex gap-3 xxs:flex-row flex-col">
-                    <button class="type-btn px-6 py-3 rounded-lg border-[1px] border-secondary/25 bg-secondary/10 text-secondary transition-all" data-type="stitched">
-                        Stitched
-                    </button>
-                    <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
-                        <i class="fas fa-ruler-combined"></i> Custom Dimension
-                    </button>
-                </div>
-            </div>
-
-            <!-- Custom Dimension Input Section (Hidden by Default) -->
-            <div id="custom-dimension-section" class="hidden space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                <h3 class="font-medium text-gray-800">Enter Custom Dimensions</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Bust (in cm)</label>
-                        <input type="number" id="custom-bust" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter bust" min="1" step="0.1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Waist (in cm)</label>
-                        <input type="number" id="custom-waist" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter waist" min="1" step="0.1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Hip (in cm)</label>
-                        <input type="number" id="custom-hip" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter hip" min="1" step="0.1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Armhole (in cm)</label>
-                        <input type="number" id="custom-armhole" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter Armhole" min="1" step="0.1">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Select Color</label>
-                    <div class="flex gap-3" id="custom-color-selection">
-                        <div class="flex flex-wrap gap-2">
-                            @if(isset($colors) && $colors->count() > 0)
-                            @foreach($colors as $color)
-                            <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all"
-                                style="background-color: {{ $color->code }};"
-                                data-color="{{ $color->code }}"
-                                title="{{ $color->name }}"></button>
-                            @endforeach
-                            @else
-                            <p class="text-gray-500 text-sm">No colors available</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-3">
-                    <button id="save-dimension-btn" class="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 transition-colors">Save Dimensions</button>
-                    <button id="cancel-custom-btn" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">Cancel</button>
-                </div>
-            </div>
-
-            <!-- Size Selection -->
-            <div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                            <i class="fas fa-expand-alt text-secondary"></i> Select Size
-                        </h3>
-                        <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
-                    </div>
-                    <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
-                        <i class="fas fa-ruler-combined"></i> View Size Guide
-                    </button>
-                </div>
-
-                <div class="flex gap-3 flex-wrap" id="size-buttons">
-                    @php
-                    $sizes = $product->variants->pluck('size')->unique()->filter();
-                    @endphp
-                    @foreach($sizes as $size)
-                    <button class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
-                        data-size="{{ $size }}">
-                        <span class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size }}</span>
-                    </button>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Color Selection -->
-            <div id="color-selection-section">
-                <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
-                <div class="flex gap-3 flex-wrap" id="color-selection">
-                    @php
-                    $firstVariant = $product->variants->first();
-                    $selectedSize = $firstVariant->size ?? 'M';
-                    $colorsForSize = $product->variants->where('size', $selectedSize);
-                    @endphp
-
-                    @forelse($colorsForSize as $index => $variant)
-                    @php
-                    $isSelected = ($index == 0);
-
-                    // Get variant image with proper path using the accessor
-                    $variantImage = '';
-                    if ($variant->images && $variant->images->isNotEmpty()) {
-                    $firstImage = $variant->images->first();
-                    $variantImage = $firstImage->image_url; // Use accessor
-                    } elseif ($variant->image) {
-                    // If variant has direct image property, check if it's a URL
-                    $imagePath = trim($variant->image);
-                    $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL) ? $imagePath : asset(ltrim($imagePath, '/'));
-                    } else {
-                    $variantImage = asset('assets/images/placeholder.jpg');
-                    }
-                    @endphp
-                    <button class="color-btn w-10 h-10 rounded-full border-2 {{ $isSelected ? 'border-secondary' : 'border-gray-300' }} transition-all hover:scale-110"
-                        style="background-color: {{ $variant->color_code ?? $variant->color ?? '#CCCCCC' }};"
-                        data-color="{{ $variant->color }}"
-                        data-color-code="{{ $variant->color_code }}"
-                        data-size="{{ $variant->size }}"
-                        data-variant-id="{{ $variant->id }}"
-                        data-variant-image="{{ $variantImage }}"
-                        title="{{ $variant->color }}">
-                    </button>
-                    @empty
-                    <p class="text-gray-500 text-sm">No colors available for this size</p>
-                    @endforelse
-                </div>
-            </div>
-
-            <!-- Best Offers Section -->
-            <div class="bg-secondary/5">
-                <h3 class="font-medium mb-2">Best Offers</h3>
-                <ul class="text-sm text-gray-600 space-y-1">
-                    <li>• Special offer get 25% off <span class="text-secondary cursor-pointer">T&C</span></li>
-                    <li>• Bank offer get 30% off on Axis Bank Credit Card <span class="text-secondary cursor-pointer">T&C</span></li>
-                    <li>• Wallet offer get 40% cashback via Paytm <span class="text-secondary cursor-pointer">T&C</span></li>
-                </ul>
-            </div>
-
-            <!-- Action Buttons -->
-            <div id="action-buttons-section" class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
-                data-product-variants="{{ json_encode($product->variants) }}">
-
-                <!-- Coupon Toggle Button -->
-                <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Have a coupon? Click here</span>
-                    <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
-                </button>
-
-                <!-- Coupon Input Block (Hidden by default) -->
-                <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
-                    <div class="flex gap-2">
-                        <input type="text"
-                            id="coupon-input"
-                            placeholder="Enter coupon code"
-                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
-                        <button id="apply-coupon-btn"
-                            class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
-                            Apply
+                        class="w-full h-full object-contain object-center object-top"
+                        alt="{{ $product->name ?? 'Product' }}"
+                        id="main-image" />
+                    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
+                        <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
+                            <i class="fas fa-expand text-xl"></i>
                         </button>
                     </div>
-                    <div id="coupon-message" class="text-sm mt-2 hidden"></div>
+                </div>
+                --}}
+                <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
+    @php
+    $firstImage = $variantImages->first();
+    // Use the accessor - it handles both local and Cloudinary URLs
+    $mainImagePath = $firstImage ? $firstImage->image_url : asset('assets/images/placeholder.jpg');
+    @endphp
+    <img src="{{ $mainImagePath }}"
+        class="w-full h-full object-contain object-center object-top"
+        alt="{{ $product->name ?? 'Product' }}"
+        id="main-image" />
+    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
+        <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
+            <i class="fas fa-expand text-xl"></i>
+        </button>
+    </div>
+</div>
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%]">
+                <div>
+                    <!-- Title -->
+                    <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
+                        {{ $product->name }}
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
+                    <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
-                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                    </button>
-                    <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
-                        <i class="far fa-heart"></i>
-                    </button>
+                <div class="flex items-center gap-2">
+                    <div class="flex text-yellow-400 text-sm">
+                        @for($i = 0; $i < $fullStars; $i++)
+                            <i class="fas fa-star"></i>
+                            @endfor
+                            @if($hasHalfStar)
+                            <i class="fas fa-star-half-alt"></i>
+                            @endif
+                            @for($i = 0; $i < $emptyStars; $i++)
+                                <i class="far fa-star"></i>
+                                @endfor
+                    </div>
+                    <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                 </div>
 
-                <!-- WhatsApp Share Button -->
-                <a href="https://wa.me/91{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    <span>Order on WhatsApp</span>
-                </a>
+                <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]" id="price-container">
+                    @php
+                    $firstVariant = $product->variants->first();
+                    $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
+                    $originalPrice = $firstVariant->price;
+                    $discount = $firstVariant->discount;
+                    @endphp
+                    <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
+                    @if($originalPrice != $currentPrice)
+                    <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
+                    @endif
+                    @if($discount > 0)
+                    <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ $discount }}% off)</span>
+                    @else
+                    <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>
+                    @endif
+                </div>
+
+                <!-- Type Selection -->
+                <div>
+                    <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
+                    <div class="flex gap-3 xxs:flex-row flex-col">
+                        <button class="type-btn px-6 py-3 rounded-lg border-[1px] border-secondary/25 bg-secondary/10 text-secondary transition-all" data-type="stitched">
+                            Stitched
+                        </button>
+                        <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
+                            <i class="fas fa-ruler-combined"></i> Custom Dimension
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Dimension Input Section (Hidden by Default) -->
+                <div id="custom-dimension-section" class="hidden space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <h3 class="font-medium text-gray-800">Enter Custom Dimensions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Bust (in cm)</label>
+                            <input type="number" id="custom-bust" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter bust" min="1" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Waist (in cm)</label>
+                            <input type="number" id="custom-waist" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter waist" min="1" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Hip (in cm)</label>
+                            <input type="number" id="custom-hip" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter hip" min="1" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Armhole (in cm)</label>
+                            <input type="number" id="custom-armhole" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary" placeholder="Enter Armhole" min="1" step="0.1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Select Color</label>
+                        <div class="flex gap-3" id="custom-color-selection">
+                            <div class="flex flex-wrap gap-2">
+                                @if(isset($colors) && $colors->count() > 0)
+                                @foreach($colors as $color)
+                                <button class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all"
+                                    style="background-color: {{ $color->code }};"
+                                    data-color="{{ $color->code }}"
+                                    title="{{ $color->name }}"></button>
+                                @endforeach
+                                @else
+                                <p class="text-gray-500 text-sm">No colors available</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button id="save-dimension-btn" class="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 transition-colors">Save Dimensions</button>
+                        <button id="cancel-custom-btn" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Size Selection -->
+                <div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-expand-alt text-secondary"></i> Select Size
+                            </h3>
+                            <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
+                        </div>
+                        <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+                            <i class="fas fa-ruler-combined"></i> View Size Guide
+                        </button>
+                    </div>
+
+                    <div class="flex gap-3 flex-wrap" id="size-buttons">
+                        @php
+                        $sizes = $product->variants->pluck('size')->unique()->filter();
+                        @endphp
+                        @foreach($sizes as $size)
+                        <button class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
+                            data-size="{{ $size }}">
+                            <span class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size }}</span>
+                        </button>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Color Selection -->
+                <div id="color-selection-section">
+                    <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
+                    <div class="flex gap-3 flex-wrap" id="color-selection">
+                        @php
+                        $firstVariant = $product->variants->first();
+                        $selectedSize = $firstVariant->size ?? 'M';
+                        $colorsForSize = $product->variants->where('size', $selectedSize);
+                        @endphp
+
+                        @forelse($colorsForSize as $index => $variant)
+                        @php
+$isSelected = ($index == 0);
+
+// Get variant image with proper path using the accessor
+$variantImage = '';
+if ($variant->images && $variant->images->isNotEmpty()) {
+    $firstImage = $variant->images->first();
+    $variantImage = $firstImage->image_url; // Use accessor
+} elseif ($variant->image) {
+    // If variant has direct image property, check if it's a URL
+    $imagePath = trim($variant->image);
+    $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL) ? $imagePath : asset(ltrim($imagePath, '/'));
+} else {
+    $variantImage = asset('assets/images/placeholder.jpg');
+}
+@endphp
+                        <button class="color-btn w-10 h-10 rounded-full border-2 {{ $isSelected ? 'border-secondary' : 'border-gray-300' }} transition-all hover:scale-110"
+                            style="background-color: {{ $variant->color_code ?? $variant->color ?? '#CCCCCC' }};"
+                            data-color="{{ $variant->color }}"
+                            data-color-code="{{ $variant->color_code }}"
+                            data-size="{{ $variant->size }}"
+                            data-variant-id="{{ $variant->id }}"
+                            data-variant-image="{{ $variantImage }}"
+                            title="{{ $variant->color }}">
+                        </button>
+                        @empty
+                        <p class="text-gray-500 text-sm">No colors available for this size</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Best Offers Section -->
+                <div class="bg-secondary/5">
+                    <h3 class="font-medium mb-2">Best Offers</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Special offer get 25% off <span class="text-secondary cursor-pointer">T&C</span></li>
+                        <li>• Bank offer get 30% off on Axis Bank Credit Card <span class="text-secondary cursor-pointer">T&C</span></li>
+                        <li>• Wallet offer get 40% cashback via Paytm <span class="text-secondary cursor-pointer">T&C</span></li>
+                    </ul>
+                </div>
+
+                <!-- Action Buttons -->
+<div id="action-buttons-section" class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+    data-product-variants="{{ json_encode($product->variants) }}">
+    
+    <!-- Coupon Toggle Button -->
+    <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+        <i class="fas fa-ticket-alt"></i>
+        <span>Have a coupon? Click here</span>
+        <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
+    </button>
+
+    <!-- Coupon Input Block (Hidden by default) -->
+    <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+        <div class="flex gap-2 xxs:flex-row flex-col">
+            <input type="text" 
+                   id="coupon-input" 
+                   placeholder="Enter coupon code" 
+                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
+            <button id="apply-coupon-btn" 
+                    class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
+                Apply
+            </button>
+        </div>
+        <div id="coupon-message" class="text-sm mt-2 hidden"></div>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
+            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+        </button>
+        <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
+            <i class="far fa-heart"></i>
+        </button>
+    </div>
+
+    <!-- WhatsApp Share Button -->
+    <a href="https://wa.me/91{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
+        <i class="fab fa-whatsapp text-xl"></i>
+        <span>Order on WhatsApp</span>
+    </a>
+</div>
             </div>
         </div>
-    </div>
     </div>
     @else
     <div class=" mx-auto max-w-[1400px]">
@@ -1042,7 +1042,7 @@ error_log('Product Data: ' . json_encode([
                     @if($product->fabric)
                     <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">Material & Care</h3>
                     <p class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                        {{ $product->material_care }}
+                       {{ $product->material_care }}
                     </p>
                     @endif
                     @if($product->fit)
@@ -2250,176 +2250,138 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 <script>
     const loginUrl = "{{route('page.login')}}";
 
-    // Store all product variants data
-    const productVariants = @json($product->variants);
+// Store all product variants data
+const productVariants = @json($product->variants);
 
-    // Set default size and color from first variant
-    let selectedSize = '{{ $product?->variants?->first()->size ?? "M" }}';
-    let selectedColor = '{{ $product?->variants?->first()->color ?? "" }}';
-    let selectedVariantId = '{{ $product?->variants?->first()->id ?? "" }}';
+// Set default size and color from first variant
+let selectedSize = '{{ $product?->variants?->first()->size ?? "M" }}';
+let selectedColor = '{{ $product?->variants?->first()->color ?? "" }}';
+let selectedVariantId = '{{ $product?->variants?->first()->id ?? "" }}';
 
-    let selectedType = 'stitched';
-    let customDimensions = null;
-    let selectedCustomColor = null;
+let selectedType = 'stitched';
+let customDimensions = null;
+let selectedCustomColor = null;
 
-    // WhatsApp Share Function
-    function shareOnWhatsApp() {
-        const productName = "{{ $product->name ?? 'Product' }}";
-        const productPrice = document.querySelector('#price-container .text-2xl')?.textContent || "{{ $basePrice }}";
-        const productUrl = window.location.href;
-        const mainImage = document.getElementById('main-image')?.src || '';
-
-        let selectedVariant = null;
-        if (selectedVariantId) {
-            selectedVariant = productVariants.find(v => v.id == selectedVariantId);
-        }
-
-        const size = selectedSize || 'N/A';
-        const color = selectedColor || 'N/A';
-
-        let message = `*${productName}*\n\n`;
-        message += `💰 *Price:* ${productPrice}\n`;
-        message += `📏 *Size:* ${size}\n`;
-        message += `🎨 *Color:* ${color}\n`;
-
-        if (customDimensions) {
-            message += `📐 *Custom Dimensions:*\n`;
-            message += `   Bust: ${customDimensions.bust} cm\n`;
-            message += `   Waist: ${customDimensions.waist} cm\n`;
-            message += `   Hip: ${customDimensions.hip} cm\n`;
-            message += `   Armhole: ${customDimensions.armhole} cm\n`;
-        }
-
-        message += `\n🔗 *Product Link:* ${productUrl}\n\n`;
-        message += `🛍️ Check out this amazing product!`;
-
-        const encodedMessage = encodeURIComponent(message);
-        window.open(`https://web.whatsapp.com/send?text=${encodedMessage}`, '_blank');
-        showNotification('WhatsApp opened! Share this product with your friends.', 'success');
+// WhatsApp Share Function
+function shareOnWhatsApp() {
+    const productName = "{{ $product->name ?? 'Product' }}";
+    const productPrice = document.querySelector('#price-container .text-2xl')?.textContent || "{{ $basePrice }}";
+    const productUrl = window.location.href;
+    const mainImage = document.getElementById('main-image')?.src || '';
+    
+    let selectedVariant = null;
+    if (selectedVariantId) {
+        selectedVariant = productVariants.find(v => v.id == selectedVariantId);
     }
+    
+    const size = selectedSize || 'N/A';
+    const color = selectedColor || 'N/A';
+    
+    let message = `*${productName}*\n\n`;
+    message += `💰 *Price:* ${productPrice}\n`;
+    message += `📏 *Size:* ${size}\n`;
+    message += `🎨 *Color:* ${color}\n`;
+    
+    if (customDimensions) {
+        message += `📐 *Custom Dimensions:*\n`;
+        message += `   Bust: ${customDimensions.bust} cm\n`;
+        message += `   Waist: ${customDimensions.waist} cm\n`;
+        message += `   Hip: ${customDimensions.hip} cm\n`;
+        message += `   Armhole: ${customDimensions.armhole} cm\n`;
+    }
+    
+    message += `\n🔗 *Product Link:* ${productUrl}\n\n`;
+    message += `🛍️ Check out this amazing product!`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://web.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+    showNotification('WhatsApp opened! Share this product with your friends.', 'success');
+}
 
-    // Image functions
-    function updateMainImage(imageSrc, altText, thumbnailElement) {
-        const mainImage = document.getElementById('main-image');
+// Image functions
+function updateMainImage(imageSrc, altText, thumbnailElement) {
+    const mainImage = document.getElementById('main-image');
+    
+    if (mainImage) {
+        mainImage.src = imageSrc;
+        mainImage.alt = altText;
+    }
+    
+    document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('selected', 'border-secondary');
+        thumb.classList.add('border-transparent');
+    });
+    
+    if (thumbnailElement) {
+        thumbnailElement.classList.add('selected', 'border-secondary');
+        thumbnailElement.classList.remove('border-transparent');
+    }
+}
 
-        if (mainImage) {
-            mainImage.src = imageSrc;
-            mainImage.alt = altText;
-        }
+// Store current color's images to prevent image changes on size selection
+let currentColorImages = null;
+let currentColorName = null;
 
-        document.querySelectorAll('.thumbnail').forEach(thumb => {
-            thumb.classList.remove('selected', 'border-secondary');
-            thumb.classList.add('border-transparent');
+// Update size options based on selected color
+function updateSizeOptionsForColor(color, currentVariantId) {
+    const sizeButtonsContainer = document.getElementById('size-buttons');
+    if (!sizeButtonsContainer) return;
+    
+    // Find all variants with the selected color
+    const variantsForColor = productVariants.filter(variant => variant.color === color);
+    
+    // Store the images for this color (same for all sizes of this color)
+    if (variantsForColor.length > 0 && currentColorName !== color) {
+        const firstVariant = variantsForColor[0];
+        currentColorImages = firstVariant.images || (firstVariant.image ? [{image: firstVariant.image}] : null);
+        currentColorName = color;
+    }
+    
+    // Get unique sizes for this color
+    const availableSizes = [...new Set(variantsForColor.map(v => v.size))];
+    
+    // Clear existing size buttons
+    sizeButtonsContainer.innerHTML = '';
+    
+    if (availableSizes.length === 0) {
+        sizeButtonsContainer.innerHTML = '<p class="text-gray-500 text-sm">No sizes available for this color</p>';
+        return;
+    }
+    
+    // Create new size buttons
+    availableSizes.forEach(size => {
+        const sizeBtn = document.createElement('button');
+        sizeBtn.className = 'size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group';
+        sizeBtn.setAttribute('data-size', size);
+        
+        const sizeSpan = document.createElement('span');
+        sizeSpan.className = 'text-lg font-semibold text-gray-800 group-hover:text-secondary';
+        sizeSpan.textContent = size;
+        sizeBtn.appendChild(sizeSpan);
+        
+        // Add click event to select this size
+        sizeBtn.addEventListener('click', function() {
+            selectSizeForColor(size, color);
         });
-
-        if (thumbnailElement) {
-            thumbnailElement.classList.add('selected', 'border-secondary');
-            thumbnailElement.classList.remove('border-transparent');
-        }
+        
+        sizeButtonsContainer.appendChild(sizeBtn);
+    });
+    
+    // Find and select the variant for the current color and size
+    let defaultVariant = variantsForColor.find(v => v.size === selectedSize);
+    
+    if (!defaultVariant && variantsForColor.length > 0) {
+        defaultVariant = variantsForColor[0];
     }
-
-    // Store current color's images to prevent image changes on size selection
-    let currentColorImages = null;
-    let currentColorName = null;
-
-    // Update size options based on selected color
-    function updateSizeOptionsForColor(color, currentVariantId) {
-        const sizeButtonsContainer = document.getElementById('size-buttons');
-        if (!sizeButtonsContainer) return;
-
-        // Find all variants with the selected color
-        const variantsForColor = productVariants.filter(variant => variant.color === color);
-
-        // Store the images for this color (same for all sizes of this color)
-        if (variantsForColor.length > 0 && currentColorName !== color) {
-            const firstVariant = variantsForColor[0];
-            currentColorImages = firstVariant.images || (firstVariant.image ? [{
-                image: firstVariant.image
-            }] : null);
-            currentColorName = color;
-        }
-
-        // Get unique sizes for this color
-        const availableSizes = [...new Set(variantsForColor.map(v => v.size))];
-
-        // Clear existing size buttons
-        sizeButtonsContainer.innerHTML = '';
-
-        if (availableSizes.length === 0) {
-            sizeButtonsContainer.innerHTML = '<p class="text-gray-500 text-sm">No sizes available for this color</p>';
-            return;
-        }
-
-        // Create new size buttons
-        availableSizes.forEach(size => {
-            const sizeBtn = document.createElement('button');
-            sizeBtn.className = 'size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group';
-            sizeBtn.setAttribute('data-size', size);
-
-            const sizeSpan = document.createElement('span');
-            sizeSpan.className = 'text-lg font-semibold text-gray-800 group-hover:text-secondary';
-            sizeSpan.textContent = size;
-            sizeBtn.appendChild(sizeSpan);
-
-            // Add click event to select this size
-            sizeBtn.addEventListener('click', function() {
-                selectSizeForColor(size, color);
-            });
-
-            sizeButtonsContainer.appendChild(sizeBtn);
-        });
-
-        // Find and select the variant for the current color and size
-        let defaultVariant = variantsForColor.find(v => v.size === selectedSize);
-
-        if (!defaultVariant && variantsForColor.length > 0) {
-            defaultVariant = variantsForColor[0];
-        }
-
-        if (defaultVariant) {
-            const oldSize = selectedSize;
-            selectedSize = defaultVariant.size;
-            selectedVariantId = defaultVariant.id;
-
-            // Update size button styling
-            document.querySelectorAll('.size-btn').forEach(btn => {
-                if (btn.getAttribute('data-size') === selectedSize) {
-                    btn.classList.add('border-secondary', 'bg-secondary/10');
-                    btn.classList.remove('border-gray-200');
-                } else {
-                    btn.classList.remove('border-secondary', 'bg-secondary/10');
-                    btn.classList.add('border-gray-200');
-                }
-            });
-
-            // Only update price, NOT images when size changes
-            updatePrice(defaultVariant);
-
-            // IMPORTANT: Only update images if the color changed, not when size changes
-            if (currentColorName !== color || oldSize !== selectedSize) {
-                // Only update images when color changes, not size
-                if (currentColorName !== color) {
-                    updateVariantImages(defaultVariant);
-                }
-            }
-
-            // Update add to cart button variant ID
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.setAttribute('data-variant-id', defaultVariant.id);
-            }
-
-            checkVariantInCart(defaultVariant.id);
-        }
-    }
-
-    // Select size when color is already selected - IMAGE SHOULD NOT CHANGE
-    function selectSizeForColor(size, color) {
-        selectedSize = size;
-
+    
+    if (defaultVariant) {
+        const oldSize = selectedSize;
+        selectedSize = defaultVariant.size;
+        selectedVariantId = defaultVariant.id;
+        
         // Update size button styling
         document.querySelectorAll('.size-btn').forEach(btn => {
-            if (btn.getAttribute('data-size') === size) {
+            if (btn.getAttribute('data-size') === selectedSize) {
                 btn.classList.add('border-secondary', 'bg-secondary/10');
                 btn.classList.remove('border-gray-200');
             } else {
@@ -2427,930 +2389,743 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
                 btn.classList.add('border-gray-200');
             }
         });
-
-        // Find the variant with the selected color and size
-        const selectedVariant = productVariants.find(v => v.color === color && v.size === size);
-
-        if (selectedVariant) {
-            selectedVariantId = selectedVariant.id;
-
-            // Update price only - DO NOT update images when size changes
-            updatePrice(selectedVariant);
-
-            // IMPORTANT: Do NOT call updateVariantImages here - images should stay the same for the same color
-
-            // Update add to cart button
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.setAttribute('data-variant-id', selectedVariant.id);
-            }
-
-            // Check if variant is in cart
-            checkVariantInCart(selectedVariant.id);
-        }
-
-        // Reset custom dimensions if any
-        if (customDimensions) {
-            customDimensions = null;
-            selectedCustomColor = null;
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.removeAttribute('data-custom-dimensions');
-                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-                addToCartBtn.classList.remove('bg-green-600');
-                addToCartBtn.classList.add('bg-secondary');
-                addToCartBtn.disabled = false;
+        
+        // Only update price, NOT images when size changes
+        updatePrice(defaultVariant);
+        
+        // IMPORTANT: Only update images if the color changed, not when size changes
+        if (currentColorName !== color || oldSize !== selectedSize) {
+            // Only update images when color changes, not size
+            if (currentColorName !== color) {
+                updateVariantImages(defaultVariant);
             }
         }
-    }
-
-    // Update color options based on selected size
-    function updateColorOptions(size) {
-        const colorSelection = document.getElementById('color-selection');
-        if (!colorSelection) return;
-
-        // Clear existing buttons
-        while (colorSelection.firstChild) {
-            colorSelection.removeChild(colorSelection.firstChild);
-        }
-
-        // Filter variants by selected size
-        const colorsForSize = productVariants.filter(variant => variant.size === size);
-
-        if (colorsForSize.length === 0) {
-            const noColorsMsg = document.createElement('p');
-            noColorsMsg.className = 'text-gray-500 text-sm';
-            noColorsMsg.textContent = 'No colors available for this size';
-            colorSelection.appendChild(noColorsMsg);
-            return;
-        }
-
-        colorsForSize.forEach((variant, index) => {
-            const colorBtn = document.createElement('button');
-            colorBtn.className = `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
-            const bgColor = variant.color_code || variant.color || '#CCCCCC';
-            colorBtn.style.backgroundColor = bgColor;
-            // colorBtn.style.backgroundColor = variant.color;
-            colorBtn.setAttribute('data-color', variant.color);
-            colorBtn.setAttribute('data-size', size);
-            colorBtn.setAttribute('data-variant-id', variant.id);
-
-            // Generate correct image URL
-            let variantImage = '{{ asset("assets/images/placeholder.jpg") }}';
-
-            // if (variant.images && variant.images.length > 0) {
-            //     if (typeof variant.images[0] === 'object' && variant.images[0].image) {
-            //         let imagePath = variant.images[0].image;
-            //         imagePath = imagePath.replace(/^\/+/, '');
-            //         variantImage = imagePath; //'{{ url("") }}/' + imagePath;
-            //     } 
-            //     else if (typeof variant.images[0] === 'string') {
-            //         let imagePath = variant.images[0];
-            //         imagePath = imagePath.replace(/^\/+/, '');
-            //         variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url("") }}/' + imagePath;
-            //     }
-            // } else if (variant.image) {
-            //     let imagePath = variant.image;
-            //     imagePath = imagePath.replace(/^\/+/, '');
-            //     variantImage = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
-            // }
-
-            if (variant.images && variant.images.length > 0) {
-                if (typeof variant.images[0] === 'object' && variant.images[0].image) {
-                    // Cloudinary URL - no need to modify
-                    variantImage = variant.images[0].image;
-                } else if (typeof variant.images[0] === 'string') {
-                    // Cloudinary URL - use as is
-                    variantImage = variant.images[0];
-                }
-            } else if (variant.image) {
-                // Cloudinary URL - use as is
-                variantImage = variant.image;
-            }
-
-            colorBtn.setAttribute('data-variant-image', variantImage);
-            colorBtn.setAttribute('title', variant.color);
-
-            colorBtn.addEventListener('click', function() {
-                selectColor(variant.color, size, variant.id, this);
-            });
-
-            colorSelection.appendChild(colorBtn);
-        });
-
-        // Select first color by default
-        if (colorsForSize.length > 0) {
-            const firstColorBtn = colorSelection.querySelector('.color-btn');
-            if (firstColorBtn) {
-                selectColor(colorsForSize[0].color, size, colorsForSize[0].id, firstColorBtn);
-            }
-        }
-    }
-
-    // Select color when size is already selected - IMAGES SHOULD CHANGE HERE
-    // function selectColor(color, size, variantId, element) {
-    //     selectedColor = color;
-    //     selectedVariantId = variantId;
-
-    //     // Update color button styling
-    //     document.querySelectorAll('.color-btn').forEach(btn => {
-    //         if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
-    //             btn.classList.add('border-secondary');
-    //             btn.classList.remove('border-gray-300');
-    //         } else {
-    //             btn.classList.remove('border-secondary');
-    //             btn.classList.add('border-gray-300');
-    //         }
-    //     });
-
-    //     // Update size options based on selected color
-    //     updateSizeOptionsForColor(color, variantId);
-
-    //     const addToCartBtn = document.getElementById('add-to-cart');
-    //     if (addToCartBtn) {
-    //         addToCartBtn.setAttribute('data-variant-id', variantId);
-    //     }
-
-    //     if (customDimensions) {
-    //         customDimensions = null;
-    //         selectedCustomColor = null;
-    //         if (addToCartBtn) {
-    //             addToCartBtn.removeAttribute('data-custom-dimensions');
-    //             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-    //             addToCartBtn.classList.remove('bg-green-600');
-    //             addToCartBtn.classList.add('bg-secondary');
-    //             addToCartBtn.disabled = false;
-    //         }
-    //     }
-
-    //     const variantImage = element.getAttribute('data-variant-image');
-
-    //     if (variantImage) {
-    //         const mainImage = document.getElementById('main-image');
-
-    //         if (mainImage) {
-    //             mainImage.src = variantImage;
-    //         }
-    //     }
-
-    //     const selectedVariant = productVariants.find(v => v.id == variantId);
-    //     if (selectedVariant) {
-    //         updatePrice(selectedVariant);
-    //         // Update images when color changes (NOT when size changes)
-    //         updateVariantImages(selectedVariant);
-    //     }
-
-    //     checkVariantInCart(variantId);
-    // }
-
-    // Original selectSize function for initial load - IMAGES SHOULD NOT CHANGE
-    function selectSize(size) {
-        selectedSize = size;
-
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            if (btn.getAttribute('data-size') === size) {
-                btn.classList.add('border-secondary', 'bg-secondary/10');
-                btn.classList.remove('border-gray-200');
-            } else {
-                btn.classList.remove('border-secondary', 'bg-secondary/10');
-                btn.classList.add('border-gray-200');
-            }
-        });
-
-        // Update color options based on selected size
-        updateColorOptions(size);
-
-        // Find the variant for current color and new size
-        const newVariant = productVariants.find(v => v.color === selectedColor && v.size === size);
-
-        if (newVariant) {
-            selectedVariantId = newVariant.id;
-            // Update price only - images remain the same
-            updatePrice(newVariant);
-
-            // Update add to cart button
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.setAttribute('data-variant-id', newVariant.id);
-            }
-
-            checkVariantInCart(newVariant.id);
-        }
-
-        if (customDimensions) {
-            customDimensions = null;
-            selectedCustomColor = null;
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.removeAttribute('data-custom-dimensions');
-                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-                addToCartBtn.classList.remove('bg-green-600');
-                addToCartBtn.classList.add('bg-secondary');
-                addToCartBtn.disabled = false;
-            }
-        }
-    }
-
-    // function updateVariantImages(variant) {
-    //     const mainImage = document.getElementById('main-image');
-    //     const thumbnailContainer = document.getElementById('thumbnail-container');
-
-    //     if (!variant) return;
-
-    //     if (variant.images && variant.images.length > 0) {
-    //         if (mainImage) {
-    //             const firstImage = variant.images[0];
-    //             let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
-
-    //             if (typeof firstImage === 'object' && firstImage.image) {
-    //                 let imagePath = firstImage.image.replace(/^\/+/, '');
-    //                 firstImagePath = '{{ url("") }}/' + imagePath;
-    //             } else if (typeof firstImage === 'string') {
-    //                 let imagePath = firstImage.replace(/^\/+/, '');
-    //                 firstImagePath = firstImage.startsWith('http') ? firstImage : '{{ url("") }}/' + imagePath;
-    //             }
-
-    //             mainImage.src = firstImagePath;
-    //             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
-    //         }
-
-    //         if (thumbnailContainer) {
-    //             let thumbnailsHtml = '';
-    //             variant.images.forEach((image, index) => {
-    //                 let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
-
-    //                 if (typeof image === 'object' && image.image) {
-    //                     let path = image.image.replace(/^\/+/, '');
-    //                     imagePath = '{{ url("") }}/' + path;
-    //                 } else if (typeof image === 'string') {
-    //                     let path = image.replace(/^\/+/, '');
-    //                     imagePath = image.startsWith('http') ? image : '{{ url("") }}/' + path;
-    //                 }
-
-    //                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-    //                 thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
-    //             });
-    //             thumbnailContainer.innerHTML = thumbnailsHtml;
-    //         }
-    //     } else if (variant.image) {
-    //         let imagePath = variant.image.replace(/^\/+/, '');
-    //         const fullImagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
-
-    //         if (mainImage) {
-    //             mainImage.src = fullImagePath;
-    //             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
-    //         }
-
-    //         if (thumbnailContainer) {
-    //             thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
-    //         }
-    //     }
-    // }
-
-    function updateVariantImages(variant) {
-        const mainImage = document.getElementById('main-image');
-        const thumbnailContainer = document.getElementById('thumbnail-container');
-
-        if (!variant) return;
-
-        if (variant.images && variant.images.length > 0) {
-            if (mainImage) {
-                const firstImage = variant.images[0];
-                let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
-
-                // Check if it's an object with image property
-                if (typeof firstImage === 'object' && firstImage.image_url) {
-                    // Use image_url if available
-                    firstImagePath = firstImage.image_url;
-                } else if (typeof firstImage === 'object' && firstImage.image) {
-                    // Fallback to image property
-                    let imagePath = firstImage.image;
-                    firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
-                } else if (typeof firstImage === 'string') {
-                    let imagePath = firstImage;
-                    firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
-                }
-
-                mainImage.src = firstImagePath;
-                mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
-            }
-
-            if (thumbnailContainer) {
-                let thumbnailsHtml = '';
-                variant.images.forEach((image, index) => {
-                    let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
-
-                    if (typeof image === 'object' && image.image_url) {
-                        imagePath = image.image_url;
-                    } else if (typeof image === 'object' && image.image) {
-                        let path = image.image;
-                        imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
-                    } else if (typeof image === 'string') {
-                        let path = image;
-                        imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
-                    }
-
-                    const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
-                    thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
-                });
-                thumbnailContainer.innerHTML = thumbnailsHtml;
-            }
-        } else if (variant.image) {
-            let imagePath = variant.image;
-            const fullImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
-
-            if (mainImage) {
-                mainImage.src = fullImagePath;
-                mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
-            }
-
-            if (thumbnailContainer) {
-                thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
-            }
-        }
-    }
-
-    // Simplified selectColor function
-    function selectColor(color, size, variantId, element) {
-        selectedColor = color;
-        selectedVariantId = variantId;
-
-        // Update color button styling
-        document.querySelectorAll('.color-btn').forEach(btn => {
-            if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
-                btn.classList.add('border-secondary');
-                btn.classList.remove('border-gray-300');
-            } else {
-                btn.classList.remove('border-secondary');
-                btn.classList.add('border-gray-300');
-            }
-        });
-
-        // Update size options based on selected color
-        updateSizeOptionsForColor(color, variantId);
-
+        
+        // Update add to cart button variant ID
         const addToCartBtn = document.getElementById('add-to-cart');
         if (addToCartBtn) {
-            addToCartBtn.setAttribute('data-variant-id', variantId);
+            addToCartBtn.setAttribute('data-variant-id', defaultVariant.id);
         }
-
-        if (customDimensions) {
-            customDimensions = null;
-            selectedCustomColor = null;
-            if (addToCartBtn) {
-                addToCartBtn.removeAttribute('data-custom-dimensions');
-                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-                addToCartBtn.classList.remove('bg-green-600');
-                addToCartBtn.classList.add('bg-secondary');
-                addToCartBtn.disabled = false;
-            }
-        }
-
-        const variantImage = element.getAttribute('data-variant-image');
-
-        if (variantImage) {
-            const mainImage = document.getElementById('main-image');
-            if (mainImage) {
-                mainImage.src = variantImage;
-            }
-        }
-
-        const selectedVariant = productVariants.find(v => v.id == variantId);
-        if (selectedVariant) {
-            console.log('selected', selectedVariant);
-            updatePrice(selectedVariant);
-            updateVariantImages(selectedVariant);
-        }
-
-        checkVariantInCart(variantId);
+        
+        checkVariantInCart(defaultVariant.id);
     }
+}
 
-    function updatePrice(variant) {
-        const priceContainer = document.getElementById('price-container');
-        if (priceContainer && variant) {
-            const currentPrice = variant.discount_price || variant.price;
-            const originalPrice = variant.price;
-            const discount = variant.discount;
-
-            let discountHtml = '';
-            if (discount > 0) {
-                discountHtml = `<span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off)</span>`;
-            } else {
-                discountHtml = `<span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>`;
-            }
-
-            let originalPriceHtml = '';
-            if (originalPrice != currentPrice) {
-                originalPriceHtml = `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>`;
-            }
-
-            priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${currentPrice}</span>
-            ${originalPriceHtml}
-            ${discountHtml}
-        `;
-        }
-    }
-
-    function checkVariantInCart(variantId) {
-        if (!variantId) return;
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (!csrfToken) return;
-
-        fetch('/cart/check', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    variant_id: variantId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                updateAddToCartButton(data.in_cart, data.quantity);
-            })
-            .catch(error => console.error('Error checking cart:', error));
-    }
-
-    function updateAddToCartButton(inCart, quantity = 0) {
-        const addToCartBtn = document.getElementById('add-to-cart');
-        if (!addToCartBtn) return;
-
-        if (inCart) {
-            addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added (${quantity})`;
-            addToCartBtn.classList.remove('bg-secondary');
-            addToCartBtn.classList.add('bg-green-600');
-            addToCartBtn.disabled = true;
+// Select size when color is already selected - IMAGE SHOULD NOT CHANGE
+function selectSizeForColor(size, color) {
+    selectedSize = size;
+    
+    // Update size button styling
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        if (btn.getAttribute('data-size') === size) {
+            btn.classList.add('border-secondary', 'bg-secondary/10');
+            btn.classList.remove('border-gray-200');
         } else {
-            if (customDimensions) {
-                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
-            } else {
-                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            btn.classList.remove('border-secondary', 'bg-secondary/10');
+            btn.classList.add('border-gray-200');
+        }
+    });
+    
+    // Find the variant with the selected color and size
+    const selectedVariant = productVariants.find(v => v.color === color && v.size === size);
+    
+    if (selectedVariant) {
+        selectedVariantId = selectedVariant.id;
+        
+        // Update price only - DO NOT update images when size changes
+        updatePrice(selectedVariant);
+        
+        // IMPORTANT: Do NOT call updateVariantImages here - images should stay the same for the same color
+        
+        // Update add to cart button
+        const addToCartBtn = document.getElementById('add-to-cart');
+        if (addToCartBtn) {
+            addToCartBtn.setAttribute('data-variant-id', selectedVariant.id);
+        }
+        
+        // Check if variant is in cart
+        checkVariantInCart(selectedVariant.id);
+    }
+    
+    // Reset custom dimensions if any
+    if (customDimensions) {
+        customDimensions = null;
+        selectedCustomColor = null;
+        const addToCartBtn = document.getElementById('add-to-cart');
+        if (addToCartBtn) {
+            addToCartBtn.removeAttribute('data-custom-dimensions');
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            addToCartBtn.classList.remove('bg-green-600');
+            addToCartBtn.classList.add('bg-secondary');
+            addToCartBtn.disabled = false;
+        }
+    }
+}
+
+// Update color options based on selected size
+function updateColorOptions(size) {
+    const colorSelection = document.getElementById('color-selection');
+    if (!colorSelection) return;
+    
+    // Clear existing buttons
+    while (colorSelection.firstChild) {
+        colorSelection.removeChild(colorSelection.firstChild);
+    }
+    
+    // Filter variants by selected size
+    const colorsForSize = productVariants.filter(variant => variant.size === size);
+
+    if (colorsForSize.length === 0) {
+        const noColorsMsg = document.createElement('p');
+        noColorsMsg.className = 'text-gray-500 text-sm';
+        noColorsMsg.textContent = 'No colors available for this size';
+        colorSelection.appendChild(noColorsMsg);
+        return;
+    }
+
+    colorsForSize.forEach((variant, index) => {
+        const colorBtn = document.createElement('button');
+        colorBtn.className = `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
+        const bgColor = variant.color_code || variant.color || '#CCCCCC';
+        colorBtn.style.backgroundColor = bgColor;
+        // colorBtn.style.backgroundColor = variant.color;
+        colorBtn.setAttribute('data-color', variant.color);
+        colorBtn.setAttribute('data-size', size);
+        colorBtn.setAttribute('data-variant-id', variant.id);
+        
+        // Generate correct image URL
+        let variantImage = '{{ asset("assets/images/placeholder.jpg") }}';
+       
+        // if (variant.images && variant.images.length > 0) {
+        //     if (typeof variant.images[0] === 'object' && variant.images[0].image) {
+        //         let imagePath = variant.images[0].image;
+        //         imagePath = imagePath.replace(/^\/+/, '');
+        //         variantImage = imagePath; //'{{ url("") }}/' + imagePath;
+        //     } 
+        //     else if (typeof variant.images[0] === 'string') {
+        //         let imagePath = variant.images[0];
+        //         imagePath = imagePath.replace(/^\/+/, '');
+        //         variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url("") }}/' + imagePath;
+        //     }
+        // } else if (variant.image) {
+        //     let imagePath = variant.image;
+        //     imagePath = imagePath.replace(/^\/+/, '');
+        //     variantImage = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+        // }
+
+        if (variant.images && variant.images.length > 0) {
+            if (typeof variant.images[0] === 'object' && variant.images[0].image) {
+                  // Cloudinary URL - no need to modify
+                 variantImage = variant.images[0].image;
+            } 
+            else if (typeof variant.images[0] === 'string') {
+               // Cloudinary URL - use as is
+               variantImage = variant.images[0];
             }
+        } else if (variant.image) {
+              // Cloudinary URL - use as is
+            variantImage = variant.image;
+        }
+        
+        colorBtn.setAttribute('data-variant-image', variantImage);
+        colorBtn.setAttribute('title', variant.color);
+        
+        colorBtn.addEventListener('click', function() {
+            selectColor(variant.color, size, variant.id, this);
+        });
+
+        colorSelection.appendChild(colorBtn);
+    });
+
+    // Select first color by default
+    if (colorsForSize.length > 0) {
+        const firstColorBtn = colorSelection.querySelector('.color-btn');
+        if (firstColorBtn) {
+            selectColor(colorsForSize[0].color, size, colorsForSize[0].id, firstColorBtn);
+        }
+    }
+}
+
+// Select color when size is already selected - IMAGES SHOULD CHANGE HERE
+// function selectColor(color, size, variantId, element) {
+//     selectedColor = color;
+//     selectedVariantId = variantId;
+
+//     // Update color button styling
+//     document.querySelectorAll('.color-btn').forEach(btn => {
+//         if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
+//             btn.classList.add('border-secondary');
+//             btn.classList.remove('border-gray-300');
+//         } else {
+//             btn.classList.remove('border-secondary');
+//             btn.classList.add('border-gray-300');
+//         }
+//     });
+
+//     // Update size options based on selected color
+//     updateSizeOptionsForColor(color, variantId);
+
+//     const addToCartBtn = document.getElementById('add-to-cart');
+//     if (addToCartBtn) {
+//         addToCartBtn.setAttribute('data-variant-id', variantId);
+//     }
+
+//     if (customDimensions) {
+//         customDimensions = null;
+//         selectedCustomColor = null;
+//         if (addToCartBtn) {
+//             addToCartBtn.removeAttribute('data-custom-dimensions');
+//             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+//             addToCartBtn.classList.remove('bg-green-600');
+//             addToCartBtn.classList.add('bg-secondary');
+//             addToCartBtn.disabled = false;
+//         }
+//     }
+
+//     const variantImage = element.getAttribute('data-variant-image');
+   
+//     if (variantImage) {
+//         const mainImage = document.getElementById('main-image');
+         
+//         if (mainImage) {
+//             mainImage.src = variantImage;
+//         }
+//     }
+
+//     const selectedVariant = productVariants.find(v => v.id == variantId);
+//     if (selectedVariant) {
+//         updatePrice(selectedVariant);
+//         // Update images when color changes (NOT when size changes)
+//         updateVariantImages(selectedVariant);
+//     }
+
+//     checkVariantInCart(variantId);
+// }
+
+// Original selectSize function for initial load - IMAGES SHOULD NOT CHANGE
+function selectSize(size) {
+    selectedSize = size;
+
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        if (btn.getAttribute('data-size') === size) {
+            btn.classList.add('border-secondary', 'bg-secondary/10');
+            btn.classList.remove('border-gray-200');
+        } else {
+            btn.classList.remove('border-secondary', 'bg-secondary/10');
+            btn.classList.add('border-gray-200');
+        }
+    });
+
+    // Update color options based on selected size
+    updateColorOptions(size);
+
+    // Find the variant for current color and new size
+    const newVariant = productVariants.find(v => v.color === selectedColor && v.size === size);
+    
+    if (newVariant) {
+        selectedVariantId = newVariant.id;
+        // Update price only - images remain the same
+        updatePrice(newVariant);
+        
+        // Update add to cart button
+        const addToCartBtn = document.getElementById('add-to-cart');
+        if (addToCartBtn) {
+            addToCartBtn.setAttribute('data-variant-id', newVariant.id);
+        }
+        
+        checkVariantInCart(newVariant.id);
+    }
+
+    if (customDimensions) {
+        customDimensions = null;
+        selectedCustomColor = null;
+        const addToCartBtn = document.getElementById('add-to-cart');
+        if (addToCartBtn) {
+            addToCartBtn.removeAttribute('data-custom-dimensions');
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            addToCartBtn.classList.remove('bg-green-600');
+            addToCartBtn.classList.add('bg-secondary');
+            addToCartBtn.disabled = false;
+        }
+    }
+}
+
+// function updateVariantImages(variant) {
+//     const mainImage = document.getElementById('main-image');
+//     const thumbnailContainer = document.getElementById('thumbnail-container');
+    
+//     if (!variant) return;
+    
+//     if (variant.images && variant.images.length > 0) {
+//         if (mainImage) {
+//             const firstImage = variant.images[0];
+//             let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+            
+//             if (typeof firstImage === 'object' && firstImage.image) {
+//                 let imagePath = firstImage.image.replace(/^\/+/, '');
+//                 firstImagePath = '{{ url("") }}/' + imagePath;
+//             } else if (typeof firstImage === 'string') {
+//                 let imagePath = firstImage.replace(/^\/+/, '');
+//                 firstImagePath = firstImage.startsWith('http') ? firstImage : '{{ url("") }}/' + imagePath;
+//             }
+            
+//             mainImage.src = firstImagePath;
+//             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+//         }
+        
+//         if (thumbnailContainer) {
+//             let thumbnailsHtml = '';
+//             variant.images.forEach((image, index) => {
+//                 let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+                
+//                 if (typeof image === 'object' && image.image) {
+//                     let path = image.image.replace(/^\/+/, '');
+//                     imagePath = '{{ url("") }}/' + path;
+//                 } else if (typeof image === 'string') {
+//                     let path = image.replace(/^\/+/, '');
+//                     imagePath = image.startsWith('http') ? image : '{{ url("") }}/' + path;
+//                 }
+                
+//                 const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
+//                 thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+//             });
+//             thumbnailContainer.innerHTML = thumbnailsHtml;
+//         }
+//     } else if (variant.image) {
+//         let imagePath = variant.image.replace(/^\/+/, '');
+//         const fullImagePath = variant.image.startsWith('http') ? variant.image : '{{ url("") }}/' + imagePath;
+        
+//         if (mainImage) {
+//             mainImage.src = fullImagePath;
+//             mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+//         }
+        
+//         if (thumbnailContainer) {
+//             thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+//         }
+//     }
+// }
+
+function updateVariantImages(variant) {
+    const mainImage = document.getElementById('main-image');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    
+    if (!variant) return;
+    
+    if (variant.images && variant.images.length > 0) {
+        if (mainImage) {
+            const firstImage = variant.images[0];
+            let firstImagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+            
+            // Check if it's an object with image property
+            if (typeof firstImage === 'object' && firstImage.image_url) {
+                // Use image_url if available
+                firstImagePath = firstImage.image_url;
+            } else if (typeof firstImage === 'object' && firstImage.image) {
+                // Fallback to image property
+                let imagePath = firstImage.image;
+                firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
+            } else if (typeof firstImage === 'string') {
+                let imagePath = firstImage;
+                firstImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
+            }
+            
+            mainImage.src = firstImagePath;
+            mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+        }
+        
+        if (thumbnailContainer) {
+            let thumbnailsHtml = '';
+            variant.images.forEach((image, index) => {
+                let imagePath = '{{ asset("assets/images/placeholder.jpg") }}';
+                
+                if (typeof image === 'object' && image.image_url) {
+                    imagePath = image.image_url;
+                } else if (typeof image === 'object' && image.image) {
+                    let path = image.image;
+                    imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
+                } else if (typeof image === 'string') {
+                    let path = image;
+                    imagePath = path.startsWith('http') ? path : '{{ url("") }}/' + path.replace(/^\/+/, '');
+                }
+                
+                const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
+                thumbnailsHtml += `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+            });
+            thumbnailContainer.innerHTML = thumbnailsHtml;
+        }
+    } else if (variant.image) {
+        let imagePath = variant.image;
+        const fullImagePath = imagePath.startsWith('http') ? imagePath : '{{ url("") }}/' + imagePath.replace(/^\/+/, '');
+        
+        if (mainImage) {
+            mainImage.src = fullImagePath;
+            mainImage.alt = `${variant.color} ${variant.size} - {{ $product?->name }}`;
+        }
+        
+        if (thumbnailContainer) {
+            thumbnailContainer.innerHTML = `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+        }
+    }
+}
+
+// Simplified selectColor function
+function selectColor(color, size, variantId, element) {
+    selectedColor = color;
+    selectedVariantId = variantId;
+
+    // Update color button styling
+    document.querySelectorAll('.color-btn').forEach(btn => {
+        if (btn.getAttribute('data-color') === color && btn.getAttribute('data-size') === size) {
+            btn.classList.add('border-secondary');
+            btn.classList.remove('border-gray-300');
+        } else {
+            btn.classList.remove('border-secondary');
+            btn.classList.add('border-gray-300');
+        }
+    });
+
+    // Update size options based on selected color
+    updateSizeOptionsForColor(color, variantId);
+
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.setAttribute('data-variant-id', variantId);
+    }
+
+    if (customDimensions) {
+        customDimensions = null;
+        selectedCustomColor = null;
+        if (addToCartBtn) {
+            addToCartBtn.removeAttribute('data-custom-dimensions');
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
             addToCartBtn.classList.remove('bg-green-600');
             addToCartBtn.classList.add('bg-secondary');
             addToCartBtn.disabled = false;
         }
     }
 
-    function addToCart() {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const variantImage = element.getAttribute('data-variant-image');
+   
+    if (variantImage) {
+        const mainImage = document.getElementById('main-image');
+        if (mainImage) {
+            mainImage.src = variantImage;
+        }
+    }
 
-        if (!csrfToken) {
-            alert('Security token not found. Please refresh the page.');
+    const selectedVariant = productVariants.find(v => v.id == variantId);
+    if (selectedVariant) {
+        console.log('selected', selectedVariant);
+        updatePrice(selectedVariant);
+        updateVariantImages(selectedVariant);
+    }
+
+    checkVariantInCart(variantId);
+}
+
+function updatePrice(variant) {
+    const priceContainer = document.getElementById('price-container');
+    if (priceContainer && variant) {
+        const currentPrice = variant.discount_price || variant.price;
+        const originalPrice = variant.price;
+        const discount = variant.discount;
+
+        let discountHtml = '';
+        if (discount > 0) {
+            discountHtml = `<span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off)</span>`;
+        } else {
+            discountHtml = `<span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>`;
+        }
+
+        let originalPriceHtml = '';
+        if (originalPrice != currentPrice) {
+            originalPriceHtml = `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>`;
+        }
+
+        priceContainer.innerHTML = `
+            <span class="text-xl text-gray-900 font-semibold">Rs. ${currentPrice}</span>
+            ${originalPriceHtml}
+            ${discountHtml}
+        `;
+    }
+}
+
+function checkVariantInCart(variantId) {
+    if (!variantId) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) return;
+
+    fetch('/cart/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ variant_id: variantId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateAddToCartButton(data.in_cart, data.quantity);
+    })
+    .catch(error => console.error('Error checking cart:', error));
+}
+
+function updateAddToCartButton(inCart, quantity = 0) {
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+
+    if (inCart) {
+        addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added (${quantity})`;
+        addToCartBtn.classList.remove('bg-secondary');
+        addToCartBtn.classList.add('bg-green-600');
+        addToCartBtn.disabled = true;
+    } else {
+        if (customDimensions) {
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+        } else {
+            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+        }
+        addToCartBtn.classList.remove('bg-green-600');
+        addToCartBtn.classList.add('bg-secondary');
+        addToCartBtn.disabled = false;
+    }
+}
+
+function addToCart() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    if (!csrfToken) {
+        alert('Security token not found. Please refresh the page.');
+        return;
+    }
+
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+
+    const customDimensionsAttr = addToCartBtn.getAttribute('data-custom-dimensions');
+    let requestData = {};
+
+    if (customDimensionsAttr) {
+        const hasStock = productVariants && productVariants.some(variant => variant.stock > 0);
+        if (!hasStock) {
+            alert('This product is currently out of stock. Please check back later.');
+            return;
+        }
+        
+        requestData = {
+            product_id: {{ $product?->id }},
+            custom_dimensions: JSON.parse(customDimensionsAttr),
+            type: selectedType,
+            count: 1
+        };
+    } else {
+        const variantId = addToCartBtn.getAttribute('data-variant-id');
+
+        if (!variantId) {
+            alert('Please select a size and color');
             return;
         }
 
-        const addToCartBtn = document.getElementById('add-to-cart');
-        if (!addToCartBtn) return;
+        requestData = {
+            variant_id: variantId,
+            type: selectedType,
+            count: 1
+        };
+    }
 
-        const customDimensionsAttr = addToCartBtn.getAttribute('data-custom-dimensions');
-        let requestData = {};
+    const originalText = addToCartBtn.innerHTML;
+    addToCartBtn.disabled = true;
+    addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
 
-        if (customDimensionsAttr) {
-            const hasStock = productVariants && productVariants.some(variant => variant.stock > 0);
-            if (!hasStock) {
-                alert('This product is currently out of stock. Please check back later.');
-                return;
-            }
-
-            requestData = {
-                product_id: {
-                    {
-                        $product ? - > id
-                    }
-                },
-                custom_dimensions: JSON.parse(customDimensionsAttr),
-                type: selectedType,
-                count: 1
-            };
-        } else {
-            const variantId = addToCartBtn.getAttribute('data-variant-id');
-
-            if (!variantId) {
-                alert('Please select a size and color');
-                return;
-            }
-
-            requestData = {
-                variant_id: variantId,
-                type: selectedType,
-                count: 1
-            };
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (response.status === 401) {
+            const currentUrl = window.location.href.split('#')[0];
+            const redirectUrl = currentUrl + '#action-buttons-section';
+            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+            return;
         }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.success) {
+            showNotification('Product added to cart successfully!', 'success');
 
-        const originalText = addToCartBtn.innerHTML;
-        addToCartBtn.disabled = true;
-        addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
+            if (data.cart_count !== undefined) {
+                updateCartCount(data.cart_count);
+            }
 
-        fetch('/cart/add', {
+            if (customDimensionsAttr) {
+                addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added`;
+                addToCartBtn.classList.remove('bg-secondary');
+                addToCartBtn.classList.add('bg-green-600');
+                addToCartBtn.disabled = true;
+            } else {
+                const variantId = addToCartBtn.getAttribute('data-variant-id');
+                checkVariantInCart(variantId);
+            }
+        } else {
+            showNotification(data?.message || 'Failed to add product to cart', 'error');
+            addToCartBtn.disabled = false;
+            addToCartBtn.innerHTML = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while adding to cart', 'error');
+        addToCartBtn.disabled = false;
+        addToCartBtn.innerHTML = originalText;
+    });
+}
+
+function showNotification(message, type = 'success') {
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: type,
+            title: type === 'success' ? 'Success!' : 'Error!',
+            text: message,
+            confirmButtonText: 'OK',
+            showConfirmButton: true
+        });
+    } else {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+}
+
+function updateCartCount(count) {
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5.bg-primary');
+
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
+    
+    cartBadges.forEach(badge => {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+}
+
+// Rest of the functions (custom dimensions, wishlist, etc.) remain the same...
+// [The remaining functions like selectType, toggleCustomDimension, updateCustomPrice, 
+//  toggleWishlist, checkProductInWishlist, updateWishlistButton, and fullscreen functionality 
+//  remain unchanged from your original code]
+
+// Custom dimensions and color functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const saveDimensionBtn = document.getElementById('save-dimension-btn');
+    const cancelCustomBtn = document.getElementById('cancel-custom-btn');
+    const customBustInput = document.getElementById('custom-bust');
+    const customWaistInput = document.getElementById('custom-waist');
+    const customHipInput = document.getElementById('custom-hip');
+    const customArmholeInput = document.getElementById('custom-armhole');
+    
+    // Custom color selection
+    const customColorBtns = document.querySelectorAll('.custom-color-btn');
+    
+    if (customColorBtns.length > 0) {
+        customColorBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                customColorBtns.forEach(b => {
+                    b.classList.remove('ring-2', 'ring-offset-2', 'border-secondary');
+                });
+                this.classList.add('ring-2', 'ring-offset-2', 'border-secondary');
+                selectedCustomColor = this.getAttribute('data-color');
+            });
+        });
+    }
+    
+    if (saveDimensionBtn) {
+        saveDimensionBtn.addEventListener('click', function() {
+            const bustInput = document.getElementById('custom-bust');
+            const waistInput = document.getElementById('custom-waist');
+            const hipInput = document.getElementById('custom-hip');
+            const armholeInput = document.getElementById('custom-armhole');
+
+            const bust = bustInput ? bustInput.value : '';
+            const waist = waistInput ? waistInput.value : '';
+            const hip = hipInput ? hipInput.value : '';
+            const armhole = armholeInput ? armholeInput.value : '';
+
+            if (!bust || !waist || !hip || !armhole) {
+                showNotification('Please enter all measurements', 'error');
+                return;
+            }
+
+            if (bust <= 0 || waist <= 0 || hip <= 0 || armhole <= 0) {
+                showNotification('All measurements must be positive numbers', 'error');
+                return;
+            }
+
+            const selectedColorBtn = document.querySelector('#custom-color-selection .ring-2');
+            const selectedColor = selectedColorBtn ? selectedColorBtn.getAttribute('data-color') : null;
+
+            if (!selectedColor) {
+                showNotification('Please select a color', 'error');
+                return;
+            }
+
+            customDimensions = {
+                bust: parseFloat(bust),
+                waist: parseFloat(waist),
+                hip: parseFloat(hip),
+                armhole: parseFloat(armhole),
+                color: selectedColor,
+                type: selectedType
+            };
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!csrfToken) {
+                showNotification('Security token not found. Please refresh the page.', 'error');
+                return;
+            }
+
+            const originalText = saveDimensionBtn.innerHTML;
+            saveDimensionBtn.disabled = true;
+            saveDimensionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
+            fetch('/custom-dimensions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
                 },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                if (response.status === 401) {
-                    const currentUrl = window.location.href.split('#')[0];
-                    const redirectUrl = currentUrl + '#action-buttons-section';
-                    window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.success) {
-                    showNotification('Product added to cart successfully!', 'success');
-
-                    if (data.cart_count !== undefined) {
-                        updateCartCount(data.cart_count);
-                    }
-
-                    if (customDimensionsAttr) {
-                        addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added`;
-                        addToCartBtn.classList.remove('bg-secondary');
-                        addToCartBtn.classList.add('bg-green-600');
-                        addToCartBtn.disabled = true;
-                    } else {
-                        const variantId = addToCartBtn.getAttribute('data-variant-id');
-                        checkVariantInCart(variantId);
-                    }
-                } else {
-                    showNotification(data?.message || 'Failed to add product to cart', 'error');
-                    addToCartBtn.disabled = false;
-                    addToCartBtn.innerHTML = originalText;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('An error occurred while adding to cart', 'error');
-                addToCartBtn.disabled = false;
-                addToCartBtn.innerHTML = originalText;
-            });
-    }
-
-    function showNotification(message, type = 'success') {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: type,
-                title: type === 'success' ? 'Success!' : 'Error!',
-                text: message,
-                confirmButtonText: 'OK',
-                showConfirmButton: true
-            });
-        } else {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
-            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-        }`;
-            notification.textContent = message;
-
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-    }
-
-    function updateCartCount(count) {
-        const cartCountElements = document.querySelectorAll('.cart-count');
-        const cartBadges = document.querySelectorAll('.absolute.-top-1.-right-1.w-5.h-5.bg-primary');
-
-        cartCountElements.forEach(element => {
-            element.textContent = count;
-        });
-
-        cartBadges.forEach(badge => {
-            if (count > 0) {
-                badge.textContent = count;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        });
-    }
-
-    // Rest of the functions (custom dimensions, wishlist, etc.) remain the same...
-    // [The remaining functions like selectType, toggleCustomDimension, updateCustomPrice, 
-    //  toggleWishlist, checkProductInWishlist, updateWishlistButton, and fullscreen functionality 
-    //  remain unchanged from your original code]
-
-    // Custom dimensions and color functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const saveDimensionBtn = document.getElementById('save-dimension-btn');
-        const cancelCustomBtn = document.getElementById('cancel-custom-btn');
-        const customBustInput = document.getElementById('custom-bust');
-        const customWaistInput = document.getElementById('custom-waist');
-        const customHipInput = document.getElementById('custom-hip');
-        const customArmholeInput = document.getElementById('custom-armhole');
-
-        // Custom color selection
-        const customColorBtns = document.querySelectorAll('.custom-color-btn');
-
-        if (customColorBtns.length > 0) {
-            customColorBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    customColorBtns.forEach(b => {
-                        b.classList.remove('ring-2', 'ring-offset-2', 'border-secondary');
-                    });
-                    this.classList.add('ring-2', 'ring-offset-2', 'border-secondary');
-                    selectedCustomColor = this.getAttribute('data-color');
-                });
-            });
-        }
-
-        if (saveDimensionBtn) {
-            saveDimensionBtn.addEventListener('click', function() {
-                const bustInput = document.getElementById('custom-bust');
-                const waistInput = document.getElementById('custom-waist');
-                const hipInput = document.getElementById('custom-hip');
-                const armholeInput = document.getElementById('custom-armhole');
-
-                const bust = bustInput ? bustInput.value : '';
-                const waist = waistInput ? waistInput.value : '';
-                const hip = hipInput ? hipInput.value : '';
-                const armhole = armholeInput ? armholeInput.value : '';
-
-                if (!bust || !waist || !hip || !armhole) {
-                    showNotification('Please enter all measurements', 'error');
-                    return;
-                }
-
-                if (bust <= 0 || waist <= 0 || hip <= 0 || armhole <= 0) {
-                    showNotification('All measurements must be positive numbers', 'error');
-                    return;
-                }
-
-                const selectedColorBtn = document.querySelector('#custom-color-selection .ring-2');
-                const selectedColor = selectedColorBtn ? selectedColorBtn.getAttribute('data-color') : null;
-
-                if (!selectedColor) {
-                    showNotification('Please select a color', 'error');
-                    return;
-                }
-
-                customDimensions = {
+                body: JSON.stringify({
+                    product_id: {{ $product->id }},
                     bust: parseFloat(bust),
                     waist: parseFloat(waist),
                     hip: parseFloat(hip),
                     armhole: parseFloat(armhole),
-                    color: selectedColor,
+                    color_code: selectedColor,
                     type: selectedType
-                };
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                if (!csrfToken) {
-                    showNotification('Security token not found. Please refresh the page.', 'error');
-                    return;
-                }
-
-                const originalText = saveDimensionBtn.innerHTML;
-                saveDimensionBtn.disabled = true;
-                saveDimensionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
-
-                fetch('/custom-dimensions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            product_id: {
-                                {
-                                    $product - > id
-                                }
-                            },
-                            bust: parseFloat(bust),
-                            waist: parseFloat(waist),
-                            hip: parseFloat(hip),
-                            armhole: parseFloat(armhole),
-                            color_code: selectedColor,
-                            type: selectedType
-                        })
-                    })
-                    .then(response => {
-                        if (response.status === 401) {
-                            const currentUrl = window.location.href.split('#')[0];
-                            const redirectUrl = currentUrl + '#action-buttons-section';
-                            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                            return;
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data && data.success) {
-                            showNotification('Custom dimensions saved successfully!', 'success');
-                            toggleCustomDimension();
-
-                            const addToCartBtn = document.getElementById('add-to-cart');
-                            if (addToCartBtn) {
-                                addToCartBtn.setAttribute('data-custom-dimensions', JSON.stringify(customDimensions));
-                                addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
-                                addToCartBtn.classList.remove('bg-green-600');
-                                addToCartBtn.classList.add('bg-secondary');
-                                addToCartBtn.disabled = false;
-                            }
-
-                            updateCustomPrice();
-                        } else {
-                            showNotification(data?.message || 'Failed to save custom dimensions', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        if (error.message !== 'Authentication required') {
-                            console.error('Error saving custom dimensions:', error);
-                            showNotification('An error occurred while saving custom dimensions', 'error');
-                        }
-                    })
-                    .finally(() => {
-                        saveDimensionBtn.disabled = false;
-                        saveDimensionBtn.innerHTML = originalText;
-                    });
-            });
-        }
-
-        if (cancelCustomBtn) {
-            cancelCustomBtn.addEventListener('click', function() {
-                if (customBustInput) customBustInput.value = '';
-                if (customWaistInput) customWaistInput.value = '';
-                if (customHipInput) customHipInput.value = '';
-                if (customArmholeInput) customArmholeInput.value = '';
-
-                if (customColorBtns.length > 0) {
-                    customColorBtns.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'border-secondary'));
-                    selectedCustomColor = null;
-                }
-
-                toggleCustomDimension();
-            });
-        }
-
-        // Type buttons
-        document.querySelectorAll('.type-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const type = this.getAttribute('data-type');
-                selectType(type);
-            });
-        });
-
-        // Custom dimension button
-        const customDimensionBtn = document.getElementById('custom-dimension-btn');
-        if (customDimensionBtn) {
-            customDimensionBtn.addEventListener('click', toggleCustomDimension);
-        }
-
-        // Size buttons
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const size = this.getAttribute('data-size');
-                selectSize(size);
-            });
-        });
-
-        // Set initial type
-        selectType('stitched');
-
-        // Set initial size and color
-        if (selectedSize) {
-            selectSize(selectedSize);
-        }
-
-        // Add to cart button
-        const addToCartBtn = document.getElementById('add-to-cart');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                addToCart();
-            });
-
-            if (selectedVariantId) {
-                checkVariantInCart(selectedVariantId);
-            }
-        }
-
-        // Wishlist button
-        const wishlistBtn = document.getElementById('wishlist-btn');
-        if (wishlistBtn) {
-            wishlistBtn.addEventListener('click', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                toggleWishlist({
-                    {
-                        $product ? - > id
-                    }
-                }, this);
-            });
-        }
-
-        // Related products wishlist buttons
-        document.querySelectorAll('.wishlist-btn-related').forEach(btn => {
-            btn.addEventListener('click', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                const productId = this.getAttribute('data-product-id');
-                toggleWishlist(productId, this);
-            });
-        });
-
-        checkProductInWishlist({
-            {
-                $product ? - > id
-            }
-        });
-    });
-
-    function selectType(type) {
-        selectedType = type;
-        document.querySelectorAll('.type-btn').forEach(btn => {
-            if (btn.getAttribute('data-type') === type) {
-                btn.classList.add('border-secondary', 'bg-secondary/10', 'text-secondary');
-                btn.classList.remove('border-gray-300', 'text-gray-700');
-            } else {
-                btn.classList.remove('border-secondary', 'bg-secondary/10', 'text-secondary');
-                btn.classList.add('border-gray-300', 'text-gray-700');
-            }
-        });
-    }
-
-    function toggleCustomDimension() {
-        const section = document.getElementById('custom-dimension-section');
-        const customBtn = document.getElementById('custom-dimension-btn');
-        const sizeSection = document.getElementById('size-selection-section');
-        const colorSection = document.getElementById('color-selection-section');
-
-        if (!section || !customBtn) return;
-
-        if (section.classList.contains('hidden')) {
-            section.classList.remove('hidden');
-            customBtn.classList.add('border-secondary', 'text-secondary', 'bg-secondary/10');
-            customBtn.classList.remove('border-dashed', 'border-gray-400', 'text-gray-600');
-            if (sizeSection) sizeSection.classList.add('hidden');
-            if (colorSection) colorSection.classList.add('hidden');
-        } else {
-            section.classList.add('hidden');
-            customBtn.classList.remove('border-secondary', 'text-secondary', 'bg-secondary/10');
-            customBtn.classList.add('border-dashed', 'border-gray-400', 'text-gray-600');
-            if (sizeSection) sizeSection.classList.remove('hidden');
-            if (colorSection) colorSection.classList.remove('hidden');
-        }
-    }
-
-    function updateCustomPrice() {
-        if (!customDimensions) return;
-
-        const basePrice = {
-            {
-                $basePrice ?? 0
-            }
-        };
-        const customPrice = Math.round(basePrice * 1.2);
-
-        const priceContainer = document.getElementById('price-container');
-        if (priceContainer) {
-            priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${customPrice}</span>
-            <span class="text-sm text-gray-500 ml-2">(Custom)</span>
-        `;
-        }
-    }
-
-    function toggleWishlist(productId, button) {
-        if (!productId) {
-            alert('Product ID not found');
-            return;
-        }
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (!csrfToken) return;
-
-        const isInWishlist = button.classList.contains('text-red-500');
-        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
-        const originalContent = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        button.disabled = true;
-
-        fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    product_id: productId
                 })
             })
             .then(response => {
@@ -3364,94 +3139,292 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
             })
             .then(data => {
                 if (data && data.success) {
-                    if (isInWishlist) {
-                        button.classList.remove('text-red-500');
-                        button.innerHTML = '<i class="far fa-heart"></i>';
-                    } else {
-                        button.classList.add('text-red-500');
-                        button.innerHTML = '<i class="fas fa-heart"></i>';
+                    showNotification('Custom dimensions saved successfully!', 'success');
+                    toggleCustomDimension();
+
+                    const addToCartBtn = document.getElementById('add-to-cart');
+                    if (addToCartBtn) {
+                        addToCartBtn.setAttribute('data-custom-dimensions', JSON.stringify(customDimensions));
+                        addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+                        addToCartBtn.classList.remove('bg-green-600');
+                        addToCartBtn.classList.add('bg-secondary');
+                        addToCartBtn.disabled = false;
                     }
-                } else if (data && data.message) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Already Added',
-                        text: data.message,
-                        confirmButtonText: 'Ok',
-                        timer: 1800
-                    });
-                    button.classList.add('text-red-500');
-                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                    
+                    updateCustomPrice();
+                } else {
+                    showNotification(data?.message || 'Failed to save custom dimensions', 'error');
                 }
             })
-            .catch(error => console.error('Error toggling wishlist:', error))
+            .catch(error => {
+                if (error.message !== 'Authentication required') {
+                    console.error('Error saving custom dimensions:', error);
+                    showNotification('An error occurred while saving custom dimensions', 'error');
+                }
+            })
             .finally(() => {
-                button.disabled = false;
+                saveDimensionBtn.disabled = false;
+                saveDimensionBtn.innerHTML = originalText;
             });
+        });
+    }
+    
+    if (cancelCustomBtn) {
+        cancelCustomBtn.addEventListener('click', function() {
+            if (customBustInput) customBustInput.value = '';
+            if (customWaistInput) customWaistInput.value = '';
+            if (customHipInput) customHipInput.value = '';
+            if (customArmholeInput) customArmholeInput.value = '';
+            
+            if (customColorBtns.length > 0) {
+                customColorBtns.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'border-secondary'));
+                selectedCustomColor = null;
+            }
+            
+            toggleCustomDimension();
+        });
     }
 
-    function checkProductInWishlist(productId) {
-        if (!productId) return;
+    // Type buttons
+    document.querySelectorAll('.type-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const type = this.getAttribute('data-type');
+            selectType(type);
+        });
+    });
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (!csrfToken) return;
-
-        fetch('/wishlist/check', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    product_id: productId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                updateWishlistButton(data.in_wishlist);
-            })
-            .catch(error => console.error('Error checking wishlist:', error));
+    // Custom dimension button
+    const customDimensionBtn = document.getElementById('custom-dimension-btn');
+    if (customDimensionBtn) {
+        customDimensionBtn.addEventListener('click', toggleCustomDimension);
     }
 
-    function updateWishlistButton(inWishlist) {
-        const wishlistBtn = document.getElementById('wishlist-btn');
-        if (!wishlistBtn) return;
+    // Size buttons
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const size = this.getAttribute('data-size');
+            selectSize(size);
+        });
+    });
 
-        if (inWishlist) {
-            wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
-            wishlistBtn.classList.add('border-red-500', 'text-red-500');
-            wishlistBtn.classList.remove('border-gray-300');
-        } else {
-            wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
-            wishlistBtn.classList.remove('border-red-500', 'text-red-500');
-            wishlistBtn.classList.add('border-gray-300');
+    // Set initial type
+    selectType('stitched');
+
+    // Set initial size and color
+    if (selectedSize) {
+        selectSize(selectedSize);
+    }
+
+    // Add to cart button
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            addToCart();
+        });
+
+        if (selectedVariantId) {
+            checkVariantInCart(selectedVariantId);
         }
     }
 
-    // Fullscreen image functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        const zoomModal = document.getElementById('zoom-modal');
-        const closeZoom = document.getElementById('close-zoom');
-        const zoomModalImage = document.getElementById('zoom-modal-image');
-        const mainImage = document.getElementById('main-image');
+    // Wishlist button
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    if (wishlistBtn) {
+        wishlistBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleWishlist({{ $product?->id }}, this);
+        });
+    }
 
-        if (fullscreenBtn && zoomModal && closeZoom && zoomModalImage) {
-            fullscreenBtn.addEventListener('click', function() {
-                zoomModalImage.src = mainImage.src;
-                zoomModal.classList.remove('hidden');
-            });
+    // Related products wishlist buttons
+    document.querySelectorAll('.wishlist-btn-related').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const productId = this.getAttribute('data-product-id');
+            toggleWishlist(productId, this);
+        });
+    });
 
-            closeZoom.addEventListener('click', function() {
-                zoomModal.classList.add('hidden');
-            });
+    checkProductInWishlist({{ $product?->id }});
+});
 
-            zoomModal.addEventListener('click', function(e) {
-                if (e.target === zoomModal) {
-                    zoomModal.classList.add('hidden');
-                }
-            });
+function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-btn').forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+            btn.classList.add('border-secondary', 'bg-secondary/10', 'text-secondary');
+            btn.classList.remove('border-gray-300', 'text-gray-700');
+        } else {
+            btn.classList.remove('border-secondary', 'bg-secondary/10', 'text-secondary');
+            btn.classList.add('border-gray-300', 'text-gray-700');
         }
     });
+}
+
+function toggleCustomDimension() {
+    const section = document.getElementById('custom-dimension-section');
+    const customBtn = document.getElementById('custom-dimension-btn');
+    const sizeSection = document.getElementById('size-selection-section');
+    const colorSection = document.getElementById('color-selection-section');
+
+    if (!section || !customBtn) return;
+
+    if (section.classList.contains('hidden')) {
+        section.classList.remove('hidden');
+        customBtn.classList.add('border-secondary', 'text-secondary', 'bg-secondary/10');
+        customBtn.classList.remove('border-dashed', 'border-gray-400', 'text-gray-600');
+        if (sizeSection) sizeSection.classList.add('hidden');
+        if (colorSection) colorSection.classList.add('hidden');
+    } else {
+        section.classList.add('hidden');
+        customBtn.classList.remove('border-secondary', 'text-secondary', 'bg-secondary/10');
+        customBtn.classList.add('border-dashed', 'border-gray-400', 'text-gray-600');
+        if (sizeSection) sizeSection.classList.remove('hidden');
+        if (colorSection) colorSection.classList.remove('hidden');
+    }
+}
+
+function updateCustomPrice() {
+    if (!customDimensions) return;
+    
+    const basePrice = {{ $basePrice ?? 0 }};
+    const customPrice = Math.round(basePrice * 1.2);
+
+    const priceContainer = document.getElementById('price-container');
+    if (priceContainer) {
+        priceContainer.innerHTML = `
+            <span class="text-xl text-gray-900 font-semibold">Rs. ${customPrice}</span>
+            <span class="text-sm text-gray-500 ml-2">(Custom)</span>
+        `;
+    }
+}
+
+function toggleWishlist(productId, button) {
+    if (!productId) {
+        alert('Product ID not found');
+        return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) return;
+
+    const isInWishlist = button.classList.contains('text-red-500');
+    const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+    .then(response => {
+        if (response.status === 401) {
+            const currentUrl = window.location.href.split('#')[0];
+            const redirectUrl = currentUrl + '#action-buttons-section';
+            window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.success) {
+            if (isInWishlist) {
+                button.classList.remove('text-red-500');
+                button.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                button.classList.add('text-red-500');
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+        } else if (data && data.message) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Already Added',
+                text: data.message,
+                confirmButtonText: 'Ok',
+                timer: 1800
+            });
+            button.classList.add('text-red-500');
+            button.innerHTML = '<i class="fas fa-heart"></i>';
+        }
+    })
+    .catch(error => console.error('Error toggling wishlist:', error))
+    .finally(() => {
+        button.disabled = false;
+    });
+}
+
+function checkProductInWishlist(productId) {
+    if (!productId) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) return;
+
+    fetch('/wishlist/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateWishlistButton(data.in_wishlist);
+    })
+    .catch(error => console.error('Error checking wishlist:', error));
+}
+
+function updateWishlistButton(inWishlist) {
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    if (!wishlistBtn) return;
+
+    if (inWishlist) {
+        wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+        wishlistBtn.classList.add('border-red-500', 'text-red-500');
+        wishlistBtn.classList.remove('border-gray-300');
+    } else {
+        wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
+        wishlistBtn.classList.remove('border-red-500', 'text-red-500');
+        wishlistBtn.classList.add('border-gray-300');
+    }
+}
+
+// Fullscreen image functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const zoomModal = document.getElementById('zoom-modal');
+    const closeZoom = document.getElementById('close-zoom');
+    const zoomModalImage = document.getElementById('zoom-modal-image');
+    const mainImage = document.getElementById('main-image');
+
+    if (fullscreenBtn && zoomModal && closeZoom && zoomModalImage) {
+        fullscreenBtn.addEventListener('click', function() {
+            zoomModalImage.src = mainImage.src;
+            zoomModal.classList.remove('hidden');
+        });
+
+        closeZoom.addEventListener('click', function() {
+            zoomModal.classList.add('hidden');
+        });
+
+        zoomModal.addEventListener('click', function(e) {
+            if (e.target === zoomModal) {
+                zoomModal.classList.add('hidden');
+            }
+        });
+    }
+});
 </script>
 <script>
     /**
@@ -3651,89 +3624,89 @@ $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const couponToggleBtn = document.getElementById('coupon-toggle-btn');
-        const couponBlock = document.getElementById('coupon-block');
-        const couponArrow = document.getElementById('coupon-arrow');
-        const couponInput = document.getElementById('coupon-input');
-        const applyCouponBtn = document.getElementById('apply-coupon-btn');
-        const couponMessage = document.getElementById('coupon-message');
+document.addEventListener('DOMContentLoaded', function() {
+    const couponToggleBtn = document.getElementById('coupon-toggle-btn');
+    const couponBlock = document.getElementById('coupon-block');
+    const couponArrow = document.getElementById('coupon-arrow');
+    const couponInput = document.getElementById('coupon-input');
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    const couponMessage = document.getElementById('coupon-message');
 
-        // Toggle coupon block visibility
-        couponToggleBtn.addEventListener('click', function() {
-            couponBlock.classList.toggle('hidden');
-            couponArrow.style.transform = couponBlock.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    // Toggle coupon block visibility
+    couponToggleBtn.addEventListener('click', function() {
+        couponBlock.classList.toggle('hidden');
+        couponArrow.style.transform = couponBlock.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        
+        // Clear previous messages when toggling
+        couponMessage.classList.add('hidden');
+        couponMessage.textContent = '';
+    });
 
-            // Clear previous messages when toggling
-            couponMessage.classList.add('hidden');
-            couponMessage.textContent = '';
-        });
+    // Apply coupon
+    applyCouponBtn.addEventListener('click', function() {
+        const couponCode = couponInput.value.trim();
+        
+        if (!couponCode) {
+            showCouponMessage('Please enter a coupon code', 'red');
+            return;
+        }
 
-        // Apply coupon
-        applyCouponBtn.addEventListener('click', function() {
-            const couponCode = couponInput.value.trim();
-
-            if (!couponCode) {
-                showCouponMessage('Please enter a coupon code', 'red');
-                return;
-            }
-
-            // Here you would typically make an AJAX request to validate the coupon
-            // For demonstration, I'll show a success message
-            // Replace this with your actual coupon validation logic
-
-            // Example AJAX call (uncomment and modify as needed):
-            /*
-            fetch('/validate-coupon', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ coupon: couponCode })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.valid) {
-                    showCouponMessage('Coupon applied successfully!', 'green');
-                    // Update price or do other actions
-                } else {
-                    showCouponMessage('Invalid coupon code', 'red');
-                }
-            })
-            .catch(error => {
-                showCouponMessage('Error applying coupon', 'red');
-            });
-            */
-
-            // For demonstration purposes only - remove this in production
-            if (couponCode.length > 3) {
-                showCouponMessage('✓ Coupon "' + couponCode + '" applied successfully!', 'green');
+        // Here you would typically make an AJAX request to validate the coupon
+        // For demonstration, I'll show a success message
+        // Replace this with your actual coupon validation logic
+        
+        // Example AJAX call (uncomment and modify as needed):
+        /*
+        fetch('/validate-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ coupon: couponCode })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                showCouponMessage('Coupon applied successfully!', 'green');
+                // Update price or do other actions
             } else {
-                showCouponMessage('✗ Invalid coupon code. Please try again.', 'red');
+                showCouponMessage('Invalid coupon code', 'red');
             }
+        })
+        .catch(error => {
+            showCouponMessage('Error applying coupon', 'red');
         });
+        */
 
-        // Allow Enter key to apply coupon
-        couponInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                applyCouponBtn.click();
-            }
-        });
-
-        // Function to show messages
-        function showCouponMessage(message, type) {
-            couponMessage.textContent = message;
-            couponMessage.className = 'text-sm mt-2 font-medium';
-            couponMessage.classList.remove('hidden');
-
-            if (type === 'green') {
-                couponMessage.classList.add('text-green-600');
-            } else if (type === 'red') {
-                couponMessage.classList.add('text-red-600');
-            }
+        // For demonstration purposes only - remove this in production
+        if (couponCode.length > 3) {
+            showCouponMessage('✓ Coupon "' + couponCode + '" applied successfully!', 'green');
+        } else {
+            showCouponMessage('✗ Invalid coupon code. Please try again.', 'red');
         }
     });
+
+    // Allow Enter key to apply coupon
+    couponInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            applyCouponBtn.click();
+        }
+    });
+
+    // Function to show messages
+    function showCouponMessage(message, type) {
+        couponMessage.textContent = message;
+        couponMessage.className = 'text-sm mt-2 font-medium';
+        couponMessage.classList.remove('hidden');
+        
+        if (type === 'green') {
+            couponMessage.classList.add('text-green-600');
+        } else if (type === 'red') {
+            couponMessage.classList.add('text-red-600');
+        }
+    }
+});
 </script>
 
 @endsection
