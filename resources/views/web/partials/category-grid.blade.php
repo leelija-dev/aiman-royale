@@ -184,7 +184,7 @@
 
     <!-- Content -->
     <div class="p-4">
-        <h3 class="text-[15px] font-semibold text-gray-900 mb-1">
+        <h3 class="text-[15px] font-semibold text-gray-900 mb-1 truncate">
             {{ $product->name }}
         </h3>
 
