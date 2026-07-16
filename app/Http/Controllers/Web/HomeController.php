@@ -112,7 +112,7 @@ class HomeController extends Controller
 
         // dd($products);
 
-        // $categories = Category::withCount('products')->get();
+        $categories = Category::Where('is_active', 1)->get();
         $categoriesWithProduct = Category::whereHas('products', function($query) {
             $query->where('is_active', 1)
                   ->whereHas('variants');
@@ -132,8 +132,7 @@ class HomeController extends Controller
 
 
         $testimonials = [];
-// dd($categories);
-        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners','bannerHeroSection'));
+        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners', 'categories','bannerHeroSection'));
     }
 
     public function BannerFilter(Request $request)

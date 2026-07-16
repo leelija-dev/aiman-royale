@@ -955,12 +955,11 @@
             <div
                 class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
 
-                @foreach ($categoriesWithProduct->where('parent_id', null) as $category)
-                    <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
-                        <!-- String/Hanger -->
-                        <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
-                        <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2">
-                        </div>
+            @foreach ($categories as $category)
+            <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
+                <!-- String/Hanger -->
+                <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
+                <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
 
                         <!-- Tag -->
                         <div
@@ -978,19 +977,20 @@
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
                             </div>
 
-                            <!-- Content -->
-                            <div class="p-3 text-center">
-                                <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
-                                <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
-                                    {{ $category->products_count }} items
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
+                    <!-- Content -->
+                    <div class="p-3 text-center">
+                        <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
+                        {{-- <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
+                            {{ $category->products_count }} items
+                        </span>
+                        --}}
+                    </div>
+                </div>
+            </a>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
 
 
     <section class="px-4 lgg:py-8 py-6">
