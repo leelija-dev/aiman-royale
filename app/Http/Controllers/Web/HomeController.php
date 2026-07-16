@@ -132,7 +132,6 @@ class HomeController extends Controller
 
 
         $testimonials = [];
-// dd($categories);
         return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners', 'categories','bannerHeroSection'));
     }
 
