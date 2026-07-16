@@ -773,7 +773,7 @@ $fullImagePath = $image->image_url;
             </div>
 
             <!-- RIGHT CONTENT -->
-            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%]">
+            <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%] sm:min-w-[270px]">
                 <div>
                     <!-- Title -->
                     <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
@@ -819,11 +819,11 @@ $fullImagePath = $image->image_url;
                 <!-- Type Selection -->
                 <div>
                     <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
-                    <div class="flex gap-3 xxs:flex-row flex-col">
+                    <div class="flex gap-3 flex-wrap ">
                         <button class="type-btn px-6 py-3 rounded-lg border-[1px] border-secondary/25 bg-secondary/10 text-secondary transition-all" data-type="stitched">
                             Stitched
                         </button>
-                        <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center gap-2">
+                        <button id="custom-dimension-btn" class="px-6 py-3 rounded-lg border-2 border-dashed border-gray-400 text-gray-600 hover:border-secondary hover:text-secondary transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-ruler-combined"></i> Custom Dimension
                         </button>
                     </div>
@@ -877,14 +877,14 @@ $fullImagePath = $image->image_url;
 
                 <!-- Size Selection -->
                 <div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                        <div>
+                    <div class="flex items-center justify-between gap-4 mb-6 flex-wrap ">
+                        <div class="w-fit">
                             <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                                 <i class="fas fa-expand-alt text-secondary"></i> Select Size
                             </h3>
                             <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
                         </div>
-                        <button type="button" data-size-guide-trigger class="px-4 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+                        <button type="button" data-size-guide-trigger class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
                             <i class="fas fa-ruler-combined"></i> View Size Guide
                         </button>
                     </div>
@@ -955,26 +955,49 @@ if ($variant->images && $variant->images->isNotEmpty()) {
                 </div>
 
                 <!-- Action Buttons -->
-                <div id="action-buttons-section" class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
-                    data-product-variants="{{ json_encode($product->variants) }}">
-                    <div class="flex items-center gap-4">
-                        <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
-                            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                        </button>
-                        <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
-                            <i class="far fa-heart"></i>
-                        </button>
-                    </div>
+<div id="action-buttons-section" class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
+    data-product-variants="{{ json_encode($product->variants) }}">
+    
+    <!-- Coupon Toggle Button -->
+    <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+        <i class="fas fa-ticket-alt"></i>
+        <span>Have a coupon? Click here</span>
+        <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
+    </button>
 
-                    <!-- WhatsApp Share Button -->
-                    <a href="https://wa.me/91{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
-                        <i class="fab fa-whatsapp text-xl"></i>
-                        <span>Order on WhatsApp</span>
-                    </a>
-                </div>
+    <!-- Coupon Input Block (Hidden by default) -->
+    <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+        <div class="flex gap-2 flex-col xxs:flex-row">
+            <input type="text" 
+                   id="coupon-input" 
+                   placeholder="Enter coupon code" 
+                   class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
+            <button id="apply-coupon-btn" 
+                    class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
+                Apply
+            </button>
+        </div>
+        <div id="coupon-message" class="text-sm mt-2 hidden"></div>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
+            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+        </button>
+        <button id="wishlist-btn" class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
+            <i class="far fa-heart"></i>
+        </button>
+    </div>
+
+    <!-- WhatsApp Share Button -->
+    <a href="https://wa.me/91{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
+        <i class="fab fa-whatsapp text-xl"></i>
+        <span>Order on WhatsApp</span>
+    </a>
+</div>
             </div>
         </div>
     </div>
@@ -1623,7 +1646,7 @@ if ($variant->images && $variant->images->isNotEmpty()) {
                     </div>
                     <a href="{{route('page.single-product', $relatedProduct->slug)}}">
                         <div class="p-4 space-y-1">
-                            <h3 class="text-[15px] font-semibold text-gray-900">{{ $relatedProduct->name }}</h3>
+                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">{{ $relatedProduct->name }}</h3>
                             <div class="flex items-center gap-2 text-sm text-gray-600">
                                 <span>{{ $relatedProduct->brand ?? '' }}</span>
                                 <span class="flex items-center gap-1 text-gray-700">
@@ -1694,7 +1717,7 @@ if ($variant->images && $variant->images->isNotEmpty()) {
                     </div>
                     <a href="{{route('page.single-product', $relatedProduct->slug)}}">
                         <div class="p-4 space-y-1">
-                            <h3 class="text-[15px] font-semibold text-gray-900">{{ $relatedProduct->name }}</h3>
+                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">{{ $relatedProduct->name }}</h3>
                             <div class="flex items-center gap-2 text-sm text-gray-600">
                                 <span>{{ $relatedProduct->brand ?? '' }}</span>
                                 <span class="flex items-center gap-1 text-gray-700">
@@ -1762,7 +1785,7 @@ if ($variant->images && $variant->images->isNotEmpty()) {
                     </div>
                     <a href="{{route('page.single-product', $lastViewedProduct['slug'])}}">
                         <div class="p-4 space-y-1">
-                            <h3 class="text-[15px] font-semibold text-gray-900">{{ $lastViewedProduct['name'] }}</h3>
+                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">{{ $lastViewedProduct['name'] }}</h3>
                             <div class="flex items-center gap-2 text-sm text-gray-600">
                                 <span>{{ $lastViewedProduct->brand ?? '' }}</span>
                             </div>
@@ -3598,6 +3621,92 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         setupThumbnailHeightSync();
     }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const couponToggleBtn = document.getElementById('coupon-toggle-btn');
+    const couponBlock = document.getElementById('coupon-block');
+    const couponArrow = document.getElementById('coupon-arrow');
+    const couponInput = document.getElementById('coupon-input');
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    const couponMessage = document.getElementById('coupon-message');
+
+    // Toggle coupon block visibility
+    couponToggleBtn.addEventListener('click', function() {
+        couponBlock.classList.toggle('hidden');
+        couponArrow.style.transform = couponBlock.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        
+        // Clear previous messages when toggling
+        couponMessage.classList.add('hidden');
+        couponMessage.textContent = '';
+    });
+
+    // Apply coupon
+    applyCouponBtn.addEventListener('click', function() {
+        const couponCode = couponInput.value.trim();
+        
+        if (!couponCode) {
+            showCouponMessage('Please enter a coupon code', 'red');
+            return;
+        }
+
+        // Here you would typically make an AJAX request to validate the coupon
+        // For demonstration, I'll show a success message
+        // Replace this with your actual coupon validation logic
+        
+        // Example AJAX call (uncomment and modify as needed):
+        /*
+        fetch('/validate-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ coupon: couponCode })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                showCouponMessage('Coupon applied successfully!', 'green');
+                // Update price or do other actions
+            } else {
+                showCouponMessage('Invalid coupon code', 'red');
+            }
+        })
+        .catch(error => {
+            showCouponMessage('Error applying coupon', 'red');
+        });
+        */
+
+        // For demonstration purposes only - remove this in production
+        if (couponCode.length > 3) {
+            showCouponMessage('✓ Coupon "' + couponCode + '" applied successfully!', 'green');
+        } else {
+            showCouponMessage('✗ Invalid coupon code. Please try again.', 'red');
+        }
+    });
+
+    // Allow Enter key to apply coupon
+    couponInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            applyCouponBtn.click();
+        }
+    });
+
+    // Function to show messages
+    function showCouponMessage(message, type) {
+        couponMessage.textContent = message;
+        couponMessage.className = 'text-sm mt-2 font-medium';
+        couponMessage.classList.remove('hidden');
+        
+        if (type === 'green') {
+            couponMessage.classList.add('text-green-600');
+        } else if (type === 'red') {
+            couponMessage.classList.add('text-red-600');
+        }
+    }
+});
 </script>
 
 @endsection

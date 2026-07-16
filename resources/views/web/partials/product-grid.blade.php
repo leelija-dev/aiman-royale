@@ -143,7 +143,7 @@
 
       <!-- Content -->
       <div class="p-4 space-y-1">
-        <h3 class="text-[15px] font-semibold text-gray-900">
+        <h3 class="text-[15px] font-semibold text-gray-900 truncate">
           {{ $productName }}
         </h3>
 

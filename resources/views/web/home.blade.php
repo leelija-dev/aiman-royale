@@ -444,11 +444,11 @@
         <div class="text-center mb-0">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                 <span class="bg-gradient-to-r from-primary via-secondary to-black bg-clip-text text-transparent">
-                    Shop By Category
+                    Be the showstopper on <br>every occasion
                 </span>
             </h2>
             <p class="text-gray-600 max-w-xl mx-auto">
-                Discover our curated collections
+               Navigate our elite collections for gowns, salwar kameez, and suits
             </p>
         </div>
 
@@ -699,8 +699,8 @@
     <div class="container mx-auto px-4">
         <!-- Header -->
         <div class="text-center mb-4">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Crafted for Celebrations</h2>
-            <p class="text-gray-500">Designed for Perfection</p>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Elegance at every wear</h2>
+            <p class="text-gray-500">Experience class and sophistication for life’s most memorable moments</p>
         </div>
 
 
@@ -816,7 +816,7 @@
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
+                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{ $product->name }}
                         </h3>
 
@@ -859,14 +859,14 @@
 
                 <div class="lgg:text-left text-center">
                     <div class="mb-6 ">
-                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Lowest Price Ever!</h3>
+                        <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Shop With Complete Confidence</h3>
 
 
                     </div>
 
 
                     <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
-                        Shop the latest 150+ designer outfits with confidence. If you see it cheaper elsewhere in 30 days, we’ll beat that price.
+                        From designer craftsmanship to our affordable luxury, every purchase is backed by our commitment to you.
                     </p>
 
                 </div>
@@ -878,21 +878,21 @@
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        30-day price protection
+                       Easy return and exchanges 
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        Lowest price guaranteed
+                       Dedicated customer supporter
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                        24/7 customer support
+                       Affordable luxury at your fingertips
                     </li>
                 </ul>
             </div>
@@ -1012,7 +1012,7 @@
             <div class="text-center">
                 <h3
                     class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
-                    VIP Deals Just for You</h3>
+                   Make Every Entrance Unforgettable.</h3>
                 <button
                     class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
@@ -1078,28 +1078,19 @@
         <div class="flex flex-col lgg:flex-row gap-8 lgg:gap-12">
             <div class="w-full lgg:w-2/5 px-4 lgg:text-left text-center">
                 <!-- Title -->
-                <h2
-                    class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
-                    Unbeatable Monthly Steals
+                <h2 class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
+                    Our Biggest Monsoon Sale of the Season
                 </h2>
 
                 <!-- Description -->
-                <p
-                    class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Summer sale is on!
-
+                <p class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    Enjoy up to 50% OFF on selected designer collections.  
                 </p>
-                <p
-                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Buy our premium collection of fashion outfits now at exclusive prices.
-
+                <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    Limited-time offer, 
                 </p>
-                <p
-                    class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    <strong>
-                        Save more with our live sale…
-                    </strong>
-
+                <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
+                    <strong>shop now!</strong>
                 </p>
 
                 <!-- Button -->
@@ -1108,47 +1099,44 @@
                 </button>
 
                 <!-- Countdown Title -->
-                <h4
-                    class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
-                    Hurry…only 2 days left!
+                <h4 class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
+                    Hurry…only <span id="daysLabel">30</span> days left!
                 </h4>
 
                 <!-- Countdown -->
                 <div class="mt-6 flex gap-4 flex-wrap lgg:justify-start justify-center">
                     <!-- Box -->
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            02
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="daysBox">
+                            30
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Days</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            06
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="hoursBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Hr</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            05
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="minutesBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Mins</p>
                     </div>
 
                     <div class="text-center">
-                        <div
-                            class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold">
-                            30
+                        <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="secondsBox">
+                            00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Sec</p>
                     </div>
                 </div>
             </div>
+
+
             <div class="w-full lgg:w-[59%] flex justify-center items-center">
                 <div class="second-owl owl-carousel owl-theme relative">
                     @foreach ($secondaryBanners as $banner)
@@ -1454,8 +1442,11 @@ All Products
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Designer’s Pick
+                Our signature Standouts
             </h2>
+            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
+               Red Carpet Ready in Every Design We Create
+            </p>
         </div>
         <div class="grid-container">
             @php
@@ -1571,8 +1562,11 @@ All Products
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Most Wishlisted Styles
+                Our Bookmarked Styles
             </h2>
+            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
+                Step Into Every Occasion with Rihanna Ready Confidence
+            </p>
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
@@ -1641,7 +1635,7 @@ All Products
 
                     <!-- Content -->
                     <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
+                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{$product->name ?? ''}}
                         </h3>
 
@@ -1883,10 +1877,10 @@ All Products
         <div class="text-center mb-12 lg:mb-16">
             <h2
                 class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem]  font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                Personalized Fashion at Your Fingertips
+                 Know How Celebrities Book us for their Occasion
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-                Customize your outfit with our fashion experts at your home
+                Get the perfect fit through our online portals
             </p>
         </div>
 
@@ -1930,13 +1924,13 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                               Virtual Fashion Consultation
+                                Get connected with fashion experts
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Find your perfect look with our virtual try-ons & connect with our stylists live for tailored one-on-one styling advice.
+                            A free service that has been provided so that you can who are trusting with your style and money. What happens during your time with us
                         </p>
 
                         <!-- Features -->
@@ -1950,7 +1944,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Video-chat session</span>
+                                <span>One-to-one private video session with our fashion experts</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -1961,7 +1955,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Virtual try-ons at home</span>
+                                <span>Virtual tour of fashion collection</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -1972,13 +1966,13 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Live Q&A with fashion experts</span>
+                                <span>Live preview of what your fit looks like</span>
                             </li>
                         </ul>
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href="{{ route('page.appointment') }}"
+                            <a href="{{ route('page.appointment') }}#appoint-book-section"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2023,13 +2017,13 @@ All Products
                                 </svg>
                             </div>
                             <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                               Bridal Styling Service
+                                Know your style and fit
                             </h3>
                         </div>
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                            Your go-to bridal stylist, guiding you step-by-step to help you find the perfect wedding outfit for your big day!
+                           A premium service that makes the showstopper for the occasion.
 
                         </p>
 
@@ -2044,7 +2038,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Exclusive bridal consultation</span>
+                                <span>Live session with our bridal stylist </span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2055,7 +2049,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Private styling session</span>
+                                <span>Accessory coordination with our design</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2066,13 +2060,13 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Accessory & jewelry coordination</span>
+                                <span>Expert advice on how to embrace your personality with our design</span>
                             </li>
                         </ul>
 
                         <!-- Button -->
                         <div class="text-center">
-                            <a href="{{ route('page.appointment') }}"
+                            <a href="{{ route('page.appointment') }}#appoint-book-section"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
                                 <svg class="w-5 h-5 sm:block hidden transform group-hover:scale-110 transition-transform"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2750,6 +2744,79 @@ All Products
                 button.disabled = false;
             });
     }
+</script>
+
+<script>
+    // Targeting JS - Countdown timer with 30 days default
+    (function() {
+        // Set target date to 30 days from now (midnight)
+        const TARGET_DATE = new Date();
+        TARGET_DATE.setDate(TARGET_DATE.getDate() + 30);
+        TARGET_DATE.setHours(0, 0, 0, 0);
+
+        // DOM elements
+        const daysBox = document.getElementById('daysBox');
+        const hoursBox = document.getElementById('hoursBox');
+        const minutesBox = document.getElementById('minutesBox');
+        const secondsBox = document.getElementById('secondsBox');
+        const daysLabel = document.getElementById('daysLabel');
+
+        // Helper: format number with leading zero
+        function pad(num) {
+            return String(num).padStart(2, '0');
+        }
+
+        // Update countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diffMs = TARGET_DATE - now;
+
+            // If countdown finished, show zeros
+            let remainingSeconds = Math.max(0, Math.floor(diffMs / 1000));
+            const days = Math.floor(remainingSeconds / 86400);
+            remainingSeconds %= 86400;
+            const hours = Math.floor(remainingSeconds / 3600);
+            remainingSeconds %= 3600;
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+
+            // Format
+            const daysStr = String(days);
+            const hoursStr = pad(hours);
+            const minsStr = pad(minutes);
+            const secsStr = pad(seconds);
+
+            // Update days label
+            if (daysLabel) {
+                daysLabel.textContent = daysStr;
+            }
+
+            // Update boxes without animation
+            if (daysBox) {
+                daysBox.textContent = daysStr;
+            }
+            if (hoursBox) {
+                hoursBox.textContent = hoursStr;
+            }
+            if (minutesBox) {
+                minutesBox.textContent = minsStr;
+            }
+            if (secondsBox) {
+                secondsBox.textContent = secsStr;
+            }
+        }
+
+        // Initial call
+        updateCountdown();
+
+        // Update every second
+        const timerInterval = setInterval(updateCountdown, 1000);
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            clearInterval(timerInterval);
+        });
+    })();
 </script>
 
 @endsection

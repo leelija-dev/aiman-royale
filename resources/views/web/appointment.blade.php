@@ -368,10 +368,10 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <button class="bg-pink-500 text-white px-8 py-4 rounded-full font-medium hover:bg-pink-600 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center backdrop-blur-sm">
+                    <a href="#appoint-book-section" class="bg-pink-500 text-white px-8 py-4 rounded-full font-medium hover:bg-pink-600 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center backdrop-blur-sm">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Book Free Consultation
-                    </button>
+                    </a>
                     <button class="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium border border-white/30 hover:border-white hover:bg-white/30 transition-all inline-flex items-center justify-center shadow-lg">
                         <i class="fas fa-play-circle mr-3"></i>
                         See How It Works
