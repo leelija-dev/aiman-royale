@@ -2657,10 +2657,12 @@ All Products
                 return response.json();
             })
             .then(data => {
+                console.log(data);
                 console.log('Parsed data:', data);
+                console.loj('Wishlist updated successfully');
                 if (data.success) {
                     showNotification(data.message, 'success');
-
+                    
                     // Update heart icon using innerHTML like single-product
                     if (isInWishlist) {
                         // Was in wishlist, now removed
@@ -2674,6 +2676,8 @@ All Products
                     if (data.wishlist_count !== undefined) {
                         updateWishlistCount(data.wishlist_count);
                     }
+                    
+                    
                 } else {
                     // Handle case where product is already in wishlist
                     if (data.message && data.message.includes('already in wishlist')) {
@@ -2968,7 +2972,7 @@ All Products
             .then(data => {
 
                 if (data.success) {
-
+                    
                     // Toggle UI
                     if (isInWishlist) {
                         button.classList.remove('text-red-500');
@@ -2977,6 +2981,16 @@ All Products
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
+                    document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                            item.textContent = data.wishlist_count;
+
+                            // Hide badge when count is 0 (optional)
+                            if (data.wishlist_count > 0) {
+                                item.style.display = "flex";
+                            } else {
+                                item.style.display = "none";
+                            }
+                        });
 
                 } else {
 

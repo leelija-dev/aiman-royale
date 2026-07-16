@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Occasion;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 class CategoryController extends Controller
 {
     /**
@@ -547,7 +549,7 @@ class CategoryController extends Controller
             if ($request->filled('collection') && $request->input('collection') != 'all') {
                 $collectionValue = $request->input('collection');
 
-                if (\Schema::hasColumn('products', 'collection')) {
+                if (Schema::hasColumn('products', 'collection')) {
                     $query->where('collection', $collectionValue);
                 } else {
                     try {
@@ -569,7 +571,7 @@ class CategoryController extends Controller
                         $join->on('products.id', '=', 'product_variants.product_id')
                             ->whereNull('product_variants.deleted_at');
                     })
-                        ->select('products.*', \DB::raw('MIN(COALESCE(product_variants.discount_price, product_variants.price)) as min_price'))
+                        ->select('products.*',   DB::raw('MIN(COALESCE(product_variants.discount_price, product_variants.price)) as min_price'))
                         ->groupBy('products.id')
                         ->orderBy('min_price', $sortValue == 'price-asc' ? 'asc' : 'desc');
                 } else {

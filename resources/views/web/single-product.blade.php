@@ -2960,7 +2960,9 @@ function addToCart() {
     .then(data => {
         if (data && data.success) {
             showNotification('Product added to cart successfully!', 'success');
-
+              setTimeout(() => {
+                location.reload();
+            }, 1000);
             if (data.cart_count !== undefined) {
                 updateCartCount(data.cart_count);
             }
@@ -3338,30 +3340,43 @@ function toggleWishlist(productId, button) {
         return response.json();
     })
     .then(data => {
-        if (data && data.success) {
-            if (isInWishlist) {
-                button.classList.remove('text-red-500');
-                button.innerHTML = '<i class="far fa-heart"></i>';
-            } else {
-                button.classList.add('text-red-500');
-                button.innerHTML = '<i class="fas fa-heart"></i>';
-            }
-        } else if (data && data.message) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Already Added',
-                text: data.message,
-                confirmButtonText: 'Ok',
-                timer: 1800
-            });
+
+    if (!data) return;
+
+    if (data.success) {
+
+        if (isInWishlist) {
+            button.classList.remove('text-red-500');
+            button.innerHTML = '<i class="far fa-heart"></i>';
+        } else {
             button.classList.add('text-red-500');
             button.innerHTML = '<i class="fas fa-heart"></i>';
         }
-    })
-    .catch(error => console.error('Error toggling wishlist:', error))
-    .finally(() => {
-        button.disabled = false;
-    });
+
+        // Update all wishlist badges
+        document.querySelectorAll('.wishlist-count').forEach(function(item){
+            item.textContent = data.wishlist_count;
+        });
+
+    } else {
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Wishlist',
+            text: data.message,
+            timer: 1800,
+            showConfirmButton: false
+        });
+
+    }
+
+})
+.catch(error => {
+    console.error(error);
+})
+.finally(() => {
+    button.disabled = false;
+});
 }
 
 function checkProductInWishlist(productId) {
