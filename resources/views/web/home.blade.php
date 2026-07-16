@@ -1876,15 +1876,15 @@ All Products
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <h2
-                class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem]  font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                 Know How Celebrities Book us for their Occasion
+                class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem] font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Know How Celebrities Book us for their Occasion
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
                 Get the perfect fit through our online portals
             </p>
         </div>
 
-        <!-- Main Horizontal Card -->
+        <!-- Main Horizontal Card (Block) -->
         <div class="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
             <!-- Background Pattern -->
             <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-50"></div>
@@ -1897,23 +1897,21 @@ All Products
                 </div>
             </div>
 
-
-
-            <!-- Main Content -->
+            <!-- Main Content Block -->
             <div class="relative py-12 lg:py-16 px-6 lg:px-12">
-                <div class="flex lg:flex-row flex-col  gap-12 lg:gap-16">
-                    <!-- Left Service - Virtual Styling -->
+                <div class="flex lg:flex-row flex-col gap-8 lg:gap-12">
+                    <!-- Left Service - Virtual Styling (Block) -->
                     <div
-                        class="group relative bg-gradient-to-br from-white to-rose-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-rose-100">
+                        class="group flex flex-col justify-between relative bg-gradient-to-br from-white to-rose-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-rose-100 flex-1">
                         <!-- Service Badge -->
-                        <div class="absolute -top-3 w-full flex justify-center items-center left-0">
+                        <div class="absolute -top-3 w-full flex justify-center left-0">
                             <span
                                 class="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 FREE SERVICE
                             </span>
                         </div>
 
-                        <!-- Service Icon -->
+                        <!-- Service Icon & Title -->
                         <div class="flex flex-col items-center text-center mb-8">
                             <div
                                 class="w-20 h-20 bg-gradient-to-br from-rose-100 to-pink-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg">
@@ -1933,7 +1931,7 @@ All Products
                             A free service that has been provided so that you can who are trusting with your style and money. What happens during your time with us
                         </p>
 
-                        <!-- Features -->
+                        <!-- Features List (Block) -->
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -1984,29 +1982,26 @@ All Products
                         </div>
                     </div>
 
-                    <!-- Center Divider -->
+                    <!-- Center Divider (Hidden on mobile) -->
                     <div class="hidden lg:flex flex-col items-center justify-center relative">
                         <div class="absolute inset-0 flex items-center justify-center w-[5px]">
                             <div class="w-[3px] h-full bg-gradient-to-b from-transparent via-rose-200 to-transparent">
                             </div>
                         </div>
-
-
                     </div>
 
-                    <!-- Right Service - Bridal Stylist -->
+                    <!-- Right Service - Bridal Stylist (Block) -->
                     <div
-                        class="group relative bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-pink-100">
+                        class="group flex flex-col justify-between relative bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-pink-100 flex-1">
                         <!-- Service Badge -->
-                        <div class="absolute -top-3 w-full flex justify-center items-center left-0">
+                        <div class="absolute -top-3 w-full flex justify-center left-0">
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 PREMIUM SERVICE
-
                             </span>
                         </div>
 
-                        <!-- Service Icon -->
+                        <!-- Service Icon & Title -->
                         <div class="flex flex-col items-center text-center mb-8">
                             <div
                                 class="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg">
@@ -2023,11 +2018,10 @@ All Products
 
                         <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
-                           A premium service that makes the showstopper for the occasion.
-
+                            A premium service that makes the showstopper for the occasion.
                         </p>
 
-                        <!-- Features -->
+                        <!-- Features List (Block) -->
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2038,7 +2032,7 @@ All Products
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <span>Live session with our bridal stylist </span>
+                                <span>Live session with our bridal stylist</span>
                             </li>
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2078,14 +2072,8 @@ All Products
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
-
-
     </div>
 </section>
 
