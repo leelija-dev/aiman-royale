@@ -76,7 +76,7 @@
 
     <!-- Content -->
     <div class="p-4">
-        <h3 class="text-[15px] font-semibold text-gray-900 mb-1">
+        <h3 class="text-[15px] font-semibold text-gray-900 mb-1 truncate">
             {{ $product->name }}
         </h3>
 
@@ -105,9 +105,7 @@
 </div>
 @endforeach
 @else
-<div class="col-span-full text-center py-12">
-    <p class="text-gray-500">No products found.</p>
-</div>
+
 
 @foreach($latestProducts as $product)
 <div class="product-card" data-product-slug="{{ $product->slug }}">
@@ -186,7 +184,7 @@
 
     <!-- Content -->
     <div class="p-4">
-        <h3 class="text-[15px] font-semibold text-gray-900 mb-1">
+        <h3 class="text-[15px] font-semibold text-gray-900 mb-1 truncate">
             {{ $product->name }}
         </h3>
 

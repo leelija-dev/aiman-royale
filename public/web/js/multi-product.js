@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     
                     <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">${product.name || ''}</h3>
+                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">${product.name || ''}</h3>
                         
                         <div class="flex items-center gap-2 text-sm text-gray-600">
                             <span>${product.brand || 'Brand Name'}</span>
