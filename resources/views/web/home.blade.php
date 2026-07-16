@@ -14,6 +14,56 @@
     #ads-carousel .owl-nav {
         display: none !important;
     }
+
+    /* Fade out animation */
+    .fade-out {
+        animation: fadeOut 1.2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* Fade in animation */
+    .fade-in {
+        animation: fadeIn 1.2s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Base styles for slides */
+    .slide-left,
+    .slide-top,
+    .slide-center,
+    .slide-right,
+    .slide-bottom {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: none;
+    }
+
+    /* Ensure content transitions smoothly with the fade */
+    .fade-out .content,
+    .fade-in .content {
+        transition: opacity 0.3s ease;
+    }
 </style>
 
 
@@ -212,7 +262,7 @@
 
 <!-- Required CSS for no scrollbar + smooth snap -->
 
-<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
+<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
             <!-- Left Image Column -->
@@ -237,64 +287,72 @@
                     </a>
 
                     <!-- Text Overlay -->
-                    <!-- Left Banner Text -->
-                    <div class="absolute top-8 left-8 z-30 text-white max-w-sm">
+                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
 
                         @if ($leftBanners->first()?->offer)
                         <div id="leftOfferText" class="inline-flex items-center mb-4">
-                            <span class="text-5xl font-extrabold">
-                                {{ $leftBanners->first()->offer }}
-                            </span>
-                            <span class="ml-3 text-lg uppercase tracking-[6px]">
-                                % OFF
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $leftBanners->first()->offer }}
+                                </span>
+                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
+                                    % OFF
+                                </span>
                             </span>
                         </div>
                         @endif
 
+                        <!-- Decorative stylish font for title -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
+                            {{ $leftBanners->first()->title }}
+                        </span> -->
+
+                        <!-- Main heading -->
                         <h2 id="leftTitleText"
-                            class="text-3xl lg:text-5xl font-bold leading-tight drop-shadow-lg mb-3">
+                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
                             {{ $leftBanners->first()->title }}
                         </h2>
 
-                        <p id="leftShortText" class="text-base lg:text-lg drop-shadow mb-6">
-                            {{ $leftBanners->first()->short_description }}
+                        <!-- Description with stylish formatting -->
+                        <p id="leftShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
+                            Get <span class="font-semibold text-secondary-light">{{ $leftBanners->first()->short_description }}</span> | Use Code:
+                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
                         </p>
 
+                        <!-- Shop Now Button -->
                         <a id="leftShopBtn" href="{{ $leftBanners->first()->redirect_link }}"
-                            class="inline-flex items-center px-6 py-3 bg-white text-black font-semibold rounded-full shadow-lg hover:bg-black hover:text-white transition-all duration-300">
+                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
 
                             Shop Now
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" fill="none"
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
-
                             </svg>
 
                         </a>
 
                     </div>
                     @else
-                    {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
-                    class="block h-full w-full relative"> --}}
                     <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
-                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
+                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store">
+                    </a>
                     @endif
 
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
-                        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Light Pink Salwar" /> --}}
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
                 </div>
                 <div
-                    class="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                    <a href="{{ url('collections/new-collection') }}"> <span
-                            class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-800">{{ $leftCategories->first()?->slug ?? 'New Collection' }}</span>
+                    class="absolute bottom-4 left-4 opacity-1 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <a href="{{ url('collections/new-collection') }}">
+                        <span
+                            class="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-white shadow-lg">
+                            {{ $leftCategories->first()?->slug ?? 'New Collection' }}
+                        </span>
                     </a>
                 </div>
             </div>
@@ -308,7 +366,7 @@
                 @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10 pointer-events-none">
+                        class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
                     </div>
 
                     @if ($topBanners->count())
@@ -323,25 +381,40 @@
                         @endforeach
 
                     </a>
-                    <div class="absolute left-6 bottom-6 z-20 text-white max-w-sm">
+                    <div class="absolute left-6 bottom-6 z-20 text-white">
 
                         @if ($topBanners->first()?->offer)
-                        <div id="topOfferText" class="text-3xl font-bold mb-2">
-                            {{ $topBanners->first()->offer }} %OFF
+                        <div id="topOfferText" class="inline-flex items-center mb-2">
+                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
+                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
+                                    {{ $topBanners->first()->offer }}
+                                </span>
+                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
+                                    % OFF
+                                </span>
+                            </span>
                         </div>
                         @endif
 
-                        <h3 id="topTitleText" class="text-2xl font-bold">
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
+                            {{ $topBanners->first()?->title }}
+                        </span> -->
+
+                        <h3 id="topTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
                             {{ $topBanners->first()?->title }}
                         </h3>
 
-                        <p id="topShortText" class="mt-2">
-                            {{ $topBanners->first()?->short_description }}
+                        <p id="topShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
+                            Get <span class="font-semibold text-secondary-light">{{ $topBanners->first()?->short_description }}</span>
                         </p>
 
                         <a id="topShopBtn" href="{{ $topBanners->first()?->redirect_link }}"
-                            class="inline-flex items-center mt-4 px-5 py-2 bg-white text-black rounded-full font-semibold">
+                            class="inline-flex items-center mt-4 px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
                             Shop Now
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
                         </a>
 
                     </div>
@@ -353,12 +426,10 @@
                             alt="Glow Pink Dress">
                     </a>
                     @endif
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" /> --}}
                     <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                         <a href="{{ url('collections/new-collection') }}">
                             <span
-                                class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">{{ $topCategories->first()?->slug ?? 'New Collection' }}</span>
+                                class="bg-gradient-to-r from-primary to-secondary text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">{{ $topCategories->first()?->slug ?? 'New Collection' }}</span>
                         </a>
                     </div>
                 </div>
@@ -382,36 +453,43 @@
 
                     </a>
 
-                    <!-- Dark Overlay -->
-                    <div class="absolute inset-0 bg-black/40 z-20"></div>
-
                     <!-- Content -->
                     <div
                         class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-8 text-white">
 
                         @if ($centerBanners->first()->offer)
-                        <div id="centerOfferText" class="mb-4">
-                            <span class="text-5xl font-extrabold">
-                                {{ $centerBanners->first()->offer }}
-                            </span>
-                            <span class="text-xl ml-2">
-                                % OFF
+                        <div id="centerOfferText" class="inline-flex items-center mb-4">
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-6 py-4 rounded-[40px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $centerBanners->first()->offer }}
+                                </span>
+                                <span class="text-xl font-semibold text-white">
+                                    % OFF
+                                </span>
                             </span>
                         </div>
                         @endif
 
-                        <h2 id="centerTitleText" class="text-4xl lg:text-5xl font-bold mb-4">
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script text-white drop-shadow-lg rotate-[-2deg] mb-[-12px] smx:mb-[-20px]">
+                            {{ $centerBanners->first()->title }}
+                        </span> -->
+
+                        <h2 id="centerTitleText" class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg leading-tight">
                             {{ $centerBanners->first()->title }}
                         </h2>
 
-                        <p id="centerShortText" class="text-lg max-w-lg mb-8">
-                            {{ $centerBanners->first()->short_description }}
+                        <p id="centerShortText" class="text-sm text-white drop-shadow-lg mb-8">
+                            Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
                         </p>
 
                         <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
-                            class="px-8 py-3 bg-white text-black rounded-full font-semibold hover:bg-black hover:text-white transition-all duration-300">
+                            class="px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide inline-flex items-center transition-all duration-300">
 
                             Shop Now
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
 
                         </a>
 
@@ -419,21 +497,21 @@
                     @else
 
                     <div
-                        class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-pink-100 via-white to-purple-100 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
+                        class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
 
                         <!-- Background Pattern -->
                         <div class="absolute inset-0 opacity-5">
-                            <div class="absolute top-0 left-0 w-32 h-32 bg-pink-500 rounded-full -translate-x-16 -translate-y-16"></div>
-                            <div class="absolute bottom-0 right-0 w-40 h-40 bg-purple-500 rounded-full translate-x-20 translate-y-20"></div>
+                            <div class="absolute top-0 left-0 w-32 h-32 bg-primary rounded-full -translate-x-16 -translate-y-16"></div>
+                            <div class="absolute bottom-0 right-0 w-40 h-40 bg-secondary rounded-full translate-x-20 translate-y-20"></div>
                         </div>
 
                         <!-- Decorative Line -->
                         <div
-                            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-pink-500 to-transparent">
+                            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent">
                         </div>
 
                         <h1
-                            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent">
+                            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
                             PRICE DROP
                         </h1>
 
@@ -451,11 +529,11 @@
 
                         <div class="text-center text-gray-500 mb-2">
                             <span class="line-through text-sm mr-2">₹199.99</span>
-                            <span class="text-xl font-bold text-rose-600">₹99.99</span>
+                            <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
                         </div>
 
                         <a href="{{ url('collections/new-collection') }}"
-                            class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                            class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
 
                             Shop Now →
 
@@ -491,29 +569,36 @@
                     </a>
 
                     <!-- Bottom Banner Text -->
-                    <div class="absolute left-6 bottom-6 z-30 text-white max-w-sm">
+                    <div class="absolute left-6 bottom-6 z-30 text-white">
 
                         @if ($bottomBanners->first()->offer)
-                        <div id="bottomOfferText" class="inline-flex items-center mb-3">
-                            <span class="text-3xl font-bold">
-                                {{ $bottomBanners->first()->offer }}
-                            </span>
-                            <span class="ml-2 text-sm uppercase">
-                                % OFF
+                        <div id="bottomOfferText" class="inline-flex items-center mb-2">
+                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
+                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
+                                    {{ $bottomBanners->first()->offer }}
+                                </span>
+                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
+                                    % OFF
+                                </span>
                             </span>
                         </div>
                         @endif
 
-                        <h3 id="bottomTitleText" class="text-2xl font-bold">
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
+                            {{ $bottomBanners->first()->title }}
+                        </span> -->
+
+                        <h3 id="bottomTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
                             {{ $bottomBanners->first()->title }}
                         </h3>
 
-                        <p id="bottomShortText" class="mt-2 mb-4">
-                            {{ $bottomBanners->first()->short_description }}
+                        <p id="bottomShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
+                            Get <span class="font-semibold text-secondary-light">{{ $bottomBanners->first()->short_description }}</span>
                         </p>
 
                         <a id="bottomShopBtn" href="{{ $bottomBanners->first()->redirect_link }}"
-                            class="inline-flex items-center px-5 py-2 bg-white text-black rounded-full font-semibold hover:bg-black hover:text-white transition">
+                            class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
 
                             Shop Now
 
@@ -564,38 +649,48 @@
                     </a>
 
                     <!-- Right Banner Text -->
-                    <div class="absolute left-6 bottom-6 z-30 text-white max-w-sm">
+                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
 
                         @if ($rightBanners->first()->offer)
-                        <div id="rightOfferText" class="inline-flex items-center mb-3">
-                            <span class="text-3xl font-bold">
-                                {{ $rightBanners->first()->offer }}
-                            </span>
-                            <span class="ml-2 text-sm uppercase">
-                                % OFF
+                        <div id="rightOfferText" class="inline-flex items-center mb-4">
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $rightBanners->first()->offer }}
+                                </span>
+                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
+                                    % OFF
+                                </span>
                             </span>
                         </div>
                         @endif
 
-                        <h3 id="rightTitleText" class="text-2xl font-bold">
+                        <!-- Decorative stylish font for title -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
                             {{ $rightBanners->first()->title }}
-                        </h3>
+                        </span> -->
 
-                        <p id="rightShortText" class="mt-2 mb-4">
-                            {{ $rightBanners->first()->short_description }}
+                        <!-- Main heading -->
+                        <h2 id="rightTitleText"
+                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
+                            {{ $rightBanners->first()->title }}
+                        </h2>
+
+                        <!-- Description with stylish formatting -->
+                        <p id="rightShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
+                            Get <span class="font-semibold text-secondary-light">{{ $rightBanners->first()->short_description }}</span> | Use Code:
+                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
                         </p>
 
+                        <!-- Shop Now Button -->
                         <a id="rightShopBtn" href="{{ $rightBanners->first()->redirect_link }}"
-                            class="inline-flex items-center px-5 py-2 bg-white text-black rounded-full font-semibold hover:bg-black hover:text-white transition">
+                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
 
                             Shop Now
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none"
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
-
                             </svg>
 
                         </a>
@@ -823,7 +918,7 @@
                 @else
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
-                
+
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
@@ -2873,22 +2968,30 @@ All Products
     let currentIndex = 0;
 
     function updateSlider(slider) {
-
         const slides = document.querySelectorAll('.' + slider.className);
         const link = document.getElementById(slider.linkId);
 
         if (slides.length === 0) return;
 
+        // Calculate previous and current active indices
+        const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+        const activeIndex = currentIndex % slides.length;
+
+        // Reset all slides
         slides.forEach((slide, i) => {
-            slide.classList.remove('opacity-100', 'z-10');
+            slide.classList.remove('opacity-100', 'z-10', 'fade-out', 'fade-in');
             slide.classList.add('opacity-0', 'z-0');
         });
 
-        const activeIndex = currentIndex % slides.length;
+        // Previous slide fades out
+        slides[prevIndex].classList.remove('opacity-0', 'z-0');
+        slides[prevIndex].classList.add('opacity-100', 'z-10', 'fade-out');
 
+        // Current slide fades in
         slides[activeIndex].classList.remove('opacity-0', 'z-0');
-        slides[activeIndex].classList.add('opacity-100', 'z-10');
+        slides[activeIndex].classList.add('fade-in', 'z-10');
 
+        // Update link
         if (link) {
             link.href = slides[activeIndex].dataset.link || '#';
         }
@@ -2907,10 +3010,13 @@ All Products
         if (offerText) {
             if (slides[activeIndex].dataset.offer) {
                 offerText.innerHTML = `
-                <span class="text-4xl font-bold">${slides[activeIndex].dataset.offer}</span>
-                <span class="ml-2 uppercase">% OFF</span>
-            `;
+                    <span class="inline-flex items-center gap-1 bg-black/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                        <span class="text-xl font-bold text-white">${slides[activeIndex].dataset.offer}</span>
+                        <span class="text-lg uppercase tracking-[6px] text-white font-semibold">% OFF</span>
+                    </span>
+                `;
                 offerText.style.display = "inline-flex";
+                offerText.style.alignItems = "center";
             } else {
                 offerText.style.display = "none";
             }
@@ -2918,22 +3024,15 @@ All Products
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-
         sliders.forEach(updateSlider);
 
         setInterval(() => {
-
             currentIndex++;
-
             sliders.forEach(updateSlider);
-
         }, 4000);
-
     });
 
-
     function toggleWishlist(productId, button, event) {
-
         if (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -2945,7 +3044,6 @@ All Products
         }
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
         const isInWishlist = button.classList.contains('text-red-500');
         const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
@@ -2966,9 +3064,7 @@ All Products
             })
             .then(response => response.json())
             .then(data => {
-
                 if (data.success) {
-
                     // Toggle UI
                     if (isInWishlist) {
                         button.classList.remove('text-red-500');
@@ -2977,28 +3073,18 @@ All Products
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
-
                 } else {
-
-
-
                     Swal.fire({
                         icon: 'info',
                         title: 'Already Added',
                         text: data.message,
-                        // showConfirmButton: false,
                         ConfirmButtonText: 'Ok',
                         timer: 1800
                     });
-
                     // Keep heart filled
                     button.classList.add('text-red-500');
                     button.innerHTML = '<i class="fas fa-heart"></i>';
-
-
                 }
-
-
             })
             .catch(error => {
                 console.error(error);

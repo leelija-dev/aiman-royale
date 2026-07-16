@@ -27,7 +27,7 @@
     <meta property="og:type" content="{{ $ogMeta['type'] ?? 'website' }}">
     <meta property="og:url" content="{{ $ogMeta['url'] ?? url()->current() }}">
     <meta property="og:site_name" content="{{ $ogMeta['site_name'] ?? 'Aiman Royale' }}">
-    <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-navbar-logo.webp') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     @if(isset($ogMeta['locale']))
@@ -44,7 +44,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
     <meta name="twitter:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.' }}">
-    <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-navbar-logo.webp') }}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
@@ -61,10 +61,10 @@
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
-    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
+    <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-navbar-logo.webp')}}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-navbar-logo.webp')}}" />
+    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-navbar-logo.webp')}}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('web/images/company-logo/aiman-navbar-logo.webp')}}" />
 
 
     @yield('styles')
