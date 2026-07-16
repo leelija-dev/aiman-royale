@@ -16,18 +16,20 @@
   <!-- HEADER: aymanroayle + address + invoice meta -->
   <div class="border-b border-[#e5e9f0] px-6 py-5 md:px-8 md:py-6 flex flex-wrap items-start justify-between">
     <div>
-      <div class="text-2xl font-bold tracking-tight text-[#0b1a33]">aymanroayle</div>
-      <div class="text-sm text-[#4e5d73] mt-0.5">Craft · Quality · Trust</div>
+      <div class="text-2xl font-bold tracking-tight text-[#0b1a33]">{{$store->name ? $store->name : 'Ayman Roayle'}}</div>
+      {{-- <div class="text-sm text-[#4e5d73] mt-0.5">{{$store->gst_number ? $store->gst_number : ''}}</div> --}}
+      <div class="text-xs text-[#4e5d73] mt-1">
+        {{$store->email ? $store->email : ''}}
+      </div>
+      <div class="text-xs text-[#4e5d73] mt-1">
+        <span class="font-medium">GST:</span> {{$store->gst_number ? $store->gst_number : ''}}
+      </div>
       <div class="text-xs text-[#4e5d73] mt-3 leading-relaxed">
-        Barasat, North 24 Parganas<br>
-        Kolkata, West Bengal, India
+        {{$store->address ? $store->address : ''}}<br>
+        {{$store->state ? $store->state : ''}} ,
+        {{$store->country ? $store->country : ''}}
       </div>
-      <div class="text-xs text-[#4e5d73] mt-1">
-        contact@aymanroayle.in · +91 800 555 0199
-      </div>
-      <div class="text-xs text-[#4e5d73] mt-1">
-        <span class="font-medium">GSTIN:</span> 19AABCU1234D1Z9
-      </div>
+      
     </div>
     <div class="text-right mt-3 md:mt-0">
       <div class="text-2xl font-bold text-[#0b1a33] tracking-wide">INVOICE</div>
@@ -146,17 +148,19 @@
       <span class="block mt-1">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span>
     </div>
     <div class="text-right">
-      <div class="font-semibold text-[#1f2a3f]">Henrietta Mitchell</div>
-      <div class="text-[#4e5d73]">Administrator</div>
-      <div class="text-[#4e5d73]">123-456-7890</div>
-      <div class="text-[#4e5d73]">hello@reallygreatsite.com</div>
-      <div class="text-[#4e5d73]">123 Anywhere St., Any City</div>
+      <div class="font-semibold text-[#1f2a3f]">{{$store->name ? $store->name : ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->phone_number ? $store->phone_number : ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->email ? $store->email : ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->address ? $store->address : ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->state ? $store->state : ''}} , {{$store->country ? $store->country : ''}}</div>
+      
     </div>
   </div>
 
   <!-- footer with company name & location -->
   <div class="px-6 py-3 text-center text-[10px] text-[#8b9aaf] bg-white border-t border-[#e5e9f0]">
-    aymanroayle · Barasat, North 24 Parganas, Kolkata, West Bengal, India · Invoice #INV-2403-1098 · GSTIN: 19AABCU1234D1Z9
+  
+    {{$store->name ? $store->name : ''}} · {{$store->address ? $store->address : ''}} · {{$store->state ? $store->state : ''}} · {{$store->country ? $store->country : ''}} · Invoice #{{$orderDetails->id ? $orderDetails->id : ''}} · GST: {{$store->gst_number ? $store->gst_number : ''}}
   </div>
 </div>
 </div>
