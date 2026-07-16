@@ -59,7 +59,7 @@ class BannerDetailsController extends Controller
             }
             $bannerDetails = BannerDetails::create($data);
             if ($bannerDetails) {
-                return view('Admin.hero-section.index', compact('bannerDetails'));
+                return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Created successfully');
             }
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

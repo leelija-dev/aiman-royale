@@ -81,6 +81,9 @@
                                         <option value="bottom" {{ $hero->position == 'bottom' ? 'selected' : '' }}>Bottom
                                             (↓)
                                         </option>
+                                        <option value="center" {{ $hero->position == 'center' ? 'selected' : '' }}>Center
+                                            (↔)
+                                        </option>
                                         <option value="left" {{ $hero->position == 'left' ? 'selected' : '' }}>Left (←)
                                         </option>
                                         <option value="right" {{ $hero->position == 'right' ? 'selected' : '' }}>Right (→)

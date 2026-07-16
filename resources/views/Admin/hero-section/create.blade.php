@@ -36,10 +36,10 @@
 
                                 <!-- Product Name -->
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Offer </label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ old('name') }}" maxlength="200" required>
-                                    @error('name')
+                                    <label for="offer" class="form-label">Offer </label>
+                                    <input type="text" class="form-control" id="offer" name="offer"
+                                        value="{{ old('offer') }}"  required>
+                                    @error('offer')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -78,6 +78,9 @@
                                         </option>
                                         <option value="bottom" {{ old('position') == 'bottom' ? 'selected' : '' }}>Bottom
                                             (↓)
+                                        </option>
+                                        <option value="center" {{ old('position') == 'center' ? 'selected' : '' }}>Center
+                                            (↔)
                                         </option>
                                         <option value="left" {{ old('position') == 'left' ? 'selected' : '' }}>Left (←)
                                         </option>
