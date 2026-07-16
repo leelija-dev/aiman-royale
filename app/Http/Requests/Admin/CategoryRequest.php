@@ -22,7 +22,7 @@ class CategoryRequest extends FormRequest
             'parent_id' => ['nullable', 'exists:categories,id'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:10240'],
             'is_active' => ['boolean'],
-            'is_home' => ['boolean'],
+            'is_home' => ['boolean','default:0'],
             //'home_position' => ['nullable', 'string'],
              'home_position' => ['required_if:is_home,1', 'nullable', 'string'],
             'meta_title'=>['required','string'],
