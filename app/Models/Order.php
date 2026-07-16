@@ -30,6 +30,7 @@ class Order extends Model
         'cancel_reason'
     ];
 
+
     public function orderProducts()
     {
         return $this->hasMany(OrderProduct::class, 'order_id');
