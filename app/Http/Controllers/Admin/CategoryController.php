@@ -321,9 +321,9 @@ class CategoryController extends Controller
             }
 
             // Set home_position to null if is_home is 0
-            if ($data['is_home'] == 0) {
-                $data['home_position'] = null;
-            }
+            // if ($data['is_home'] == 0) {
+            //     $data['home_position'] = null;
+            // }
 
             // Update the category
             $category->update($data);
