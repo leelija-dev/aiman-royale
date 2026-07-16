@@ -139,6 +139,7 @@ Route::middleware(['auth', 'refresh.jwt'])->group(function () {
     // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
     Route::post('/cancel-order/{orderId}', [UserController::class, 'cancelOrder'])->name('order.cancel');
+    Route::get('/invoice/{orderId}', [UserController::class, 'orderInvoice'])->name('order.invoice');
 
     // Custom Dimensions Routes
     Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('web.custom-request');
@@ -269,3 +270,4 @@ Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegi
 // Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 // Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 // Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
+// Route::view('/invoice', 'web.invoice-temple')->name('page.invoice');

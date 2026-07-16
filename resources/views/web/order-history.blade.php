@@ -429,9 +429,10 @@
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-question-circle mr-2"></i>Get Help
                                    </button>
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                   <a href="{{ route('order.invoice', $ord->id) }}"  class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium"><button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-receipt mr-2"></i>View Invoice
                                    </button>
+                                   </a>
                                </div>
 
 

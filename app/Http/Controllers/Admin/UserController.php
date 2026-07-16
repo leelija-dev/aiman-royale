@@ -282,6 +282,11 @@ class UserController extends Controller implements HasMiddleware
         return view('web.order-history', compact('user', 'orders'));
     }
 
+
+    public function orderInvoice($id){
+        $orderDetails = Order::where('id',$id)->with('orderProducts.product','user','variant',)->first();
+        return view('web.invoice-temple',compact('orderDetails'));
+    }
     /**
      * Cancel an order
      */

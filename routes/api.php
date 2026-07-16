@@ -61,3 +61,5 @@ Route::prefix('reviews')->group(function () {
     Route::post('/', [ReviewController::class, 'store'])->name('api.reviews.store');
     Route::get('/products/{productSlug}', [ReviewController::class, 'getProductReviews'])->name('api.reviewsRoutr.product');
 });
+
+Route::get('/category/filter-options/{slug}', [CategoryController::class, 'getFilterOptions'])->name('category.filter.options');

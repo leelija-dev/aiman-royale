@@ -1507,7 +1507,7 @@ $isProductPage = !empty($productSlug);
         <div id="faq-error-msg" class="hidden text-center py-6 text-gray-500 text-sm"></div>
 
         <div class="mt-7 pt-2 text-center text-xs text-gray-400 border-t border-gray-100">
-          <span>📘 Need more help? <a href="#" class="text-primary-dark hover:underline font-medium">Contact our fashion experts</a></span>
+          <span>📘 Need more help? <a href="https://aimanroyale.com/contact-us" class="text-primary-dark hover:underline font-medium">Contact our fashion experts</a></span>
         </div>
       </div>
     </div>
@@ -1746,9 +1746,9 @@ $isProductPage = !empty($productSlug);
           }
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: Failed to load FAQs`);
-        }
+        // if (!response.ok) {
+        //   throw new Error(`HTTP ${response.status}: Failed to load FAQs`);
+        // }
 
         const result = await response.json();
 
@@ -1765,12 +1765,12 @@ $isProductPage = !empty($productSlug);
         console.error('FAQ fetch error:', error);
         container.innerHTML = `
             <div class="text-center py-8 text-gray-500">
-              <p class="text-sm text-red-500">⚠️ Unable to load FAQs at the moment.</p>
+              <p class="text-sm text-red-500">No FAQs available at the moment.</p>
               <p class="text-xs mt-2 text-gray-400">${error.message || 'Please check API connection or try again later.'}</p>
             </div>
           `;
         errorDiv.classList.remove('hidden');
-        errorDiv.innerHTML = '<span class="text-xs">💡 Tip: Ensure backend server is running at http://127.0.0.1:8000</span>';
+        // errorDiv.innerHTML = '<span class="text-xs">💡 Tip: Ensure backend server is running at http://127.0.0.1:8000</span>';
       }
     }
 

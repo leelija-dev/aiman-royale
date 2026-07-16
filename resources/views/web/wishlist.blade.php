@@ -644,7 +644,16 @@ const WishlistManager = {
                 // Animate removal
                 productCard.style.opacity = '0';
                 productCard.style.transform = 'scale(0.9)';
-                
+                document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                            item.textContent = data.wishlist_count;
+
+                            // Hide badge when count is 0 (optional)
+                            if (data.wishlist_count > 0) {
+                                item.style.display = "flex";
+                            } else {
+                                item.style.display = "none";
+                            }
+                        });
                 setTimeout(() => {
                     productCard.remove();
                     WishlistManager.showNotification('Item removed from wishlist', 'success');

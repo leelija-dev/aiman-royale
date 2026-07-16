@@ -981,18 +981,23 @@
                         </div>
                     </a>
                 </div>
+              @php
+                    $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                @endphp
 
-                <!-- Icons -->
                 <a href="{{ route('wishlist.index') }}">
-                    <button class="text-gray-700 hover:text-black group relative">
-                        <div
-                            class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
-                            <i class="fa-regular fa-heart text-lg group-hover:text-red-500"></i>
+                    <button class="relative text-gray-700 hover:text-black group">
+
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
+                            <i class="fa-regular fa-heart text-lg group-hover:text-red-600"></i>
                         </div>
-                        <span
-                            class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                            Wishlist
-                        </span>
+
+                      
+                            <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
+                                {{ $wishlistCount ?? 0 }}
+                            </span>
+                        
+
                     </button>
                 </a>
 
@@ -1063,7 +1068,9 @@
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <i class="fa-regular fa-heart text-gray-500 w-4"></i>
                             <span>Wishlist</span>
-                            <span class="ml-auto text-primary text-xs">12</span>
+                            <span class="wishlist-count ml-auto bg-primary text-white text-xs px-3 py-1 rounded-full">
+                                {{ $wishlistCount ?? 0 }}
+                            </span>
                         </a>
 
                         <hr class="my-2 border-gray-100" />
