@@ -80,6 +80,7 @@ class CategoryController extends Controller
             ->paginate(12);
 
         $occasions = Occasion::where('is_active', 1)->get();
+        $categories = Category::where('is_active', 1)->get();
 
         // Get all available sizes from variants (including child categories)
         $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($categoryIds) {

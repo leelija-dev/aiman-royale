@@ -470,12 +470,14 @@
                     aria-orientation="vertical"
                     aria-labelledby="collection-dropdown-button">
                     <div class="py-2" role="none">
+                        @if(isset($categories) && $categories->isNotEmpty())
+                        @foreach($categories as $category)
                         <button
                             type="button"
                             class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                            data-value="spring-2024"
+                            data-value="{{ $category->slug }}"
                             role="menuitem">
-                            <span>Spring 2024</span>
+                            <span>{{ $category->name }}</span>
                             <svg
                                 class="w-4 h-4 text-blue-600 opacity-0 checkmark"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -489,6 +491,11 @@
                                     d="M5 13l4 4L19 7" />
                             </svg>
                         </button>
+                        @endforeach
+                        @else
+                        <div class="px-4 py-2.5 text-sm text-gray-500">No Collection available</div>
+                        @endif
+                        {{--
                         <button
                             type="button"
                             class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
@@ -565,6 +572,7 @@
                                     d="M5 13l4 4L19 7" />
                             </svg>
                         </button>
+                        --}}
                     </div>
                 </div>
             </div>
@@ -1019,7 +1027,7 @@
     });
 </script>
 <!-- comment it for debug -->
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize filters
         let currentFilters = {
@@ -1033,7 +1041,7 @@
             occasions: [],
             filter: '', // Add filter for best-seller, new-arrival, etc.
             collection: '', // Add collection filter
-            sort: '' // Add sort filter
+            sort: 'date-desc' // Add sort filter
         };
 
         let filterTimeout;
@@ -1043,6 +1051,9 @@
         const productsContainer = document.getElementById('products-container');
         const loadingSpinner = document.getElementById('loading-spinner');
         const productsCountDiv = document.getElementById('products-count');
+
+        const categorySlug = window.location.pathname.split('/').pop();
+
 
         // Track currently open dropdown
         let currentlyOpenDropdown = null;
@@ -1521,6 +1532,884 @@
                 closeAllDropdowns();
             }
         });
+    });
+
+    // Wishlist toggle function
+    function toggleWishlist(productId, button, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const isInWishlist = button.classList.contains('text-red-500');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+        // Show loading
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (isInWishlist) {
+                        button.classList.remove('text-red-500');
+                        button.innerHTML = '<i class="far fa-heart"></i>';
+                    } else {
+                        button.classList.add('text-red-500');
+                        button.innerHTML = '<i class="fas fa-heart"></i>';
+                    }
+                } else {
+                    button.classList.add('text-red-500');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+    }
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize filters
+        let currentFilters = {
+            priceRanges: [],
+            customPrice: {
+                min: 0,
+                max: 10000
+            },
+            sizes: [],
+            colors: [],
+            occasions: [],
+            filter: 'new-arrival', // Default
+            collection: '', // Will be set dynamically
+            sort: 'date-desc' // Default
+        };
+
+        let filterTimeout;
+        let isLoading = false;
+
+        // DOM Elements
+        const productsContainer = document.getElementById('products-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const productsCountDiv = document.getElementById('products-count');
+
+        // Get category slug from the page
+        const categorySlug = window.location.pathname.split('/').pop();
+
+        // Track currently open dropdown
+        let currentlyOpenDropdown = null;
+
+        // ──────────────────────────────────────────────
+        //  Dropdown Management Functions
+        // ──────────────────────────────────────────────
+
+        function closeAllDropdowns() {
+            const dropdowns = ['filter-menu', 'occasion-menu', 'collection-menu', 'sort-menu'];
+            const buttons = {
+                'filter-menu': {
+                    button: 'filter-dropdown-button',
+                    chevron: 'filter-chevron'
+                },
+                'occasion-menu': {
+                    button: 'occasion-dropdown-button',
+                    chevron: 'occasion-chevron'
+                },
+                'collection-menu': {
+                    button: 'collection-dropdown-button',
+                    chevron: 'collection-chevron'
+                },
+                'sort-menu': {
+                    button: 'sort-button',
+                    chevron: 'chevron-icon'
+                }
+            };
+
+            dropdowns.forEach(menuId => {
+                const menu = document.getElementById(menuId);
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    const btnConfig = buttons[menuId];
+                    if (btnConfig) {
+                        const chevron = document.getElementById(btnConfig.chevron);
+                        if (chevron) chevron.style.transform = 'rotate(0deg)';
+                        const button = document.getElementById(btnConfig.button);
+                        if (button) button.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+            currentlyOpenDropdown = null;
+        }
+
+        function setupDropdownToggle(buttonId, menuId, chevronId) {
+            const button = document.getElementById(buttonId);
+            const menu = document.getElementById(menuId);
+            const chevron = document.getElementById(chevronId);
+
+            if (!button || !menu || !chevron) return;
+
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Close any other open dropdown
+                closeAllDropdowns();
+                
+                // Toggle current dropdown
+                const isHidden = menu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    menu.classList.remove('hidden');
+                    chevron.style.transform = 'rotate(180deg)';
+                    button.setAttribute('aria-expanded', 'true');
+                    currentlyOpenDropdown = menuId;
+                } else {
+                    menu.classList.add('hidden');
+                    chevron.style.transform = 'rotate(0deg)';
+                    button.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                }
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Collection Dropdown Setup (Modified)
+        // ──────────────────────────────────────────────
+
+        function setupCollectionDropdown() {
+            const collectionMenu = document.getElementById('collection-menu');
+            const collectionButton = document.getElementById('collection-dropdown-button');
+            const collectionChevron = document.getElementById('collection-chevron');
+            const collectionLabel = document.getElementById('collection-label');
+            
+            // Get all collection options
+            const collectionOptions = document.querySelectorAll('.collection-option');
+            
+            if (!collectionMenu || !collectionButton || !collectionChevron || !collectionLabel) {
+                console.warn('Collection dropdown elements not found');
+                return;
+            }
+
+            // Setup toggle
+            setupDropdownToggle('collection-dropdown-button', 'collection-menu', 'collection-chevron');
+
+            // Find default active option
+            let defaultActive = false;
+            collectionOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.collection = value;
+                    collectionLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            // If no active option, set first one as default
+            if (!defaultActive && collectionOptions.length > 0) {
+                const firstOption = collectionOptions[0];
+                firstOption.classList.add('active');
+                const checkmark = firstOption.querySelector('.checkmark');
+                if (checkmark) checkmark.style.opacity = '1';
+                const value = firstOption.getAttribute('data-value');
+                const text = firstOption.querySelector('span').textContent;
+                currentFilters.collection = value;
+                collectionLabel.textContent = text;
+            }
+
+            // Handle collection option clicks
+            collectionOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+                    
+                    // Update active state
+                    collectionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+                    
+                    // Update currentFilters
+                    currentFilters.collection = value;
+                    collectionLabel.textContent = text;
+                    
+                    // Close dropdown
+                    collectionMenu.classList.add('hidden');
+                    collectionChevron.style.transform = 'rotate(0deg)';
+                    collectionButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                    
+                    // Apply filter
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Filter Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupFilterDropdown() {
+            const filterMenu = document.getElementById('filter-menu');
+            const filterButton = document.getElementById('filter-dropdown-button');
+            const filterChevron = document.getElementById('filter-chevron');
+            const filterLabel = document.getElementById('filter-label');
+            const filterOptions = document.querySelectorAll('.filter-option');
+            
+            if (!filterMenu || !filterButton || !filterChevron || !filterLabel) return;
+
+            // Setup toggle
+            setupDropdownToggle('filter-dropdown-button', 'filter-menu', 'filter-chevron');
+
+            // Find default active option
+            let defaultActive = false;
+            filterOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.filter = value;
+                    filterLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            // If no active option, set default
+            if (!defaultActive && filterOptions.length > 0) {
+                const defaultOption = document.querySelector('.filter-option[data-value="new-arrival"]');
+                if (defaultOption) {
+                    defaultOption.classList.add('active');
+                    const checkmark = defaultOption.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.filter = 'new-arrival';
+                    filterLabel.textContent = 'Filter';
+                }
+            }
+
+            // Handle filter option clicks
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+                    
+                    // Update active state
+                    filterOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+                    
+                    // Update currentFilters
+                    currentFilters.filter = value;
+                    filterLabel.textContent = text;
+                    
+                    // Close dropdown
+                    filterMenu.classList.add('hidden');
+                    filterChevron.style.transform = 'rotate(0deg)';
+                    filterButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                    
+                    // Apply filter
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Occasion Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupOccasionDropdown() {
+            const occasionMenu = document.getElementById('occasion-menu');
+            const occasionButton = document.getElementById('occasion-dropdown-button');
+            const occasionChevron = document.getElementById('occasion-chevron');
+            const occasionLabel = document.getElementById('occasion-label');
+            const occasionOptions = document.querySelectorAll('.occasion-option');
+            
+            if (!occasionMenu || !occasionButton || !occasionChevron || !occasionLabel) return;
+
+            // Setup toggle
+            setupDropdownToggle('occasion-dropdown-button', 'occasion-menu', 'occasion-chevron');
+
+            // Handle occasion option clicks
+            occasionOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+                    
+                    // Update active state
+                    occasionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+                    
+                    // Update currentFilters
+                    currentFilters.occasions = [value];
+                    occasionLabel.textContent = text;
+                    
+                    // Close dropdown
+                    occasionMenu.classList.add('hidden');
+                    occasionChevron.style.transform = 'rotate(0deg)';
+                    occasionButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                    
+                    // Apply filter
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Sort Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupSortDropdown() {
+            const sortMenu = document.getElementById('sort-menu');
+            const sortButton = document.getElementById('sort-button');
+            const sortChevron = document.getElementById('chevron-icon');
+            const sortLabel = document.getElementById('sort-label');
+            const sortOptions = document.querySelectorAll('.sort-option');
+            
+            if (!sortMenu || !sortButton || !sortChevron || !sortLabel) return;
+
+            // Setup toggle
+            setupDropdownToggle('sort-button', 'sort-menu', 'chevron-icon');
+
+            // Find default active option
+            let defaultActive = false;
+            sortOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.sort = value;
+                    sortLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            // If no active option, set default
+            if (!defaultActive && sortOptions.length > 0) {
+                const defaultOption = document.querySelector('.sort-option[data-value="date-desc"]');
+                if (defaultOption) {
+                    defaultOption.classList.add('active');
+                    const checkmark = defaultOption.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.sort = 'date-desc';
+                    sortLabel.textContent = 'Sort by';
+                }
+            }
+
+            // Handle sort option clicks
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+                    
+                    // Update active state
+                    sortOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+                    
+                    // Update currentFilters
+                    currentFilters.sort = value;
+                    sortLabel.textContent = text;
+                    
+                    // Close dropdown
+                    sortMenu.classList.add('hidden');
+                    sortChevron.style.transform = 'rotate(0deg)';
+                    sortButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                    
+                    // Apply filter
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Collect Filters Function
+        // ──────────────────────────────────────────────
+
+        function collectFilters() {
+            // Price ranges
+            currentFilters.priceRanges = Array.from(document.querySelectorAll('.price-range-filter:checked')).map(cb => cb.value);
+
+            // Sizes
+            currentFilters.sizes = Array.from(document.querySelectorAll('.size-filter:checked')).map(cb => cb.value);
+
+            // Colors
+            currentFilters.colors = Array.from(document.querySelectorAll('.color-filter:checked')).map(cb => cb.value);
+
+            // Occasions - check both dropdown and sidebar
+            const dropdownOccasion = document.querySelector('.occasion-option.active');
+            const sidebarOccasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
+
+            if (dropdownOccasion) {
+                currentFilters.occasions = [dropdownOccasion.getAttribute('data-value')];
+            } else if (sidebarOccasions.length > 0) {
+                currentFilters.occasions = sidebarOccasions;
+            } else {
+                currentFilters.occasions = [];
+            }
+
+            // Collection - get from dropdown
+            const collectionOption = document.querySelector('.collection-option.active');
+            if (collectionOption) {
+                currentFilters.collection = collectionOption.getAttribute('data-value');
+            }
+
+            // Filter and Sort are already updated via dropdown clicks
+        }
+
+        // ──────────────────────────────────────────────
+        //  Update Active Filters Display
+        // ──────────────────────────────────────────────
+
+        function updateActiveFiltersDisplay() {
+            const activeFiltersDiv = document.getElementById('active-filters');
+            const filterTagsDiv = document.getElementById('filter-tags');
+
+            if (!activeFiltersDiv || !filterTagsDiv) return;
+
+            const activeFilters = [];
+
+            // Add collection filter
+            const collectionOption = document.querySelector('.collection-option.active');
+            if (collectionOption && collectionOption.getAttribute('data-value') !== 'all') {
+                const text = collectionOption.querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'collection',
+                    text: `Collection: ${text}`,
+                    value: collectionOption.getAttribute('data-value')
+                });
+            }
+
+            // Add filter type
+            const filterOption = document.querySelector('.filter-option.active');
+            if (filterOption) {
+                const text = filterOption.querySelector('span').textContent;
+                if (text !== 'Filter') {
+                    activeFilters.push({
+                        type: 'filter',
+                        text: text,
+                        value: filterOption.getAttribute('data-value')
+                    });
+                }
+            }
+
+            // Add price range filters
+            document.querySelectorAll('.price-range-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'price',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add size filters
+            document.querySelectorAll('.size-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'size',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add color filters
+            document.querySelectorAll('.color-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'color',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add occasion filters
+            const occasionActive = document.querySelector('.occasion-option.active');
+            if (occasionActive) {
+                const text = occasionActive.querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'occasion',
+                    text: `Occasion: ${text}`,
+                    value: occasionActive.getAttribute('data-value')
+                });
+            }
+
+            document.querySelectorAll('.occasion-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'occasion',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            if (activeFilters.length > 0) {
+                activeFiltersDiv.classList.remove('hidden');
+                filterTagsDiv.innerHTML = activeFilters.map(filter => `
+                    <span class="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                        ${filter.text}
+                        <button onclick="removeFilter('${filter.type}', '${filter.value || ''}')" class="hover:text-primary-dark">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </span>
+                `).join('');
+            } else {
+                activeFiltersDiv.classList.add('hidden');
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Remove Filter
+        // ──────────────────────────────────────────────
+
+        window.removeFilter = function(type, value) {
+            if (type === 'collection') {
+                // Reset collection to default
+                const collectionOptions = document.querySelectorAll('.collection-option');
+                collectionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                const defaultCollection = document.querySelector('.collection-option[data-value="all"]');
+                if (defaultCollection) {
+                    defaultCollection.classList.add('active');
+                    const checkmark = defaultCollection.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.collection = 'all';
+                    document.getElementById('collection-label').textContent = 'Collection';
+                }
+            } else if (type === 'filter') {
+                const filterOptions = document.querySelectorAll('.filter-option');
+                filterOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                const defaultFilter = document.querySelector('.filter-option[data-value="new-arrival"]');
+                if (defaultFilter) {
+                    defaultFilter.classList.add('active');
+                    const checkmark = defaultFilter.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.filter = 'new-arrival';
+                    document.getElementById('filter-label').textContent = 'Filter';
+                }
+            } else if (type === 'price' || type === 'custom-price') {
+                if (type === 'custom-price') {
+                    const minPriceInput = document.getElementById('min-price');
+                    const maxPriceInput = document.getElementById('max-price');
+                    if (minPriceInput && maxPriceInput) {
+                        minPriceInput.value = 0;
+                        maxPriceInput.value = 10000;
+                        updatePriceDisplay();
+                    }
+                } else {
+                    document.querySelectorAll(`.price-range-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+                }
+            } else if (type === 'size') {
+                document.querySelectorAll(`.size-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            } else if (type === 'color') {
+                document.querySelectorAll(`.color-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            } else if (type === 'occasion') {
+                document.querySelectorAll(`.occasion-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+                const occasionOptions = document.querySelectorAll('.occasion-option');
+                occasionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                currentFilters.occasions = [];
+                document.getElementById('occasion-label').textContent = 'Occasion';
+            }
+
+            applyFilters();
+        };
+
+        // ──────────────────────────────────────────────
+        //  Price Display Functions
+        // ──────────────────────────────────────────────
+
+        function updatePriceDisplay() {
+            const minPriceInput = document.getElementById('min-price');
+            const maxPriceInput = document.getElementById('max-price');
+            const minPriceDisplay = document.getElementById('min-price-display');
+            const maxPriceDisplay = document.getElementById('max-price-display');
+            
+            if (minPriceDisplay && maxPriceDisplay && minPriceInput && maxPriceInput) {
+                minPriceDisplay.textContent = Number(minPriceInput.value).toLocaleString();
+                maxPriceDisplay.textContent = Number(maxPriceInput.value).toLocaleString();
+                currentFilters.customPrice.min = parseInt(minPriceInput.value);
+                currentFilters.customPrice.max = parseInt(maxPriceInput.value);
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Apply Filters
+        // ──────────────────────────────────────────────
+
+        async function applyFilters() {
+            if (isLoading) return;
+
+            collectFilters();
+            updateActiveFiltersDisplay();
+
+            // Show loading
+            isLoading = true;
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+            if (productsContainer) productsContainer.style.opacity = '0.5';
+
+            // Build query string
+            const params = new URLSearchParams({
+                price_ranges: JSON.stringify(currentFilters.priceRanges),
+                custom_min_price: currentFilters.customPrice.min,
+                custom_max_price: currentFilters.customPrice.max,
+                sizes: JSON.stringify(currentFilters.sizes),
+                colors: JSON.stringify(currentFilters.colors),
+                occasions: JSON.stringify(currentFilters.occasions),
+                filter: currentFilters.filter,
+                collection: currentFilters.collection,
+                sort: currentFilters.sort
+            });
+
+            try {
+                const response = await fetch(`/category/${categorySlug}/filter?${params.toString()}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success && productsContainer) {
+                    productsContainer.innerHTML = data.html;
+
+                    // Update products count
+                    if (productsCountDiv) {
+                        productsCountDiv.innerHTML = `Showing ${data.firstItem} - ${data.lastItem} of ${data.total} products`;
+                    }
+
+                    // Re-attach product card handlers
+                    attachProductCardHandlers();
+                } else {
+                    console.error('Controller returned error:', data);
+                }
+            } catch (error) {
+                console.error('Filter error:', error);
+            } finally {
+                isLoading = false;
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+                if (productsContainer) productsContainer.style.opacity = '1';
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Attach Product Card Handlers
+        // ──────────────────────────────────────────────
+
+        function attachProductCardHandlers() {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('button') || e.target.closest('a')) {
+                        return;
+                    }
+                    const productSlug = this.getAttribute('data-product-slug');
+                    if (productSlug) {
+                        window.location.href = `/products/${productSlug}`;
+                    }
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Setup Filter Checkboxes
+        // ──────────────────────────────────────────────
+
+        function setupFilterCheckboxes() {
+            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Setup Clear Filters Button
+        // ──────────────────────────────────────────────
+
+        function setupClearFilters() {
+            const clearFiltersBtn = document.getElementById('clear-filters');
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', function() {
+                    // Uncheck all checkboxes
+                    document.querySelectorAll('.price-range-filter, .size-filter, .color-filter, .occasion-filter').forEach(cb => {
+                        cb.checked = false;
+                    });
+
+                    // Reset price ranges
+                    const minPriceInput = document.getElementById('min-price');
+                    const maxPriceInput = document.getElementById('max-price');
+                    if (minPriceInput && maxPriceInput) {
+                        minPriceInput.value = 0;
+                        maxPriceInput.value = 10000;
+                        updatePriceDisplay();
+                    }
+
+                    // Reset collection
+                    const collectionOptions = document.querySelectorAll('.collection-option');
+                    collectionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultCollection = document.querySelector('.collection-option[data-value="all"]');
+                    if (defaultCollection) {
+                        defaultCollection.classList.add('active');
+                        const checkmark = defaultCollection.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.collection = 'all';
+                        document.getElementById('collection-label').textContent = 'Collection';
+                    }
+
+                    // Reset filter
+                    const filterOptions = document.querySelectorAll('.filter-option');
+                    filterOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultFilter = document.querySelector('.filter-option[data-value="new-arrival"]');
+                    if (defaultFilter) {
+                        defaultFilter.classList.add('active');
+                        const checkmark = defaultFilter.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.filter = 'new-arrival';
+                        document.getElementById('filter-label').textContent = 'Filter';
+                    }
+
+                    // Reset sort
+                    const sortOptions = document.querySelectorAll('.sort-option');
+                    sortOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultSort = document.querySelector('.sort-option[data-value="date-desc"]');
+                    if (defaultSort) {
+                        defaultSort.classList.add('active');
+                        const checkmark = defaultSort.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.sort = 'date-desc';
+                        document.getElementById('sort-label').textContent = 'Sort by';
+                    }
+
+                    // Reset occasion
+                    const occasionOptions = document.querySelectorAll('.occasion-option');
+                    occasionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    currentFilters.occasions = [];
+                    document.getElementById('occasion-label').textContent = 'Occasion';
+
+                    // Apply filters with cleared values
+                    applyFilters();
+                });
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Initialize All Dropdowns and Filters
+        // ──────────────────────────────────────────────
+
+        function init() {
+            // Setup all dropdowns
+            setupCollectionDropdown();
+            setupFilterDropdown();
+            setupOccasionDropdown();
+            setupSortDropdown();
+
+            // Setup filter checkboxes
+            setupFilterCheckboxes();
+
+            // Setup clear filters
+            setupClearFilters();
+
+            // Initial attachment of product card handlers
+            attachProductCardHandlers();
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const isClickInsideDropdown = e.target.closest('.relative.inline-block.text-left');
+                if (!isClickInsideDropdown) {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Close dropdown on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Initial filter application
+            applyFilters();
+        }
+
+        // Start the application
+        init();
     });
 
     // Wishlist toggle function
