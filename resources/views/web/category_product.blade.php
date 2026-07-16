@@ -871,16 +871,30 @@
     <!-- Products Grid -->
     <div class=" w-full">
         <!-- Category Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                {{ $category->title ?? $category->name ?? 'Products' }}
-            </h1>
-           
-           @if(isset($category->about))
-            <p class="text-gray-600">{{ $category->about }}</p>
-            @endif
-           
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-6">
+    <!-- Left: Title & Description -->
+    <div class="flex-1 min-w-[200px]">
+        <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
+            {{ $category->title ?? $category->name ?? 'Products' }}
+        </h1>
+        
+        @if(isset($category->about))
+            <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
+                {{ $category->about }}
+            </p>
+        @endif
+    </div>
+
+    <!-- Right: Status Badge -->
+    @if($products->count() == 0)
+        <div class="flex shrink-0 items-center gap-2 rounded-full bg-red-50 px-4 py-2 border border-red-200">
+            <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span class="text-sm font-medium text-primary">No Products Found</span>
         </div>
+    @endif
+</div>
 
         <!-- Products Count -->
         {{-- <div id="products-count" class="mb-4 text-sm text-gray-600">

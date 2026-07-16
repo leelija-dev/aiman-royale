@@ -105,9 +105,7 @@
 </div>
 @endforeach
 @else
-<div class="col-span-full text-center py-12">
-    <p class="text-gray-500">No products found.</p>
-</div>
+
 
 @foreach($latestProducts as $product)
 <div class="product-card" data-product-slug="{{ $product->slug }}">
