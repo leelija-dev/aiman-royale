@@ -2,7 +2,7 @@
 
 @section('title', 'Custom Design Studio | Personalize Your Perfect Outfit')
 @section('meta-description', 'Work with our expert designers to create custom-made outfits tailored to your style, measurements, and occasion.')
-
+ @dd(env('CALENDLY_URL'));
 @section('content')
 <style>
     * {
@@ -772,6 +772,7 @@
     </div>
     </div>
     --}}
+   
     <!-- Calendly Widget Container -->
     <div class="">
         <div class="calendly-inline-widget"
