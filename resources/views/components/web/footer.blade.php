@@ -2076,15 +2076,15 @@ art from fake trails.
         </div>
         <div id="Occaisions" class="accordion-content mt-6 lg:mt-8 space-y-4">
          
-          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="https://aimanroyale.com/salwar-kameez/casual" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Casual</span>
           </a>
-          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="https://aimanroyale.com/salwar-kameez/festival" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Festival</span>
           </a>
-          <a href="https://aimanroyale.com/salwar-kameez/wedding" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="https://aimanroyale.com/salwar-kameez/party" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Party</span>
           </a>
