@@ -55,8 +55,11 @@
                                     <div class="d-flex px-2 py-1">
                                         <div>
                                             
-                                            <img src="{{$banner->image}}"
-                                                class="avatar avatar-sm me-3" alt="No image">
+                                            @if($banner->image)
+                                                <img src="{{ $banner->image }}" class="avatar avatar-sm me-3" alt="Banner">
+                                            @else
+                                                <span>No Image</span>
+                                            @endif
                                             
                                         </div>
                                     </div>
