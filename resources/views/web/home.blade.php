@@ -593,15 +593,16 @@
                 </div>
 
                 <!-- Continue with similar structure for categories 3-6 -->
-                <!-- ... -->
+                <!-- ... asset('assets/images/placeholder-category.jpg') -->
 
                 @else
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
+                
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
-                            <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
+                            <img src="{{ $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image }}"
                                 alt="{{ $category->name }}"
                                 class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
 

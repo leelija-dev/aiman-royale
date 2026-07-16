@@ -109,4 +109,21 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    public function latestProduct()
+    {
+        return $this->hasOne(Product::class)
+            ->where('is_active', 1)
+            ->whereHas('variants')
+            ->latest('id'); // or 'created_at'
+    }
+
+    public function latestProductWithImage()
+    {
+        return $this->hasOne(Product::class)
+            ->where('is_active', 1)
+            ->whereHas('variants')
+            ->with('images')
+            ->latest('id');
+    }
 }
