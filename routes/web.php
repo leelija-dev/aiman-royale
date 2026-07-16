@@ -24,7 +24,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
 // use App\Http\Controllers\Auth\GoogleAuthController;
-
+use Illuminate\Support\Facades\DB;
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');
@@ -59,7 +59,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::view('/addresses', 'web.addresses');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'refresh.jwt'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 
@@ -124,7 +124,7 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
 
 // Authenticated Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'refresh.jwt'])->group(function () {
     // Profile Routes
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
@@ -139,6 +139,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin Routes
     Route::get('/user/order-history/{id}', [UserController::class, 'orderHistory'])->name('user.order-history');
     Route::post('/cancel-order/{orderId}', [UserController::class, 'cancelOrder'])->name('order.cancel');
+    Route::get('/invoice/{orderId}', [UserController::class, 'orderInvoice'])->name('order.invoice');
 
     // Custom Dimensions Routes
     Route::get('/custom-request', [CustomDimensionController::class, 'index'])->name('web.custom-request');
@@ -269,3 +270,4 @@ Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegi
 // Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 // Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 // Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
+// Route::view('/invoice', 'web.invoice-temple')->name('page.invoice');

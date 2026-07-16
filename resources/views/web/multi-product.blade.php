@@ -1036,8 +1036,11 @@
         </form>
       </div>
 
+      
+
       <!-- Products Grid Container -->
       <div class="w-full">
+        
         <div id="products-container" class="products-container">
           @include('web.partials.product-grid', ['products' => $products])
         </div>

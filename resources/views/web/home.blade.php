@@ -14,6 +14,56 @@
     #ads-carousel .owl-nav {
         display: none !important;
     }
+
+    /* Fade out animation */
+    .fade-out {
+        animation: fadeOut 1.2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* Fade in animation */
+    .fade-in {
+        animation: fadeIn 1.2s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Base styles for slides */
+    .slide-left,
+    .slide-top,
+    .slide-center,
+    .slide-right,
+    .slide-bottom {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: none;
+    }
+
+    /* Ensure content transitions smoothly with the fade */
+    .fade-out .content,
+    .fade-in .content {
+        transition: opacity 0.3s ease;
+    }
 </style>
 
 
@@ -32,14 +82,13 @@
         <div class="inline-block mb-3">
             <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[2px]"></div>
             <!-- <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
-                        Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
-                    </h3> -->
+                                            Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
+                                        </h3> -->
             <!-- <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
-                        Curated styles for every occasion. Discover your perfect look.
-                    </p> -->
+                                            Curated styles for every occasion. Discover your perfect look.
+                                        </p> -->
         </div>
     </div>
-
     <!-- Horizontal Scroll with Enhanced Styling -->
     <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
         <!-- Gradient fade edges -->
@@ -50,9 +99,10 @@
 
             <!-- Category Items with Enhanced Cards -->
             <!-- Bestsellers -->
-            @if($categories)
-            @foreach($categories->whereNull('parent_id') as $category)
-            <a href="{{ route('category.show',$category->slug) }}" class="group flex flex-col items-center  snap-center">
+            @if ($categories)
+            @foreach ($categories->whereNull('parent_id') as $category)
+            <a href="{{ route('category.show', $category->slug) }}"
+                class="group flex flex-col items-center  snap-center">
                 <div class="relative mb-2">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
@@ -60,13 +110,13 @@
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
                         <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-                            alt="{{$category->name}}"
+                            alt="{{ $category->name }}"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                 </div>
                 <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{$category->name}}</span>
+                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->name }}</span>
                 <span class="text-xs text-gray-500 mt-1">Most Loved</span>
             </a>
             @endforeach
@@ -212,74 +262,162 @@
 
 <!-- Required CSS for no scrollbar + smooth snap -->
 
-<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-gray-100 to-white">
+<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
             <!-- Left Image Column -->
             @php
             $leftCategories = $homeCategories['left'] ?? collect();
+            $leftBanners = $bannerHeroSection->where('position', 'left')->values();
             @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
 
-                    @if ($leftCategories->count())
-                    <a id="leftSliderLink" href="{{ url('collections/' . $leftCategories->first()?->slug) }}"
+                    @if ($leftBanners->count())
+                    <a id="leftSliderLink" href="{{ $leftBanners->first()->redirect_link }}"
                         class="block h-full w-full relative">
 
-                        @foreach ($leftCategories as $index => $cat)
-                        <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ asset('uploads/category/' . $cat->image) }}" alt="{{ $cat->name }}"
-                            data-link="{{ url('collections/' . $cat->slug) }}">
+                        @foreach ($leftBanners as $index => $banner)
+                        <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
                         @endforeach
 
                     </a>
+
+                    <!-- Text Overlay -->
+                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
+
+                        @if ($leftBanners->first()?->offer)
+                        <div id="leftOfferText" class="inline-flex items-center mb-4">
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $leftBanners->first()->offer }}
+                                </span>
+                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
+                                    % OFF
+                                </span>
+                            </span>
+                        </div>
+                        @endif
+
+                        <!-- Decorative stylish font for title -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
+                            {{ $leftBanners->first()->title }}
+                        </span> -->
+
+                        <!-- Main heading -->
+                        <h2 id="leftTitleText"
+                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
+                            {{ $leftBanners->first()->title }}
+                        </h2>
+
+                        <!-- Description with stylish formatting -->
+                        <p id="leftShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
+                            Get <span class="font-semibold text-secondary-light">{{ $leftBanners->first()->short_description }}</span> | Use Code:
+                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
+                        </p>
+
+                        <!-- Shop Now Button -->
+                        <a id="leftShopBtn" href="{{ $leftBanners->first()->redirect_link }}"
+                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
+
+                            Shop Now
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+
+                        </a>
+
+                    </div>
                     @else
-                    {{-- <a id="leftSliderLink" href="{{ url('collections/lehengas') }}"
-                    class="block h-full w-full relative"> --}}
                     <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
-                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"> </a>
+                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store">
+                    </a>
                     @endif
 
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
-                        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Light Pink Salwar" /> --}}
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
                 </div>
                 <div
-                    class="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                    <a href="{{ url('collections/new-collection') }}"> <span
-                            class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-800">{{ $leftCategories->first()?->slug ?? 'New Collection' }}</span>
+                    class="absolute bottom-4 left-4 opacity-1 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <a href="{{ url('collections/new-collection') }}">
+                        <span
+                            class="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-white shadow-lg">
+                            {{ $leftCategories->first()?->slug ?? 'New Collection' }}
+                        </span>
                     </a>
                 </div>
             </div>
 
             <!-- Middle Content Column -->
-            <div
-                class="xl:min-w-[600px] lgg:min-w-[350px] min-w-[250px] md:w-auto w-full flex flex-col gap-3 lg:gap-6">
+            <div class="xl:min-w-[600px] lgg:min-w-[350px] min-w-[250px] md:w-auto w-full flex flex-col gap-3 lg:gap-6">
                 <!-- Top Image -->
                 @php
                 $topCategories = $homeCategories['top'] ?? collect();
+                $topBanners = $bannerHeroSection->where('position', 'top')->values();
                 @endphp
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 z-10 pointer-events-none">
+                        class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
                     </div>
 
-                    @if ($topCategories->count())
-                    <a id="topSliderLink" href="{{ url('collections/' . $topCategories->first()?->slug) }}"
+                    @if ($topBanners->count())
+                    <a id="topSliderLink" href="{{ $topBanners->first()->redirect_link ?? '#' }}"
                         class="block h-full w-full relative">
-                        @foreach ($topCategories as $index => $cat)
-                        <img data-link="{{ url('collections/' . $cat->slug) }}"
-                            class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center
-                                transition-opacity duration-1000 transform group-hover:scale-110
-                                {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ asset('uploads/category/' . $cat->image) }}" alt="{{ $cat->name }}">
+
+                        @foreach ($topBanners as $index => $banner)
+                        <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
                         @endforeach
 
                     </a>
+                    <div class="absolute left-6 bottom-6 z-20 text-white">
+
+                        @if ($topBanners->first()?->offer)
+                        <div id="topOfferText" class="inline-flex items-center mb-2">
+                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
+                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
+                                    {{ $topBanners->first()->offer }}
+                                </span>
+                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
+                                    % OFF
+                                </span>
+                            </span>
+                        </div>
+                        @endif
+
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
+                            {{ $topBanners->first()?->title }}
+                        </span> -->
+
+                        <h3 id="topTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
+                            {{ $topBanners->first()?->title }}
+                        </h3>
+
+                        <p id="topShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
+                            Get <span class="font-semibold text-secondary-light">{{ $topBanners->first()?->short_description }}</span>
+                        </p>
+
+                        <a id="topShopBtn" href="{{ $topBanners->first()?->redirect_link }}"
+                            class="inline-flex items-center mt-4 px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
+                            Shop Now
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+
+                    </div>
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
@@ -288,146 +426,292 @@
                             alt="Glow Pink Dress">
                     </a>
                     @endif
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}" alt="Glow Pink Dress" /> --}}
                     <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
                         <a href="{{ url('collections/new-collection') }}">
                             <span
-                                class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">{{ $topCategories->first()?->slug ?? 'New Collection' }}</span>
+                                class="bg-gradient-to-r from-primary to-secondary text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">{{ $topCategories->first()?->slug ?? 'New Collection' }}</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Center Banner -->
-                <div
-                    class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-pink-100 via-white to-purple-100 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden">
-                    <!-- Background Pattern -->
-                    <div class="absolute inset-0 opacity-5">
-                        <div
-                            class="absolute top-0 left-0 w-32 h-32 bg-pink-500 rounded-full -translate-x-16 -translate-y-16">
-                        </div>
-                        <div
-                            class="absolute bottom-0 right-0 w-40 h-40 bg-purple-500 rounded-full translate-x-20 translate-y-20">
-                        </div>
-                    </div>
-
-                    <!-- Decorative Elements -->
-                    <div
-                        class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-pink-500 to-transparent">
-                    </div>
-
-                    <h1
-                        class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient">
-                        PRICE DROP
-                    </h1>
-
-                    <div class="relative">
-                        <span
-                            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
-                            style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0 rgba(0,0,0,0.1)">
-                            SALE
-                        </span>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 blur-xl opacity-50 -z-10">
-                        </div>
-                    </div>
-
-                    <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">NEW COLLECTION</p>
-
-                    <div class="text-center text-gray-500 mb-2">
-                        <span class="line-through text-sm mr-2">₹199.99</span>
-                        <span class="text-xl font-bold text-rose-600">₹99.99</span>
-                    </div>
-
-                    <button
-                        class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
-                        <span class="relative z-10">Shop Now →</span>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                    </button>
-
-                    <p class="text-sm text-gray-500 mt-2">Limited Period Offer</p>
-                </div>
-
-                <!-- Bottom Image -->
                 @php
-                $bottomCategories = $homeCategories['bottom'] ?? collect();
+                $centerBanners = $bannerHeroSection->where('position', 'center')->values();
                 @endphp
-                <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                        src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                    alt="Gray Lahenga" /> --}}
-                    @if ($bottomCategories->count())
-                    <a id="bottomSliderLink" href="{{ url('collections/' . $bottomCategories->first()?->slug) }}"
-                        class="block h-full w-full relative">
 
-                        @foreach ($bottomCategories as $index => $cat)
-                        <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center
-                                            transition-opacity duration-1000 transform group-hover:scale-110
-                                            {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ asset('uploads/category/' . $cat->image) }}" alt="{{ $cat->name }}"
-                            data-link="{{ url('collections/' . $cat->slug) }}">
+                <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow min-h-[350px]">
+
+                    @if ($centerBanners->count())
+                    <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
+                        class="absolute inset-0 block">
+
+                        @foreach ($centerBanners as $index => $banner)
+                        <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
                         @endforeach
 
                     </a>
+
+                    <!-- Content -->
+                    <div
+                        class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-8 text-white">
+
+                        @if ($centerBanners->first()->offer)
+                        <div id="centerOfferText" class="inline-flex items-center mb-4">
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-6 py-4 rounded-[40px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $centerBanners->first()->offer }}
+                                </span>
+                                <span class="text-xl font-semibold text-white">
+                                    % OFF
+                                </span>
+                            </span>
+                        </div>
+                        @endif
+
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script text-white drop-shadow-lg rotate-[-2deg] mb-[-12px] smx:mb-[-20px]">
+                            {{ $centerBanners->first()->title }}
+                        </span> -->
+
+                        <h2 id="centerTitleText" class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg leading-tight">
+                            {{ $centerBanners->first()->title }}
+                        </h2>
+
+                        <p id="centerShortText" class="text-sm text-white drop-shadow-lg mb-8">
+                            Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
+                        </p>
+
+                        <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
+                            class="px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide inline-flex items-center transition-all duration-300">
+
+                            Shop Now
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+
+                        </a>
+
+                    </div>
                     @else
-                    <!-- Default Image -->
-                    <a href="{{ url('collections/' . 'lehanga') }}">
-                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+
+                    <div
+                        class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
+
+                        <!-- Background Pattern -->
+                        <div class="absolute inset-0 opacity-5">
+                            <div class="absolute top-0 left-0 w-32 h-32 bg-primary rounded-full -translate-x-16 -translate-y-16"></div>
+                            <div class="absolute bottom-0 right-0 w-40 h-40 bg-secondary rounded-full translate-x-20 translate-y-20"></div>
+                        </div>
+
+                        <!-- Decorative Line -->
+                        <div
+                            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent">
+                        </div>
+
+                        <h1
+                            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                            PRICE DROP
+                        </h1>
+
+                        <div class="relative">
+                            <span
+                                class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
+                                style="-webkit-text-stroke:2px black;">
+                                SALE
+                            </span>
+                        </div>
+
+                        <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">
+                            NEW COLLECTION
+                        </p>
+
+                        <div class="text-center text-gray-500 mb-2">
+                            <span class="line-through text-sm mr-2">₹199.99</span>
+                            <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
+                        </div>
+
+                        <a href="{{ url('collections/new-collection') }}"
+                            class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+
+                            Shop Now →
+
+                        </a>
+
+                        <p class="text-sm text-gray-500 mt-2">
+                            Limited Period Offer
+                        </p>
+
+                    </div>
+
+                    @endif
+
+                </div>
+
+                @php
+                $bottomBanners = $bannerHeroSection->where('position', 'bottom')->values();
+                @endphp
+
+                <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
+
+                    @if ($bottomBanners->count())
+                    <a id="bottomSliderLink" href="{{ $bottomBanners->first()->redirect_link }}"
+                        class="block h-full w-full relative">
+
+                        @foreach ($bottomBanners as $index => $banner)
+                        <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                        @endforeach
+
+                    </a>
+
+                    <!-- Bottom Banner Text -->
+                    <div class="absolute left-6 bottom-6 z-30 text-white">
+
+                        @if ($bottomBanners->first()->offer)
+                        <div id="bottomOfferText" class="inline-flex items-center mb-2">
+                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
+                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
+                                    {{ $bottomBanners->first()->offer }}
+                                </span>
+                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
+                                    % OFF
+                                </span>
+                            </span>
+                        </div>
+                        @endif
+
+                        <!-- Decorative stylish font -->
+                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
+                            {{ $bottomBanners->first()->title }}
+                        </span> -->
+
+                        <h3 id="bottomTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
+                            {{ $bottomBanners->first()->title }}
+                        </h3>
+
+                        <p id="bottomShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
+                            Get <span class="font-semibold text-secondary-light">{{ $bottomBanners->first()->short_description }}</span>
+                        </p>
+
+                        <a id="bottomShopBtn" href="{{ $bottomBanners->first()->redirect_link }}"
+                            class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
+
+                            Shop Now
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+
+                            </svg>
+
+                        </a>
+
+                    </div>
+                    @else
+                    <a href="{{ url('collections/lehanga') }}">
+
+                        <img class="object-cover h-full w-full"
                             src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                            alt="Gray Lahenga">
+                            alt="Bottom Banner">
+
                     </a>
                     @endif
-                    <div
-                        class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                        <a href="{{ url('collections/new-collection') }}">
-                            <span
-                                class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-800 shadow-lg">{{ $bottomCategories->first()?->slug ?? 'New Collection' }}</span>
-                        </a>
-                    </div>
+
                 </div>
             </div>
 
             <!-- Right Image Column -->
             @php
-            $rightCategories = $homeCategories['right'] ?? collect();
+            $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             @endphp
+
             <div class="flex-1 overflow-hidden md:block hidden relative group">
+
                 <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
-                    {{-- <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-105 transition-transform duration-700"
-                        src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo" /> --}}
-                    @if ($rightCategories->count())
-                    <a id="rightSliderLink" href="{{ url('collections/' . $rightCategories->first()?->slug) }}"
+
+                    @if ($rightBanners->count())
+                    <a id="rightSliderLink" href="{{ $rightBanners->first()->redirect_link }}"
                         class="absolute inset-0 z-20 block">
 
-                        @foreach ($rightCategories as $index => $cat)
-                        <img data-link="{{ url('collections/' . $cat->slug) }}"
-                            class="slide-right absolute inset-0 w-full h-full object-cover
-                               transition-opacity duration-1000
-                               {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                            src="{{ asset('uploads/category/' . $cat->image) }}" alt="{{ $cat->name }}">
+                        @foreach ($rightBanners as $index => $banner)
+                        <img class="slide-right absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
                         @endforeach
 
                     </a>
+
+                    <!-- Right Banner Text -->
+                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
+
+                        @if ($rightBanners->first()->offer)
+                        <div id="rightOfferText" class="inline-flex items-center mb-4">
+                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                                <span class="text-3xl font-bold text-white">
+                                    {{ $rightBanners->first()->offer }}
+                                </span>
+                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
+                                    % OFF
+                                </span>
+                            </span>
+                        </div>
+                        @endif
+
+                        <!-- Decorative stylish font for title -->
+                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
+                            {{ $rightBanners->first()->title }}
+                        </span> -->
+
+                        <!-- Main heading -->
+                        <h2 id="rightTitleText"
+                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
+                            {{ $rightBanners->first()->title }}
+                        </h2>
+
+                        <!-- Description with stylish formatting -->
+                        <p id="rightShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
+                            Get <span class="font-semibold text-secondary-light">{{ $rightBanners->first()->short_description }}</span> | Use Code:
+                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
+                        </p>
+
+                        <!-- Shop Now Button -->
+                        <a id="rightShopBtn" href="{{ $rightBanners->first()->redirect_link }}"
+                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
+
+                            Shop Now
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+
+                        </a>
+
+                    </div>
                     @else
                     <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
 
                         <img class="object-cover h-full w-full"
-                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Red Plazo">
+                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Right Banner">
+
                     </a>
                     @endif
+
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
+
                 </div>
-                <div
-                    class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                    <a href="{{ url('collections/new-collection') }}"><span
-                            class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-800">{{ $rightCategories->first()?->slug ?? 'New Collection' }}</span>
-                    </a>
-                </div>
+
             </div>
         </div>
     </div>
@@ -449,7 +733,7 @@
                 </span>
             </h2>
             <p class="text-gray-600 max-w-xl mx-auto">
-               Navigate our elite collections for gowns, salwar kameez, and suits
+                Navigate our elite collections for gowns, salwar kameez, and suits
             </p>
         </div>
 
@@ -468,14 +752,18 @@
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
 
                             <!-- Transparent Overlay Content - Shows on hover -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
 
                                 <!-- Floating Badge -->
                                 <div class="absolute top-6 left-6">
-                                    <span class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                    <span
+                                        class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
                                         <span class="flex items-center">
-                                            <svg class="w-3 h-3 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            <svg class="w-3 h-3 mr-1 animate-pulse" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg>
                                             Popular
                                         </span>
@@ -483,43 +771,57 @@
                                 </div>
 
                                 <!-- Category Name -->
-                                <h3 class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     Salwar Kameez
                                 </h3>
 
                                 <!-- Description -->
-                                <p class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                                <p
+                                    class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Traditional elegance with modern designs
                                 </p>
 
                                 <!-- Styles Count -->
-                                <div class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
-                                    <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <div
+                                    class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                                    <span
+                                        class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         120+ Designs
                                     </span>
                                 </div>
 
                                 <!-- Shop Now Button -->
-                                <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                                    <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                <div
+                                    class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                                    <span
+                                        class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
                                         Shop Now
-                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Minimal Content Visible Before Hover -->
-                            <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                            <div
+                                class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Salwar Kameez</h3>
                                 <div class="flex items-center">
                                     <span class="flex items-center text-sm text-white/90">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         120+ Designs
                                     </span>
@@ -537,53 +839,70 @@
                                 alt="Lehanga"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
 
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
 
                                 <div class="absolute top-6 left-6">
-                                    <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                    <span
+                                        class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
                                         <span class="flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                                                <path
+                                                    d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
                                             </svg>
                                             Bridal
                                         </span>
                                     </span>
                                 </div>
 
-                                <h3 class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     Lehengas
                                 </h3>
 
-                                <p class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                                <p
+                                    class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Royal bridal collections
                                 </p>
 
-                                <div class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
-                                    <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <div
+                                    class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                                    <span
+                                        class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         80+ Collections
                                     </span>
                                 </div>
 
-                                <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                                    <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                <div
+                                    class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                                    <span
+                                        class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
                                         Shop Now
-                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Minimal Content Before Hover -->
-                            <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                            <div
+                                class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Lehengas</h3>
                                 <div class="flex items-center">
                                     <span class="flex items-center text-sm text-white/90">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         80+ Collections
                                     </span>
@@ -594,65 +913,85 @@
                 </div>
 
                 <!-- Continue with similar structure for categories 3-6 -->
-                <!-- ... -->
+                <!-- ... asset('assets/images/placeholder-category.jpg') -->
 
                 @else
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
+
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
                         <div class="relative  overflow-hidden rounded-[0px]">
-                            <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
+                            <img src="{{ $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image }}"
                                 alt="{{ $category->name }}"
                                 class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
 
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
 
                                 <div class="absolute top-6 left-6">
-                                    <span class="bg-gradient-to-r from-gray-800 to-black block text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+                                    <span
+                                        class="bg-gradient-to-r from-gray-800 to-black block text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
                                         <span class="flex items-center">
-                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                             Collection
                                         </span>
                                     </span>
                                 </div>
 
-                                <h3 class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4  group-hover:translate-y-0 transition-transform duration-500">
+                                <h3
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4  group-hover:translate-y-0 transition-transform duration-500">
                                     {{ $category->name }}
                                 </h3>
 
-                                <p class="text-gray-200 text-sm lgg:mb-4 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                                <p
+                                    class="text-gray-200 text-sm lgg:mb-4 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Explore our exclusive collection
                                 </p>
 
-                                <div class="flex items-center lgg:mb-6 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
-                                    <span class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <div
+                                    class="flex items-center lgg:mb-6 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
+                                    <span
+                                        class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         100+ Styles
                                     </span>
                                 </div>
 
-                                <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                                    <span class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
+                                <div
+                                    class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                                    <span
+                                        class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
                                         Shop Now
-                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Minimal Content Before Hover -->
-                            <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                            <div
+                                class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">{{ $category->name }}</h3>
                                 <div class="flex items-center">
                                     <span class="flex items-center text-sm text-white/90">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         100+ Styles
                                     </span>
@@ -666,13 +1005,16 @@
             </div>
 
             <!-- Simple Navigation Arrows -->
-            <div class="custom-nav hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-2 pointer-events-none z-[1]">
-                <button class="owl-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+            <div
+                class="custom-nav hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-2 pointer-events-none z-[1]">
+                <button
+                    class="owl-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button class="owl-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+                <button
+                    class="owl-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -685,8 +1027,8 @@
             <a href="#"
                 class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
                 <span>View All Categories</span>
-                <svg class="w-5 h-5 transform hover:translate-x-1 transition-transform"
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 transform hover:translate-x-1 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
@@ -706,19 +1048,23 @@
 
 
         <!-- Hanging Tags -->
-        <div class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+        <div
+            class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
 
-            @foreach ($categoriesWithProduct->where('parent_id', null) as $category)
+            @foreach ($categories as $category)
             <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
                 <!-- String/Hanger -->
                 <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
                 <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
 
                 <!-- Tag -->
-                <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
+                <div
+                    class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
 
                     <!-- Tag Hole -->
-                    <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10"></div>
+                    <div
+                        class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10">
+                    </div>
 
                     <!-- Image -->
                     <div class="h-32 overflow-hidden">
@@ -730,9 +1076,10 @@
                     <!-- Content -->
                     <div class="p-3 text-center">
                         <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
-                        <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
+                        {{-- <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
                             {{ $category->products_count }} items
                         </span>
+                        --}}
                     </div>
                 </div>
             </a>
@@ -762,7 +1109,6 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
-
             @foreach ($products as $product)
             <div class="item flex justify-center items-center">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer"
@@ -775,12 +1121,13 @@
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            @if($product->discount == 0)
+                            @if ($product->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
                             </span>
                             @else
-                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                            <span
+                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
                                 {{ $product->discount }}% OFF
                             </span>
                             @endif
@@ -797,9 +1144,8 @@
                                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                         </button> --}}
-                        @if(Auth::check())
+                        @if (Auth::check())
                         <button
-
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
                             onclick="toggleWishlist({{ $product->id }}, this,event);">
                             <i class="far fa-heart"></i>
@@ -807,7 +1153,8 @@
                         @else
                         <a href="{{ route('page.login') }}">
 
-                            <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
+                            <button
+                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                                 <i class="far fa-heart"></i>
                             </button>
                         </a>
@@ -878,21 +1225,21 @@
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                       Easy return and exchanges 
+                        Easy return and exchanges
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                       Dedicated customer supporter
+                        Dedicated customer supporter
                     </li>
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
                             <i class="fas fa-check text-white text-sm"></i>
                         </div>
-                       Affordable luxury at your fingertips
+                        Affordable luxury at your fingertips
                     </li>
                 </ul>
             </div>
@@ -1012,7 +1359,7 @@
             <div class="text-center">
                 <h3
                     class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
-                   Make Every Entrance Unforgettable.</h3>
+                    Make Every Entrance Unforgettable.</h3>
                 <button
                     class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
@@ -1032,35 +1379,36 @@
         <div id="ads-carousel" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
-                @if($banner->filter_type === 'multiple' && $banner->filters)
-                data-filter="{{ $banner->filters }}"
+                @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                 @else
-                data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                @endif>
+                data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('uploads/banners/' . $banner->image) }}"
-                        alt="{{ $banner->title }}" />
+                        src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}" />
                 </div>
                 <!-- Blackish overlay that appears on hover -->
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div
+                    class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                </div>
                 <!-- Content that slides up from bottom -->
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                <div
+                    class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
-                        @if($banner->subtitle)
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
                         @endif
                         <span class="text-[2.7rem] font-bold font-serif uppercase tracking-wider lgg:mb-4 mb-2">
                             {{ $banner->title }}
                         </span>
-                        @if($banner->description)
+                        @if ($banner->description)
                         <p class="lgg:text-3xl text-[1.2rem] font-serif lgg:mb-6 mb-3">
                             {{ $banner->description }}
                         </p>
                         @endif
                         <a href="#"
                             class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">{{ $banner->button_text }}</a>
-                        @if($banner->discount)
+                        @if ($banner->discount)
                         <p class="text-md lgg:mt-4 mt-2 font-sans opacity-80">
                             {{ $banner->discount }}
                         </p>
@@ -1084,10 +1432,10 @@
 
                 <!-- Description -->
                 <p class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Enjoy up to 50% OFF on selected designer collections.  
+                    Enjoy up to 50% OFF on selected designer collections.
                 </p>
                 <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
-                    Limited-time offer, 
+                    Limited-time offer,
                 </p>
                 <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
                     <strong>shop now!</strong>
@@ -1145,8 +1493,7 @@
                             @if($banner->filter_type === 'multiple' && $banner->filters)
                             data-filter="{{ $banner->filters }}"
                             @else
-                            data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                            @endif>
+                            data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                             <div class="relative overflow-hidden">
                                 <img src="{{ asset('uploads/banners/' . $banner->image) }}"
                                     alt="{{ $banner->title }}"
@@ -1156,9 +1503,11 @@
                                 <div class="text-left">
                                     <!-- Top line: subtitle — title -->
                                     <div class="flex items-center justify-center gap-4 mb-1">
-                                        <span class="text-[1.1rem] font-medium text-gray-600">{{ $banner->subtitle }}</span>
+                                        <span
+                                            class="text-[1.1rem] font-medium text-gray-600">{{ $banner->subtitle }}</span>
                                         <div class="h-px w-4 bg-gray-400"></div>
-                                        <span class="text-[1.1rem] font-medium text-gray-600 tracking-wider">{{ $banner->title }}</span>
+                                        <span
+                                            class="text-[1.1rem] font-medium text-gray-600 tracking-wider">{{ $banner->title }}</span>
                                     </div>
 
                                     <!-- Big discount text -->
@@ -1445,7 +1794,7 @@ All Products
                 Our signature Standouts
             </h2>
             <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
-               Red Carpet Ready in Every Design We Create
+                Red Carpet Ready in Every Design We Create
             </p>
         </div>
         <div class="grid-container">
@@ -1460,26 +1809,26 @@ All Products
                     @if($banner->filter_type === 'multiple' && $banner->filters)
                     data-filter="{{ $banner->filters }}"
                     @else
-                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                    @endif>
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if($banner->subtitle)
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
                         @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             {{ $banner->title }}
                         </h2>
 
-                        @if($banner->description)
+                        @if ($banner->description)
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
                             <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
                         @endif
 
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
@@ -1490,31 +1839,30 @@ All Products
 
             <!-- Original grid layout for desktop -->
             <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
-                @foreach($editorBanners as $index => $banner)
-                @if($index % 2 == 0)
+                @foreach ($editorBanners as $index => $banner)
+                @if ($index % 2 == 0)
                 <!-- Left Banner -->
                 <div class="relative bg-[#b8a89a] overflow-hidden"
-                    @if($banner->filter_type === 'multiple' && $banner->filters)
-                    data-filter="{{ $banner->filters }}"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                     @else
-                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                    @endif>
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if($banner->subtitle)
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
                         @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             {{ $banner->title }}
                         </h2>
-                        @if($banner->description)
+                        @if ($banner->description)
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
                             <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
                         @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
@@ -1523,31 +1871,30 @@ All Products
                 @endif
                 @endforeach
 
-                @foreach($editorBanners as $index => $banner)
-                @if($index % 2 == 1)
+                @foreach ($editorBanners as $index => $banner)
+                @if ($index % 2 == 1)
                 <!-- Right Banner -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden"
-                    @if($banner->filter_type === 'multiple' && $banner->filters)
-                    data-filter="{{ $banner->filters }}"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                     @else
-                    data-filter="{{ $banner->filter ?? $banner->discount ?? '' }}"
-                    @endif>
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        @if($banner->subtitle)
-                        <span class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
                         @endif
                         <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             {{ $banner->title }}
                         </h2>
-                        @if($banner->description)
+                        @if ($banner->description)
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
                             <span class="text-white font-medium">{{ $banner->discount }}</span>
                         </p>
                         @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? $banner->discount ?? '') : '#' }}"
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
@@ -1583,17 +1930,18 @@ All Products
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
 
-                        <a href="{{route('category.show', $product->category->slug)}}">
+                        <a href="{{ route('category.show', $product->category->slug) }}">
                             <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
-                                alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-                            {{--<img src="{{ asset($product->images->first()->image) }}"
-                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />--}}
+                                alt="Silver Lehenga"
+                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                            {{-- <img src="{{ asset($product->images->first()->image) }}"
+                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" /> --}}
                         </a>
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
                             {{-- @dd($product->variants->first()->discount) --}}
-                            @if(optional($product->variants->first())->discount == 0)
+                            @if (optional($product->variants->first())->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
                             </span>
@@ -1624,8 +1972,9 @@ All Products
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
 
 
-                            <a href="{{route('page.single-product', $product->slug)}}">
-                                <button class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <a href="{{ route('page.single-product', $product->slug) }}">
+                                <button
+                                    class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                     View
                                 </button>
                             </a>
@@ -1640,23 +1989,25 @@ All Products
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>{{$product->brand ?? ''}}</span>
+                            <span>{{ $product->brand ?? '' }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. {{$variant->discount_price ?? $product->price}}</span>
-                            @if($variant != null )
-                            <span class="text-sm text-gray-400 line-through">Rs. {{$variant->price ?? $product->price}}</span>
+                            <span class="text-lg font-bold text-gray-900">Rs.
+                                {{ $variant->discount_price ?? $product->price }}</span>
+                            @if ($variant != null)
+                            <span class="text-sm text-gray-400 line-through">Rs.
+                                {{ $variant->price ?? $product->price }}</span>
                             @endif
                         </div>
                         <div class="lgg:hidden block">
 
                             {{-- <button onclick="addToCart({{$variant_id}}, event)"
                             class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button> --}}
-                            <a href="{{route('category.show', $product->category->slug)}}">
+                            <a href="{{ route('category.show', $product->category->slug) }}">
                                 <button
                                     class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
                             </a>
@@ -1738,12 +2089,12 @@ All Products
     <!-- Badges -->
     <div class="absolute top-3 left-3 flex flex-col gap-2">
 
-        @if($product->wishlists_count > 0)
+        @if ($product->wishlists_count > 0)
         <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
             Trending
         </span>
         @endif
-        @if($product->discount_price && $product->discount_price < $product->price)
+        @if ($product->discount_price && $product->discount_price < $product->price)
             <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
                 -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
             </span>
@@ -2307,18 +2658,17 @@ All Products
                     class="flex  md:justify-between justify-center md:absolute w-full md:left-0 md:bottom-[20%] px-[37px] md:z-[10] gap-4 mt-8 thoughts-nav">
                     <button
                         class="custom-prev-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <button
                         class="custom-next-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5l7 7-7 7" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
@@ -2402,10 +2752,12 @@ All Products
                 return response.json();
             })
             .then(data => {
+                console.log(data);
                 console.log('Parsed data:', data);
+                console.loj('Wishlist updated successfully');
                 if (data.success) {
                     showNotification(data.message, 'success');
-
+                    
                     // Update heart icon using innerHTML like single-product
                     if (isInWishlist) {
                         // Was in wishlist, now removed
@@ -2419,6 +2771,8 @@ All Products
                     if (data.wishlist_count !== undefined) {
                         updateWishlistCount(data.wishlist_count);
                     }
+                    
+                    
                 } else {
                     // Handle case where product is already in wishlist
                     if (data.message && data.message.includes('already in wishlist')) {
@@ -2593,72 +2947,96 @@ All Products
     updateParallax();
 </script>
 <script>
-    function autoSlider(className, linkId, interval = 3000) {
-        const slides = document.querySelectorAll('.' + className);
-        const link = document.getElementById(linkId);
+    const sliders = [{
+            className: 'slide-left',
+            linkId: 'leftSliderLink'
+        },
+        {
+            className: 'slide-top',
+            linkId: 'topSliderLink'
+        },
+        {
+            className: 'slide-center',
+            linkId: 'centerSliderLink'
+        },
+        {
+            className: 'slide-right',
+            linkId: 'rightSliderLink'
+        },
+        {
+            className: 'slide-bottom',
+            linkId: 'bottomSliderLink'
+        },
+    ];
 
-        if (slides.length <= 1) return;
+    let currentIndex = 0;
 
-        let index = 0;
+    function updateSlider(slider) {
+        const slides = document.querySelectorAll('.' + slider.className);
+        const link = document.getElementById(slider.linkId);
 
-        setInterval(() => {
-            slides[index].classList.replace('opacity-100', 'opacity-0');
-            slides[index].classList.replace('z-10', 'z-0');
+        if (slides.length === 0) return;
 
-            index = (index + 1) % slides.length;
+        // Calculate previous and current active indices
+        const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+        const activeIndex = currentIndex % slides.length;
 
-            slides[index].classList.replace('opacity-0', 'opacity-100');
-            slides[index].classList.replace('z-0', 'z-10');
+        // Reset all slides
+        slides.forEach((slide, i) => {
+            slide.classList.remove('opacity-100', 'z-10', 'fade-out', 'fade-in');
+            slide.classList.add('opacity-0', 'z-0');
+        });
 
-            // UPDATE LINK
-            link.href = slides[index].dataset.link;
+        // Previous slide fades out
+        slides[prevIndex].classList.remove('opacity-0', 'z-0');
+        slides[prevIndex].classList.add('opacity-100', 'z-10', 'fade-out');
 
-        }, interval);
+        // Current slide fades in
+        slides[activeIndex].classList.remove('opacity-0', 'z-0');
+        slides[activeIndex].classList.add('fade-in', 'z-10');
+
+        // Update link
+        if (link) {
+            link.href = slides[activeIndex].dataset.link || '#';
+        }
+
+        const prefix = slider.className.replace('slide-', '');
+
+        const title = document.getElementById(prefix + 'TitleText');
+        const shortText = document.getElementById(prefix + 'ShortText');
+        const offerText = document.getElementById(prefix + 'OfferText');
+        const shopBtn = document.getElementById(prefix + 'ShopBtn');
+
+        if (title) title.innerText = slides[activeIndex].dataset.title || '';
+        if (shortText) shortText.innerText = slides[activeIndex].dataset.short || '';
+        if (shopBtn) shopBtn.href = slides[activeIndex].dataset.link || '#';
+
+        if (offerText) {
+            if (slides[activeIndex].dataset.offer) {
+                offerText.innerHTML = `
+                    <span class="inline-flex items-center gap-1 bg-black/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
+                        <span class="text-xl font-bold text-white">${slides[activeIndex].dataset.offer}</span>
+                        <span class="text-lg uppercase tracking-[6px] text-white font-semibold">% OFF</span>
+                    </span>
+                `;
+                offerText.style.display = "inline-flex";
+                offerText.style.alignItems = "center";
+            } else {
+                offerText.style.display = "none";
+            }
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        autoSlider('slide-left', 'leftSliderLink', 4000);
-        autoSlider('slide-top', 'topSliderLink', 3500);
-        autoSlider('slide-right', 'rightSliderLink', 4500);
-        autoSlider('slide-bottom', 'bottomSliderLink', 4500);
+        sliders.forEach(updateSlider);
 
-        // Banner click handler for filtering and discount
-        document.querySelectorAll('.banner-card').forEach(function(banner) {
-            banner.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                console.log('Banner filter clicked:', filter);
-                if (filter) {
-                    try {
-                        // Try to parse as JSON for multiple filters
-                        const filterData = JSON.parse(filter);
-                        console.log('Parsed filter data:', filterData);
-
-                        // For multiple filters, create proper query parameters
-                        if (Array.isArray(filterData)) {
-                            const queryParams = new URLSearchParams();
-                            filterData.forEach(f => {
-                                queryParams.append(`banner_${f.type}`, f.value);
-                            });
-                            // Redirect to products page with banner filters
-                            window.location.href = '/products?' + queryParams.toString();
-                        } else {
-                            // Single filter case
-                            window.location.href = '/products?filter=' + encodeURIComponent(filter);
-                        }
-                    } catch (e) {
-                        // Not JSON, treat as simple string
-                        console.log('Using simple filter:', filter);
-                        window.location.href = '/products?filter=' + encodeURIComponent(filter);
-                    }
-                }
-            });
-        });
+        setInterval(() => {
+            currentIndex++;
+            sliders.forEach(updateSlider);
+        }, 4000);
     });
 
-
-
     function toggleWishlist(productId, button, event) {
-
         if (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -2670,7 +3048,6 @@ All Products
         }
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
         const isInWishlist = button.classList.contains('text-red-500');
         const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
@@ -2691,9 +3068,8 @@ All Products
             })
             .then(response => response.json())
             .then(data => {
-
                 if (data.success) {
-
+                    
                     // Toggle UI
                     if (isInWishlist) {
                         button.classList.remove('text-red-500');
@@ -2702,6 +3078,16 @@ All Products
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
+                    document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                            item.textContent = data.wishlist_count;
+
+                            // Hide badge when count is 0 (optional)
+                            if (data.wishlist_count > 0) {
+                                item.style.display = "flex";
+                            } else {
+                                item.style.display = "none";
+                            }
+                        });
 
                 } else {
 
@@ -2711,19 +3097,13 @@ All Products
                         icon: 'info',
                         title: 'Already Added',
                         text: data.message,
-                        // showConfirmButton: false,
                         ConfirmButtonText: 'Ok',
                         timer: 1800
                     });
-
                     // Keep heart filled
                     button.classList.add('text-red-500');
                     button.innerHTML = '<i class="fas fa-heart"></i>';
-
-
                 }
-
-
             })
             .catch(error => {
                 console.error(error);

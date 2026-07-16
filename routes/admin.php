@@ -54,6 +54,7 @@ use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\CustomDimensionController;
+use App\Http\Controllers\Admin\BannerDetailsController;
 // use App\Http\Controllers\ShopController;
 
 
@@ -526,5 +527,14 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         // Update return status (webhook)
         Route::post('/webhook', [ReturnOrder::class, 'webhook'])->name('return-orders.webhook');
+    });
+    //Hero Section
+    Route::prefix('/hero-section')->group(function () {
+        Route::get('/', [BannerDetailsController::class, 'index'])->name('hero-section.index');
+        Route::get('/create', [BannerDetailsController::class, 'create'])->name('hero-section.create');
+        Route::post('/store', [BannerDetailsController::class, 'store'])->name('hero-section.store');
+        Route::get('/edit/{id}', [BannerDetailsController::class, 'edit'])->name('hero-section.edit');
+        Route::post('/update/{id}', [BannerDetailsController::class, 'update'])->name('hero-section.update');
+        Route::delete('/delete/{id}', [BannerDetailsController::class, 'delete'])->name('hero-section.delete');
     });
 });

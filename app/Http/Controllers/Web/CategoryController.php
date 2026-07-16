@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Occasion;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 class CategoryController extends Controller
 {
     /**
@@ -80,6 +82,7 @@ class CategoryController extends Controller
             ->paginate(12);
 
         $occasions = Occasion::where('is_active', 1)->get();
+        $categories = Category::where('is_active', 1)->get();
 
         // Get all available sizes from variants (including child categories)
         $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($categoryIds) {
@@ -127,7 +130,19 @@ class CategoryController extends Controller
         // Calculate dynamic price ranges based on actual product data
         $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
 
-        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges'));
+        $latestProducts = Product::where('is_active', 1)
+            ->whereHas('variants')
+            ->with(['images' => function ($query) {
+                $query->select('product_id', 'image');
+            }])
+            ->select('products.*')
+            ->latest()
+            ->take(5)
+            ->get();
+
+            // dd($latestProducts);
+
+        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
     }
 
     // Helper function to check if string is JSON
@@ -535,7 +550,7 @@ class CategoryController extends Controller
             if ($request->filled('collection') && $request->input('collection') != 'all') {
                 $collectionValue = $request->input('collection');
 
-                if (\Schema::hasColumn('products', 'collection')) {
+                if (Schema::hasColumn('products', 'collection')) {
                     $query->where('collection', $collectionValue);
                 } else {
                     try {
@@ -557,7 +572,7 @@ class CategoryController extends Controller
                         $join->on('products.id', '=', 'product_variants.product_id')
                             ->whereNull('product_variants.deleted_at');
                     })
-                        ->select('products.*', \DB::raw('MIN(COALESCE(product_variants.discount_price, product_variants.price)) as min_price'))
+                        ->select('products.*',   DB::raw('MIN(COALESCE(product_variants.discount_price, product_variants.price)) as min_price'))
                         ->groupBy('products.id')
                         ->orderBy('min_price', $sortValue == 'price-asc' ? 'asc' : 'desc');
                 } else {

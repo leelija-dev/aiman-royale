@@ -120,7 +120,7 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
-            <div class="mb-3">
+            {{-- <div class="mb-3">
               <label class="form-label text-secondary text-uppercase">Show Home Page</label>
 
               <div class="form-check form-switch">
@@ -139,10 +139,10 @@
               @error('is_home')
               <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
-            </div>
+            </div> --}}
 
             <!-- Dropdown (Hidden by default) -->
-            <div class="mb-3" id="homeDropdownWrapper" style="display: none;">
+            {{-- <div class="mb-3" id="homeDropdownWrapper" style="display: none;">
               <label class="form-label text-secondary text-uppercase">Select Position</label>
               <select name="home_position" class="form-select">
                 <option value="" selected hidden>Select Position</option>
@@ -155,7 +155,7 @@
               @error('home_position')
               <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
-            </div>
+            </div> --}}
             <div class="col-lg-12 ">
               <div class="row">
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
     //
@@ -21,13 +21,13 @@ class AuthController extends Controller
         if ($request->has('redirect') && $request->redirect) {
             session(['redirect_after_registration' => $request->redirect]);
         }
-        
+
         return view('web.login');
     }
 
     public function register(Request $request)
     {
-       
+
         $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -260,7 +260,7 @@ class AuthController extends Controller
 
             // Check for redirect URL from registration session
             $redirectUrl = session('redirect_after_registration');
-            
+
             // Clean up redirect session
             session()->forget('redirect_after_registration');
 
@@ -491,17 +491,52 @@ class AuthController extends Controller
         }
     }
 
+    // public function login(Request $request)
+    // {
+
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required'
+    //     ]);
+
+    //     // Attempt login with JWT
+    //     if (!$token = JWTAuth::attempt($credentials)) {
+    //         // dd($credentials);
+    //         return back()->withErrors([
+    //             'email' => 'The provided credentials do not match our records.',
+    //         ])->onlyInput('email');
+    //     }
+
+    //     // Get authenticated user from JWT
+    //     $user = JWTAuth::user();
+    //     // dd($user);
+    //     // Also login with Laravel's Auth for web routes
+    //     Auth::login($user);
+
+    //     // Regenerate session
+    //     $request->session()->regenerate();
+
+    //     // Check if there's a redirect URL
+    //     if ($request->has('redirect') && $request->redirect) {
+    //         return redirect()->to($request->redirect)->with('jwt_token', $token);
+    //     }
+
+    //     // Default redirect if no redirect URL provided
+    //     return redirect()->intended(route('page.index'))->with('jwt_token', $token);
+    // }
+
     public function login(Request $request)
     {
-
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        // Attempt login with JWT
-        if (!$token = JWTAuth::attempt($credentials)) {
-            // dd($credentials);
+        // Check if "Remember me" checkbox was checked
+        $remember = $request->has('remember') ? true : false;
+
+        // Attempt login with JWT - pass remember parameter
+        if (!$token = JWTAuth::attempt($credentials, $remember)) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
@@ -509,9 +544,9 @@ class AuthController extends Controller
 
         // Get authenticated user from JWT
         $user = JWTAuth::user();
-        // dd($user);
+
         // Also login with Laravel's Auth for web routes
-        Auth::login($user);
+        Auth::login($user, $remember); // Pass remember parameter here too
 
         // Regenerate session
         $request->session()->regenerate();
@@ -578,7 +613,7 @@ class AuthController extends Controller
     }
 
 
-     public function completeGoogleRegistration(Request $request)
+    public function completeGoogleRegistration(Request $request)
     {
         try {
             $request->validate([
@@ -597,12 +632,11 @@ class AuthController extends Controller
             ]);
 
             Auth::login($user);
-            
+
             // Clear Google session data
             session()->forget('google_data');
-            
+
             return redirect()->route('home')->with('success', 'Account created successfully with Google!');
-            
         } catch (\Exception $e) {
             Log::error('Google registration error: ' . $e->getMessage());
             return redirect()->route('page.register')
