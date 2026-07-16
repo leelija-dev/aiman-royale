@@ -64,6 +64,10 @@
     .fade-in .content {
         transition: opacity 0.3s ease;
     }
+
+    #unique-scroll .custom-nav-tags,#unique-scroll .owl-dots,#unique-scroll .owl-nav {
+        display:none !important;
+    }
 </style>
 
 
@@ -1038,52 +1042,61 @@
 </section>
 
 
-<section class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
+<section id="unique-scroll" class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
         <!-- Header -->
         <div class="text-center mb-4">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Elegance at every wear</h2>
-            <p class="text-gray-500">Experience class and sophistication for life’s most memorable moments</p>
+            <p class="text-gray-500">Experience class and sophistication for life's most memorable moments</p>
         </div>
 
+        <!-- Owl Carousel Container -->
+        <div class="relative px-2">
+            <div id="categories-tag-carousel" class="owl-carousel owl-theme">
+                @foreach ($categories as $category)
+                <div class="item">
+                    <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8 block">
+                        <!-- String/Hanger -->
+                        <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
+                        <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
 
-        <!-- Hanging Tags -->
-        <div
-            class="flex  lgg:justify-center justify-start items-start gap-5 md:gap-7 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+                        <!-- Tag -->
+                        <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-full">
 
-            @foreach ($categories as $category)
-            <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8">
-                <!-- String/Hanger -->
-                <div class="absolute -top-8 left-1/2 w-px h-8 bg-primary transform -translate-x-1/2"></div>
-                <div class="absolute -top-10 left-1/2 w-3 h-3 rounded-full bg-primary transform -translate-x-1/2"></div>
+                            <!-- Tag Hole -->
+                            <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10">
+                            </div>
 
-                <!-- Tag -->
-                <div
-                    class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-40">
+                            <!-- Image -->
+                            <div class="h-32 overflow-hidden">
+                                <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
+                                    alt="{{ $category->name }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
+                            </div>
 
-                    <!-- Tag Hole -->
-                    <div
-                        class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10">
-                    </div>
-
-                    <!-- Image -->
-                    <div class="h-32 overflow-hidden">
-                        <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
-                            alt="{{ $category->name }}"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-3 text-center">
-                        <h3 class="font-medium text-gray-800 text-sm mb-1">{{ $category->name }}</h3>
-                        {{-- <span class="inline-block px-2 py-0.5 bg-rose-100 text-rose-600 text-xs rounded-full">
-                            {{ $category->products_count }} items
-                        </span>
-                        --}}
-                    </div>
+                            <!-- Content -->
+                            <div class="p-3 text-center">
+                                <h3 class="font-medium text-gray-800 text-sm mb-1 truncate">{{ $category->name }}</h3>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
-            @endforeach
+                @endforeach
+            </div>
+
+            <!-- Custom Navigation Arrows -->
+            <div class="custom-nav-tags hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-2 pointer-events-none z-[1]">
+                <button class="owl-tag-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button class="owl-tag-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </section>
@@ -3185,6 +3198,50 @@ All Products
             clearInterval(timerInterval);
         });
     })();
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Categories Tag Carousel
+        if ($('#categories-tag-carousel').length) {
+            $('#categories-tag-carousel').owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: false,
+                dots: true,
+                autoplay: true,
+                autoplayTimeout: 4000,
+                autoplayHoverPause: true,
+                smartSpeed: 500,
+                responsive: {
+                    0: {
+                        items: 1.5,
+                        margin: 15,
+                    },
+                    480: {
+                        items: 2.5,
+                        margin: 15,
+                    },
+                    640: {
+                        items: 3.5,
+                        margin: 15,
+                    },
+                    768: {
+                        items: 4.5,
+                        margin: 20,
+                    },
+                    1024: {
+                        items: 6.5,
+                        margin: 20,
+                    },
+                    1280: {
+                        items: 8.5,
+                        margin: 25,
+                    }
+                }
+            });
+        }
+    });
 </script>
 
 @endsection
