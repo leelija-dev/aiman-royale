@@ -405,55 +405,55 @@
 
             <!-- Right Content - Simple Calendar Preview -->
             <a href="#appoint-book-section" class="hidden lg:block" id="calendarWrapper">
-    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 transform rotate-1 hover:rotate-0 transition-transform">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="font-semibold text-gray-900" id="monthYearDisplay">March 2024</h3>
-            <div class="flex gap-2">
-                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="prevMonthBtn">
-                    <i class="fas fa-chevron-left text-sm text-gray-600"></i>
+                <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 transform rotate-1 hover:rotate-0 transition-transform">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-semibold text-gray-900" id="monthYearDisplay">March 2024</h3>
+                        <div class="flex gap-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="prevMonthBtn">
+                                <i class="fas fa-chevron-left text-sm text-gray-600"></i>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="nextMonthBtn">
+                                <i class="fas fa-chevron-right text-sm text-gray-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Day Names -->
+                    <div class="grid grid-cols-7 gap-1 mb-4" id="dayNames">
+                        <div class="text-xs text-gray-400 text-center">S</div>
+                        <div class="text-xs text-gray-400 text-center">M</div>
+                        <div class="text-xs text-gray-400 text-center">T</div>
+                        <div class="text-xs text-gray-400 text-center">W</div>
+                        <div class="text-xs text-gray-400 text-center">T</div>
+                        <div class="text-xs text-gray-400 text-center">F</div>
+                        <div class="text-xs text-gray-400 text-center">S</div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1" id="calendarGrid">
+                        <!-- JS will populate this -->
+                    </div>
+
+                    <!-- Available Slots -->
+                    <div class="mt-6 pt-6 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600" id="availabilityLabel">Available tomorrow</span>
+                            <span class="text-sm font-medium text-pink-600" id="availabilityTime">9:00 AM - 4:00 PM</span>
+                        </div>
+                        <div class="mt-3 flex gap-2" id="slotContainer">
+                            <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">10:30 AM</span>
+                            <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">1:00 PM</span>
+                            <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">3:30 PM</span>
+                        </div>
+                    </div>
+
+                    <!-- Booking Badge -->
+                    <div class="mt-4 flex items-center text-sm text-gray-500">
+                        <i class="fas fa-clock text-pink-400 mr-2"></i>
+                        <span>60 min session • Free rescheduling</span>
+                    </div>
                 </div>
-                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="nextMonthBtn">
-                    <i class="fas fa-chevron-right text-sm text-gray-600"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Day Names -->
-        <div class="grid grid-cols-7 gap-1 mb-4" id="dayNames">
-            <div class="text-xs text-gray-400 text-center">S</div>
-            <div class="text-xs text-gray-400 text-center">M</div>
-            <div class="text-xs text-gray-400 text-center">T</div>
-            <div class="text-xs text-gray-400 text-center">W</div>
-            <div class="text-xs text-gray-400 text-center">T</div>
-            <div class="text-xs text-gray-400 text-center">F</div>
-            <div class="text-xs text-gray-400 text-center">S</div>
-        </div>
-
-        <!-- Calendar Grid -->
-        <div class="grid grid-cols-7 gap-1" id="calendarGrid">
-            <!-- JS will populate this -->
-        </div>
-
-        <!-- Available Slots -->
-        <div class="mt-6 pt-6 border-t border-gray-100">
-            <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600" id="availabilityLabel">Available tomorrow</span>
-                <span class="text-sm font-medium text-pink-600" id="availabilityTime">9:00 AM - 4:00 PM</span>
-            </div>
-            <div class="mt-3 flex gap-2" id="slotContainer">
-                <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">10:30 AM</span>
-                <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">1:00 PM</span>
-                <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">3:30 PM</span>
-            </div>
-        </div>
-
-        <!-- Booking Badge -->
-        <div class="mt-4 flex items-center text-sm text-gray-500">
-            <i class="fas fa-clock text-pink-400 mr-2"></i>
-            <span>60 min session • Free rescheduling</span>
-        </div>
-    </div>
-</a>
+            </a>
         </div>
 
         <!-- Simple Stats Bar - Updated for dark background -->
@@ -772,13 +772,24 @@
     </div>
     </div>
     --}}
+
+
     <!-- Calendly Widget Container -->
+
     <div class="">
+        @php
+        $calendlyUrl = env('CALENDLY_URL') ?: 'https://calendly.com/aiman-royale/30min';
+        $primaryColor = env('CALENDLY_PRIMARY_COLOR', '#0066FF');
+        $textColor = env('CALENDLY_TEXT_COLOR', '#FFFFFF');
+        $backgroundColor = env('CALENDLY_BACKGROUND_COLOR', '#FFFFFF');
+        @endphp
+
         <div class="calendly-inline-widget"
-            data-url="{{ env('CALENDLY_URL') }}?primary_color={{ env('CALENDLY_PRIMARY_COLOR') }}&text_color={{ env('CALENDLY_TEXT_COLOR') }}&background_color={{ env('CALENDLY_BACKGROUND_COLOR') }}&hide_gdpr_banner=1"
+            data-url="{{ $calendlyUrl }}?primary_color={{ $primaryColor }}&text_color={{ $textColor }}&background_color={{ $backgroundColor }}&hide_gdpr_banner=1"
             style="min-width:320px;height:700px;">
         </div>
     </div>
+
     </div>
 </section>
 
@@ -1927,227 +1938,238 @@
 </script>
 <script>
     (function() {
-    // Get DOM elements
-    const monthYearDisplay = document.getElementById('monthYearDisplay');
-    const calendarGrid = document.getElementById('calendarGrid');
-    const prevBtn = document.getElementById('prevMonthBtn');
-    const nextBtn = document.getElementById('nextMonthBtn');
-    const availabilityLabel = document.getElementById('availabilityLabel');
-    const availabilityTime = document.getElementById('availabilityTime');
-    const slotContainer = document.getElementById('slotContainer');
+        // Get DOM elements
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const prevBtn = document.getElementById('prevMonthBtn');
+        const nextBtn = document.getElementById('nextMonthBtn');
+        const availabilityLabel = document.getElementById('availabilityLabel');
+        const availabilityTime = document.getElementById('availabilityTime');
+        const slotContainer = document.getElementById('slotContainer');
 
-    // Current date state
-    let currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
-    let currentYear = currentDate.getFullYear();
-    
-    // Track selected date (initially today)
-    let selectedDate = new Date();
-    let selectedDay = selectedDate.getDate();
-    let selectedMonth = selectedDate.getMonth();
-    let selectedYear = selectedDate.getFullYear();
+        // Current date state
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
 
-    // Sample slots data
-    const sampleSlots = ['10:30 AM', '1:00 PM', '3:30 PM'];
+        // Track selected date (initially today)
+        let selectedDate = new Date();
+        let selectedDay = selectedDate.getDate();
+        let selectedMonth = selectedDate.getMonth();
+        let selectedYear = selectedDate.getFullYear();
 
-    // Render calendar
-    function renderCalendar(month, year) {
-        // Update month/year display
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                           'July', 'August', 'September', 'October', 'November', 'December'];
-        monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+        // Sample slots data
+        const sampleSlots = ['10:30 AM', '1:00 PM', '3:30 PM'];
 
-        // Get first day of month and number of days
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
+        // Render calendar
+        function renderCalendar(month, year) {
+            // Update month/year display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
 
-        // Get today's date
-        const today = new Date();
-        const todayDate = today.getDate();
-        const todayMonth = today.getMonth();
-        const todayYear = today.getFullYear();
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-        // Build calendar grid
-        let gridHTML = '';
+            // Get today's date
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
 
-        // Previous month days
-        const prevMonthStart = daysInPrevMonth - firstDay + 1;
-        for (let i = prevMonthStart; i <= daysInPrevMonth; i++) {
-            gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month-1}" data-year="${year}">${i}</div>`;
-        }
+            // Build calendar grid
+            let gridHTML = '';
 
-        // Current month days
-        for (let i = 1; i <= daysInMonth; i++) {
-            const isToday = (i === todayDate && month === todayMonth && year === todayYear);
-            const isSelected = (i === selectedDay && month === selectedMonth && year === selectedYear);
-            
-            let classes = 'text-xs text-center py-2 day-cell cursor-pointer hover:bg-pink-500 transition rounded-[100px] hover:text-white';
-            
-            if (isSelected) {
-                classes += ' bg-pink-600 text-white rounded-full font-semibold';
-            } else if (isToday) {
-                classes += ' bg-pink-100 text-pink-700 rounded-full font-medium';
-            } else {
-                classes += ' text-gray-600';
+            // Previous month days
+            const prevMonthStart = daysInPrevMonth - firstDay + 1;
+            for (let i = prevMonthStart; i <= daysInPrevMonth; i++) {
+                gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month-1}" data-year="${year}">${i}</div>`;
             }
-            
-            gridHTML += `<div class="${classes}" data-day="${i}" data-month="${month}" data-year="${year}">${i}</div>`;
-        }
 
-        // Next month days (to fill remaining grid)
-        const totalCells = firstDay + daysInMonth;
-        const remainingCells = (7 - (totalCells % 7)) % 7;
-        for (let i = 1; i <= remainingCells; i++) {
-            gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month+1}" data-year="${year}">${i}</div>`;
-        }
+            // Current month days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isToday = (i === todayDate && month === todayMonth && year === todayYear);
+                const isSelected = (i === selectedDay && month === selectedMonth && year === selectedYear);
 
-        calendarGrid.innerHTML = gridHTML;
+                let classes = 'text-xs text-center py-2 day-cell cursor-pointer hover:bg-pink-500 transition rounded-[100px] hover:text-white';
 
-        // Add click listeners to all day cells
-        document.querySelectorAll('.day-cell').forEach(cell => {
-            cell.addEventListener('click', function(e) {
-                const day = parseInt(this.dataset.day);
-                const month = parseInt(this.dataset.month);
-                const year = parseInt(this.dataset.year);
-                
-                // Update selected date
-                selectedDay = day;
-                selectedMonth = month;
-                selectedYear = year;
-                
-                // If clicked on different month, navigate there
-                if (month !== currentMonth || year !== currentYear) {
-                    currentMonth = month;
-                    currentYear = year;
-                    renderCalendar(currentMonth, currentYear);
+                if (isSelected) {
+                    classes += ' bg-pink-600 text-white rounded-full font-semibold';
+                } else if (isToday) {
+                    classes += ' bg-pink-100 text-pink-700 rounded-full font-medium';
                 } else {
-                    // Just re-render to update selection
-                    renderCalendar(currentMonth, currentYear);
+                    classes += ' text-gray-600';
                 }
-                
-                // Update availability for selected date
-                updateAvailabilityForDate(month, year, day);
+
+                gridHTML += `<div class="${classes}" data-day="${i}" data-month="${month}" data-year="${year}">${i}</div>`;
+            }
+
+            // Next month days (to fill remaining grid)
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = (7 - (totalCells % 7)) % 7;
+            for (let i = 1; i <= remainingCells; i++) {
+                gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month+1}" data-year="${year}">${i}</div>`;
+            }
+
+            calendarGrid.innerHTML = gridHTML;
+
+            // Add click listeners to all day cells
+            document.querySelectorAll('.day-cell').forEach(cell => {
+                cell.addEventListener('click', function(e) {
+                    const day = parseInt(this.dataset.day);
+                    const month = parseInt(this.dataset.month);
+                    const year = parseInt(this.dataset.year);
+
+                    // Update selected date
+                    selectedDay = day;
+                    selectedMonth = month;
+                    selectedYear = year;
+
+                    // If clicked on different month, navigate there
+                    if (month !== currentMonth || year !== currentYear) {
+                        currentMonth = month;
+                        currentYear = year;
+                        renderCalendar(currentMonth, currentYear);
+                    } else {
+                        // Just re-render to update selection
+                        renderCalendar(currentMonth, currentYear);
+                    }
+
+                    // Update availability for selected date
+                    updateAvailabilityForDate(month, year, day);
+                });
             });
-        });
 
-        // Update availability based on current view
-        updateAvailability(month, year);
-    }
+            // Update availability based on current view
+            updateAvailability(month, year);
+        }
 
-    // Update availability for a specific date
-    function updateAvailabilityForDate(month, year, day) {
-        const selectedDateObj = new Date(year, month, day);
-        const today = new Date();
-        const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        
-        // Check if selected date is today
-        const isToday = selectedDateObj.getTime() === todayDate.getTime();
-        
-        if (isToday) {
-            availabilityLabel.textContent = 'Available Today';
-            availabilityTime.textContent = 'Limited slots available';
-            slotContainer.innerHTML = `
+        // Update availability for a specific date
+        function updateAvailabilityForDate(month, year, day) {
+            const selectedDateObj = new Date(year, month, day);
+            const today = new Date();
+            const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Check if selected date is today
+            const isToday = selectedDateObj.getTime() === todayDate.getTime();
+
+            if (isToday) {
+                availabilityLabel.textContent = 'Available Today';
+                availabilityTime.textContent = 'Limited slots available';
+                slotContainer.innerHTML = `
                 <span class="text-xs bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-full slot-badge">12:00 PM</span>
                 <span class="text-xs bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-full slot-badge">2:30 PM</span>
                 <span class="text-xs bg-gray-100 text-gray-400 px-3 py-1.5 rounded-full">4:00 PM (Booked)</span>
             `;
-        } else if (selectedDateObj > todayDate) {
-            // Future date
-            const dayOfWeek = selectedDateObj.getDay();
-            const dateStr = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-            availabilityLabel.textContent = `Available ${dateStr}`;
-            
-            let slots = [];
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                slots = ['11:00 AM', '2:00 PM'];
+            } else if (selectedDateObj > todayDate) {
+                // Future date
+                const dayOfWeek = selectedDateObj.getDay();
+                const dateStr = selectedDateObj.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                availabilityLabel.textContent = `Available ${dateStr}`;
+
+                let slots = [];
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    slots = ['11:00 AM', '2:00 PM'];
+                } else {
+                    slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
+                }
+
+                slotContainer.innerHTML = slots.map(slot =>
+                    `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
+                ).join('');
+
+                availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
             } else {
-                slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
-            }
-            
-            slotContainer.innerHTML = slots.map(slot => 
-                `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
-            ).join('');
-            
-            availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
-        } else {
-            // Past date
-            availabilityLabel.textContent = '📅 Past Date';
-            availabilityTime.textContent = 'No availability';
-            slotContainer.innerHTML = `
+                // Past date
+                availabilityLabel.textContent = '📅 Past Date';
+                availabilityTime.textContent = 'No availability';
+                slotContainer.innerHTML = `
                 <span class="text-xs bg-gray-100 text-gray-400 px-3 py-1.5 rounded-full">Unavailable</span>
             `;
-        }
-    }
-
-    // Update availability section
-    function updateAvailability(month, year) {
-        const today = new Date();
-        const currentDateObj = new Date(year, month, 1);
-        
-        // Check if we're viewing current month
-        const isCurrentMonth = (month === today.getMonth() && year === today.getFullYear());
-        
-        if (isCurrentMonth) {
-            // If viewing current month, show tomorrow by default
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            const tomorrowStr = tomorrow.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-            availabilityLabel.textContent = `Available ${tomorrowStr}`;
-            
-            const dayOfWeek = tomorrow.getDay();
-            let slots = [];
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                slots = ['11:00 AM', '2:00 PM'];
-            } else {
-                slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
             }
-            
-            slotContainer.innerHTML = slots.map(slot => 
-                `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
-            ).join('');
-            
-            availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
-        } else {
-            // Not current month
-            const monthName = new Date(year, month).toLocaleDateString('en-US', { month: 'long' });
-            availabilityLabel.textContent = `Available in ${monthName}`;
-            availabilityTime.textContent = 'Check back soon';
-            
-            slotContainer.innerHTML = `
+        }
+
+        // Update availability section
+        function updateAvailability(month, year) {
+            const today = new Date();
+            const currentDateObj = new Date(year, month, 1);
+
+            // Check if we're viewing current month
+            const isCurrentMonth = (month === today.getMonth() && year === today.getFullYear());
+
+            if (isCurrentMonth) {
+                // If viewing current month, show tomorrow by default
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                const tomorrowStr = tomorrow.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                availabilityLabel.textContent = `Available ${tomorrowStr}`;
+
+                const dayOfWeek = tomorrow.getDay();
+                let slots = [];
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    slots = ['11:00 AM', '2:00 PM'];
+                } else {
+                    slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
+                }
+
+                slotContainer.innerHTML = slots.map(slot =>
+                    `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
+                ).join('');
+
+                availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
+            } else {
+                // Not current month
+                const monthName = new Date(year, month).toLocaleDateString('en-US', {
+                    month: 'long'
+                });
+                availabilityLabel.textContent = `Available in ${monthName}`;
+                availabilityTime.textContent = 'Check back soon';
+
+                slotContainer.innerHTML = `
                 <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Coming soon</span>
             `;
+            }
         }
-    }
 
-    // Navigate months
-    function changeMonth(delta) {
-        currentMonth += delta;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
+        // Navigate months
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentMonth, currentYear);
         }
+
+        // Event listeners
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            changeMonth(-1);
+        });
+
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            changeMonth(1);
+        });
+
+        // Initial render
         renderCalendar(currentMonth, currentYear);
-    }
 
-    // Event listeners
-    prevBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        changeMonth(-1);
-    });
-
-    nextBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        changeMonth(1);
-    });
-
-    // Initial render
-    renderCalendar(currentMonth, currentYear);
-
-})();
+    })();
 </script>
 <!-- Add Calendly script at the end of the section or in your scripts section -->
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
