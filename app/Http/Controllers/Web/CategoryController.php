@@ -140,7 +140,7 @@ class CategoryController extends Controller
 
             // dd($latestProducts);
 
-        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts'));
+        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
     }
 
     // Helper function to check if string is JSON
