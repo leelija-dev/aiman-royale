@@ -683,6 +683,115 @@ error_log('Product Data: ' . json_encode([
     }
 </style>
 
+<!-- Share Modal -->
+<div id="shareModal" class="fixed inset-0 z-[20000000] hidden">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeShareModal()"></div>
+
+    <!-- Modal Container -->
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-0 relative z-10 transform transition-all duration-300 scale-100 overflow-hidden">
+
+          
+
+            <!-- Close button -->
+            <button 
+                onclick="closeShareModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                aria-label="Close modal"
+            >
+                <i class="fas fa-times text-lg"></i>
+            </button>
+
+            <!-- Modal Content -->
+            <div class="p-7 pt-5">
+
+                <!-- Header -->
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 tracking-tight">Share</h3>
+                    <p class="text-sm text-gray-500 mt-0.5">Send this product link to anyone</p>
+                </div>
+
+                <!-- Product Info -->
+                <div class="bg-gray-50/90 border border-gray-200/60 rounded-xl p-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex-shrink-0 w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                            <i class="fas fa-box text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">From AymanRoyale</p>
+                            <p class="text-sm font-semibold text-gray-900 truncate">{{ $product->name }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- URL & Copy -->
+                <div class="flex items-center gap-2 p-2 bg-gray-50/70 border border-gray-200/60 rounded-lg mb-6">
+                    <div class="flex-1 min-w-0 pl-2">
+                        <input 
+                            type="text" 
+                            id="shareUrl" 
+                            value="{{ url()->current() }}" 
+                            readonly
+                            class="w-full bg-transparent text-sm text-gray-600 outline-none truncate font-mono"
+                        >
+                    </div>
+                    <button 
+                        onclick="copyToClipboard()"
+                        class="flex-shrink-0 text-indigo-600 hover:text-indigo-800 text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors duration-200 flex items-center gap-1.5"
+                    >
+                        <i class="far fa-copy text-xs"></i>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- Share Options -->
+                <div class="grid grid-cols-4 gap-3 mb-4">
+                    <!-- Facebook -->
+                    <button onclick="shareOnFacebook()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group">
+                        <div class="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center text-white shadow-sm group-hover:shadow-md transition-shadow">
+                            <i class="fab fa-facebook-f text-base"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-gray-500 group-hover:text-gray-700">Facebook</span>
+                    </button>
+
+                    <!-- Twitter -->
+                    <button onclick="shareOnTwitter()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group">
+                        <div class="w-11 h-11 rounded-full bg-black flex items-center justify-center text-white shadow-sm group-hover:shadow-md transition-shadow">
+                            <i class="fa-brands fa-x-twitter text-base"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-gray-500 group-hover:text-gray-700">Twitter</span>
+                    </button>
+
+                    <!-- WhatsApp -->
+                    <button onclick="shareOnSecondWhatsApp()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group">
+                        <div class="w-11 h-11 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-sm group-hover:shadow-md transition-shadow">
+                            <i class="fab fa-whatsapp text-base"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-gray-500 group-hover:text-gray-700">WhatsApp</span>
+                    </button>
+
+                    <!-- Email -->
+                    <button onclick="shareOnEmail()" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group">
+                        <div class="w-11 h-11 rounded-full bg-[#EA4335] flex items-center justify-center text-white shadow-sm group-hover:shadow-md transition-shadow">
+                            <i class="fas fa-envelope text-base"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-gray-500 group-hover:text-gray-700">Email</span>
+                    </button>
+                </div>
+
+                <!-- Footer -->
+                <div class="flex items-center justify-center gap-2 pt-3 border-t border-gray-100">
+                    <span class="text-xs text-gray-400">Shared with</span>
+                    <i class="fas fa-heart text-rose-400 text-xs"></i>
+                    <span class="text-xs text-gray-400">from</span>
+                    <span class="text-xs font-medium text-indigo-600">AymanRoyale</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
 
     @if($product->variants->first() == true)
@@ -774,14 +883,27 @@ $fullImagePath = $image->image_url;
 
             <!-- RIGHT CONTENT -->
             <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%] sm:min-w-[270px]">
-                <div>
-                    <!-- Title -->
-                    <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
-                        {{ $product->name }}
-                    </h3>
-                    <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
-                    <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
-                </div>
+                <div class="relative pe-[33px]">
+    <!-- Title and info section -->
+    <div>
+        <!-- Title -->
+        <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
+            {{ $product->name }}
+        </h3>
+        <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
+        <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
+    </div>
+    
+    <!-- Share Icon -->
+    <button 
+        type="button" 
+        onclick="openShareModal()"
+        class="absolute top-0 right-0 p-2 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+        aria-label="Share product"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">    <path d="M12.6053 12.3608C6.28947 11.9245 2.90351 16.5426 1.5 18.9062C2.34211 8.87003 8.74561 5.9063 12.6053 5.17896V1.9945C12.6053 1.56713 13.1067 1.33675 13.431 1.61513L20.6463 7.80961C21.1006 8.19968 21.1117 8.89973 20.671 9.30514L13.4446 15.9523C13.1241 16.2471 12.6053 16.0205 12.6053 15.5851V12.3608Z" stroke="#3F3D4D" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>   </svg>
+    </button>
+</div>
 
                 <div class="flex items-center gap-2">
                     <div class="flex text-yellow-400 text-sm">
@@ -1943,6 +2065,118 @@ if ($variant->images && $variant->images->isNotEmpty()) {
 $variant = $product?->variants?->first();
 $basePrice = $variant?->discount_price ?? $variant?->price ?? 0;
 @endphp
+
+
+<!-- share modal code  -->
+ <script>
+    const BRAND_NAME = "{{ config('app.name') }}";
+    // Get product name dynamically
+const productName = document.querySelector('h3')?.textContent || 'this product';
+
+// Open share modal
+function openShareModal() {
+    document.getElementById('shareModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close share modal
+function closeShareModal() {
+    document.getElementById('shareModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// Copy URL to clipboard
+function copyToClipboard() {
+    const shareUrl = document.getElementById('shareUrl');
+    shareUrl.select();
+    shareUrl.setSelectionRange(0, 99999);
+    
+    try {
+        navigator.clipboard.writeText(shareUrl.value);
+        alert('✅ Link copied to clipboard!');
+    } catch (err) {
+        document.execCommand('copy');
+        alert('✅ Link copied to clipboard!');
+    }
+}
+
+// Get share text with greeting
+function getShareText() {
+    const productName = document.querySelector('h3')?.textContent || 'this amazing product';
+    const url = window.location.href;
+    return `✨ Hey! Check out this amazing product "${productName}" from AymanRoyale 🛍️\n\n${url}`;
+}
+
+// Share on Facebook
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    const quote = encodeURIComponent(`Check out "${document.querySelector('h3')?.textContent || 'this amazing product'}" from AymanRoyale!`);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank', 'width=600,height=400');
+}
+
+// Share on Twitter
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`✨ Hey! Check out "${document.querySelector('h3')?.textContent || 'this amazing product'}" from AymanRoyale! 🛍️`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
+}
+
+// Share on WhatsApp
+function shareOnSecondWhatsApp() {
+    const productName =  "{{ $product->name ?? 'Product' }}";
+    const priceElement = document.querySelector('#price-container .text-xl');
+    const productPrice = priceElement ? priceElement.textContent.trim() : "{{ $basePrice }}";
+    const productUrl = window.location.href;
+    
+    let selectedVariant = null;
+    if (selectedVariantId) {
+        selectedVariant = productVariants.find(v => v.id == selectedVariantId);
+    }
+    
+    const size = selectedSize || 'N/A';
+    const color = selectedColor || 'N/A';
+    
+    // ========================================
+    // 📝 EDIT THIS MESSAGE FORMAT
+    // Customize the WhatsApp message below
+    // ========================================
+    let message = `Hi, I found this style, what do you think?\n\n`;
+     message += `*${productName}*\n\n`;
+    message += `💰 *Price:* ${productPrice}\n`;
+    message += `📏 *Size:* ${size}\n`;
+    message += `🎨 *Color:* ${color}\n`;
+    
+    if (customDimensions) {
+        message += `📐 *Custom Dimensions:*\n`;
+        message += `   Bust: ${customDimensions.bust} cm\n`;
+        message += `   Waist: ${customDimensions.waist} cm\n`;
+        message += `   Hip: ${customDimensions.hip} cm\n`;
+        message += `   Armhole: ${customDimensions.armhole} cm\n`;
+    }
+    
+    message += `\n🔗 *Product Link:* ${productUrl}\n\n`;
+    message += `🛍️ Check out this amazing product from ${BRAND_NAME}!`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://web.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+    showNotification('WhatsApp opened! Share this product with your friends.', 'success');
+}
+
+// Share via Email
+function shareOnEmail() {
+    const productName = document.querySelector('h3')?.textContent || 'this amazing product';
+    const subject = encodeURIComponent(`Check out "${productName}" from AymanRoyale!`);
+    const body = encodeURIComponent(`✨ Hey!\n\nI thought you'd like this amazing product "${productName}" from AymanRoyale.\n\nCheck it out here:\n${window.location.href}\n\nShared with ❤️`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeShareModal();
+    }
+});
+ </script>
 
 <!-- Tab Switching JavaScript -->
 <script>
@@ -3723,5 +3957,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
 
 @endsection
