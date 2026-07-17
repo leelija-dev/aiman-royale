@@ -1312,6 +1312,192 @@
         </div>
     </div>
 </section>
+<!-- Features Section -->
+<section class="px-4 lgg:py-8 py-6">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Premium Quality</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Made of the finest material</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Buyer Protection</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">2+ years</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Free Shipping</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Over **</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">24 / 7 Support</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Dedicated guidance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Signature Standouts Section -->
+<section class="px-4 lgg:py-8 py-6">
+    <div class="container mx-auto">
+        <div class="w-full text-center mb-6">
+            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
+                Our signature Standouts
+            </h2>
+            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
+                Red Carpet Ready in Every Design We Create
+            </p>
+        </div>
+        <div class="grid-container">
+            @php
+            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
+            @endphp
+            <div class="owl-carousel banner-carousel lgg:hidden">
+                @foreach($editorBanners as $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
+                @foreach ($editorBanners as $index => $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                @if ($index % 2 == 0)
+                <div class="relative bg-[#b8a89a] overflow-hidden"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+
+                @foreach ($editorBanners as $index => $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                @if ($index % 2 == 1)
+                <div class="relative bg-[#e8dcd6] overflow-hidden"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- 🔥 FIXED: Bookmarked Styles Section -->
 <section class="px-4 lgg:py-8 py-6">
@@ -1823,192 +2009,7 @@
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
-                    alt="" loading="lazy" decoding="async" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Premium Quality</h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Made of the finest material</p>
-                </div>
-            </div>
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
-                    alt="" loading="lazy" decoding="async" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Buyer Protection</h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">2+ years</p>
-                </div>
-            </div>
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
-                    alt="" loading="lazy" decoding="async" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Free Shipping</h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Over **</p>
-                </div>
-            </div>
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
-                    alt="" loading="lazy" decoding="async" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">24 / 7 Support</h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Dedicated guidance</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Signature Standouts Section -->
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="w-full text-center mb-6">
-            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Our signature Standouts
-            </h2>
-            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
-                Red Carpet Ready in Every Design We Create
-            </p>
-        </div>
-        <div class="grid-container">
-            @php
-            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
-            @endphp
-            <div class="owl-carousel banner-carousel lgg:hidden">
-                @foreach($editorBanners as $banner)
-                @php
-                $editorImg = asset('uploads/banners/' . $banner->image);
-                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
-                }
-                @endphp
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
-                    @if($banner->filter_type === 'multiple' && $banner->filters)
-                    data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
-                @foreach ($editorBanners as $index => $banner)
-                @php
-                $editorImg = asset('uploads/banners/' . $banner->image);
-                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
-                }
-                @endphp
-                @if ($index % 2 == 0)
-                <div class="relative bg-[#b8a89a] overflow-hidden"
-                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endif
-                @endforeach
-
-                @foreach ($editorBanners as $index => $banner)
-                @php
-                $editorImg = asset('uploads/banners/' . $banner->image);
-                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
-                }
-                @endphp
-                @if ($index % 2 == 1)
-                <div class="relative bg-[#e8dcd6] overflow-hidden"
-                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endif
-                @endforeach
-            </div>
-        </div>
-    </div>
-</section>
 
 @endsection
 
