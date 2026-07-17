@@ -1,13 +1,5 @@
 @extends('layout.web.main-layout')
 
-
-
-
-
-
-
-
-
 @section('content')
 
 <style>
@@ -24,7 +16,6 @@
         0% {
             opacity: 1;
         }
-
         100% {
             opacity: 0;
         }
@@ -39,7 +30,6 @@
         0% {
             opacity: 0;
         }
-
         100% {
             opacity: 1;
         }
@@ -65,13 +55,12 @@
         transition: opacity 0.3s ease;
     }
 
-    #unique-scroll .custom-nav-tags,#unique-scroll .owl-dots,#unique-scroll .owl-nav {
-        display:none !important;
+    #unique-scroll .custom-nav-tags,
+    #unique-scroll .owl-dots,
+    #unique-scroll .owl-nav {
+        display: none !important;
     }
 </style>
-
-
-
 
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
@@ -85,39 +74,36 @@
     <div class="relative text-center mb-0 px-2">
         <div class="inline-block mb-3">
             <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[2px]"></div>
-            <!-- <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
-                                            Explore Our <span class="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Collections</span>
-                                        </h3> -->
-            <!-- <p class="text-gray-600 text-sm md:text-base max-w-md mx-auto">
-                                            Curated styles for every occasion. Discover your perfect look.
-                                        </p> -->
         </div>
     </div>
     <!-- Horizontal Scroll with Enhanced Styling -->
     <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
-        <!-- Gradient fade edges -->
-        {{-- <div class="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10"></div>
-    <div class="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent z-10"></div> --}}
-
         <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
-
-            <!-- Category Items with Enhanced Cards -->
-            <!-- Bestsellers -->
             @if ($categories)
             @foreach ($categories->whereNull('parent_id') as $category)
             <a href="{{ route('category.show', $category->slug) }}"
-                class="group flex flex-col items-center  snap-center">
+                class="group flex flex-col items-center snap-center">
                 <div class="relative mb-2">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                     </div>
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
-                        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                        @php
+                        $catImage = $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg');
+                        if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $catImage);
+                            $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
+                        <img src="{{ $catImage }}"
                             alt="{{ $category->name }}"
-                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
+                            decoding="async"
+                            width="200"
+                            height="200">
                     </div>
-
                 </div>
                 <span
                     class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->name }}</span>
@@ -125,147 +111,11 @@
             </a>
             @endforeach
             @endif
-            <!-- Saree --> {{--
-            <a href="/" class="group flex flex-col items-center  snap-center">
-                <div class="relative mb-2">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                    </div>
-                    <div
-                        class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
-                        <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
-            alt="Saree"
-            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
         </div>
     </div>
-    <span
-        class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Saree</span>
-    <span class="text-xs text-gray-500 mt-1">Elegant Drapes</span>
-    </a>
-
-    <!-- Salwar Kameez -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-emerald-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}"
-                    alt="Salwar Kameez"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            </div>
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-emerald-700 transition-colors duration-300">Salwar
-            Kameez</span>
-        <span class="text-xs text-gray-500 mt-1">Comfort & Style</span>
-    </a>
-
-    <!-- Lehenga -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-rose-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/cobalt-plazo-1_5_11zon.webp') }}" alt="Lehenga"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-                <div
-                    class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
-            </div>
-
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-rose-700 transition-colors duration-300">Lehenga</span>
-        <span class="text-xs text-gray-500 mt-1">Festival Ready</span>
-    </a>
-
-    <!-- Indo Western -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-indigo-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/dark-red-plazo-4_14_11zon.webp') }}"
-                    alt="Indo Western"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            </div>
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">Indo
-            Western</span>
-        <span class="text-xs text-gray-500 mt-1">Fusion Trends</span>
-    </a>
-
-    <!-- Blouses -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-violet-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-purple-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/cherry-plazo-6_4_11zon.webp') }}" alt="Blouses"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            </div>
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-purple-700 transition-colors duration-300">Blouses</span>
-        <span class="text-xs text-gray-500 mt-1">Statement Pieces</span>
-    </a>
-
-    <!-- Menswear -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-blue-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/glow-orange-2_17_11zon.webp') }}" alt="Menswear"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            </div>
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">Menswear</span>
-        <span class="text-xs text-gray-500 mt-1">Modern Ethnic</span>
-    </a>
-
-    <!-- Bridal Edit -->
-    <a href="/" class="group flex flex-col items-center  snap-center">
-        <div class="relative mb-2">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-            </div>
-            <div
-                class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-amber-100 transition-all duration-300">
-                <img src="{{ asset('web/images/product-images/purple-plazo-5_85_11zon.webp') }}"
-                    alt="Bridal Edit"
-                    class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500">
-            </div>
-
-        </div>
-        <span
-            class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-amber-700 transition-colors duration-300">Bridal
-            Edit</span>
-        <span class="text-xs text-gray-500 mt-1">Luxury Collection</span>
-    </a>
-    --}}
-</div>
 </div>
 
-
-</div>
-
-
-
-<!-- Required CSS for no scrollbar + smooth snap -->
-
+<!-- Banner Section -->
 <section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -276,23 +126,30 @@
             @endphp
             <div class="flex-1 overflow-hidden md:block hidden relative group">
                 <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
-
                     @if ($leftBanners->count())
                     <a id="leftSliderLink" href="{{ $leftBanners->first()->redirect_link }}"
                         class="block h-full w-full relative">
-
                         @foreach ($leftBanners as $index => $banner)
+                        @php
+                        $bannerImage = $banner->image;
+                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $bannerImage);
+                            $bannerImage = $parts[0] . 'upload/w_800,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
                             data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="1000">
                         @endforeach
-
                     </a>
 
                     <!-- Text Overlay -->
                     <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
-
                         @if ($leftBanners->first()?->offer)
                         <div id="leftOfferText" class="inline-flex items-center mb-4">
                             <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
@@ -306,46 +163,35 @@
                         </div>
                         @endif
 
-                        <!-- Decorative stylish font for title -->
-                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
-                            {{ $leftBanners->first()->title }}
-                        </span> -->
-
-                        <!-- Main heading -->
                         <h2 id="leftTitleText"
                             class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
                             {{ $leftBanners->first()->title }}
                         </h2>
 
-                        <!-- Description with stylish formatting -->
                         <p id="leftShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
                             Get <span class="font-semibold text-secondary-light">{{ $leftBanners->first()->short_description }}</span> | Use Code:
                             <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
                         </p>
 
-                        <!-- Shop Now Button -->
                         <a id="leftShopBtn" href="{{ $leftBanners->first()->redirect_link }}"
                             class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
-
                             Shop Now
-
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
                             </svg>
-
                         </a>
-
                     </div>
                     @else
                     <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
-                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store">
+                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"
+                            loading="lazy"
+                            decoding="async">
                     </a>
                     @endif
-
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -372,21 +218,28 @@
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
                     </div>
-
                     @if ($topBanners->count())
                     <a id="topSliderLink" href="{{ $topBanners->first()->redirect_link ?? '#' }}"
                         class="block h-full w-full relative">
-
                         @foreach ($topBanners as $index => $banner)
+                        @php
+                        $bannerImage = $banner->image;
+                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $bannerImage);
+                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
                         <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
                             data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="600"
+                            height="400">
                         @endforeach
-
                     </a>
                     <div class="absolute left-6 bottom-6 z-20 text-white">
-
                         @if ($topBanners->first()?->offer)
                         <div id="topOfferText" class="inline-flex items-center mb-2">
                             <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
@@ -399,20 +252,12 @@
                             </span>
                         </div>
                         @endif
-
-                        <!-- Decorative stylish font -->
-                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
-                            {{ $topBanners->first()?->title }}
-                        </span> -->
-
                         <h3 id="topTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
                             {{ $topBanners->first()?->title }}
                         </h3>
-
                         <p id="topShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
                             Get <span class="font-semibold text-secondary-light">{{ $topBanners->first()?->short_description }}</span>
                         </p>
-
                         <a id="topShopBtn" href="{{ $topBanners->first()?->redirect_link }}"
                             class="inline-flex items-center mt-4 px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
                             Shop Now
@@ -420,22 +265,17 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </a>
-
                     </div>
                     @else
                     <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
                         <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                             src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
-                            alt="Glow Pink Dress">
+                            alt="Glow Pink Dress"
+                            loading="lazy"
+                            decoding="async">
                     </a>
                     @endif
-                    <div class="absolute sm:top-4 sm:left-4 left-3 top-3">
-                        <a href="{{ url('collections/new-collection') }}">
-                            <span
-                                class="bg-gradient-to-r from-primary to-secondary text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">{{ $topCategories->first()?->slug ?? 'New Collection' }}</span>
-                        </a>
-                    </div>
                 </div>
 
                 @php
@@ -443,24 +283,31 @@
                 @endphp
 
                 <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow min-h-[350px]">
-
                     @if ($centerBanners->count())
                     <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
                         class="absolute inset-0 block">
-
                         @foreach ($centerBanners as $index => $banner)
+                        @php
+                        $bannerImage = $banner->image;
+                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $bannerImage);
+                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
                         <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
                             data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="600"
+                            height="400">
                         @endforeach
-
                     </a>
 
                     <!-- Content -->
                     <div
                         class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-8 text-white">
-
                         @if ($centerBanners->first()->offer)
                         <div id="centerOfferText" class="inline-flex items-center mb-4">
                             <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-6 py-4 rounded-[40px] shadow-lg">
@@ -473,52 +320,35 @@
                             </span>
                         </div>
                         @endif
-
-                        <!-- Decorative stylish font -->
-                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script text-white drop-shadow-lg rotate-[-2deg] mb-[-12px] smx:mb-[-20px]">
-                            {{ $centerBanners->first()->title }}
-                        </span> -->
-
                         <h2 id="centerTitleText" class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg leading-tight">
                             {{ $centerBanners->first()->title }}
                         </h2>
-
                         <p id="centerShortText" class="text-sm text-white drop-shadow-lg mb-8">
                             Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
                         </p>
-
                         <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
                             class="px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide inline-flex items-center transition-all duration-300">
-
                             Shop Now
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
-
                         </a>
-
                     </div>
                     @else
-
                     <div
                         class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
-
                         <!-- Background Pattern -->
                         <div class="absolute inset-0 opacity-5">
                             <div class="absolute top-0 left-0 w-32 h-32 bg-primary rounded-full -translate-x-16 -translate-y-16"></div>
                             <div class="absolute bottom-0 right-0 w-40 h-40 bg-secondary rounded-full translate-x-20 translate-y-20"></div>
                         </div>
-
-                        <!-- Decorative Line -->
                         <div
                             class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent">
                         </div>
-
                         <h1
                             class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
                             PRICE DROP
                         </h1>
-
                         <div class="relative">
                             <span
                                 class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
@@ -526,31 +356,22 @@
                                 SALE
                             </span>
                         </div>
-
                         <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">
                             NEW COLLECTION
                         </p>
-
                         <div class="text-center text-gray-500 mb-2">
                             <span class="line-through text-sm mr-2">₹199.99</span>
                             <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
                         </div>
-
                         <a href="{{ url('collections/new-collection') }}"
                             class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-
                             Shop Now →
-
                         </a>
-
                         <p class="text-sm text-gray-500 mt-2">
                             Limited Period Offer
                         </p>
-
                     </div>
-
                     @endif
-
                 </div>
 
                 @php
@@ -558,23 +379,30 @@
                 @endphp
 
                 <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
-
                     @if ($bottomBanners->count())
                     <a id="bottomSliderLink" href="{{ $bottomBanners->first()->redirect_link }}"
                         class="block h-full w-full relative">
-
                         @foreach ($bottomBanners as $index => $banner)
+                        @php
+                        $bannerImage = $banner->image;
+                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $bannerImage);
+                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
                         <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
                             data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="600"
+                            height="400">
                         @endforeach
-
                     </a>
 
                     <!-- Bottom Banner Text -->
                     <div class="absolute left-6 bottom-6 z-30 text-white">
-
                         @if ($bottomBanners->first()->offer)
                         <div id="bottomOfferText" class="inline-flex items-center mb-2">
                             <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
@@ -587,46 +415,31 @@
                             </span>
                         </div>
                         @endif
-
-                        <!-- Decorative stylish font -->
-                        <!-- <span class="text-xl font-script text-white drop-shadow-lg block mb-[-4px]">
-                            {{ $bottomBanners->first()->title }}
-                        </span> -->
-
                         <h3 id="bottomTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
                             {{ $bottomBanners->first()->title }}
                         </h3>
-
                         <p id="bottomShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
                             Get <span class="font-semibold text-secondary-light">{{ $bottomBanners->first()->short_description }}</span>
                         </p>
-
                         <a id="bottomShopBtn" href="{{ $bottomBanners->first()->redirect_link }}"
                             class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
-
                             Shop Now
-
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
-
                             </svg>
-
                         </a>
-
                     </div>
                     @else
                     <a href="{{ url('collections/lehanga') }}">
-
                         <img class="object-cover h-full w-full"
                             src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                            alt="Bottom Banner">
-
+                            alt="Bottom Banner"
+                            loading="lazy"
+                            decoding="async">
                     </a>
                     @endif
-
                 </div>
             </div>
 
@@ -636,25 +449,31 @@
             @endphp
 
             <div class="flex-1 overflow-hidden md:block hidden relative group">
-
                 <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
-
                     @if ($rightBanners->count())
                     <a id="rightSliderLink" href="{{ $rightBanners->first()->redirect_link }}"
                         class="absolute inset-0 z-20 block">
-
                         @foreach ($rightBanners as $index => $banner)
+                        @php
+                        $bannerImage = $banner->image;
+                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $bannerImage);
+                            $bannerImage = $parts[0] . 'upload/w_800,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
+                        }
+                        @endphp
                         <img class="slide-right absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $banner->image }}" alt="{{ $banner->title }}"
+                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
                             data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}">
+                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="1000">
                         @endforeach
-
                     </a>
 
                     <!-- Right Banner Text -->
                     <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
-
                         @if ($rightBanners->first()->offer)
                         <div id="rightOfferText" class="inline-flex items-center mb-4">
                             <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
@@ -667,66 +486,43 @@
                             </span>
                         </div>
                         @endif
-
-                        <!-- Decorative stylish font for title -->
-                        <!-- <span class="lg:text-[3rem] text-[2rem] font-script rotate-[-3deg] mb-[-12px] smx:mb-[-20px] text-white drop-shadow-lg">
-                            {{ $rightBanners->first()->title }}
-                        </span> -->
-
-                        <!-- Main heading -->
                         <h2 id="rightTitleText"
                             class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
                             {{ $rightBanners->first()->title }}
                         </h2>
-
-                        <!-- Description with stylish formatting -->
                         <p id="rightShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
                             Get <span class="font-semibold text-secondary-light">{{ $rightBanners->first()->short_description }}</span> | Use Code:
                             <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
                         </p>
-
-                        <!-- Shop Now Button -->
                         <a id="rightShopBtn" href="{{ $rightBanners->first()->redirect_link }}"
                             class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
-
                             Shop Now
-
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
                             </svg>
-
                         </a>
-
                     </div>
                     @else
                     <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
-
                         <img class="object-cover h-full w-full"
-                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Right Banner">
-
+                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Right Banner"
+                            loading="lazy"
+                            decoding="async">
                     </a>
                     @endif
-
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
 </section>
 
-
-
-
-
-
-
+<!-- Categories Carousel Section -->
 <section class="px-4 lgg:py-8 py-6 bg-gradient-to-b from-white to-gray-50/50">
     <div class="container mx-auto">
         <!-- Section Header -->
@@ -748,18 +544,14 @@
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
-                        <!-- Main Image Container -->
                         <div class="relative h-96 overflow-hidden rounded-3xl">
-                            <!-- Image with zoom effect -->
                             <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
                                 alt="Salwar Kameez"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-
-                            <!-- Transparent Overlay Content - Shows on hover -->
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                loading="lazy"
+                                decoding="async" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
-
-                                <!-- Floating Badge -->
                                 <div class="absolute top-6 left-6">
                                     <span
                                         class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
@@ -773,20 +565,14 @@
                                         </span>
                                     </span>
                                 </div>
-
-                                <!-- Category Name -->
                                 <h3
-                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     Salwar Kameez
                                 </h3>
-
-                                <!-- Description -->
                                 <p
                                     class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Traditional elegance with modern designs
                                 </p>
-
-                                <!-- Styles Count -->
                                 <div
                                     class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                                     <span
@@ -799,8 +585,6 @@
                                         120+ Designs
                                     </span>
                                 </div>
-
-                                <!-- Shop Now Button -->
                                 <div
                                     class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
                                     <span
@@ -815,8 +599,6 @@
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Minimal Content Visible Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Salwar Kameez</h3>
@@ -841,11 +623,11 @@
                         <div class="relative h-96 overflow-hidden rounded-3xl">
                             <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
                                 alt="Lehanga"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                loading="lazy"
+                                decoding="async" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
-
                                 <div class="absolute top-6 left-6">
                                     <span
                                         class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
@@ -858,17 +640,14 @@
                                         </span>
                                     </span>
                                 </div>
-
                                 <h3
-                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     Lehengas
                                 </h3>
-
                                 <p
                                     class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Royal bridal collections
                                 </p>
-
                                 <div
                                     class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                                     <span
@@ -881,7 +660,6 @@
                                         80+ Collections
                                     </span>
                                 </div>
-
                                 <div
                                     class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
                                     <span
@@ -896,8 +674,6 @@
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Minimal Content Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Lehengas</h3>
@@ -915,24 +691,28 @@
                         </div>
                     </a>
                 </div>
-
-                <!-- Continue with similar structure for categories 3-6 -->
-                <!-- ... asset('assets/images/placeholder-category.jpg') -->
-
                 @else
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
-
                 <div class="item p-2">
                     <a href="{{ route('category.show', $category->slug) }}" class="group block relative overflow-hidden rounded-[0px]">
-                        <div class="relative  overflow-hidden rounded-[0px]">
-                            <img src="{{ $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image }}"
+                        <div class="relative overflow-hidden rounded-[0px]">
+                            @php
+                            $catImg = $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image;
+                            if (strpos($catImg, 'cloudinary.com') !== false && strpos($catImg, 'upload/') !== false) {
+                                $parts = explode('upload/', $catImg);
+                                $catImg = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto/' . $parts[1];
+                            }
+                            @endphp
+                            <img src="{{ $catImg }}"
                                 alt="{{ $category->name }}"
-                                class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700" />
-
+                                class="w-full h-auto aspect-[9/13] object-cover group-hover:scale-110 transition-transform duration-700"
+                                loading="lazy"
+                                decoding="async"
+                                width="600"
+                                height="900" />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
-
                                 <div class="absolute top-6 left-6">
                                     <span
                                         class="bg-gradient-to-r from-gray-800 to-black block text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
@@ -947,17 +727,14 @@
                                         </span>
                                     </span>
                                 </div>
-
                                 <h3
-                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem]  font-bold text-white mb-3 transform translate-y-4  group-hover:translate-y-0 transition-transform duration-500">
+                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     {{ $category->name }}
                                 </h3>
-
                                 <p
                                     class="text-gray-200 text-sm lgg:mb-4 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Explore our exclusive collection
                                 </p>
-
                                 <div
                                     class="flex items-center lgg:mb-6 mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                                     <span
@@ -970,7 +747,6 @@
                                         100+ Styles
                                     </span>
                                 </div>
-
                                 <div
                                     class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
                                     <span
@@ -985,8 +761,6 @@
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Minimal Content Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">{{ $category->name }}</h3>
@@ -1041,7 +815,7 @@
     </div>
 </section>
 
-
+<!-- Category Tags Section -->
 <section id="unique-scroll" class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
         <!-- Header -->
@@ -1062,16 +836,26 @@
 
                         <!-- Tag -->
                         <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden w-full">
-
                             <!-- Tag Hole -->
                             <div class="absolute hidden top-3 left-1/2 w-4 h-4 rounded-full bg-amber-100 border-2 border-white transform -translate-x-1/2 z-10">
                             </div>
 
                             <!-- Image -->
                             <div class="h-32 overflow-hidden">
-                                <img src="{{ $category->image ? $category->image : asset('assets/images/placeholder-category.jpg') }}"
+                                @php
+                                $tagImage = $category->image ? $category->image : asset('assets/images/placeholder-category.jpg');
+                                if (strpos($tagImage, 'cloudinary.com') !== false && strpos($tagImage, 'upload/') !== false) {
+                                    $parts = explode('upload/', $tagImage);
+                                    $tagImage = $parts[0] . 'upload/w_300,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                                }
+                                @endphp
+                                <img src="{{ $tagImage }}"
                                     alt="{{ $category->name }}"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top" />
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="300"
+                                    height="200" />
                             </div>
 
                             <!-- Content -->
@@ -1101,18 +885,13 @@
     </div>
 </section>
 
-
+<!-- 🔥 FIXED: Trending Best Selling Products Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-            <!-- Left Title -->
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
                 Trending Best Selling Products
             </h2>
-
-            <!-- Center Navigation -->
-
-            <!-- Right Link -->
             <a href="{{ route('page.multi-product') }}"
                 class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
                 All Products
@@ -1128,9 +907,20 @@
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
+                        @php
+                        $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
+                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                            $parts = explode('upload/', $imageUrl);
+                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        }
+                        @endphp
+                        <img src="{{ $imageUrl }}"
                             alt="{{ $product->name }}"
-                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
+                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center"
+                            loading="lazy"
+                            decoding="async"
+                            width="600"
+                            height="900" />
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
@@ -1139,33 +929,21 @@
                                 Trending
                             </span>
                             @else
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
                                 {{ $product->discount }}% OFF
                             </span>
                             @endif
                         </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        {{-- <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                            onclick="toggleHomeWishlist({{ $product->id }}, event)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                            id="wishlist-heart-{{ $product->id }}">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        </button> --}}
+                        <!-- Wishlist Heart Icon -->
                         @if (Auth::check())
                         <button
                             class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                            onclick="toggleWishlist({{ $product->id }}, this,event);">
+                            onclick="toggleWishlist({{ $product->id }}, this, event);">
                             <i class="far fa-heart"></i>
                         </button>
                         @else
                         <a href="{{ route('page.login') }}">
-
                             <button
                                 class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
                                 <i class="far fa-heart"></i>
@@ -1179,14 +957,12 @@
                         <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{ $product->name }}
                         </h3>
-
                         <div class="flex items-center gap-2 text-sm text-gray-600">
                             <span>{{ $product->brand }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
-
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
                             <span class="text-lg font-bold text-gray-900">Rs.
                                 {{ $product->price_after_discount }}</span>
@@ -1208,31 +984,24 @@
     </div>
 </section>
 
+<!-- Shop With Complete Confidence Section -->
 <section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto lgg:py-12 lgg:px-12 py-12  px-4 relative rounded-[10px] overflow-hidden">
+    <div class="container mx-auto lgg:py-12 lgg:px-12 py-12 px-4 relative rounded-[10px] overflow-hidden">
         <span class="absolute z-[1] top-[8px] right-[30px] text-secondary/30 text-[100px]">%</span>
         <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-100 z-[-1]"></div>
         <div class="grid lgg:grid-cols-3 lgg:gap-4 gap-8 xl:gap-16 items-center">
 
             <!-- Left - Guarantee Info -->
             <div class="">
-
                 <div class="lgg:text-left text-center">
-                    <div class="mb-6 ">
+                    <div class="mb-6">
                         <h3 class="text-2xl md:text-5xl font-bold text-gray-900">Shop With Complete Confidence</h3>
-
-
                     </div>
-
-
                     <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-lg lgg:mx-0 mx-auto">
                         From designer craftsmanship to our affordable luxury, every purchase is backed by our commitment to you.
                     </p>
-
                 </div>
-
-
-                <ul class=" text-gray-700 flex flex-col gap-3 lgg:items-start items-center justify-center">
+                <ul class="text-gray-700 flex flex-col gap-3 lgg:items-start items-center justify-center">
                     <li class="flex items-center">
                         <div
                             class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center mr-3 flex-shrink-0">
@@ -1259,25 +1028,20 @@
 
             <!-- Center - Geometric Product Mosaic -->
             <div class="relative">
-                <!-- Main Geometric Container -->
                 <div class="relative w-full max-w-md mx-auto">
-
-                    <!-- Diamond Pattern Background -->
                     <div class="absolute inset-0 flex items-center justify-center opacity-10">
                         <div class="w-64 h-64 border-2 border-secondary/30 rotate-45 rounded-3xl"></div>
                     </div>
 
-                    <!-- Product 1 - Large & Centered (Parallelogram Shape) -->
-
-
-                    <!-- Product 2 - Top Right (Rhombus Shape) -->
                     <div
                         class="absolute top-0 right-8 w-36 h-36 transform rotate-12 hover:-rotate-6 transition-transform duration-500 cursor-pointer group z-10">
                         <div class="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-pink-500/10 rounded-xl">
                         </div>
                         <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
                             alt="Saree Collection"
-                            class="w-full h-full object-cover object-top  rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300">
+                            class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
+                            loading="lazy"
+                            decoding="async">
                         <div
                             class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
                             <p class="text-gray-900 text-xs font-bold">₹74.99</p>
@@ -1290,41 +1054,44 @@
                         </div>
                         <img src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}"
                             alt="Premium Lehenga"
-                            class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300">
+                            class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300"
+                            loading="lazy"
+                            decoding="async">
                         <div
                             class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6">
                             -25%
                         </div>
                     </div>
 
-                    <!-- Product 3 - Bottom Left (Tilted Square) -->
                     <div
                         class="absolute bottom-8 left-4 w-40 h-40 transform -rotate-12 hover:rotate-3 transition-transform duration-500 cursor-pointer group z-10">
                         <div class="absolute inset-0 bg-gradient-to-tl from-secondary/10 to-pink-600/10 rounded-xl">
                         </div>
                         <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
                             alt="Party Wear"
-                            class="w-full h-full object-cover object-top  rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300">
+                            class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
+                            loading="lazy"
+                            decoding="async">
                         <div
                             class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                             New
                         </div>
                     </div>
 
-                    <!-- Product 4 - Bottom Right (Circle) -->
                     <div
                         class="absolute bottom-4 right-0 w-32 h-32 rounded-full overflow-hidden border-4 border-white hover:border-secondary transition-all duration-300 cursor-pointer group z-10 shadow-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-secondary/10 to-pink-600/10"></div>
                         <img src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}"
                             alt="Kurta Set"
-                            class="w-full h-full object-cover object-top  group-hover:scale-110 transition-transform duration-500">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
+                            decoding="async">
                         <div
                             class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <span class="text-white text-sm font-bold">View</span>
                         </div>
                     </div>
 
-                    <!-- Connecting Lines -->
                     <div class="absolute inset-0 pointer-events-none">
                         <div
                             class="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-secondary/20 to-transparent transform -translate-x-20">
@@ -1333,7 +1100,6 @@
                             class="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-l from-secondary/20 to-transparent transform translate-x-20">
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Collection Badge -->
@@ -1343,15 +1109,15 @@
                         <div class="flex -space-x-3">
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover">
+                                    alt="" class="w-full h-full object-cover" loading="lazy">
                             </div>
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover">
+                                    alt="" class="w-full h-full object-cover" loading="lazy">
                             </div>
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover">
+                                    alt="" class="w-full h-full object-cover" loading="lazy">
                             </div>
                         </div>
                         <div class="text-left">
@@ -1371,33 +1137,43 @@
             <!-- Right - CTA + Trust -->
             <div class="text-center">
                 <h3
-                    class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl  font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
-                    Make Every Entrance Unforgettable.</h3>
+                    class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4">
+                    Make Every Entrance Unforgettable.
+                </h3>
                 <button
                     class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
                     Grab now
                 </button>
-
-
-
-
             </div>
-
         </div>
     </div>
 </section>
+
+<!-- Ads/Banners Carousel -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div id="ads-carousel" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
+            @php
+            $bannerImg = asset('uploads/banners/' . $banner->image);
+            if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
+                $parts = explode('upload/', $bannerImg);
+                $bannerImg = $parts[0] . 'upload/w_1200,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+            @endphp
             <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
                 @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                 @else
                 data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}" />
+                        src="{{ $bannerImg }}"
+                        alt="{{ $banner->title }}"
+                        loading="lazy"
+                        decoding="async"
+                        width="1200"
+                        height="600" />
                 </div>
                 <!-- Blackish overlay that appears on hover -->
                 <div
@@ -1434,6 +1210,7 @@
     </div>
 </section>
 
+<!-- Monsoon Sale Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="flex flex-col lgg:flex-row gap-8 lgg:gap-12">
@@ -1442,8 +1219,6 @@
                 <h2 class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
                     Our Biggest Monsoon Sale of the Season
                 </h2>
-
-                <!-- Description -->
                 <p class="mt-4 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
                     Enjoy up to 50% OFF on selected designer collections.
                 </p>
@@ -1453,41 +1228,34 @@
                 <p class="mt-2 text-gray-500 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl">
                     <strong>shop now!</strong>
                 </p>
-
-                <!-- Button -->
                 <button class="mt-6 bg-black text-white px-8 py-3 rounded-lg shadow-md hover:bg-gray-900 transition">
                     Shop Now
                 </button>
 
-                <!-- Countdown Title -->
                 <h4 class="mt-10 text-h4-xs sm:text-h4-sm md:text-h4-md lg:text-h4-lg lgg:text-h4-lgg xl:text-h4-xl 2xl:text-h4-2xl font-semibold text-gray-800">
                     Hurry…only <span id="daysLabel">30</span> days left!
                 </h4>
 
                 <!-- Countdown -->
                 <div class="mt-6 flex gap-4 flex-wrap lgg:justify-start justify-center">
-                    <!-- Box -->
                     <div class="text-center">
                         <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="daysBox">
                             30
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Days</p>
                     </div>
-
                     <div class="text-center">
                         <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="hoursBox">
                             00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Hr</p>
                     </div>
-
                     <div class="text-center">
                         <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="minutesBox">
                             00
                         </div>
                         <p class="mt-2 text-sm text-gray-600">Mins</p>
                     </div>
-
                     <div class="text-center">
                         <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="secondsBox">
                             00
@@ -1497,10 +1265,16 @@
                 </div>
             </div>
 
-
             <div class="w-full lgg:w-[59%] flex justify-center items-center">
                 <div class="second-owl owl-carousel owl-theme relative">
                     @foreach ($secondaryBanners as $banner)
+                    @php
+                    $secBannerImg = asset('uploads/banners/' . $banner->image);
+                    if (strpos($secBannerImg, 'cloudinary.com') !== false && strpos($secBannerImg, 'upload/') !== false) {
+                        $parts = explode('upload/', $secBannerImg);
+                        $secBannerImg = $parts[0] . 'upload/w_600,h_800,c_fill,f_auto,q_auto/' . $parts[1];
+                    }
+                    @endphp
                     <div class="item flex justify-center items-center">
                         <div class="w-full bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer banner-card"
                             @if($banner->filter_type === 'multiple' && $banner->filters)
@@ -1508,13 +1282,16 @@
                             @else
                             data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                             <div class="relative overflow-hidden">
-                                <img src="{{ asset('uploads/banners/' . $banner->image) }}"
+                                <img src="{{ $secBannerImg }}"
                                     alt="{{ $banner->title }}"
-                                    class="w-full h-[400px] object-cover object-center object-top" />
+                                    class="w-full h-[400px] object-cover object-center object-top"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="600"
+                                    height="800" />
                             </div>
                             <div class="absolute bg-white p-4 bottom-[5%] left-[5%]">
                                 <div class="text-left">
-                                    <!-- Top line: subtitle — title -->
                                     <div class="flex items-center justify-center gap-4 mb-1">
                                         <span
                                             class="text-[1.1rem] font-medium text-gray-600">{{ $banner->subtitle }}</span>
@@ -1522,8 +1299,6 @@
                                         <span
                                             class="text-[1.1rem] font-medium text-gray-600 tracking-wider">{{ $banner->title }}</span>
                                     </div>
-
-                                    <!-- Big discount text -->
                                     <div class="text-[1.4rem] font-semibold text-gray-800 tracking-tight">
                                         {{ $banner->discount }}
                                     </div>
@@ -1538,386 +1313,7 @@
     </div>
 </section>
 
-{{--
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-            <!-- Left Title -->
-            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Filled By Colour
-            </h2>
-
-            <!-- Center Navigation -->
-
-            <!-- Right Link -->
-            <a href="{{ route('page.multi-product') }}"
-class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
-All Products
-<span aria-hidden="true">→</span>
-</a>
-</div>
-
-<div class="main-owl owl-carousel owl-theme">
-
-    @foreach ($products as $product)
-    <div class="item flex justify-center items-center">
-        <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card"
-            data-product-id="{{ $product->id }}">
-            <!-- Image Wrapper -->
-            <div class="relative rounded-[6px] overflow-hidden">
-                <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
-                    alt="{{ $product->name }}"
-                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
-                <!-- Badges -->
-                <div class="absolute top-3 left-3 flex flex-col gap-2">
-                    @if ($product->is_trending ?? false)
-                    <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                        Trending
-                    </span>
-                    @endif
-                    @if ($product->price_after_discount && $product->price_after_discount != $product->price)
-                    <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                        -{{ round((($product->price - $product->price_after_discount) / $product->price) * 100) }}%
-                    </span>
-                    @endif
-                </div>
-
-                <!-- Wishlist Heart Icon (Top Right) -->
-                <button
-                    class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                    onclick="toggleHomeWishlist({{ $product->id }}, event)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                        id="wishlist-heart-{{ $product->id }}">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </button>
-
-                <!-- Add To Cart (Hidden → Hover Show) -->
-                <div
-                    class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                    <button onclick="addToCart(1, event)"
-                        class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                        Add To Cart
-                    </button>
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="p-4 space-y-1">
-                <h3 class="text-[15px] font-semibold text-gray-900">
-                    {{ $product->name }}, {{ $product->size }}, {{ $product->color }}
-                </h3>
-
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <span>{{ $product->brand ?? 'Brand Name' }}</span>
-                    <span class="flex items-center gap-1 text-gray-700">
-                        <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
-                    </span>
-                </div>
-
-                <div class="flex items-center gap-2 mt-2 flex-wrap">
-                    <span class="text-lg font-bold text-gray-900">Rs.
-                        {{ $product->price_after_discount }}</span>
-                    @if ($product->price_after_discount != $product->price)
-                    <span class="text-sm text-gray-400 line-through">Rs. {{ $product->price }}</span>
-                    @endif
-                </div>
-                <div class="lgg:hidden block">
-                    <button onclick="addToCart({{ $product->variant_id }}, event)"
-                        class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endforeach
-
-    <!-- Add more product items as needed -->
-</div>
-</div>
-</section>
---}}
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
-            <!-- Item 1 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Premium Quality
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Made of the finest material
-                    </p>
-                </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Buyer Protection
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        2+ years
-                    </p>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        Free Shipping
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Over **
-                    </p>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
-                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
-                    alt="" />
-                <div>
-                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
-                        24 / 7 Support
-                    </h3>
-                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">
-                        Dedicated guidance
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{--
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-
-            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Filled By Categories
-            </h2>
-
-
-            <a href="#"
-                class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
-                All Products
-                <span aria-hidden="true">→</span>
-            </a>
-        </div>
-
-        <div class="main-owl owl-carousel owl-theme">
-            @foreach ($categories as $category)
-            <div class="item flex justify-center items-center">
-                <a href="{{ route('category.show', $category->slug) }}">
-<div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-[6px] shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card"
-    data-category-id="{{ $category->id }}">
-    <!-- Image Wrapper -->
-    <div class="relative rounded-[6px] overflow-hidden">
-        <img src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
-            alt="{{ $category->name }}"
-            class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
-        <!-- Category Badge -->
-        <div class="absolute top-3 left-3 flex flex-col gap-2">
-            @if ($category->products_count ?? false)
-            <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                {{ $category->products_count }} Products
-            </span>
-            @endif
-            @if ($category->is_active)
-            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                Active
-            </span>
-            @endif
-        </div>
-
-        <!-- View Products Button (Top Right) -->
-        <button
-            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-blue-500">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-        </button>
-
-        <!-- View Category (Hidden → Hover Show) -->
-        <div
-            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-            <a href="{{ route('category.show', $category->slug) }}"
-                class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
-                View Category
-            </a>
-        </div>
-    </div>
-
-    <!-- Content -->
-    <div class="p-4 space-y-1">
-        <h3 class="text-[15px] font-semibold text-gray-900">
-            {{ $category->name }}
-        </h3>
-
-        <div class="flex items-center gap-2 text-sm text-gray-600">
-            <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
-        </div>
-
-        <div class="flex items-center gap-2 mt-2 flex-wrap">
-            @if ($category->products_count)
-            <span class="text-lg font-bold text-gray-900">{{ $category->products_count }}
-                Items</span>
-            @else
-            <span class="text-lg font-bold text-gray-900">Browse Collection</span>
-            @endif
-        </div>
-        <div class="lgg:hidden block">
-            <a href="{{ route('category.show', $category->slug) }}"
-                class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
-                View
-            </a>
-        </div>
-    </div>
-</div>
-</a>
-</div>
-@endforeach
-</div>
-</div>
-</section>
---}}
-
-<section class="px-4 lgg:py-8 py-6">
-    <div class="container mx-auto">
-        <div class="w-full text-center mb-6">
-            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Our signature Standouts
-            </h2>
-            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
-                Red Carpet Ready in Every Design We Create
-            </p>
-        </div>
-        <div class="grid-container">
-            @php
-            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
-            @endphp
-            <!-- Owl Carousel for mobile/tablet -->
-            <div class="owl-carousel banner-carousel lgg:hidden">
-                @foreach($editorBanners as $banner)
-                <!-- Slide -->
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
-                    @if($banner->filter_type === 'multiple' && $banner->filters)
-                    data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <!-- Original grid layout for desktop -->
-            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
-                @foreach ($editorBanners as $index => $banner)
-                @if ($index % 2 == 0)
-                <!-- Left Banner -->
-                <div class="relative bg-[#b8a89a] overflow-hidden"
-                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endif
-                @endforeach
-
-                @foreach ($editorBanners as $index => $banner)
-                @if ($index % 2 == 1)
-                <!-- Right Banner -->
-                <div class="relative bg-[#e8dcd6] overflow-hidden"
-                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
-                    @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ asset('uploads/banners/' . $banner->image) }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
-                            {{ $banner->title }}
-                        </h2>
-                        @if ($banner->description)
-                        <p class="text-sm text-black mb-6">
-                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
-                            <span class="text-white font-medium">{{ $banner->discount }}</span>
-                        </p>
-                        @endif
-                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
-                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
-                            {{ $banner->button_text }}
-                        </a>
-                    </div>
-                </div>
-                @endif
-                @endforeach
-            </div>
-</section>
-
+<!-- 🔥 FIXED: Bookmarked Styles Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
@@ -1933,27 +1329,27 @@ All Products
             @forelse($mostWishlisted as $index => $product)
             @php
             $variant = $product->variants->first();
+            $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
+            if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                $parts = explode('upload/', $imageUrl);
+                $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+            }
             @endphp
-
-
-
             <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
+                <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="relative rounded-[6px] overflow-hidden">
-
                         <a href="{{ route('category.show', $product->category->slug) }}">
-                            <img src="{{ $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg') }}"
-                                alt="Silver Lehenga"
-                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-                            {{-- <img src="{{ asset($product->images->first()->image) }}"
-                            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" /> --}}
+                            <img src="{{ $imageUrl }}"
+                                alt="{{ $product->name }}"
+                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center"
+                                loading="lazy"
+                                decoding="async"
+                                width="600"
+                                height="900" />
                         </a>
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            {{-- @dd($product->variants->first()->discount) --}}
                             @if (optional($product->variants->first())->discount == 0)
                             <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
                                 Trending
@@ -1965,33 +1361,15 @@ All Products
                             @endif
                         </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        {{-- <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                            onclick="toggleHomeWishlist(1, event)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                                id="wishlist-heart-1">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button> --}}
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
                         @php
                         $variant_id = optional($variant)->id ?? $variant?->first()->id;
                         @endphp
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-
-
+                        <div class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
                             <a href="{{ route('page.single-product', $product->slug) }}">
-                                <button
-                                    class="add-to-cart-btn bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                                <button class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                     View
                                 </button>
                             </a>
-
                         </div>
                     </div>
 
@@ -2000,14 +1378,12 @@ All Products
                         <h3 class="text-[15px] font-semibold text-gray-900 truncate">
                             {{$product->name ?? ''}}
                         </h3>
-
                         <div class="flex items-center gap-2 text-sm text-gray-600">
                             <span>{{ $product->brand ?? '' }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
-
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
                             <span class="text-lg font-bold text-gray-900">Rs.
                                 {{ $variant->discount_price ?? $product->price }}</span>
@@ -2017,227 +1393,25 @@ All Products
                             @endif
                         </div>
                         <div class="lgg:hidden block">
-
-                            {{-- <button onclick="addToCart({{$variant_id}}, event)"
-                            class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button> --}}
                             <a href="{{ route('category.show', $product->category->slug) }}">
-                                <button
-                                    class="add-to-cart-btn px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
+                                <button class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">View</button>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            {{-- <div class="item flex justify-center items-center">
-                <div class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/light-pink-plazo-2_54_11zon.webp') }}"
-            alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
-            <!-- Badges -->
-            <div class="absolute top-3 left-3 flex flex-col gap-2">
-                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                    Trending
-                </span>
-                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                    -17%
-                </span>
+            @empty
+            <div class="text-center py-8">
+                <p class="text-gray-500">No wishlisted products found.</p>
             </div>
-
-            <!-- Wishlist Heart Icon (Top Right) -->
-            <button
-                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-                onclick="toggleHomeWishlist(1, event)">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-                    id="wishlist-heart-1">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-            </button>
-
-            <!-- Add To Cart (Hidden → Hover Show) -->
-            <div
-                class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                <button onclick="addToCart(1, event)"
-                    class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                    Add To Cart
-                </button>
-            </div>
+            @endforelse
         </div>
-
-        <!-- Content -->
-        <div class="p-4 space-y-1">
-            <h3 class="text-[15px] font-semibold text-gray-900">
-                Light Pink Plazo
-            </h3>
-
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-                <span>Brand Name</span>
-                <span class="flex items-center gap-1 text-gray-700">
-                    <span class="text-sm font-medium">4.4</span>
-                </span>
-            </div>
-
-            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-            </div>
-            <div class="lgg:hidden block">
-                <button onclick="addToCart(1, event)"
-                    class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-            </div>
-        </div>
-    </div>
-    </div> --}}
-    {{-- <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-[6px] overflow-hidden">
-                        <img src="{{ asset('web/images/product-images/cherry-plazo-3_1_11zon.webp') }}"
-    alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
-    <!-- Badges -->
-    <div class="absolute top-3 left-3 flex flex-col gap-2">
-
-        @if ($product->wishlists_count > 0)
-        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-            Trending
-        </span>
-        @endif
-        @if ($product->discount_price && $product->discount_price < $product->price)
-            <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
-            </span>
-            @endif
-    </div>
-
-    <!-- Wishlist Heart Icon (Top Right) -->
-    <button
-        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-        onclick="toggleHomeWishlist(1, event)">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-            id="wishlist-heart-1">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-    </button>
-
-    <!-- Add To Cart (Hidden → Hover Show) -->
-    {{-- <div class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart({{ $product->id }}, event)"
-    class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-    Add To Cart
-    </button>
-    </div> --}}
-    {{-- </div> --}}
-
-    <!-- Content -->
-    {{-- <div class="p-4 space-y-1">
-                    <h3 class="text-[15px] font-semibold text-gray-900">
-                        {{ $product->name }}
-    </h3>
-
-    <div class="flex items-center gap-2 text-sm text-gray-600">
-        <span>{{ $product->brand_name ?? 'Brand Name' }}</span>
-        <span class="flex items-center gap-1 text-gray-700">
-            <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
-        </span>
-    </div>
-
-    <div class="flex items-center gap-2 mt-2 flex-wrap">
-        <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-        <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-    </div>
-    <div class="lgg:hidden block">
-        <button onclick="addToCart(1, event)"
-            class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-    </div>
-    </div> --}}
-    {{-- </div> --}}
-    {{-- </div> --}}
-    {{-- <div class="item flex justify-center items-center">
-            <div
-                class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <!-- Image Wrapper -->
-                <div class="relative rounded-[6px] overflow-hidden">
-                    <img src="{{ asset('web/images/product-images/dark-red-plazo-3_13_11zon.webp') }}"
-    alt="Silver Lehenga" class="w-full h-auto aspect-[9/13] object-cover object-top object-center" />
-
-    <!-- Badges -->
-    <div class="absolute top-3 left-3 flex flex-col gap-2">
-        <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-            Trending
-        </span>
-        <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-            -17%
-        </span>
-    </div>
-
-    <!-- Wishlist Heart Icon (Top Right) -->
-    <button
-        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 w-[35px] h-[35px] flex justify-center items-center"
-        onclick="toggleHomeWishlist(1, event)">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500"
-            id="wishlist-heart-1">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-    </button>
-
-    <!-- Add To Cart (Hidden → Hover Show) -->
-    <div
-        class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-        <button onclick="addToCart(1, event)"
-            class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-            Add To Cart
-        </button>
-    </div>
-    </div>
-
-    <!-- Content -->
-    <div class="p-4 space-y-1">
-        <h3 class="text-[15px] font-semibold text-gray-900">
-            Cherry Plazo
-        </h3>
-
-        <div class="flex items-center gap-2 text-sm text-gray-600">
-            <span>Brand Name</span>
-            <span class="flex items-center gap-1 text-gray-700">
-                <span class="text-sm font-medium">4.4</span>
-            </span>
-        </div>
-
-        <div class="flex items-center gap-2 mt-2 flex-wrap">
-            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-        </div>
-        <div class="lgg:hidden block">
-            <button onclick="addToCart(1, event)"
-                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
-        </div>
-    </div>
-    </div>
-    </div> --}}
-    @empty
-    <div class="text-center py-8">
-        <p class="text-gray-500">No wishlisted products found.</p>
-    </div>
-    @endforelse
-
-    <!-- Add more product items as needed -->
-    </div>
     </div>
 </section>
 
-<!-- Combined Premium Services Card -->
+<!-- Premium Services Card -->
 <section class="py-16 lg:py-20 px-4 bg-gradient-to-b from-white to-gray-50">
     <div class="container mx-auto">
-        <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <h2
                 class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem] font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
@@ -2248,9 +1422,7 @@ All Products
             </p>
         </div>
 
-        <!-- Main Horizontal Card (Block) -->
         <div class="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
-            <!-- Background Pattern -->
             <div class="absolute inset-0 bg-gradient-to-r from-rose-50 via-white to-pink-50"></div>
             <div class="absolute inset-0 opacity-10">
                 <div
@@ -2261,21 +1433,16 @@ All Products
                 </div>
             </div>
 
-            <!-- Main Content Block -->
             <div class="relative py-12 lg:py-16 px-6 lg:px-12">
                 <div class="flex lg:flex-row flex-col gap-8 lg:gap-12">
-                    <!-- Left Service - Virtual Styling (Block) -->
                     <div
                         class="group flex flex-col justify-between relative bg-gradient-to-br from-white to-rose-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-rose-100 flex-1">
-                        <!-- Service Badge -->
                         <div class="absolute -top-3 w-full flex justify-center left-0">
                             <span
                                 class="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 FREE SERVICE
                             </span>
                         </div>
-
-                        <!-- Service Icon & Title -->
                         <div class="flex flex-col items-center text-center mb-8">
                             <div
                                 class="w-20 h-20 bg-gradient-to-br from-rose-100 to-pink-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg">
@@ -2289,13 +1456,9 @@ All Products
                                 Get connected with fashion experts
                             </h3>
                         </div>
-
-                        <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
                             A free service that has been provided so that you can who are trusting with your style and money. What happens during your time with us
                         </p>
-
-                        <!-- Features List (Block) -->
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2331,8 +1494,6 @@ All Products
                                 <span>Live preview of what your fit looks like</span>
                             </li>
                         </ul>
-
-                        <!-- Button -->
                         <div class="text-center">
                             <a href="{{ route('page.appointment') }}#appoint-book-section"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
@@ -2346,7 +1507,6 @@ All Products
                         </div>
                     </div>
 
-                    <!-- Center Divider (Hidden on mobile) -->
                     <div class="hidden lg:flex flex-col items-center justify-center relative">
                         <div class="absolute inset-0 flex items-center justify-center w-[5px]">
                             <div class="w-[3px] h-full bg-gradient-to-b from-transparent via-rose-200 to-transparent">
@@ -2354,18 +1514,14 @@ All Products
                         </div>
                     </div>
 
-                    <!-- Right Service - Bridal Stylist (Block) -->
                     <div
                         class="group flex flex-col justify-between relative bg-gradient-to-br from-white to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-pink-100 flex-1">
-                        <!-- Service Badge -->
                         <div class="absolute -top-3 w-full flex justify-center left-0">
                             <span
                                 class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 PREMIUM SERVICE
                             </span>
                         </div>
-
-                        <!-- Service Icon & Title -->
                         <div class="flex flex-col items-center text-center mb-8">
                             <div
                                 class="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg">
@@ -2379,13 +1535,9 @@ All Products
                                 Know your style and fit
                             </h3>
                         </div>
-
-                        <!-- Service Description -->
                         <p class="text-gray-600 text-center mb-8 leading-relaxed">
                             A premium service that makes the showstopper for the occasion.
                         </p>
-
-                        <!-- Features List (Block) -->
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center gap-3 text-gray-700">
                                 <div
@@ -2421,8 +1573,6 @@ All Products
                                 <span>Expert advice on how to embrace your personality with our design</span>
                             </li>
                         </ul>
-
-                        <!-- Button -->
                         <div class="text-center">
                             <a href="{{ route('page.appointment') }}#appoint-book-section"
                                 class="group inline-flex items-center justify-center gap-3 w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg">
@@ -2441,24 +1591,19 @@ All Products
     </div>
 </section>
 
-
-
+<!-- Designer Thoughts Section -->
 <section class="relative w-full min-h-[800px] h-auto py-12 flex items-center justify-center overflow-hidden">
     <div class="parallax-bg absolute inset-0 bg-cover bg-top scale-110" data-parallax>
     </div>
-
     <div class="absolute inset-0 bg-black/40"></div>
-
     <div class="container mx-auto relative z-10 px-4 md:px-6">
         <div class="h-full flex items-center lg:justify-end justify-center">
-            <!-- Enhanced Designer Thoughts Card -->
             <div
                 class="bg-gradient-to-br from-white to-red-50 rounded-2xl shadow-2xl max-w-2xl w-full p-8 md:p-6 relative overflow-hidden border border-red-100">
 
-                <!-- Top Banner -->
                 <div class="flex justify-center items-center">
                     <div
-                        class="w-auto flex sm:flex-row flex-col  bg-gradient-to-r from-primary  to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg   items-center gap-2">
+                        class="w-auto flex sm:flex-row flex-col bg-gradient-to-r from-primary to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:block hidden" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -2469,22 +1614,17 @@ All Products
                     </div>
                 </div>
 
-                <!-- Brand Logo Watermark -->
                 <div class="absolute top-4 right-4 opacity-10 md:block hidden">
                     <div class="text-6xl font-serif font-bold text-secondary">AF</div>
                 </div>
 
-                <!-- Owl Carousel Container -->
                 <div id="designer-thoughts" class="owl-carousel owl-theme mt-8">
-
-                    <!-- Slide 1 -->
                     <div class="slide-item">
                         <div class="flex justify-center mb-6">
-                            <div class="w-16 h-1 bg-gradient-to-r from-secondary  to-secondary-light rounded-full">
+                            <div class="w-16 h-1 bg-gradient-to-r from-secondary to-secondary-light rounded-full">
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">Elevating Lahenga
-                            Elegance</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">Elevating Lahenga Elegance</h3>
                         <div class="relative">
                             <div class="absolute -left-4 top-1/2 transform -translate-y-1/2 text-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor"
@@ -2502,9 +1642,7 @@ All Products
                                 </svg>
                             </div>
                             <p class="text-gray-700 text-lg leading-relaxed text-center px-8 italic">
-                                "At Aiman Fashion, we believe every lahenga tells a story. Our designs blend traditional
-                                craftsmanship with contemporary silhouettes, creating pieces that honor heritage while
-                                embracing modern elegance."
+                                "At Aiman Fashion, we believe every lahenga tells a story. Our designs blend traditional craftsmanship with contemporary silhouettes, creating pieces that honor heritage while embracing modern elegance."
                             </p>
                         </div>
                         <div class="md:mt-8 mt-4 pt-6 pb-3 border-t border-red-100">
@@ -2540,14 +1678,12 @@ All Products
                         </div>
                     </div>
 
-                    <!-- Slide 2 -->
                     <div class="slide-item">
                         <div class="flex justify-center mb-6">
-                            <div class="w-16 h-1 bg-gradient-to-r from-secondary  to-secondary-light rounded-full">
+                            <div class="w-16 h-1 bg-gradient-to-r from-secondary to-secondary-light rounded-full">
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">Modern Salwar Kameez
-                        </h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">Modern Salwar Kameez</h3>
                         <div class="relative">
                             <div class="absolute -left-4 top-1/2 transform -translate-y-1/2 text-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor"
@@ -2565,8 +1701,7 @@ All Products
                                 </svg>
                             </div>
                             <p class="text-gray-700 text-lg leading-relaxed text-center px-8 italic">
-                                "Our salwar kameez collection redefines comfort with style. We focus on flattering cuts
-                                and breathable fabrics that celebrate the feminine form while ensuring maximum comfort."
+                                "Our salwar kameez collection redefines comfort with style. We focus on flattering cuts and breathable fabrics that celebrate the feminine form while ensuring maximum comfort."
                             </p>
                         </div>
                         <div class="mt-8 pt-6 pb-3 border-t border-red-100">
@@ -2601,14 +1736,12 @@ All Products
                         </div>
                     </div>
 
-                    <!-- Slide 3 -->
                     <div class="slide-item">
                         <div class="flex justify-center mb-6">
-                            <div class="w-16 h-1 bg-gradient-to-r from-secondary  to-secondary-light rounded-full">
+                            <div class="w-16 h-1 bg-gradient-to-r from-secondary to-secondary-light rounded-full">
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">The Palazzo
-                            Revolution</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center font-serif">The Palazzo Revolution</h3>
                         <div class="relative">
                             <div class="absolute -left-4 top-1/2 transform -translate-y-1/2 text-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor"
@@ -2626,9 +1759,7 @@ All Products
                                 </svg>
                             </div>
                             <p class="text-gray-700 text-lg leading-relaxed text-center px-8 italic">
-                                "Palazzos are our canvas for innovation. We experiment with fabrics and draping
-                                techniques to create pieces that are both trendy and timeless for the modern woman on
-                                the go."
+                                "Palazzos are our canvas for innovation. We experiment with fabrics and draping techniques to create pieces that are both trendy and timeless for the modern woman on the go."
                             </p>
                         </div>
                         <div class="mt-8 pt-6 pb-3 border-t border-red-100">
@@ -2663,12 +1794,10 @@ All Products
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Custom Navigation -->
                 <div
-                    class="flex  md:justify-between justify-center md:absolute w-full md:left-0 md:bottom-[20%] px-[37px] md:z-[10] gap-4 mt-8 thoughts-nav">
+                    class="flex md:justify-between justify-center md:absolute w-full md:left-0 md:bottom-[20%] px-[37px] md:z-[10] gap-4 mt-8 thoughts-nav">
                     <button
                         class="custom-prev-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -2686,70 +1815,233 @@ All Products
                     </button>
                 </div>
 
-                <!-- Decorative Bottom Border -->
                 <div
                     class="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent rounded-full">
                 </div>
-
             </div>
         </div>
     </div>
 </section>
 
+<!-- Features Section -->
+<section class="px-4 lgg:py-8 py-6">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon1.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Premium Quality</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Made of the finest material</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon2.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Buyer Protection</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">2+ years</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon4.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">Free Shipping</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Over **</p>
+                </div>
+            </div>
+            <div class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
+                <img class="min-w-12 w-12 h-12 min-h-12" src="{{ asset('web/images/icons/icon3.svg') }}"
+                    alt="" loading="lazy" decoding="async" />
+                <div>
+                    <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">24 / 7 Support</h3>
+                    <p class="xl:text-[1.3rem] text-[1.1rem] text-gray-500">Dedicated guidance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- Signature Standouts Section -->
+<section class="px-4 lgg:py-8 py-6">
+    <div class="container mx-auto">
+        <div class="w-full text-center mb-6">
+            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
+                Our signature Standouts
+            </h2>
+            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
+                Red Carpet Ready in Every Design We Create
+            </p>
+        </div>
+        <div class="grid-container">
+            @php
+            $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();
+            @endphp
+            <div class="owl-carousel banner-carousel lgg:hidden">
+                @foreach($editorBanners as $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                    @if($banner->filter_type === 'multiple' && $banner->filters)
+                    data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
 
+            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
+                @foreach ($editorBanners as $index => $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                @if ($index % 2 == 0)
+                <div class="relative bg-[#b8a89a] overflow-hidden"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+                @endforeach
 
-
-
-
-
-
-
-
-
+                @foreach ($editorBanners as $index => $banner)
+                @php
+                $editorImg = asset('uploads/banners/' . $banner->image);
+                if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
+                    $parts = explode('upload/', $editorImg);
+                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                }
+                @endphp
+                @if ($index % 2 == 1)
+                <div class="relative bg-[#e8dcd6] overflow-hidden"
+                    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                    @else
+                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                        loading="lazy"
+                        decoding="async"
+                        width="800"
+                        height="600" />
+                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                        @if ($banner->subtitle)
+                        <span
+                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
+                        @endif
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
+                            {{ $banner->title }}
+                        </h2>
+                        @if ($banner->description)
+                        <p class="text-sm text-black mb-6">
+                            Get <span class="font-semibold">{{ $banner->description }}</span> | Use Code:
+                            <span class="text-white font-medium">{{ $banner->discount }}</span>
+                        </p>
+                        @endif
+                        <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}"
+                            class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
+                            {{ $banner->button_text }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
 
 @endsection
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<!-- Cart Functionality -->
+
 <script>
     // Wishlist functionality
     function toggleHomeWishlist(productId, event) {
         console.log('toggleHomeWishlist called with productId:', productId);
-
         if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
-
         if (!productId) {
             alert('Product ID not found');
             return;
         }
-
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
-
         console.log('Heart icon element:', heartIcon);
-
         if (!heartIcon) {
             console.error('Heart icon not found for product:', productId);
             return;
         }
-
-        // Check if already in wishlist by checking if it's an SVG (empty) or FontAwesome (filled)
         const isSVG = heartIcon.tagName === 'svg';
         const isInWishlist = isSVG ? false : heartIcon.classList.contains('fas');
         const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
         console.log('Is SVG element:', isSVG);
         console.log('Current wishlist state:', isInWishlist);
         console.log('Calling URL:', url);
-
-        // Show loading state
         const originalContent = heartIcon.innerHTML;
         heartIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
         fetch(url, {
                 method: 'POST',
                 headers: {
@@ -2770,27 +2062,17 @@ All Products
                 console.loj('Wishlist updated successfully');
                 if (data.success) {
                     showNotification(data.message, 'success');
-                    
-                    // Update heart icon using innerHTML like single-product
                     if (isInWishlist) {
-                        // Was in wishlist, now removed
                         heartIcon.innerHTML = '<i class="far fa-heart text-red-500"></i>';
                     } else {
-                        // Was not in wishlist, now added
                         heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
                     }
-
-                    // Update wishlist count if you have a counter
                     if (data.wishlist_count !== undefined) {
                         updateWishlistCount(data.wishlist_count);
                     }
-                    
-                    
                 } else {
-                    // Handle case where product is already in wishlist
                     if (data.message && data.message.includes('already in wishlist')) {
                         showNotification('Product is already in wishlist!', 'info');
-                        // Don't change the heart icon if already in wishlist
                         if (isSVG && !isInWishlist) {
                             heartIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
                         }
@@ -2804,20 +2086,16 @@ All Products
                 showNotification('An error occurred while updating wishlist', 'error');
             })
             .finally(() => {
-                // Restore original content if error occurred
                 if (heartIcon.innerHTML.includes('fa-spinner')) {
                     heartIcon.innerHTML = originalContent;
                 }
             });
     }
 
-    // Check if product is in wishlist
     function checkHomeProductWishlist(productId) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const heartIcon = document.getElementById(`wishlist-heart-${productId}`);
-
         if (!heartIcon) return;
-
         fetch('/wishlist/check', {
                 method: 'POST',
                 headers: {
@@ -2845,7 +2123,6 @@ All Products
             });
     }
 
-    // Update wishlist count (if you have a counter)
     function updateWishlistCount(count) {
         const wishlistCounter = document.getElementById('wishlist-counter');
         if (wishlistCounter) {
@@ -2853,74 +2130,16 @@ All Products
         }
     }
 
-    // function addToCart(variantId, event) {
-    //     // Show loading state
-    //     console.log('Adding to cart, variantId:', variantId);
-    //     const button = event.target;
-    //     const originalText = button.textContent;
-    //     button.textContent = 'Adding...';
-    //     button.disabled = true;
-
-    //     // Create form data
-    //     const formData = new FormData();
-    //     formData.append('variant_id', variantId);
-    //     formData.append('count', 1);
-    //     console.log(formData);
-    //     // Get CSRF token
-    //     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-    //     // Send AJAX request
-    //     fetch('/cart/add', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'X-CSRF-TOKEN': token,
-    //                 'Accept': 'application/json'
-    //             },
-    //             body: formData
-    //         })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log(data)
-    //             if (data.success) {
-    //                 button.textContent = 'Added';
-    //                 button.disabled = true;
-
-    //                 // Optional styling change
-    //                 button.classList.remove('bg-white');
-    //                 button.classList.add('bg-green-600', 'text-white');
-
-    //                 showNotification(data.message, 'success');
-    //                 updateCartCount(data.cart_count);
-    //                 blastCelebration(button);
-    //             } else {
-    //                  button.textContent = originalText;
-    //                  button.disabled = false;
-    //                 showNotification(data.message, 'error');
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             showNotification('An error occurred while adding to cart', 'error');
-    //         });
-    //         // .finally(() => {
-    //         //     button.textContent = originalText;
-    //         //     button.disabled = false;
-    //         // });
-    // }
-
     function showNotification(message, type) {
         const notification = document.createElement('div');
         notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    }`;
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        }`;
         notification.textContent = message;
-
         document.body.appendChild(notification);
-
         setTimeout(() => {
             notification.classList.remove('translate-x-full');
         }, 100);
-
         setTimeout(() => {
             notification.classList.add('translate-x-full');
             setTimeout(() => {
@@ -2938,6 +2157,7 @@ All Products
         });
     }
 </script>
+
 <script>
     const bg = document.querySelector(".parallax-bg");
     const section = bg.closest("section");
@@ -2945,12 +2165,9 @@ All Products
     function updateParallax() {
         const rect = section.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-
-        // Only run when section is visible
         if (rect.bottom > 0 && rect.top < windowHeight) {
             const scrollProgress = rect.top / windowHeight;
-            const movement = scrollProgress * -500; // adjust strength here
-
+            const movement = scrollProgress * -500;
             bg.style.transform = `translateY(${movement}px) scale(1.2)`;
         }
     }
@@ -2959,6 +2176,7 @@ All Products
     window.addEventListener("resize", updateParallax);
     updateParallax();
 </script>
+
 <script>
     const sliders = [{
             className: 'slide-left',
@@ -2987,43 +2205,28 @@ All Products
     function updateSlider(slider) {
         const slides = document.querySelectorAll('.' + slider.className);
         const link = document.getElementById(slider.linkId);
-
         if (slides.length === 0) return;
-
-        // Calculate previous and current active indices
         const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
         const activeIndex = currentIndex % slides.length;
-
-        // Reset all slides
         slides.forEach((slide, i) => {
             slide.classList.remove('opacity-100', 'z-10', 'fade-out', 'fade-in');
             slide.classList.add('opacity-0', 'z-0');
         });
-
-        // Previous slide fades out
         slides[prevIndex].classList.remove('opacity-0', 'z-0');
         slides[prevIndex].classList.add('opacity-100', 'z-10', 'fade-out');
-
-        // Current slide fades in
         slides[activeIndex].classList.remove('opacity-0', 'z-0');
         slides[activeIndex].classList.add('fade-in', 'z-10');
-
-        // Update link
         if (link) {
             link.href = slides[activeIndex].dataset.link || '#';
         }
-
         const prefix = slider.className.replace('slide-', '');
-
         const title = document.getElementById(prefix + 'TitleText');
         const shortText = document.getElementById(prefix + 'ShortText');
         const offerText = document.getElementById(prefix + 'OfferText');
         const shopBtn = document.getElementById(prefix + 'ShopBtn');
-
         if (title) title.innerText = slides[activeIndex].dataset.title || '';
         if (shortText) shortText.innerText = slides[activeIndex].dataset.short || '';
         if (shopBtn) shopBtn.href = slides[activeIndex].dataset.link || '#';
-
         if (offerText) {
             if (slides[activeIndex].dataset.offer) {
                 offerText.innerHTML = `
@@ -3042,7 +2245,6 @@ All Products
 
     document.addEventListener('DOMContentLoaded', function() {
         sliders.forEach(updateSlider);
-
         setInterval(() => {
             currentIndex++;
             sliders.forEach(updateSlider);
@@ -3054,21 +2256,16 @@ All Products
             event.preventDefault();
             event.stopPropagation();
         }
-
         if (!productId) {
             alert('Product ID not found');
             return;
         }
-
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         const isInWishlist = button.classList.contains('text-red-500');
         const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
-        // Show loading
         const originalContent = button.innerHTML;
         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         button.disabled = true;
-
         fetch(url, {
                 method: 'POST',
                 headers: {
@@ -3082,8 +2279,6 @@ All Products
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    
-                    // Toggle UI
                     if (isInWishlist) {
                         button.classList.remove('text-red-500');
                         button.innerHTML = '<i class="far fa-heart"></i>';
@@ -3092,20 +2287,14 @@ All Products
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
-                            item.textContent = data.wishlist_count;
-
-                            // Hide badge when count is 0 (optional)
-                            if (data.wishlist_count > 0) {
-                                item.style.display = "flex";
-                            } else {
-                                item.style.display = "none";
-                            }
-                        });
-
+                        item.textContent = data.wishlist_count;
+                        if (data.wishlist_count > 0) {
+                            item.style.display = "flex";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
                 } else {
-
-
-
                     Swal.fire({
                         icon: 'info',
                         title: 'Already Added',
@@ -3113,7 +2302,6 @@ All Products
                         ConfirmButtonText: 'Ok',
                         timer: 1800
                     });
-                    // Keep heart filled
                     button.classList.add('text-red-500');
                     button.innerHTML = '<i class="fas fa-heart"></i>';
                 }
@@ -3128,31 +2316,24 @@ All Products
 </script>
 
 <script>
-    // Targeting JS - Countdown timer with 30 days default
     (function() {
-        // Set target date to 30 days from now (midnight)
         const TARGET_DATE = new Date();
         TARGET_DATE.setDate(TARGET_DATE.getDate() + 30);
         TARGET_DATE.setHours(0, 0, 0, 0);
 
-        // DOM elements
         const daysBox = document.getElementById('daysBox');
         const hoursBox = document.getElementById('hoursBox');
         const minutesBox = document.getElementById('minutesBox');
         const secondsBox = document.getElementById('secondsBox');
         const daysLabel = document.getElementById('daysLabel');
 
-        // Helper: format number with leading zero
         function pad(num) {
             return String(num).padStart(2, '0');
         }
 
-        // Update countdown
         function updateCountdown() {
             const now = new Date();
             const diffMs = TARGET_DATE - now;
-
-            // If countdown finished, show zeros
             let remainingSeconds = Math.max(0, Math.floor(diffMs / 1000));
             const days = Math.floor(remainingSeconds / 86400);
             remainingSeconds %= 86400;
@@ -3161,18 +2342,14 @@ All Products
             const minutes = Math.floor(remainingSeconds / 60);
             const seconds = remainingSeconds % 60;
 
-            // Format
             const daysStr = String(days);
             const hoursStr = pad(hours);
             const minsStr = pad(minutes);
             const secsStr = pad(seconds);
 
-            // Update days label
             if (daysLabel) {
                 daysLabel.textContent = daysStr;
             }
-
-            // Update boxes without animation
             if (daysBox) {
                 daysBox.textContent = daysStr;
             }
@@ -3187,13 +2364,8 @@ All Products
             }
         }
 
-        // Initial call
         updateCountdown();
-
-        // Update every second
         const timerInterval = setInterval(updateCountdown, 1000);
-
-        // Cleanup
         window.addEventListener('beforeunload', function() {
             clearInterval(timerInterval);
         });
@@ -3202,7 +2374,6 @@ All Products
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Categories Tag Carousel
         if ($('#categories-tag-carousel').length) {
             $('#categories-tag-carousel').owlCarousel({
                 loop: true,
@@ -3243,5 +2414,4 @@ All Products
         }
     });
 </script>
-
 @endsection

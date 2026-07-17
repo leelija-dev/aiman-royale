@@ -2428,7 +2428,7 @@ art from fake trails.
 </footer>
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
-<a href="https://wa.me/919999999999" target="_blank"
+<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
   class="fixed {{ $isProductPage ? 'bottom-[12.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 

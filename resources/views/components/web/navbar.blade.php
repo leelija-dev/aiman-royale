@@ -972,7 +972,7 @@
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
 
-                    <a href="https://wa.me/1234567890" target="_blank"
+                    <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
                         <div
