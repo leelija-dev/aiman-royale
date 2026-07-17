@@ -128,7 +128,7 @@
                                     <i class="fas fa-times me-2"></i>Cancel
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Save Product
+                                    <i class="fas fa-save me-2"></i>Save Store
                                 </button>
 
                             </div>
