@@ -162,7 +162,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Already have an account? 
-                        <a href="{{ route('login') }}" class="text-purple-600 hover:text-purple-700 font-medium">
+                        <a href="{{ route('page.login') }}" class="text-purple-600 hover:text-purple-700 font-medium">
                             Sign In
                         </a>
                     </p>
