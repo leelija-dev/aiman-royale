@@ -981,11 +981,11 @@
                         </div>
                     </a>
                 </div>
-              @php
+                @php
                 if (Auth::check()) {
-                     $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
                 } else {
-                   $wishlistCount = 0;
+                $wishlistCount = 0;
                 }
 
                 @endphp
@@ -996,14 +996,14 @@
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
                             <i class="fa-regular fa-heart text-lg group-hover:text-red-600"></i>
                         </div>
-                            @if (Auth::check())
-                                @if ($wishlistCount > 0)
-                                <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
-                                    {{ $wishlistCount ?? 0 }}
-                                </span>
-                                @endif
-                           
-                            @endif
+                        @if (Auth::check())
+                        @if ($wishlistCount > 0)
+                        <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
+                            {{ $wishlistCount ?? 0 }}
+                        </span>
+                        @endif
+
+                        @endif
 
                     </button>
                 </a>
@@ -2251,6 +2251,60 @@
         }
 
         // Process API response to match our expected format
+        // function processSearchResponse(data, searchTerm) {
+        //     const term = searchTerm.toLowerCase().trim();
+        //     const results = {
+        //         categories: [],
+        //         products: [],
+        //         hasResults: false
+        //     };
+
+        //     if (data.success && data.data) {
+        //         console.log('Processing search response for term:', term, 'Data:', data.data);
+        //         // Extract unique categories from products
+        //         const categoryMap = new Map();
+
+        //         data.data.forEach(product => {
+        //             // Add product
+        //             results.products.push({
+        //                 id: product.id,
+        //                 title: product.name,
+        //                 price: product.discount_price ? `MRP ₹${product.discount_price}` : `MRP ₹${product.price}`,
+        //                 image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+        //                 slug: product.slug,
+        //                 tags: [product.category?.name?.toLowerCase() || '', product.subcategory?.name?.toLowerCase() || ''].filter(Boolean)
+        //             });
+
+        //             // Add category if not already added
+        //             if (product.category && !categoryMap.has(product.category.id)) {
+        //                 categoryMap.set(product.category.id, {
+        //                     id: product.category.id,
+        //                     name: product.category.name,
+        //                     slug: product.category.slug
+        //                 });
+        //             }
+
+        //             // Add subcategory if exists and not already added
+        //             if (product.subcategory && !categoryMap.has(`sub_${product.subcategory.id}`)) {
+        //                 categoryMap.set(`sub_${product.subcategory.id}`, {
+        //                     id: product.subcategory.id,
+        //                     name: product.subcategory.name,
+        //                     slug: product.subcategory.slug,
+        //                     is_subcategory: true
+        //                 });
+        //             }
+        //         });
+
+        //         // Convert categories map to array and limit to 3
+        //         results.categories = Array.from(categoryMap.values()).slice(0, 3);
+        //         results.hasResults = results.products.length > 0 || results.categories.length > 0;
+        //     }
+
+        //     return results;
+        // }
+
+        // Process API response to match our expected format - FIXED FOR CLOUDINARY
+       
         function processSearchResponse(data, searchTerm) {
             const term = searchTerm.toLowerCase().trim();
             const results = {
@@ -2259,19 +2313,77 @@
                 hasResults: false
             };
 
+            console.log('Processing search response for term:', term, 'Data:', data.data);
+
             if (data.success && data.data) {
                 // Extract unique categories from products
                 const categoryMap = new Map();
 
-                data.data.forEach(product => {
+                // Check if data.data is an array
+                const productsArray = Array.isArray(data.data) ? data.data : [data.data];
+
+                productsArray.forEach(product => {
+                    // FIX: Get the correct product image URL based on your API structure
+                    let productImage = '';
+
+                    // Your API has 'image' directly at root level (could be Cloudinary URL)
+                    if (product.image) {
+                        productImage = product.image;
+                    }
+                    // Fallback: check if there's a featured_image
+                    else if (product.featured_image) {
+                        productImage = product.featured_image;
+                    }
+                    // Fallback: check if there's an images array
+                    else if (product.images && product.images.length > 0) {
+                        const firstImage = product.images[0];
+                        if (firstImage) {
+                            if (firstImage.image) {
+                                productImage = firstImage.image;
+                            } else if (typeof firstImage === 'string') {
+                                productImage = firstImage;
+                            } else if (firstImage.url) {
+                                productImage = firstImage.url;
+                            } else if (firstImage.path) {
+                                productImage = firstImage.path;
+                            }
+                        }
+                    }
+
+                    // If still no image, use placeholder
+                    if (!productImage) {
+                        productImage = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    }
+
+                    // ONLY add base URL if it's a relative path (starts with / or doesn't have http)
+                    // Cloudinary URLs already have https:// and should NOT be modified
+                    if (productImage && !productImage.startsWith('http://') && !productImage.startsWith('https://') && !productImage.startsWith('//')) {
+                        // It's a relative path, so add base URL
+                        if (productImage.startsWith('/')) {
+                            productImage = getBaseUrl() + productImage;
+                        } else {
+                            productImage = getBaseUrl() + '/' + productImage;
+                        }
+                    }
+
+                    // Debug: Log the image URL
+                    console.log('Product image for', product.name, ':', productImage);
+
+                    // Determine price
+                    let price = product.discount_price || product.price || '0';
+
                     // Add product
                     results.products.push({
                         id: product.id,
-                        title: product.name,
-                        price: product.discount_price ? `MRP ₹${product.discount_price}` : `MRP ₹${product.price}`,
-                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        title: product.name || product.title || 'Product',
+                        price: price ? `MRP ₹${price}` : 'MRP ₹0',
+                        image: productImage,
                         slug: product.slug,
-                        tags: [product.category?.name?.toLowerCase() || '', product.subcategory?.name?.toLowerCase() || ''].filter(Boolean)
+                        tags: [
+                            product.category?.name?.toLowerCase() || '',
+                            product.subcategory?.name?.toLowerCase() || '',
+                            product.occasion?.name?.toLowerCase() || ''
+                        ].filter(Boolean)
                     });
 
                     // Add category if not already added
@@ -2292,11 +2404,23 @@
                             is_subcategory: true
                         });
                     }
+
+                    // Add occasion if exists and not already added
+                    if (product.occasion && !categoryMap.has(`occasion_${product.occasion.id}`)) {
+                        categoryMap.set(`occasion_${product.occasion.id}`, {
+                            id: product.occasion.id,
+                            name: product.occasion.name,
+                            slug: product.occasion.slug,
+                            is_occasion: true
+                        });
+                    }
                 });
 
                 // Convert categories map to array and limit to 3
                 results.categories = Array.from(categoryMap.values()).slice(0, 3);
                 results.hasResults = results.products.length > 0 || results.categories.length > 0;
+
+                console.log('Processed results:', results);
             }
 
             return results;
@@ -3087,7 +3211,7 @@
 
                     // Try to get product name from page content (more reliable than title)
                     let productName = '';
-                    
+
                     // Try to find product name from various sources
                     // 1. Check if there's a global product name variable (from single-product page)
                     if (typeof window.productName !== 'undefined' && window.productName) {
@@ -3100,7 +3224,7 @@
                             productName = productTitleElement.textContent.trim();
                         }
                     }
-                    
+
                     // Fallback to page title if no product name found
                     if (!productName) {
                         const pageTitle = document.title;
@@ -3108,7 +3232,7 @@
                             productName = pageTitle.replace(' - Aiman', '');
                         }
                     }
-                    
+
                     if (productName) {
                         breadcrumbs.push({
                             name: productName,
