@@ -55,10 +55,8 @@
         transition: opacity 0.3s ease;
     }
 
-    #unique-scroll .custom-nav-tags,
-    #unique-scroll .owl-dots,
-    #unique-scroll .owl-nav {
-        display: none !important;
+    #unique-scroll .custom-nav-tags,#unique-scroll .owl-dots,#unique-scroll .owl-nav {
+        display:none !important;
     }
 </style>
 
@@ -115,7 +113,6 @@
     </div>
 </div>
 
-<!-- Banner Section -->
 <section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
@@ -162,17 +159,14 @@
                             </span>
                         </div>
                         @endif
-
                         <h2 id="leftTitleText"
                             class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
                             {{ $leftBanners->first()->title }}
                         </h2>
-
                         <p id="leftShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
                             Get <span class="font-semibold text-secondary-light">{{ $leftBanners->first()->short_description }}</span> | Use Code:
                             <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
                         </p>
-
                         <a id="leftShopBtn" href="{{ $leftBanners->first()->redirect_link }}"
                             class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
                             Shop Now
@@ -522,7 +516,6 @@
     </div>
 </section>
 
-<!-- Categories Carousel Section -->
 <section class="px-4 lgg:py-8 py-6 bg-gradient-to-b from-white to-gray-50/50">
     <div class="container mx-auto">
         <!-- Section Header -->
@@ -544,14 +537,18 @@
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
+                        <!-- Main Image Container -->
                         <div class="relative h-96 overflow-hidden rounded-3xl">
+                            <!-- Image with zoom effect -->
                             <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
                                 alt="Salwar Kameez"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 loading="lazy"
                                 decoding="async" />
+                            <!-- Transparent Overlay Content - Shows on hover -->
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+                                <!-- Floating Badge -->
                                 <div class="absolute top-6 left-6">
                                     <span
                                         class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
@@ -565,14 +562,17 @@
                                         </span>
                                     </span>
                                 </div>
+                                <!-- Category Name -->
                                 <h3
                                     class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     Salwar Kameez
                                 </h3>
+                                <!-- Description -->
                                 <p
                                     class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                     Traditional elegance with modern designs
                                 </p>
+                                <!-- Styles Count -->
                                 <div
                                     class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                                     <span
@@ -585,6 +585,7 @@
                                         120+ Designs
                                     </span>
                                 </div>
+                                <!-- Shop Now Button -->
                                 <div
                                     class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
                                     <span
@@ -599,6 +600,7 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Minimal Content Visible Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Salwar Kameez</h3>
@@ -674,6 +676,7 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Minimal Content Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">Lehengas</h3>
@@ -761,6 +764,7 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Minimal Content Before Hover -->
                             <div
                                 class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                                 <h3 class="text-2xl font-bold text-white mb-2">{{ $category->name }}</h3>
@@ -815,7 +819,6 @@
     </div>
 </section>
 
-<!-- Category Tags Section -->
 <section id="unique-scroll" class="px-4 lgg:py-8 py-6 bg-gradient-to-t from-white to-gray-50/50">
     <div class="container mx-auto px-4">
         <!-- Header -->
@@ -885,7 +888,7 @@
     </div>
 </section>
 
-<!-- 🔥 FIXED: Trending Best Selling Products Section -->
+<!-- 🔥 OPTIMIZED: Trending Best Selling Products Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
@@ -984,7 +987,6 @@
     </div>
 </section>
 
-<!-- Shop With Complete Confidence Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto lgg:py-12 lgg:px-12 py-12 px-4 relative rounded-[10px] overflow-hidden">
         <span class="absolute z-[1] top-[8px] right-[30px] text-secondary/30 text-[100px]">%</span>
@@ -1150,7 +1152,6 @@
     </div>
 </section>
 
-<!-- Ads/Banners Carousel -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div id="ads-carousel" class="owl-carousel owl-theme">
@@ -1175,11 +1176,9 @@
                         width="1200"
                         height="600" />
                 </div>
-                <!-- Blackish overlay that appears on hover -->
                 <div
                     class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 </div>
-                <!-- Content that slides up from bottom -->
                 <div
                     class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
@@ -1210,12 +1209,10 @@
     </div>
 </section>
 
-<!-- Monsoon Sale Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="flex flex-col lgg:flex-row gap-8 lgg:gap-12">
             <div class="w-full lgg:w-2/5 px-4 lgg:text-left text-center">
-                <!-- Title -->
                 <h2 class="text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold text-gray-800">
                     Our Biggest Monsoon Sale of the Season
                 </h2>
@@ -1236,7 +1233,6 @@
                     Hurry…only <span id="daysLabel">30</span> days left!
                 </h4>
 
-                <!-- Countdown -->
                 <div class="mt-6 flex gap-4 flex-wrap lgg:justify-start justify-center">
                     <div class="text-center">
                         <div class="digital-font p-4 flex items-center justify-center bg-white shadow-md rounded-lg text-h2-xs sm:text-h2-sm md:text-h2-md lg:text-h2-lg lgg:text-h2-lgg xl:text-h2-xl 2xl:text-h2-2xl font-semibold" id="daysBox">
@@ -1312,7 +1308,7 @@
         </div>
     </div>
 </section>
-<!-- Features Section -->
+
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-gray-800">
@@ -1352,7 +1348,6 @@
     </div>
 </section>
 
-<!-- Signature Standouts Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
@@ -1499,7 +1494,7 @@
     </div>
 </section>
 
-<!-- 🔥 FIXED: Bookmarked Styles Section -->
+<!-- 🔥 OPTIMIZED: Bookmarked Styles Section -->
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
@@ -1595,7 +1590,7 @@
     </div>
 </section>
 
-<!-- Premium Services Card -->
+<!-- Combined Premium Services Card -->
 <section class="py-16 lg:py-20 px-4 bg-gradient-to-b from-white to-gray-50">
     <div class="container mx-auto">
         <div class="text-center mb-12 lg:mb-16">
@@ -1777,7 +1772,6 @@
     </div>
 </section>
 
-<!-- Designer Thoughts Section -->
 <section class="relative w-full min-h-[800px] h-auto py-12 flex items-center justify-center overflow-hidden">
     <div class="parallax-bg absolute inset-0 bg-cover bg-top scale-110" data-parallax>
     </div>
@@ -1786,7 +1780,6 @@
         <div class="h-full flex items-center lg:justify-end justify-center">
             <div
                 class="bg-gradient-to-br from-white to-red-50 rounded-2xl shadow-2xl max-w-2xl w-full p-8 md:p-6 relative overflow-hidden border border-red-100">
-
                 <div class="flex justify-center items-center">
                     <div
                         class="w-auto flex sm:flex-row flex-col bg-gradient-to-r from-primary to-secondary text-white text-sm font-bold px-8 py-3 rounded-full shadow-lg items-center gap-2">
@@ -2015,9 +2008,8 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+<!-- Cart Functionality -->
 <script>
-    // Wishlist functionality
     function toggleHomeWishlist(productId, event) {
         console.log('toggleHomeWishlist called with productId:', productId);
         if (event) {
