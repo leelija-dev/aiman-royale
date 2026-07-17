@@ -20,6 +20,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Store;
 use App\Services\CashfreeRefundService;
 
 class UserController extends Controller implements HasMiddleware
@@ -282,6 +283,12 @@ class UserController extends Controller implements HasMiddleware
         return view('web.order-history', compact('user', 'orders'));
     }
 
+
+    public function orderInvoice($id){
+        $orderDetails = Order::where('id',$id)->with('orderProducts.product','user','variant',)->first();
+        $store = Store::where('is_active',true)->first();
+        return view('web.invoice-temple',compact('orderDetails','store'));
+    }
     /**
      * Cancel an order
      */
@@ -290,30 +297,30 @@ class UserController extends Controller implements HasMiddleware
     // public function cancelOrder(Request $request, $orderId)
     // {
     //     try {
-    //         \Log::info('=== CANCEL ORDER DEBUG START ===');
-    //         \Log::info('Order ID: ' . $orderId);
+    //         Log::info('=== CANCEL ORDER DEBUG START ===');
+    //         Log::info('Order ID: ' . $orderId);
 
     //         // Find the order
     //         $order = Order::find($orderId);
     //         if (!$order) {
-    //             \Log::error('Order not found: ' . $orderId);
+    //             Log::error('Order not found: ' . $orderId);
     //             return response()->json([
     //                 'success' => false,
     //                 'message' => 'Order not found.'
     //             ], 404);
     //         }
 
-    //         \Log::info('Order found successfully');
-    //         \Log::info('Order ID: ' . $order->id);
-    //         \Log::info('Order Status: ' . $order->order_status);
-    //         \Log::info('Order User ID: ' . $order->user_id);
+    //         Log::info('Order found successfully');
+    //         Log::info('Order ID: ' . $order->id);
+    //         Log::info('Order Status: ' . $order->order_status);
+    //         Log::info('Order User ID: ' . $order->user_id);
 
     //         // Check authentication
     //         $userId = auth('web')->id();
-    //         \Log::info('Auth User ID: ' . $userId);
+    //         Log::info('Auth User ID: ' . $userId);
 
     //         if (!$userId) {
-    //             \Log::error('User not authenticated');
+    //             Log::error('User not authenticated');
     //             return response()->json([
     //                 'success' => false,
     //                 'message' => 'User not authenticated.'
@@ -323,7 +330,7 @@ class UserController extends Controller implements HasMiddleware
     //         // Check if order is cancellable
     //         $cancelableStatuses = ['pending', 'confirmed', 'paid'];
     //         if (!in_array($order->order_status, $cancelableStatuses)) {
-    //             \Log::error('Order not cancellable. Status: ' . $order->order_status);
+    //             Log::error('Order not cancellable. Status: ' . $order->order_status);
     //             return response()->json([
     //                 'success' => false,
     //                 'message' => 'Order cannot be cancelled. Current status: ' . $order->order_status
@@ -335,37 +342,37 @@ class UserController extends Controller implements HasMiddleware
     //         $waybillError = null;
 
     //         if (!empty($order->waybill_number)) {
-    //             \Log::info('Waybill number found: ' . $order->waybill_number);
+    //             Log::info('Waybill number found: ' . $order->waybill_number);
 
     //             try {
     //                 // Call Delhivery API to cancel waybill
     //                 $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
 
     //                 if ($waybillCancelled) {
-    //                     \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
+    //                     Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
     //                 } else {
-    //                     \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
+    //                     Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
     //                     $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
     //                 }
 
     //             } catch (\Exception $e) {
-    //                 \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
+    //                 Log::error('Exception while cancelling waybill: ' . $e->getMessage());
     //                 $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
     //                 // Continue with database cancellation even if waybill API fails
     //             }
     //         } else {
-    //             \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+    //             Log::info('No waybill number found for this order. Skipping Delhivery API call.');
     //         }
 
     //         // Update order status in database
-    //         \Log::info('Attempting to update order status to cancelled...');
+    //         Log::info('Attempting to update order status to cancelled...');
     //         $order->order_status = 'cancelled';
     //         $result = $order->save();
 
-    //         \Log::info('Save result: ' . ($result ? 'SUCCESS' : 'FAILED'));
-    //         \Log::info('Updated order status: ' . $order->order_status);
+    //         Log::info('Save result: ' . ($result ? 'SUCCESS' : 'FAILED'));
+    //         Log::info('Updated order status: ' . $order->order_status);
 
-    //         \Log::info('=== CANCEL ORDER DEBUG END ===');
+    //         Log::info('=== CANCEL ORDER DEBUG END ===');
 
     //         return response()->json([
     //             'success' => true,
@@ -383,13 +390,13 @@ class UserController extends Controller implements HasMiddleware
     //         ]);
 
     //     } catch (\Exception $e) {
-    //         \Log::error('=== CANCEL ORDER ERROR ===');
-    //         \Log::error('Error Message: ' . $e->getMessage());
-    //         \Log::error('Error Code: ' . $e->getCode());
-    //         \Log::error('File: ' . $e->getFile());
-    //         \Log::error('Line: ' . $e->getLine());
-    //         \Log::error('Stack Trace: ' . $e->getTraceAsString());
-    //         \Log::error('=== END ERROR ===');
+    //         Log::error('=== CANCEL ORDER ERROR ===');
+    //         Log::error('Error Message: ' . $e->getMessage());
+    //         Log::error('Error Code: ' . $e->getCode());
+    //         Log::error('File: ' . $e->getFile());
+    //         Log::error('Line: ' . $e->getLine());
+    //         Log::error('Stack Trace: ' . $e->getTraceAsString());
+    //         Log::error('=== END ERROR ===');
 
     //         return response()->json([
     //             'success' => false,
@@ -406,33 +413,33 @@ class UserController extends Controller implements HasMiddleware
     public function cancelOrder(Request $request, $orderId)
     {
         try {
-            \Log::info('=== CANCEL ORDER DEBUG START ===');
-            \Log::info('Order ID: ' . $orderId);
+            Log::info('=== CANCEL ORDER DEBUG START ===');
+            Log::info('Order ID: ' . $orderId);
 
             // Find the order
             $order = Order::find($orderId);
             if (!$order) {
-                \Log::error('Order not found: ' . $orderId);
+                Log::error('Order not found: ' . $orderId);
                 return response()->json([
                     'success' => false,
                     'message' => 'Order not found.'
                 ], 404);
             }
 
-            \Log::info('Order found successfully');
-            \Log::info('Order ID: ' . $order->id);
-            \Log::info('Order Status: ' . $order->order_status);
-            \Log::info('Order Payment Status: ' . $order->payment_status);
-            \Log::info('Order Payment Method: ' . $order->payment_method);
-            \Log::info('Order Total Amount: ' . $order->total_amount);
-            \Log::info('Order User ID: ' . $order->user_id);
+            Log::info('Order found successfully');
+            Log::info('Order ID: ' . $order->id);
+            Log::info('Order Status: ' . $order->order_status);
+            Log::info('Order Payment Status: ' . $order->payment_status);
+            Log::info('Order Payment Method: ' . $order->payment_method);
+            Log::info('Order Total Amount: ' . $order->total_amount);
+            Log::info('Order User ID: ' . $order->user_id);
 
             // Check authentication
             $userId = auth('web')->id();
-            \Log::info('Auth User ID: ' . $userId);
+            Log::info('Auth User ID: ' . $userId);
 
             if (!$userId) {
-                \Log::error('User not authenticated');
+                Log::error('User not authenticated');
                 return response()->json([
                     'success' => false,
                     'message' => 'User not authenticated.'
@@ -441,7 +448,7 @@ class UserController extends Controller implements HasMiddleware
 
             // Check if user owns the order
             if ($order->user_id != $userId) {
-                \Log::error('User does not own this order. Order User ID: ' . $order->user_id . ', Auth User ID: ' . $userId);
+                Log::error('User does not own this order. Order User ID: ' . $order->user_id . ', Auth User ID: ' . $userId);
                 return response()->json([
                     'success' => false,
                     'message' => 'You are not authorized to cancel this order.'
@@ -451,7 +458,7 @@ class UserController extends Controller implements HasMiddleware
             // Check if order is cancellable
             $cancelableStatuses = ['pending', 'confirmed', 'paid'];
             if (!in_array($order->order_status, $cancelableStatuses)) {
-                \Log::error('Order not cancellable. Status: ' . $order->order_status);
+                Log::error('Order not cancellable. Status: ' . $order->order_status);
                 return response()->json([
                     'success' => false,
                     'message' => 'Order cannot be cancelled. Current status: ' . $order->order_status
@@ -460,7 +467,7 @@ class UserController extends Controller implements HasMiddleware
 
             // Check if already cancelled
             if ($order->order_status === 'cancelled') {
-                \Log::error('Order already cancelled');
+                Log::error('Order already cancelled');
                 return response()->json([
                     'success' => false,
                     'message' => 'Order has already been cancelled.'
@@ -471,8 +478,8 @@ class UserController extends Controller implements HasMiddleware
             $reason = $request->input('reason', 'Cancelled by customer');
             $comments = $request->input('comments', '');
 
-            \Log::info('Cancellation Reason: ' . $reason);
-            \Log::info('Cancellation Comments: ' . $comments);
+            Log::info('Cancellation Reason: ' . $reason);
+            Log::info('Cancellation Comments: ' . $comments);
 
             // Start database transaction
             DB::beginTransaction();
@@ -483,25 +490,25 @@ class UserController extends Controller implements HasMiddleware
                 $waybillError = null;
 
                 if (!empty($order->waybill_number)) {
-                    \Log::info('Waybill number found: ' . $order->waybill_number);
+                    Log::info('Waybill number found: ' . $order->waybill_number);
 
                     try {
                         // Call Delhivery API to cancel waybill
                         $waybillCancelled = $this->cancelWaybillWithDelhivery($order->waybill_number);
 
                         if ($waybillCancelled) {
-                            \Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
+                            Log::info('Waybill cancelled successfully: ' . $order->waybill_number);
                         } else {
-                            \Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
+                            Log::warning('Failed to cancel waybill: ' . $order->waybill_number);
                             $waybillError = 'Waybill cancellation failed but order will be cancelled in database.';
                         }
                     } catch (\Exception $e) {
-                        \Log::error('Exception while cancelling waybill: ' . $e->getMessage());
+                        Log::error('Exception while cancelling waybill: ' . $e->getMessage());
                         $waybillError = 'Error cancelling waybill: ' . $e->getMessage();
                         // Continue with database cancellation even if waybill API fails
                     }
                 } else {
-                    \Log::info('No waybill number found for this order. Skipping Delhivery API call.');
+                    Log::info('No waybill number found for this order. Skipping Delhivery API call.');
                 }
 
                 // Process refund for paid orders
@@ -511,7 +518,7 @@ class UserController extends Controller implements HasMiddleware
 
                 // Check if order is paid and eligible for refund
                 if ($order->payment_status === 'paid' && $order->payment_method === 'cashfree') {
-                    \Log::info('Order is paid. Processing refund...');
+                    Log::info('Order is paid. Processing refund...');
 
                     try {
                         
@@ -522,7 +529,7 @@ class UserController extends Controller implements HasMiddleware
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . $timestamp;
 
                         
-                            \Log::info('Generated Cashfree Order Reference: ' . $cashfreeOrderRef);
+                            Log::info('Generated Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
 
                        
@@ -530,7 +537,7 @@ class UserController extends Controller implements HasMiddleware
                             $existingRefund = Refund::where('order_id', $order->id)->first();
                             if ($existingRefund && isset($existingRefund->refund_data['order_id'])) {
                                 $cashfreeOrderRef = $existingRefund->refund_data['order_id'];
-                                \Log::info('Found Cashfree order reference from refund: ' . $cashfreeOrderRef);
+                                Log::info('Found Cashfree order reference from refund: ' . $cashfreeOrderRef);
                             }
                         }
 
@@ -538,11 +545,11 @@ class UserController extends Controller implements HasMiddleware
                         if (!$cashfreeOrderRef) {
                             
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . strtotime($order->created_at);
-                            \Log::info('Using fallback Cashfree Order Reference: ' . $cashfreeOrderRef);
+                            Log::info('Using fallback Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
 
-                        \Log::info('Cashfree Order Reference: ' . $cashfreeOrderRef);
-                        \Log::info('Refund Amount: ' . $order->total_amount);
+                         Log::info('Cashfree Order Reference: ' . $cashfreeOrderRef);
+                        Log::info('Refund Amount: ' . $order->total_amount);
 
                         // Process full refund
                         $refundResult = $this->refundService->processRefund(
@@ -576,21 +583,21 @@ class UserController extends Controller implements HasMiddleware
                             'processed_at' => null,
                         ]);
                         $refundProcessed = true;
-                        \Log::info('Refund processed successfully', ['refund_result' => $refundResult]);
+                        Log::info('Refund processed successfully', ['refund_result' => $refundResult]);
                     } catch (\Exception $e) {
-                        \Log::error('Refund processing failed: ' . $e->getMessage());
+                        Log::error('Refund processing failed: ' . $e->getMessage());
                         $refundError = 'Refund processing failed: ' . $e->getMessage();
                         // Continue with order cancellation even if refund fails
                         // The refund can be processed manually later
                     }
                 } else {
-                    \Log::info('Order is not paid. No refund needed.');
-                    \Log::info('Payment Status: ' . $order->payment_status);
-                    \Log::info('Payment Method: ' . $order->payment_method);
+                    Log::info('Order is not paid. No refund needed.');
+                    Log::info('Payment Status: ' . $order->payment_status);
+                    Log::info('Payment Method: ' . $order->payment_method);
                 }
 
                 // Update order status in database
-                \Log::info('Attempting to update order status to cancelled...');
+                Log::info('Attempting to update order status to cancelled...');
 
                 $updateData = [
                     'order_status' => 'cancelled',
@@ -613,9 +620,9 @@ class UserController extends Controller implements HasMiddleware
                 // Update the order
                 $order->update($updateData);
 
-                \Log::info('Order status updated successfully');
-                \Log::info('Updated order status: ' . $order->order_status);
-                \Log::info('Updated refund status: ' . ($updateData['refund_status'] ?? 'none'));
+                Log::info('Order status updated successfully');
+                Log::info('Updated order status: ' . $order->order_status);
+                Log::info('Updated refund status: ' . ($updateData['refund_status'] ?? 'none'));
 
                 // Get the refund record if created
                 $refund = Refund::where('order_id', $order->id)
@@ -632,7 +639,7 @@ class UserController extends Controller implements HasMiddleware
                     $message .= ' Refund failed: ' . $refundError;
                 }
 
-                \Log::info('=== CANCEL ORDER DEBUG END ===');
+                Log::info('=== CANCEL ORDER DEBUG END ===');
 
                 return response()->json([
                     'success' => true,
@@ -658,17 +665,17 @@ class UserController extends Controller implements HasMiddleware
                 ]);
             } catch (\Exception $e) {
                 DB::rollBack();
-                \Log::error('Database transaction failed: ' . $e->getMessage());
+                Log::error('Database transaction failed: ' . $e->getMessage());
                 throw $e;
             }
         } catch (\Exception $e) {
-            \Log::error('=== CANCEL ORDER ERROR ===');
-            \Log::error('Error Message: ' . $e->getMessage());
-            \Log::error('Error Code: ' . $e->getCode());
-            \Log::error('File: ' . $e->getFile());
-            \Log::error('Line: ' . $e->getLine());
-            \Log::error('Stack Trace: ' . $e->getTraceAsString());
-            \Log::error('=== END ERROR ===');
+            Log::error('=== CANCEL ORDER ERROR ===');
+            Log::error('Error Message: ' . $e->getMessage());
+            Log::error('Error Code: ' . $e->getCode());
+            Log::error('File: ' . $e->getFile());
+            Log::error('Line: ' . $e->getLine());
+            Log::error('Stack Trace: ' . $e->getTraceAsString());
+            Log::error('=== END ERROR ===');
 
             return response()->json([
                 'success' => false,
@@ -694,7 +701,7 @@ class UserController extends Controller implements HasMiddleware
             $apiToken = env('DELHIVERY_API_TOKEN'); // Store your API token in .env
 
             if (empty($apiToken)) {
-                \Log::error('Delhivery API token not configured');
+                Log::error('Delhivery API token not configured');
                 return false;
             }
 
@@ -705,8 +712,8 @@ class UserController extends Controller implements HasMiddleware
                 'cancellation' => true
             ];
 
-            \Log::info('Delhivery API Request URL: ' . $apiUrl);
-            \Log::info('Delhivery API Request Payload: ' . json_encode($payload));
+            Log::info('Delhivery API Request URL: ' . $apiUrl);
+            Log::info('Delhivery API Request Payload: ' . json_encode($payload));
 
             $ch = curl_init();
 
@@ -728,11 +735,11 @@ class UserController extends Controller implements HasMiddleware
 
             curl_close($ch);
 
-            \Log::info('Delhivery API Response HTTP Code: ' . $httpCode);
-            \Log::info('Delhivery API Response: ' . $response);
+            Log::info('Delhivery API Response HTTP Code: ' . $httpCode);
+            Log::info('Delhivery API Response: ' . $response);
 
             if ($curlError) {
-                \Log::error('Curl Error: ' . $curlError);
+                Log::error('Curl Error: ' . $curlError);
                 return false;
             }
 
@@ -742,31 +749,31 @@ class UserController extends Controller implements HasMiddleware
 
                 // Check if cancellation was successful
                 if (isset($responseData['success']) && $responseData['success'] === true) {
-                    \Log::info('Waybill cancellation successful');
+                    Log::info('Waybill cancellation successful');
                     return true;
                 } elseif (isset($responseData['cancelled']) && $responseData['cancelled'] === true) {
-                    \Log::info('Waybill cancellation successful');
+                    Log::info('Waybill cancellation successful');
                     return true;
                 } elseif (isset($responseData['status']) && $responseData['status'] === 'success') {
-                    \Log::info('Waybill cancellation successful');
+                    Log::info('Waybill cancellation successful');
                     return true;
                 } else {
-                    \Log::warning('Waybill cancellation API returned unexpected response: ' . json_encode($responseData));
+                    Log::warning('Waybill cancellation API returned unexpected response: ' . json_encode($responseData));
                     // Some APIs return success without explicit success flag
                     // Check if there's any error message
                     if (isset($responseData['message']) && strpos(strtolower($responseData['message']), 'error') !== false) {
-                        \Log::error('API Error: ' . $responseData['message']);
+                        Log::error('API Error: ' . $responseData['message']);
                         return false;
                     }
                     // Assume success if no error and response is valid
                     return true;
                 }
             } else {
-                \Log::error('Delhivery API returned error HTTP code: ' . $httpCode);
+                Log::error('Delhivery API returned error HTTP code: ' . $httpCode);
                 return false;
             }
         } catch (\Exception $e) {
-            \Log::error('Exception in cancelWaybillWithDelhivery: ' . $e->getMessage());
+            Log::error('Exception in cancelWaybillWithDelhivery: ' . $e->getMessage());
             return false;
         }
     }

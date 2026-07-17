@@ -982,7 +982,12 @@
                     </a>
                 </div>
               @php
-                    $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                if (Auth::check()) {
+                     $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                } else {
+                   $wishlistCount = 0;
+                }
+
                 @endphp
 
                 <a href="{{ route('wishlist.index') }}">
@@ -991,12 +996,14 @@
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
                             <i class="fa-regular fa-heart text-lg group-hover:text-red-600"></i>
                         </div>
-
-                      
-                            <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
-                                {{ $wishlistCount ?? 0 }}
-                            </span>
-                        
+                            @if (Auth::check())
+                                @if ($wishlistCount > 0)
+                                <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
+                                    {{ $wishlistCount ?? 0 }}
+                                </span>
+                                @endif
+                           
+                            @endif
 
                     </button>
                 </a>

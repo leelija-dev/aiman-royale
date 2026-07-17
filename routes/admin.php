@@ -55,6 +55,8 @@ use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
+use App\Http\Controllers\admin\StoreController;
+
 // use App\Http\Controllers\ShopController;
 
 
@@ -536,5 +538,14 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::get('/edit/{id}', [BannerDetailsController::class, 'edit'])->name('hero-section.edit');
         Route::post('/update/{id}', [BannerDetailsController::class, 'update'])->name('hero-section.update');
         Route::delete('/delete/{id}', [BannerDetailsController::class, 'delete'])->name('hero-section.delete');
+    });
+
+    Route::prefix('/store')->group(function () {
+        Route::get('/', [StoreController::class, 'index'])->name('store.index');
+        Route::get('/create', [StoreController::class, 'create'])->name('store.create');
+        Route::post('/store', [StoreController::class, 'store'])->name('store.store');
+        Route::get('/edit/{id}', [StoreController::class, 'edit'])->name('store.edit');
+        Route::post('/update/{id}', [StoreController::class, 'update'])->name('store.update');
+        Route::delete('/delete/{id}', [StoreController::class, 'delete'])->name('store.delete');
     });
 });
