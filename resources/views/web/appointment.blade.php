@@ -349,10 +349,10 @@
             <!-- Left Content -->
             <div class="text-center lg:text-left">
                 <!-- Badge -->
-                <div class="inline-flex items-center bg-pink-100/95 backdrop-blur-sm text-pink-700 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
+                <a href="#appoint-book-section" class="inline-flex items-center bg-pink-100/95 backdrop-blur-sm text-pink-700 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Book Your Session
-                </div>
+                </a>
 
                 <!-- Main Heading -->
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
@@ -607,9 +607,9 @@
 
         <!-- CTA Button -->
         <div class="mt-12 md:mt-16 text-center fade-up">
-            <button class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-8 md:px-10 rounded-full text-base md:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
+            <a href="#appoint-book-section" class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-8 md:px-10 rounded-full text-base md:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
                 <i class="fas fa-calendar-alt mr-2 md:mr-3"></i> Book Your Appointment Now
-            </button>
+            </a>
             <p class="text-xs md:text-sm text-gray-500 mt-4 md:mt-6">Flexible scheduling • Virtual or in-person • No commitment required</p>
         </div>
     </div>
@@ -1142,9 +1142,9 @@
                             </div>
                             <h4 class="font-semibold text-gray-900 mb-2 text-base md:text-lg">Special Bonus</h4>
                             <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">Book first appointment & receive style starter kit.</p>
-                            <button class="bg-[#EC4899] text-white font-medium py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-sm w-full hover:bg-pink-600 transition duration-300">
+                            <a href="#appoint-book-section" class="bg-[#EC4899] text-white font-medium py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-sm w-full hover:bg-pink-600 transition duration-300">
                                 <i class="fas fa-calendar-plus mr-2"></i> Book Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1259,12 +1259,7 @@
                     </div>
                 </div>
 
-                <!-- Button -->
-                <div class="mb-10 md:mb-12">
-                    <button class="profile-btn font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg shadow-lg inline-flex items-center">
-                        <i class="fas fa-user-circle mr-2 md:mr-3"></i> View Designer Profile
-                    </button>
-                </div>
+                
 
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-3 md:gap-4 lg:gap-6">
@@ -1464,7 +1459,7 @@
         </div>
 
         <!-- CTA Section -->
-        <div class="text-center fade-up px-4">
+        <!-- <div class="text-center fade-up px-4">
             <div class="inline-block bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl p-0.5 shadow-xl mb-6 md:mb-8 w-full sm:w-auto">
                 <div class="bg-white rounded-xl p-6 md:p-8 lg:p-10">
                     <h3 class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-4 md:mb-6">Ready to Transform Your Style?</h3>
@@ -1484,7 +1479,7 @@
             <p class="text-xs md:text-sm text-gray-500">
                 All client photos are used with permission. Real names may be changed for privacy.
             </p>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -1516,9 +1511,9 @@
 
             <!-- Button -->
             <div>
-                <button class="cta-button font-semibold py-4 md:py-5 px-8 md:px-10 lg:px-12 rounded-full text-base md:text-lg lg:text-xl shadow-xl inline-flex items-center justify-center">
+                <a href="#appoint-book-section" class="hover:bg-pink-600 bg-[#EC4899] text-white font-semibold py-4 md:py-5 px-8 md:px-10 lg:px-12 rounded-full text-base md:text-lg lg:text-xl shadow-xl inline-flex items-center justify-center">
                     <i class="fas fa-calendar-alt mr-2 md:mr-3 lg:mr-4"></i> Book Your Appointment Now
-                </button>
+                </a>
             </div>
 
             <!-- Subtext under button -->
