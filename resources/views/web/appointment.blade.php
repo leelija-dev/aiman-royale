@@ -1530,28 +1530,7 @@
             </div>
         </div>
 
-        <!-- CTA Section -->
-        <div class="text-center fade-up px-4">
-            <div class="inline-block bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl p-0.5 shadow-xl mb-6 md:mb-8 w-full sm:w-auto">
-                <div class="bg-white rounded-xl p-6 md:p-8 lg:p-10">
-                    <h3 class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-4 md:mb-6">Ready to Transform Your Style?</h3>
-                    <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8 px-4">
-                        Join thousands of Indian women who have discovered their perfect ethnic style through our personal consultations.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-                        <button class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-calendar-check mr-2 md:mr-3"></i> Book Your Appointment
-                        </button>
-                        <button class="bg-white border border-gray-300 text-gray-700 font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg hover:bg-gray-50 transition duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-play-circle mr-2 md:mr-3"></i> Watch Client Stories
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <p class="text-xs md:text-sm text-gray-500">
-                All client photos are used with permission. Real names may be changed for privacy.
-            </p>
-        </div>
+     
     </div>
 </section>
 
@@ -1680,7 +1659,7 @@
         </div>
 
         <!-- FAQ Preview -->
-        <div class="mt-12 md:mt-16 text-center fade-up px-4">
+        <!-- <div class="mt-12 md:mt-16 text-center fade-up px-4">
             <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
                 <i class="fas fa-question-circle text-pink-400 mr-1 md:mr-2"></i>
                 Have questions about the appointment process?
@@ -1689,7 +1668,7 @@
                 <span>View Frequently Asked Questions</span>
                 <i class="fas fa-arrow-right ml-1 md:ml-2 text-xs md:text-sm"></i>
             </a>
-        </div>
+        </div> -->
     </div>
 
     <!-- Bottom decorative border -->
