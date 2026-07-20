@@ -52,7 +52,7 @@
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <!-- Code for -->
+                                <!-- Remarks -->
                                 <div class="mb-3">
                                     <label for="code_for" class="form-label">Remarks</label>
                                     <input type="text" class="form-control" id="code_for"
@@ -78,11 +78,11 @@
                                 </div>
                                  <div class="mb-3">
                                     <label for="code_type" class="form-label">
-                                        Code Type <span class="text-danger">*</span>
+                                        Coupon Type <span class="text-danger">*</span>
                                     </label>
 
                                     <select class="form-control" id="code_type" name="code_type" required>
-                                        <option value="" hidden>Select Code Type</option>
+                                        <option value="" hidden>Select Coupon Type</option>
                                         <option value="product-discount" {{ old('code_type') == 'product-discount' ? 'selected' : '' }}>
                                             Product Discount
                                         </option>
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const minimumAmountDiv = document.getElementById("minimumAmountDiv");
 
     function toggleMinimumAmount() {
-        if (codeType.value === "special") {
+        if (codeType.value === "special-discount") {
             minimumAmountDiv.style.display = "block";
         } else {
             minimumAmountDiv.style.display = "none";

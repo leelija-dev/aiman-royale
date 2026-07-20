@@ -190,7 +190,7 @@
                                             <p class="text-sm text-gray-500">{{ $cart->size ?? 'One Size' }},
                                                 {{ $cart->color ?? 'Default' }}</p>
                                             <p class="text-sm text-gray-500">Qty: {{ $cart->count }}</p>
-                                            <div class="flex items-center gap-2 mt-2">
+                                            <div class="flex items-center gap-1 mt-2">
                                                 <input type="text" id="coupon-{{ $cart->cart_id }}"
                                                     class="w-28 border border-gray-300 rounded-md px-2 py-1 text-xs"
                                                     placeholder="Coupon">
@@ -207,10 +207,10 @@
                                         {{-- <p class="font-medium">{{config('app.currency')}}{{ number_format(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count), 2 }}</p> --}}
 
 
-                                        <p class="font-medium">
-                                            {{ config('app.currency') }}
+                                        <p class="font-small" style="font-size: 14px;">
+
                                             <span id="product-total-{{ $cart->cart_id }}">
-                                                {{ number_format($productTotal, 2) }}
+                                                {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
                                             </span>
                                         </p>
                                     </div>
@@ -251,6 +251,62 @@
                                         </span>
                                     </span>
                                 </div>
+                                <div class="flex justify-between items-start">
+                                    @if ($coupon)
+                                        @if ($coupon->minimum_amount <= $total)
+
+                                            <div class="flex justify-between w-full">
+
+                                                <div class="relative">
+
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-gray-600 font-medium">
+                                                            Special Discount ({{ $coupon->discount }}%)
+                                                        </span>
+
+                                                        <button
+                                                            type="button"
+                                                            onclick="toggleSpecialTerms()"
+                                                            class="text-xs text-blue-600 hover:text-blue-800 hover:underline">
+                                                            <i class="fa fa-circle-info"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    @if(optional($coupon)->code_for)
+                                                        <div class="text-xs text-pink-500">
+                                                            {{ $coupon->code_for }}
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Popup -->
+                                                    <div id="special-terms"
+                                                        class="absolute left-0 top-full mt-2 w-72 bg-white border border-gray-200 shadow-lg rounded-lg p-3 text-xs text-gray-600 opacity-0 invisible transition-all duration-300 z-50">
+
+                                                    
+
+                                                        <p class="mt-2">
+                                                            You have got
+                                                            <strong>{{ $coupon->discount }}%</strong>
+                                                            discount on orders above
+                                                            <strong>{{ config('app.currency') }}{{ number_format($coupon->minimum_amount,2) }}</strong>.
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <span class="font-medium whitespace-nowrap">
+                                                    - {{ config('app.currency') }}
+                                                    <span id="special-discount">0</span>
+                                                </span>
+
+                                            </div>
+
+                                        @endif
+                                    @endif
+                                </div>
+
+
                                 <div class="flex justify-between">
                                     @php
                                         if ($store) {
@@ -278,6 +334,7 @@
                                         <span id="shipping">{{ $shippingCost }}</span>
                                     </span>
                                 </div>
+
                                 <div class="flex justify-between font-semibold text-base pt-2 border-t">
                                     <span>Total</span>
                                     {{-- <span>{{config('app.currency')}}{{ number_format($total+$shippingCost, 2) }}</span> --}}
@@ -296,6 +353,33 @@
 
                                     <input type="hidden" id="gst-amount" name="gst_amount"
                                         value="{{ ($total * ($gst_percentage ?? 0)) / 100 ?? 0 }}" form="checkout-form">
+                                    <!-- special discount-->
+                                    <input type="hidden" id="special-discount-hidden" name="special_discount"
+                                        value="0" form="checkout-form">
+
+                                        <input type="hidden"
+                                                id="special-discount-hidden"
+                                                name="special_discount"
+                                                value="0"
+                                                form="checkout-form">
+
+                                            <input type="hidden"
+                                                id="special-discount-id"
+                                                name="special_discount_id"
+                                                value="{{ $coupon->id ?? '' }}"
+                                                form="checkout-form">
+
+                                            <input type="hidden"
+                                                id="special-discount-percentage"
+                                                name="special_discount_percentage"
+                                                value="{{ $coupon->discount ?? 0 }}"
+                                                form="checkout-form">
+
+                                            <input type="hidden"
+                                                id="special-discount-name"
+                                                name="special_discount_name"
+                                                value="{{ $coupon->code ?? '' }}"
+                                                form="checkout-form">
 
                                 </div>
                             </div>
@@ -596,9 +680,10 @@
 
         })();
     </script>
-    <script>
+    {{-- <script>
         let appliedDiscounts = {};
         let appliedCoupons = {};
+        const specialCoupon = @json($coupon);
 
         function applyCoupon(cartId, productTotal) {
 
@@ -677,6 +762,7 @@
                     );
 
                     let subtotal = originalSubtotal - totalDiscount;
+                    //special discoumt 
 
                     document.getElementById("subtotal").innerHTML = subtotal.toFixed(2);
 
@@ -714,5 +800,192 @@
                 });
 
         }
+    </script> --}}
+    <script>
+        let appliedDiscounts = {};
+        let appliedCoupons = {};
+
+        function calculateTotals() {
+
+            let originalSubtotal = parseFloat(
+                document.getElementById("subtotal").dataset.original
+            );
+
+            // Product coupon discount
+            let totalProductDiscount = Object.values(appliedDiscounts)
+                .reduce((sum, value) => sum + value, 0);
+
+            let subtotal = originalSubtotal - totalProductDiscount;
+
+            // -----------------------------
+            // Auto Special Discount
+            // -----------------------------
+            let specialDiscount = 0;
+
+            @if ($coupon)
+                if (subtotal >= {{ $coupon->minimum_amount }}) {
+                    // Log::info('special discount');
+
+                    specialDiscount = subtotal * {{ $coupon->discount }} / 100;
+
+                }
+            @endif
+            @if($coupon)
+                if (specialDiscount > 0) {
+                    document.getElementById("special-discount-id").value = "{{ $coupon->id }}";
+                    document.getElementById("special-discount-percentage").value = "{{ $coupon->discount }}";
+                    document.getElementById("special-discount-name").value = "{{ $coupon->code }}";
+                } else {
+                    document.getElementById("special-discount-id").value = "";
+                    document.getElementById("special-discount-percentage").value = "";
+                    document.getElementById("special-discount-name").value = "";
+                }
+            @endif
+            // document.getElementById("special-discount").innerHTML =
+            //     specialDiscount.toFixed(2);
+
+            // document.getElementById("special-discount-hidden").value =
+            //     specialDiscount.toFixed(2);
+            const specialDiscountEl = document.getElementById("special-discount");
+            const specialDiscountHidden = document.getElementById("special-discount-hidden");
+
+            if (specialDiscountEl) {
+                specialDiscountEl.innerHTML = specialDiscount.toFixed(2);
+            }
+
+            if (specialDiscountHidden) {
+                specialDiscountHidden.value = specialDiscount.toFixed(2);
+            }
+            // Final subtotal after special discount
+            // subtotal = subtotal - specialDiscount;
+
+            document.getElementById("subtotal").innerHTML =
+                subtotal.toFixed(2);
+
+            // GST
+            let gstPercentage = parseFloat(
+                document.getElementById("gst-percentage").value
+            );
+
+            let gst = (subtotal - specialDiscount) * gstPercentage / 100;
+
+            document.getElementById("gst").innerHTML =
+                gst.toFixed(2);
+
+            document.getElementById("gst-amount").value =
+                gst.toFixed(2);
+
+            // Shipping
+            let shipping = parseFloat(
+                document.getElementById("shipping").innerHTML
+            );
+
+            // Grand Total
+            let grandTotal = (subtotal - specialDiscount) + gst + shipping;
+
+            document.getElementById("grand-total").innerHTML =
+                grandTotal.toFixed(2);
+
+            document.getElementById("grand-total-hidden").value =
+                grandTotal.toFixed(2);
+        }
+
+        // Auto calculate on page load
+        window.addEventListener("load", function() {
+            calculateTotals();
+        });
+
+        function applyCoupon(cartId, productTotal) {
+
+            let code = document.getElementById('coupon-' + cartId).value.trim();
+            let msg = document.getElementById('coupon-message-' + cartId);
+
+            msg.innerHTML = "";
+
+            if (code == "") {
+                msg.className = "text-red-500 text-xs mt-1";
+                msg.innerHTML = "Please enter coupon code.";
+                return;
+            }
+
+            fetch("{{ route('apply.coupon') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        coupon_code: code,
+                        total: productTotal
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+
+                    if (!res.status) {
+                        msg.className = "text-red-500 text-xs mt-1";
+                        msg.innerHTML = res.message;
+                        return;
+                    }
+
+                    let discount = parseFloat(res.coupon.discount);
+
+                    let discountAmount = productTotal * discount / 100;
+
+                    let newProductTotal = productTotal - discountAmount;
+
+                    document.getElementById("product-total-" + cartId).innerHTML =
+                        newProductTotal.toFixed(2);
+
+                    appliedCoupons[cartId] = {
+                        coupon_id: res.coupon.id,
+                        coupon_code: res.coupon.code,
+                        coupon_discount: res.coupon.discount,
+                        coupon_discount_amount: discountAmount
+                    };
+
+                    appliedDiscounts[cartId] = discountAmount;
+
+                    msg.className = "text-green-600 text-xs mt-1";
+                    msg.innerHTML = res.message;
+
+                    // Recalculate all totals
+                    calculateTotals();
+
+                    // Disable coupon
+                    document.getElementById("coupon-" + cartId).disabled = true;
+
+                    let btn = document.getElementById("apply-btn-" + cartId);
+
+                    btn.disabled = true;
+                    btn.innerHTML = "Applied";
+                    btn.classList.remove("bg-black");
+                    btn.classList.add("bg-green-600");
+
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    msg.className = "text-red-500 text-xs mt-1";
+                    msg.innerHTML = "Something went wrong.";
+
+                });
+
+        }
     </script>
+   <script>
+function toggleSpecialTerms() {
+    const box = document.getElementById("special-terms");
+    if (!box) return;
+
+    if (box.classList.contains("opacity-0")) {
+        box.classList.remove("opacity-0", "invisible");
+        box.classList.add("opacity-100", "visible");
+    } else {
+        box.classList.remove("opacity-100", "visible");
+        box.classList.add("opacity-0", "invisible");
+    }
+}
+</script>
 @endsection

@@ -48,7 +48,7 @@
                                         (Only for special discount)
                                     </small>
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Code For</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Coupon For</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Validity</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Expire Date</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Status</th>
@@ -104,7 +104,7 @@
                                 <td class="text-center">
                                     <div class="d-flex px-2 py-1">
                                         
-                                            {{$coupon->validity ? $coupon->validity : '' }}
+                                            {{$coupon->validity ? $coupon->validity : '' }} Days
 
                                     </div>
                                 </td>

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Address;
+use App\Models\Coupon;
 use App\Models\Store;
 
 class CheckoutController extends Controller
@@ -65,8 +66,8 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index');
         }
         $store = Store::where('is_active', true)->first();
-
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store'));
+        $coupon = Coupon::where('code_type','special-discount')->where('is_active', true)->first();
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store','coupon'));
     }
 
 
@@ -175,8 +176,9 @@ class CheckoutController extends Controller
         $total = (float) $request->input('grand_total');
         $gst_percentage = $request->input('gst_percentage');
         $gst_amount = $request->input('gst_amount');
-        $special_discount = $request->input('special_discount');
+        $special_discount = $request->input('special_discount_percentage');
         $special_discount_id = $request->input('special_discount_id');
+        $special_discount_code = $request->input('special_discount_name');
         // Get payment method
         $paymentMethod = $request->input('payment_method', 'cashfree');
 
@@ -196,7 +198,7 @@ class CheckoutController extends Controller
             'gst_amount' => $gst_amount,    #$total * ($gst_percentage ?? 0) / 100,
             'special_discount' => $special_discount ?? 0,
             'special_discount_id' => $special_discount_id ?? null,
-            'special_discount_name' => null,
+            'special_discount_name' => $special_discount_code  ?? null,
             'order_status' => 'pending',
             'created_at' => now(),
             'updated_at' => now(),
@@ -816,7 +818,7 @@ class CheckoutController extends Controller
         if (!$order) {
             return redirect()->route('checkout.index')->with('error', 'Order not found');
         }
-
+        
         // ✅ Get the actual transaction ID from session
         $transactionId = session('cashfree_transaction_id');
 
@@ -899,7 +901,7 @@ class CheckoutController extends Controller
         } else {
             Log::warning('No transaction ID found for order: ' . $orderId);
         }
-
+        
         DB::table('orders')->where('id', $orderId)->update($updateData);
 
         // Update stock

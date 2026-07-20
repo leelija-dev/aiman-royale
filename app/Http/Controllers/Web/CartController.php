@@ -293,7 +293,7 @@ if ($validator->fails()) {
     ]);
 }
 
-    $coupon = Coupon::where('code', $request->coupon_code)
+    $coupon = Coupon::where('code', $request->coupon_code)->where('code_type','!=','special-discount') 
         // ->where('expiry_date', '>=', Carbon::now())
         ->where('is_active', 1)->select('id','code','discount','expiry_date')
         ->first();
