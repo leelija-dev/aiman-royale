@@ -59,8 +59,8 @@
                         </div>
                         <div>
                             <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Call Us</h3>
-                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+91 {{env('WH_WHATSAPP_NUMBER')}}</a></p>
-                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+91 {{env('WH_WHATSAPP_NUMBER')}}</a></p>
+                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+{{env('WH_WHATSAPP_NUMBER')}}</a></p>
+                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+{{env('WH_WHATSAPP_NUMBER')}}</a></p>
                             <div class="flex items-center gap-1.5 mt-4 text-stone-500 text-xs">
                                 <i class="far fa-clock"></i>
                                 <span>Monday – Saturday, 10:00 AM – 7:00 PM IST</span>

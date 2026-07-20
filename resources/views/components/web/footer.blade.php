@@ -2202,7 +2202,7 @@ art from fake trails.
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <a href="tel:+917003184741" class="text-sm text-gray-600 mt-1">+91 7003184741</a>
+              <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="text-sm text-gray-600 mt-1">+{{env('WH_WHATSAPP_NUMBER')}}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -2415,7 +2415,7 @@ art from fake trails.
     <div class="flex flex-col md:flex-row justify-center items-center gap-6">
       <div class="text-center ">
         <p class="text-gray-600 text-sm">
-          &copy; {{now()->format('Y')}} Aiman Fashion. All rights reserved.
+          &copy; {{now()->format('Y')}} Aiman Royale. All rights reserved.
         </p>
         <p class="text-gray-500 text-xs mt-2">
           Crafted with ❤️ in India
@@ -2503,7 +2503,7 @@ art from fake trails.
     </a>
 
     <!-- Book Appointment Button -->
-    <a href="{{ config('app.url') }}/appointment" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ route('page.appointment') }}#appoint-book-section" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
