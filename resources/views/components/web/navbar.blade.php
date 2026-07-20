@@ -1056,8 +1056,8 @@
                     <div id="account-dropdown"
                         class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
                         <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                            <p class="text-sm font-semibold text-gray-800 break-words">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 break-words">{{ Auth::user()->email }}</p>
                         </div>
 
                         <a href="{{route('web.profile')}}"
