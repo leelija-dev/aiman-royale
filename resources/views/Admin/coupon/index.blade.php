@@ -52,6 +52,8 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Validity</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Expire Date</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Status</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Created At</th>
+                                
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -106,7 +108,10 @@
 
                                     </div>
                                 </td>
-                               
+                                <td class="text-center">
+                                    {{ $coupon->expiry_date ? \Carbon\Carbon::parse($coupon->expiry_date)->format('d-m-Y h:i A') : '' }}
+
+                                </td>
                                 <td class="text-center">
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">

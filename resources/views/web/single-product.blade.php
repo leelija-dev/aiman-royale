@@ -1081,14 +1081,14 @@ if ($variant->images && $variant->images->isNotEmpty()) {
     data-product-variants="{{ json_encode($product->variants) }}">
     
     <!-- Coupon Toggle Button -->
-    <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+    {{-- <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
         <i class="fas fa-ticket-alt"></i>
         <span>Have a coupon? Click here</span>
         <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
-    </button>
+    </button> --}}
 
     <!-- Coupon Input Block (Hidden by default) -->
-    <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+    {{-- <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
         <div class="flex gap-2 flex-col xxs:flex-row">
             <input type="text" 
                    id="coupon-input" 
@@ -1100,7 +1100,7 @@ if ($variant->images && $variant->images->isNotEmpty()) {
             </button>
         </div>
         <div id="coupon-message" class="text-sm mt-2 hidden"></div>
-    </div>
+    </div> --}}
 
     <div class="flex items-center gap-4">
         <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}" class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">

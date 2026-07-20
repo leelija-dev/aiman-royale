@@ -12,7 +12,7 @@ class StoreController extends Controller
 {
     $search = request('search');
 
-    $stores = Store::where('is_active', true)
+    $stores = Store::orderBy('id', 'desc')
         ->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")

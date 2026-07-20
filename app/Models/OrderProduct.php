@@ -19,7 +19,11 @@ class OrderProduct extends Model
         'status',
         'payment_status',
         'order_date',
-        'custom_measurements'
+        'custom_measurements',
+        'coupon_id',
+        'coupon_code',
+        'coupon_discount',
+        'coupon_discount_amount'      
     ];
 
     public function order()

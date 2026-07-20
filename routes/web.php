@@ -265,7 +265,7 @@ Route::get('/auth/google/callback', function () {
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
-
+Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
 // Google OAuth Routes
 // Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 // Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);

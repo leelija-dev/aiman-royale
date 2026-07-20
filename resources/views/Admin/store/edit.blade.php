@@ -107,11 +107,11 @@
                                             class="text-danger">*</span></label>
                                     <select class="form-control" id="is_active" name="is_active" required>
                                         <option value="1"
-                                            {{ old('is_active', $store->status ?? '1') == '1' ? 'selected' : '' }}>
+                                            {{ old('is_active', $store->is_active ?? '1') == '1' ? 'selected' : '' }}>
                                             Active
                                         </option>
                                         <option value="0"
-                                            {{ old('is_active', $store->status ?? '1') == '0' ? 'selected' : '' }}>
+                                            {{ old('is_active', $store->is_active ?? '0') == '0' ? 'selected' : '' }}>
                                             Inactive
                                         </option>
                                     </select>
