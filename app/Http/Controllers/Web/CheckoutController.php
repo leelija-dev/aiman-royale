@@ -115,7 +115,9 @@ class CheckoutController extends Controller
         if (!$serviceability['serviceable']) {
             return back()
                 ->withInput()
-                ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
+                ->withErrors([
+                    'pinCode' => $serviceability['message'] . ' (' . $request->pinCode . ')'
+                ]);
         }
         Log::info("serviceability", $serviceability);
         // For COD orders, specifically check COD availability

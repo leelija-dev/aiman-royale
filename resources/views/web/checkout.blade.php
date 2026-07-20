@@ -10,7 +10,7 @@
                         Cart > Shipping > Payment
                     </nav>
                     <h1 class="text-2xl font-semibold mb-8">Shipping Address</h1>
-                    @if ($errors->any())
+                    {{-- @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
                             <ul>
                                 @foreach ($errors->all() as $error)
@@ -18,7 +18,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <form id="checkout-form" action="{{ route('checkout.place') }}" method="post"
                         enctype="multipart/form-data" class="space-y-6" novalidate>
@@ -141,12 +141,13 @@
                                 <p id="pincode-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid
                                     6-digit pincode</p>
                                 <p id="pincode-success" class="text-green-500 text-sm mt-1 hidden">✓ Valid pincode</p>
-                            </div>
-                            @error('pinCode')
+                                @error('pinCode')
                                 <p class="text-red-500 text-sm mt-1">
                                     {{ $message }}
                                 </p>
                             @enderror
+                            </div>
+                            
                         </div>
 
                         <div>
