@@ -1359,10 +1359,8 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Priya Sharma"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <!-- Text Avatar: first letter -->
+                        <div class="text-avatar" aria-label="Priya Sharma">P</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Priya Sharma</h4>
@@ -1389,10 +1387,7 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Zara Khan"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Zara Khan">Z</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Zara Khan</h4>
@@ -1419,10 +1414,7 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1506368083636-6defb2e2c5f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Gurpreet Kaur"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Gurpreet Kaur">G</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Gurpreet Kaur</h4>
@@ -1449,10 +1441,7 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Anjali D'Souza"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Anjali D'Souza">A</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Anjali D'Souza</h4>
@@ -1479,10 +1468,7 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Riddhi Patel"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Riddhi Patel">R</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Riddhi Patel</h4>
@@ -1509,10 +1495,7 @@
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Fatima Ansari"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Fatima Ansari">F</div>
                     </div>
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Fatima Ansari</h4>
@@ -1571,6 +1554,36 @@
         </div>
     </div>
 </section>
+
+<style>
+    /* Text avatar style — inline so it works standalone */
+    .text-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+        color: #831843;
+        font-weight: 600;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        flex-shrink: 0;
+        box-shadow: 0 4px 8px rgba(236, 72, 153, 0.15);
+        transition: transform 0.2s;
+    }
+    .text-avatar:hover {
+        transform: scale(1.02);
+    }
+    @media (min-width: 768px) {
+        .text-avatar {
+            width: 4rem;
+            height: 4rem;
+            font-size: 1.5rem;
+        }
+    }
+</style>
 
 <!-- Call-to-Action Section -->
 <section class="bg-gray-50 py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
