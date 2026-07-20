@@ -1140,7 +1140,7 @@
                 @endforeach
                 <div class="relative group">
                     <a href="https://aimanroyale.com/products/"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                        class="hover:text-black  flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
                         >
