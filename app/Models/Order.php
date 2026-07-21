@@ -27,7 +27,12 @@ class Order extends Model
         'pincode',
         'phone_no',
         'cancelled_at',
-        'cancel_reason'
+        'cancel_reason',
+        'gst_percentage',
+        'gst_amount',
+        'special_discount',
+        'special_discount_id',
+        'special_discount_name'
     ];
 
 

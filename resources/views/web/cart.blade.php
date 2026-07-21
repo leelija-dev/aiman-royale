@@ -156,7 +156,7 @@
         </div>
 
         <!-- Coupon Section -->
-        <div class="mt-3 flex flex-wrap gap-4 px-6 py-6">
+        {{-- <div class="mt-3 flex flex-wrap gap-4 px-6 py-6">
           <input
             type="text"
             placeholder="Coupon code"
@@ -174,7 +174,7 @@
             </button>
             </a>
           </div>
-        </div>
+        </div> --}}
       </div>
 
       <!-- Cart Totals Sidebar -->
