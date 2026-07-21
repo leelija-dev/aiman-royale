@@ -55,6 +55,7 @@ use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
+use App\Http\Controllers\admin\CouponController;
 use App\Http\Controllers\admin\StoreController;
 
 // use App\Http\Controllers\ShopController;
@@ -547,5 +548,13 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::get('/edit/{id}', [StoreController::class, 'edit'])->name('store.edit');
         Route::post('/update/{id}', [StoreController::class, 'update'])->name('store.update');
         Route::delete('/delete/{id}', [StoreController::class, 'delete'])->name('store.delete');
+    });
+    Route::prefix('coupon')->group(function (){
+        Route::get('/', [CouponController::class, 'index'])->name('coupon.index');
+        Route::get('/create', [CouponController::class, 'create'])->name('coupon.create');
+        Route::post('/store', [CouponController::class, 'store'])->name('coupon.store');
+        Route::get('/edit/{id}', [CouponController::class, 'edit'])->name('coupon.edit');
+        Route::post('/update/{id}', [CouponController::class, 'update'])->name('coupon.update');
+        Route::delete('/delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
     });
 });

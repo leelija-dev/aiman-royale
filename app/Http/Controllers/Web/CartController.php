@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Carbon\Carbon;
+use App\Models\Coupon;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -274,4 +277,55 @@ class CartController extends Controller
     return redirect()->route('checkout.index');
 }
 
+
+
+public function applyCoupon(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+    'coupon_code' => 'required',
+    'total' => 'required|numeric',
+]);
+
+if ($validator->fails()) {
+    return response()->json([
+        'status' => false,
+        'message' => $validator->errors()->first(),
+    ]);
+}
+
+    $coupon = Coupon::where('code', $request->coupon_code)->where('code_type','!=','special-discount') 
+        // ->where('expiry_date', '>=', Carbon::now())
+        ->where('is_active', 1)->select('id','code','discount','expiry_date')
+        ->first();
+
+    if (!$coupon) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid coupon code.'
+        ]);
+    }
+
+    if (Carbon::now()->gt($coupon->expiry_date)) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Coupon has expired.'
+        ]);
+    }
+
+    // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
+    //     return response()->json([
+    //         'status' => false,
+    //         'message' => 'Minimum order amount is ₹'.$coupon->minimum_amount
+    //     ]);
+    // }
+
+    // $discount = ($request->total * $coupon->discount) / 100;
+    // $grandTotal = $request->total - $discount;
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Coupon applied successfully.',
+        'coupon' => $coupon
+    ]);
+}
 }

@@ -124,11 +124,11 @@
                         <!-- Submit Buttons -->
                         <div class="row">
                             <div class="col-12 text-end">
-                                <a href="{{ route('hero-section.index') }}" class="btn btn-danger">
+                                <a href="{{ route('store.index') }}" class="btn btn-danger">
                                     <i class="fas fa-times me-2"></i>Cancel
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Save Product
+                                    <i class="fas fa-save me-2"></i>Save Store
                                 </button>
 
                             </div>
