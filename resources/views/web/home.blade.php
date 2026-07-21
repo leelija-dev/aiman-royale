@@ -1371,18 +1371,20 @@
                     $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
                 }
                 @endphp
-                <div class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]"
+                <div class="relative bg-[#b8a89a] "
                     @if($banner->filter_type === 'multiple' && $banner->filters)
                     data-filter="{{ $banner->filters }}"
                     @else
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                    <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] w-full relative block" >
+                        <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-contain object-center object-top"
                         loading="lazy"
                         decoding="async"
                         width="800"
                         height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+                    </a>
+                    <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         @if ($banner->subtitle)
                         <span
                             class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
@@ -1400,12 +1402,12 @@
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
-                    </div>
+                    </div> -->
                 </div>
                 @endforeach
             </div>
 
-            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] min-h-[500px] h-[50vh]">
+            <div class="hidden lgg:grid grid-cols-1 md:grid-cols-2 gap-6 ">
                 @foreach ($editorBanners as $index => $banner)
                 @php
                 $editorImg = asset('uploads/banners/' . $banner->image);
@@ -1415,17 +1417,21 @@
                 }
                 @endphp
                 @if ($index % 2 == 0)
-                <div class="relative bg-[#b8a89a] overflow-hidden"
+                <div class="relative bg-[#b8a89a] "
                     @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                     @else
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                    <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] relative block">
+                        <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                        class="absolute inset-0 w-full h-full object-contain object-center object-top"
                         loading="lazy"
                         decoding="async"
                         width="800"
                         height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
+
+                    </a>
+                    
+                    <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         @if ($banner->subtitle)
                         <span
                             class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
@@ -1443,7 +1449,7 @@
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
-                    </div>
+                    </div> -->
                 </div>
                 @endif
                 @endforeach
@@ -1457,17 +1463,19 @@
                 }
                 @endphp
                 @if ($index % 2 == 1)
-                <div class="relative bg-[#e8dcd6] overflow-hidden"
+                <div class="relative bg-[#e8dcd6] "
                     @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
                     @else
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
+                    <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] relative w-full block">
+                        <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top"
                         loading="lazy"
                         decoding="async"
                         width="800"
                         height="600" />
-                    <div class="relative z-10 flex flex-col justify-center h-full p-10">
+                    </a>
+                    <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         @if ($banner->subtitle)
                         <span
                             class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
@@ -1485,7 +1493,7 @@
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition inline-block">
                             {{ $banner->button_text }}
                         </a>
-                    </div>
+                    </div> -->
                 </div>
                 @endif
                 @endforeach
