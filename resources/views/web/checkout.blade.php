@@ -382,6 +382,12 @@
                                                 value="{{ $coupon->code ?? '' }}"
                                                 form="checkout-form">
 
+                                            <input type="hidden"
+                                                id="special-discount-amount"
+                                                name="special_discount_amount"
+                                                value="{{ $coupon->code ?? '' }}"
+                                                form="checkout-form">
+
                                 </div>
                             </div>
 
@@ -836,6 +842,7 @@
                     document.getElementById("special-discount-id").value = "{{ $coupon->id }}";
                     document.getElementById("special-discount-percentage").value = "{{ $coupon->discount }}";
                     document.getElementById("special-discount-name").value = "{{ $coupon->code }}";
+                    
                 } else {
                     document.getElementById("special-discount-id").value = "";
                     document.getElementById("special-discount-percentage").value = "";
@@ -848,12 +855,16 @@
             // document.getElementById("special-discount-hidden").value =
             //     specialDiscount.toFixed(2);
             const specialDiscountEl = document.getElementById("special-discount");
+            const specialDiscountAmt = document.getElementById("special-discount-amount");
             const specialDiscountHidden = document.getElementById("special-discount-hidden");
 
             if (specialDiscountEl) {
                 specialDiscountEl.innerHTML = specialDiscount.toFixed(2);
-            }
 
+            }
+            if (specialDiscountAmt) {
+                specialDiscountAmt.value = specialDiscount.toFixed(2);
+            }
             if (specialDiscountHidden) {
                 specialDiscountHidden.value = specialDiscount.toFixed(2);
             }

@@ -31,6 +31,7 @@ class Order extends Model
         'gst_percentage',
         'gst_amount',
         'special_discount',
+        'special_discount_amount',
         'special_discount_id',
         'special_discount_name'
     ];

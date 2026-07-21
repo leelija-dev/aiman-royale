@@ -181,6 +181,7 @@ class CheckoutController extends Controller
         $special_discount = $request->input('special_discount_percentage');
         $special_discount_id = $request->input('special_discount_id');
         $special_discount_code = $request->input('special_discount_name');
+        $special_discount_amount = $request->input('special_discount_amount');
         // Get payment method
         $paymentMethod = $request->input('payment_method', 'cashfree');
 
@@ -199,6 +200,7 @@ class CheckoutController extends Controller
             'gst_percentage' => $gst_percentage ?? 0,
             'gst_amount' => $gst_amount,    #$total * ($gst_percentage ?? 0) / 100,
             'special_discount' => $special_discount ?? 0,
+            'special_discount_amount' =>  $special_discount_amount ?? 0,
             'special_discount_id' => $special_discount_id ?? null,
             'special_discount_name' => $special_discount_code  ?? null,
             'order_status' => 'pending',
