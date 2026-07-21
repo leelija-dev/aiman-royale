@@ -53,7 +53,7 @@
     </div>
     <div class="sm:text-right">
       <div class="text-xs font-semibold uppercase tracking-wide text-[#4e5d73] mb-1">Invoice details</div>
-      <div><span class="text-[#4e5d73]">Invoice no:</span> <span class="font-medium text-[#0b1a33]">{{$orderDetails->id ?$orderDetails->id :''}}</span></div>
+      <div><span class="text-[#4e5d73]">Invoice no: </span> <span class="font-medium text-[#0b1a33]">#{{$orderDetails->id ?$orderDetails->id :''}}</span></div>
       <div><span class="text-[#4e5d73]">Date:</span> <span class="font-medium text-[#0b1a33]">{{$orderDetails->created_at->format('d M Y, h:i A')}}</span></div>
       @php
     $status = strtolower($orderDetails->payment_status ?? '');
@@ -86,9 +86,11 @@
           <th class="px-4 py-3 font-semibold">DESCRIPTION</th>
           <th class="px-4 py-3 font-semibold text-center">QTY</th>
           <th class="px-4 py-3 font-semibold text-right">PRICE</th>
-          <th class="px-4 py-3 font-semibold text-right">TAXABLE</th>
-          <th class="px-4 py-3 font-semibold text-right">CGST (0%)</th>
-          <th class="px-4 py-3 font-semibold text-right">SGST (0%)</th>
+          <th class="px-4 py-3 font-semibold text-right">Discount</th>
+          {{-- <th class="px-4 py-3 font-semibold text-right">TAXABLE</th> --}}
+          {{-- <th class="px-4 py-3 font-semibold text-right">GST (%)</th>
+          <th class="px-4 py-3 font-semibold text-right">CGST</th>
+          <th class="px-4 py-3 font-semibold text-right">SGST</th> --}}
           <th class="px-4 py-3 font-semibold text-right">TOTAL</th>
         </tr>
       </thead>
@@ -96,12 +98,14 @@
         @foreach($orderDetails->orderProducts as $orderProduct)
         <tr>
           <td class="px-4 py-3 text-[#2c3a4f]">{{$loop->iteration}}</td>
-          <td class="px-4 py-3 font-medium text-[#0b1a33]">{{$orderProduct->product->name}} , Size: {{$orderProduct->variant->size ? $orderProduct->variant->size : ''}} ,Color: {{$orderProduct->variant->color ?$orderProduct->variant->color :''}}</td>
+          <td class="px-4 py-3 font-medium text-[#0b1a33]">{{$orderProduct->product->name}} , Size: {{$orderProduct->variant->size ? $orderProduct->variant->size : ''}} , Colour: {{$orderProduct->variant->color ?$orderProduct->variant->color :''}}</td>
           <td class="px-4 py-3 text-center text-[#0b1a33]">{{$orderProduct->quantity ? $orderProduct->quantity : 0 }}</td>
           <td class="px-4 py-3 text-right text-[#0b1a33]">₹{{$orderProduct->price ? $orderProduct->price : 0}}</td>
-          <td class="px-4 py-3 text-right text-[#0b1a33]">₹00</td>
-          <td class="px-4 py-3 text-right text-[#0b1a33]">₹00</td>
-          <td class="px-4 py-3 text-right text-[#0b1a33]">₹00</td>
+          <td class="px-4 py-3 text-right text-[#0b1a33]">₹{{$orderProduct->coupon_discount_amount ? $orderProduct->coupon_discount_amount : 0}}</td>
+          {{-- <td class="px-4 py-3 text-right text-[#0b1a33]">₹{{$orderProduct->total ? $orderProduct->total : 0}}</td> --}}
+          {{-- <td class="px-4 py-3 text-right text-[#0b1a33]">{{$orderDetails->gst_percentage ? $orderDetails->gst_percentage : 0}}%</td>
+          <td class="px-4 py-3 text-right text-[#0b1a33]">₹{{$orderDetails->gst_percentage ? ($orderDetails->gst_percentage/2) : 0}}%</td>
+          <td class="px-4 py-3 text-right text-[#0b1a33]">{{$orderDetails->gst_percentage ? ($orderDetails->gst_percentage/2) : 0}}%</td> --}}
           <td class="px-4 py-3 text-right font-medium text-[#0b1a33]">₹{{$orderProduct->total ? $orderProduct->total : 0}}</td>
         </tr>
       @endforeach
@@ -118,10 +122,13 @@
       <span class="block mt-2 text-[10px] leading-relaxed">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span>
     </div>
     <div class="min-w-[260px] bg-[#f9fafc] px-5 py-4 border border-[#e5e9f0]">
-      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Sub Total (Taxable)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->total_amount ? $orderDetails->total_amount : 0 }}</span></div>
-      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">CGST (0%)</span> <span class="font-medium text-[#0b1a33]">₹00</span></div>
-      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">SGST (0%)</span> <span class="font-medium text-[#0b1a33]">₹00</span></div>
-      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Total Tax (0%)</span> <span class="font-medium text-[#0b1a33]">₹00.00</span></div>
+      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Sub Total (Taxable)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->total_amount ? (float)($orderDetails->total_amount + ($orderDetails->special_discount_amount ? $orderDetails->special_discount_amount  : 0) ) - ($orderDetails->gst_amount ? $orderDetails->gst_amount : 0): 0 }}</span></div>
+      @if((float)$orderDetails->special_discount_amount > 0 && (float)$orderDetails->special_discount_id != null )
+        <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Special Discount ({{$orderDetails->special_discount ? $orderDetails->special_discount : 0}}%)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->special_discount_amount ? $orderDetails->special_discount_amount : 0}}</span></div>
+      @endif
+      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">CGST ({{$orderDetails->gst_percentage ? ((float)$orderDetails->gst_percentage/2) : 0}}%)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->gst_amount ? ((float)$orderDetails->gst_amount/2) : 0}}</span></div>
+      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">SGST ({{$orderDetails->gst_percentage ? ((float)$orderDetails->gst_percentage/2) : 0}}%)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->gst_amount ? ((float)$orderDetails->gst_amount/2) : 0}}</span></div>
+      <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Total Tax (0%)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->gst_amount ? $orderDetails->gst_amount : 0}}</span></div>
       
       <!-- Payment method row -->
       <div class="flex justify-between text-sm py-2 border-b border-[#e5e9f0] items-center">
