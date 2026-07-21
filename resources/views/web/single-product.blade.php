@@ -42,14 +42,14 @@
     @if ($product == true)
         <style>
             /* ========================================
-       PRODUCT SECTION STYLES
-       Targeting ONLY #single-right-content
-       Respects Tailwind custom properties
-       ======================================== */
+           PRODUCT SECTION STYLES
+           Targeting ONLY #single-right-content
+           Respects Tailwind custom properties
+           ======================================== */
 
             /* #single-right-content {
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    } */
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        } */
 
             /* ========== TYPOGRAPHY & HEADINGS ========== */
 
@@ -195,11 +195,11 @@
 
             /* Stitched button - using Tailwind secondary */
             /* #single-right-content .type-btn[data-type="stitched"] {
-        background: var(--secondary, #b8652e);
-        background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%);
-        border-color: var(--secondary, #b8652e);
-        color: white;
-    } */
+            background: var(--secondary, #b8652e);
+            background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%);
+            border-color: var(--secondary, #b8652e);
+            color: white;
+        } */
 
             #single-right-content .type-btn[data-type="stitched"]:hover {
                 transform: translateY(-2px);
@@ -431,8 +431,8 @@
             }
 
             /* #single-right-content .text-secondary {
-        color: var(--secondary, #b8652e) !important;
-    } */
+            color: var(--secondary, #b8652e) !important;
+        } */
 
             #single-right-content .text-secondary.cursor-pointer {
                 font-weight: 500;
@@ -491,20 +491,20 @@
             }
 
             /* #single-right-content #wishlist-btn:hover {
-        border-color: #e06c4a;
-        background: #fff8f5;
-        transform: scale(1.02);
-    }
+            border-color: #e06c4a;
+            background: #fff8f5;
+            transform: scale(1.02);
+        }
 
-    #single-right-content #wishlist-btn i {
-        transition: color 0.2s;
-        font-size: 1.3rem;
-        color: #b8a28c;
-    }
+        #single-right-content #wishlist-btn i {
+            transition: color 0.2s;
+            font-size: 1.3rem;
+            color: #b8a28c;
+        }
 
-    #single-right-content #wishlist-btn:hover i {
-        color: #e06c4a;
-    } */
+        #single-right-content #wishlist-btn:hover i {
+            color: #e06c4a;
+        } */
 
             /* WhatsApp Button */
             #single-right-content .bg-\[\\#25D366\] {
@@ -1012,7 +1012,8 @@
                                         <div class="flex flex-wrap gap-2">
                                             @if (isset($colors) && $colors->count() > 0)
                                                 @foreach ($colors as $color)
-                                                    <button
+                                                 
+                                                <button
                                                         class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all"
                                                         style="background-color: {{ $color->code }};"
                                                         data-color="{{ $color->code }}"
@@ -1070,11 +1071,20 @@
                                 <h3 class="font-medium mb-3 text-gray-800">Select Color</h3>
                                 <div class="flex gap-3 flex-wrap" id="color-selection">
                                     @php
+                                        // // Get first variant
                                         $firstVariant = $product->variants->first();
-                                        $selectedSize = $firstVariant->size ?? 'M';
-                                        $colorsForSize = $product->variants->where('size', $selectedSize);
-                                    @endphp
+                                        // // dd($firstVariant);
+                                        // // Default selected color
+                                        $selectedColor = $firstVariant->color ?? '';
 
+                                        // Get all unique colors
+                                        $colorsForSize = $product->variants->unique('color')->values();
+                                        // dd($colorsForSize->count());
+                                    @endphp
+                                    {{-- @dd($product->variants->pluck('color')); --}}
+                                    {{-- @php
+                                        dd($colorsForSize);
+                                    @endphp --}}
                                     @forelse($colorsForSize as $index => $variant)
                                         @php
                                             $isSelected = $index == 0;
@@ -1105,9 +1115,10 @@
                                     @empty
                                         <p class="text-gray-500 text-sm">No colors available for this size</p>
                                     @endforelse
+
                                 </div>
                             </div>
-
+                            {{-- @dd({{ $colorsForSize->count() }}) --}}
                             <!-- Best Offers Section -->
                             <div class="bg-secondary/5">
                                 <h3 class="font-medium mb-2">Best Offers</h3>
@@ -2276,7 +2287,7 @@
             const url = encodeURIComponent(window.location.href);
             const text = encodeURIComponent(
                 `✨ Hey! Check out "${document.querySelector('h3')?.textContent || 'this amazing product'}" from AymanRoyale! 🛍️`
-                );
+            );
             window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
         }
 
@@ -2327,7 +2338,7 @@
             const subject = encodeURIComponent(`Check out "${productName}" from AymanRoyale!`);
             const body = encodeURIComponent(
                 `✨ Hey!\n\nI thought you'd like this amazing product "${productName}" from AymanRoyale.\n\nCheck it out here:\n${window.location.href}\n\nShared with ❤️`
-                );
+            );
             window.location.href = `mailto:?subject=${subject}&body=${body}`;
         }
 
@@ -2865,6 +2876,88 @@
         }
 
         // Update color options based on selected size
+        // function updateColorOptions(size) {
+        //     const colorSelection = document.getElementById('color-selection');
+        //     if (!colorSelection) return;
+
+        //     // Clear existing buttons
+        //     while (colorSelection.firstChild) {
+        //         colorSelection.removeChild(colorSelection.firstChild);
+        //     }
+
+        //     // Filter variants by selected size
+        //     const colorsForSize = productVariants.filter(variant => variant.size === size);
+
+        //     if (colorsForSize.length === 0) {
+        //         const noColorsMsg = document.createElement('p');
+        //         noColorsMsg.className = 'text-gray-500 text-sm';
+        //         noColorsMsg.textContent = 'No colors available for this size';
+        //         colorSelection.appendChild(noColorsMsg);
+        //         return;
+        //     }
+
+        //     colorsForSize.forEach((variant, index) => {
+        //         const colorBtn = document.createElement('button');
+        //         colorBtn.className =
+        //             `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
+        //         const bgColor = variant.color_code || variant.color || '#CCCCCC';
+        //         colorBtn.style.backgroundColor = bgColor;
+        //         // colorBtn.style.backgroundColor = variant.color;
+        //         colorBtn.setAttribute('data-color', variant.color);
+        //         colorBtn.setAttribute('data-size', size);
+        //         colorBtn.setAttribute('data-variant-id', variant.id);
+
+        //         // Generate correct image URL
+        //         let variantImage = '{{ asset('assets/images/placeholder.jpg') }}';
+
+        //         // if (variant.images && variant.images.length > 0) {
+        //         //     if (typeof variant.images[0] === 'object' && variant.images[0].image) {
+        //         //         let imagePath = variant.images[0].image;
+        //         //         imagePath = imagePath.replace(/^\/+/, '');
+        //         //         variantImage = imagePath; //'{{ url('') }}/' + imagePath;
+        //         //     } 
+        //         //     else if (typeof variant.images[0] === 'string') {
+        //         //         let imagePath = variant.images[0];
+        //         //         imagePath = imagePath.replace(/^\/+/, '');
+        //         //         variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url('') }}/' + imagePath;
+        //         //     }
+        //         // } else if (variant.image) {
+        //         //     let imagePath = variant.image;
+        //         //     imagePath = imagePath.replace(/^\/+/, '');
+        //         //     variantImage = variant.image.startsWith('http') ? variant.image : '{{ url('') }}/' + imagePath;
+        //         // }
+
+        //         if (variant.images && variant.images.length > 0) {
+        //             if (typeof variant.images[0] === 'object' && variant.images[0].image) {
+        //                 // Cloudinary URL - no need to modify
+        //                 variantImage = variant.images[0].image;
+        //             } else if (typeof variant.images[0] === 'string') {
+        //                 // Cloudinary URL - use as is
+        //                 variantImage = variant.images[0];
+        //             }
+        //         } else if (variant.image) {
+        //             // Cloudinary URL - use as is
+        //             variantImage = variant.image;
+        //         }
+
+        //         colorBtn.setAttribute('data-variant-image', variantImage);
+        //         colorBtn.setAttribute('title', variant.color);
+
+        //         colorBtn.addEventListener('click', function() {
+        //             selectColor(variant.color, size, variant.id, this);
+        //         });
+
+        //         colorSelection.appendChild(colorBtn);
+        //     });
+
+        //     // Select first color by default
+        //     if (colorsForSize.length > 0) {
+        //         const firstColorBtn = colorSelection.querySelector('.color-btn');
+        //         if (firstColorBtn) {
+        //             selectColor(colorsForSize[0].color, size, colorsForSize[0].id, firstColorBtn);
+        //         }
+        //     }
+        // }
         function updateColorOptions(size) {
             const colorSelection = document.getElementById('color-selection');
             if (!colorSelection) return;
@@ -2874,10 +2967,12 @@
                 colorSelection.removeChild(colorSelection.firstChild);
             }
 
-            // Filter variants by selected size
-            const colorsForSize = productVariants.filter(variant => variant.size === size);
+            // CHANGE THIS: Show ALL unique colors, not filtered by size
+            const uniqueColors = [...new Set(productVariants.map(v => v.color))];
 
-            if (colorsForSize.length === 0) {
+            // REMOVE THIS LINE: const colorsForSize = productVariants.filter(variant => variant.size === size);
+
+            if (uniqueColors.length === 0) {
                 const noColorsMsg = document.createElement('p');
                 noColorsMsg.className = 'text-gray-500 text-sm';
                 noColorsMsg.textContent = 'No colors available for this size';
@@ -2885,69 +2980,45 @@
                 return;
             }
 
-            colorsForSize.forEach((variant, index) => {
+            // CHANGE THIS: Use uniqueColors instead of colorsForSize
+            uniqueColors.forEach((color, index) => {
+                // Find any variant with this color
+                const variant = productVariants.find(v => v.color === color);
+                if (!variant) return;
+
                 const colorBtn = document.createElement('button');
                 colorBtn.className =
                     `color-btn w-10 h-10 rounded-full border-2 ${index === 0 ? 'border-secondary' : 'border-gray-300'} transition-all hover:scale-110`;
                 const bgColor = variant.color_code || variant.color || '#CCCCCC';
                 colorBtn.style.backgroundColor = bgColor;
-                // colorBtn.style.backgroundColor = variant.color;
                 colorBtn.setAttribute('data-color', variant.color);
-                colorBtn.setAttribute('data-size', size);
+                // REMOVE THIS: Don't set data-size
+                // colorBtn.setAttribute('data-size', size);
                 colorBtn.setAttribute('data-variant-id', variant.id);
 
-                // Generate correct image URL
-                let variantImage = '{{ asset('assets/images/placeholder.jpg') }}';
+                // ... rest of your image handling code remains the same ...
 
-                // if (variant.images && variant.images.length > 0) {
-                //     if (typeof variant.images[0] === 'object' && variant.images[0].image) {
-                //         let imagePath = variant.images[0].image;
-                //         imagePath = imagePath.replace(/^\/+/, '');
-                //         variantImage = imagePath; //'{{ url('') }}/' + imagePath;
-                //     } 
-                //     else if (typeof variant.images[0] === 'string') {
-                //         let imagePath = variant.images[0];
-                //         imagePath = imagePath.replace(/^\/+/, '');
-                //         variantImage = variant.images[0].startsWith('http') ? variant.images[0] : '{{ url('') }}/' + imagePath;
-                //     }
-                // } else if (variant.image) {
-                //     let imagePath = variant.image;
-                //     imagePath = imagePath.replace(/^\/+/, '');
-                //     variantImage = variant.image.startsWith('http') ? variant.image : '{{ url('') }}/' + imagePath;
-                // }
-
-                if (variant.images && variant.images.length > 0) {
-                    if (typeof variant.images[0] === 'object' && variant.images[0].image) {
-                        // Cloudinary URL - no need to modify
-                        variantImage = variant.images[0].image;
-                    } else if (typeof variant.images[0] === 'string') {
-                        // Cloudinary URL - use as is
-                        variantImage = variant.images[0];
-                    }
-                } else if (variant.image) {
-                    // Cloudinary URL - use as is
-                    variantImage = variant.image;
-                }
-
-                colorBtn.setAttribute('data-variant-image', variantImage);
                 colorBtn.setAttribute('title', variant.color);
 
                 colorBtn.addEventListener('click', function() {
-                    selectColor(variant.color, size, variant.id, this);
+                    // CHANGE THIS: Don't pass size parameter
+                    selectColor(variant.color, null, variant.id, this);
                 });
 
                 colorSelection.appendChild(colorBtn);
             });
 
             // Select first color by default
-            if (colorsForSize.length > 0) {
+            if (uniqueColors.length > 0) {
                 const firstColorBtn = colorSelection.querySelector('.color-btn');
                 if (firstColorBtn) {
-                    selectColor(colorsForSize[0].color, size, colorsForSize[0].id, firstColorBtn);
+                    const firstVariant = productVariants.find(v => v.color === uniqueColors[0]);
+                    if (firstVariant) {
+                        selectColor(firstVariant.color, null, firstVariant.id, firstColorBtn);
+                    }
                 }
             }
         }
-
         // Select color when size is already selected - IMAGES SHOULD CHANGE HERE
         // function selectColor(color, size, variantId, element) {
         //     selectedColor = color;
