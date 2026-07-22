@@ -887,66 +887,66 @@
       }
     </style>
 
-   <script>
-(function () {
-    const panel = document.getElementById("panel1");
-    const trigger = document.getElementById("accordion-trigger-1");
+    <script>
+      (function() {
+        const panel = document.getElementById("panel1");
+        const trigger = document.getElementById("accordion-trigger-1");
 
-    if (!panel || !trigger) {
-        console.error("Accordion elements not found");
-        return;
-    }
+        if (!panel || !trigger) {
+          console.error("Accordion elements not found");
+          return;
+        }
 
-    const DESKTOP_WIDTH = 992;
+        const DESKTOP_WIDTH = 992;
 
-    function updateAccordionState() {
-        if (window.innerWidth >= DESKTOP_WIDTH) {
+        function updateAccordionState() {
+          if (window.innerWidth >= DESKTOP_WIDTH) {
             // Always open on desktop
             panel.classList.add("open");
             trigger.classList.add("open");
-        } else {
+          } else {
             // Mobile starts closed (remove these two lines if you want to preserve state)
             panel.classList.remove("open");
             trigger.classList.remove("open");
+          }
         }
-    }
 
-    window.toggleAccordion = function () {
-        // Disable accordion toggle on desktop
-        if (window.innerWidth >= DESKTOP_WIDTH) {
+        window.toggleAccordion = function() {
+          // Disable accordion toggle on desktop
+          if (window.innerWidth >= DESKTOP_WIDTH) {
             return;
-        }
+          }
 
-        const isOpen = panel.classList.contains("open");
+          const isOpen = panel.classList.contains("open");
 
-        if (isOpen) {
+          if (isOpen) {
             panel.classList.remove("open");
             trigger.classList.remove("open");
-        } else {
+          } else {
             panel.classList.add("open");
             trigger.classList.add("open");
 
             setTimeout(() => {
-                trigger.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                });
+              trigger.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+              });
             }, 100);
-        }
-    };
+          }
+        };
 
-    trigger.addEventListener("click", function (e) {
-        e.preventDefault();
-        window.toggleAccordion();
-    });
+        trigger.addEventListener("click", function(e) {
+          e.preventDefault();
+          window.toggleAccordion();
+        });
 
-    // Set initial state
-    updateAccordionState();
+        // Set initial state
+        updateAccordionState();
 
-    // Update when resizing
-    window.addEventListener("resize", updateAccordionState);
-})();
-</script>
+        // Update when resizing
+        window.addEventListener("resize", updateAccordionState);
+      })();
+    </script>
 
 
     <div class="flex flex-row gap-3 relative">

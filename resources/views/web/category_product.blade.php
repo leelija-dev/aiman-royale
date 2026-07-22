@@ -1,650 +1,719 @@
 @extends('layout.web.main-layout')
 
 @section('content')
-    <style>
-        /* MAIN CONTAINER — proper grid, no flex override issues */
-        .products-container {
-            width: 100%;
-            /* max-width: 1600px; */
-            margin: 0 auto;
-            display: grid;
-            /* Responsive columns: consistent card widths, no flex-wrap quirks */
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-            /* 24px gap consistent */
-        }
+<style>
+    /* MAIN CONTAINER — proper grid, no flex override issues */
+    .products-container {
+        width: 100%;
+        /* max-width: 1600px; */
+        margin: 0 auto;
+        display: grid;
+        /* Responsive columns: consistent card widths, no flex-wrap quirks */
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        /* 24px gap consistent */
+    }
 
-        /* CARD — each card has identical structure & fixed ratio behavior */
-        .product-card {
-            width: 100%;
-            background: white;
-            border-radius: 1rem;
-            /* rounded-xl */
-            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            transition: box-shadow 0.2s ease, transform 0.2s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+    /* CARD — each card has identical structure & fixed ratio behavior */
+    .product-card {
+        width: 100%;
+        background: white;
+        border-radius: 1rem;
+        /* rounded-xl */
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 
-        .product-card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            transform: translateY(-2px);
-        }
+    .product-card:hover {
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        transform: translateY(-2px);
+    }
 
-        /* IMAGE WRAPPER — enforces consistent aspect ratio (4/6) regardless of screen */
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            /* ASPECT RATIO 4:6 → same as original (4/6 = 0.666) -> height = width * 1.5 */
-            /* Using aspect-ratio property guarantees same ratio on every screen size */
-            aspect-ratio: 4 / 6;
-            background-color: #f3f4f6;
-            /* gray-100 */
-            overflow: hidden;
-            border-radius: 0.75rem 0.75rem 0 0;
-        }
+    /* IMAGE WRAPPER — enforces consistent aspect ratio (4/6) regardless of screen */
+    .image-wrapper {
+        position: relative;
+        width: 100%;
+        /* ASPECT RATIO 4:6 → same as original (4/6 = 0.666) -> height = width * 1.5 */
+        /* Using aspect-ratio property guarantees same ratio on every screen size */
+        aspect-ratio: 4 / 6;
+        background-color: #f3f4f6;
+        /* gray-100 */
+        overflow: hidden;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
 
-        /* IMAGE styling — object-contain preserves full image visibility, object-top aligns nicely */
-        .product-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: top center;
-            display: block;
-            transition: transform 0.3s ease;
-        }
+    /* IMAGE styling — object-contain preserves full image visibility, object-top aligns nicely */
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: top center;
+        display: block;
+        transition: transform 0.3s ease;
+    }
 
-        .product-card:hover .product-img {
-            transform: scale(1.02);
-        }
+    .product-card:hover .product-img {
+        transform: scale(1.02);
+    }
 
-        /* BADGES (discount) */
-        .badge-container {
-            position: absolute;
-            top: 0.75rem;
-            left: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 2;
-        }
+    /* BADGES (discount) */
+    .badge-container {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 2;
+    }
 
-        .discount-badge {
-            background-color: #dc2626;
-            /* primary red-like but modern */
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.25rem 0.6rem;
-            border-radius: 9999px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            letter-spacing: 0.3px;
-        }
+    .discount-badge {
+        background-color: #dc2626;
+        /* primary red-like but modern */
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.6rem;
+        border-radius: 9999px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        letter-spacing: 0.3px;
+    }
 
-        /* WISHLIST BUTTON */
-        .wishlist-btn {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(2px);
-            border-radius: 9999px;
-            width: 2.25rem;
-            height: 2.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            z-index: 3;
-        }
+    /* WISHLIST BUTTON */
+    .wishlist-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(2px);
+        border-radius: 9999px;
+        width: 2.25rem;
+        height: 2.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        z-index: 3;
+    }
 
-        .wishlist-btn:hover {
-            background-color: white;
-            transform: scale(1.1);
-        }
+    .wishlist-btn:hover {
+        background-color: white;
+        transform: scale(1.1);
+    }
 
-        .wishlist-btn i {
-            font-size: 1rem;
-            color: #1f2937;
-            transition: color 0.2s;
-        }
+    .wishlist-btn i {
+        font-size: 1rem;
+        color: #1f2937;
+        transition: color 0.2s;
+    }
 
-        .wishlist-btn:hover i {
-            color: #ef4444;
-        }
+    .wishlist-btn:hover i {
+        color: #ef4444;
+    }
 
-        /* CONTENT AREA */
-        .card-content {
+    /* CONTENT AREA */
+    .card-content {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+    }
+
+    .product-title {
+        font-size: 0.9375rem;
+        /* 15px */
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0.25rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .brand-text {
+        font-size: 0.875rem;
+        color: #4b5563;
+        margin-bottom: 0.5rem;
+    }
+
+    .price-row {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+    }
+
+    .current-price {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .old-price {
+        font-size: 0.875rem;
+        color: #9ca3af;
+        text-decoration: line-through;
+    }
+
+    /* Fix for any anchor interference */
+    a.wishlist-link {
+        text-decoration: none;
+        display: flex;
+    }
+
+    /* MEDIA QUERIES: grid adjusts column count automatically,
+               but card ratio remains identical due to aspect-ratio on wrapper */
+    @media (max-width: 640px) {
+        body {
             padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            flex: 1;
+        }
+
+        .products-container {
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+
+        .card-content {
+            padding: 0.75rem;
         }
 
         .product-title {
-            font-size: 0.9375rem;
-            /* 15px */
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 0.25rem;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .brand-text {
-            font-size: 0.875rem;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-        }
-
-        .price-row {
-            display: flex;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.25rem;
+            font-size: 0.85rem;
         }
 
         .current-price {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #111827;
+            font-size: 1rem;
         }
+    }
 
-        .old-price {
-            font-size: 0.875rem;
-            color: #9ca3af;
-            text-decoration: line-through;
+    @media (max-width: 480px) {
+        .products-container {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.875rem;
         }
+    }
 
-        /* Fix for any anchor interference */
-        a.wishlist-link {
-            text-decoration: none;
-            display: flex;
-        }
-
-        /* MEDIA QUERIES: grid adjusts column count automatically,
-               but card ratio remains identical due to aspect-ratio on wrapper */
-        @media (max-width: 640px) {
-            body {
-                padding: 1rem;
-            }
-
-            .products-container {
-                gap: 1rem;
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-
-            .card-content {
-                padding: 0.75rem;
-            }
-
-            .product-title {
-                font-size: 0.85rem;
-            }
-
-            .current-price {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .products-container {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 0.875rem;
-            }
-        }
-
-        /* For very large screens, cards won't stretch beyond comfortable size,
+    /* For very large screens, cards won't stretch beyond comfortable size,
                but each card's image ratio stays locked. No height distortion */
-        @media (min-width: 1680px) {
-            .products-container {
-                grid-template-columns: repeat(4, minmax(180px, 1fr));
-            }
+    @media (min-width: 1680px) {
+        .products-container {
+            grid-template-columns: repeat(4, minmax(180px, 1fr));
         }
+    }
 
-        /* keep hover transition consistent */
-        .product-card {
-            transition: box-shadow 0.2s ease, transform 0.2s ease;
-        }
-    </style>
-    <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
-        <div class="container mx-auto mb-4 flex flex-row lgg:justify-end justify-between gap-3 flex-wrap lgg:px-6 px-4">
+    /* keep hover transition consistent */
+    .product-card {
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+</style>
+<section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
+ <div class="container mx-auto">
+       
+        <div class="mb-[0px] flex items-center justify-between gap-3 px-4 lgg:px-6 lgg:hidden ">
+
             <!-- Mobile Filter Button -->
-            <button id="open-filter" type="button"
-                class="lgg:hidden flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-gray-100 hover:shadow-md active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
+            <button
+                id="open-filter"
+                type="button"
+                class=" inline-flex items-center gap-2 rounded-[40px] border border-gray-200 bg-white py-[9px] px-[14px] text-sm font-semibold text-gray-700 shadow-sm transition-all duration-300 hover:border-red-200 hover:bg-red-50 hover:text-[#A10000] hover:shadow-md active:scale-95">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                         d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 018 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
                 </svg>
-                Filter
+
+                <span>Filters</span>
             </button>
 
-            <!-- Desktop Filter Dropdowns Container -->
-            <div class="flex flex-row gap-3 flex-wrap">
-                <!-- Filter Dropdown -->
-                <div class="relative inline-block text-left">
-                    <button type="button" id="filter-dropdown-button"
-                        class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
-                        aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                        </svg>
-                        <span id="filter-label">Filter</span>
-                        <svg id="filter-chevron" xmlns="http://www.w3.org/2000/svg"
-                            class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
+            <!-- Sort / Accordion Button -->
+            <button
+                id="accordion-trigger-1"
+                class="accordion-trigger flex items-center gap-2 rounded-[40px] border border-gray-200 bg-white py-[9px] px-[14px] text-sm font-semibold text-gray-700 shadow-sm transition-all duration-300 hover:border-red-200 hover:bg-red-50 hover:text-[#A10000] hover:shadow-md"
+                data-target="panel1">
 
-                    <div id="filter-menu"
-                        class="absolute lg:right-0 left-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
-                        role="menu" aria-orientation="vertical" aria-labelledby="filter-dropdown-button">
-                        <div class="py-2" role="none">
-                            <button type="button"
-                                class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                data-value="featured" role="menuitem">
-                                <span>Featured</span>
-                                <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </button>
-                            <button type="button"
-                                class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                data-value="best-seller" role="menuitem">
-                                <span>Best Seller</span>
-                                <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </button>
-                            <button type="button"
-                                class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
-                                data-value="new-arrival" role="menuitem">
-                                <span>New Arrival</span>
-                                <svg class="w-4 h-4 text-blue-600  checkmark" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </button>
-                            <button type="button"
-                                class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                data-value="top-rated" role="menuitem">
-                                <span>Top Rated</span>
-                                <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </button>
+                <span>Sort Types</span>
+
+                <svg class="icon-chevron h-5 w-5 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+        </div>
+
+        <div id="custom-unique-accordian" class="lgg:px-6 px-4">
+            <!-- Accordion Item 1 -->
+            <div class="">
+                <div id="panel1" class="accordion-panel py-0 px-1 text-gray-600">
+                    <div class=" py-3">
+                        <div class="flex flex-row gap-3 flex-wrap lgg:justify-end items-center justify-center">
+
+                            <!-- Filter Dropdown -->
+                            <div class="relative inline-block text-left">
+                                <button type="button" id="filter-dropdown-button"
+                                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                    </svg>
+                                    <span id="filter-label">Filter</span>
+                                    <svg id="filter-chevron" xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div id="filter-menu"
+                                    class="absolute lg:right-0 left-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    role="menu" aria-orientation="vertical" aria-labelledby="filter-dropdown-button">
+                                    <div class="py-2" role="none">
+                                        <button type="button"
+                                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="featured" role="menuitem">
+                                            <span>Featured</span>
+                                            <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button type="button"
+                                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="best-seller" role="menuitem">
+                                            <span>Best Seller</span>
+                                            <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button type="button"
+                                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                                            data-value="new-arrival" role="menuitem">
+                                            <span>New Arrival</span>
+                                            <svg class="w-4 h-4 text-blue-600  checkmark" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button type="button"
+                                            class="filter-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="top-rated" role="menuitem">
+                                            <span>Top Rated</span>
+                                            <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Occasion Dropdown -->
+                            <div class="relative inline-block text-left">
+                                <button type="button" id="occasion-dropdown-button"
+                                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span id="occasion-label">Occasion</span>
+                                    <svg id="occasion-chevron" xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div id="occasion-menu"
+                                    class="absolute lgg:right-0 left-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    role="menu" aria-orientation="vertical" aria-labelledby="occasion-dropdown-button">
+                                    <div class="py-2" role="none">
+                                        @if (isset($occasions) && $occasions->isNotEmpty())
+                                        @foreach ($occasions as $occasion)
+                                        <button type="button"
+                                            class="occasion-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="{{ $occasion->id }}" role="menuitem">
+                                            <span>{{ $occasion->name }}</span>
+                                            <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        @endforeach
+                                        @else
+                                        <div class="px-4 py-2.5 text-sm text-gray-500">No occasions available</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="relative inline-block text-left">
+                                <button
+                                    type="button"
+                                    id="collection-dropdown-button"
+                                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                    <span id="collection-label">
+                                        @if(isset($category))
+                                        {{ $category->name }}
+                                        @else
+                                        Collection
+                                        @endif
+                                    </span>
+                                    <svg
+                                        id="collection-chevron"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div
+                                    id="collection-menu"
+                                    class="absolute lgg:right-0 left-0 z-[201] mt-2 w-auto min-w-[200px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    role="menu"
+                                    aria-orientation="vertical"
+                                    aria-labelledby="collection-dropdown-button">
+                                    <div class="py-2" role="none">
+                                        @if(isset($category))
+                                        <button
+                                            type="button"
+                                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                                            data-value="{{ $category->slug }}"
+                                            role="menuitem">
+                                            <span>{{ $category->name }}</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        @else
+                                        <div class="px-4 py-2.5 text-sm text-gray-500">No collection available</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Sort Dropdown -->
+                            <div class="relative inline-block text-left">
+                                <button
+                                    type="button"
+                                    id="sort-button"
+                                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M3 7h14M3 12h10M3 17h6M17 7l3 3m0 0l-3 3m3-3H10" />
+                                    </svg>
+                                    <span id="sort-label">Sort by</span>
+                                    <svg
+                                        id="chevron-icon"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div
+                                    id="sort-menu"
+                                    class="absolute right-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    role="menu"
+                                    aria-orientation="vertical"
+                                    aria-labelledby="sort-button">
+                                    <div class="py-2" role="none">
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="name-asc"
+                                            role="menuitem">
+                                            <span>Name (A to Z)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="name-desc"
+                                            role="menuitem">
+                                            <span>Name (Z to A)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
+                                            data-value="date-desc"
+                                            role="menuitem">
+                                            <span>Date (Newest first)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600  checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="date-asc"
+                                            role="menuitem">
+                                            <span>Date (Oldest first)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="price-asc"
+                                            role="menuitem">
+                                            <span>Price (Low to High)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                            data-value="price-desc"
+                                            role="menuitem">
+                                            <span>Price (High to Low)</span>
+                                            <svg
+                                                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="3"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-
-                <!-- Occasion Dropdown -->
-                <div class="relative inline-block text-left">
-                    <button type="button" id="occasion-dropdown-button"
-                        class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
-                        aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span id="occasion-label">Occasion</span>
-                        <svg id="occasion-chevron" xmlns="http://www.w3.org/2000/svg"
-                            class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-
-                    <div id="occasion-menu"
-                        class="absolute lgg:right-0 left-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
-                        role="menu" aria-orientation="vertical" aria-labelledby="occasion-dropdown-button">
-                        <div class="py-2" role="none">
-                            @if (isset($occasions) && $occasions->isNotEmpty())
-                                @foreach ($occasions as $occasion)
-                                    <button type="button"
-                                        class="occasion-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                        data-value="{{ $occasion->id }}" role="menuitem">
-                                        <span>{{ $occasion->name }}</span>
-                                        <svg class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </button>
-                                @endforeach
-                            @else
-                                <div class="px-4 py-2.5 text-sm text-gray-500">No occasions available</div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-            <!-- Collection Dropdown -->
-            {{--
-            <div class="relative inline-block text-left">
-                <button
-                    type="button"
-                    id="collection-dropdown-button"
-                    class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4 text-gray-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <span id="collection-label">Collection</span>
-                    <svg
-                        id="collection-chevron"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <div
-                    id="collection-menu"
-                    class="absolute lgg:right-0 left-0 z-[201] mt-2 w-auto min-w-[200px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="collection-dropdown-button">
-                    <div class="py-2" role="none">
-                        @if(isset($categories) && $categories->isNotEmpty())
-                        @foreach($categories as $category)
-                        <button
-                            type="button"
-                            class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                            data-value="{{ $category->slug }}"
-            role="menuitem">
-            <span>{{ $category->name }}</span>
-            <svg
-                class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="3"
-                    d="M5 13l4 4L19 7" />
-            </svg>
-            </button>
-            @endforeach
-            @else
-            <div class="px-4 py-2.5 text-sm text-gray-500">No Collection available</div>
-            @endif
-
-        </div>
-    </div>
-    </div>
-    --}}
-
-    <div class="relative inline-block text-left">
-        <button
-            type="button"
-            id="collection-dropdown-button"
-            class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
-            aria-haspopup="true"
-            aria-expanded="false">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2">
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            <span id="collection-label">
-                @if(isset($category))
-                {{ $category->name }}
-                @else
-                Collection
-                @endif
-            </span>
-            <svg
-                id="collection-chevron"
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
-
-        <div
-            id="collection-menu"
-            class="absolute lgg:right-0 left-0 z-[201] mt-2 w-auto min-w-[200px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="collection-dropdown-button">
-            <div class="py-2" role="none">
-                @if(isset($category))
-                <button
-                    type="button"
-                    class="collection-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
-                    data-value="{{ $category->slug }}"
-                    role="menuitem">
-                    <span>{{ $category->name }}</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                @else
-                <div class="px-4 py-2.5 text-sm text-gray-500">No collection available</div>
-                @endif
             </div>
-        </div>
-    </div>
 
-    <!-- Professional Sort Dropdown -->
-    <div class="relative inline-block text-left">
-        <button
-            type="button"
-            id="sort-button"
-            class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-800 text-sm font-medium shadow-sm transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 active:scale-95"
-            aria-haspopup="true"
-            aria-expanded="false">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2">
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 7h14M3 12h10M3 17h6M17 7l3 3m0 0l-3 3m3-3H10" />
-            </svg>
-            <span id="sort-label">Sort by</span>
-            <svg
-                id="chevron-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-gray-600 ml-1 transition-transform duration-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
 
-        <div
-            id="sort-menu"
-            class="absolute right-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="sort-button">
-            <div class="py-2" role="none">
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                    data-value="name-asc"
-                    role="menuitem">
-                    <span>Name (A to Z)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                    data-value="name-desc"
-                    role="menuitem">
-                    <span>Name (Z to A)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
-                    data-value="date-desc"
-                    role="menuitem">
-                    <span>Date (Newest first)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600  checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                    data-value="date-asc"
-                    role="menuitem">
-                    <span>Date (Oldest first)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                    data-value="price-asc"
-                    role="menuitem">
-                    <span>Price (Low to High)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                    data-value="price-desc"
-                    role="menuitem">
-                    <span>Price (High to Low)</span>
-                    <svg
-                        class="w-4 h-4 text-blue-600 opacity-0 checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="3"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                </button>
-            </div>
         </div>
-    </div>
-    </div>
-    </div>
-    <div class="container mx-auto">
+
+        <style>
+            .accordion-panel {
+                max-height: 0;
+                /* overflow: hidden; */
+                transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+                opacity: 0;
+                padding: 0 4px;
+            }
+
+            .accordion-panel.open {
+                max-height: 500px;
+                /* Adjust based on content */
+                opacity: 1;
+                padding: 0px 4px;
+            }
+
+            .accordion-trigger .icon-chevron {
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .accordion-trigger.open .icon-chevron {
+                transform: rotate(180deg);
+            }
+
+            #open-filter.active svg {
+                transform: rotate(180deg);
+            }
+        </style>
+
+        <script>
+            (function() {
+                const panel = document.getElementById("panel1");
+                const trigger = document.getElementById("accordion-trigger-1");
+
+                if (!panel || !trigger) {
+                    console.error("Accordion elements not found");
+                    return;
+                }
+
+                const DESKTOP_WIDTH = 992;
+
+                function updateAccordionState() {
+                    if (window.innerWidth >= DESKTOP_WIDTH) {
+                        // Always open on desktop
+                        panel.classList.add("open");
+                        trigger.classList.add("open");
+                    } else {
+                        // Mobile starts closed (remove these two lines if you want to preserve state)
+                        panel.classList.remove("open");
+                        trigger.classList.remove("open");
+                    }
+                }
+
+                window.toggleAccordion = function() {
+                    // Disable accordion toggle on desktop
+                    if (window.innerWidth >= DESKTOP_WIDTH) {
+                        return;
+                    }
+
+                    const isOpen = panel.classList.contains("open");
+
+                    if (isOpen) {
+                        panel.classList.remove("open");
+                        trigger.classList.remove("open");
+                    } else {
+                        panel.classList.add("open");
+                        trigger.classList.add("open");
+
+                        setTimeout(() => {
+                            trigger.scrollIntoView({
+                                behavior: "smooth",
+                                block: "nearest",
+                            });
+                        }, 100);
+                    }
+                };
+
+                trigger.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    window.toggleAccordion();
+                });
+
+                // Set initial state
+                updateAccordionState();
+
+                // Update when resizing
+                window.addEventListener("resize", updateAccordionState);
+            })();
+        </script>
+
+
+
+    <div class="w-full">
         <div class="flex flex-row gap-3 relative">
             @if($category!=null)
             <!-- Filters Sidebar -->
@@ -656,24 +725,24 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
                     <h2 class="text-xl font-bold text-gray-900 mb-4">Filters</h2>
 
-                            <!-- Occasion Filter -->
-                            @if (isset($occasions) && $occasions->isNotEmpty())
-                                <div class="mb-6">
-                                    <h3 class="font-semibold text-gray-900 mb-3">Occasion</h3>
-                                    <div class="space-y-2">
-                                        @foreach ($occasions as $occasion)
-                                            <label class="flex items-center space-x-2 cursor-pointer">
-                                                <input type="checkbox" name="occasion[]" value="{{ $occasion->id }}"
-                                                    class="occasion-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                                                <span class="text-sm text-gray-700">{{ $occasion->name }}</span>
-                                            </label>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
+                    <!-- Occasion Filter -->
+                    @if (isset($occasions) && $occasions->isNotEmpty())
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-900 mb-3">Occasion</h3>
+                        <div class="space-y-2">
+                            @foreach ($occasions as $occasion)
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="occasion[]" value="{{ $occasion->id }}"
+                                    class="occasion-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                                <span class="text-sm text-gray-700">{{ $occasion->name }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
 
-                            <!-- Custom Price Range Slider (Optional - can keep or remove) -->
-                            {{-- <div class="mb-6">
+                    <!-- Custom Price Range Slider (Optional - can keep or remove) -->
+                    {{-- <div class="mb-6">
             <h3 class="font-semibold text-gray-900 mb-3">Custom Price Range</h3>
             <div class="space-y-3">
               <div class="flex items-center justify-between">
@@ -697,231 +766,232 @@
             </div>
         </div> --}}
 
-                            <!-- Size Filter -->
-                            @if (isset($sizes) && $sizes->isNotEmpty())
-                                <div class="mb-6">
-                                    <h3 class="font-semibold text-gray-900 mb-3">Size</h3>
-                                    <div class="space-y-2">
-                                        @foreach ($sizes as $size)
-                                            @php
-                                                $sizeId = is_object($size) ? $size->id : $size;
-                                                $sizeName = is_object($size) ? $size->name : $size;
-                                                $sizeCode = is_object($size) && isset($size->code) ? $size->code : '';
-                                                $displayText = $sizeCode ? "$sizeCode" : $sizeName;
-                                            @endphp
-                                            <label class="flex items-center space-x-2 cursor-pointer">
-                                                <input type="checkbox" name="size[]" value="{{ $displayText }}"
-                                                    class="size-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                                                <span class="text-sm text-gray-700">{{ $displayText }}</span>
-                                            </label>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
+        <!-- Size Filter -->
+        @if (isset($sizes) && $sizes->isNotEmpty())
+        <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Size</h3>
+            <div class="space-y-2">
+                @foreach ($sizes as $size)
+                @php
+                $sizeId = is_object($size) ? $size->id : $size;
+                $sizeName = is_object($size) ? $size->name : $size;
+                $sizeCode = is_object($size) && isset($size->code) ? $size->code : '';
+                $displayText = $sizeCode ? "$sizeCode" : $sizeName;
+                @endphp
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="size[]" value="{{ $displayText }}"
+                        class="size-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                    <span class="text-sm text-gray-700">{{ $displayText }}</span>
+                </label>
+                @endforeach
+            </div>
+        </div>
+        @endif
 
-                            <!-- Color Filter -->
-                            @if (isset($colors) && $colors->isNotEmpty())
-                                <div class="mb-6">
-                                    <h3 class="font-semibold text-gray-900 mb-3">Color</h3>
-                                    <div class="space-y-2">
-                                        @foreach ($colors as $color)
-                                            @php
-                                                $colorId = is_object($color) ? $color->id : $color;
-                                                $colorName = is_object($color) ? $color->name : $color;
-                                            @endphp
-                                            <label class="flex items-center space-x-2 cursor-pointer">
-                                                <input type="checkbox" name="color[]" value="{{ $colorId }}"
-                                                    class="color-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                                                <span class="text-sm text-gray-700">{{ $colorName }}</span>
-                                            </label>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
+        <!-- Color Filter -->
+        @if (isset($colors) && $colors->isNotEmpty())
+        <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Color</h3>
+            <div class="space-y-2">
+                @foreach ($colors as $color)
+                @php
+                $colorId = is_object($color) ? $color->id : $color;
+                $colorName = is_object($color) ? $color->name : $color;
+                @endphp
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="color[]" value="{{ $colorId }}"
+                        class="color-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                    <span class="text-sm text-gray-700">{{ $colorName }}</span>
+                </label>
+                @endforeach
+            </div>
+        </div>
+        @endif
 
 
-                            <!-- Price Range Filter - Dynamic from Product Variants -->
-                            <div class="mb-6">
-                                <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
-                                <div class="space-y-2">
-                                    @foreach ($priceRanges as $range)
-                                        <label class="flex items-center space-x-2 cursor-pointer">
-                                            <input type="checkbox" name="price_range[]" value="{{ $range['value'] }}"
-                                                class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                                            <span class="text-sm text-gray-700">{{ $range['label'] }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
+        <!-- Price Range Filter - Dynamic from Product Variants -->
+        <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
+            <div class="space-y-2">
+                @foreach ($priceRanges as $range)
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="price_range[]" value="{{ $range['value'] }}"
+                        class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                    <span class="text-sm text-gray-700">{{ $range['label'] }}</span>
+                </label>
+                @endforeach
+            </div>
+        </div>
 
-                            <!-- Active Filters Display -->
-                            <div id="active-filters" class="mb-4 hidden">
-                                <h4 class="text-sm font-semibold text-gray-700 mb-2">Active Filters:</h4>
-                                <div id="filter-tags" class="flex flex-wrap gap-2"></div>
-                            </div>
+        <!-- Active Filters Display -->
+        <div id="active-filters" class="mb-4 hidden">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Active Filters:</h4>
+            <div id="filter-tags" class="flex flex-wrap gap-2"></div>
+        </div>
 
-                            <!-- Filter Actions -->
-                            <div class="flex gap-2 mt-4">
-                                <button id="clear-filters"
-                                    class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                                    Clear Filters
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Filter Actions -->
+        <div class="flex gap-2 mt-4">
+            <button id="clear-filters"
+                class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                Clear Filters
+            </button>
+        </div>
+    </div>
+    </div>
 
-                    <!-- Products Grid -->
-                    <div class=" w-full">
-                        <!-- Category Header -->
-                        <div
-                            class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
-                            <!-- Left: Title & Description -->
-                            <div class="flex-1 min-w-[200px]">
-                                <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
-                                    {{ $category->title ?? ($category->name ?? 'Products') }}
-                                </h1>
+    <!-- Products Grid -->
+    <div class=" w-full">
+        <!-- Category Header -->
+        <div
+            class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
+            <!-- Left: Title & Description -->
+            <div class="flex-1 min-w-[200px]">
+                <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
+                    {{ $category->title ?? ($category->name ?? 'Products') }}
+                </h1>
 
-                                @if (isset($category->about))
-                                    <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
-                                        {{ $category->about }}
-                                    </p>
-                                @endif
-                            </div>
+                @if (isset($category->about))
+                <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
+                    {{ $category->about }}
+                </p>
+                @endif
+            </div>
 
-                            <!-- Right: Status Badge -->
-                            @if ($products->count() == 0)
-                                <div
-                                    class="flex shrink-0 items-center gap-2 rounded-full bg-red-50 px-4 py-2 border border-red-200">
-                                    <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    <span class="text-sm font-medium text-primary">This style is not available right
-                                        now!</span>
-                                </div>
-                            @endif
-                        </div>
+            <!-- Right: Status Badge -->
+            @if ($products->count() == 0)
+            <div
+                class="flex shrink-0 items-center gap-2 rounded-full bg-red-50 px-4 py-2 border border-red-200">
+                <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span class="text-sm font-medium text-primary">This style is not available right
+                    now!</span>
+            </div>
+            @endif
+        </div>
 
-                        <!-- Products Count -->
-                        {{-- <div id="products-count" class="mb-4 text-sm text-gray-600">
+        <!-- Products Count -->
+        {{-- <div id="products-count" class="mb-4 text-sm text-gray-600">
           Showing {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products
     </div> --}}
 
-                        <!-- Products Container -->
-                        <div id="products-container" class="products-container">
-                            @include('web.partials.category-grid', ['products' => $products])
-                        </div>
+    <!-- Products Container -->
+    <div id="products-container" class="products-container">
+        @include('web.partials.category-grid', ['products' => $products])
+    </div>
 
-                        <!-- Loading Spinner -->
-                        <div id="loading-spinner" class="hidden text-center py-8">
-                            <div
-                                class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent">
-                            </div>
-                        </div>
-
-                        <!-- Pagination -->
-                        @if ($products->hasPages())
-                            <div class="mt-8">
-                                {{ $products->links() }}
-                            </div>
-                        @endif
-                    </div>
-                @else
-                    <div class="container mx-auto">
-                        <div class="w-full text-center mb-6">
-                            <h1 class="text-2xl font-semibold mb-2">This style is not available right now!</h1>
-                        </div>
-                    </div>
-                @endif
-            </div>
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="hidden text-center py-8">
+        <div
+            class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent">
         </div>
-    </section>
+    </div>
 
-    <!-- Overlay -->
-    <div id="filter-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[20002] lg:hidden hidden"></div>
+    <!-- Pagination -->
+    @if ($products->hasPages())
+    <div class="mt-8">
+        {{ $products->links() }}
+    </div>
+    @endif
+    </div>
+    @else
+    <div class="container mx-auto">
+        <div class="w-full text-center mb-6">
+            <h1 class="text-2xl font-semibold mb-2">This style is not available right now!</h1>
+        </div>
+    </div>
+    @endif
+    </div>
+    </div>
+ </div>
+</section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // DOM Elements
-            const filterButton = document.querySelector("#open-filter");
-            const sideCloseButton = document.getElementById("close-filter");
-            const sidebar = document.getElementById("filter-sidebar");
-            const overlay = document.getElementById("filter-overlay");
+<!-- Overlay -->
+<div id="filter-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[20002] lg:hidden hidden"></div>
 
-            // State to track if sidebar is open on mobile
-            let isSidebarOpen = false;
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // DOM Elements
+        const filterButton = document.querySelector("#open-filter");
+        const sideCloseButton = document.getElementById("close-filter");
+        const sidebar = document.getElementById("filter-sidebar");
+        const overlay = document.getElementById("filter-overlay");
 
-            // ──────────────────────────────────────────────
-            //  Utility Functions
-            // ──────────────────────────────────────────────
-            function isMobile() {
-                return window.innerWidth < 991;
-            }
+        // State to track if sidebar is open on mobile
+        let isSidebarOpen = false;
 
-            sideCloseButton.addEventListener("click", function() {
-                closeSidebar();
-            });
+        // ──────────────────────────────────────────────
+        //  Utility Functions
+        // ──────────────────────────────────────────────
+        function isMobile() {
+            return window.innerWidth < 991;
+        }
 
-            // ──────────────────────────────────────────────
-            //  Mobile Sidebar Functions
-            // ──────────────────────────────────────────────
-            function openSidebar() {
-                if (!isMobile()) return;
-                sidebar.classList.remove("translate-x-[-150%]");
-                sidebar.classList.add("translate-x-0");
-                overlay.classList.remove("hidden");
-                document.body.style.overflow = "hidden";
-                isSidebarOpen = true;
-            }
+        sideCloseButton.addEventListener("click", function() {
+            closeSidebar();
+        });
 
-            function closeSidebar() {
-                if (!isMobile()) return;
-                sidebar.classList.remove("translate-x-0");
-                sidebar.classList.add("translate-x-[-150%]");
+        // ──────────────────────────────────────────────
+        //  Mobile Sidebar Functions
+        // ──────────────────────────────────────────────
+        function openSidebar() {
+            if (!isMobile()) return;
+            sidebar.classList.remove("translate-x-[-150%]");
+            sidebar.classList.add("translate-x-0");
+            overlay.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+            isSidebarOpen = true;
+        }
+
+        function closeSidebar() {
+            if (!isMobile()) return;
+            sidebar.classList.remove("translate-x-0");
+            sidebar.classList.add("translate-x-[-150%]");
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "";
+            isSidebarOpen = false;
+        }
+
+        // ──────────────────────────────────────────────
+        //  Initialize Sidebar Position Based on Screen Size
+        // ──────────────────────────────────────────────
+        function initSidebarPosition() {
+            if (isMobile()) {
+                // On mobile: sidebar is fixed and hidden off-canvas
+                sidebar.classList.add("fixed", "translate-x-[-150%]");
+                sidebar.classList.remove("relative", "lgg:sticky", "translate-x-0");
+                // Ensure it's closed when switching to mobile
+                if (isSidebarOpen) {
+                    closeSidebar();
+                } else {
+                    // Make sure it's in closed state
+                    sidebar.classList.remove("translate-x-0");
+                    sidebar.classList.add("translate-x-[-150%]");
+                    overlay.classList.add("hidden");
+                    document.body.style.overflow = "";
+                }
+            } else {
+                // On desktop: sidebar is relative/sticky and always visible
+                sidebar.classList.remove("fixed", "translate-x-[-150%]", "translate-x-0");
+                sidebar.classList.add("relative", "lgg:sticky");
                 overlay.classList.add("hidden");
                 document.body.style.overflow = "";
                 isSidebarOpen = false;
             }
+        }
 
-            // ──────────────────────────────────────────────
-            //  Initialize Sidebar Position Based on Screen Size
-            // ──────────────────────────────────────────────
-            function initSidebarPosition() {
-                if (isMobile()) {
-                    // On mobile: sidebar is fixed and hidden off-canvas
-                    sidebar.classList.add("fixed", "translate-x-[-150%]");
-                    sidebar.classList.remove("relative", "lgg:sticky", "translate-x-0");
-                    // Ensure it's closed when switching to mobile
-                    if (isSidebarOpen) {
-                        closeSidebar();
-                    } else {
-                        // Make sure it's in closed state
-                        sidebar.classList.remove("translate-x-0");
-                        sidebar.classList.add("translate-x-[-150%]");
-                        overlay.classList.add("hidden");
-                        document.body.style.overflow = "";
-                    }
-                } else {
-                    // On desktop: sidebar is relative/sticky and always visible
-                    sidebar.classList.remove("fixed", "translate-x-[-150%]", "translate-x-0");
-                    sidebar.classList.add("relative", "lgg:sticky");
-                    overlay.classList.add("hidden");
-                    document.body.style.overflow = "";
-                    isSidebarOpen = false;
-                }
-            }
+        // ──────────────────────────────────────────────
+        //  Event Listeners
+        // ──────────────────────────────────────────────
+        if (filterButton) filterButton.addEventListener("click", openSidebar);
+        if (overlay) overlay.addEventListener("click", closeSidebar);
 
-            // ──────────────────────────────────────────────
-            //  Event Listeners
-            // ──────────────────────────────────────────────
-            if (filterButton) filterButton.addEventListener("click", openSidebar);
-            if (overlay) overlay.addEventListener("click", closeSidebar);
-
-            // Handle window resize
-            window.addEventListener("resize", function() {
-                initSidebarPosition();
-            });
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            initSidebarPosition();
+        });
 
         // Initialize on page load
         initSidebarPosition();
@@ -1754,71 +1824,71 @@
         init();
     });
 
-        // Wishlist toggle function
-        function toggleWishlist(productId, button, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+    // Wishlist toggle function
+    function toggleWishlist(productId, button, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
-            if (!productId) {
-                alert('Product ID not found');
-                return;
-            }
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            const isInWishlist = button.classList.contains('text-red-500');
-            const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const isInWishlist = button.classList.contains('text-red-500');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
 
-            // Show loading
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            button.disabled = true;
+        // Show loading
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
 
-            fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        product_id: productId
-                    })
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        if (isInWishlist) {
-                            button.classList.remove('text-red-500');
-                            button.innerHTML = '<i class="far fa-heart"></i>';
-                        } else {
-                            button.classList.add('text-red-500');
-                            button.innerHTML = '<i class="fas fa-heart"></i>';
-                        }
-                        document.querySelectorAll('.wishlist-count').forEach(function(item) {
-                            item.textContent = data.wishlist_count;
-
-                            // Hide badge when count is 0 (optional)
-                            if (data.wishlist_count > 0) {
-                                item.style.display = "flex";
-                            } else {
-                                item.style.display = "none";
-                            }
-                        });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (isInWishlist) {
+                        button.classList.remove('text-red-500');
+                        button.innerHTML = '<i class="far fa-heart"></i>';
                     } else {
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    button.disabled = false;
-                });
-        }
-    </script>
+                    document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                        item.textContent = data.wishlist_count;
 
-    <!-- <script>
+                        // Hide badge when count is 0 (optional)
+                        if (data.wishlist_count > 0) {
+                            item.style.display = "flex";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                } else {
+                    button.classList.add('text-red-500');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+    }
+</script>
+
+<!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize filters
             let currentFilters = {
