@@ -1110,7 +1110,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
         <!-- Simple View All Button -->
         <div class="text-center mt-0">
-            <a href="#"
+            <a href="{{route('category.collection')}}"
                 class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-full text-white font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300">
                 <span>View All Categories</span>
                 <svg class="w-5 h-5 transform hover:translate-x-1 transition-transform" fill="none"
@@ -1134,7 +1134,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         <!-- Owl Carousel Container -->
         <div class="relative px-2">
             <div id="categories-tag-carousel" class="owl-carousel owl-theme">
-                @foreach ($categories as $category)
+                @foreach ($categoriesWithProduct as $category)
                 <div class="item">
                     <a href="{{ route('category.show', $category->slug) }}" class="group relative mt-8 block">
                         <!-- String/Hanger -->
@@ -1150,12 +1150,12 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             <!-- Image -->
                             <div class="h-32 overflow-hidden">
                                 @php
-                                $tagImage = $category->image ? $category->image : asset('assets/images/placeholder-category.jpg');
-                                if (strpos($tagImage, 'cloudinary.com') !== false && strpos($tagImage, 'upload/') !== false) {
-                                $parts = explode('upload/', $tagImage);
-                                $tagImage = $parts[0] . 'upload/w_300,h_200,c_fill,f_auto,q_auto/' . $parts[1];
-                                }
-                                @endphp
+                            $tagImage = $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image;
+                            if (strpos($tagImage, 'cloudinary.com') !== false && strpos($tagImage, 'upload/') !== false) {
+                            $parts = explode('upload/', $tagImage);
+                            $tagImage = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto/' . $parts[1];
+                            }
+                            @endphp
                                 <img src="{{ $tagImage }}"
                                     alt="{{ $category->name }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 object-top"
