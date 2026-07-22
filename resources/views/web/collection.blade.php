@@ -17,9 +17,9 @@
                             <div class="w-16 h-6 bg-gray-300 rounded"></div>
                         </div>
                         <!-- Wishlist Skeleton -->
-                        <div class="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow-md w-[35px] h-[35px] flex justify-center items-center">
+                        <!-- <div class="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow-md w-[35px] h-[35px] flex justify-center items-center">
                             <div class="w-5 h-5 bg-gray-300 rounded-full"></div>
-                        </div>
+                        </div> -->
                     </div>
                     
                     <!-- Content Skeleton -->
@@ -75,13 +75,13 @@
                             </div>
 
                             <!-- Wishlist Button -->
-                            <div class="absolute top-3 right-3 z-10">
+                            <!-- <div class="absolute top-3 right-3 z-10">
                                 <button class="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white transition-all duration-300 w-[35px] h-[35px] flex justify-center items-center group/like">
                                     <svg class="w-4 h-4 text-gray-600 group-hover/like:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                                     </svg>
                                 </button>
-                            </div>
+                            </div> -->
 
                             <!-- Content - Clean Layout at Bottom -->
                             <div class="absolute bottom-[5px] left-0 right-0 py-5 md:py-6 px-[14px]">
