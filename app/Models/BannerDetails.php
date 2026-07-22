@@ -15,6 +15,8 @@ class BannerDetails extends Model
             'redirect_link',
             'position',
             'image',
+            'mobile_screen_image',
+            'mobile_screen_image_public_id',
             'public_id',
             'is_active'
     ];

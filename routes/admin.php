@@ -532,7 +532,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::post('/webhook', [ReturnOrder::class, 'webhook'])->name('return-orders.webhook');
     });
     //Hero Section
-    Route::prefix('/hero-section')->group(function () {
+    Route::prefix('hero-section')->group(function () {
         Route::get('/', [BannerDetailsController::class, 'index'])->name('hero-section.index');
         Route::get('/create', [BannerDetailsController::class, 'create'])->name('hero-section.create');
         Route::post('/store', [BannerDetailsController::class, 'store'])->name('hero-section.store');
@@ -541,7 +541,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::delete('/delete/{id}', [BannerDetailsController::class, 'delete'])->name('hero-section.delete');
     });
 
-    Route::prefix('/store')->group(function () {
+    Route::prefix('store')->group(function () {
         Route::get('/', [StoreController::class, 'index'])->name('store.index');
         Route::get('/create', [StoreController::class, 'create'])->name('store.create');
         Route::post('/store', [StoreController::class, 'store'])->name('store.store');
