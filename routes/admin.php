@@ -55,8 +55,8 @@ use App\Http\Controllers\Admin\PrintBillController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
-use App\Http\Controllers\admin\CouponController;
-use App\Http\Controllers\admin\StoreController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\StoreController;
 
 // use App\Http\Controllers\ShopController;
 
