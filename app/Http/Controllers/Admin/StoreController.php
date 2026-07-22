@@ -10,7 +10,6 @@ class StoreController extends Controller
 {
    public function index()
 {
-    print_r('hi'); exit;
     $search = request('search');
     $stores = Store::orderBy('id', 'desc')
         ->when($search, function ($query) use ($search) {
