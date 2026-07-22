@@ -35,12 +35,13 @@ class BannerDetailsController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string',
+            'title' => 'nullable|string',
             'short_description' => 'nullable|string',
             'offer' => 'nullable|string',
             'redirect_link' => 'nullable|string',
-            'position' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
+            // 'position' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp',
+            'mobile_screen_image' => 'required|image|mimes:jpeg,png,jpg,webp|dimensions:ratio=2/3',
             'is_active' => 'boolean',
         ]);
 
@@ -57,6 +58,19 @@ class BannerDetailsController extends Controller
                 $data['image'] = $upload['secure_url'];
                 $data['public_id'] = $upload['public_id'];
             }
+            if ($request->hasFile('mobile_screen_image')) {
+                
+                $upload = Cloudinary::uploadApi()->upload(
+                    $request->file('mobile_screen_image')->getRealPath(),
+                    [
+                        'folder' => 'aiman/hero-section'
+                    ]
+                );
+
+                $data['mobile_screen_image'] = $upload['secure_url'];
+                $data['mobile_screen_image_public_id'] = $upload['public_id'];
+            }
+            $data['position'] = null;
             $bannerDetails = BannerDetails::create($data);
             if ($bannerDetails) {
                 return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Created successfully');
@@ -74,12 +88,13 @@ class BannerDetailsController extends Controller
     public function update($id, Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string',
+            'title' => 'nullable|string',
             'short_description' => 'nullable|string',
             'offer' => 'nullable|string',
             'redirect_link' => 'nullable|string',
-            'position' => 'required|string',
+            // 'position' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
+            'mobile_screen_image' => 'nullable|image',
             'is_active' => 'boolean',
         ]);
         try {
@@ -98,6 +113,21 @@ class BannerDetailsController extends Controller
                 $data['image'] = $upload['secure_url'];
                 $data['public_id'] = $upload['public_id'];
             }
+            if ($request->hasFile('mobile_screen_image')) {
+
+                if ($bannerDetails->mobile_screen_image_public_id) {
+                     Cloudinary::uploadApi()->destroy($bannerDetails->mobile_screen_image_public_id);
+                }
+
+                $upload = Cloudinary::uploadApi()->upload(
+                    $request->file('mobile_screen_image')->getRealPath(),
+                    ['folder' => 'aiman/hero-section']
+                );
+
+                $data['mobile_screen_image'] = $upload['secure_url'];
+                $data['mobile_screen_image_public_id'] = $upload['public_id'];
+            }
+            $data['position'] = null ;
             $bannerDetails->update($data);
             return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Updated successfully');
             // return view('Admin.hero-section.index',compact('bannerDetails'));
@@ -112,6 +142,10 @@ class BannerDetailsController extends Controller
             if ($bannerDetails) {
                 if ($bannerDetails->public_id) {
                     Cloudinary::uploadApi()->destroy($bannerDetails->public_id);
+
+                }
+                if($bannerDetails->mobile_screen_image_public_id){
+                    Cloudinary::uploadApi()->destroy($bannerDetails->mobile_screen_image_public_id);
                 }
                 $bannerDetails->delete();
 
