@@ -11,7 +11,7 @@ class StoreController extends Controller
    public function index()
 {
     $search = request('search');
-
+dd($search);
     $stores = Store::orderBy('id', 'desc')
         ->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
