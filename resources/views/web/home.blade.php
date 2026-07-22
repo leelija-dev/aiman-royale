@@ -92,7 +92,7 @@
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
                         @php
-                        $catImage = $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg');
+                        $catImage = $category->image ?  $category->image : asset('assets/images/placeholder-category.jpg');
                         if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
                         $parts = explode('upload/', $catImage);
                         $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
