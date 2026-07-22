@@ -286,7 +286,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="edit_color_{{ $variant->id }}" class="form-label">Color</label>
+                                                            <label for="edit_color_{{ $variant->id }}" class="form-label">Color <span class="text-danger">*</span></label>
                                                             <select class="form-control" id="edit_color_{{ $variant->id }}" name="color_code">
                                                                 <option value="">No Color</option>
                                                                 @foreach($colors as $color)
@@ -298,7 +298,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="edit_size_{{ $variant->id }}" class="form-label">Size</label>
+                                                            <label for="edit_size_{{ $variant->id }}" class="form-label">Size <span class="text-danger">*</span></label>
                                                             <select class="form-control" id="edit_size_{{ $variant->id }}" name="size">
                                                                 <option value="" selected hidden>Select Size</option>
                                                                 @foreach($sizes as $size)
