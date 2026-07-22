@@ -117,7 +117,7 @@
     </div>
 </div>
 
-<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
+{{--<section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
         <div class="flex flex-row gap-3 lgg:gap-[9px] justify-between items-stretch h-auto">
             <!-- Left Image Column - 9:16 Portrait (Responsive) -->
@@ -129,272 +129,696 @@
                 <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl aspect-[9/16]">
                     @if ($leftBanners->count())
                     <a id="leftSliderLink" href="{{ $leftBanners->first()->redirect_link }}"
-                        class="block h-full w-full relative">
-                        @foreach ($leftBanners as $index => $banner)
-                        @php
-                        $bannerImage = $banner->image;
-                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                        $parts = explode('upload/', $bannerImage);
-                        $bannerImage = $parts[0] . 'upload/w_450,h_800,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        @endphp
-                        <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-                            loading="lazy"
-                            decoding="async"
-                            width="450"
-                            height="800">
-                        @endforeach
-                    </a>
-                    @else
-                    <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
-                        class="absolute inset-0 z-20 block">
-                        <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
-                            src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"
-                            loading="lazy"
-                            decoding="async">
-                    </a>
-                    @endif
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                </div>
-                <div
-                    class="absolute bottom-4 left-4 opacity-1 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                    <a href="{{ url('collections/new-collection') }}">
-                        <span
-                            class="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-white shadow-lg">
-                            {{ $leftCategories->first()?->slug ?? 'New Collection' }}
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Middle Content Column -->
-            <div class="3xl:min-w-[550px] 2xl:min-w-[450px] xl:min-w-[400px] lgg:min-w-[350px] min-w-[250px] lgg:w-auto lgg:mx-0 mx-auto smx:max-w-[550px]  w-full flex flex-col gap-3 lg:gap-6">
-                <!-- Top Image - 16:10 Landscape -->
-                @php
-                $topCategories = $homeCategories['top'] ?? collect();
-                $topBanners = $bannerHeroSection->where('position', 'top')->values();
-                @endphp
-                <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
-                    </div>
-                    @if ($topBanners->count())
-                    <a id="topSliderLink" href="{{ $topBanners->first()->redirect_link ?? '#' }}"
-                        class="block h-full w-full relative">
-                        @foreach ($topBanners as $index => $banner)
-                        @php
-                        $bannerImage = $banner->image;
-                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                        $parts = explode('upload/', $bannerImage);
-                        $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        @endphp
-                        <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-                            loading="lazy"
-                            decoding="async"
-                            width="800"
-                            height="500">
-                        @endforeach
-                    </a>
-                    @else
-                    <a href="{{ url('collections/' . 'lehanga') }}">
-                        <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
-                            src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
-                            alt="Glow Pink Dress"
-                            loading="lazy"
-                            decoding="async">
-                    </a>
-                    @endif
-                </div>
-
-                <!-- Center Image - 9:16 Portrait -->
-                @php
-                $centerBanners = $bannerHeroSection->where('position', 'center')->values();
-                @endphp
-
-                <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow ">
-    @if ($centerBanners->count())
-    <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
-        class="absolute inset-0 block">
-        @foreach ($centerBanners as $index => $banner)
-        @php
-        $bannerImage = $banner->image;
-        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-            $parts = explode('upload/', $bannerImage);
-            $bannerImage = $parts[0] . 'upload/w_600,h_1067,c_fill,f_auto,q_auto/' . $parts[1];
-        }
-        @endphp
-        <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-            loading="lazy"
-            decoding="async"
-            width="600"
-            height="1067">
-        @endforeach
+class="block h-full w-full relative">
+@foreach ($leftBanners as $index => $banner)
+@php
+$bannerImage = $banner->image;
+if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+$parts = explode('upload/', $bannerImage);
+$bannerImage = $parts[0] . 'upload/w_750,h_1500,c_fill,f_auto,q_auto/' . $parts[1];
+}
+@endphp
+<img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+    src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+    data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+    data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+    loading="lazy"
+    decoding="async"
+    width="750"
+    height="1500">
+@endforeach
+</a>
+@else
+<a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
+    class="absolute inset-0 z-20 block">
+    <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000"
+        src="{{ asset('web/images/banner-images/glow-orange-2.webp') }}" alt="Store"
+        loading="lazy"
+        decoding="async">
+</a>
+@endif
+<div
+    class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+</div>
+</div>
+<div
+    class="absolute bottom-4 left-4 opacity-1 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+    <a href="{{ url('collections/new-collection') }}">
+        <span
+            class="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-white shadow-lg">
+            {{ $leftCategories->first()?->slug ?? 'New Collection' }}
+        </span>
     </a>
-
-    <!-- Content Overlay -->
-    <div
-        class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-4 text-white">
-        @if ($centerBanners->first()->offer)
-        <div id="centerOfferText" class="inline-flex items-center mb-1">
-            <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-[40px] shadow-lg">
-                <span class="text-xl font-bold text-white">
-                    {{ $centerBanners->first()->offer }}
-                </span>
-                <span class="text-base font-semibold text-white">
-                    % OFF
-                </span>
-            </span>
-        </div>
-        @endif
-        <h2 id="centerTitleText" class="heading-font text-2xl md:text-3xl text-white mb-1.5 drop-shadow-lg leading-tight">
-            {{ $centerBanners->first()->title }}
-        </h2>
-        <p id="centerShortText" class="text-[11px] text-white drop-shadow-lg mb-3">
-            Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
-        </p>
-        <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
-            class="px-5 py-1.5 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-[11px] tracking-wide inline-flex items-center transition-all duration-300">
-            Shop Now
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </a>
-    </div>
-    @else
-    <div
-        class="flex flex-col items-center justify-center space-y-1.5 p-3 lg:p-4 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
-        <div class="absolute inset-0 opacity-5">
-            <div class="absolute top-0 left-0 w-20 h-20 bg-primary rounded-full -translate-x-10 -translate-y-10"></div>
-            <div class="absolute bottom-0 right-0 w-28 h-28 bg-secondary rounded-full translate-x-14 translate-y-14"></div>
-        </div>
-        <div
-            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent">
-        </div>
-        <h1
-            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-            PRICE DROP
-        </h1>
-        <div class="relative">
-            <span
-                class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
-                style="-webkit-text-stroke:2px black;">
-                SALE
-            </span>
-        </div>
-        <p class="text-gray-600 font-medium tracking-wider text-sm uppercase">
-            NEW COLLECTION
-        </p>
-        <div class="text-center text-gray-500 mb-0.5">
-            <span class="line-through text-[11px] mr-1">₹199.99</span>
-            <span class="text-base font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
-        </div>
-        <a href="{{ url('collections/new-collection') }}"
-            class="px-5 py-1.5 lg:px-6 lg:py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-            Shop Now →
-        </a>
-        <p class="text-[11px] text-gray-500 mt-0.5">
-            Limited Period Offer
-        </p>
-    </div>
-    @endif
+</div>
 </div>
 
-                <!-- Bottom Image - 16:10 Landscape -->
-                @php
-                $bottomBanners = $bannerHeroSection->where('position', 'bottom')->values();
-                @endphp
+<!-- Middle Content Column -->
+<div class="3xl:min-w-[550px] 2xl:min-w-[450px] xl:min-w-[400px] lgg:min-w-[350px] min-w-[250px] lgg:w-auto lgg:mx-0 mx-auto smx:max-w-[550px]  w-full flex flex-col gap-3 lg:gap-6">
+    <!-- Top Image - 16:10 Landscape -->
+    @php
+    $topCategories = $homeCategories['top'] ?? collect();
+    $topBanners = $bannerHeroSection->where('position', 'top')->values();
+    @endphp
+    <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
+        </div>
+        @if ($topBanners->count())
+        <a id="topSliderLink" href="{{ $topBanners->first()->redirect_link ?? '#' }}"
+            class="block h-full w-full relative">
+            @foreach ($topBanners as $index => $banner)
+            @php
+            $bannerImage = $banner->image;
+            if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImage);
+            $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+            @endphp
+            <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+                data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="500">
+            @endforeach
+        </a>
+        @else
+        <a href="{{ url('collections/' . 'lehanga') }}">
+            <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
+                src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
+                alt="Glow Pink Dress"
+                loading="lazy"
+                decoding="async">
+        </a>
+        @endif
+    </div>
 
-                <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
-                    @if ($bottomBanners->count())
-                    <a id="bottomSliderLink" href="{{ $bottomBanners->first()->redirect_link }}"
-                        class="block h-full w-full relative">
-                        @foreach ($bottomBanners as $index => $banner)
-                        @php
-                        $bannerImage = $banner->image;
-                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                        $parts = explode('upload/', $bannerImage);
-                        $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        @endphp
-                        <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-                            loading="lazy"
-                            decoding="async"
-                            width="800"
-                            height="500">
-                        @endforeach
-                    </a>
-                    @else
-                    <a href="{{ url('collections/lehanga') }}">
-                        <img class="object-cover h-full w-full"
-                            src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
-                            alt="Bottom Banner"
-                            loading="lazy"
-                            decoding="async">
-                    </a>
-                    @endif
-                </div>
+    <!-- Center Image - 9:16 Portrait -->
+    @php
+    $centerBanners = $bannerHeroSection->where('position', 'center')->values();
+    @endphp
+
+    <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow ">
+        @if ($centerBanners->count())
+        <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
+            class="absolute inset-0 block">
+            @foreach ($centerBanners as $index => $banner)
+            @php
+            $bannerImage = $banner->image;
+            if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImage);
+            $bannerImage = $parts[0] . 'upload/w_600,h_1067,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+            @endphp
+            <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+                data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                loading="lazy"
+                decoding="async"
+                width="600"
+                height="1067">
+            @endforeach
+        </a>
+
+        <!-- Content Overlay -->
+        <div
+            class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-4 text-white">
+            @if ($centerBanners->first()->offer)
+            <div id="centerOfferText" class="inline-flex items-center mb-1">
+                <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-[40px] shadow-lg">
+                    <span class="text-xl font-bold text-white">
+                        {{ $centerBanners->first()->offer }}
+                    </span>
+                    <span class="text-base font-semibold text-white">
+                        % OFF
+                    </span>
+                </span>
+            </div>
+            @endif
+            <h2 id="centerTitleText" class="heading-font text-2xl md:text-3xl text-white mb-1.5 drop-shadow-lg leading-tight">
+                {{ $centerBanners->first()->title }}
+            </h2>
+            <p id="centerShortText" class="text-[11px] text-white drop-shadow-lg mb-3">
+                Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
+            </p>
+            <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
+                class="px-5 py-1.5 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-[11px] tracking-wide inline-flex items-center transition-all duration-300">
+                Shop Now
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+        @else
+        <div
+            class="flex flex-col items-center justify-center space-y-1.5 p-3 lg:p-4 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
+            <div class="absolute inset-0 opacity-5">
+                <div class="absolute top-0 left-0 w-20 h-20 bg-primary rounded-full -translate-x-10 -translate-y-10"></div>
+                <div class="absolute bottom-0 right-0 w-28 h-28 bg-secondary rounded-full translate-x-14 translate-y-14"></div>
+            </div>
+            <div
+                class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent">
+            </div>
+            <h1
+                class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                PRICE DROP
+            </h1>
+            <div class="relative">
+                <span
+                    class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
+                    style="-webkit-text-stroke:2px black;">
+                    SALE
+                </span>
+            </div>
+            <p class="text-gray-600 font-medium tracking-wider text-sm uppercase">
+                NEW COLLECTION
+            </p>
+            <div class="text-center text-gray-500 mb-0.5">
+                <span class="line-through text-[11px] mr-1">₹199.99</span>
+                <span class="text-base font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
+            </div>
+            <a href="{{ url('collections/new-collection') }}"
+                class="px-5 py-1.5 lg:px-6 lg:py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                Shop Now →
+            </a>
+            <p class="text-[11px] text-gray-500 mt-0.5">
+                Limited Period Offer
+            </p>
+        </div>
+        @endif
+    </div>
+
+    <!-- Bottom Image - 16:10 Landscape -->
+    @php
+    $bottomBanners = $bannerHeroSection->where('position', 'bottom')->values();
+    @endphp
+
+    <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
+        @if ($bottomBanners->count())
+        <a id="bottomSliderLink" href="{{ $bottomBanners->first()->redirect_link }}"
+            class="block h-full w-full relative">
+            @foreach ($bottomBanners as $index => $banner)
+            @php
+            $bannerImage = $banner->image;
+            if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImage);
+            $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+            @endphp
+            <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+                data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="500">
+            @endforeach
+        </a>
+        @else
+        <a href="{{ url('collections/lehanga') }}">
+            <img class="object-cover h-full w-full"
+                src="{{ asset('web/images/product-images/Long Frock Poses Photo Ideas At Home.jpg') }}"
+                alt="Bottom Banner"
+                loading="lazy"
+                decoding="async">
+        </a>
+        @endif
+    </div>
+</div>
+
+<!-- Right Image Column - 9:16 Portrait (Responsive) -->
+@php
+$rightBanners = $bannerHeroSection->where('position', 'right')->values();
+@endphp
+
+<div class="flex-1 overflow-hidden lgg:block hidden relative">
+    <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl aspect-[9/16]">
+        @if ($rightBanners->count())
+        <a id="rightSliderLink" href="{{ $rightBanners->first()->redirect_link }}"
+            class="absolute inset-0 z-20 block">
+            @foreach ($rightBanners as $index => $banner)
+            @php
+            $bannerImage = $banner->image;
+            if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImage);
+            $bannerImage = $parts[0] . 'upload/w_750,h_1500,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+            @endphp
+            <img class="slide-right absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+                src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+                data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+                data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+                loading="lazy"
+                decoding="async"
+                width="750"
+                height="1500">
+            @endforeach
+        </a>
+        @else
+        <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
+            class="absolute inset-0 z-20 block">
+            <img class="object-cover h-full w-full"
+                src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Right Banner"
+                loading="lazy"
+                decoding="async">
+        </a>
+        @endif
+        <div
+            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</section> --}}
+
+<style>
+    /* ----- MODERN HERO SLIDER · redesigned ----- */
+    .hero-carousel .slide-item {
+        position: relative;
+   
+        /* more immersive */
+        /* min-height: 600px; */
+        /* max-height: 700px; */
+       
+        border-radius: 0;
+        /* clean edge, no rounding */
+    }
+
+    .hero-carousel .owl-stage-outer {
+        border-radius: 34px;
+        overflow: hidden;
+        padding: 0 !important;
+        margin-top: 21px;
+    }
+
+    /* image layer – subtle zoom + overlay for depth */
+    .hero-carousel .slide-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 6s ease-in-out;
+        transform: scale(1.05);
+        /* gentle zoom */
+    }
+
+    .hero-carousel .slide-item:hover .slide-bg {
+        transform: scale(1);
+        /* slow pull-back on hover */
+    }
+
+    /* dark overlay for better text readability */
+    /* .hero-carousel .slide-item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 70%);
+        z-index: 1;
+        pointer-events: none;
+    } */
+
+    /* content – centered with modern left-aligned refinement */
+    .hero-carousel .slide-content {
+        position: absolute;
+        bottom: 15%;
+        left: 8%;
+        color: #fff;
+        max-width: 580px;
+        z-index: 2;
+        text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        padding: 24px 32px 32px 32px;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border-radius: 12px;
+        border-left: 4px solid #e6c9a8;
+        transition: all 0.3s ease;
+    }
+
+    .hero-carousel .slide-content:hover {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+    .hero-carousel .brand-name {
+        font-size: 36px;
+        font-weight: 400;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        font-family: 'Georgia', 'Times New Roman', serif;
+        color: #f5ede4;
+        line-height: 1.1;
+    }
+
+    .hero-carousel .brand-name span {
+        display: inline-block;
+        border-bottom: 2px solid #e6c9a8;
+        padding-bottom: 6px;
+    }
+
+    .hero-carousel .tagline {
+        font-size: 17px;
+        font-weight: 300;
+        letter-spacing: 3px;
+        margin-bottom: 24px;
+        opacity: 0.95;
+        color: #f0e7dc;
+        text-transform: uppercase;
+        font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    }
+
+    .hero-carousel .shop-btn {
+        display: inline-block;
+        padding: 14px 40px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        color: #fff;
+        text-decoration: none;
+        font-size: 12px;
+        letter-spacing: 4px;
+        transition: all 0.35s ease;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border-radius: 40px;
+        font-weight: 500;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-carousel .shop-btn:hover {
+        background: #fff;
+        color: #1a1a1a;
+        border-color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        letter-spacing: 5px;
+    }
+
+    .hero-carousel .shop-btn i {
+        margin-left: 8px;
+        font-size: 11px;
+    }
+
+    /* ---------- Owl Carousel custom overrides ---------- */
+
+    /* dots – modern, minimal, placed at bottom-center */
+    .hero-carousel .owl-dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        /* display: flex; */
+        gap: 12px;
+        z-index: 5;
+        display:none !important;
+    }
+
+    .hero-carousel .owl-dots .owl-dot span {
+        background: rgba(255, 255, 255, 0.35);
+        width: 12px;
+        height: 12px;
+        margin: 0;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-carousel .owl-dots .owl-dot.active span {
+        background: #f5ede4;
+        transform: scale(1.25);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-carousel .owl-dots .owl-dot:hover span {
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    /* navigation arrows – refined, circular, glass-morphism */
+    .hero-carousel .owl-nav {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    .hero-carousel .owl-nav button {
+        pointer-events: auto;
+        background: rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        color: #fff !important;
+        width: 52px;
+        height: 52px;
+        border-radius: 50% !important;
+        font-size: 28px !important;
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-carousel .owl-nav .owl-prev {
+        margin-left: 10px;
+    }
+
+    .hero-carousel .owl-nav .owl-next {
+        margin-right: 10px;
+    }
+
+    .hero-carousel .owl-nav button:hover {
+        background: rgba(255, 255, 255, 0.25) !important;
+        transform: scale(1.08);
+        border-color: rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    }
+
+    /* hide default owl nav text (‹ ›) – we use font-awesome in JS */
+    .hero-carousel .owl-nav button span {
+        display: none;
+    }
+
+    /* custom icon via pseudo – but we'll use data-* in JS, so clean */
+    .hero-carousel .owl-nav .owl-prev::before {
+        content: '\f104';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 26px;
+        display: inline-block;
+    }
+
+    .hero-carousel .owl-nav .owl-next::before {
+        content: '\f105';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 26px;
+        display: inline-block;
+    }
+
+    /* ensure no extra nav text */
+    .hero-carousel .owl-nav button span {
+        display: none !important;
+    }
+
+    /* make arrows visible on small screens */
+    @media (min-width: 768px) {
+        .hero-carousel .hero-carousel-desktop{
+            display: block !important;
+        }
+        .hero-carousel .hero-carousel-mobile{
+            display: none !important;
+        }
+    }
+    @media (max-width: 768px) {
+        .hero-carousel .hero-carousel-mobile{
+            display: block !important;
+        }
+        .hero-carousel .hero-carousel-desktop{
+            display: none !important;
+        }
+        .hero-carousel .owl-nav {
+            padding: 0 8px;
+        }
+
+        .hero-carousel .owl-nav button {
+            width: 40px;
+            height: 40px;
+            font-size: 20px !important;
+        }
+
+        .hero-carousel .slide-content {
+            left: 5%;
+            bottom: 12%;
+            max-width: 85%;
+            padding: 18px 20px 24px 20px;
+        }
+
+        .hero-carousel .brand-name {
+            font-size: 26px;
+            letter-spacing: 4px;
+        }
+
+        .hero-carousel .tagline {
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .hero-carousel .shop-btn {
+            padding: 10px 28px;
+            font-size: 11px;
+        }
+
+
+    }
+
+     @media (min-width: 576px) {
+        .hero-carousel .hero-carousel-desktop{
+            display: block !important;
+            aspect-ratio: 16/6;
+        }
+        .hero-carousel .hero-carousel-mobile{
+            display: none !important;
+
+        }
+        /* .hero-carousel .slide-item{
+            max-height:700px;
+        } */
+    }
+    @media (max-width: 576px) {
+        .hero-carousel .hero-carousel-mobile{
+            display: block !important;
+            aspect-ratio:2/3 !important;
+        }
+        .hero-carousel .hero-carousel-desktop{
+            display: none !important;
+        }
+}
+
+    @media (max-width: 480px) {
+        .hero-carousel .slide-content {
+            left: 4%;
+            bottom: 10%;
+            max-width: 92%;
+            padding: 14px 16px 20px 16px;
+            border-left-width: 3px;
+        }
+
+        .hero-carousel .brand-name {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero-carousel .tagline {
+            font-size: 12px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .hero-carousel .shop-btn {
+            padding: 8px 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .hero-carousel .owl-dots {
+            bottom: 18px;
+            gap: 8px;
+        }
+
+        .hero-carousel .owl-dots .owl-dot span {
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    /* optional: subtle animation for content */
+    .hero-carousel .slide-content {
+        animation: fadeUp 0.9s ease-out both;
+    }
+
+    @keyframes fadeUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ensure owl container has no overflow issues */
+    .hero-carousel {
+        overflow: hidden;
+        border-radius: 0;
+    }
+</style>
+<!-- updated HTML block – slide structure with Font Awesome icons -->
+<section class="px-4 lgg:py-8 py-6 ">
+    <div class="container mx-auto">
+        <div class="hero-carousel owl-carousel owl-theme ">
+            <!-- Slide 1 -->
+            <div class="slide-item relative">
+               
+                    <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
+                    <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
+                
+
+
+                <!-- <div class="slide-content">
+                    <h2 class="brand-name"><span>Seema Gujral</span></h2>
+                    <p class="tagline">An ode to timeless elegance</p>
+                    <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
+                </div> -->
             </div>
 
-            <!-- Right Image Column - 9:16 Portrait (Responsive) -->
-            @php
-            $rightBanners = $bannerHeroSection->where('position', 'right')->values();
-            @endphp
+            <!-- Slide 2 -->
+            <div class="slide-item relative">
+                
+                     <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
+                    <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
+           
+                    <!-- <div class="slide-content">
+                        <h2 class="brand-name"><span>Seema Gujral</span></h2>
+                        <p class="tagline">An ode to timeless elegance</p>
+                        <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
+                    </div> -->
+            </div>
 
-            <div class="flex-1 overflow-hidden lgg:block hidden relative">
-                <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl aspect-[9/16]">
-                    @if ($rightBanners->count())
-                    <a id="rightSliderLink" href="{{ $rightBanners->first()->redirect_link }}"
-                        class="absolute inset-0 z-20 block">
-                        @foreach ($rightBanners as $index => $banner)
-                        @php
-                        $bannerImage = $banner->image;
-                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                        $parts = explode('upload/', $bannerImage);
-                        $bannerImage = $parts[0] . 'upload/w_450,h_800,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        @endphp
-                        <img class="slide-right absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-                            loading="lazy"
-                            decoding="async"
-                            width="450"
-                            height="800">
-                        @endforeach
-                    </a>
-                    @else
-                    <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
-                        class="absolute inset-0 z-20 block">
-                        <img class="object-cover h-full w-full"
-                            src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}" alt="Right Banner"
-                            loading="lazy"
-                            decoding="async">
-                    </a>
-                    @endif
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                </div>
+            <!-- Slide 3 -->
+            <div class="slide-item relative">
+               
+                     <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
+                    <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
+            
+                <!-- <div class="slide-content">
+                    <h2 class="brand-name"><span>Seema Gujral</span></h2>
+                    <p class="tagline">An ode to timeless elegance</p>
+                    <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
+                </div> -->
             </div>
         </div>
     </div>
 </section>
+
 
 <section class="px-4 lgg:py-8 py-6 bg-gradient-to-b from-white to-gray-50/50">
     <div class="container mx-auto">
@@ -2294,5 +2718,46 @@
             });
         }
     });
+</script>
+
+<script>
+    // Wait for jQuery and OwlCarousel to load
+    function initHeroCarousel() {
+        if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+            $('.hero-carousel').owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 0,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 5500,
+                autoplayHoverPause: true,
+                stopOnHover: true,  // Add this line
+                smartSpeed: 900,
+                navText: ['', ''],
+                responsive: {
+                    0: {
+                        nav: true,
+                        dots: true
+                    },
+                    768: {
+                        nav: true,
+                        dots: true
+                    }
+                }
+            });
+        } else {
+            console.warn('Owl Carousel not loaded, retrying...');
+            setTimeout(initHeroCarousel, 500);
+        }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHeroCarousel);
+    } else {
+        initHeroCarousel();
+    }
 </script>
 @endsection
