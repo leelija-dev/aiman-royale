@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sizes: [],
         price_ranges: [],
         sort: 'date-desc',
-        filter: 'new-arrival',
+        filter: '',
         occasion: 'all',
         collection: 'all',
         search: '',
@@ -409,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 const defaultOption = Array.from(options).find(opt => 
                     opt.dataset.value === 'all' || 
-                    opt.dataset.value === 'new-arrival' || 
+                    opt.dataset.value === '' || 
                     opt.dataset.value === 'date-desc'
                 );
                 

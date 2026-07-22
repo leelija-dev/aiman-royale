@@ -2036,7 +2036,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="top-categories" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="top-categories" class="accordion-content lg:mt-8 space-y-4">
           
           
          
@@ -2074,7 +2074,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="Occaisions" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="Occaisions" class="accordion-content lg:mt-8 space-y-4">
          
           <a href="https://aimanroyale.com/salwar-kameez/casual" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
@@ -2108,7 +2108,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="explore" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="explore" class="accordion-content lg:mt-8 space-y-4">
            <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">About Us</span>
@@ -2147,7 +2147,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="account" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="account" class="accordion-content lg:mt-8 space-y-4">
           <a href="{{ config('app.url') }}/login" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Login / Register</span>
@@ -2534,6 +2534,7 @@ art from fake trails.
         // Collapse all on mobile initially
         content.style.maxHeight = '0';
         content.style.opacity = '0';
+        content.style.marginTop = '0';
         content.style.overflow = 'hidden';
       } else {
         // Expand all on desktop
@@ -2564,6 +2565,8 @@ art from fake trails.
 
             otherHeader.classList.remove('active');
             otherContent.style.maxHeight = '0';
+            otherContent.style.marginTop = '0';
+
             otherContent.style.opacity = '0';
             otherIcon.classList.remove('rotate-180');
           }
@@ -2574,11 +2577,13 @@ art from fake trails.
           this.classList.add('active');
           content.style.maxHeight = content.scrollHeight + 'px';
           content.style.opacity = '1';
+          content.style.marginTop = '8px';
           if (icon) icon.classList.add('rotate-180');
         } else {
           this.classList.remove('active');
           content.style.maxHeight = '0';
           content.style.opacity = '0';
+          content.style.marginTop = '0';
           if (icon) icon.classList.remove('rotate-180');
         }
       });
@@ -2601,11 +2606,13 @@ art from fake trails.
             header.classList.remove('active');
             content.style.maxHeight = '0';
             content.style.opacity = '0';
+            content.style.marginTop = '0';
             if (icon) icon.classList.remove('rotate-180');
           } else {
             // On desktop, expand all
             content.style.maxHeight = content.scrollHeight + 'px';
             content.style.opacity = '1';
+            content.style.marginTop = '8px';
             if (icon) icon.classList.remove('rotate-180');
           }
         });

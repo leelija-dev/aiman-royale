@@ -16,6 +16,7 @@
         0% {
             opacity: 1;
         }
+
         100% {
             opacity: 0;
         }
@@ -30,6 +31,7 @@
         0% {
             opacity: 0;
         }
+
         100% {
             opacity: 1;
         }
@@ -55,8 +57,10 @@
         transition: opacity 0.3s ease;
     }
 
-    #unique-scroll .custom-nav-tags,#unique-scroll .owl-dots,#unique-scroll .owl-nav {
-        display:none !important;
+    #unique-scroll .custom-nav-tags,
+    #unique-scroll .owl-dots,
+    #unique-scroll .owl-nav {
+        display: none !important;
     }
 </style>
 
@@ -90,8 +94,8 @@
                         @php
                         $catImage = $category->image ?  $category->image : asset('assets/images/placeholder-category.jpg');
                         if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $catImage);
-                            $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                        $parts = explode('upload/', $catImage);
+                        $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img src="{{ $catImage }}"
@@ -115,14 +119,14 @@
 
 <section class="px-4 lgg:py-8 py-6 h-auto bg-gradient-to-b from-secondary-light to-white">
     <div class="container mx-auto">
-        <div class="flex flex-row gap-3 lg:gap-6 justify-between items-stretch h-auto">
-            <!-- Left Image Column -->
+        <div class="flex flex-row gap-3 lgg:gap-[9px] justify-between items-stretch h-auto">
+            <!-- Left Image Column - 9:16 Portrait (Responsive) -->
             @php
             $leftCategories = $homeCategories['left'] ?? collect();
             $leftBanners = $bannerHeroSection->where('position', 'left')->values();
             @endphp
-            <div class="flex-1 overflow-hidden md:block hidden relative group">
-                <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
+            <div class="flex-1 overflow-hidden lgg:block hidden relative">
+                <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl aspect-[9/16]">
                     @if ($leftBanners->count())
                     <a id="leftSliderLink" href="{{ $leftBanners->first()->redirect_link }}"
                         class="block h-full w-full relative">
@@ -130,8 +134,8 @@
                         @php
                         $bannerImage = $banner->image;
                         if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $bannerImage);
-                            $bannerImage = $parts[0] . 'upload/w_800,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
+                        $parts = explode('upload/', $bannerImage);
+                        $bannerImage = $parts[0] . 'upload/w_450,h_800,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img class="slide-left absolute inset-0 object-cover h-full w-full transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
@@ -140,43 +144,10 @@
                             data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
                             loading="lazy"
                             decoding="async"
-                            width="800"
-                            height="1000">
+                            width="450"
+                            height="800">
                         @endforeach
                     </a>
-
-                    <!-- Text Overlay -->
-                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
-                        @if ($leftBanners->first()?->offer)
-                        <div id="leftOfferText" class="inline-flex items-center mb-4">
-                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
-                                <span class="text-3xl font-bold text-white">
-                                    {{ $leftBanners->first()->offer }}
-                                </span>
-                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
-                                    % OFF
-                                </span>
-                            </span>
-                        </div>
-                        @endif
-                        <h2 id="leftTitleText"
-                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
-                            {{ $leftBanners->first()->title }}
-                        </h2>
-                        <p id="leftShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
-                            Get <span class="font-semibold text-secondary-light">{{ $leftBanners->first()->short_description }}</span> | Use Code:
-                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
-                        </p>
-                        <a id="leftShopBtn" href="{{ $leftBanners->first()->redirect_link }}"
-                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
-                            Shop Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
                     @else
                     <a id="leftSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
@@ -202,13 +173,13 @@
             </div>
 
             <!-- Middle Content Column -->
-            <div class="xl:min-w-[600px] lgg:min-w-[350px] min-w-[250px] md:w-auto w-full flex flex-col gap-3 lg:gap-6">
-                <!-- Top Image -->
+            <div class="3xl:min-w-[550px] 2xl:min-w-[450px] xl:min-w-[400px] lgg:min-w-[350px] min-w-[250px] lgg:w-auto lgg:mx-0 mx-auto smx:max-w-[550px]  w-full flex flex-col gap-3 lg:gap-6">
+                <!-- Top Image - 16:10 Landscape -->
                 @php
                 $topCategories = $homeCategories['top'] ?? collect();
                 $topBanners = $bannerHeroSection->where('position', 'top')->values();
                 @endphp
-                <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
+                <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 z-10 pointer-events-none">
                     </div>
@@ -219,8 +190,8 @@
                         @php
                         $bannerImage = $banner->image;
                         if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $bannerImage);
-                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
+                        $parts = explode('upload/', $bannerImage);
+                        $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
@@ -229,39 +200,11 @@
                             data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
                             loading="lazy"
                             decoding="async"
-                            width="600"
-                            height="400">
+                            width="800"
+                            height="500">
                         @endforeach
                     </a>
-                    <div class="absolute left-6 bottom-6 z-20 text-white">
-                        @if ($topBanners->first()?->offer)
-                        <div id="topOfferText" class="inline-flex items-center mb-2">
-                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
-                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
-                                    {{ $topBanners->first()->offer }}
-                                </span>
-                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
-                                    % OFF
-                                </span>
-                            </span>
-                        </div>
-                        @endif
-                        <h3 id="topTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
-                            {{ $topBanners->first()?->title }}
-                        </h3>
-                        <p id="topShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
-                            Get <span class="font-semibold text-secondary-light">{{ $topBanners->first()?->short_description }}</span>
-                        </p>
-                        <a id="topShopBtn" href="{{ $topBanners->first()?->redirect_link }}"
-                            class="inline-flex items-center mt-4 px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
-                            Shop Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
                     @else
-                    <!-- Default Image -->
                     <a href="{{ url('collections/' . 'lehanga') }}">
                         <img class="object-cover h-full w-full object-top object-center transform group-hover:scale-110 transition-transform duration-700"
                             src="{{ asset('web/images/product-images/Poses In Frock Suit.jpg') }}"
@@ -272,107 +215,108 @@
                     @endif
                 </div>
 
+                <!-- Center Image - 9:16 Portrait -->
                 @php
                 $centerBanners = $bannerHeroSection->where('position', 'center')->values();
                 @endphp
 
-                <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow min-h-[350px]">
-                    @if ($centerBanners->count())
-                    <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
-                        class="absolute inset-0 block">
-                        @foreach ($centerBanners as $index => $banner)
-                        @php
-                        $bannerImage = $banner->image;
-                        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $bannerImage);
-                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        @endphp
-                        <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
-                            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
-                            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
-                            loading="lazy"
-                            decoding="async"
-                            width="600"
-                            height="400">
-                        @endforeach
-                    </a>
+                <div class="relative overflow-hidden rounded-[4px] shadow-2xl flex-grow ">
+    @if ($centerBanners->count())
+    <a id="centerSliderLink" href="{{ $centerBanners->first()->redirect_link }}"
+        class="absolute inset-0 block">
+        @foreach ($centerBanners as $index => $banner)
+        @php
+        $bannerImage = $banner->image;
+        if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImage);
+            $bannerImage = $parts[0] . 'upload/w_600,h_1067,c_fill,f_auto,q_auto/' . $parts[1];
+        }
+        @endphp
+        <img class="slide-center absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
+            src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+            data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
+            data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
+            loading="lazy"
+            decoding="async"
+            width="600"
+            height="1067">
+        @endforeach
+    </a>
 
-                    <!-- Content -->
-                    <div
-                        class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-8 text-white">
-                        @if ($centerBanners->first()->offer)
-                        <div id="centerOfferText" class="inline-flex items-center mb-4">
-                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md px-6 py-4 rounded-[40px] shadow-lg">
-                                <span class="text-3xl font-bold text-white">
-                                    {{ $centerBanners->first()->offer }}
-                                </span>
-                                <span class="text-xl font-semibold text-white">
-                                    % OFF
-                                </span>
-                            </span>
-                        </div>
-                        @endif
-                        <h2 id="centerTitleText" class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg leading-tight">
-                            {{ $centerBanners->first()->title }}
-                        </h2>
-                        <p id="centerShortText" class="text-sm text-white drop-shadow-lg mb-8">
-                            Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
-                        </p>
-                        <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
-                            class="px-8 py-3 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide inline-flex items-center transition-all duration-300">
-                            Shop Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    @else
-                    <div
-                        class="flex flex-col items-center justify-center space-y-4 p-6 lg:p-8 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
-                        <!-- Background Pattern -->
-                        <div class="absolute inset-0 opacity-5">
-                            <div class="absolute top-0 left-0 w-32 h-32 bg-primary rounded-full -translate-x-16 -translate-y-16"></div>
-                            <div class="absolute bottom-0 right-0 w-40 h-40 bg-secondary rounded-full translate-x-20 translate-y-20"></div>
-                        </div>
-                        <div
-                            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent">
-                        </div>
-                        <h1
-                            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                            PRICE DROP
-                        </h1>
-                        <div class="relative">
-                            <span
-                                class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
-                                style="-webkit-text-stroke:2px black;">
-                                SALE
-                            </span>
-                        </div>
-                        <p class="text-gray-600 font-medium tracking-wider text-lg uppercase">
-                            NEW COLLECTION
-                        </p>
-                        <div class="text-center text-gray-500 mb-2">
-                            <span class="line-through text-sm mr-2">₹199.99</span>
-                            <span class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
-                        </div>
-                        <a href="{{ url('collections/new-collection') }}"
-                            class="px-8 py-3 lg:px-10 lg:py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-[1.3rem] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                            Shop Now →
-                        </a>
-                        <p class="text-sm text-gray-500 mt-2">
-                            Limited Period Offer
-                        </p>
-                    </div>
-                    @endif
-                </div>
+    <!-- Content Overlay -->
+    <div
+        class="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-4 text-white">
+        @if ($centerBanners->first()->offer)
+        <div id="centerOfferText" class="inline-flex items-center mb-1">
+            <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-[40px] shadow-lg">
+                <span class="text-xl font-bold text-white">
+                    {{ $centerBanners->first()->offer }}
+                </span>
+                <span class="text-base font-semibold text-white">
+                    % OFF
+                </span>
+            </span>
+        </div>
+        @endif
+        <h2 id="centerTitleText" class="heading-font text-2xl md:text-3xl text-white mb-1.5 drop-shadow-lg leading-tight">
+            {{ $centerBanners->first()->title }}
+        </h2>
+        <p id="centerShortText" class="text-[11px] text-white drop-shadow-lg mb-3">
+            Get <span class="font-semibold text-secondary-light">{{ $centerBanners->first()->short_description }}</span>
+        </p>
+        <a id="centerShopBtn" href="{{ $centerBanners->first()->redirect_link }}"
+            class="px-5 py-1.5 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-[11px] tracking-wide inline-flex items-center transition-all duration-300">
+            Shop Now
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+    </div>
+    @else
+    <div
+        class="flex flex-col items-center justify-center space-y-1.5 p-3 lg:p-4 bg-gradient-to-br from-secondary-light via-white to-primary/10 rounded-[4px] shadow-2xl border border-gray-100 flex-grow relative overflow-hidden h-full">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-0 left-0 w-20 h-20 bg-primary rounded-full -translate-x-10 -translate-y-10"></div>
+            <div class="absolute bottom-0 right-0 w-28 h-28 bg-secondary rounded-full translate-x-14 translate-y-14"></div>
+        </div>
+        <div
+            class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent">
+        </div>
+        <h1
+            class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            PRICE DROP
+        </h1>
+        <div class="relative">
+            <span
+                class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl 2xl:text-h1-2xl font-extrabold text-white relative z-10"
+                style="-webkit-text-stroke:2px black;">
+                SALE
+            </span>
+        </div>
+        <p class="text-gray-600 font-medium tracking-wider text-sm uppercase">
+            NEW COLLECTION
+        </p>
+        <div class="text-center text-gray-500 mb-0.5">
+            <span class="line-through text-[11px] mr-1">₹199.99</span>
+            <span class="text-base font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">₹99.99</span>
+        </div>
+        <a href="{{ url('collections/new-collection') }}"
+            class="px-5 py-1.5 lg:px-6 lg:py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+            Shop Now →
+        </a>
+        <p class="text-[11px] text-gray-500 mt-0.5">
+            Limited Period Offer
+        </p>
+    </div>
+    @endif
+</div>
 
+                <!-- Bottom Image - 16:10 Landscape -->
                 @php
                 $bottomBanners = $bannerHeroSection->where('position', 'bottom')->values();
                 @endphp
 
-                <div class="w-full xll:h-[300px] h-[250px] overflow-hidden relative group rounded-[4px] shadow-lg">
+                <div class="w-full overflow-hidden relative group rounded-[4px] shadow-lg aspect-[16/10]">
                     @if ($bottomBanners->count())
                     <a id="bottomSliderLink" href="{{ $bottomBanners->first()->redirect_link }}"
                         class="block h-full w-full relative">
@@ -380,8 +324,8 @@
                         @php
                         $bannerImage = $banner->image;
                         if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $bannerImage);
-                            $bannerImage = $parts[0] . 'upload/w_600,h_400,c_fill,f_auto,q_auto/' . $parts[1];
+                        $parts = explode('upload/', $bannerImage);
+                        $bannerImage = $parts[0] . 'upload/w_800,h_500,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img class="slide-bottom absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
@@ -390,41 +334,10 @@
                             data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
                             loading="lazy"
                             decoding="async"
-                            width="600"
-                            height="400">
+                            width="800"
+                            height="500">
                         @endforeach
                     </a>
-
-                    <!-- Bottom Banner Text -->
-                    <div class="absolute left-6 bottom-6 z-30 text-white">
-                        @if ($bottomBanners->first()->offer)
-                        <div id="bottomOfferText" class="inline-flex items-center mb-2">
-                            <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg">
-                                <span class="text-4xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-lg">
-                                    {{ $bottomBanners->first()->offer }}
-                                </span>
-                                <span class="text-sm uppercase tracking-wider bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent font-semibold">
-                                    % OFF
-                                </span>
-                            </span>
-                        </div>
-                        @endif
-                        <h3 id="bottomTitleText" class="text-3xl font-extrabold heading-font text-white drop-shadow-[0_0_10px_black]">
-                            {{ $bottomBanners->first()->title }}
-                        </h3>
-                        <p id="bottomShortText" class="mt-2 text-sm text-white drop-shadow-[0_0_10px_black]">
-                            Get <span class="font-semibold text-secondary-light">{{ $bottomBanners->first()->short_description }}</span>
-                        </p>
-                        <a id="bottomShopBtn" href="{{ $bottomBanners->first()->redirect_link }}"
-                            class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-none text-sm tracking-wide transition-all duration-300">
-                            Shop Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
                     @else
                     <a href="{{ url('collections/lehanga') }}">
                         <img class="object-cover h-full w-full"
@@ -437,13 +350,13 @@
                 </div>
             </div>
 
-            <!-- Right Image Column -->
+            <!-- Right Image Column - 9:16 Portrait (Responsive) -->
             @php
             $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             @endphp
 
-            <div class="flex-1 overflow-hidden md:block hidden relative group">
-                <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl">
+            <div class="flex-1 overflow-hidden lgg:block hidden relative">
+                <div class="h-full w-full relative overflow-hidden rounded-[4px] shadow-xl aspect-[9/16]">
                     @if ($rightBanners->count())
                     <a id="rightSliderLink" href="{{ $rightBanners->first()->redirect_link }}"
                         class="absolute inset-0 z-20 block">
@@ -451,8 +364,8 @@
                         @php
                         $bannerImage = $banner->image;
                         if (strpos($bannerImage, 'cloudinary.com') !== false && strpos($bannerImage, 'upload/') !== false) {
-                            $parts = explode('upload/', $bannerImage);
-                            $bannerImage = $parts[0] . 'upload/w_800,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
+                        $parts = explode('upload/', $bannerImage);
+                        $bannerImage = $parts[0] . 'upload/w_450,h_800,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img class="slide-right absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
@@ -461,43 +374,10 @@
                             data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
                             loading="lazy"
                             decoding="async"
-                            width="800"
-                            height="1000">
+                            width="450"
+                            height="800">
                         @endforeach
                     </a>
-
-                    <!-- Right Banner Text -->
-                    <div class="absolute inset-0 z-30 flex flex-col justify-center h-full lg:p-8 p-2">
-                        @if ($rightBanners->first()->offer)
-                        <div id="rightOfferText" class="inline-flex items-center mb-4">
-                            <span class="inline-flex items-center gap-3 bg-white/20 backdrop-blur-md py-1 px-3 rounded-[50px] shadow-lg">
-                                <span class="text-3xl font-bold text-white">
-                                    {{ $rightBanners->first()->offer }}
-                                </span>
-                                <span class="text-lg uppercase tracking-[6px] text-white font-semibold">
-                                    % OFF
-                                </span>
-                            </span>
-                        </div>
-                        @endif
-                        <h2 id="rightTitleText"
-                            class="heading-font text-4xl md:text-5xl text-white mb-4 drop-shadow-[0_0_10px_black] leading-tight font-extrabold">
-                            {{ $rightBanners->first()->title }}
-                        </h2>
-                        <p id="rightShortText" class="text-lg text-white drop-shadow-[0_0_10px_black] mb-6">
-                            Get <span class="font-semibold text-secondary-light">{{ $rightBanners->first()->short_description }}</span> | Use Code:
-                            <span class="font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent bg-white/20 px-2 py-0.5 rounded">CODE20</span>
-                        </p>
-                        <a id="rightShopBtn" href="{{ $rightBanners->first()->redirect_link }}"
-                            class="w-fit bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2 text-sm tracking-wide rounded-none shadow-lg transition-all duration-300 inline-flex items-center">
-                            Shop Now
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 inline-block" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
                     @else
                     <a id="rightSliderLink" href="{{ url('collections/lehanga') }}"
                         class="absolute inset-0 z-20 block">
@@ -703,8 +583,8 @@
                             @php
                             $catImg = $category->latestProductWithImage->featured_image ? $category->latestProductWithImage->featured_image : $category->image;
                             if (strpos($catImg, 'cloudinary.com') !== false && strpos($catImg, 'upload/') !== false) {
-                                $parts = explode('upload/', $catImg);
-                                $catImg = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto/' . $parts[1];
+                            $parts = explode('upload/', $catImg);
+                            $catImg = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto/' . $parts[1];
                             }
                             @endphp
                             <img src="{{ $catImg }}"
@@ -848,8 +728,8 @@
                                 @php
                                 $tagImage = $category->image ? $category->image : asset('assets/images/placeholder-category.jpg');
                                 if (strpos($tagImage, 'cloudinary.com') !== false && strpos($tagImage, 'upload/') !== false) {
-                                    $parts = explode('upload/', $tagImage);
-                                    $tagImage = $parts[0] . 'upload/w_300,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                                $parts = explode('upload/', $tagImage);
+                                $tagImage = $parts[0] . 'upload/w_300,h_200,c_fill,f_auto,q_auto/' . $parts[1];
                                 }
                                 @endphp
                                 <img src="{{ $tagImage }}"
@@ -913,8 +793,8 @@
                         @php
                         $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
                         if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                            $parts = explode('upload/', $imageUrl);
-                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        $parts = explode('upload/', $imageUrl);
+                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
                         }
                         @endphp
                         <img src="{{ $imageUrl }}"
@@ -1159,8 +1039,8 @@
             @php
             $bannerImg = asset('uploads/banners/' . $banner->image);
             if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
-                $parts = explode('upload/', $bannerImg);
-                $bannerImg = $parts[0] . 'upload/w_1200,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+            $parts = explode('upload/', $bannerImg);
+            $bannerImg = $parts[0] . 'upload/w_1200,h_600,c_fill,f_auto,q_auto/' . $parts[1];
             }
             @endphp
             <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
@@ -1267,8 +1147,8 @@
                     @php
                     $secBannerImg = asset('uploads/banners/' . $banner->image);
                     if (strpos($secBannerImg, 'cloudinary.com') !== false && strpos($secBannerImg, 'upload/') !== false) {
-                        $parts = explode('upload/', $secBannerImg);
-                        $secBannerImg = $parts[0] . 'upload/w_600,h_800,c_fill,f_auto,q_auto/' . $parts[1];
+                    $parts = explode('upload/', $secBannerImg);
+                    $secBannerImg = $parts[0] . 'upload/w_600,h_800,c_fill,f_auto,q_auto/' . $parts[1];
                     }
                     @endphp
                     <div class="item flex justify-center items-center">
@@ -1367,8 +1247,8 @@
                 @php
                 $editorImg = asset('uploads/banners/' . $banner->image);
                 if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                $parts = explode('upload/', $editorImg);
+                $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
                 }
                 @endphp
                 <div class="relative bg-[#b8a89a] "
@@ -1376,13 +1256,13 @@
                     data-filter="{{ $banner->filters }}"
                     @else
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                    <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] w-full relative block" >
+                    <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] w-full relative block">
                         <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-contain object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
+                            class="absolute inset-0 w-full h-full object-contain object-center object-top"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="600" />
                     </a>
                     <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         @if ($banner->subtitle)
@@ -1412,8 +1292,8 @@
                 @php
                 $editorImg = asset('uploads/banners/' . $banner->image);
                 if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                $parts = explode('upload/', $editorImg);
+                $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
                 }
                 @endphp
                 @if ($index % 2 == 0)
@@ -1423,14 +1303,14 @@
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] relative block">
                         <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-contain object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
+                            class="absolute inset-0 w-full h-full object-contain object-center object-top"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="600" />
 
                     </a>
-                    
+
                     <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
                         @if ($banner->subtitle)
                         <span
@@ -1458,8 +1338,8 @@
                 @php
                 $editorImg = asset('uploads/banners/' . $banner->image);
                 if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
-                    $parts = explode('upload/', $editorImg);
-                    $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+                $parts = explode('upload/', $editorImg);
+                $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
                 }
                 @endphp
                 @if ($index % 2 == 1)
@@ -1469,11 +1349,11 @@
                     data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     <a href="{{ $banner->filter ? '/products?' . ($banner->filter ?? ($banner->discount ?? '')) : '#' }}" class="overflow-hidden aspect-[16/10] relative w-full block">
                         <img src="{{ $editorImg }}" alt="{{ $banner->title }}"
-                        class="absolute inset-0 w-full h-full object-cover object-center object-top"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="600" />
+                            class="absolute inset-0 w-full h-full object-cover object-center object-top"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="600" />
                     </a>
                     <!-- <div class="relative z-10 flex flex-col justify-center h-full p-10">
                         @if ($banner->subtitle)
@@ -1520,8 +1400,8 @@
             $variant = $product->variants->first();
             $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
             if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                $parts = explode('upload/', $imageUrl);
-                $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+            $parts = explode('upload/', $imageUrl);
+            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
             }
             @endphp
             <div class="item flex justify-center items-center">

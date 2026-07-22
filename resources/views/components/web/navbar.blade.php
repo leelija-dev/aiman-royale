@@ -927,7 +927,7 @@
 
                     <span>
                         Get up to
-                        <span class="font-semibold text-secondary">20% OFF</span>
+                        <span class="font-semibold text-secondary">60% OFF</span>
 
                     </span>
 
