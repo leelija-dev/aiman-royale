@@ -113,7 +113,7 @@ class HomeController extends Controller
         // dd($products);
 
         $categories = Category::Where('is_active', 1)->get();
-        // $categoriesWithProduct = Category::whereHas('products', function($query) {
+        // $categories = Category::whereHas('products', function($query) {
         //     $query->where('is_active', 1)
         //           ->whereHas('variants');
         // })
