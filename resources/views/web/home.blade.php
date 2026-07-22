@@ -791,10 +791,12 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     <div class="container mx-auto">
         <div class="hero-carousel owl-carousel owl-theme ">
             <!-- Slide 1 -->
+            @foreach($bannerHeroSection as $banner)
             <div class="slide-item relative">
                
-                    <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
-                    <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
+                    {{-- @if($banner-> --}}
+                    <a href="{{$banner->redirect_link}}" ><img class="hero-carousel-desktop" src="{{ $banner->image }}" class="w-full h-full object-cover md:hidden  " alt=""> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
+                   <a href="{{$banner->redirect_link}}" > <img class="hero-carousel-mobile" src="{{ $banner->mobile_screen_image }}" class="w-full h-full object-cover md:block  hidden" alt="" ></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
                 
 
 
@@ -804,9 +806,10 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                 </div> -->
             </div>
+            @endforeach
 
             <!-- Slide 2 -->
-            <div class="slide-item relative">
+            {{-- <div class="slide-item relative">
                 
                      <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
                     <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
@@ -816,10 +819,10 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                         <p class="tagline">An ode to timeless elegance</p>
                         <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                     </div> -->
-            </div>
+            </div> --}}
 
             <!-- Slide 3 -->
-            <div class="slide-item relative">
+            {{-- <div class="slide-item relative">
                
                      <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden  block" alt="">
                     <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="" >
@@ -829,7 +832,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     <p class="tagline">An ode to timeless elegance</p>
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                 </div> -->
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
