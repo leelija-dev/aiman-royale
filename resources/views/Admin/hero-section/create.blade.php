@@ -25,8 +25,7 @@
                             <div class="col-md-6">
                                 <!-- Design Number -->
                                 <div class="mb-3">
-                                    <label for="design_no" class="form-label">Title <span
-                                            class="text-danger">*</span></label>
+                                    <label for="design_no" class="form-label">Title </label>
                                     <input type="text" class="form-control" id="title" name="title"
                                         value="{{ old('title') }}" required>
                                     @error('title')

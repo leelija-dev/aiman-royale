@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Size;
 use App\Models\Wishlist;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,7 +36,13 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('*', function ($view) {
         $notifications = Notification::where('viewed', 0)->latest()->get();
-        $categories = Category::where('is_active', 1)->orderBy('name')->get();
+        $categories = Category::where('is_active', 1)->with('products')->orderBy('name')->get();
+        $productCategory = ProductVariant::with(['product.category','product.images', 'images'])
+    ->get()
+    ->unique(function ($variant) {
+        return optional($variant->product)->category_id;
+    })
+    ->values();
         $sizes=Size::OrderBy('sort_order')->get();
         
         
@@ -47,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
         }
         
         $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes)
-        ->with('wishlists', $wishlists);
+        ->with('wishlists', $wishlists)->with('productCategory', $productCategory);
     });
    }
 }

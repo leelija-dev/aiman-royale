@@ -81,9 +81,14 @@
     <!-- Horizontal Scroll with Enhanced Styling -->
     <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
         <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
-            @if ($categories)
-            @foreach ($categories->whereNull('parent_id') as $category)
-            <a href="{{ route('category.show', $category->slug) }}"
+            @if ($productCategory)
+          
+            @foreach ($productCategory->whereNull('parent_id') as $category)
+            
+            @php
+            @endphp
+    
+            <a href="{{ route('category.show', $category->product->category->slug) }}"
                 class="group flex flex-col items-center snap-center">
                 <div class="relative mb-2">
                     <div
@@ -91,15 +96,25 @@
                     </div>
                     <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
-                        @php
-                        $catImage = $category->image ?  $category->image : asset('assets/images/placeholder-category.jpg');
-                        if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
-                        $parts = explode('upload/', $catImage);
-                        $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
+                       @php
+                            $variantImage = $category->images->sortByDesc('id')->first()?->image;
+
+                            $productImage = $category->product->images->sortByDesc('id')->first()?->image;
+                            $catagoryImage = $category->product->category->image;
+                            $catImage = $variantImage ?: $productImage ?: $catagoryImage;
+
+                            // Optional: placeholder if neither exists
+                            // if (!$catImage) {
+                            //     $catImage = asset('assets/images/placeholder-category.jpg');
+                            // }
+
+                            if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
+                                $parts = explode('upload/', $catImage);
+                                $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                            }
                         @endphp
                         <img src="{{ $catImage }}"
-                            alt="{{ $category->name }}"
+                            alt="{{ $category->product->category->name }}"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
                             decoding="async"
@@ -108,7 +123,7 @@
                     </div>
                 </div>
                 <span
-                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->name }}</span>
+                    class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->product->category->name }}</span>
                 <span class="text-xs text-gray-500 mt-1">Most Loved</span>
             </a>
             @endforeach
