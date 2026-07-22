@@ -73,12 +73,7 @@
                             {{ $category->name }}
                         </h3>
 
-                        <div class="md:hidden block">
-                            <button
-                                class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full hover:bg-secondary-light transition-colors">
-                                Add
-                            </button>
-                        </div>
+                        
                     </div>
                 </div>
                 @empty

@@ -4,9 +4,7 @@
 
 
 <style>
-    #ads-carousel .owl-nav {
-        display: none !important;
-    }
+ 
 
     /* Fade out animation */
     .fade-out {
@@ -1468,13 +1466,13 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 <section class="px-4 lgg:py-12 py-8 bg-[#fdfaf7]">
     <div class="container mx-auto">
         <!-- Section Title -->
-        <div class="text-left mb-5">
+        <div class="lgg:text-left text-center mb-5">
             <h2 class="font-thin font-[initial] text-2xl sm:text-3xl md:text-4xl lg:text-[49px] leading-tight text-[#2c1810] mb-2">The Wedding Edit</h2>
-            <div class="w-24 h-0.5 bg-[#d4a88b] me-auto"></div>
+            <div class="w-24 h-0.5 bg-[#d4a88b] lgg:ml-0 lgg:me-auto me-auto ml-auto "></div>
             <p class="text-gray-600 mt-3 font-serif text-sm md:text-base">Curated collections for your special day</p>
         </div>
 
-        <div id="ads-carousel" class="owl-carousel owl-theme">
+        <div id="uniq-ads-slider" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             @php
             $bannerImg = asset('uploads/banners/' . $banner->image);
@@ -1484,7 +1482,6 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             }
             @endphp
             <div class="px-2">
-                <!-- Single anchor tag wrapping everything -->
                 <a href="{{ $banner->link }}" class="block w-full">
                     <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
                         style="aspect-ratio: 9/15; "
@@ -1528,7 +1525,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                                 </p>
                                 @endif
 
-                                <!-- Shop Now Button (Non-clickable, just for styling) -->
+                                <!-- Shop Now Button -->
                                 <span class="inline-block rounded-[11px] bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-5 md:px-6 py-1.5 md:py-2 text-[10px] md:text-xs font-medium tracking-wide transition-all duration-300 ease-in-out cursor-pointer">
                                     Shop Now
                                 </span>
@@ -1550,90 +1547,120 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         letter-spacing: 4px;
     }
 
-    #ads-carousel .owl-dots {
+    #uniq-ads-slider .owl-dots {
         display: none !important;
     }
 
-    /* Owl Carousel Custom Styles */
-    #ads-carousel .owl-nav {
+    /* Owl Carousel Custom Styles - With Backdrop Blur & Font Awesome */
+    #uniq-ads-slider .owl-nav {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         width: 100%;
         pointer-events: none;
         margin-top: 0;
+        z-index: 10;
     }
 
-    #ads-carousel .owl-nav button {
+    #uniq-ads-slider .owl-nav button {
         pointer-events: auto;
-        width: 36px;
-        height: 36px;
-        background: rgba(255, 255, 255, 0.95) !important;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
         border-radius: 50% !important;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(44, 24, 16, 0.1);
-    }
-
-    #ads-carousel .owl-nav button:hover {
-        background: #d4a88b !important;
-        transform: translateY(-50%) scale(1.1);
-        box-shadow: 0 8px 25px rgba(212, 168, 139, 0.4);
-    }
-
-    #ads-carousel .owl-nav button.owl-prev {
-        left: -15px;
-    }
-
-    #ads-carousel .owl-nav button.owl-next {
-        right: -15px;
-    }
-
-    #ads-carousel .owl-nav button span {
-        font-size: 20px;
-        color: #2c1810;
-        display: flex;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex !important;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
+    }
+
+    #uniq-ads-slider .owl-nav button:hover {
+        background: rgba(212, 168, 139, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 8px 30px rgba(212, 168, 139, 0.4);
+        border-color: rgba(212, 168, 139, 0.5);
+    }
+
+    #uniq-ads-slider .owl-nav button:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+
+    #uniq-ads-slider .owl-nav button.owl-prev {
+        left: -12px;
+    }
+
+    #uniq-ads-slider .owl-nav button.owl-next {
+        right: -12px;
+    }
+
+    /* Font Awesome Icons */
+    #uniq-ads-slider .owl-nav button.owl-prev::before {
+        content: "\f104";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 24px;
+        color: #2c1810;
+        transition: color 0.3s ease;
         line-height: 1;
-        margin-top: -2px;
-        font-weight: 300;
     }
 
-    #ads-carousel .owl-nav button:hover span {
-        color: white;
+    #uniq-ads-slider .owl-nav button.owl-next::before {
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 24px;
+        color: #2c1810;
+        transition: color 0.3s ease;
+        line-height: 1;
     }
 
-    #ads-carousel .owl-dots {
+    #uniq-ads-slider .owl-nav button:hover::before {
+        color: #ffffff;
+    }
+
+    /* Hide default nav text */
+    #uniq-ads-slider .owl-nav button span {
+        display: none !important;
+    }
+
+    /* Dots Styling */
+    #uniq-ads-slider .owl-dots {
         position: absolute;
-        bottom: -30px;
+        bottom: -35px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 6px;
+        gap: 8px;
         margin-top: 10px;
     }
 
-    #ads-carousel .owl-dots .owl-dot {
-        width: 6px;
-        height: 6px;
+    #uniq-ads-slider .owl-dots .owl-dot {
+        width: 8px;
+        height: 8px;
         background: #d4a88b !important;
         border-radius: 50%;
         transition: all 0.3s ease;
         opacity: 0.5;
     }
 
-    #ads-carousel .owl-dots .owl-dot.active {
+    #uniq-ads-slider .owl-dots .owl-dot.active {
         background: #2c1810 !important;
-        width: 24px;
+        width: 28px;
         border-radius: 20px;
         opacity: 1;
     }
 
-    #ads-carousel .owl-dots .owl-dot:hover {
+    #uniq-ads-slider .owl-dots .owl-dot:hover {
         opacity: 1;
     }
 
@@ -1656,105 +1683,105 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
     /* Mobile Responsive */
     @media (max-width: 640px) {
-        #ads-carousel .owl-nav button {
-            width: 28px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.95) !important;
+        #uniq-ads-slider .owl-nav button {
+            width: 38px;
+            height: 38px;
         }
 
-        #ads-carousel .owl-nav button.owl-prev {
+        #uniq-ads-slider .owl-nav button.owl-prev {
             left: -10px;
         }
 
-        #ads-carousel .owl-nav button.owl-next {
+        #uniq-ads-slider .owl-nav button.owl-next {
             right: -10px;
         }
 
-        #ads-carousel .owl-nav button span {
-            font-size: 16px;
-        }
-
-        #ads-carousel .owl-dots {
-            bottom: -25px;
-            gap: 5px;
-        }
-
-        #ads-carousel .owl-dots .owl-dot {
-            width: 5px;
-            height: 5px;
-        }
-
-        #ads-carousel .owl-dots .owl-dot.active {
-            width: 18px;
-        }
-
-    }
-
-    @media (min-width: 641px) and (max-width: 1024px) {
-        #ads-carousel .owl-nav button.owl-prev {
-            left: -12px;
-        }
-
-        #ads-carousel .owl-nav button.owl-next {
-            right: -12px;
-        }
-
-        #ads-carousel .owl-nav button {
-            width: 32px;
-            height: 32px;
-        }
-
-        #ads-carousel .owl-nav button span {
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
             font-size: 18px;
         }
 
+        #uniq-ads-slider .owl-dots {
+            bottom: -25px;
+            gap: 6px;
+        }
 
+        #uniq-ads-slider .owl-dots .owl-dot {
+            width: 6px;
+            height: 6px;
+        }
+
+        #uniq-ads-slider .owl-dots .owl-dot.active {
+            width: 20px;
+        }
+
+        #uniq-ads-slider .owl-nav {
+            top: 55%;
+        }
     }
 
-    @media (min-width: 1025px) {
-        #ads-carousel .owl-nav button.owl-prev {
-            left: -20px;
+    @media (min-width: 641px) and (max-width: 1024px) {
+        #uniq-ads-slider .owl-nav button.owl-prev {
+            left: -12px;
         }
 
-        #ads-carousel .owl-nav button.owl-next {
-            right: -20px;
+        #uniq-ads-slider .owl-nav button.owl-next {
+            right: -12px;
         }
 
-        #ads-carousel .owl-nav button {
+        #uniq-ads-slider .owl-nav button {
             width: 42px;
             height: 42px;
         }
 
-        #ads-carousel .owl-nav button span {
-            font-size: 24px;
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
+            font-size: 20px;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #uniq-ads-slider .owl-nav button.owl-prev {
+            left: -12px;
         }
 
+        #uniq-ads-slider .owl-nav button.owl-next {
+            right: -12px;
+        }
 
+        #uniq-ads-slider .owl-nav button {
+            width: 54px;
+            height: 54px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
+            font-size: 26px;
+        }
     }
 </style>
 
-<!-- Owl Carousel Initialization Script with Responsive Items -->
+<!-- Owl Carousel Initialization Script -->
 <script>
-    function initHeroCarousel() {
+    function initUniqAdsSlider() {
         if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
-            $('#ads-carousel').owlCarousel({
+            $('#uniq-ads-slider').owlCarousel({
                 loop: true,
                 margin: 20,
                 nav: true,
-                dots: false,
+                dots: true,
                 autoplay: true,
                 autoplayTimeout: 5500,
                 autoplayHoverPause: true,
                 stopOnHover: true,
                 smartSpeed: 900,
-                navText: ['‹', '›'],
+                navText: ['', ''], // Empty strings since we use Font Awesome
                 responsive: {
                     0: {
-                        items: 2,
+                        items: 1,
                         margin: 10,
                         nav: true,
-                        dots: true,
-                        navText: ['‹', '›']
+                        dots: true
                     },
                     480: {
                         items: 2,
@@ -1770,25 +1797,25 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     },
                     768: {
                         items: 3,
-                        margin: 10,
+                        margin: 15,
                         nav: true,
                         dots: true
                     },
                     1024: {
                         items: 3,
-                        margin: 10,
+                        margin: 15,
                         nav: true,
                         dots: true
                     },
                     1280: {
                         items: 3,
-                        margin: 10,
+                        margin: 20,
                         nav: true,
                         dots: true
                     },
                     1366: {
                         items: 4,
-                        margin: 10,
+                        margin: 20,
                         nav: true,
                         dots: true
                     }
@@ -1796,14 +1823,14 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             });
         } else {
             console.warn('Owl Carousel not loaded, retrying...');
-            setTimeout(initHeroCarousel, 500);
+            setTimeout(initUniqAdsSlider, 500);
         }
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHeroCarousel);
+        document.addEventListener('DOMContentLoaded', initUniqAdsSlider);
     } else {
-        initHeroCarousel();
+        initUniqAdsSlider();
     }
 </script>
 
