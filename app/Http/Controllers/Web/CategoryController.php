@@ -612,11 +612,20 @@ class CategoryController extends Controller
 
                 $products = $query->paginate(12);
             }
+             $latestProducts = Product::where('is_active', 1)
+            ->whereHas('variants')
+            ->with(['images' => function ($query) {
+                $query->select('product_id', 'image');
+            }])
+            ->select('products.*')
+            ->latest()
+            ->take(5)
+            ->get();
 
             // Return response
             if ($request->ajax()) {
                 try {
-                    $html = view('web.partials.category-grid', compact('products'))->render();
+                    $html = view('web.partials.category-grid', compact('products','latestProducts'))->render();
 
                     return response()->json([
                         'success' => true,

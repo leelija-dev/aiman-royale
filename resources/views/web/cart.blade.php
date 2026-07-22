@@ -16,7 +16,7 @@
       </div>
       <p class="text-sm text-gray-600">
         @if($subtotal < 400)
-          Spend ${{ number_format(400 - $subtotal, 2) }} more and get free shipping!
+          Spend ₹{{ number_format(400 - $subtotal, 2) }} more and get free shipping!
           @else
           🎉 You've qualified for free shipping!
           @endif
