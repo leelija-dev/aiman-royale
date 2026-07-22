@@ -1036,35 +1036,40 @@
                             </div>
 
                             <!-- Size Selection -->
-                            <div id="size-selection-section"
-                                class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                                <div class="flex items-center justify-between gap-4 mb-6 flex-wrap ">
-                                    <div class="w-fit">
-                                        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                            <i class="fas fa-expand-alt text-secondary"></i> Select Size
-                                        </h3>
-                                        <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
-                                    </div>
-                                    <button type="button" data-size-guide-trigger
-                                        class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
-                                        <i class="fas fa-ruler-combined"></i> View Size Guide
-                                    </button>
-                                </div>
+                            <!-- Size Selection -->
+<div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+    <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="w-fit">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-expand-alt text-secondary"></i> Select Size
+            </h3>
+            <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
+        </div>
+        <button type="button" data-size-guide-trigger
+            class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+            <i class="fas fa-ruler-combined"></i> View Size Guide
+        </button>
+    </div>
 
-                                <div class="flex gap-3 flex-wrap" id="size-buttons">
-                                    @php
-                                        $sizes = $product->variants->pluck('size')->unique()->filter();
-                                    @endphp
-                                    @foreach ($sizes as $size)
-                                        <button
-                                            class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
-                                            data-size="{{ $size }}">
-                                            <span
-                                                class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size }}</span>
-                                        </button>
-                                    @endforeach
-                                </div>
-                            </div>
+    <div class="flex gap-3 flex-wrap" id="size-buttons">
+        @php
+            // Get unique sizes from variants that exist in the sizes table
+            $productSizeCodes = $product->variants->pluck('size')->unique()->filter()->toArray();
+            // Filter sizes to only those that have variants
+            $availableSizes = $sizes->filter(function($size) use ($productSizeCodes) {
+                return in_array($size->code, $productSizeCodes);
+            });
+        @endphp
+        @foreach($availableSizes as $size)
+            <button
+                class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
+                data-size="{{ $size->code }}"
+                data-size-id="{{ $size->id }}">
+                <span class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size->code }}</span>
+            </button>
+        @endforeach
+    </div>
+</div>
 
                             <!-- Color Selection -->
                             <div id="color-selection-section">
@@ -1088,7 +1093,7 @@
                                     @forelse($colorsForSize as $index => $variant)
                                         @php
                                             $isSelected = $index == 0;
-
+                                            // $sizeCode = $variant->size ?? '';
                                             // Get variant image with proper path using the accessor
                                             $variantImage = '';
                                             if ($variant->images && $variant->images->isNotEmpty()) {
@@ -2231,7 +2236,29 @@
         $variant = $product?->variants?->first();
         $basePrice = $variant?->discount_price ?? ($variant?->price ?? 0);
     @endphp
-
+<script>
+    // ===== PASS SIZES DATA FROM DATABASE =====
+    // Create a mapping of size code to sort_order
+    const sizeOrderMap = {};
+    @foreach($sizes as $size)
+        sizeOrderMap['{{ $size->code }}'] = {{ $size->sort_order }};
+    @endforeach
+    
+    // Get ordered size codes
+    const orderedSizeCodes = [];
+    @foreach($sizes->sortBy('sort_order') as $size)
+        orderedSizeCodes.push('{{ $size->code }}');
+    @endforeach
+    
+    // Store in window for global access
+    window.sizeOrderMap = sizeOrderMap;
+    window.orderedSizeCodes = orderedSizeCodes;
+    window.productVariants = @json($product->variants);
+    
+    console.log('Size Order Map (code => sort_order):', window.sizeOrderMap);
+    console.log('Ordered Size Codes:', window.orderedSizeCodes);
+    console.log('Product Variants:', window.productVariants);
+</script>
 
     <!-- share modal code  -->
     <script>

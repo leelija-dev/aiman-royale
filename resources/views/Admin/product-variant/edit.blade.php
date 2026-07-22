@@ -73,7 +73,7 @@
                                 <small class="text-muted">Select a color for this variant</small>
                             </div>
                             <div class="mb-3">
-                                <label for="size" class="form-label">Size</label>
+                                <label for="size" class="form-label">Size <span class="text-danger">*</span></label>
                                 <select class="form-control" id="size" name="size">
                                     <option value="">No Size</option>
                                     @foreach($sizes as $size)

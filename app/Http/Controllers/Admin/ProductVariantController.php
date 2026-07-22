@@ -345,8 +345,8 @@ class ProductVariantController extends Controller
         // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'size' => 'nullable|string|max:20',
-            'color_code' => 'nullable|string|max:50',
+            'size' => 'required|string|max:20',
+            'color_code' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
