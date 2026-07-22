@@ -977,7 +977,7 @@
                         title="WhatsApp">
                         <div
                             class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <i class="fa-brands fa-whatsapp text-[18px]"></i>
                         </div>
                     </a>
                 </div>

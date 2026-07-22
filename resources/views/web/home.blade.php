@@ -2,10 +2,9 @@
 
 @section('content')
 
+
 <style>
-    #ads-carousel .owl-nav {
-        display: none !important;
-    }
+ 
 
     /* Fade out animation */
     .fade-out {
@@ -415,11 +414,11 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     /* ----- MODERN HERO SLIDER · redesigned ----- */
     .hero-carousel .slide-item {
         position: relative;
-   
+
         /* more immersive */
         /* min-height: 600px; */
         /* max-height: 700px; */
-       
+
         border-radius: 0;
         /* clean edge, no rounding */
     }
@@ -428,7 +427,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         border-radius: 34px;
         overflow: hidden;
         padding: 0 !important;
-        margin-top: 21px;
+        /* margin-top: 21px; */
     }
 
     /* image layer – subtle zoom + overlay for depth */
@@ -555,7 +554,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         /* display: flex; */
         gap: 12px;
         z-index: 5;
-        display:none !important;
+        display: none !important;
     }
 
     .hero-carousel .owl-dots .owl-dot span {
@@ -654,20 +653,24 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
     /* make arrows visible on small screens */
     @media (min-width: 768px) {
-        .hero-carousel .hero-carousel-desktop{
+        .hero-carousel .hero-carousel-desktop {
             display: block !important;
         }
-        .hero-carousel .hero-carousel-mobile{
+
+        .hero-carousel .hero-carousel-mobile {
             display: none !important;
         }
     }
+
     @media (max-width: 768px) {
-        .hero-carousel .hero-carousel-mobile{
+        .hero-carousel .hero-carousel-mobile {
             display: block !important;
         }
-        .hero-carousel .hero-carousel-desktop{
+
+        .hero-carousel .hero-carousel-desktop {
             display: none !important;
         }
+
         .hero-carousel .owl-nav {
             padding: 0 8px;
         }
@@ -703,28 +706,32 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
     }
 
-     @media (min-width: 576px) {
-        .hero-carousel .hero-carousel-desktop{
+    @media (min-width: 576px) {
+        .hero-carousel .hero-carousel-desktop {
             display: block !important;
             aspect-ratio: 16/6;
         }
-        .hero-carousel .hero-carousel-mobile{
+
+        .hero-carousel .hero-carousel-mobile {
             display: none !important;
 
         }
+
         /* .hero-carousel .slide-item{
             max-height:700px;
         } */
     }
+
     @media (max-width: 576px) {
-        .hero-carousel .hero-carousel-mobile{
+        .hero-carousel .hero-carousel-mobile {
             display: block !important;
-            aspect-ratio:2/3 !important;
+            aspect-ratio: 2/3 !important;
         }
-        .hero-carousel .hero-carousel-desktop{
+
+        .hero-carousel .hero-carousel-desktop {
             display: none !important;
         }
-}
+    }
 
     @media (max-width: 480px) {
         .hero-carousel .slide-content {
@@ -787,7 +794,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     }
 </style>
 <!-- updated HTML block – slide structure with Font Awesome icons -->
-<section class="px-4 lgg:py-8 py-6 ">
+<section class="px-4 lgg:py-4 py-3 ">
     <div class="container mx-auto">
         <div class="hero-carousel owl-carousel owl-theme ">
             <!-- Slide 1 -->
@@ -1474,62 +1481,376 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     </div>
 </section>
 
-<section class="px-4 lgg:py-8 py-6">
+<section class="px-4 lgg:py-12 py-8 bg-[#fdfaf7]">
     <div class="container mx-auto">
-        <div id="ads-carousel" class="owl-carousel owl-theme">
+        <!-- Section Title -->
+        <div class="lgg:text-left text-center mb-5">
+            <h2 class="font-thin font-[initial] text-2xl sm:text-3xl md:text-4xl lg:text-[49px] leading-tight text-[#2c1810] mb-2">The Wedding Edit</h2>
+            <div class="w-24 h-0.5 bg-[#d4a88b] lgg:ml-0 lgg:me-auto me-auto ml-auto "></div>
+            <p class="text-gray-600 mt-3 font-serif text-sm md:text-base">Curated collections for your special day</p>
+        </div>
+
+        <div id="uniq-ads-slider" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             @php
             $bannerImg = asset('uploads/banners/' . $banner->image);
             if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
             $parts = explode('upload/', $bannerImg);
-            $bannerImg = $parts[0] . 'upload/w_1200,h_600,c_fill,f_auto,q_auto/' . $parts[1];
+            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
             }
             @endphp
-            <div class="relative overflow-hidden rounded-[0px] shadow-lg bg-cover bg-center h-96 group banner-card"
-                @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
-                @else
-                data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
-                <div class="absolute top-0 left-0 w-full h-full">
-                    <img class="w-full h-full object-cover object-center object-top transition-transform duration-700 group-hover:scale-110"
-                        src="{{ $bannerImg }}"
-                        alt="{{ $banner->title }}"
-                        loading="lazy"
-                        decoding="async"
-                        width="1200"
-                        height="600" />
-                </div>
-                <div
-                    class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                </div>
-                <div
-                    class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <div class="relative flex flex-col justify-end md:p-8 p-4 h-full text-white">
-                        @if ($banner->subtitle)
-                        <span
-                            class="lgg:text-[3rem] text-[2rem] font-script rotate-[-6deg] smx:mb-[-20px] mb-[-12px]">{{ $banner->subtitle }}</span>
-                        @endif
-                        <span class="text-[2.7rem] font-bold font-serif uppercase tracking-wider lgg:mb-4 mb-2">
-                            {{ $banner->title }}
-                        </span>
-                        @if ($banner->description)
-                        <p class="lgg:text-3xl text-[1.2rem] font-serif lgg:mb-6 mb-3">
-                            {{ $banner->description }}
-                        </p>
-                        @endif
-                        <a href="#"
-                            class="inline-block w-fit text-center bg-black text-white lgg:px-8 px-4 py-2 lgg:text-md text-sm font-sans rounded-full uppercase tracking-wide hover:bg-gray-600 transition-all duration-300 ease-in-out">{{ $banner->button_text }}</a>
-                        @if ($banner->discount)
-                        <p class="text-md lgg:mt-4 mt-2 font-sans opacity-80">
-                            {{ $banner->discount }}
-                        </p>
-                        @endif
+            <div class="px-2">
+                <a href="{{ $banner->link }}" class="block w-full">
+                    <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
+                        style="aspect-ratio: 9/15; "
+                        @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                        @else
+                        data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+
+                        <!-- Image -->
+                        <div class="absolute inset-0">
+                            <img class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                                src="{{ $bannerImg }}"
+                                alt="{{ $banner->title }}"
+                                loading="lazy"
+                                decoding="async"
+                                width="600"
+                                height="1000" />
+                        </div>
+
+                        <!-- Subtle Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-40 transition-opacity duration-500"></div>
+
+                        <!-- Content - Clean Layout -->
+                        <div class="absolute bottom-[5px] left-0 right-0 py-5 md:py-6 px-[14px]">
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col items-center justify-center">
+                                <!-- Category -->
+                                @if ($banner->subtitle)
+                                <span class="inline-block text-white/80 text-[9px] md:text-[10px] font-medium tracking-[0.2em] uppercase mb-1.5">
+                                    {{ $banner->subtitle }}
+                                </span>
+                                @endif
+
+                                <!-- Title -->
+                                <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1">
+                                    {{ $banner->title }}
+                                </h3>
+
+                                <!-- Description -->
+                                @if ($banner->description)
+                                <p class="text-white/60 text-[10px] md:text-xs font-light mb-3 line-clamp-1">
+                                    {{ $banner->description }}
+                                </p>
+                                @endif
+
+                                <!-- Shop Now Button -->
+                                <span class="inline-block rounded-[11px] bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-5 md:px-6 py-1.5 md:py-2 text-[10px] md:text-xs font-medium tracking-wide transition-all duration-300 ease-in-out cursor-pointer">
+                                    Shop Now
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             @endforeach
         </div>
     </div>
 </section>
+
+<style>
+    /* Vertical Text Utility */
+    .writing-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        letter-spacing: 4px;
+    }
+
+    #uniq-ads-slider .owl-dots {
+        display: none !important;
+    }
+
+    /* Owl Carousel Custom Styles - With Backdrop Blur & Font Awesome */
+    #uniq-ads-slider .owl-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        pointer-events: none;
+        margin-top: 0;
+        z-index: 10;
+    }
+
+    #uniq-ads-slider .owl-nav button {
+        pointer-events: auto;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-radius: 50% !important;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    #uniq-ads-slider .owl-nav button:hover {
+        background: rgba(212, 168, 139, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 8px 30px rgba(212, 168, 139, 0.4);
+        border-color: rgba(212, 168, 139, 0.5);
+    }
+
+    #uniq-ads-slider .owl-nav button:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+
+    #uniq-ads-slider .owl-nav button.owl-prev {
+        left: -12px;
+    }
+
+    #uniq-ads-slider .owl-nav button.owl-next {
+        right: -12px;
+    }
+
+    /* Font Awesome Icons */
+    #uniq-ads-slider .owl-nav button.owl-prev::before {
+        content: "\f104";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 24px;
+        color: #2c1810;
+        transition: color 0.3s ease;
+        line-height: 1;
+    }
+
+    #uniq-ads-slider .owl-nav button.owl-next::before {
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 24px;
+        color: #2c1810;
+        transition: color 0.3s ease;
+        line-height: 1;
+    }
+
+    #uniq-ads-slider .owl-nav button:hover::before {
+        color: #ffffff;
+    }
+
+    /* Hide default nav text */
+    #uniq-ads-slider .owl-nav button span {
+        display: none !important;
+    }
+
+    /* Dots Styling */
+    #uniq-ads-slider .owl-dots {
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    #uniq-ads-slider .owl-dots .owl-dot {
+        width: 8px;
+        height: 8px;
+        background: #d4a88b !important;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        opacity: 0.5;
+    }
+
+    #uniq-ads-slider .owl-dots .owl-dot.active {
+        background: #2c1810 !important;
+        width: 28px;
+        border-radius: 20px;
+        opacity: 1;
+    }
+
+    #uniq-ads-slider .owl-dots .owl-dot:hover {
+        opacity: 1;
+    }
+
+    /* Banner Card Hover */
+    .banner-card {
+        transition: all 0.4s ease;
+    }
+
+    .banner-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Line clamp */
+    .line-clamp-1 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 640px) {
+        #uniq-ads-slider .owl-nav button {
+            width: 38px;
+            height: 38px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-prev {
+            left: -10px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-next {
+            right: -10px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
+            font-size: 18px;
+        }
+
+        #uniq-ads-slider .owl-dots {
+            bottom: -25px;
+            gap: 6px;
+        }
+
+        #uniq-ads-slider .owl-dots .owl-dot {
+            width: 6px;
+            height: 6px;
+        }
+
+        #uniq-ads-slider .owl-dots .owl-dot.active {
+            width: 20px;
+        }
+
+        #uniq-ads-slider .owl-nav {
+            top: 55%;
+        }
+    }
+
+    @media (min-width: 641px) and (max-width: 1024px) {
+        #uniq-ads-slider .owl-nav button.owl-prev {
+            left: -12px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-next {
+            right: -12px;
+        }
+
+        #uniq-ads-slider .owl-nav button {
+            width: 42px;
+            height: 42px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
+            font-size: 20px;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #uniq-ads-slider .owl-nav button.owl-prev {
+            left: -12px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-next {
+            right: -12px;
+        }
+
+        #uniq-ads-slider .owl-nav button {
+            width: 54px;
+            height: 54px;
+        }
+
+        #uniq-ads-slider .owl-nav button.owl-prev::before,
+        #uniq-ads-slider .owl-nav button.owl-next::before {
+            font-size: 26px;
+        }
+    }
+</style>
+
+<!-- Owl Carousel Initialization Script -->
+<script>
+    function initUniqAdsSlider() {
+        if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+            $('#uniq-ads-slider').owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: true,
+                autoplay: true,
+                autoplayTimeout: 5500,
+                autoplayHoverPause: true,
+                stopOnHover: true,
+                smartSpeed: 900,
+                navText: ['', ''], // Empty strings since we use Font Awesome
+                responsive: {
+                    0: {
+                        items: 1,
+                        margin: 10,
+                        nav: true,
+                        dots: true
+                    },
+                    480: {
+                        items: 2,
+                        margin: 10,
+                        nav: true,
+                        dots: true
+                    },
+                    640: {
+                        items: 2,
+                        margin: 10,
+                        nav: true,
+                        dots: true
+                    },
+                    768: {
+                        items: 3,
+                        margin: 15,
+                        nav: true,
+                        dots: true
+                    },
+                    1024: {
+                        items: 3,
+                        margin: 15,
+                        nav: true,
+                        dots: true
+                    },
+                    1280: {
+                        items: 3,
+                        margin: 20,
+                        nav: true,
+                        dots: true
+                    },
+                    1366: {
+                        items: 4,
+                        margin: 20,
+                        nav: true,
+                        dots: true
+                    }
+                }
+            });
+        } else {
+            console.warn('Owl Carousel not loaded, retrying...');
+            setTimeout(initUniqAdsSlider, 500);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initUniqAdsSlider);
+    } else {
+        initUniqAdsSlider();
+    }
+</script>
 
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
@@ -2751,7 +3072,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                 autoplay: true,
                 autoplayTimeout: 5500,
                 autoplayHoverPause: true,
-                stopOnHover: true,  // Add this line
+                stopOnHover: true, // Add this line
                 smartSpeed: 900,
                 navText: ['', ''],
                 responsive: {
