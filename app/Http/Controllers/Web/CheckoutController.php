@@ -66,8 +66,8 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index');
         }
         $store = Store::where('is_active', true)->first();
-        $coupon = Coupon::where('code_type','special-discount')->where('is_active', true)->first();
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store','coupon'));
+        $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon'));
     }
 
 
@@ -570,12 +570,12 @@ class CheckoutController extends Controller
             // Get ordered products for stock update
             $orderedProducts = DB::table('ordered_products')->where('order_id', $orderId)->get();
 
-
+            $user = Auth::user();
             // Create Delhivery shipment if not already created
             if (!$order->waybill_number) {
                 // Get order details from request (stored in order table)
                 $orderData = [
-                    'customer_name' => $order->full_name ?? 'Customer',
+                    'customer_name' => $user->name ?? 'Customer',
                     'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
                     'city' => $order->city,
                     'state' => $order->state,
@@ -928,7 +928,7 @@ class CheckoutController extends Controller
         } else {
             Log::warning('No transaction ID found for order: ' . $orderId);
         }
-        
+
         DB::table('orders')->where('id', $orderId)->update($updateData);
 
         // Update stock

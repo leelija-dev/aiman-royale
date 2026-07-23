@@ -284,10 +284,11 @@ class UserController extends Controller implements HasMiddleware
     }
 
 
-    public function orderInvoice($id){
-        $orderDetails = Order::where('id',$id)->with('orderProducts.product','user','variant',)->first();
-        $store = Store::where('is_active',true)->first();
-        return view('web.invoice-temple',compact('orderDetails','store'));
+    public function orderInvoice($id)
+    {
+        $orderDetails = Order::where('id', $id)->with('orderProducts.product', 'user', 'variant',)->first();
+        $store = Store::where('is_active', true)->first();
+        return view('web.invoice-temple', compact('orderDetails', 'store'));
     }
     /**
      * Cancel an order
@@ -521,18 +522,18 @@ class UserController extends Controller implements HasMiddleware
                     Log::info('Order is paid. Processing refund...');
 
                     try {
-                        
+
                         $cashfreeOrderRef = $order->cashfree_order_ref;
 
                         if (!$cashfreeOrderRef) {
                             $timestamp = strtotime($order->created_at);
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . $timestamp;
 
-                        
+
                             Log::info('Generated Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
 
-                       
+
                         if (!$cashfreeOrderRef) {
                             $existingRefund = Refund::where('order_id', $order->id)->first();
                             if ($existingRefund && isset($existingRefund->refund_data['order_id'])) {
@@ -543,12 +544,12 @@ class UserController extends Controller implements HasMiddleware
 
                         // If still not found, use a fallback based on the transaction_id
                         if (!$cashfreeOrderRef) {
-                            
+
                             $cashfreeOrderRef = 'CF_' . $order->id . '_' . strtotime($order->created_at);
                             Log::info('Using fallback Cashfree Order Reference: ' . $cashfreeOrderRef);
                         }
 
-                         Log::info('Cashfree Order Reference: ' . $cashfreeOrderRef);
+                        Log::info('Cashfree Order Reference: ' . $cashfreeOrderRef);
                         Log::info('Refund Amount: ' . $order->total_amount);
 
                         // Process full refund
@@ -698,14 +699,23 @@ class UserController extends Controller implements HasMiddleware
     private function cancelWaybillWithDelhivery($waybillNumber)
     {
         try {
-            $apiToken = env('DELHIVERY_API_TOKEN'); // Store your API token in .env
+            // Load Delhivery configuration
+            $config = config('delhivery');
+
+            $apiToken = $config['api_token'] ?? env('DELHIVERY_API_TOKEN');
 
             if (empty($apiToken)) {
                 Log::error('Delhivery API token not configured');
                 return false;
             }
 
-            $apiUrl = "https://staging-express.delhivery.com/api/p/edit";
+            // Determine which URL to use based on mode
+            $isSandbox = $config['sandbox'] ?? true;
+            $baseUrl = $isSandbox
+                ? ($config['sandbox_url'] ?? 'https://staging-express.delhivery.com')
+                : ($config['production_url'] ?? 'https://api.delhivery.com');
+
+            $apiUrl = $baseUrl . "/api/p/edit";
 
             $payload = [
                 'waybill' => $waybillNumber,
@@ -714,6 +724,7 @@ class UserController extends Controller implements HasMiddleware
 
             Log::info('Delhivery API Request URL: ' . $apiUrl);
             Log::info('Delhivery API Request Payload: ' . json_encode($payload));
+            Log::info('Delhivery Mode: ' . ($isSandbox ? 'Sandbox' : 'Production'));
 
             $ch = curl_init();
 
@@ -727,7 +738,11 @@ class UserController extends Controller implements HasMiddleware
                 'Authorization: Token ' . $apiToken
             ]);
             curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For staging only, enable in production
+
+            // SSL verification based on environment
+            // Disable only in sandbox, enable in production
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $isSandbox ? false : true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $isSandbox ? false : 2);
 
             $response = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -735,8 +750,8 @@ class UserController extends Controller implements HasMiddleware
 
             curl_close($ch);
 
-            Log::info('Delhivery API Response HTTP Code: ' . $httpCode);
-            Log::info('Delhivery API Response: ' . $response);
+            // Log::info('Delhivery API Response HTTP Code: ' . $httpCode);
+            // Log::info('Delhivery API Response: ' . $response);
 
             if ($curlError) {
                 Log::error('Curl Error: ' . $curlError);
@@ -746,6 +761,28 @@ class UserController extends Controller implements HasMiddleware
             // Check if request was successful
             if ($httpCode >= 200 && $httpCode < 300) {
                 $responseData = json_decode($response, true);
+
+                // Handle empty response
+                if (empty($responseData)) {
+                    Log::warning('Empty response received from Delhivery API');
+                    return false;
+                }
+
+                // Check for Delhivery API error codes
+                if (isset($responseData['error']) && !empty($responseData['error'])) {
+                    Log::error('Delhivery API Error: ' . json_encode($responseData['error']));
+                    return false;
+                }
+
+                // Check for package status error
+                if (
+                    isset($responseData['package_status']) &&
+                    isset($responseData['package_status']['error']) &&
+                    $responseData['package_status']['error'] === true
+                ) {
+                    Log::error('Delhivery Package Status Error: ' . json_encode($responseData['package_status']));
+                    return false;
+                }
 
                 // Check if cancellation was successful
                 if (isset($responseData['success']) && $responseData['success'] === true) {
@@ -757,23 +794,53 @@ class UserController extends Controller implements HasMiddleware
                 } elseif (isset($responseData['status']) && $responseData['status'] === 'success') {
                     Log::info('Waybill cancellation successful');
                     return true;
+                } elseif (isset($responseData['status']) && $responseData['status'] === 'Cancelled') {
+                    Log::info('Waybill already cancelled or cancellation successful');
+                    return true;
                 } else {
                     Log::warning('Waybill cancellation API returned unexpected response: ' . json_encode($responseData));
-                    // Some APIs return success without explicit success flag
+
                     // Check if there's any error message
-                    if (isset($responseData['message']) && strpos(strtolower($responseData['message']), 'error') !== false) {
-                        Log::error('API Error: ' . $responseData['message']);
+                    if (isset($responseData['message'])) {
+                        $message = strtolower($responseData['message']);
+                        if (strpos($message, 'error') !== false || strpos($message, 'failed') !== false) {
+                            Log::error('API Error: ' . $responseData['message']);
+                            return false;
+                        }
+                    }
+
+                    // Check if there's any error in the response
+                    if (isset($responseData['errors']) && !empty($responseData['errors'])) {
+                        Log::error('API Errors: ' . json_encode($responseData['errors']));
                         return false;
                     }
-                    // Assume success if no error and response is valid
+
+                    // For some Delhivery endpoints, successful cancellation might not return explicit flags
+                    // Check if the response contains a waybill number or reference number
+                    if (isset($responseData['waybill']) || isset($responseData['reference'])) {
+                        Log::info('Waybill cancellation likely successful (response contained waybill/reference)');
+                        return true;
+                    }
+
+                    // If we got a successful HTTP status and no errors, consider it a success
+                    Log::info('Waybill cancellation assumed successful (no errors in response)');
                     return true;
                 }
             } else {
                 Log::error('Delhivery API returned error HTTP code: ' . $httpCode);
+
+                // Try to parse error response
+                if (!empty($response)) {
+                    $errorData = json_decode($response, true);
+                    if (isset($errorData['message'])) {
+                        Log::error('API Error Message: ' . $errorData['message']);
+                    }
+                }
                 return false;
             }
         } catch (\Exception $e) {
             Log::error('Exception in cancelWaybillWithDelhivery: ' . $e->getMessage());
+            Log::error('Exception Trace: ' . $e->getTraceAsString());
             return false;
         }
     }

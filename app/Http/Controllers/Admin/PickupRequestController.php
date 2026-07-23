@@ -47,7 +47,6 @@ class PickupRequestController extends Controller
             ->paginate(10);
 
         return view('Admin.pick-up-request.requested-pickup', compact('orders'));
-
     }
 
 
@@ -87,7 +86,18 @@ class PickupRequestController extends Controller
                 'pickup_datetime' => $request->pickup_date . ' ' . $request->pickup_time
             ]);
 
-            $url = config('delhivery.sandbox_url') . '/fm/request/new/';
+            $config = config('delhivery');
+            $apiToken = $config['api_token'] ?? env('DELHIVERY_API_TOKEN');
+            $isSandbox = $config['sandbox'] ?? true;
+            // $pickupLocation = $config['pickup_location'] ?? 'c3a7c4-RJFASHIONS-do';
+
+            // Determine base URL based on environment
+            $baseUrl = $isSandbox
+                ? ($config['sandbox_url'] ?? 'https://staging-express.delhivery.com')
+                : ($config['production_url'] ?? 'https://express.delhivery.com');
+
+
+            $url = $baseUrl . '/fm/request/new/';
 
             // Use the date and time from the request
             $pickupDateTime = \Carbon\Carbon::parse($request->pickup_date . ' ' . $request->pickup_time);
@@ -309,6 +319,4 @@ class PickupRequestController extends Controller
 
         return $errorMessage;
     }
-
-    
 }
