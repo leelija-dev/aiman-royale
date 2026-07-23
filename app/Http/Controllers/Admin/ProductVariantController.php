@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductVariant;
 use App\Models\Product;
 use App\Models\Color;
+use App\Models\Coupon;
 use App\Models\Size;
 use App\Models\StockIn;
 use Illuminate\Http\Request;
@@ -55,8 +56,8 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes'));
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
+        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes','coupons'));
     }
 
 
@@ -69,8 +70,8 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes'));
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
+        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes','coupons'));
     }
 
     /**
@@ -146,6 +147,9 @@ class ProductVariantController extends Controller
             'size' => 'required|string|max:20',
             'color' => 'required',
             'price' => 'required|numeric|min:0',
+            'coupon_id' => 'nullable|exists:coupon,id',
+            'fixed_price' => 'nullable|numeric',
+            'final_price'  => 'nullable|numeric',
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'video_url' => 'nullable|url|max:500',
@@ -172,7 +176,7 @@ class ProductVariantController extends Controller
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
         }
-// dd($data);
+        // dd($data);
         $variant = ProductVariant::create($data);
         $product = Product::find($data['product_id']);
         $product->update([
@@ -348,6 +352,9 @@ class ProductVariantController extends Controller
             'size' => 'required|string|max:20',
             'color_code' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
+            'coupon_id' => 'nullable|exists:coupon,id',
+            'fixed_price' => 'nullable|numeric',
+            'final_price'  => 'nullable|numeric',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
             'images' => 'nullable|array',
@@ -384,6 +391,9 @@ class ProductVariantController extends Controller
         $productVariant->update([
             'product_id'      => $request->product_id,
             'price'           => $request->price,
+            'final_price'     => $request->final_price,
+            'fixed_price'     => $request->fixed_price,
+            'coupon_id'       => $request->coupon_id,
             'discount_price'  => $discount_price,
             'discount'        => $request->discount,
             'color'           => $color ? $color->name : null,

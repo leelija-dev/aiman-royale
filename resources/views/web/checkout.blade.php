@@ -337,7 +337,7 @@
                                 </div>
 
                                 <div class="flex justify-between font-semibold text-base pt-2 border-t">
-                                    <span>Total</span>
+                                    <span>Total <span style="font-size: 12px;">(round off)</span></span>
                                     {{-- <span>{{config('app.currency')}}{{ number_format($total+$shippingCost, 2) }}</span> --}}
                                     <span>
                                         {{ config('app.currency') }}
@@ -894,12 +894,17 @@
 
             // Grand Total
             let grandTotal = (subtotal - specialDiscount) + gst + shipping;
+            let roundedGrandTotal = customRound(grandTotal);
+            // document.getElementById("grand-total").innerHTML =
+            //     grandTotal.toFixed(2);
 
-            document.getElementById("grand-total").innerHTML =
-                grandTotal.toFixed(2);
+            // document.getElementById("grand-total-hidden").value =
+            //     grandTotal.toFixed(2);
+            document.getElementById("grand-total").innerHTML = roundedGrandTotal.toFixed(
+                Number.isInteger(roundedGrandTotal) ? 0 : 1
+            );
 
-            document.getElementById("grand-total-hidden").value =
-                grandTotal.toFixed(2);
+            document.getElementById("grand-total-hidden").value = roundedGrandTotal;
         }
 
         // Auto calculate on page load
@@ -984,6 +989,15 @@
 
                 });
 
+        }
+        function customRound(value) {
+        const decimal = value - Math.floor(value);
+
+            if (decimal >= 0.5) {
+                return Math.ceil(value);
+            }
+
+            return Math.round(value * 10) / 10;
         }
     </script>
    <script>
