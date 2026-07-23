@@ -3457,7 +3457,7 @@
                 let discountHtml = '';
                 if (discount > 0) {
                     discountHtml =
-                        `<span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off)</span>`;
+                        `<span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${Number(discount).toFixed(2)}% off)</span>`;
                 } else {
                     discountHtml = `<span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>`;
                 }
