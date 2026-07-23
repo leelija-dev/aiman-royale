@@ -15,7 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Aiman Royale'),
 
-    'wh_number' => env('WHATSAPP_NUMBER', '7003184741'),
+    'wh_number' => env('WH_WHATSAPP_NUMBER', '7003184741'),
 
     'cashfree' => [
         'mode' =>  env('CASHFREE_MODE', 'sandbox'),

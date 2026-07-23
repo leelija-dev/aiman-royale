@@ -927,7 +927,7 @@
 
                     <span>
                         Get up to
-                        <span class="font-semibold text-secondary">20% OFF</span>
+                        <span class="font-semibold text-secondary">60% OFF</span>
 
                     </span>
 
@@ -943,7 +943,7 @@
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Book Appointment Button -->
-                <a href="{{ route('page.appointment') }}"
+                <a href="{{ route('page.appointment') }}#appoint-book-section"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
           bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm 
           rounded-full shadow-md
@@ -972,12 +972,12 @@
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
 
-                    <a href="https://wa.me/1234567890" target="_blank"
+                    <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
                         <div
                             class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <i class="fa-brands fa-whatsapp text-[18px]"></i>
                         </div>
                     </a>
                 </div>
@@ -1056,8 +1056,8 @@
                     <div id="account-dropdown"
                         class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
                         <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                            <p class="text-sm font-semibold text-gray-800 break-words">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 break-words">{{ Auth::user()->email }}</p>
                         </div>
 
                         <a href="{{route('web.profile')}}"
@@ -1113,12 +1113,12 @@
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Desktop Navigation with Enhanced Hover Effects -->
-            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium">
+            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[17px] text-[15px]">
                 @if (isset($categories) && count($categories) > 0)
                 @foreach ($categories->where('parent_id', null) as $category)
                 <div class="relative group">
                     <a href="{{ route('category.show', $category->slug) }}"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
                         data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
@@ -1134,15 +1134,31 @@
                             {{ $category->name }}
                         </span>
 
-                        <!-- Animated arrow icon (optional) -->
-                        <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 
-                            transition-all duration-300 text-purple-600"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
+                       
                     </a>
                 </div>
                 @endforeach
+                <div class="relative group">
+                    <a href="https://aimanroyale.com/products/"
+                        class="hover:text-black  flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        >
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Collections
+                        </span>
+
+                       
+                    </a>
+                </div>
                 @else
                 <!-- Enhanced fallback navigation items -->
                 <a href="#"
@@ -1452,6 +1468,24 @@
                 </ul>
             </div>
             @endforeach
+            <div class="menu-item  top-level-item">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="https://aimanroyale.com/products/"
+                    class="menu-link top-level-link group">
+                    <span class="flex-1">Collections</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+
+                <ul class="submenu">
+                    <li class="menu-item">
+                        <a href="https://aimanroyale.com/products/"
+                            class="menu-link hover:pl-6 transition-all">All Collections</a>
+                    </li>
+                </ul>
+</div>
+
             @else
             <!-- Default menu items -->
             <div class="menu-item has-submenu top-level-item">

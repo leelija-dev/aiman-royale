@@ -25,8 +25,7 @@
                             <div class="col-md-6">
                                 <!-- Design Number -->
                                 <div class="mb-3">
-                                    <label for="design_no" class="form-label">Title <span
-                                            class="text-danger">*</span></label>
+                                    <label for="design_no" class="form-label">Title </label>
                                     <input type="text" class="form-control" id="title" name="title"
                                         value="{{ old('title') }}" required>
                                     @error('title')
@@ -69,7 +68,7 @@
 
                             <div class="col-md-6">
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="position" class="form-label">Position <span
                                             class="text-danger">*</span></label>
                                     <select class="form-control" id="position" name="position">
@@ -90,13 +89,13 @@
                                     @error('position')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <!-- Featured Image -->
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">
-                                        Image <span class="text-danger">*</span>
-                                    </label>
+                                <label for="image" class="form-label">
+                                    Desktop Banner Image (Aspect Ratio: 16:6) <span class="text-danger">*</span>
+                                </label>
 
                                     <input type="file" class="form-control" id="image" name="image"
                                         accept="image/*">
@@ -105,11 +104,33 @@
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
 
-                                    <small class="text-muted">Upload an image for hero section.</small>
+                                    <small class="text-muted">Upload an image for the desktop hero section. Recommended aspect ratio: <strong>16:6</strong>.</small>
 
                                     <!-- Image Preview -->
                                     <div class="mt-2">
                                         <img id="imagePreview" src="" alt="Image Preview" class="img-thumbnail"
+                                            style="width:200px; height:100px; object-fit:cover; display:none;">
+                                    </div>
+                                </div>
+                                <!-- image for mobile screen -->
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">
+                                        Mobile Banner Image (Aspect Ratio 2:3 ) <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="file" class="form-control" id="mobile_screen_image" name="mobile_screen_image"
+                                        accept="image/*">
+
+                                    @error('mobile_screen_image')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+
+                                   <small class="text-muted">
+                                        Upload an image for the mobile hero section. Recommended aspect ratio: <strong>2:3</strong>.
+                                    </small>
+                                    <!-- Image Preview -->
+                                    <div class="mt-2">
+                                        <img id="mobileImagePreview" src="" alt="Image Preview" class="img-thumbnail"
                                             style="width:80px; height:120px; object-fit:cover; display:none;">
                                     </div>
                                 </div>
@@ -154,6 +175,20 @@
         document.getElementById('image').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const preview = document.getElementById('imagePreview');
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+     <script>
+        document.getElementById('mobile_screen_image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('mobileImagePreview');
 
             if (file) {
                 preview.src = URL.createObjectURL(file);

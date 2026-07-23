@@ -45,23 +45,23 @@
                                     <td>{{ $banner->subtitle ?? '-' }}</td>
                                     <td>
                                         @if($banner->type === 'main')
-                                            <span class="badge badge-primary">Main</span>
+                                            <span class="badge bg-primary">Main</span>
                                         @elseif($banner->type === 'secondary')
-                                            <span class="badge badge-info">Secondary</span>
+                                            <span class="badge bg-info">Secondary</span>
                                         @elseif($banner->type === 'editor')
-                                            <span class="badge badge-success">Editor's Pick</span>
+                                            <span class="badge bg-success">Editor's Pick</span>
                                         @else
-                                            <span class="badge badge-secondary">{{ ucfirst($banner->type) }}</span>
+                                            <span class="badge bg-secondary">{{ ucfirst($banner->type) }}</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <span class="badge badge-info">{{ $banner->filter }}</span>
+                                        <span class="badge bg-info">{{ $banner->filter }}</span>
                                     </td>
                                     <td>
                                         @if($banner->is_active)
-                                        <span class="badge badge-success">Active</span>
+                                        <span class="badge bg-success">Active</span>
                                         @else
-                                        <span class="badge badge-danger">Inactive</span>
+                                        <span class="badge bg-danger">Inactive</span>
                                         @endif
                                     </td>
                                     <td>{{ $banner->sort_order }}</td>

@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Contact Page - Luxury Fashion Edition with Red/Pink Theme -->
-<section class="relative overflow-hidden pt-8  pb-16 md:pb-24 lg:pb-32">
+<section class="relative overflow-hidden pt-8 pb-16 md:pb-24 lg:pb-32">
     <!-- Luxury Background Decor - Updated with red/pink tones -->
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-20 left-10 w-72 h-72 bg-red-50/30 rounded-full blur-3xl"></div>
@@ -14,7 +14,7 @@
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23A10000" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
     </div>
 
-    <div class="container mx-auto px-6 md:px-10 lg:px-16 relative z-10 ">
+    <div class="container mx-auto px-6 md:px-10 lg:px-16 relative z-10">
         
         <!-- SECTION 1: Hero Header - Fashion Editorial Style -->
         <div class="text-center max-w-3xl mx-auto mb-16 md:mb-20">
@@ -27,8 +27,8 @@
             </h1>
             <div class="w-20 h-0.5 bg-gradient-to-r from-primary via-secondary to-primary mx-auto my-6 rounded-full"></div>
             <p class="text-base md:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
-                From bespoke tailoring to order assistance — our fashion experts are just a message away. 
-                We respond within <span class="font-semibold text-primary">12 hours</span>.
+                From custom tailoring to order help — our fashion experts are just a message away. 
+                We reply within <span class="font-semibold text-primary">12 hours</span>.
             </p>
         </div>
 
@@ -44,13 +44,9 @@
                             <i class="fas fa-store text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Visit Our Atelier</h3>
+                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Our Store</h3>
                             <p class="text-stone-600 text-sm leading-relaxed">Islampur, Kadambagachhi,</p>
                             <p class="text-stone-600 text-sm">North 24 Parganas, Kol-700125, West Bengal, India</p>
-                            <!-- <div class="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium border-b border-transparent hover:border-primary transition-all cursor-pointer group/dir">
-                                <span>Get Directions</span>
-                                <i class="fas fa-arrow-right text-xs group-hover/dir:translate-x-1 transition-transform"></i>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -62,12 +58,12 @@
                             <i class="fas fa-phone-alt text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Concierge Hotline</h3>
-                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+917003184741" class="hover:text-primary transition-colors">+91 7003184741</a></p>
-                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/917003184741" class="hover:text-primary transition-colors">+91 7003184741</a></p>
+                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Call Us</h3>
+                            <p class="text-stone-600 text-sm"><span class="font-medium">Support:</span> <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+{{env('WH_WHATSAPP_NUMBER')}}</a></p>
+                            <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/{{env('WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+{{env('WH_WHATSAPP_NUMBER')}}</a></p>
                             <div class="flex items-center gap-1.5 mt-4 text-stone-500 text-xs">
                                 <i class="far fa-clock"></i>
-                                <span>Mon – Sat, 10:00 – 19:00 IST</span>
+                                <span>Monday – Saturday, 10:00 AM – 7:00 PM IST</span>
                             </div>
                         </div>
                     </div>
@@ -80,16 +76,15 @@
                             <i class="fas fa-envelope-open-text text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">E-mail Atelier</h3>
+                            <h3 class="font-serif-alt text-xl md:text-2xl font-bold text-stone-800 mb-2">Email Us</h3>
                             <p class="text-stone-600 text-sm"><span class="font-medium">General:</span> <a href="mailto:contact.aimanroyale@gmail.com" class="hover:text-primary transition-colors">contact.aimanroyale@gmail.com</a></p>
-                            
                         </div>
                     </div>
                 </div>
 
                 <!-- Social Connect - Luxury Edition with red/pink theme -->
                 <div class="bg-gradient-to-br from-red-50/80 via-stone-50/90 to-pink-50/80 rounded-3xl p-6 md:p-7 border border-primary/20 shadow-sm">
-                    <h3 class="font-serif-alt text-xl font-bold text-center lg:text-left text-stone-800 mb-4">The Royal Circle</h3>
+                    <h3 class="font-serif-alt text-xl font-bold text-center lg:text-left text-stone-800 mb-4">Follow Us</h3>
                     <div class="flex gap-5 justify-center lg:justify-start">
                         <a href="https://www.facebook.com/AimanRoyale" target="_blank" class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-[#1877F2] hover:text-white hover:scale-110 transition-all duration-300">
                             <i class="fab fa-facebook-f text-lg"></i>
@@ -104,14 +99,14 @@
                             <i class="fab fa-linkedin-in text-lg"></i>
                         </a>
                     </div>
-                    <p class="text-center lg:text-left text-[11px] text-stone-500 mt-5 tracking-wide">Follow for daily couture inspiration & exclusive drops</p>
+                    <p class="text-center lg:text-left text-[11px] text-stone-500 mt-5 tracking-wide">Follow us for daily fashion inspiration and exclusive offers</p>
                 </div>
             </div>
 
             <!-- RIGHT: Luxury Contact Form with red/pink accents -->
             <div class="bg-white rounded-3xl shadow-2xl border border-primary/20 p-7 md:p-9 transition-all hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]">
                 <div class="mb-7 border-b border-stone-100 pb-4">
-                    <h3 class="font-serif-alt text-2xl md:text-3xl font-semibold text-stone-800">Send a <span class="text-primary">Haute</span> Message</h3>
+                    <h3 class="font-serif-alt text-2xl md:text-3xl font-semibold text-stone-800">Send a <span class="text-primary">Message</span></h3>
                     <p class="text-stone-500 text-sm mt-1">Our style advisors reply within hours.</p>
                 </div>
 
@@ -122,7 +117,7 @@
                             <label class="block text-sm font-medium text-stone-700 mb-2">Full Name <span class="text-primary">*</span></label>
                             <input type="text" name="name" id="luxuryName" value="{{ old('name') }}" 
                                 class="w-full px-5 py-3.5 rounded-xl border border-stone-200 bg-stone-50/40 focus:bg-white focus:border-primary focus:ring-2 focus:ring-red-200/60 transition-all @error('name') border-red-500 @enderror"
-                                placeholder="Aiman Royale">
+                                placeholder="Your full name">
                             <div id="nameError" class="text-red-500 text-xs mt-1 hidden"></div>
                             @error('name') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
                         </div>
@@ -140,7 +135,7 @@
                         <label class="block text-sm font-medium text-stone-700 mb-2">Email Address <span class="text-primary">*</span></label>
                         <input type="email" name="email" id="luxuryEmail" value="{{ old('email') }}"
                             class="w-full px-5 py-3.5 rounded-xl border border-stone-200 bg-stone-50/40 focus:bg-white focus:border-primary focus:ring-2 focus:ring-red-200/60 transition-all @error('email') border-red-500 @enderror"
-                            placeholder="hello@aimanfashion.com">
+                            placeholder="your@email.com">
                         <div id="emailError" class="text-red-500 text-xs mt-1 hidden"></div>
                         @error('email') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
                     </div>
@@ -153,7 +148,7 @@
                             <option value="product" {{ old('subject') == 'product' ? 'selected' : '' }}>Product Styling Advice</option>
                             <option value="return" {{ old('subject') == 'return' ? 'selected' : '' }}>Return / Exchange</option>
                             <option value="wholesale" {{ old('subject') == 'wholesale' ? 'selected' : '' }}>Wholesale / Private Label</option>
-                            <option value="feedback" {{ old('subject') == 'feedback' ? 'selected' : '' }}>Runway Feedback</option>
+                            <option value="feedback" {{ old('subject') == 'feedback' ? 'selected' : '' }}>Feedback</option>
                             <option value="other" {{ old('subject') == 'other' ? 'selected' : '' }}>Other</option>
                         </select>
                         <div id="subjectError" class="text-red-500 text-xs mt-1 hidden"></div>
@@ -164,7 +159,7 @@
                         <label class="block text-sm font-medium text-stone-700 mb-2">Your Message <span class="text-primary">*</span></label>
                         <textarea name="message" id="luxuryMessage" rows="5" 
                             class="w-full px-5 py-3.5 rounded-xl border border-stone-200 bg-stone-50/40 focus:bg-white focus:border-primary focus:ring-2 focus:ring-red-200/60 transition-all resize-none @error('message') border-red-500 @enderror"
-                            placeholder="Tell us about your vision or request...">{{ old('message') }}</textarea>
+                            placeholder="Tell us about your request...">{{ old('message') }}</textarea>
                         <div id="messageError" class="text-red-500 text-xs mt-1 hidden"></div>
                         @error('message') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
                     </div>
@@ -173,7 +168,7 @@
                         <label class="flex items-start gap-3 cursor-pointer group">
                             <input type="checkbox" name="privacy_policy" id="luxuryPrivacy" value="1" {{ old('privacy_policy') ? 'checked' : '' }}
                                 class="mt-0.5 w-4.5 h-4.5 rounded border-stone-300 text-primary focus:ring-red-400">
-                            <span class="text-xs text-stone-600 leading-relaxed">I agree to the <a href="#" class="text-primary font-medium hover:underline">Privacy Policy</a> and consent to being contacted by Aiman Royale.</span>
+                            <span class="text-xs text-stone-600 leading-relaxed">I agree to the <a href="#" class="text-primary font-medium hover:underline">Privacy Policy</a> and accept that Aiman Royale may contact me.</span>
                         </label>
                         <div id="privacyError" class="text-red-500 text-xs mt-1 hidden"></div>
                         @error('privacy_policy') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
@@ -189,7 +184,7 @@
                     
                     <div class="flex items-center justify-center gap-2 text-center text-stone-400 text-[11px] mt-6">
                         <i class="fas fa-lock text-[10px]"></i>
-                        <span>Your information is always confidential</span>
+                        <span>Your information is always kept private</span>
                     </div>
                 </form>
             </div>
@@ -198,21 +193,21 @@
         <!-- SECTION 3: FAQ Luxury Accordion Style with red/pink theme -->
         <div class="max-w-5xl mx-auto mt-8">
             <div class="text-center mb-12">
-                <span class="inline-block px-4 py-1.5 bg-red-50 text-primary text-xs font-semibold tracking-wider rounded-full uppercase border border-primary/20">Insider Guide</span>
-                <h2 class="font-serif-alt text-3xl md:text-4xl font-bold text-stone-800 mt-5 mb-3">Questions, Answered with Elegance</h2>
-                <p class="text-stone-500 max-w-2xl mx-auto">Everything you need to know about sizing, shipping, and our luxury promise.</p>
+                <span class="inline-block px-4 py-1.5 bg-red-50 text-primary text-xs font-semibold tracking-wider rounded-full uppercase border border-primary/20">Help Guide</span>
+                <h2 class="font-serif-alt text-3xl md:text-4xl font-bold text-stone-800 mt-5 mb-3">Frequently Asked Questions</h2>
+                <p class="text-stone-500 max-w-2xl mx-auto">Everything you need to know about sizing, shipping, and our services.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
                 <!-- FAQ Items -->
                 @php
                     $faqs = [
-                        ['icon' => 'fa-shipping-fast', 'title' => 'Order tracking & delivery', 'desc' => 'After dispatch, you\'ll receive a tracking link via SMS & email. Log in to your account for real-time updates on your couture.'],
-                        ['icon' => 'fa-exchange-alt', 'title' => '14-day atelier return', 'desc' => 'Unused items with original tags qualify for easy returns within 14 days. Custom orders are final — crafted just for you.'],
-                        ['icon' => 'fa-rupee-sign', 'title' => 'Cash on Delivery?', 'desc' => 'Yes, COD is available for orders under ₹12,000 (₹50 convenience fee). For premium orders above, prepaid is recommended.'],
-                        ['icon' => 'fa-gem', 'title' => 'Authenticity guarantee', 'desc' => 'Every piece is crafted in our in-house atelier. 100% authentic materials and hand-finished quality assurance.'],
-                        ['icon' => 'fa-tshirt', 'title' => 'Size consultation', 'desc' => 'Our stylists provide free virtual fit consultations. Reach out via WhatsApp for personalized sizing charts.'],
-                        ['icon' => 'fa-globe-asia', 'title' => 'International shipping', 'desc' => 'We ship worldwide. Duties and taxes calculated at checkout. Delivery within 7-12 business days globally.']
+                        ['icon' => 'fa-shipping-fast', 'title' => 'Order tracking & delivery', 'desc' => 'After we ship your order, you\'ll get a tracking link via SMS and email. You can also log in to your account to see real-time updates.'],
+                        ['icon' => 'fa-exchange-alt', 'title' => '14-day return policy', 'desc' => 'You can return unused items with original tags within 14 days. Custom orders cannot be returned because they are made just for you.'],
+                        ['icon' => 'fa-rupee-sign', 'title' => 'Cash on Delivery?', 'desc' => 'Yes, we offer COD for orders under ₹12,000 (₹50 extra fee). For larger orders, we recommend prepaid payment.'],
+                        ['icon' => 'fa-gem', 'title' => 'Quality guarantee', 'desc' => 'All our products are made in our own workshop. We guarantee 100% authentic materials and hand-finished quality.'],
+                        ['icon' => 'fa-tshirt', 'title' => 'Size help', 'desc' => 'Our stylists offer free virtual size consultations. Contact us on WhatsApp for personalized size charts.'],
+                        ['icon' => 'fa-globe-asia', 'title' => 'International shipping', 'desc' => 'We ship worldwide. Customs duties are calculated at checkout. Delivery takes 7-12 business days.']
                     ];
                 @endphp
 
@@ -235,8 +230,8 @@
             <div class="text-center mt-12 pt-6">
                 <p class="text-stone-600 inline-flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-3 rounded-full shadow-sm border border-red-100">
                     <i class="fas fa-headset text-primary"></i>
-                    <span>Still have a sartorial question?</span>
-                    <a href="#" class="font-semibold text-primary hover:underline transition-all">Chat with our concierge →</a>
+                    <span>Still have questions?</span>
+                    <a href="#" class="font-semibold text-primary hover:underline transition-all">Chat with us →</a>
                 </p>
             </div>
         </div>
@@ -346,7 +341,7 @@ function validateAndSubmitLuxuryContact() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showLuxuryFormStatus('success', data.message || 'Thank you! Your message has been received. Our atelier will reply within 12 hours.');
+                showLuxuryFormStatus('success', data.message || 'Thank you! Your message has been received. Our team will reply within 12 hours.');
                 form.reset();
                 clearLuxuryErrors();
             } else {

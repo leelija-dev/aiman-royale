@@ -222,20 +222,7 @@
                     </button>
                 </form>
 
-                <!-- Security Notice -->
-                <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-shield-alt text-blue-500"></i>
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-blue-800">Secure Login</h3>
-                            <div class="mt-1 text-sm text-blue-700">
-                                <p>Your information is protected with 256-bit SSL encryption.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              
                 
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">

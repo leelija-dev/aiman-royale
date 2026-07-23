@@ -2036,7 +2036,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="top-categories" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="top-categories" class="accordion-content lg:mt-8 space-y-4">
           
           
          
@@ -2074,7 +2074,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="Occaisions" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="Occaisions" class="accordion-content lg:mt-8 space-y-4">
          
           <a href="https://aimanroyale.com/salwar-kameez/casual" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
@@ -2108,7 +2108,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="explore" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="explore" class="accordion-content lg:mt-8 space-y-4">
            <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">About Us</span>
@@ -2147,7 +2147,7 @@ art from fake trails.
             </svg>
           </div>
         </div>
-        <div id="account" class="accordion-content mt-6 lg:mt-8 space-y-4">
+        <div id="account" class="accordion-content lg:mt-8 space-y-4">
           <a href="{{ config('app.url') }}/login" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#A10000] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Login / Register</span>
@@ -2202,7 +2202,7 @@ art from fake trails.
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <a href="tel:+917003184741" class="text-sm text-gray-600 mt-1">+91 7003184741</a>
+              <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="text-sm text-gray-600 mt-1">+{{env('WH_WHATSAPP_NUMBER')}}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -2415,7 +2415,7 @@ art from fake trails.
     <div class="flex flex-col md:flex-row justify-center items-center gap-6">
       <div class="text-center ">
         <p class="text-gray-600 text-sm">
-          &copy; {{now()->format('Y')}} Aiman Fashion. All rights reserved.
+          &copy; {{now()->format('Y')}} Aiman Royale. All rights reserved.
         </p>
         <p class="text-gray-500 text-xs mt-2">
           Crafted with ❤️ in India
@@ -2428,7 +2428,7 @@ art from fake trails.
 </footer>
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
-<a href="https://wa.me/919999999999" target="_blank"
+<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
   class="fixed {{ $isProductPage ? 'bottom-[12.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
@@ -2503,7 +2503,7 @@ art from fake trails.
     </a>
 
     <!-- Book Appointment Button -->
-    <a href="{{ config('app.url') }}/appointment" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ route('page.appointment') }}#appoint-book-section" class="nav-item flex flex-col items-center justify-center w-[74px] py-2 rounded-xl hover:bg-emerald-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <i class="fas fa-calendar-check text-xl text-gray-600 mb-1 group-hover:text-emerald-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
       <span class="text-[10px] font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors text-center leading-tight px-0.5 relative z-10">Book Appointment</span>
@@ -2534,6 +2534,7 @@ art from fake trails.
         // Collapse all on mobile initially
         content.style.maxHeight = '0';
         content.style.opacity = '0';
+        content.style.marginTop = '0';
         content.style.overflow = 'hidden';
       } else {
         // Expand all on desktop
@@ -2564,6 +2565,8 @@ art from fake trails.
 
             otherHeader.classList.remove('active');
             otherContent.style.maxHeight = '0';
+            otherContent.style.marginTop = '0';
+
             otherContent.style.opacity = '0';
             otherIcon.classList.remove('rotate-180');
           }
@@ -2574,11 +2577,13 @@ art from fake trails.
           this.classList.add('active');
           content.style.maxHeight = content.scrollHeight + 'px';
           content.style.opacity = '1';
+          content.style.marginTop = '8px';
           if (icon) icon.classList.add('rotate-180');
         } else {
           this.classList.remove('active');
           content.style.maxHeight = '0';
           content.style.opacity = '0';
+          content.style.marginTop = '0';
           if (icon) icon.classList.remove('rotate-180');
         }
       });
@@ -2601,11 +2606,13 @@ art from fake trails.
             header.classList.remove('active');
             content.style.maxHeight = '0';
             content.style.opacity = '0';
+            content.style.marginTop = '0';
             if (icon) icon.classList.remove('rotate-180');
           } else {
             // On desktop, expand all
             content.style.maxHeight = content.scrollHeight + 'px';
             content.style.opacity = '1';
+            content.style.marginTop = '8px';
             if (icon) icon.classList.remove('rotate-180');
           }
         });

@@ -2108,7 +2108,7 @@
         @endif
 
         <!-- Editor's Pick Section -->
-        <section class="px-4 lgg:py-12 py-6">
+        {{-- <section class="px-4 lgg:py-12 py-6">
             <div class="container mx-auto">
                 <div class="w-full text-center mb-6">
                     <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Editor's Pick</h2>
@@ -2223,7 +2223,8 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
+        @include('components.web.editor-banner')
     @else
         <div class="container mx-auto">
             <div class="w-full text-center mb-6 mt-5">

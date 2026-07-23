@@ -71,7 +71,7 @@
 
                             <div class="col-md-6">
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="position" class="form-label">Position <span
                                             class="text-danger">*</span></label>
                                     <select class="form-control" id="position" name="position">
@@ -92,12 +92,12 @@
                                     @error('position')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
-                                </div>
-                                    
+                                </div> --}}
+
                                 <!--  Image -->
                                 <div class="mb-3">
                                     <label for="image" class="form-label">
-                                        Image <span class="text-danger">*</span>
+                                         Desktop Banner Image (Aspect Ratio: 16:6) <span class="text-danger">*</span>
                                     </label>
 
                                     <input type="file" class="form-control" id="image" name="image"
@@ -107,12 +107,38 @@
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
 
-                                    <small class="text-muted">Upload an image for hero section.</small>
+                                    <small class="text-muted">Upload an image for the desktop hero section. Recommended aspect ratio: <strong>16:6</strong>.</small>
 
                                     <div class="mt-3">
                                         <img id="imagePreview" src="{{ $hero->image ?? '' }}" alt="Hero Image"
-                                            style="max-width:250px; max-height:150px; border:1px solid #ddd; padding:5px; {{ empty($hero->image) ? 'display:none;' : '' }}">
+                                            style="width:200px; max-height:100px; border:1px solid #ddd; padding:5px; {{ empty($hero->image) ? 'display:none;' : '' }}">
                                     </div>
+                                </div>
+                                <!-- image for mobile screen -->
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">
+                                        Mobile Banner Image (Aspect Ratio 2:3 ) <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="file" class="form-control" id="mobile_screen_image"
+                                        name="mobile_screen_image" accept="image/*" onchange="previewMobileImage(event)">
+
+                                        @error('mobile_screen_image')
+                                            <div class="text-danger small">{{ $message }}</div>
+                                        @enderror
+
+                                        <small class="text-muted">
+                                            Upload an image for the mobile hero section. Recommended aspect ratio:
+                                            <strong>2:3</strong>.
+                                        </small>
+                                        <!-- Image Preview -->
+                                        <div class="mt-2">
+                                           <img id="mobileImagePreview"
+     src="{{ $hero->mobile_screen_image ?? '' }}"
+     alt="Image Preview"
+     class="img-thumbnail"
+     style="width:80px; height:120px; object-fit:cover; {{ empty($hero->mobile_screen_image) ? 'display:none;' : '' }}">
+                                        </div>
                                 </div>
                                 <!-- Status -->
                                 <div class="mb-3">
@@ -151,7 +177,7 @@
             </div>
         </div>
     </div>
-    <script>
+    {{-- <script>
         function previewImage(event) {
             const file = event.target.files[0];
             const preview = document.getElementById('imagePreview');
@@ -161,5 +187,29 @@
                 preview.style.display = 'block';
             }
         }
-    </script>
+    </script> --}}
+    <script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    }
+
+    function previewMobileImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('mobileImagePreview');
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
+</script>
 @endsection
