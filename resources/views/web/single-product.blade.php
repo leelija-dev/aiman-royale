@@ -1868,171 +1868,228 @@
         </section>
 
         <!-- Related Products Section -->
-        <section class="px-4 lgg:py-12 py-6">
-            <div class="container mx-auto">
-                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-                    <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Related Products</h2>
-                </div>
+       <section class="px-4 lgg:py-12 py-6 bg-gray-50">
+    <div class="container mx-auto">
+        <!-- Related Products Section -->
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
+            <div>
+                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                    Related Products
+                </h2>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
+            </div>
+            <a href="{{ route('page.multi-product') }}"
+                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                View All
+                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+            </a>
+        </div>
 
-                <div class="main-owl owl-carousel owl-theme">
-                    @if (isset($relatedProducts))
-                        @forelse($relatedProducts as $relatedProduct)
-                            @php
-                                $variant = $relatedProduct->variants->first();
-                                $productImage = $relatedProduct->images->first();
-                                $imagePath = $productImage
-                                    ? ltrim($productImage->image, '/')
-                                    : 'assets/images/placeholder.jpg';
-                            @endphp
-                            <div class="item flex items-center justify-center">
-                                <div
-                                    class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div class="relative rounded-xl overflow-hidden">
-                                        <img src="{{ $relatedProduct->featured_image }}"
-                                            alt="{{ $relatedProduct->name }}"
-                                            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
-                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                            @if ($relatedProduct->is_trending ?? false)
-                                                <span
-                                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
-                                            @endif
-                                            @if ($variant && $variant->discount)
-                                                <span
-                                                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                                    @if ($variant->discount == 0)
-                                                        Trending
-                                                    @else
-                                                        OFF {{ $variant->discount }}%
-                                                    @endif
-                                                </span>
-                                            @endif
-                                        </div>
-                                        {{--
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
-                                data-product-id="{{ $variant->product_id }}">
-                        <i class="far fa-heart"></i>
-                        </button>
-                        --}}
-                                    </div>
-                                    <a href="{{ route('page.single-product', $relatedProduct->slug) }}">
-                                        <div class="p-4 space-y-1">
-                                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">
-                                                {{ $relatedProduct->name }}</h3>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <span>{{ $relatedProduct->brand ?? '' }}</span>
-                                                <span class="flex items-center gap-1 text-gray-700">
-                                                    <span
-                                                        class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span class="text-lg font-semibold text-gray-900">Rs.
-                                                    {{ $variant->discount_price ?? $variant->price }}</span>
-                                                @if ($variant->discount_price)
-                                                    <span class="text-sm text-gray-400 line-through">Rs.
-                                                        {{ $variant->price }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </a>
+        <div class="main-owl owl-carousel owl-theme">
+            @if (isset($relatedProducts))
+                @forelse($relatedProducts as $relatedProduct)
+                    @php
+                        $variant = $relatedProduct->variants->first();
+                        $productImage = $relatedProduct->images->first();
+                        $imagePath = $productImage
+                            ? ltrim($productImage->image, '/')
+                            : 'assets/images/placeholder.jpg';
+                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
+                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                            $parts = explode('upload/', $imageUrl);
+                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        }
+                    @endphp
+                    <div class="item flex justify-center items-center">
+                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
+                            
+                            <!-- Image Wrapper -->
+                            <div class="relative overflow-hidden bg-gray-100">
+                                <img src="{{ $imageUrl }}"
+                                    alt="{{ $relatedProduct->name }}"
+                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="600"
+                                    height="900" />
+
+                                <!-- Quick View Overlay -->
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                        Quick View
+                                    </button>
+                                </div>
+
+                                <!-- Badges -->
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    @if ($variant && $variant->discount && $variant->discount > 0)
+                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                            {{ $variant->discount }}% OFF
+                                        </span>
+                                    @elseif($relatedProduct->is_trending ?? false)
+                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                            Trending
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
-                        @empty
-                            <div class="item flex items-center justify-center">
-                                <p class="text-gray-500">No related products found.</p>
-                            </div>
-                        @endforelse
-                    @else
-                        <div class="item flex items-center justify-center">
-                            <p class="text-gray-500">Related products not available.</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            <div class="container mx-auto">
-                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-                    <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Most Wishlisted Products</h2>
-                </div>
 
-                <div class="main-owl owl-carousel owl-theme">
-                    @if (isset($mostWishlistedProducts))
-                        @forelse($mostWishlistedProducts as $relatedProduct)
-                            @php
-                                $variant = $relatedProduct->variants->first();
-                                $productImage = $relatedProduct->featured_image;
-                                $imagePath = $productImage
-                                    ? ltrim($productImage, '/')
-                                    : 'assets/images/placeholder.jpg';
-                                // Debug: Check if variant exists
-                                if (!$variant) {
-                                    continue; // Skip this product if no variant found
-                                }
-                            @endphp
-                            <div class="item flex items-center justify-center">
-                                <div
-                                    class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div class="relative rounded-xl overflow-hidden">
-                                        <img src="{{ $imagePath }}" alt="{{ $relatedProduct->name }}"
-                                            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
-                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                            @if ($relatedProduct->is_trending ?? false)
-                                                <span
-                                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
-                                            @endif
-                                            @if ($variant && $variant->discount)
-                                                <span
-                                                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                                    @if ($variant->discount == 0)
-                                                        Trending
-                                                    @else
-                                                        OFF {{ $variant->discount }}%
-                                                    @endif
-                                                </span>
-                                            @endif
-                                        </div>
-                                        {{--
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
-                                data-product-id="{{ $variant->product_id }}">
-                        <i class="far fa-heart"></i>
-                        </button>
-                        --}}
+                            <!-- Content -->
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-start justify-between">
+                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                        {{ $relatedProduct->name }}
+                                    </h3>
+                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                </div>
+
+                                <!-- Rating -->
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-0.5">
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                     </div>
-                                    <a href="{{ route('page.single-product', $relatedProduct->slug) }}">
-                                        <div class="p-4 space-y-1">
-                                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">
-                                                {{ $relatedProduct->name }}</h3>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <span>{{ $relatedProduct->brand ?? '' }}</span>
-                                                <span class="flex items-center gap-1 text-gray-700">
-                                                    <span
-                                                        class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span class="text-lg font-semibold text-gray-900">Rs.
-                                                    {{ $variant->discount_price ?? $variant->price }}</span>
-                                                @if ($variant->discount_price)
-                                                    <span class="text-sm text-gray-400 line-through">Rs.
-                                                        {{ $variant->price }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </a>
+                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex items-center gap-2 flex-wrap mt-1">
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                        {{ $variant->discount_price ?? $variant->price ?? $relatedProduct->price }}</span>
+                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                            {{ $variant->price }}</span>
+                                    @endif
                                 </div>
                             </div>
-                        @empty
-                            <div class="item flex items-center justify-center">
-                                <p class="text-gray-500">No related products found.</p>
-                            </div>
-                        @endforelse
-                    @else
-                        <div class="item flex items-center justify-center">
-                            <p class="text-gray-500">Related products not available.</p>
                         </div>
-                    @endif
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 font-sans">No related products found.</p>
+                    </div>
+                @endforelse
+            @else
+                <div class="text-center py-8">
+                    <p class="text-gray-500 font-sans">Related products not available.</p>
                 </div>
+            @endif
+        </div>
+
+        <!-- Most Wishlisted Products Section -->
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6 mt-12">
+            <div>
+                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                    Most Wishlisted Products
+                </h2>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
             </div>
-        </section>
+            <a href="{{ route('page.multi-product') }}"
+                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                View All
+                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+            </a>
+        </div>
+
+        <div class="main-owl owl-carousel owl-theme">
+            @if (isset($mostWishlistedProducts))
+                @forelse($mostWishlistedProducts as $relatedProduct)
+                    @php
+                        $variant = $relatedProduct->variants->first();
+                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
+                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                            $parts = explode('upload/', $imageUrl);
+                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        }
+                        if (!$variant) {
+                            continue;
+                        }
+                    @endphp
+                    <div class="item flex justify-center items-center">
+                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
+                            
+                            <!-- Image Wrapper -->
+                            <div class="relative overflow-hidden bg-gray-100">
+                                <img src="{{ $imageUrl }}"
+                                    alt="{{ $relatedProduct->name }}"
+                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="600"
+                                    height="900" />
+
+                                <!-- Quick View Overlay -->
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                        Quick View
+                                    </button>
+                                </div>
+
+                                <!-- Badges -->
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    @if ($variant && $variant->discount && $variant->discount > 0)
+                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                            {{ $variant->discount }}% OFF
+                                        </span>
+                                    @elseif($relatedProduct->is_trending ?? false)
+                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                            Trending
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-start justify-between">
+                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                        {{ $relatedProduct->name }}
+                                    </h3>
+                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                </div>
+
+                                <!-- Rating -->
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-0.5">
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    </div>
+                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex items-center gap-2 flex-wrap mt-1">
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                        {{ $variant->discount_price ?? $variant->price }}</span>
+                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                            {{ $variant->price }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 font-sans">No wishlisted products found.</p>
+                    </div>
+                @endforelse
+            @else
+                <div class="text-center py-8">
+                    <p class="text-gray-500 font-sans">Wishlisted products not available.</p>
+                </div>
+            @endif
+        </div>
+    </div>
+</section>
 
 
         <!-- Last Viewed Products Section -->
