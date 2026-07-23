@@ -1,13 +1,13 @@
 <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
-            <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
-                Our signature Standouts
-            </h2>
-            <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500">
-                Red Carpet Ready in Every Design We Create
-            </p>
-        </div>
+    <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900 heading-font tracking-wide">
+        Our Signature Standouts
+    </h2>
+    <p class="text-p-xs lgg:text-p-sm xl:text-p-md 2xl:text-p-lg text-gray-500 font-sans">
+        Red Carpet Ready in Every Design We Create
+    </p>
+</div>
         <div class="grid-container">
             @php
             $editorBanners = \App\Models\Banner::active()->where('type', 'editor')->ordered()->get();

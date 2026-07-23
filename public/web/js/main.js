@@ -383,7 +383,6 @@ $(document).ready(function () {
         margin: 20,
         nav: false,
         dots: false,
-        // ❌ Lazy loading removed
         ...carouselPresets.autoplay,
         autoplayTimeout: 5000,
         responsive: {
@@ -394,10 +393,8 @@ $(document).ready(function () {
           1024: { items: 2, margin: 25 },
           1280: { items: 3, margin: 25 },
           1500: { items: 4, margin: 25 }
-
         }
       },
-     
     },
     {
       selector: "#categories-carousel",
@@ -406,7 +403,6 @@ $(document).ready(function () {
         margin: 20,
         nav: false,
         dots: false,
-        // ❌ Lazy loading removed
         ...carouselPresets.autoplay,
         autoplayTimeout: 5000,
         responsive: {
@@ -417,7 +413,6 @@ $(document).ready(function () {
           1024: { items: 3, margin: 9 },
           1280: { items: 4, margin: 9 },
           1500: { items: 5, margin: 9 }
-
         }
       },
       customNav: {
@@ -431,7 +426,6 @@ $(document).ready(function () {
         loop: true,
         margin: 24,
         dots: false,
-        // ❌ Lazy loading removed
         ...carouselPresets.navigation,
         ...carouselPresets.autoplay,
         responsive: {
@@ -439,8 +433,8 @@ $(document).ready(function () {
           450: { items: 2, margin: 21 },
           768: { items: 3, margin: 21 },
           1024: { items: 4, margin: 21 },
-          1280: { items: 4 ,margin: 21 },
-          1500: { items: 5 ,margin: 21 }
+          1280: { items: 4, margin: 21 },
+          1500: { items: 5, margin: 21 }
         }
       }
     },
@@ -451,7 +445,6 @@ $(document).ready(function () {
         margin: 10,
         items: 1,
         dots: true,
-        // ❌ Lazy loading removed
         ...carouselPresets.navigation,
         ...carouselPresets.autoplay,
         responsive: {
@@ -464,17 +457,16 @@ $(document).ready(function () {
       selector: ".second-owl",
       options: {
         loop: true,
-        margin: 24,
+        margin: 10,
         dots: true,
-        // ❌ Lazy loading removed
         ...carouselPresets.autoplay,
         nav: true,
         navText: carouselPresets.navigation.navText,
         responsive: {
           0: { items: 1 },
           550: { items: 2 },
-          1000: { items: 2 },
-          1200: { items: 3 }
+          1280: { items: 2 },
+          1440: { items: 3 }
         }
       }
     },
@@ -485,7 +477,6 @@ $(document).ready(function () {
         margin: 20,
         nav: false,
         dots: true,
-        // ❌ Lazy loading removed
         ...carouselPresets.autoplay,
         responsive: {
           0: { items: 1, dots: true },
@@ -528,8 +519,47 @@ $(document).ready(function () {
     }
 
     try {
-      // Initialize the carousel
-      $carousel.owlCarousel(config.options);
+      // Force a reflow before initialization to ensure proper width calculation
+      // This is critical for responsive layouts
+      void $carousel[0].offsetHeight;
+      
+      // Get current window width and apply the correct responsive settings
+      const windowWidth = window.innerWidth;
+      const responsiveSettings = config.options.responsive;
+      
+      // Determine the correct items count based on current width
+      let currentItems = 1;
+      let currentMargin = config.options.margin || 10;
+      
+      if (responsiveSettings) {
+        const breakpoints = Object.keys(responsiveSettings)
+          .map(Number)
+          .sort((a, b) => a - b);
+        
+        for (let i = breakpoints.length - 1; i >= 0; i--) {
+          const breakpoint = breakpoints[i];
+          if (windowWidth >= breakpoint) {
+            const settings = responsiveSettings[breakpoint];
+            if (settings.items !== undefined) {
+              currentItems = settings.items;
+            }
+            if (settings.margin !== undefined) {
+              currentMargin = settings.margin;
+            }
+            break;
+          }
+        }
+      }
+
+      // Override options with calculated values for current width
+      const initOptions = {
+        ...config.options,
+        items: currentItems,
+        margin: currentMargin
+      };
+
+      // Initialize the carousel with correct width settings
+      $carousel.owlCarousel(initOptions);
       initializedCarousels.add(config.selector);
 
       // Setup custom navigation with event delegation
@@ -554,7 +584,7 @@ $(document).ready(function () {
         }
       });
 
-      console.log(`Initialized: ${config.selector}`);
+      console.log(`Initialized: ${config.selector} with ${currentItems} items at ${windowWidth}px`);
     } catch (error) {
       console.error(`Failed to initialize ${config.selector}:`, error);
     }
@@ -569,8 +599,37 @@ $(document).ready(function () {
     });
   }
 
-  // Initialize immediately visible carousels
-  lazyInitCarousels();
+  // NEW: Function to refresh carousels that are already initialized but need recalculation
+  function refreshCarousels() {
+    carouselConfigs.forEach(config => {
+      const $carousel = $(config.selector);
+      if ($carousel.length && $carousel.hasClass('owl-loaded')) {
+        // Trigger a refresh to recalculate widths
+        $carousel.trigger('refresh.owl.carousel');
+        console.log(`Refreshed: ${config.selector}`);
+      }
+    });
+  }
+
+  // Initialize immediately visible carousels with a slight delay to ensure layout is complete
+  // Use multiple attempts to ensure proper width detection
+  setTimeout(function() {
+    lazyInitCarousels();
+  }, 100);
+
+  // Secondary initialization after fonts and other resources load
+  setTimeout(function() {
+    lazyInitCarousels();
+  }, 500);
+
+  // Third attempt after full page load
+  $(window).on('load', function() {
+    // Initialize any remaining carousels
+    lazyInitCarousels();
+    
+    // Refresh all initialized carousels to ensure proper widths after all resources load
+    setTimeout(refreshCarousels, 300);
+  });
 
   // Lazy initialize on scroll with debounce
   let scrollTimeout;
@@ -579,11 +638,17 @@ $(document).ready(function () {
     scrollTimeout = setTimeout(lazyInitCarousels, 100);
   });
 
-  // Also initialize on resize (for responsive changes)
+  // Enhanced resize handler with refresh
   let resizeTimeout;
   $(window).on('resize', function() {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(lazyInitCarousels, 200);
+    resizeTimeout = setTimeout(function() {
+      // First initialize any remaining carousels
+      lazyInitCarousels();
+      
+      // Then refresh all existing carousels to adjust to new width
+      setTimeout(refreshCarousels, 100);
+    }, 200);
   });
 
   // Cleanup on page unload
