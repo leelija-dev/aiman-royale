@@ -129,6 +129,7 @@
                                     </a>
                                     <form id="delete-form-{{ $banner->id }}"
                                         action="{{ route('hero-section.delete', $banner->id) }}" 
+                                        method="POST"
                                         style="display:none;">
                                         @csrf
                                         @method('DELETE')
