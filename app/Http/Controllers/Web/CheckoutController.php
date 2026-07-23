@@ -313,9 +313,9 @@ class CheckoutController extends Controller
         //                 'order_id' => $order_id
         //             ]);
         //         }
-        Log::info([
-    'grand_total' => $total,
-]);
+//         Log::info([
+//     'grand_total' => $total,
+// ]);
         // Store order details in session
         session([
             'cashfree_order_id' => $order_id,
@@ -808,6 +808,7 @@ class CheckoutController extends Controller
 
     public function paymentSuccess(Request $request)
     {
+        $cashfreeService = new CashfreeService();
         Log::info('Payment success request received:', $request->all());
 
         $orderId = session('cashfree_order_id');
@@ -822,7 +823,29 @@ class CheckoutController extends Controller
         if (!$order) {
             return redirect()->route('checkout.index')->with('error', 'Order not found');
         }
+        //cashfree cancel
+        $cashfreeOrderRef = $order->cashfree_order_ref;
+
+        $response = $cashfreeService->getOrderDetails($cashfreeOrderRef);
+
+        if (!$response) {
+            return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
+                ->with('error', 'Unable to verify payment.');
+        }
+
+        if ($response['order_status'] != 'PAID') {
+
+            DB::table('orders')
+                ->where('id', $orderId)
+                ->update([
+                    'payment_status' => 'failed'
+                ]);
+
+            return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
+                ->with('error', 'Payment Cancelled');
+        } //end cashfree cancel
         
+
         // ✅ Get the actual transaction ID from session
         $transactionId = session('cashfree_transaction_id');
 
