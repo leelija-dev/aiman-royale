@@ -1991,7 +1991,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     </div>
 </section>
 
-<section class="px-4 lgg:py-8 py-6">
+{{-- <section class="px-4 lgg:py-8 py-6">
     <div class="container mx-auto">
         <div class="w-full text-center mb-6">
             <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
@@ -2143,7 +2143,9 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             </div>
         </div>
     </div>
-</section>
+</section> --}}
+@include('components.web.editor-banner')
+
 
 <!-- 🔥 OPTIMIZED: Bookmarked Styles Section -->
 <section class="px-4 lgg:py-8 py-6">
