@@ -52,7 +52,7 @@ class ProductVariantController extends Controller
             $query->where('size', $request->input('size'));
         }
 
-        $data = $query->orderBy('product_id')->orderBy('color')->orderBy('size')->paginate(2);
+        $data = $query->orderBy('product_id')->orderBy('color')->orderBy('size')->paginate(15);
 
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
