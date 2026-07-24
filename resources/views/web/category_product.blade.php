@@ -843,7 +843,7 @@
     <div class=" w-full">
         <!-- Category Header -->
         <div
-            class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
+            class=" flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4 mb-[10px]">
             <!-- Left: Title & Description -->
             <div class="flex-1 min-w-[200px]">
                 <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
