@@ -130,7 +130,7 @@
                                 <select name="color" class="form-control" onchange="this.form.submit()">
                                     <option value="">All Colors</option>
                                     @foreach ($colors as $color)
-                                        <option value="{{ $color->code }}"
+                                        <option value="{{ $color->name }}"
                                             {{ request('color') == $color->code ? 'selected' : '' }}>
                                             {{ $color }}
                                         </option>
@@ -547,7 +547,8 @@
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
                     </div> --}}
                         <div>
-                            {{ $data->links('pagination::bootstrap-5') }}
+                            {{-- {{ $data->links('pagination::bootstrap-5') }} --}}
+                            {{ $data->withQueryString()->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
