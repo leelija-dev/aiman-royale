@@ -217,7 +217,13 @@
                             <div class="absolute top-4 left-4">
                                 <span class="sale-badge text-white text-xs px-3 py-1 rounded-full font-medium">
                                     @if($variant?->discount > 0)
-                                    {{ $variant->discount }}% OFF
+                                    {{-- {{ $variant->discount }} --}}
+                                    {{ number_format(
+                                        ($variant->discount - floor($variant->discount)) >= 0.5
+                                            ? ceil($variant->discount)
+                                            : $variant->discount,
+                                        2
+                                    ) }}% OFF
                                     @else
                                     Trending
                                     @endif
