@@ -1320,7 +1320,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             </span>
                             @else
                             <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                {{ $product->discount }}% OFF
+                                {{ round($product->discount,2) }}% OFF
                             </span>
                             @endif
                         </div>
@@ -2481,7 +2481,12 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                             </span>
                             @else
                             <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                {{ optional($product->variants->first())->discount }}% OFF
+                                @php
+                                    $discount = optional($product->variants->first())->discount ?? 0;
+                                    $value = ($discount - floor($discount) >= 0.5) ? ceil($discount) : $discount;
+                                @endphp
+
+                                {{ round($value, 2) }}% OFF
                             </span>
                             @endif
                         </div>
