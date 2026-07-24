@@ -897,30 +897,61 @@
 
                         <!-- RIGHT CONTENT -->
                         <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%] sm:min-w-[270px]">
-                            <div class="relative pe-[33px]">
-                                <!-- Title and info section -->
-                                <div>
-                                    <!-- Title -->
-                                    <h3 class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg ">
-                                        {{ $product->name }}
-                                    </h3>
-                                    <p class="text-sm text-gray-500 mt-1 ">{{ $product->brand ?? 'Brand Name' }}</p>
-                                    <p class="text-sm text-gray-500">Manufactured / Packed by : Aiman Royale</p>
-                                </div>
+                            <div class="relative pr-12">
 
-                                <!-- Share Icon -->
-                                <button type="button" onclick="openShareModal()"
-                                    class="absolute top-0 right-0 p-2 text-gray-500 hover:text-blue-600 transition-colors duration-200"
-                                    aria-label="Share product">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20"
-                                        viewBox="0 0 22 20" fill="none">
-                                        <path
-                                            d="M12.6053 12.3608C6.28947 11.9245 2.90351 16.5426 1.5 18.9062C2.34211 8.87003 8.74561 5.9063 12.6053 5.17896V1.9945C12.6053 1.56713 13.1067 1.33675 13.431 1.61513L20.6463 7.80961C21.1006 8.19968 21.1117 8.89973 20.671 9.30514L13.4446 15.9523C13.1241 16.2471 12.6053 16.0205 12.6053 15.5851V12.3608Z"
-                                            stroke="#3F3D4D" stroke-width="1.2" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </button>
-                            </div>
+    <!-- Product Information -->
+    <div class="space-y-2">
+        <!-- Product Name -->
+        <h1
+            class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg font-semibold leading-tight text-gray-900">
+            {{ $product->name }}
+        </h1>
+
+        <!-- Brand -->
+        <div class="flex items-center gap-2 text-sm">
+            <span class="font-medium text-gray-900">
+                {{ $product->brand ?? 'Aiman Royale' }}
+            </span>
+
+            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+
+            <span class="text-gray-500">
+                Premium Collection
+            </span>
+        </div>
+
+        <!-- Manufacturer -->
+        <p class="text-sm text-gray-500">
+            Manufactured & Packed by
+            <span class="font-medium text-gray-700">Aiman Royale</span>
+        </p>
+    </div>
+
+    <!-- Share Button -->
+    <button
+        type="button"
+        onclick="openShareModal()"
+        aria-label="Share Product"
+        class="group absolute top-0 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-primary hover:bg-primary hover:shadow-lg">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 22 20"
+            fill="none"
+            class="transition-colors duration-300">
+
+            <path
+                d="M12.6053 12.3608C6.28947 11.9245 2.90351 16.5426 1.5 18.9062C2.34211 8.87003 8.74561 5.9063 12.6053 5.17896V1.9945C12.6053 1.56713 13.1067 1.33675 13.431 1.61513L20.6463 7.80961C21.1006 8.19968 21.1117 8.89973 20.671 9.30514L13.4446 15.9523C13.1241 16.2471 12.6053 16.0205 12.6053 15.5851V12.3608Z"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-gray-600 group-hover:text-white" />
+        </svg>
+    </button>
+
+</div>
 
                             <div class="flex items-center gap-2">
                                 <div class="flex text-yellow-400 text-sm">
@@ -1207,904 +1238,988 @@
         </div>
 
         <!-- Product Details and Specifications Section -->
-        <section class="px-4 lgg:py-12 py-6">
-            <div class="container mx-auto">
-                <!-- DESKTOP TABS -->
-                <div class="hidden md:block">
-                    <div class="flex gap-10 border-b text-p-lg xl:text-p-xl 2xl:text-p-2xl">
-                        <button class="tab-btn border-b-2 border-black pb-2 text-black" data-tab="details">Product
-                            Details</button>
-                        <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500"
-                            data-tab="specification">Specification</button>
-                        <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500"
-                            data-tab="reviews">Ratings & Reviews</button>
-                    </div>
-
-                    <!-- Tab Content Container -->
-                    <div class="mt-6 relative min-h-[300px]">
-                        <!-- Product Details Tab -->
-                        <div class="tab-content active" id="details">
-                            <h3
-                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2">
-                                Product Details</h3>
-                            <p
-                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                {{ $product->description ?? 'No description available.' }}
-                            </p>
-                            @if ($product->fabric)
-                                <h3
-                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
-                                    Material & Care</h3>
-                                <p
-                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                    {{ $product->material_care }}
-                                </p>
-                            @endif
-                            @if ($product->fit)
-                                <h3
-                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
-                                    Size & Fit</h3>
-                                <p
-                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                    {{ $product->fit }}
-                                </p>
-                            @endif
-
-                            <!-- Product Parts with Fabric and Stitching Type -->
-                            {{--
-                    @if ($product->parts && $product->parts->count() > 0)
-                    <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
-                    <div class="space-y-3">
-                        @foreach ($product->parts as $part)
-                        <div class="border-l-4 border-gray-300 pl-4 py-2">
-                            <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900">
-                                {{ $part->part_name }}
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">
+      <section class="px-4 lgg:py-12 py-6">
+   <div class="container mx-auto">
+      <!-- DESKTOP TABS -->
+      <div class="hidden md:block">
+         <div class="flex gap-10 border-b text-p-lg xl:text-p-xl 2xl:text-p-2xl">
+            <button class="tab-btn border-b-2 border-black pb-2 text-black font-sans" data-tab="details">Product
+            Details</button>
+            <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
+               data-tab="specification">Specification</button>
+            <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
+               data-tab="reviews">Ratings & Reviews</button>
+         </div>
+         <!-- Tab Content Container -->
+         <div class="mt-6 relative min-h-[300px]">
+            <!-- Product Details Tab -->
+            <div class="tab-content active" id="details">
+               <h3
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2 font-sans">
+                  Product Details
+               </h3>
+               <p
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                  {{ $product->description ?? 'No description available.' }}
+               </p>
+               @if ($product->fabric)
+               <h3
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                  Material & Care
+               </h3>
+               <p
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                  {{ $product->material_care }}
+               </p>
+               @endif
+               @if ($product->fit)
+               <h3
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                  Size & Fit
+               </h3>
+               <p
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                  {{ $product->fit }}
+               </p>
+               @endif
+               <!-- Product Parts with Fabric and Stitching Type -->
+               {{--
+               @if ($product->parts && $product->parts->count() > 0)
+               <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2 font-sans">Product Parts</h3>
+               <div class="space-y-3">
+                  @foreach ($product->parts as $part)
+                  <div class="border-l-4 border-gray-300 pl-4 py-2">
+                     <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900 font-sans">
+                        {{ $part->part_name }}
+                     </h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-sans">
                         @if ($part->fabric)
                         <div class="flex flex-col">
-                            <span class="text-gray-500 text-xs">Fabric</span>
-                            <span class="text-gray-900">{{ $part->fabric }}</span>
+                           <span class="text-gray-500 text-xs font-sans">Fabric</span>
+                           <span class="text-gray-900 font-sans">{{ $part->fabric }}</span>
                         </div>
                         @endif
                         @if ($part->work_type)
                         <div class="flex flex-col">
-                            <span class="text-gray-500 text-xs">Work Type</span>
-                            <span class="text-gray-900">{{ $part->work_type }}</span>
+                           <span class="text-gray-500 text-xs font-sans">Work Type</span>
+                           <span class="text-gray-900 font-sans">{{ $part->work_type }}</span>
                         </div>
                         @endif
-                    </div>
-                </div>
-                @endforeach
+                     </div>
+                  </div>
+                  @endforeach
+               </div>
+               @endif
+               --}}
+               <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                  <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     @if ($product->type)
+                     <div class="flex flex-col">
+                        <span class="text-sm text-gray-500 font-sans">Type</span>
+                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                     </div>
+                     @endif
+                     @if ($product->color)
+                     <div class="flex flex-col">
+                        <span class="text-sm text-gray-500 font-sans">Color</span>
+                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                     </div>
+                     @endif
+                     @if ($product->fit)
+                     <div class="flex flex-col">
+                        <span class="text-sm text-gray-500 font-sans">Fit</span>
+                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                     </div>
+                     @endif
+                     @if ($product->fabric && !$product->parts)
+                     <div class="flex flex-col">
+                        <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                        <span
+                           class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                     </div>
+                     @endif
+                     @if ($product->sales_package)
+                     <div class="flex flex-col">
+                        <span class="text-sm text-gray-500 font-sans">Package Contains</span>
+                        <span
+                           class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                     </div>
+                     @endif
+                  </div>
+               </div>
             </div>
-            @endif
-
-            --}}
-                            <div class="mt-4 p-3 border rounded-lg bg-gray-50">
-                                <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    @if ($product->type)
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500">Type</span>
-                                            <span class="text-base font-medium text-gray-900">{{ $product->type }}</span>
-                                        </div>
-                                    @endif
-                                    @if ($product->color)
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500">Color</span>
-                                            <span class="text-base font-medium text-gray-900">{{ $product->color }}</span>
-                                        </div>
-                                    @endif
-                                    @if ($product->fit)
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500">Fit</span>
-                                            <span class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
-                                        </div>
-                                    @endif
-                                    @if ($product->fabric && !$product->parts)
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500">Fabric</span>
-                                            <span
-                                                class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
-                                        </div>
-                                    @endif
-                                    @if ($product->sales_package)
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500">Package Contains</span>
-                                            <span
-                                                class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
+            <!-- Specification Tab -->
+            <div class="tab-content hidden" id="specification">
+               <h3
+                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-4 font-sans">
+                  Product Specifications
+               </h3>
+               <div class="css-175oi2r"
+                  style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
+                  <!-- Stitching Type -->
+                  @if ($product->stitching_type)
+                  <div class="mb-4 p-3 border rounded-lg bg-gray-50">
+                     <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Stitching Information
+                     </h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Stitching Type</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ ucfirst($product->stitching_type) }}</span>
                         </div>
-
-                        <!-- Specification Tab -->
-                        <div class="tab-content hidden" id="specification">
-                            <h3
-                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-4">
-                                Product Specifications</h3>
-
-                            <div class="css-175oi2r"
-                                style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
-                                <!-- Stitching Type -->
-                                @if ($product->stitching_type)
-                                    <div class="mb-4 p-3 border rounded-lg bg-gray-50">
-                                        <h4 class="font-semibold text-lg mb-2" style="color: #333;">Stitching Information
-                                        </h4>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Stitching Type</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ ucfirst($product->stitching_type) }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <!-- Display Product Parts -->
-                                @if ($product->parts && $product->parts->count() > 0)
-                                    @foreach ($product->parts as $part)
-                                        <div class="mb-6 p-4 border rounded-lg bg-gray-50">
-                                            <h4 class="font-semibold text-lg mb-3"
-                                                style="color: #333; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
-                                                {{ $part->part_name }}
-                                            </h4>
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                @if ($part->fabric)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Fabric</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->fabric }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->work_type)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Work Type</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->work_type }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->color)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Color</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->color }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->pattern)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Pattern</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->pattern }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->embroidery)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Embroidery</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->embroidery }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->lining)
-                                                    <div class="flex flex-col">
-                                                        <span class="text-sm text-gray-500">Lining</span>
-                                                        <span
-                                                            class="text-base font-medium text-gray-900">{{ $part->lining }}</span>
-                                                    </div>
-                                                @endif
-                                                @if ($part->description)
-                                                    <div class="flex flex-col md:col-span-2">
-                                                        <span class="text-sm text-gray-500">Details</span>
-                                                        <span
-                                                            class="text-base text-gray-900">{{ $part->description }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-
-                                <!-- Common Specifications -->
-                                {{--
-                        <div class="mt-4 p-3 border rounded-lg bg-gray-50">
-                            <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                @if ($product->type)
-                                <div class="flex flex-col">
-                                    <span class="text-sm text-gray-500">Type</span>
-                                    <span class="text-base font-medium text-gray-900">{{ $product->type }}</span>
-            </div>
-            @endif
-            @if ($product->color)
-            <div class="flex flex-col">
-                <span class="text-sm text-gray-500">Color</span>
-                <span class="text-base font-medium text-gray-900">{{ $product->color }}</span>
-            </div>
-            @endif
-            @if ($product->fit)
-            <div class="flex flex-col">
-                <span class="text-sm text-gray-500">Fit</span>
-                <span class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
-            </div>
-            @endif
-            @if ($product->fabric && !$product->parts)
-            <div class="flex flex-col">
-                <span class="text-sm text-gray-500">Fabric</span>
-                <span class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
-            </div>
-            @endif
-            @if ($product->sales_package)
-            <div class="flex flex-col">
-                <span class="text-sm text-gray-500">Package Contains</span>
-                <span class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
-            </div>
-            @endif
-        </div>
-    </div>
-    --}}
-                            </div>
-                        </div>
-
-                        <!-- Reviews Tab -->
-                        <div class="tab-content hidden" id="reviews">
-                            <div class="p-6 lg:p-8">
-                                <!-- Header with rating summary row -->
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
-                                    <div>
-                                        <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Ratings & Reviews</h3>
-                                        <p class="text-gray-500 mt-1 text-sm">What our customers are saying</p>
-                                    </div>
-                                    <!-- Overall rating badge with stars -->
-                                    <div
-                                        class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
-                                        <div class="text-center">
-                                            <span id="average-rating"
-                                                class="text-4xl font-extrabold text-gray-900">0.0</span>
-                                            <span class="text-gray-500 text-sm">/5</span>
-                                            <div id="average-stars"
-                                                class="flex items-center justify-center mt-1 star-rating">
-                                                <!-- Stars will be generated dynamically -->
-                                            </div>
-                                        </div>
-                                        <div class="border-l border-gray-300 pl-4">
-                                            <div class="text-sm text-gray-600"><span id="total-reviews"
-                                                    class="font-semibold text-gray-900">0</span> verified reviews</div>
-                                            <div id="verified-percentage" class="text-xs text-green-600 mt-0.5"><i
-                                                    class="fas fa-check-circle mr-1"></i> 0% recommend</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Rating breakdown bars (visual summary) -->
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                                    <div id="rating-breakdown" class="space-y-3">
-                                        <!-- Rating bars will be generated dynamically -->
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <span class="w-12 text-gray-600 font-medium">5 ★</span>
-                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="5"
-                                                    style="width: 0%"></div>
-                                            </div>
-                                            <span class="w-8 text-gray-500 text-xs percentage-5">0%</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <span class="w-12 text-gray-600 font-medium">4 ★</span>
-                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="4"
-                                                    style="width: 0%"></div>
-                                            </div>
-                                            <span class="w-8 text-gray-500 text-xs percentage-4">0%</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <span class="w-12 text-gray-600 font-medium">3 ★</span>
-                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="3"
-                                                    style="width: 0%"></div>
-                                            </div>
-                                            <span class="w-8 text-gray-500 text-xs percentage-3">0%</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <span class="w-12 text-gray-600 font-medium">2 ★</span>
-                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div class="bg-gray-300 h-full rounded-full" data-rating="2"
-                                                    style="width: 0%"></div>
-                                            </div>
-                                            <span class="w-8 text-gray-500 text-xs percentage-2">0%</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <span class="w-12 text-gray-600 font-medium">1 ★</span>
-                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div class="bg-gray-300 h-full rounded-full" data-rating="1"
-                                                    style="width: 0%"></div>
-                                            </div>
-                                            <span class="w-8 text-gray-500 text-xs percentage-1">0%</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center justify-center lg:justify-end">
-                                        <div
-                                            class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
-                                            <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
-                                            <p class="text-xs font-medium text-indigo-700">Top-rated product</p>
-                                            <p class="text-xs text-gray-600 mt-1">⭐ Featured in "Customer Favorites"</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Reviews list header with sorting mock -->
-                                <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
-                                    <h4 class="font-semibold text-gray-800 text-lg">Customer reviews</h4>
-                                    <div
-                                        class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700">
-                                        <span>Most relevant</span>
-                                        <i class="fas fa-chevron-down text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Dynamic reviews list (beautiful cards) -->
-                                <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
-                                    <!-- Loading state -->
-                                    <div class="text-center py-12">
-                                        <div
-                                            class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark">
-                                        </div>
-                                        <p class="text-gray-500 mt-3">Loading reviews...</p>
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MOBILE ACCORDION - FIXED VERSION -->
-                <div class="md:hidden border-t border-b">
-                    <div class="accordion-wrapper border-b">
-                        <div class="flex justify-between items-center py-4 cursor-pointer">
-                            <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Product
-                                Details</span>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
-                        </div>
-                        <div class="accordion-content-block">
-                            <div class="pb-4">
-                                <p
-                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                    {{ $product->description ?? 'No description available.' }}
-                                </p>
-                                @if ($product->fabric)
-                                    <h3
-                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
-                                        Material & Care</h3>
-                                    <p
-                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                        {{ $product->fabric }}<br />{{ $product->material_care }}
-                                    </p>
-                                @endif
-                                @if ($product->fit)
-                                    <h3
-                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1">
-                                        Size & Fit</h3>
-                                    <p
-                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700">
-                                        {{ $product->fit }}
-                                    </p>
-                                @endif
-
-                                <!-- Product Parts with Fabric and Stitching Type -->
-                                {{--
-                        @if ($product->parts && $product->parts->count() > 0)
-                        <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2">Product Parts</h3>
-                        <div class="space-y-3">
-                            @foreach ($product->parts as $part)
-                            <div class="border-l-4 border-gray-300 pl-4 py-2">
-                                <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900">
-                                    {{ $part->part_name }}
-                    </h4>
-                    <div class="grid grid-cols-1 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl">
+                     </div>
+                  </div>
+                  @endif
+                  <!-- Display Product Parts -->
+                  @if ($product->parts && $product->parts->count() > 0)
+                  @foreach ($product->parts as $part)
+                  <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                     <h4 class="font-semibold text-lg mb-3 font-sans"
+                        style="color: #333; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
+                        {{ $part->part_name }}
+                     </h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @if ($part->fabric)
                         <div class="flex flex-col">
-                            <span class="text-gray-500 text-xs">Fabric</span>
-                            <span class="text-gray-900">{{ $part->fabric }}</span>
+                           <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->fabric }}</span>
                         </div>
                         @endif
                         @if ($part->work_type)
                         <div class="flex flex-col">
-                            <span class="text-gray-500 text-xs">Work Type</span>
-                            <span class="text-gray-900">{{ $part->work_type }}</span>
+                           <span class="text-sm text-gray-500 font-sans">Work Type</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->work_type }}</span>
                         </div>
                         @endif
-                    </div>
-                </div>
-                @endforeach
+                        @if ($part->color)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Color</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->color }}</span>
+                        </div>
+                        @endif
+                        @if ($part->pattern)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Pattern</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->pattern }}</span>
+                        </div>
+                        @endif
+                        @if ($part->embroidery)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Embroidery</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->embroidery }}</span>
+                        </div>
+                        @endif
+                        @if ($part->lining)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Lining</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $part->lining }}</span>
+                        </div>
+                        @endif
+                        @if ($part->description)
+                        <div class="flex flex-col md:col-span-2">
+                           <span class="text-sm text-gray-500 font-sans">Details</span>
+                           <span
+                              class="text-base text-gray-900 font-sans">{{ $part->description }}</span>
+                        </div>
+                        @endif
+                     </div>
+                  </div>
+                  @endforeach
+                  @endif
+                  <!-- Common Specifications -->
+                  {{--
+                  <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                     <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information</h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @if ($product->type)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Type</span>
+                           <span class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                        </div>
+                        @endif
+                        @if ($product->color)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Color</span>
+                           <span class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                        </div>
+                        @endif
+                        @if ($product->fit)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Fit</span>
+                           <span class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                        </div>
+                        @endif
+                        @if ($product->fabric && !$product->parts)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                           <span class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                        </div>
+                        @endif
+                        @if ($product->sales_package)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Package Contains</span>
+                           <span class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                        </div>
+                        @endif
+                     </div>
+                  </div>
+                  --}}
+               </div>
             </div>
-            @endif
-            --}}
-                                <div class="mt-4 p-3 border rounded-lg bg-gray-50">
-                                    <h4 class="font-semibold text-lg mb-2" style="color: #333;">Additional Information
-                                    </h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        @if ($product->type)
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Type</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ $product->type }}</span>
-                                            </div>
-                                        @endif
-                                        @if ($product->color)
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Color</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ $product->color }}</span>
-                                            </div>
-                                        @endif
-                                        @if ($product->fit)
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Fit</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ $product->fit }}</span>
-                                            </div>
-                                        @endif
-                                        @if ($product->fabric && !$product->parts)
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Fabric</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ $product->fabric }}</span>
-                                            </div>
-                                        @endif
-                                        @if ($product->sales_package)
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-500">Package Contains</span>
-                                                <span
-                                                    class="text-base font-medium text-gray-900">{{ $product->sales_package }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+            <!-- Reviews Tab -->
+            <div class="tab-content hidden" id="reviews">
+               <div class="p-6 lg:p-8">
+                  <!-- Header with rating summary row -->
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
+                     <div>
+                        <h3 class="text-2xl font-bold text-gray-900 tracking-tight font-sans">Ratings & Reviews</h3>
+                        <p class="text-gray-500 mt-1 text-sm font-sans">What our customers are saying</p>
+                     </div>
+                     <!-- Overall rating badge with stars -->
+                     <div
+                        class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
+                        <div class="text-center">
+                           <span id="average-rating"
+                              class="text-4xl font-extrabold text-gray-900 font-sans">0.0</span>
+                           <span class="text-gray-500 text-sm font-sans">/5</span>
+                           <div id="average-stars"
+                              class="flex items-center justify-center mt-1 star-rating">
+                              <!-- Stars will be generated dynamically -->
+                           </div>
                         </div>
-                    </div>
-
-                    <div class="accordion-wrapper border-b">
-                        <div class="flex justify-between items-center py-4 cursor-pointer">
-                            <span
-                                class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium">Specification</span>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
+                        <div class="border-l border-gray-300 pl-4">
+                           <div class="text-sm text-gray-600 font-sans"><span id="total-reviews"
+                              class="font-semibold text-gray-900 font-sans">0</span> verified reviews</div>
+                           <div id="verified-percentage" class="text-xs text-green-600 mt-0.5 font-sans"><i
+                              class="fas fa-check-circle mr-1"></i> 0% recommend</div>
                         </div>
-                        <div class="accordion-content-block">
-                            <div class="pb-4">
-                                @if ($product->stitching_type)
-                                    <div class="mb-4 p-3 border rounded bg-gray-50">
-                                        <h5 class="font-semibold mb-2">Stitching Information</h5>
-                                        <div class="flex justify-between py-1">
-                                            <span class="text-gray-500">Stitching Type:</span>
-                                            <span class="font-medium">{{ ucfirst($product->stitching_type) }}</span>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                @if ($product->parts && $product->parts->count() > 0)
-                                    @foreach ($product->parts as $part)
-                                        <div class="mb-4 p-3 border rounded bg-gray-50">
-                                            <h5 class="font-semibold mb-2">{{ $part->part_name }}</h5>
-                                            @if ($part->fabric)
-                                                <div class="flex justify-between py-1">
-                                                    <span class="text-gray-500">Fabric:</span>
-                                                    <span class="font-medium">{{ $part->fabric }}</span>
-                                                </div>
-                                            @endif
-                                            @if ($part->work_type)
-                                                <div class="flex justify-between py-1">
-                                                    <span class="text-gray-500">Work Type:</span>
-                                                    <span class="font-medium">{{ $part->work_type }}</span>
-                                                </div>
-                                            @endif
-                                            @if ($part->color)
-                                                <div class="flex justify-between py-1">
-                                                    <span class="text-gray-500">Color:</span>
-                                                    <span class="font-medium">{{ $part->color }}</span>
-                                                </div>
-                                            @endif
-                                            @if ($part->pattern)
-                                                <div class="flex justify-between py-1">
-                                                    <span class="text-gray-500">Pattern:</span>
-                                                    <span class="font-medium">{{ $part->pattern }}</span>
-                                                </div>
-                                            @endif
-                                            @if ($part->embroidery)
-                                                <div class="flex justify-between py-1">
-                                                    <span class="text-gray-500">Embroidery:</span>
-                                                    <span class="font-medium">{{ $part->embroidery }}</span>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <p class="text-gray-700">Specification details will appear here.</p>
-                                @endif
-                            </div>
+                     </div>
+                  </div>
+                  <!-- Rating breakdown bars (visual summary) -->
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                     <div id="rating-breakdown" class="space-y-3">
+                        <!-- Rating bars will be generated dynamically -->
+                        <div class="flex items-center gap-2 text-sm font-sans">
+                           <span class="w-12 text-gray-600 font-medium font-sans">5 ★</span>
+                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="bg-yellow-400 h-full rounded-full" data-rating="5"
+                                 style="width: 0%"></div>
+                           </div>
+                           <span class="w-8 text-gray-500 text-xs percentage-5 font-sans">0%</span>
                         </div>
-                    </div>
-
-                    <div class="accordion-wrapper">
-                        <div class="flex justify-between items-center py-4 cursor-pointer group">
-                            <div class="flex flex-col">
-                                <span class="text-lg font-semibold text-gray-900">Ratings & Reviews</span>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <div class="star-rating flex gap-0.5">
-                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
-                                    </div>
-                                    <span class="text-xs text-gray-500 font-medium">{{ $averageRating }} ·
-                                        {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
-                                </div>
-                            </div>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
+                        <div class="flex items-center gap-2 text-sm font-sans">
+                           <span class="w-12 text-gray-600 font-medium font-sans">4 ★</span>
+                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="bg-yellow-400 h-full rounded-full" data-rating="4"
+                                 style="width: 0%"></div>
+                           </div>
+                           <span class="w-8 text-gray-500 text-xs percentage-4 font-sans">0%</span>
                         </div>
-                        <div class="accordion-content-block">
-                            <div class="pb-4 space-y-6">
-                                <!-- Compact rating summary card for mobile -->
-                                <div
-                                    class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
-                                    <div>
-                                        <div class="text-3xl font-bold text-gray-900">{{ $averageRating }}</div>
-                                        <div class="star-rating text-xs mt-1">
-                                            @for ($i = 0; $i < $fullStars; $i++)
-                                                <i class="fas fa-star text-yellow-400"></i>
-                                            @endfor
-                                            @if ($hasHalfStar)
-                                                <i class="fas fa-star-half-alt text-yellow-400"></i>
-                                            @endif
-                                            @for ($i = 0; $i < $emptyStars; $i++)
-                                                <i class="far fa-star text-yellow-400"></i>
-                                            @endfor
-                                        </div>
-                                        <p class="text-xs text-gray-500 mt-1">Based on {{ $reviewCount }} reviews</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full"><i
-                                                class="fas fa-check-circle mr-1"></i>
-                                            {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend</div>
-                                    </div>
-                                </div>
-
-                                <!-- Rating breakdown bars (mobile friendly) -->
-                                <div class="space-y-2">
-                                    @php
-                                        $fiveStarCount = $reviews->where('rating', 5)->count();
-                                        $fourStarCount = $reviews->where('rating', 4)->count();
-                                        $threeStarCount = $reviews->where('rating', 3)->count();
-                                        $fivePercent =
-                                            $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
-                                        $fourPercent =
-                                            $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
-                                        $threePercent =
-                                            $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
-                                    @endphp
-                                    <div class="flex items-center gap-2 text-xs">
-                                        <span class="w-8">5★</span>
-                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                                            <div class="bg-yellow-400 h-full rounded-full"
-                                                style="width: {{ $fivePercent }}%"></div>
-                                        </div>
-                                        <span class="text-gray-500 w-8">{{ $fivePercent }}%</span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-xs">
-                                        <span class="w-8">4★</span>
-                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                                            <div class="bg-yellow-400 h-full rounded-full"
-                                                style="width: {{ $fourPercent }}%"></div>
-                                        </div>
-                                        <span class="text-gray-500 w-8">{{ $fourPercent }}%</span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-xs">
-                                        <span class="w-8">3★</span>
-                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                                            <div class="bg-yellow-400 h-full rounded-full"
-                                                style="width: {{ $threePercent }}%"></div>
-                                        </div>
-                                        <span class="text-gray-500 w-8">{{ $threePercent }}%</span>
-                                    </div>
-                                </div>
-
-                                <!-- Reviews list for mobile (clean card design) -->
-                                <div class="space-y-4 max-h-[420px] overflow-y-auto">
-                                    @forelse($reviews->take(4) as $review)
-                                        <div class="border-b border-gray-100 pb-4 last:border-0">
-                                            <div class="flex justify-between items-center">
-                                                <div class="flex items-center gap-2">
-                                                    <div
-                                                        class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
-                                                        {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
-                                                    </div>
-                                                    <span
-                                                        class="font-semibold text-sm">{{ $review->name ?? 'Anonymous User' }}</span>
-                                                </div>
-                                                <div class="star-rating text-[10px]">
-                                                    @for ($i = 0; $i < floor($review->rating); $i++)
-                                                        <i class="fas fa-star text-yellow-400"></i>
-                                                    @endfor
-                                                    @if ($review->rating - floor($review->rating) >= 0.5)
-                                                        <i class="fas fa-star-half-alt text-yellow-400"></i>
-                                                    @endif
-                                                    @for ($i = 0; $i < 5 - ceil($review->rating); $i++)
-                                                        <i class="far fa-star text-gray-300"></i>
-                                                    @endfor
-                                                </div>
-                                            </div>
-                                            <p class="text-gray-600 text-xs mt-2 leading-relaxed">
-                                                {{ $review->review ?? 'No review text provided.' }}</p>
-                                            <div class="flex gap-3 mt-2 text-[11px] text-gray-400">
-                                                <span><i class="far fa-thumbs-up"></i>
-                                                    {{ $review->helpful_count ?? 0 }}</span>
-                                                <span>{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <div class="text-center py-8">
-                                            <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
-                                            <p class="text-gray-500 text-sm">No reviews yet. Be the first to review this
-                                                product!</p>
-                                        </div>
-                                    @endforelse
-                                </div>
-
-
-                                <p class="text-center text-[11px] text-gray-400">Showing {{ min(4, $reviewCount) }} of
-                                    {{ $reviewCount }} reviews</p>
-                            </div>
+                        <div class="flex items-center gap-2 text-sm font-sans">
+                           <span class="w-12 text-gray-600 font-medium font-sans">3 ★</span>
+                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="bg-yellow-400 h-full rounded-full" data-rating="3"
+                                 style="width: 0%"></div>
+                           </div>
+                           <span class="w-8 text-gray-500 text-xs percentage-3 font-sans">0%</span>
                         </div>
-                    </div>
-                </div>
+                        <div class="flex items-center gap-2 text-sm font-sans">
+                           <span class="w-12 text-gray-600 font-medium font-sans">2 ★</span>
+                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="bg-gray-300 h-full rounded-full" data-rating="2"
+                                 style="width: 0%"></div>
+                           </div>
+                           <span class="w-8 text-gray-500 text-xs percentage-2 font-sans">0%</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm font-sans">
+                           <span class="w-12 text-gray-600 font-medium font-sans">1 ★</span>
+                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div class="bg-gray-300 h-full rounded-full" data-rating="1"
+                                 style="width: 0%"></div>
+                           </div>
+                           <span class="w-8 text-gray-500 text-xs percentage-1 font-sans">0%</span>
+                        </div>
+                     </div>
+                     <div class="flex items-center justify-center lg:justify-end">
+                        <div
+                           class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
+                           <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
+                           <p class="text-xs font-medium text-indigo-700 font-sans">Top-rated product</p>
+                           <p class="text-xs text-gray-600 mt-1 font-sans">⭐ Featured in "Customer Favorites"</p>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Reviews list header with sorting mock -->
+                  <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
+                     <h4 class="font-semibold text-gray-800 text-lg font-sans">Customer reviews</h4>
+                     <div
+                        class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700 font-sans">
+                        <span>Most relevant</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                     </div>
+                  </div>
+                  <!-- Dynamic reviews list (beautiful cards) -->
+                  <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
+                     <!-- Loading state -->
+                     <div class="text-center py-12">
+                        <div
+                           class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark">
+                        </div>
+                        <p class="text-gray-500 mt-3 font-sans">Loading reviews...</p>
+                     </div>
+                  </div>
+               </div>
             </div>
-        </section>
+         </div>
+      </div>
+      <!-- MOBILE ACCORDION - FIXED VERSION -->
+      <div class="md:hidden border-t border-b">
+         <div class="accordion-wrapper border-b">
+            <div class="flex justify-between items-center py-4 cursor-pointer">
+               <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Product
+               Details</span>
+               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
+            </div>
+            <div class="accordion-content-block">
+               <div class="pb-4">
+                  <p
+                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                     {{ $product->description ?? 'No description available.' }}
+                  </p>
+                  @if ($product->fabric)
+                  <h3
+                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                     Material & Care
+                  </h3>
+                  <p
+                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                     {{ $product->fabric }}<br />{{ $product->material_care }}
+                  </p>
+                  @endif
+                  @if ($product->fit)
+                  <h3
+                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                     Size & Fit
+                  </h3>
+                  <p
+                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                     {{ $product->fit }}
+                  </p>
+                  @endif
+                  <!-- Product Parts with Fabric and Stitching Type -->
+                  {{--
+                  @if ($product->parts && $product->parts->count() > 0)
+                  <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2 font-sans">Product Parts</h3>
+                  <div class="space-y-3">
+                     @foreach ($product->parts as $part)
+                     <div class="border-l-4 border-gray-300 pl-4 py-2">
+                        <h4 class="font-medium text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl mb-2 text-gray-900 font-sans">
+                           {{ $part->part_name }}
+                        </h4>
+                        <div class="grid grid-cols-1 gap-2 text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-sans">
+                           @if ($part->fabric)
+                           <div class="flex flex-col">
+                              <span class="text-gray-500 text-xs font-sans">Fabric</span>
+                              <span class="text-gray-900 font-sans">{{ $part->fabric }}</span>
+                           </div>
+                           @endif
+                           @if ($part->work_type)
+                           <div class="flex flex-col">
+                              <span class="text-gray-500 text-xs font-sans">Work Type</span>
+                              <span class="text-gray-900 font-sans">{{ $part->work_type }}</span>
+                           </div>
+                           @endif
+                        </div>
+                     </div>
+                     @endforeach
+                  </div>
+                  @endif
+                  --}}
+                  <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                     <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information
+                     </h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @if ($product->type)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Type</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                        </div>
+                        @endif
+                        @if ($product->color)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Color</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                        </div>
+                        @endif
+                        @if ($product->fit)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Fit</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                        </div>
+                        @endif
+                        @if ($product->fabric && !$product->parts)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                        </div>
+                        @endif
+                        @if ($product->sales_package)
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-500 font-sans">Package Contains</span>
+                           <span
+                              class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                        </div>
+                        @endif
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="accordion-wrapper border-b">
+            <div class="flex justify-between items-center py-4 cursor-pointer">
+               <span
+                  class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Specification</span>
+               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
+            </div>
+            <div class="accordion-content-block">
+               <div class="pb-4">
+                  @if ($product->stitching_type)
+                  <div class="mb-4 p-3 border rounded bg-gray-50">
+                     <h5 class="font-semibold mb-2 font-sans">Stitching Information</h5>
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Stitching Type:</span>
+                        <span class="font-medium font-sans">{{ ucfirst($product->stitching_type) }}</span>
+                     </div>
+                  </div>
+                  @endif
+                  @if ($product->parts && $product->parts->count() > 0)
+                  @foreach ($product->parts as $part)
+                  <div class="mb-4 p-3 border rounded bg-gray-50">
+                     <h5 class="font-semibold mb-2 font-sans">{{ $part->part_name }}</h5>
+                     @if ($part->fabric)
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Fabric:</span>
+                        <span class="font-medium font-sans">{{ $part->fabric }}</span>
+                     </div>
+                     @endif
+                     @if ($part->work_type)
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Work Type:</span>
+                        <span class="font-medium font-sans">{{ $part->work_type }}</span>
+                     </div>
+                     @endif
+                     @if ($part->color)
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Color:</span>
+                        <span class="font-medium font-sans">{{ $part->color }}</span>
+                     </div>
+                     @endif
+                     @if ($part->pattern)
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Pattern:</span>
+                        <span class="font-medium font-sans">{{ $part->pattern }}</span>
+                     </div>
+                     @endif
+                     @if ($part->embroidery)
+                     <div class="flex justify-between py-1 font-sans">
+                        <span class="text-gray-500 font-sans">Embroidery:</span>
+                        <span class="font-medium font-sans">{{ $part->embroidery }}</span>
+                     </div>
+                     @endif
+                  </div>
+                  @endforeach
+                  @else
+                  <p class="text-gray-700 font-sans">Specification details will appear here.</p>
+                  @endif
+               </div>
+            </div>
+         </div>
+         <div class="accordion-wrapper">
+            <div class="flex justify-between items-center py-4 cursor-pointer group">
+               <div class="flex flex-col">
+                  <span class="text-lg font-semibold text-gray-900 font-sans">Ratings & Reviews</span>
+                  <div class="flex items-center gap-2 mt-1">
+                     <div class="star-rating flex gap-0.5">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                     </div>
+                     <span class="text-xs text-gray-500 font-medium font-sans">{{ $averageRating }} ·
+                     {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
+                  </div>
+               </div>
+               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
+            </div>
+            <div class="accordion-content-block">
+               <div class="pb-4 space-y-6">
+                  <!-- Compact rating summary card for mobile -->
+                  <div
+                     class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+                     <div>
+                        <div class="text-3xl font-bold text-gray-900 font-sans">{{ $averageRating }}</div>
+                        <div class="star-rating text-xs mt-1">
+                           @for ($i = 0; $i < $fullStars; $i++)
+                           <i class="fas fa-star text-yellow-400"></i>
+                           @endfor
+                           @if ($hasHalfStar)
+                           <i class="fas fa-star-half-alt text-yellow-400"></i>
+                           @endif
+                           @for ($i = 0; $i < $emptyStars; $i++)
+                           <i class="far fa-star text-yellow-400"></i>
+                           @endfor
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 font-sans">Based on {{ $reviewCount }} reviews</p>
+                     </div>
+                     <div class="text-right">
+                        <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full font-sans"><i
+                           class="fas fa-check-circle mr-1"></i>
+                           {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Rating breakdown bars (mobile friendly) -->
+                  <div class="space-y-2">
+                     @php
+                     $fiveStarCount = $reviews->where('rating', 5)->count();
+                     $fourStarCount = $reviews->where('rating', 4)->count();
+                     $threeStarCount = $reviews->where('rating', 3)->count();
+                     $fivePercent =
+                     $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
+                     $fourPercent =
+                     $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
+                     $threePercent =
+                     $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
+                     @endphp
+                     <div class="flex items-center gap-2 text-xs font-sans">
+                        <span class="w-8 font-sans">5★</span>
+                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                           <div class="bg-yellow-400 h-full rounded-full"
+                              style="width: {{ $fivePercent }}%"></div>
+                        </div>
+                        <span class="text-gray-500 w-8 font-sans">{{ $fivePercent }}%</span>
+                     </div>
+                     <div class="flex items-center gap-2 text-xs font-sans">
+                        <span class="w-8 font-sans">4★</span>
+                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                           <div class="bg-yellow-400 h-full rounded-full"
+                              style="width: {{ $fourPercent }}%"></div>
+                        </div>
+                        <span class="text-gray-500 w-8 font-sans">{{ $fourPercent }}%</span>
+                     </div>
+                     <div class="flex items-center gap-2 text-xs font-sans">
+                        <span class="w-8 font-sans">3★</span>
+                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                           <div class="bg-yellow-400 h-full rounded-full"
+                              style="width: {{ $threePercent }}%"></div>
+                        </div>
+                        <span class="text-gray-500 w-8 font-sans">{{ $threePercent }}%</span>
+                     </div>
+                  </div>
+                  <!-- Reviews list for mobile (clean card design) -->
+                  <div class="space-y-4 max-h-[420px] overflow-y-auto">
+                     @forelse($reviews->take(4) as $review)
+                     <div class="border-b border-gray-100 pb-4 last:border-0">
+                        <div class="flex justify-between items-center">
+                           <div class="flex items-center gap-2">
+                              <div
+                                 class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold font-sans">
+                                 {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
+                              </div>
+                              <span
+                                 class="font-semibold text-sm font-sans">{{ $review->name ?? 'Anonymous User' }}</span>
+                           </div>
+                           <div class="star-rating text-[10px]">
+                              @for ($i = 0; $i < floor($review->rating); $i++)
+                              <i class="fas fa-star text-yellow-400"></i>
+                              @endfor
+                              @if ($review->rating - floor($review->rating) >= 0.5)
+                              <i class="fas fa-star-half-alt text-yellow-400"></i>
+                              @endif
+                              @for ($i = 0; $i < 5 - ceil($review->rating); $i++)
+                              <i class="far fa-star text-gray-300"></i>
+                              @endfor
+                           </div>
+                        </div>
+                        <p class="text-gray-600 text-xs mt-2 leading-relaxed font-sans">
+                           {{ $review->review ?? 'No review text provided.' }}
+                        </p>
+                        <div class="flex gap-3 mt-2 text-[11px] text-gray-400 font-sans">
+                           <span class="font-sans"><i class="far fa-thumbs-up"></i>
+                           {{ $review->helpful_count ?? 0 }}</span>
+                           <span class="font-sans">{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
+                        </div>
+                     </div>
+                     @empty
+                     <div class="text-center py-8">
+                        <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
+                        <p class="text-gray-500 text-sm font-sans">No reviews yet. Be the first to review this
+                           product!
+                        </p>
+                     </div>
+                     @endforelse
+                  </div>
+                  <p class="text-center text-[11px] text-gray-400 font-sans">Showing {{ min(4, $reviewCount) }} of
+                     {{ $reviewCount }} reviews
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
 
         <!-- Related Products Section -->
-        <section class="px-4 lgg:py-12 py-6">
-            <div class="container mx-auto">
-                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-                    <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Related Products</h2>
-                </div>
+       <section class="px-4 lgg:py-12 py-6 bg-gray-50">
+    <div class="container mx-auto">
+        <!-- Related Products Section -->
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
+            <div>
+                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                    Related Products
+                </h2>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
+            </div>
+            <a href="{{ route('page.multi-product') }}"
+                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                View All
+                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+            </a>
+        </div>
 
-                <div class="main-owl owl-carousel owl-theme">
-                    @if (isset($relatedProducts))
-                        @forelse($relatedProducts as $relatedProduct)
-                            @php
-                                $variant = $relatedProduct->variants->first();
-                                $productImage = $relatedProduct->images->first();
-                                $imagePath = $productImage
-                                    ? ltrim($productImage->image, '/')
-                                    : 'assets/images/placeholder.jpg';
-                            @endphp
-                            <div class="item flex items-center justify-center">
-                                <div
-                                    class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div class="relative rounded-xl overflow-hidden">
-                                        <img src="{{ $relatedProduct->featured_image }}"
-                                            alt="{{ $relatedProduct->name }}"
-                                            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
-                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                            @if ($relatedProduct->is_trending ?? false)
-                                                <span
-                                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
-                                            @endif
-                                            @if ($variant && $variant->discount)
-                                                <span
-                                                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                                    @if ($variant->discount == 0)
-                                                        Trending
-                                                    @else
-                                                        OFF {{ $variant->discount }}%
-                                                    @endif
-                                                </span>
-                                            @endif
-                                        </div>
-                                        {{--
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
-                                data-product-id="{{ $variant->product_id }}">
-                        <i class="far fa-heart"></i>
-                        </button>
-                        --}}
-                                    </div>
-                                    <a href="{{ route('page.single-product', $relatedProduct->slug) }}">
-                                        <div class="p-4 space-y-1">
-                                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">
-                                                {{ $relatedProduct->name }}</h3>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <span>{{ $relatedProduct->brand ?? '' }}</span>
-                                                <span class="flex items-center gap-1 text-gray-700">
-                                                    <span
-                                                        class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span class="text-lg font-semibold text-gray-900">Rs.
-                                                    {{ $variant->discount_price ?? $variant->price }}</span>
-                                                @if ($variant->discount_price)
-                                                    <span class="text-sm text-gray-400 line-through">Rs.
-                                                        {{ $variant->price }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </a>
+        <div class="main-owl owl-carousel owl-theme">
+            @if (isset($relatedProducts))
+                @forelse($relatedProducts as $relatedProduct)
+                    @php
+                        $variant = $relatedProduct->variants->first();
+                        $productImage = $relatedProduct->images->first();
+                        $imagePath = $productImage
+                            ? ltrim($productImage->image, '/')
+                            : 'assets/images/placeholder.jpg';
+                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
+                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                            $parts = explode('upload/', $imageUrl);
+                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        }
+                    @endphp
+                    <div class="item flex justify-center items-center">
+                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
+                            
+                            <!-- Image Wrapper -->
+                            <div class="relative overflow-hidden bg-gray-100">
+                                <img src="{{ $imageUrl }}"
+                                    alt="{{ $relatedProduct->name }}"
+                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="600"
+                                    height="900" />
+
+                                <!-- Quick View Overlay -->
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                        Quick View
+                                    </button>
+                                </div>
+
+                                <!-- Badges -->
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    @if ($variant && $variant->discount && $variant->discount > 0)
+                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                            {{ $variant->discount }}% OFF
+                                        </span>
+                                    @elseif($relatedProduct->is_trending ?? false)
+                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                            Trending
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
-                        @empty
-                            <div class="item flex items-center justify-center">
-                                <p class="text-gray-500">No related products found.</p>
-                            </div>
-                        @endforelse
-                    @else
-                        <div class="item flex items-center justify-center">
-                            <p class="text-gray-500">Related products not available.</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            <div class="container mx-auto">
-                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-                    <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Most Wishlisted Products</h2>
-                </div>
 
-                <div class="main-owl owl-carousel owl-theme">
-                    @if (isset($mostWishlistedProducts))
-                        @forelse($mostWishlistedProducts as $relatedProduct)
-                            @php
-                                $variant = $relatedProduct->variants->first();
-                                $productImage = $relatedProduct->featured_image;
-                                $imagePath = $productImage
-                                    ? ltrim($productImage, '/')
-                                    : 'assets/images/placeholder.jpg';
-                                // Debug: Check if variant exists
-                                if (!$variant) {
-                                    continue; // Skip this product if no variant found
-                                }
-                            @endphp
-                            <div class="item flex items-center justify-center">
-                                <div
-                                    class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div class="relative rounded-xl overflow-hidden">
-                                        <img src="{{ $imagePath }}" alt="{{ $relatedProduct->name }}"
-                                            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
-                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                            @if ($relatedProduct->is_trending ?? false)
-                                                <span
-                                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
-                                            @endif
-                                            @if ($variant && $variant->discount)
-                                                <span
-                                                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                                    @if ($variant->discount == 0)
-                                                        Trending
-                                                    @else
-                                                        OFF {{ $variant->discount }}%
-                                                    @endif
-                                                </span>
-                                            @endif
-                                        </div>
-                                        {{--
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
-                                data-product-id="{{ $variant->product_id }}">
-                        <i class="far fa-heart"></i>
-                        </button>
-                        --}}
+                            <!-- Content -->
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-start justify-between">
+                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                        {{ $relatedProduct->name }}
+                                    </h3>
+                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                </div>
+
+                                <!-- Rating -->
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-0.5">
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                     </div>
-                                    <a href="{{ route('page.single-product', $relatedProduct->slug) }}">
-                                        <div class="p-4 space-y-1">
-                                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">
-                                                {{ $relatedProduct->name }}</h3>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <span>{{ $relatedProduct->brand ?? '' }}</span>
-                                                <span class="flex items-center gap-1 text-gray-700">
-                                                    <span
-                                                        class="text-sm font-medium">{{ $relatedProduct->rating ?? '4.4' }}</span>
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span class="text-lg font-semibold text-gray-900">Rs.
-                                                    {{ $variant->discount_price ?? $variant->price }}</span>
-                                                @if ($variant->discount_price)
-                                                    <span class="text-sm text-gray-400 line-through">Rs.
-                                                        {{ $variant->price }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </a>
+                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex items-center gap-2 flex-wrap mt-1">
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                        {{ $variant->discount_price ?? $variant->price ?? $relatedProduct->price }}</span>
+                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                            {{ $variant->price }}</span>
+                                    @endif
                                 </div>
                             </div>
-                        @empty
-                            <div class="item flex items-center justify-center">
-                                <p class="text-gray-500">No related products found.</p>
-                            </div>
-                        @endforelse
-                    @else
-                        <div class="item flex items-center justify-center">
-                            <p class="text-gray-500">Related products not available.</p>
                         </div>
-                    @endif
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 font-sans">No related products found.</p>
+                    </div>
+                @endforelse
+            @else
+                <div class="text-center py-8">
+                    <p class="text-gray-500 font-sans">Related products not available.</p>
                 </div>
+            @endif
+        </div>
+
+        
+    </div>
+</section>
+
+<section class="px-4 lgg:py-12 py-6 ">
+    <div class="container mx-auto">
+        <!-- Most Wishlisted Products Section -->
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6 ">
+            <div>
+                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                    Most Wishlisted Products
+                </h2>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
             </div>
-        </section>
+            <a href="{{ route('page.multi-product') }}"
+                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                View All
+                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+            </a>
+        </div>
+
+        <div class="main-owl owl-carousel owl-theme">
+            @if (isset($mostWishlistedProducts))
+                @forelse($mostWishlistedProducts as $relatedProduct)
+                    @php
+                        $variant = $relatedProduct->variants->first();
+                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
+                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                            $parts = explode('upload/', $imageUrl);
+                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                        }
+                        if (!$variant) {
+                            continue;
+                        }
+                    @endphp
+                    <div class="item flex justify-center items-center">
+                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
+                            
+                            <!-- Image Wrapper -->
+                            <div class="relative overflow-hidden bg-gray-100">
+                                <img src="{{ $imageUrl }}"
+                                    alt="{{ $relatedProduct->name }}"
+                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="600"
+                                    height="900" />
+
+                                <!-- Quick View Overlay -->
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                        Quick View
+                                    </button>
+                                </div>
+
+                                <!-- Badges -->
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    @if ($variant && $variant->discount && $variant->discount > 0)
+                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                            {{ $variant->discount }}% OFF
+                                        </span>
+                                    @elseif($relatedProduct->is_trending ?? false)
+                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                            Trending
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-start justify-between">
+                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                        {{ $relatedProduct->name }}
+                                    </h3>
+                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                </div>
+
+                                <!-- Rating -->
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-0.5">
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    </div>
+                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex items-center gap-2 flex-wrap mt-1">
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                        {{ $variant->discount_price ?? $variant->price }}</span>
+                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                            {{ $variant->price }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 font-sans">No wishlisted products found.</p>
+                    </div>
+                @endforelse
+            @else
+                <div class="text-center py-8">
+                    <p class="text-gray-500 font-sans">Wishlisted products not available.</p>
+                </div>
+            @endif
+        </div>
+</div>
+</section>
 
 
         <!-- Last Viewed Products Section -->
         @if ($lastViewedProducts && $lastViewedProducts->isNotEmpty())
 
-            <section class="px-4 lgg:py-12 py-6">
-                <div class="container mx-auto">
-                    <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-                        <h2 class="text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">Last Viewed Products</h2>
-                    </div>
+           <section class="px-4 lgg:py-12 py-6 bg-gray-50">
+    <div class="container mx-auto">
+        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
+            <div>
+                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                    Last Viewed Products
+                </h2>
+                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
+            </div>
+            <a href="{{ route('page.multi-product') }}"
+                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                View All
+                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+            </a>
+        </div>
 
-                    <div class="main-owl owl-carousel owl-theme">
-                        @forelse($lastViewedProducts as $lastViewedProduct)
-                            @php
-                                $imagePath = $lastViewedProduct['featured_image']
-                                    ? ltrim($lastViewedProduct['featured_image'], '/')
-                                    : 'assets/images/placeholder.jpg';
-                            @endphp
-                            <div class="item flex items-center justify-center">
-                                <div
-                                    class="group w-full xxs:max-w-full max-w-[300px] bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div class="relative rounded-xl overflow-hidden">
-                                        <img src="{{ $imagePath }}" alt="{{ $lastViewedProduct['id'] }}"
-                                            class="aspect-[4/6] object-contain max-h-[500px] w-full h-auto object-top object-center" />
-                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                            @if ($lastViewedProduct['is_trending'] ?? false)
-                                                <span
-                                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">Trending</span>
-                                            @endif
-                                            <span
-                                                class="bg-gray-800 text-white text-xs font-semibold px-2 py-1 rounded">Recently
-                                                Viewed</span>
-                                        </div>
-                                        {{--
-                        <button class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110 wishlist-btn-related" 
-                                data-product-id="{{ $lastViewedProduct['id'] }}">
-                        <i class="far fa-heart"></i>
-                        </button>
-                        --}}
-                                    </div>
-                                    <a href="{{ route('page.single-product', $lastViewedProduct['slug']) }}">
-                                        <div class="p-4 space-y-1">
-                                            <h3 class="text-[15px] font-semibold text-gray-900 truncate">
-                                                {{ $lastViewedProduct['name'] }}</h3>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <span>{{ $lastViewedProduct->brand ?? '' }}</span>
-                                            </div>
-                                            {{--
-                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                <span class="text-lg font-semibold text-gray-900">Rs. {{ $lastViewedProduct['price'] }}</span>
+        <div class="main-owl owl-carousel owl-theme">
+            @forelse($lastViewedProducts as $lastViewedProduct)
+                @php
+                    $imageUrl = $lastViewedProduct['featured_image'] 
+                        ? asset($lastViewedProduct['featured_image']) 
+                        : asset('assets/images/placeholder.jpg');
+                    if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                        $parts = explode('upload/', $imageUrl);
+                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                    }
+                @endphp
+                <div class="item flex justify-center items-center">
+                    <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                        onclick="window.location.href='{{ route('page.single-product', $lastViewedProduct['slug']) }}';">
+                        
+                        <!-- Image Wrapper -->
+                        <div class="relative overflow-hidden bg-gray-100">
+                            <img src="{{ $imageUrl }}"
+                                alt="{{ $lastViewedProduct['name'] }}"
+                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                                width="600"
+                                height="900" />
+
+                            <!-- Quick View Overlay -->
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                    Quick View
+                                </button>
+                            </div>
+
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                @if ($lastViewedProduct['is_trending'] ?? false)
+                                    <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                        Trending
+                                    </span>
+                                @endif
+                                <span class="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                    Recently Viewed
+                                </span>
+                            </div>
                         </div>
-                        --}}
-                                            <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span class="text-lg font-semibold text-gray-900">Rs.
-                                                    {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
-                                                @if ($lastViewedProduct['discount_price'] ?? null)
-                                                    <span class="text-sm text-gray-400 line-through">Rs.
-                                                        {{ $lastViewedProduct['price'] }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </a>
+
+                        <!-- Content -->
+                        <div class="p-4 space-y-2">
+                            <div class="flex items-start justify-between">
+                                <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                    {{ $lastViewedProduct['name'] }}
+                                </h3>
+                                <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $lastViewedProduct['brand'] ?? '' }}</span>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-0.5">
+                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                 </div>
+                                <span class="text-xs font-sans text-gray-400">({{ rand(10, 200) }})</span>
                             </div>
-                        @empty
-                            <div class="item flex items-center justify-center">
-                                <p class="text-gray-500">No recently viewed products.</p>
+
+                            <!-- Price -->
+                            <div class="flex items-center gap-2 flex-wrap mt-1">
+                                <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                    {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
+                                @if (isset($lastViewedProduct['discount_price']) && $lastViewedProduct['discount_price'] != $lastViewedProduct['price'])
+                                    <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        {{ $lastViewedProduct['price'] }}</span>
+                                @endif
                             </div>
-                        @endforelse
+                        </div>
                     </div>
                 </div>
-            </section>
+            @empty
+                <div class="text-center py-8">
+                    <p class="text-gray-500 font-sans">No recently viewed products.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
         @endif
 
         <!-- Editor's Pick Section -->

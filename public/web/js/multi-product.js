@@ -238,46 +238,85 @@ document.addEventListener("DOMContentLoaded", function () {
                 : 0;
 
             html += `
-            <div class="item product-card">
-                <a href="/products/${product.slug}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                    <div class="image-wrapper">
-                        <img src="${imageUrl}" 
-                             alt="${product.name || 'Product'}" 
-                             class="product-img"
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\' viewBox=\'0 0 200 200\'%3E%3Crect width=\'200\' height=\'200\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%239ca3af\' font-size=\'14\'%3ENo Image%3C/text%3E%3C/svg%3E'" />
-                        
-                        <div class="badge-container">
-                            ${product.is_featured ? `
-                                <span class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded discount-badge">Featured</span>
-                            ` : ''}
-                            ${discountPercentage > 0 ? `
-                                <span class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded discount-badge">-${discountPercentage}%</span>
-                            ` : ''}
-                        </div>
-                        
-                        <button class="wishlist-btn absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900 truncate">${product.name || ''}</h3>
-                        
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>${product.brand || 'Brand Name'}</span>
-                        </div>
-                        
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. ${parseFloat(displayPrice).toFixed(2)}</span>
-                            ${displayPrice < originalPrice ? `
-                                <span class="text-sm text-gray-400 line-through">Rs. ${parseFloat(originalPrice).toFixed(2)}</span>
-                            ` : ''}
-                        </div>
-                    </div>
-                </a>
+            <div class="item flex justify-center items-center ">
+    <a href="/products/${product.slug}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200 product-card">
+        <!-- Image Wrapper -->
+        <div class="relative overflow-hidden bg-gray-100">
+            <img src="${imageUrl}" 
+                 alt="${product.name || 'Product'}" 
+                 class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                 loading="lazy"
+                 decoding="async"
+                 width="600"
+                 height="900"
+                 onerror="this.parentElement.innerHTML = this.parentElement.innerHTML.replace(this.outerHTML, '<div class=\\'w-full aspect-[9/13] flex flex-col items-center justify-center bg-gray-100\\'><svg class=\\'w-16 h-16 text-gray-400 mb-2\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\\' /></svg><span class=\\'text-gray-500 text-sm\\'>No image</span></div>')" />
+            
+            <!-- Quick View Overlay -->
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                <span class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                    Quick View
+                </span>
             </div>
+
+            <!-- Badges -->
+            <div class="absolute top-[6px] left-[5px] flex flex-col gap-2">
+                ${product.is_featured ? `
+                    <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                        Featured
+                    </span>
+                ` : ''}
+                ${discountPercentage > 0 ? `
+                    <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                        -${discountPercentage}% OFF
+                    </span>
+                ` : ''}
+            </div>
+
+            <!-- Wishlist Heart Icon -->
+            <button class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex items-center justify-center text-gray-400 hover:text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="p-4 space-y-2">
+            <div class="flex items-start justify-between">
+                <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                    ${product.name || ''}
+                </h3>
+                <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">${product.brand || 'Brand'}</span>
+            </div>
+
+            <!-- Rating -->
+            <div class="flex items-center gap-2">
+                <div class="flex items-center gap-0.5">
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                </div>
+                <span class="text-xs font-sans text-gray-400">(${product.rating || '4.4'})</span>
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-center justify-between mt-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs. ${parseFloat(displayPrice).toFixed(2)}</span>
+                    ${displayPrice < originalPrice ? `
+                        <span class="text-xs text-gray-400 line-through font-sans">Rs. ${parseFloat(originalPrice).toFixed(2)}</span>
+                    ` : ''}
+                </div>
+
+               
+            </div>
+
+            
+        </div>
+    </a>
+</div>
             `;
         });
 

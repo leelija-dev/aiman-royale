@@ -92,13 +92,13 @@
                                     </span>
                                     
                                     <!-- Title -->
-                                    <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1 text-center">
+                                    <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1 text-center uppercase">
                                         {{ $category->name }}
                                     </h3>
 
                                     <!-- Description -->
                                     @if($category->description)
-                                    <p class="text-white/60 text-[10px] md:text-xs text-center line-clamp-1 mb-2">
+                                    <p class="text-white/60 text-[10px] md:text-xs text-center line-clamp-1 mb-2 uppercase">
                                         {{ Str::limit($category->description, 60) }}
                                     </p>
                                     @endif

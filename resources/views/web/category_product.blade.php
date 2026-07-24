@@ -9,7 +9,7 @@
         margin: 0 auto;
         display: grid;
         /* Responsive columns: consistent card widths, no flex-wrap quirks */
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
         gap: 1.5rem;
         /* 24px gap consistent */
     }
@@ -181,7 +181,7 @@
 
         .products-container {
             gap: 1rem;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         }
 
         .card-content {

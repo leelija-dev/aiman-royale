@@ -2538,10 +2538,9 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
 <section class="py-16 lg:py-20 px-4 bg-gradient-to-b from-white to-gray-50">
     <div class="container mx-auto">
         <div class="text-center mb-12 lg:mb-16">
-            <h2
-                class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem] font-bold bg-gradient-to-r from-rose-700 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                Know How Celebrities Book us for their Occasion
-            </h2>
+            <h2 class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem] font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4 heading-font">
+    Know How Celebrities Book Us for Their Occasion
+</h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
                 Get the perfect fit through our online portals
             </p>
