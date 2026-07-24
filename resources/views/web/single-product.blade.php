@@ -983,7 +983,7 @@
                                 @endif
                                 @if ($discount > 0)
                                     <span
-                                        class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ $discount }}%
+                                        class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round($discount,2) }}%
                                         off)</span>
                                 @else
                                     <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>
@@ -1132,12 +1132,12 @@
                                                 $variantImage = $firstImage->image_url; // Use accessor
                                             } elseif ($variant->image) {
                                                 // If variant has direct image property, check if it's a URL
-    $imagePath = trim($variant->image);
-    $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL)
-        ? $imagePath
-        : asset(ltrim($imagePath, '/'));
-} else {
-    $variantImage = asset('assets/images/placeholder.jpg');
+                                                $imagePath = trim($variant->image);
+                                                $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL)
+                                                    ? $imagePath
+                                                    : asset(ltrim($imagePath, '/'));
+                                            } else {
+                                                $variantImage = asset('assets/images/placeholder.jpg');
                                             }
                                         @endphp
                                         <button
@@ -1942,7 +1942,12 @@
                                 <div class="absolute top-3 left-3 flex flex-col gap-2">
                                     @if ($variant && $variant->discount && $variant->discount > 0)
                                         <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                            {{ $variant->discount }}% OFF
+                                            {{ number_format(
+                                                ($variant->discount - floor($variant->discount)) >= 0.5
+                                                    ? ceil($variant->discount)
+                                                    : $variant->discount,
+                                                2
+                                            ) }}% OFF
                                         </span>
                                     @elseif($relatedProduct->is_trending ?? false)
                                         <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
@@ -2057,7 +2062,12 @@
                                 <div class="absolute top-3 left-3 flex flex-col gap-2">
                                     @if ($variant && $variant->discount && $variant->discount > 0)
                                         <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                            {{ $variant->discount }}% OFF
+                                            {{ number_format(
+                                                ($variant->discount - floor($variant->discount)) >= 0.5
+                                                    ? ceil($variant->discount)
+                                                    : $variant->discount,
+                                                2
+                                            ) }}% OFF
                                         </span>
                                     @elseif($relatedProduct->is_trending ?? false)
                                         <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">

@@ -48,7 +48,7 @@
                             <!-- Image -->
                             <div class="absolute inset-0">
                                 <img 
-                                    src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder.jpg') }}" 
+                                    src="{{ $category->image ?  $category->image : asset('assets/images/placeholder.jpg') }}" 
                                     alt="{{ $category->name }}" 
                                     class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                                     loading="lazy" 
