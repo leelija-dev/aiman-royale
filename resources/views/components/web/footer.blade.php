@@ -1,3 +1,170 @@
+<style>
+ /* ===========================
+   Category Description - Reduced Margins
+=========================== */
+
+#category-full-content{
+    margin-top:16px; /* reduced from 24px */
+    color:#555;
+    font-family:inherit;
+}
+
+/* Heading 2 */
+#category-full-content h2{
+    font-size:clamp(24px,2vw,34px);
+    font-weight:600;
+    color:#222;
+    line-height:1.3;
+    margin: 2px 0px;/* reduced from 40px 0 18px */
+}
+
+/* Heading 3 */
+#category-full-content h3{
+    font-size:clamp(20px,1.5vw,26px);
+    font-weight:600;
+    color:#333;
+    line-height:1.4;
+    margin: 2px 0px; /* reduced from 28px 0 14px */
+}
+
+/* Paragraph */
+#category-full-content p{
+    font-size:16px;
+    line-height:1.9;
+    color:#666;
+    margin:0 0 12px; /* reduced from 18px */
+}
+
+/* Lists */
+#category-full-content ul {
+  margin: 0px 0px 0px 28px;
+  padding: 0;
+}
+
+#category-full-content li{
+    margin-bottom:8px; /* reduced from 12px */
+}
+
+#category-full-content li p{
+    margin:0;
+}
+
+/* Links */
+#category-full-content a{
+    color:#A10000;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+#category-full-content a:hover{
+    color:#d10000;
+    text-decoration:underline;
+}
+
+/* Bold */
+#category-full-content strong,
+#category-full-content b{
+    color:#222;
+    font-weight:600;
+}
+
+/* Images */
+#category-full-content img{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+}
+
+/* Remove Empty Headings */
+#category-full-content h2:empty,
+#category-full-content h3:empty{
+    display:none;
+}
+
+/* Remove margins from h2 wrapping ul (your HTML) */
+#category-full-content h2>ul{
+    margin-top:0;
+}
+
+/* Preview text */
+#category-preview{
+    color:#666;
+    font-size:16px;
+    line-height:1.9;
+}
+
+/* Read More / Show Less */
+#category-read-more,
+#category-show-less{
+    font-size:16px;
+    font-weight:600;
+    color:#A10000;
+}
+
+#category-read-more:hover,
+#category-show-less:hover{
+    color:#750000;
+}
+
+/* Tablet */
+@media(max-width:991px){
+
+    #category-full-content h2{
+        font-size:30px;
+      margin: 2px 0px; /* reduced */
+    }
+
+    #category-full-content h3{
+        font-size:23px;
+        margin: 2px 0px; /* reduced */
+    }
+
+    #category-full-content p,
+    #category-preview{
+        font-size:15px;
+    }
+    
+    #category-full-content p{
+        margin:0 0 10px; /* reduced */
+    }
+}
+
+/* Mobile */
+@media(max-width:767px){
+
+    #category-full-content h2{
+        font-size:24px;
+       margin: 2px 0px; /* reduced from 28px 0 14px */
+    }
+
+    #category-full-content h3{
+        font-size:20px;
+        margin: 2px 0px; /* reduced from 20px 0 10px */
+    }
+
+    #category-full-content p,
+    #category-preview,
+    #category-full-content li{
+        font-size:15px;
+        line-height:1.8;
+    }
+    
+    #category-full-content p{
+        margin:0 0 10px; /* reduced */
+    }
+    
+    #category-full-content ul {
+  margin: 0px 0px 0px 28px;
+  padding: 0;
+}
+    
+    #category-full-content li{
+        margin-bottom:6px; /* reduced from 12px */
+    }
+}
+</style>
+
 <!-- <style>
 /* 
  * Aiman Fashion - Salwar Kameez Category Page Styles
@@ -2972,6 +3139,34 @@ art from fake trails.
   }
 `;
   document.head.appendChild(style);
+</script>
+
+<script>
+  // Remove empty h2 tags and fix structure
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('category-full-content');
+    
+    // Remove all empty h2 tags
+    container.querySelectorAll('h2').forEach(function(h2) {
+        if (h2.innerHTML.trim() === '' || h2.innerHTML.trim() === '<br>') {
+            h2.remove();
+        }
+        
+        // If h2 contains only ul, unwrap it (remove h2 but keep ul)
+        if (h2.querySelector('ul') && h2.children.length === 1) {
+            const ul = h2.querySelector('ul');
+            h2.parentNode.insertBefore(ul, h2);
+            h2.remove();
+        }
+    });
+    
+    // Remove &nbsp; from li
+    container.querySelectorAll('li').forEach(function(li) {
+        if (li.innerHTML.trim().startsWith('&nbsp;')) {
+            li.innerHTML = li.innerHTML.replace('&nbsp;', '');
+        }
+    });
+});
 </script>
 
 
