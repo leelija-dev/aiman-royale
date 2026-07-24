@@ -252,10 +252,8 @@ class UserController extends Controller implements HasMiddleware
                 $q->whereIn('status', ['ready_for_pickup', 'in_transit', 'out_for_delivery']);
             }]);
 
-        //  Search
-
+        // Search by order ID, status, or product name
         if ($request->filled('search')) {
-
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
@@ -267,18 +265,39 @@ class UserController extends Controller implements HasMiddleware
             });
         }
 
-        // 
+        // Status / quick-tab filter (column is order_status)
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $status = $request->status;
+
+            $statusMap = [
+                'processing' => ['pending', 'confirmed', 'paid'],
+                'to_ship' => ['pending', 'confirmed', 'paid'],
+                'to_receive' => ['shipped'],
+                'shipped' => ['shipped'],
+                'completed' => ['delivered'],
+                'delivered' => ['delivered'],
+                'cancelled' => ['cancelled'],
+                'returned' => ['returned'],
+            ];
+
+            if (isset($statusMap[$status])) {
+                $query->whereIn('order_status', $statusMap[$status]);
+            } else {
+                $query->where('order_status', $status);
+            }
         }
 
-
-        if ($request->filled('date_filter')) {
-            $days = $request->date_filter;
-            $query->where('created_at', '>=', now()->subDays($days));
+        // Date range filter (days)
+        if ($request->filled('date_filter') && is_numeric($request->date_filter)) {
+            $days = (int) $request->date_filter;
+            if ($days > 0) {
+                $query->where('created_at', '>=', now()->subDays($days));
+            }
         }
 
-        $orders = $query->latest()->paginate(5, '*', 'page');
+        $orders = $query->latest()
+            ->paginate(5, '*', 'page')
+            ->appends($request->except('page'));
 
         return view('web.order-history', compact('user', 'orders'));
     }
