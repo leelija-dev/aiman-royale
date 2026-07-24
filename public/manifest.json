@@ -1,6 +1,6 @@
 {
-    "name": "Amarmaa",
-    "short_name": "Amarmaa",
+    "name": "Aiman Royale",
+    "short_name": "Aiman Royale",
     "description": "Your app description",
     "start_url": "/admin/new-bill",
     "display": "standalone",
@@ -9,12 +9,12 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "/web/images/amarmaa-logo.webp",
+            "src": "/web/images/company-logo/aiman-logo.png",
             "sizes": "192x192",
             "type": "image/webp"
         },
         {
-            "src": "/web/images/amarmaa-logo.webp",
+            "src": "/web/images/company-logo/aiman-logo.png",
             "sizes": "512x512",
             "type": "image/webp"
         }
