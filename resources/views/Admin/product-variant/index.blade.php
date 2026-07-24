@@ -689,7 +689,7 @@
 
                         dz.emit("addedfile", mockFile);
                         dz.emit("thumbnail", mockFile,
-                            "{{ asset('uploads/variants') }}/" + image.image
+                            image.image
                         );
                         dz.emit("complete", mockFile);
 
