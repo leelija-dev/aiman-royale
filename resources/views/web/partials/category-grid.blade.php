@@ -47,7 +47,7 @@
                 $discountPercentage = round((($originalPrice - $discountPrice) / $originalPrice) * 100);
                 @endphp
                 <span class="discount-badge bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                    -{{ $discountPercentage }}% OFF
+                    {{ $discountPercentage }}% OFF
                 </span>
                 @endif
         </div>
@@ -174,7 +174,7 @@
                 $discountPercentage = round((($originalPrice - $discountPrice) / $originalPrice) * 100);
                 @endphp
                 <span class="discount-badge bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                    -{{ $discountPercentage }}% OFF
+                    {{ $discountPercentage }}% OFF
                 </span>
                 @endif
         </div>
