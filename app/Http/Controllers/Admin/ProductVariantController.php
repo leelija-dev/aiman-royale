@@ -42,8 +42,9 @@ class ProductVariantController extends Controller
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->input('product_id'));
         }
-
+        // dd($request->input('color'));
         if ($request->filled('color')) {
+            // dd($request->input('color'));
             $query->where('color', $request->input('color'));
         }
 
@@ -480,7 +481,7 @@ class ProductVariantController extends Controller
             }
         }
 
-        return redirect()->route('admin.product-variants')->with('success', 'Product variant updated successfully with Cloudinary!');
+        return redirect()->back()->with('success', 'Product variant updated successfully with Cloudinary!');
     }
 
     /**
