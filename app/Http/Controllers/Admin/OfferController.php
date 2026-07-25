@@ -176,16 +176,21 @@ class OfferController extends Controller
         }
     }
     public function delete($id)
-    {
-        $offer = Offer::findOrFail($id);
-        if (!$offer) {
-            return back()->with('error', 'Offer not found');
-        }
-        try {
-            $offer->delete();
-            return redirect()->route('admin.offers.index')->with('success', 'Offer deleted successfully');
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
+{
+    $offer = Offer::findOrFail($id);
+
+    try {
+        // Delete all products associated with this offer
+        OfferProducts::where('offer_id', $offer->id)->delete();
+
+        // Delete the offer
+        $offer->delete();
+
+        return redirect()
+            ->route('offer.index')
+            ->with('success', 'Offer deleted successfully');
+    } catch (\Exception $e) {
+        return back()->with('error', $e->getMessage());
     }
+}
 }
