@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+
 class CategoryController extends Controller
 {
     /**
@@ -41,7 +42,18 @@ class CategoryController extends Controller
 
     public function show($slug)
     {
+
+        $occasion = Occasion::where('slug', $slug)
+            ->where('is_active', 1)
+            ->first();
+        // dd($occasion);
+
+        if ($occasion) {
+            // Handle occasion-based filtering
+            return $this->handleOccasionProducts($occasion, $slug);
+        }
         $categoryExist = Category::where('slug', $slug)->first();
+
         if ($categoryExist) {
 
             $category = Category::where('slug', $slug)
@@ -140,9 +152,113 @@ class CategoryController extends Controller
             ->take(5)
             ->get();
 
-            // dd($latestProducts);
+        // dd($latestProducts);
 
         return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
+    }
+
+    private function handleOccasionProducts($occasion, $slug)
+    {
+        // dd($occasion);
+        $occasion_id = $occasion->id;
+        // dd($occasion_id);
+        // Get products that belong to this occasion
+        $products = Product::where('is_active', 1)
+            ->whereHas('variants')
+            ->whereHas('occasions', function ($query) use ($occasion_id) {
+                $query->where('occasion_id', $occasion_id);
+            })
+            ->with(['images' => function ($query) {
+                $query->select('product_id', 'image');
+            }, 'variants' => function ($query) {
+                $query->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock');
+            }])
+            ->select('products.*')
+            ->latest()
+            ->paginate(12);
+// dd($products);
+        // Get all occasions and categories for filters
+        $occasions = Occasion::where('is_active', 1)->get();
+        $categories = Category::where('is_active', 1)->get();
+
+        // Get all variants for products in this occasion
+        $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($occasion_id) {
+            $query->where('is_active', 1)
+                ->whereHas('occasions', function ($q) use ($occasion_id) {
+                    $q->where('occasion_id', $occasion_id);
+                });
+        })->get();
+
+        // Get unique sizes
+        $sizes = $allVariants->pluck('size')
+            ->filter()
+            ->map(function ($size) {
+                if (is_string($size) && $this->isJson($size)) {
+                    return json_decode($size, true);
+                }
+                return $size;
+            })
+            ->flatten()
+            ->unique()
+            ->filter()
+            ->sort()
+            ->values();
+
+        // Get unique colors
+        $colors = $allVariants->pluck('color')
+            ->filter()
+            ->map(function ($color) {
+                if (is_string($color) && $this->isJson($color)) {
+                    return json_decode($color, true);
+                }
+                return $color;
+            })
+            ->flatten()
+            ->unique()
+            ->filter()
+            ->sort()
+            ->values();
+
+        // Get price range
+        $priceRange = [
+            'min' => $allVariants->min('discount_price') ?? $allVariants->min('price') ?? 0,
+            'max' => $allVariants->max('price') ?? 10000
+        ];
+
+        // Calculate dynamic price ranges
+        $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
+
+        // Set category as occasion for display purposes
+        $category = (object) [
+            'id' => $occasion->id,
+            'name' => $occasion->name,
+            'slug' => $occasion->slug,
+            'description' => $occasion->description,
+            'parent_id' => null,
+            'is_occasion' => true,
+        ];
+
+        $latestProducts = Product::where('is_active', 1)
+            ->whereHas('variants')
+            ->with(['images' => function ($query) {
+                $query->select('product_id', 'image');
+            }])
+            ->select('products.*')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('web.category_product', compact(
+            'category',
+            'products',
+            'occasions',
+            'sizes',
+            'colors',
+            'priceRange',
+            'priceRanges',
+            'latestProducts',
+            'categories'
+        ));
     }
 
     // Helper function to check if string is JSON
@@ -612,20 +728,20 @@ class CategoryController extends Controller
 
                 $products = $query->paginate(12);
             }
-             $latestProducts = Product::where('is_active', 1)
-            ->whereHas('variants')
-            ->with(['images' => function ($query) {
-                $query->select('product_id', 'image');
-            }])
-            ->select('products.*')
-            ->latest()
-            ->take(5)
-            ->get();
+            $latestProducts = Product::where('is_active', 1)
+                ->whereHas('variants')
+                ->with(['images' => function ($query) {
+                    $query->select('product_id', 'image');
+                }])
+                ->select('products.*')
+                ->latest()
+                ->take(5)
+                ->get();
 
             // Return response
             if ($request->ajax()) {
                 try {
-                    $html = view('web.partials.category-grid', compact('products','latestProducts'))->render();
+                    $html = view('web.partials.category-grid', compact('products', 'latestProducts'))->render();
 
                     return response()->json([
                         'success' => true,

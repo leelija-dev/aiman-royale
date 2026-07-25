@@ -1,5 +1,6 @@
 @if($products->count() > 0)
 @foreach($products as $product)
+{{-- @dd($product) --}}
 <div class="item flex justify-center items-center">
     <a href="/products/{{ $product->slug ?? $product['slug'] ?? '' }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200 product-card">
         <!-- Image Wrapper -->
@@ -187,6 +188,7 @@
 </div>
 @endforeach
 @else
+{{-- @dd("this is test") --}}
 <!-- No Products Found Message -->
 <div class="col-span-full flex flex-col items-center justify-center py-16">
     <div class="text-center">

@@ -217,6 +217,153 @@
   .product-card {
     transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
+
+  
+    .offer-banner-wrapper {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 3px;
+        margin: 2rem 0;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    }
+    
+    .offer-banner {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        border-radius: 18px;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .offer-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    
+    .offer-banner::after {
+        content: '30%';
+        position: absolute;
+        bottom: -30px;
+        right: -10px;
+        font-size: 200px;
+        font-weight: 900;
+        color: rgba(102, 126, 234, 0.05);
+        line-height: 1;
+        pointer-events: none;
+    }
+    
+    .offer-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .offer-badge {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        animation: pulse-badge 2s infinite;
+    }
+    
+    @keyframes pulse-badge {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .offer-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #2d3748;
+        margin: 1rem 0 0.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .offer-subtitle {
+        font-size: 1.1rem;
+        color: #718096;
+        margin-bottom: 1.5rem;
+    }
+    
+    .offer-highlight {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .offer-highlight:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .offer-features {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .offer-feature {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #4a5568;
+        font-size: 0.95rem;
+    }
+    
+    .offer-feature i {
+        color: #667eea;
+        font-size: 1.2rem;
+    }
+    
+    .offer-image {
+        max-height: 300px;
+        object-fit: contain;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .offer-title {
+            font-size: 2rem;
+        }
+        .offer-banner {
+            padding: 1.5rem;
+        }
+        .offer-features {
+            gap: 1rem;
+        }
+        .offer-image {
+            max-height: 200px;
+            margin-top: 1rem;
+        }
+    }
+
 </style>
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
   <div class="container mx-auto">
@@ -1167,8 +1314,56 @@
       <div class="w-full">
         <div
           class="py-[10px] flex flex-wrap items-center justify-end gap-4 border-b border-gray-200/80 mb-[10px] ">
+          
+               @if(request('search') == 'offer' || request('search') == 'offers')
+    @php
+        $offer = App\Models\Offer::where('is_active', 1)
+            ->where('start_date', '<=', date('Y-m-d'))
+            ->where('end_date', '>=', date('Y-m-d'))
+            ->first();
+        $coupon = App\Models\Coupon::where('is_active', 1)->where('expiry_date', '>=', date('Y-m-d H:i'))->first();
+    @endphp
 
+    @if($offer)
+    <div class="w-full mb-6">
+        <div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-pink-600 via-pink-500 to-fuchsia-500 p-8 lg:p-12">
 
+            <!-- Decorative circles -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-200/20 rounded-full"></div>
+            <div class="absolute -bottom-16 -left-10 w-56 h-56 bg-pink-200/20 rounded-full"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+
+                <div class="text-white">
+                    {{-- <span class="inline-block bg-white text-pink-600 font-semibold px-4 py-2 rounded-full mb-4">
+                        🔥 Limited Time Offer
+                    </span> --}}
+
+                    <h2 class="text-3xl lg:text-5xl font-bold mb-3">
+                        {{ $offer->name ?? '' }}
+                    </h2>
+
+                    <p class="text-xl lg:text-2xl font-medium mb-6">
+                        Get Up To
+                        <span class="font-bold text-yellow-300">
+                            {{ $offer->discount ?? '' }}% OFF
+                        </span>
+                    </p>
+
+                    <p class="text-lg font-medium mb-2">
+                        Use Coupon Code 
+                        <span class="font-bold text-white" style="size: 15px;">
+                            {{ $coupon->code ?? '' }}
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    @endif
+@endif
+            
           <!-- Right: Status Badge -->
           @if ($products->count() == 0)
           <div
@@ -1184,6 +1379,7 @@
           @endif
         </div>
         <div id="products-container" class="products-container">
+          {{-- @dd($products->count()) --}}
           @include('web.partials.product-grid', ['products' => $products])
         </div>
 

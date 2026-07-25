@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Occasion;
+use App\Models\OfferProducts;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -673,6 +674,107 @@ class HomeController extends Controller
         $hasOffer = $request->input('has_offer');
 
         // Start building the query
+        if (in_array(strtolower($search), ['offer', 'offers'])) {
+        
+    $query = DB::table('offer_products')
+        ->join('products', 'offer_products.product_id', '=', 'products.id')
+        ->join('product_variants', 'offer_products.product_variant_id', '=', 'product_variants.id')
+        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
+        ->where('products.is_active', 1)
+        ->where('products.ready_to_ship', 1)
+        ->select(
+                'products.id',
+                'products.design_no',
+                'products.category_id',
+                'products.ocassion_id',
+                'products.name',
+                'products.slug',
+                'products.description',
+                'products.brand',
+                'products.fabric',
+                'products.fit',
+                'products.price',
+                'products.discount_price',
+                'products.stock',
+                'products.status',
+                'products.featured_image',
+                'products.ready_to_ship',
+                'products.is_featured',
+                'products.meta_title',
+                'products.keywords',
+                'products.tags',
+                'products.meta_description',
+                'products.schema_markup',
+                'products.created_at',
+                'products.updated_at',
+                'products.deleted_at',
+                'products.is_active',
+                'products.unit_id',
+                'products.lehenga_fabric',
+                'products.choli_fabric',
+                'products.dupatta_fabric',
+                'products.type',
+                'products.stitching_type',
+                'products.pattern',
+                'products.sales_package',
+
+                'product_variants.id as variant_id',
+                'product_variants.size',
+                'product_variants.color',
+                'product_variants.price as variant_price',
+                'product_variants.discount_price as price_after_discount',
+                'product_variants.stock as variant_stock',
+
+                DB::raw('MIN(product_images.image) as variant_image')
+            )
+            ->groupBy(
+                'products.id',
+                'products.design_no',
+                'products.category_id',
+                'products.ocassion_id',
+                'products.name',
+                'products.slug',
+                'products.description',
+                'products.brand',
+                'products.fabric',
+                'products.fit',
+                'products.price',
+                'products.discount_price',
+                'products.stock',
+                'products.status',
+                'products.featured_image',
+                'products.ready_to_ship',
+                'products.is_featured',
+                'products.meta_title',
+                'products.keywords',
+                'products.tags',
+                'products.meta_description',
+                'products.schema_markup',
+                'products.created_at',
+                'products.updated_at',
+                'products.deleted_at',
+                'products.is_active',
+                'products.unit_id',
+                'products.lehenga_fabric',
+                'products.choli_fabric',
+                'products.dupatta_fabric',
+                'products.type',
+                'products.stitching_type',
+                'products.pattern',
+                'products.sales_package',
+
+                'product_variants.id',
+                'product_variants.size',
+                'product_variants.color',
+                'product_variants.price',
+                'product_variants.discount_price',
+                'product_variants.stock'
+            );
+        // dd($query);
+} else {
+    // dd('else');
         $query = DB::table('products')
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
@@ -768,9 +870,9 @@ class HomeController extends Controller
                 'product_variants.discount_price',
                 'product_variants.stock'
             );
-
+}
         // Apply search filter
-        if ($search && !empty(trim($search))) {
+        if ($search != 'offer' && $search != 'offers' && !empty(trim($search))) {
 
             $searchTerm = strtolower(trim($search));
 
@@ -913,7 +1015,7 @@ class HomeController extends Controller
         // $products = $query->get();
         // Get products
         $rawProducts = $query->get();
-
+        
         // Convert products to old array structure
         $products = collect();
 
@@ -1023,8 +1125,11 @@ class HomeController extends Controller
             'price_ranges' => array_unique($priceRanges),
             'discount_ranges' => $discountRanges,
         ];
-
-
+            
+        // if($request->search == 'offers' || $request->search == 'offer') { 
+        //     $products = OfferProducts::with('productVariant');
+        // }
+    //    dd($products);
         return view(
             'web.multi-product',
             compact(
@@ -1233,7 +1338,7 @@ class HomeController extends Controller
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-
+            
         return view('web.single-product', compact(
             'product',
             'sizes',
