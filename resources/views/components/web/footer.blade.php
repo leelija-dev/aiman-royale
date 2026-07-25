@@ -1277,97 +1277,37 @@
 @if(request()->route()->getName() === 'page.index')
 <section id="dynamic-content-sec-1" class="w-full bg-white py-12 lg:py-20">
   <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
-
-    <!-- Main Heading -->
-    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
-      Aiman Royale - Buy Exclusive Designer Ethnic Collection Online in India
-
-    </h2>
-
-    <!-- Intro Paragraph (Always Visible) -->
-    <p class="mb-3 leading-relaxed text-base md:text-lg">
-      Founded in 2007 in New Delhi, Aiman Royale is passionate about combining modern simplicity with the timeless creativity of Indian artistry and craftsmanship. We specialize in women’s ethnic outfits, including designer sarees, exclusive lehengas, premium salwar suits, comfy palazzos & fusion ensembles. We bring you luxury that seamlessly blends heritage & convenience.
-
-
-    </p>
-
-    <!-- Expandable Details Section -->
-    <details class="mt-2 group">
+   <!-- Main Heading --> 
+   <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6"> Aiman Royal - The definition of resilience and the vigor of not giving up </h2>
+   <!-- Intro Paragraph (Always Visible) --> 
+   <p class="mb-3 leading-relaxed text-base md:text-lg"> We first began our journey when we were nested under Moni Designer Private Limited. It was established in 2017, and it began with one mission: to make you wear art. Fast forward, we had a setback during COVID, then a breakthrough in 2023, and started designing designer collections for women that would make them feel like a diva when they wore them. </p>
+   <!-- Expandable Details Section --> 
+   <details class="mt-2 group">
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
-        <!-- Show "Read more" when closed, "Show less" when open -->
-        <span class="group-open:hidden">Read more</span>
-        <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span>
-
+         <!-- Show "Read more" when closed, "Show less" when open --> <span class="group-open:hidden">Read more</span> <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span> 
       </summary>
-
-      <div class="mt-4 space-y-6">
-        <!-- Continued Intro Content -->
-        <p class="leading-relaxed text-base md:text-lg">
-          Aiman Royale redefines ethnic fashion through masterful craftsmanship and intricate detail. From luxurious, contemporary bridal lehengas with intricate embroidery to ready-to-wear salwar suits for everyday, our extensive contemporary collections celebrate the sophistication of Indian traditional outfits with a modern blend of comfort.
-        </p>
-
-        <!-- Subheading -->
-        <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
-          Premium Ethnic Wear Collection for Women
-        </h3>
-
-        <p class="leading-relaxed text-base md:text-lg">
-          At Aiman Royale, we believe that today’s woman should own outfits that celebrate her individuality without compromising her cultural pride. Our collection includes:
-        </p>
-
-        <ul class="list-disc pl-6 space-y-3 text-base md:text-lg leading-relaxed">
-          <li><span class="font-medium">Gowns:</span> Machine embroidered long anarkali gowns made of georgette & chinon with floor-length, elegant, voluminous flared skirts, mid-cut suits with taffeta pants, & chinon dupatta available in size X & XL & gorgeous colors like wine, rust, maroon, firoji, white, green, rose gold, coffee, & more. </li>
-          <li><span class="font-medium">Lehengas:</span> 3-piece bridal and festive lehengas with flared ankle-length skirt, fitted choli, & matching dupatta. These machine-embroidered lahengas feature unique zari work, intricate zardosi detailing, & beautiful gota patti work. Available in L and XL sizes, these lahengas are designed to elevate your complete look on special occasions.</li>
-          <li><span class="font-medium">Salwar Kameez:</span> A wide range of traditional 3-piece salwar suits made of chinon, georgette, shimmer, viscose organza, paired with taffeta unstitched pants, palazzos, ghararas, straight mid-cut pants, & matching dupatta with four-side borders and decorated with hand-embroidered buttis, perfect for regular or casual events.</li>
-          <li><span class="font-medium">Palazzo Sets:</span>Comfortable yet stylish everyday wear, perfect for on-the-go events. Coordinated 2-piece outfits with wide-legged flared trousers paired with a matching dupatta, available in L & XL with multiple color options like turquoise blue, maroon, mint green, wine, purple, rose gold, mauve, copper, rust, olive green, & more.</li>
-          <li><span class="font-medium">Anarkali:</span> Long, flowing kurtas paired with a fitted bottom and a matching dupatta, made of chinnon and georgette. Available in a wide range of color options like maroon, black, red, orange, mustard, mauve, firoji, & more, these outfits feature intricate machine-embroidered patterns for an elegant look. </li>
-          <li><span class="font-medium">Kurta Sets: </span> Traditional, loose-fitting regular kurtas with full sleeves and a dupatta, made of breathable fabrics for everyday use. Available in L and XL sizes & soothing pastel color shades, the kurta sets are just the perfect picks for this summer. </li>
-          <li><span class="font-medium">Sharara Suits: </span> South-Asian wide-legged & straight outfit with heavily flared trousers and a matching dupatta, designed for weddings and festivals. Made of chinnon & georgette, these shararas are available in exciting color variants like rani, mint green, rust, turquoise blue, maroon, & rose gold.
-          </li>
-        </ul>
-
-        <!-- Subheading -->
-        <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4">
-          Why Aiman Royale for A Complete Ethnic Wardrobe Revamp?
-        </h3>
-
-        <p class="leading-relaxed text-base md:text-lg">
-          Designed to create a lasting impression, Aiman Royale’s luxury outfits celebrate the intricate textiles and rich artistry of India. Our commitment to the finest quality & elegant designs ensures that each outfit:
-
-        </p>
-
-        <!-- Bullet Points -->
-        <ul class="list-disc pl-6 space-y-4 text-base md:text-lg leading-relaxed mb-4">
-          <li>
-            Is designed by the expert artisans across India, especially skilled in blending traditional craftsmanship with modern elegance
-          </li>
-          <li>
-            Is made of premium-quality fabrics such as pure silk, naturally-derived cotton, & luxurious georgette blends that ensure all-day comfort
-
-          </li>
-          <li>
-            Is versatile and can be styled in different ways by pairing it with the right set of jewelry
-          </li>
-          <li>
-            Is embroidered with classy & contemporary patterns that never fall out of fashion
-
-          </li>
-          <li>
-            Will give you the perfect fit with our customization & tailored virtual fashion consultation services
-
-          </li>
-        </ul>
-
-        <!-- Closing Paragraph -->
-        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-          <p class="leading-relaxed text-base md:text-lg text-gray-700">
-            Explore the beauty of Indian traditional and ethnic outfits at Aiman Royale. Whether it’s your big day, a festive event, or a casual evening celebration, we always have something for you. Experience luxury curated with comfort at its finest.
-          </p>
-        </div>
+      <div class="mt-4 space-y-3">
+         <!-- Continued Intro Content --> 
+         <p class="leading-relaxed text-base md:text-lg"> Our mission was to make them walk with confidence and make every photograph insta-worthy. People loved our clothing, and now we have operational channels in Kashmir, Kolkata, and Delhi and make deliveries pan-India. From going nearly bankrupt to making profits again, we have come a long way. The following list consists of some standout categories that made us become our brand loyalists </p>
+         <!-- Subheading --> 
+         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4"> Gowns </h3>
+         <p class="leading-relaxed text-base md:text-lg"> We don't call them gowns; we call them art redefined. If you look closely, you can see the fine-tuning that we have done. Once you wear them they you feel like royalty. At the end of the day, people don't care how much money you make; they see how well you can represent an occasion. </p>
+         <p class="leading-relaxed text-base md:text-lg mt-2"> Some of our bestsellers in our gown collection are Maroon Anakali, Maroon long Anarkali with middle cut suit and pants, and white Anarkali. All these apparel are perfect for family get-togethers, nikah ceremony, haldi, mehendi, reception and temple ceremonies </p>
+         <!-- Subheading --> 
+         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4"> Bridal </h3>
+         <p class="leading-relaxed text-base md:text-lg"> Our bridal classics are items that we pride ourselves on. Once you wear them, you become unforgettable. Some of the finest selections in our bridal category are copper straight suit + middle cut pant, Navi paplom suit with skirt, and maroon paplom suit with ghagra. Most of them are inspired by Rajasthani style, and the Zari embroidery, along with chinon fabric, complements the Dupatta when you wear them. </p>
+         <!-- Subheading --> 
+         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4"> Salwar Kameez </h3>
+         <p class="leading-relaxed text-base md:text-lg"> This category of ours is called the cult favourites, and why won't it be? All the classics presented in this fashion line are lightweight and perfect for everyday wear. In India, we don't have one-day wedding events; we average 3-4 days of festivity, and wearing a new piece every day is a task, but Aiman Royal makes it look easy, since it presents you with standout pieces every time. </p>
+         <!-- Subheading --> 
+         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4"> Wedding hits </h3>
+         <p class="leading-relaxed text-base md:text-lg"> These are attires that honour your celebrations. They are not clothing; they are everyday keepsakes that honour your wardrobe. You can wear them 5 years back, or you can wear them today, but each time you wear it will feel like you have worn it for the first time. These apparels grow on you slowly and make you keep them cherished forever. </p>
+         <!-- Subheading --> 
+         <h3 class="text-xl md:text-2xl font-semibold mt-8 mb-4"> Style you can trust. Class, you can afford </h3>
+         <p class="leading-relaxed text-base md:text-lg"> At Aiman Royal, we believe that each piece is a work of art, and that's why it becomes a head turner every time you wear them. At every occasion, you have heard someone say, "God! Fiona looked so stunning". This indicates that people don't remember the decor or food; they remember the people who have made a long-lasting impression. If you want the remark for yourself, then it's possible with Aiman Royale. </p>
       </div>
-    </details>
-
-  </div>
+   </details>
+</div>
 </section>
 
 @elseif(str_contains(request()->path(), 'collections/'))

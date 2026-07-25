@@ -1080,23 +1080,26 @@
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
 
-                // Close any other open dropdown
-                closeAllDropdowns();
-
-                // Toggle current dropdown
+                // Check if current dropdown is already open
                 const isHidden = menu.classList.contains('hidden');
 
-                if (isHidden) {
-                    menu.classList.remove('hidden');
-                    chevron.style.transform = 'rotate(180deg)';
-                    button.setAttribute('aria-expanded', 'true');
-                    currentlyOpenDropdown = menuId;
-                } else {
+                if (!isHidden) {
+                    // If already open, just close it
                     menu.classList.add('hidden');
                     chevron.style.transform = 'rotate(0deg)';
                     button.setAttribute('aria-expanded', 'false');
                     currentlyOpenDropdown = null;
+                    return;
                 }
+
+                // Close any other open dropdown
+                closeAllDropdowns();
+
+                // Open current dropdown
+                menu.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+                button.setAttribute('aria-expanded', 'true');
+                currentlyOpenDropdown = menuId;
             });
         }
 
