@@ -771,7 +771,7 @@ class HomeController extends Controller
                 'product_variants.price',
                 'product_variants.discount_price',
                 'product_variants.stock'
-            );
+            )->orderByDesc('product_variants.discount' );
         // dd($query);
 } else {
     // dd('else');
@@ -1014,7 +1014,7 @@ class HomeController extends Controller
         // Get products
         // $products = $query->get();
         // Get products
-        $rawProducts = $query->get();
+        $rawProducts = $query->paginate(12);
         
         // Convert products to old array structure
         $products = collect();
