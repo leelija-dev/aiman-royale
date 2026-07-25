@@ -1115,6 +1115,46 @@
             <!-- Desktop Navigation with Enhanced Hover Effects -->
             <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[17px] text-[15px]">
                 @if (isset($categories) && count($categories) > 0)
+                <a href=""
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="" data-category-id="">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Wedding
+                        </span>
+
+                       
+                    </a>
+                    <a href="#"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="" data-category-id="">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Bridal
+                        </span>
+
+                       
+                    </a>
+                
+
                 @foreach ($categories->where('parent_id', null) as $category)
                 <div class="relative group">
                     <a href="{{ route('category.show', $category->slug) }}"
@@ -3349,6 +3389,19 @@
                     isOverNav = true;
 
                     const categoryId = this.getAttribute('data-category-id');
+                    const categoryName = this.getAttribute('data-category');
+                    const linkText = this.textContent.toLowerCase();
+                    
+                    // Hide/Show Occasion button based on category
+                    const occasionBtn = document.querySelector('[data-target="occation-products"]');
+                    if (occasionBtn) {
+                        if (linkText.includes('wedding') || linkText.includes('bridal')) {
+                            occasionBtn.style.display = 'none';
+                        } else {
+                            occasionBtn.style.display = 'block';
+                        }
+                    }
+                    
                     if (categoryId) {
                         currentCategoryId = categoryId;
                         loadCategoryData(categoryId);

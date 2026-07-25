@@ -41,7 +41,7 @@ class BannerDetailsController extends Controller
             'redirect_link' => 'nullable|string',
             // 'position' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp',
-            'mobile_screen_image' => 'required|image|mimes:jpeg,png,jpg,webp|dimensions:ratio=2/3',
+            'mobile_screen_image' => 'required|image|mimes:jpeg,png,jpg,webp',
             'is_active' => 'boolean',
         ]);
 
