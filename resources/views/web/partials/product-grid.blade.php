@@ -134,7 +134,7 @@
 
                 @if($discountPercentage > 0)
                 <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                    -{{ $discountPercentage }}% OFF
+                    {{ $discountPercentage }}% OFF
                 </span>
                 @endif
             </div>
@@ -187,6 +187,7 @@
 </div>
 @endforeach
 @else
+{{-- @dd("this is test") --}}
 <!-- No Products Found Message -->
 <div class="col-span-full flex flex-col items-center justify-center py-16">
     <div class="text-center">

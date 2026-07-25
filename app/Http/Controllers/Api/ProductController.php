@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\OfferProducts;
 use App\Models\Product;
 use App\Models\Order;
 use Cashfree\Model\Products;
@@ -165,12 +166,30 @@ class ProductController extends Controller
     public function filterProducts(Request $request): JsonResponse
     {
         try {
+            if($request->search == 'offers' || $request->search == 'offer' ){
+                
+               $query = OfferProducts::join('product_variants', 'offer_products.product_variant_id', '=', 'product_variants.id')
+    ->join('products', 'offer_products.product_id', '=', 'products.id')
+    ->where('products.ready_to_ship', 1)
+    ->select(
+        'offer_products.*',
+        'product_variants.discount'
+    )
+    ->orderByDesc('product_variants.discount')
+    ->with([
+        'productVariant',
+        'product.category',
+        'product.occasion'
+    ]);
+    
+                
+            }else{
             $query = Product::where('is_active', 1)
                 ->where('products.ready_to_ship', 1)
                 ->with(['variants', 'category', 'occasion']);
 
             // Filter by search term
-            if ($request->filled('search')) {
+            if ($request->filled('search') != 'offers' && $request->filled('search') != 'offer') {
                 $searchTerm = $request->input('search');
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('name', 'LIKE', '%' . $searchTerm . '%')
@@ -187,7 +206,7 @@ class ProductController extends Controller
                         });
                 });
             }
-
+            }
             // Filter by products with offer (discount applied)
             if ($request->filled('has_offer') && $request->input('has_offer') == '1') {
                 $query->whereNotNull('discount_price')
@@ -344,7 +363,7 @@ class ProductController extends Controller
                 }
             }
 
-            $products = $query->get();
+            $products = $query->paginate(12);
 
             $processedProducts = $products->map(function ($product) {
 

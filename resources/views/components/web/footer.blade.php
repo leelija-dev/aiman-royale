@@ -2599,7 +2599,7 @@ art from fake trails.
     </a>
 
     <!-- Offers Button -->
-    <a href="{{ config('app.url') }}/products?search=trending" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
+    <a href="{{ route('page.multi-product', ['search' => 'offers']) }}" class="nav-item flex flex-col items-center justify-center w-14 py-2 rounded-xl hover:bg-amber-50 active:scale-95 transition-all duration-300 group relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div class="relative">
         <i class="fas fa-percent text-xl text-gray-600 mb-1 group-hover:text-amber-600 group-hover:scale-110 transition-all duration-300 relative z-10"></i>
