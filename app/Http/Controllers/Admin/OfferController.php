@@ -38,11 +38,11 @@ class OfferController extends Controller
             'duration' => 'required|integer',
             'apply_on' => 'required',
             'is_active' => 'required',
-            'is_timer' => 'nullable',
-            'product_id' => 'nullable|array',
-            'product_variant_id' => 'nullable|array',
+            'is_timer' => 'nullable|boolean',
+            // 'product_id' => 'nullable|array',
+            'selected_product_variants' => 'nullable|array',
         ]);
-
+        // dd($request->all());
         try {
 
             if ($request->boolean('is_timer')) {
@@ -58,7 +58,7 @@ class OfferController extends Controller
                 'duration' => $request->duration,
                 'apply_on' => $request->apply_on,
                 'is_active' => $request->is_active,
-                'is_timer' => $request->is_timer
+                'is_timer' => $request->has('is_timer') ? 1 : 0,
             ]);
 
             $allVariants = ProductVariant::all();
@@ -68,11 +68,15 @@ class OfferController extends Controller
                 $request->apply_on == "selected-product" &&
                 $request->filled('selected_product_variants')
             ) {
-                foreach ($request->product_variant_id as $key => $variantId) {
+                foreach ($request->selected_product_variants as $key => $variantId) {
+                    $variant = ProductVariant::find($variantId);
 
+                        if (!$variant) {
+                            continue;
+                        }
                     OfferProducts::create([
                         'offer_id' => $offer->id,
-                        'product_id' => $request->product_id[$key],
+                        'product_id' => $variant->product_id,
                         'product_variant_id' => $variantId,
                     ]);
                 }
@@ -111,7 +115,7 @@ class OfferController extends Controller
             'duration' => 'required|integer',
             'apply_on' => 'required',
             'is_active' => 'required',
-            'is_timer' => 'nullable',
+            'is_timer' => 'nullable|boolean',
             'product_id' => 'nullable|array',
             'selected_product_variants' => 'nullable|array',
         ]);
@@ -119,11 +123,11 @@ class OfferController extends Controller
         try {
 
             $offer = Offer::findOrFail($id);
-            $offers = Offer::all();
-            if ($data['is_timer'] == true) {
+            // $offers = Offer::all();
+            if ($request->boolean('is_timer')) {
                 Offer::where('id', '!=', $id)
                     ->update([
-                        'is_timer' => false
+                        'is_timer' => 0
                     ]);
             }
             $offer->update([
@@ -134,7 +138,7 @@ class OfferController extends Controller
                 'duration'   => $request->duration,
                 'apply_on'   => $request->apply_on,
                 'is_active'  => $request->is_active,
-                'is_timer'   => $request->has('is_timer') ? 1 : 0,
+                'is_timer'   => $request->boolean('is_timer'),
             ]);
 
             // Remove previous selected products
@@ -176,16 +180,21 @@ class OfferController extends Controller
         }
     }
     public function delete($id)
-    {
-        $offer = Offer::findOrFail($id);
-        if (!$offer) {
-            return back()->with('error', 'Offer not found');
-        }
-        try {
-            $offer->delete();
-            return redirect()->route('admin.offers.index')->with('success', 'Offer deleted successfully');
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
+{
+    $offer = Offer::findOrFail($id);
+
+    try {
+        // Delete all products associated with this offer
+        OfferProducts::where('offer_id', $offer->id)->delete();
+
+        // Delete the offer
+        $offer->delete();
+
+        return redirect()
+            ->route('offer.index')
+            ->with('success', 'Offer deleted successfully');
+    } catch (\Exception $e) {
+        return back()->with('error', $e->getMessage());
     }
+}
 }
