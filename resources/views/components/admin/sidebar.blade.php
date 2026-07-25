@@ -59,6 +59,16 @@ $isEmailActive = false;
                     <span class="nav-link-text ms-1">Coupon</span>
                 </a>
             </li>
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('offer.*') ? 'active' : '' }}" href="{{ route('offer.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                   
+                    <span class="nav-link-text ms-1">Offer</span>
+                </a>
+            </li>
 
             {{-- @if ($admin->hasPermissionTo('view services') || $roles[0] == 'superadmin')
                 

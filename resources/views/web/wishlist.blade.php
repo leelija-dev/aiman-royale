@@ -167,7 +167,7 @@
                 </div>
 
                 <!-- Wishlist Items Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 wishlist-grid">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 wishlist-grid">
                     @if($wishlistItems->isEmpty())
                     <div class="col-span-full">
                         <div class="bg-white rounded-2xl shadow-sm p-12 text-center empty-state">
@@ -196,7 +196,7 @@
                     <div class="wishlist-item flex flex-col  product-card bg-white rounded-2xl shadow-sm overflow-hidden" data-product-id="{{ $product->id }}">
                         <div class="relative">
                             <a href="{{ route('page.single-product', $product->slug) }}">
-                                <div class="h-64 w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                                <div class="h-64 w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center ">
                                     @if($product->featured_image)
                                     <img src="{{ asset($product->featured_image) }}"
                                         alt="{{ $product->name }}"
@@ -217,7 +217,13 @@
                             <div class="absolute top-4 left-4">
                                 <span class="sale-badge text-white text-xs px-3 py-1 rounded-full font-medium">
                                     @if($variant?->discount > 0)
-                                    {{ $variant->discount }}% OFF
+                                    {{-- {{ $variant->discount }} --}}
+                                    {{ number_format(
+                                        ($variant->discount - floor($variant->discount)) >= 0.5
+                                            ? ceil($variant->discount)
+                                            : $variant->discount,
+                                        2
+                                    ) }}% OFF
                                     @else
                                     Trending
                                     @endif

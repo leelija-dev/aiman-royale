@@ -9,7 +9,7 @@
         margin: 0 auto;
         display: grid;
         /* Responsive columns: consistent card widths, no flex-wrap quirks */
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
         gap: 1.5rem;
         /* 24px gap consistent */
     }
@@ -181,7 +181,7 @@
 
         .products-container {
             gap: 1rem;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         }
 
         .card-content {
@@ -843,7 +843,7 @@
     <div class=" w-full">
         <!-- Category Header -->
         <div
-            class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
+            class=" flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4 mb-[10px]">
             <!-- Left: Title & Description -->
             <div class="flex-1 min-w-[200px]">
                 <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
@@ -1080,23 +1080,26 @@
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
 
-                // Close any other open dropdown
-                closeAllDropdowns();
-
-                // Toggle current dropdown
+                // Check if current dropdown is already open
                 const isHidden = menu.classList.contains('hidden');
 
-                if (isHidden) {
-                    menu.classList.remove('hidden');
-                    chevron.style.transform = 'rotate(180deg)';
-                    button.setAttribute('aria-expanded', 'true');
-                    currentlyOpenDropdown = menuId;
-                } else {
+                if (!isHidden) {
+                    // If already open, just close it
                     menu.classList.add('hidden');
                     chevron.style.transform = 'rotate(0deg)';
                     button.setAttribute('aria-expanded', 'false');
                     currentlyOpenDropdown = null;
+                    return;
                 }
+
+                // Close any other open dropdown
+                closeAllDropdowns();
+
+                // Open current dropdown
+                menu.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+                button.setAttribute('aria-expanded', 'true');
+                currentlyOpenDropdown = menuId;
             });
         }
 

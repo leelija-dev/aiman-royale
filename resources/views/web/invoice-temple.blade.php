@@ -10,24 +10,24 @@
     .bg-soft { background-color: #f9fafc; }
   </style>
 
-<div class="flex justify-center items-center">
+<div class="flex justify-center items-center mt-4">
+  
   <div class="invoice">
-
   <!-- HEADER: aymanroayle + address + invoice meta -->
   <div class="border-b border-[#e5e9f0] px-6 py-5 md:px-8 md:py-6 flex flex-wrap items-start justify-between">
     <div>
-      <div class="text-2xl font-bold tracking-tight text-[#0b1a33]">{{$store->name ? $store->name : 'Ayman Roayle'}}</div>
+      <div class="text-2xl font-bold tracking-tight text-[#0b1a33]">{{$store->name ??'Ayman Roayle'}}</div>
       {{-- <div class="text-sm text-[#4e5d73] mt-0.5">{{$store->gst_number ? $store->gst_number : ''}}</div> --}}
       <div class="text-xs text-[#4e5d73] mt-1">
-        {{$store->email ? $store->email : ''}}
+        {{$store->email ?? ''}}
       </div>
       <div class="text-xs text-[#4e5d73] mt-1">
-        <span class="font-medium">GST:</span> {{$store->gst_number ? $store->gst_number : ''}}
+        <span class="font-medium">GST:</span> {{$store->gst_number ??  ''}}
       </div>
       <div class="text-xs text-[#4e5d73] mt-3 leading-relaxed">
-        {{$store->address ? $store->address : ''}}<br>
-        {{$store->state ? $store->state : ''}} ,
-        {{$store->country ? $store->country : ''}}
+        {{$store->address ??''}}<br>
+        {{$store->state ??''}} ,
+        {{$store->country ??  ''}}
       </div>
       
     </div>
@@ -119,7 +119,7 @@
     <div class="text-xs text-[#4e5d73] max-w-[200px]">
       <span class="block font-semibold text-[#1f2a3f]">Notes</span>
       <span class="block mt-1">Thank you for business with us!</span>
-      <span class="block mt-2 text-[10px] leading-relaxed">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span>
+      {{-- <span class="block mt-2 text-[10px] leading-relaxed">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span> --}}
     </div>
     <div class="min-w-[260px] bg-[#f9fafc] px-5 py-4 border border-[#e5e9f0]">
       <div class="flex justify-between text-sm py-1 border-b border-[#e5e9f0]"><span class="text-[#4e5d73]">Sub Total (Taxable)</span> <span class="font-medium text-[#0b1a33]">₹{{$orderDetails->total_amount ? (float)($orderDetails->total_amount + ($orderDetails->special_discount_amount ? $orderDetails->special_discount_amount  : 0) ) - ($orderDetails->gst_amount ? $orderDetails->gst_amount : 0): 0 }}</span></div>
@@ -152,14 +152,14 @@
   <div class="px-6 py-4 md:px-8 md:py-5 flex flex-wrap justify-between text-xs text-[#4e5d73] border-b border-[#e5e9f0]">
     <div>
       <span class="font-semibold text-[#1f2a3f]">Thank you for business with us!</span><br>
-      <span class="block mt-1">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span>
+      {{-- <span class="block mt-1">Term and Conditions:<br>Please send payment within 30 days of receiving this invoice. There will be 10% interest charge per month on late invoice.</span> --}}
     </div>
     <div class="text-right">
-      <div class="font-semibold text-[#1f2a3f]">{{$store->name ? $store->name : ''}}</div>
-      <div class="text-[#4e5d73]">{{$store->phone_number ? $store->phone_number : ''}}</div>
-      <div class="text-[#4e5d73]">{{$store->email ? $store->email : ''}}</div>
-      <div class="text-[#4e5d73]">{{$store->address ? $store->address : ''}}</div>
-      <div class="text-[#4e5d73]">{{$store->state ? $store->state : ''}} , {{$store->country ? $store->country : ''}}</div>
+      <div class="font-semibold text-[#1f2a3f]">{{$store->name ?? ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->phone_number ?? ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->email ?? ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->address ?? ''}}</div>
+      <div class="text-[#4e5d73]">{{$store->state ?? ''}} , {{$store->country ?? ''}}</div>
       
     </div>
   </div>
@@ -167,7 +167,7 @@
   <!-- footer with company name & location -->
   <div class="px-6 py-3 text-center text-[10px] text-[#8b9aaf] bg-white border-t border-[#e5e9f0]">
   
-    {{$store->name ? $store->name : ''}} · {{$store->address ? $store->address : ''}} · {{$store->state ? $store->state : ''}} · {{$store->country ? $store->country : ''}} · Invoice #{{$orderDetails->id ? $orderDetails->id : ''}} · GST: {{$store->gst_number ? $store->gst_number : ''}}
+    {{$store->name ?? ''}} · {{$store->address ?? ''}} · {{$store->state ?? ''}} · {{$store->country ?? ''}} · Invoice #{{$orderDetails->id ? $orderDetails->id : ''}} · GST: {{$store->gst_number ?? ''}}
   </div>
 </div>
 </div>

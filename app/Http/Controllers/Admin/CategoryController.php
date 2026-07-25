@@ -273,10 +273,10 @@ class CategoryController extends Controller
             $data['slug']  = Str::slug($data['name']);
             $data['title'] = $request->title;
             $data['about'] = $request->about;
-
-            if ($request->has('description')) {
-                $data['description'] = $this->removeHtmlStyles($request->description);
-            }
+            $data['description'] = $request->description;
+            // if ($request->has('description')) {
+            //     $data['description'] = $this->removeHtmlStyles($request->description);
+            // }
 
             // CHECK IF NEW IMAGE UPLOADED
             if ($request->hasFile('image')) {

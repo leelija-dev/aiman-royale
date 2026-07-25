@@ -56,6 +56,7 @@ use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\OfferController;
 use App\Http\Controllers\Admin\StoreController;
 
 // use App\Http\Controllers\ShopController;
@@ -556,5 +557,14 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::get('/edit/{id}', [CouponController::class, 'edit'])->name('coupon.edit');
         Route::post('/update/{id}', [CouponController::class, 'update'])->name('coupon.update');
         Route::delete('/delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
+    });
+
+    Route::prefix('offer')->group(function (){
+        Route::get('/',[OfferController::class,'index'])->name('offer.index');
+        Route::get('/create', [OfferController::class, 'create'])->name('offer.create');
+        Route::post('/store', [OfferController::class, 'store'])->name('offer.store');
+        Route::get('/edit/{id}', [OfferController::class, 'edit'])->name('offer.edit');
+        Route::post('/update/{id}', [OfferController::class, 'update'])->name('offer.update');
+        Route::delete('/delete/{id}', [OfferController::class, 'delete'])->name('offer.delete');
     });
 });

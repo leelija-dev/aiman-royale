@@ -48,7 +48,7 @@
                             <!-- Image -->
                             <div class="absolute inset-0">
                                 <img 
-                                    src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder.jpg') }}" 
+                                    src="{{ $category->image ?  $category->image : asset('assets/images/placeholder.jpg') }}" 
                                     alt="{{ $category->name }}" 
                                     class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                                     loading="lazy" 
@@ -92,14 +92,14 @@
                                     </span>
                                     
                                     <!-- Title -->
-                                    <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1 text-center">
+                                    <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1 text-center uppercase">
                                         {{ $category->name }}
                                     </h3>
 
                                     <!-- Description -->
                                     @if($category->description)
-                                    <p class="text-white/60 text-[10px] md:text-xs text-center line-clamp-1 mb-2">
-                                        {{ Str::limit($category->description, 60) }}
+                                    <p class="text-white/60 text-[10px] md:text-xs text-center line-clamp-1 mb-2 uppercase">
+                                        {!! Str::limit($category->description, 60) !!}
                                     </p>
                                     @endif
                                     

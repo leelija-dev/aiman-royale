@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,8 +8,6 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
   font-family: "Plus Jakarta Sans", sans-serif !important;
@@ -20,12 +20,12 @@ html {
     scroll-behavior: smooth;
 }
 
-
 .hero-bg {
     background-image: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80");
     background-size: cover;
     background-position: center;
 }
+
 .image-overlay {
     background: linear-gradient(
         to right,
@@ -33,11 +33,13 @@ html {
         rgba(0, 0, 0, 0.2)
     );
 }
+
 .product-image {
     background-image: url("https://images.unsplash.com/photo-1542838132-92c53300491f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60");
     background-size: cover;
     background-position: center;
 }
+
 .mobile-sidebar {
     position: fixed;
     top: 0;
@@ -51,6 +53,7 @@ html {
     z-index: 1000;
     display: block;
 }
+
 .mobile-sidebar-overlay {
     position: fixed;
     top: 0;
@@ -61,9 +64,11 @@ html {
     z-index: 999;
     display: none;
 }
+
 .mobile-sidebar.show {
     left: 0;
 }
+
 .mobile-sidebar-overlay.show {
     display: block;
 }
