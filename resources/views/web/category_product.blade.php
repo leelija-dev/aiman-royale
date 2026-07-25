@@ -1820,7 +1820,7 @@
             });
 
             // Initial filter application
-            applyFilters();
+            // applyFilters();
         }
 
         // Start the application
