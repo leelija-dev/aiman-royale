@@ -165,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-                @dd($wishCount,$wishCount->count())
+                {{-- @dd($wishCount,$wishCount->count()) --}}
                 <!-- Wishlist Items Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 wishlist-grid">
                     @if($wishlistItems->isEmpty())
