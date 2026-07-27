@@ -233,6 +233,8 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <script>
     (function() {
         'use strict'
@@ -302,13 +304,14 @@ document.getElementById('imageInput').addEventListener('change', function () {
         //     }
         // });
 
-        $(document).ready(function() {
+        
+
+    });
+    $(document).ready(function() {
             $('#description-editor').summernote({
                 height: 200,
             });
         });
-
-    });
 </script>
 
 @endsection
