@@ -2556,7 +2556,7 @@ art from fake trails.
 <div class="sticky bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
 
   <!-- Attractive Banner -->
-  <a href="/" class="w-full">
+  <a href="{{route('page.appointment')}}" class="w-full">
     <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
       <div class="flex items-center justify-center gap-2 animate-pulse">
         <i class="fas fa-gem text-white text-sm"></i>
