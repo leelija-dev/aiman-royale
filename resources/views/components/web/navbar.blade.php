@@ -985,7 +985,6 @@
                 // dd(Auth::id());
                 if (Auth::check()) {
                 $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
-                dd($wishlistCount , Auth::id());
                 } else {
                 $wishlistCount = 0;
                 }
