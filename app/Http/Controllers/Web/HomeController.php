@@ -1196,13 +1196,19 @@ $products = new LengthAwarePaginator(
         //     $products = OfferProducts::with('productVariant');
         // }
     //    dd($products);
+    $wishlistIds = Auth::check()
+    ? \App\Models\Wishlist::where('user_id', Auth::id())
+        ->pluck('product_id')
+        ->toArray()
+    : [];
         return view(
             'web.multi-product',
             compact(
                 'products',
                 'filterOptions',
                 'priceRange',
-                'selectedFilters'
+                'selectedFilters',
+                'wishlistIds'
             )
         );
     }
