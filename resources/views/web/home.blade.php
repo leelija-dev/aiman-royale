@@ -1334,21 +1334,21 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                         @endphp
                         <!-- Wishlist Heart Icon -->
                         @if (Auth::check())
-    <button
-        class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
-        onclick="toggleWishlist({{ $product->id }}, this, event);">
+                            <button
+                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
+                                onclick="toggleWishlist({{ $product->id }}, this, event);">
 
-        <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
+                                <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
 
-    </button>
-@else
-    <a href="{{ route('page.login') }}">
-        <button
-            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
-            <i class="far fa-heart text-sm"></i>
-        </button>
-    </a>
-@endif
+                            </button>
+                        @else
+                            <a href="{{ route('page.login') }}">
+                                <button
+                                    class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
+                                    <i class="far fa-heart text-sm"></i>
+                                </button>
+                            </a>
+                        @endif
                     </div>
 
                     <!-- Content -->
@@ -2020,16 +2020,69 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                 </div>
 
                 <!-- Timer -->
+                @php
+                    $isTimmer = \App\Models\Offer::where('is_active', true)
+                        ->where('is_timer', true)
+                        ->where('end_date', '>', now())
+                        ->first();
 
+                    $days = 0;
+                    $hours = 0;
+                    $minutes = 0;
+
+                    if ($isTimmer) {
+                        $end = \Carbon\Carbon::parse($isTimmer->end_date);
+                        $now = now();
+
+                        $days = (int) $now->diffInDays($end, false);
+                        $hours = (int) $now->diffInHours($end, false);
+                        $minutes = (int) $now->diffInMinutes($end, false);
+                    }
+                @endphp
+                @if($isTimmer)
                 <div class="mt-8">
-
+                    {{-- @if((int) now()->diffInDays(\Carbon\Carbon::parse($isTimmer->end_date), false) == 0 )
+                        <!-- 0 days left -->
                     <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
-                        Hurry…only
+                        Hurry! Only a few hours left to grab these exclusive offers.
+                    </h4>
+
+                    @else
+                    <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
+                        Hurry…only 
                         <span id="daysLabel" class="font-semibold text-gray-900">
                             30
                         </span>
                         days left!
                     </h4>
+                    @endif --}}
+                    @if($days > 0)
+
+                    <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
+                        Hurry…only
+                        <span id="daysLabel" class="font-semibold text-gray-900">{{ $days }}</span>
+                        {{ $days == 1 ? 'day' : 'days' }} left! 
+                    </h4>
+
+                    @elseif($hours > 0)
+
+                    <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
+                        Hurry…only
+                        <span id="hoursLabel" class="font-semibold text-gray-900">{{ $hours }}</span>
+                        {{ $hours == 1 ? 'hour' : 'hours' }} left! 
+                    </h4>
+
+                    @elseif($minutes > 0)
+
+                    <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
+                        Hurry…only
+                        <span id="minutesLabel" class="font-semibold text-gray-900">{{ $minutes }}</span>
+                        {{ $minutes == 1 ? 'minute' : 'minutes' }} left! 
+                    </h4>
+
+                   @endif
+
+                    
 
                     <div
                         class="mt-7 flex flex-wrap justify-center lgg:justify-start gap-6">
@@ -2039,7 +2092,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             <div
                                 id="daysBox"
                                 class="heading-font text-4xl font-medium text-gray-900">
-                                29
+                                35
                             </div>
 
                             <div class="w-10 h-px bg-gray-300 mx-auto my-2"></div>
@@ -2101,6 +2154,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     </div>
 
                 </div>
+                @endif
 
             </div>
 
@@ -3299,10 +3353,10 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
     }
 </script>
 
-<script>
+{{-- <script>
     (function() {
         const TARGET_DATE = new Date();
-        TARGET_DATE.setDate(TARGET_DATE.getDate() + 30);
+        TARGET_DATE.setDate(TARGET_DATE.getDate() +  );
         TARGET_DATE.setHours(0, 0, 0, 0);
 
         const daysBox = document.getElementById('daysBox');
@@ -3354,7 +3408,50 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             clearInterval(timerInterval);
         });
     })();
+</script> --}}
+@if($isTimmer)
+<script>
+(function () {
+
+    const TARGET_DATE = new Date("{{ \Carbon\Carbon::parse($isTimmer->end_date)->format('Y-m-d H:i:s') }}");
+
+    const daysBox = document.getElementById('daysBox');
+    const hoursBox = document.getElementById('hoursBox');
+    const minutesBox = document.getElementById('minutesBox');
+    const secondsBox = document.getElementById('secondsBox');
+    const daysLabel = document.getElementById('daysLabel');
+
+    function pad(num) {
+        return String(num).padStart(2, '0');
+    }
+
+    function updateCountdown() {
+
+        const now = new Date();
+        let diff = TARGET_DATE.getTime() - now.getTime();
+
+        if (diff <= 0) {
+            diff = 0;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        if(daysLabel) daysLabel.textContent = days;
+        if(daysBox) daysBox.textContent = days;
+        if(hoursBox) hoursBox.textContent = pad(hours);
+        if(minutesBox) minutesBox.textContent = pad(minutes);
+        if(secondsBox) secondsBox.textContent = pad(seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+})();
 </script>
+@endif
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
