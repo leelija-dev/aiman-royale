@@ -996,15 +996,19 @@
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
                             <i class="fa-regular fa-heart text-lg group-hover:text-red-600"></i>
                         </div>
-                        @if (Auth::check())
+                        {{-- @if (Auth::check())
                         @if ($wishlistCount > 0)
                         <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
                             {{ $wishlistCount ?? 0 }}
                         </span>
                         @endif
 
-                        @endif
-
+                        @endif --}}
+                        <span
+                            id="wishlist-counter"
+                            class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full items-center justify-center {{ $wishlistCount > 0 ? 'flex' : 'hidden' }}">
+                            {{ $wishlistCount }}
+                        </span>
                     </button>
                 </a>
 

@@ -1325,22 +1325,30 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             </span>
                             @endif
                         </div>
-
+                        @php
+                          $isWishlisted = Auth::check()
+                            ? \App\Models\Wishlist::where('user_id', Auth::id())
+                                ->where('product_id', $product->id)
+                                ->exists()
+                            : false;
+                        @endphp
                         <!-- Wishlist Heart Icon -->
                         @if (Auth::check())
-                        <button
-                            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500"
-                            onclick="toggleWishlist({{ $product->id }}, this, event);">
-                            <i class="far fa-heart text-sm"></i>
-                        </button>
-                        @else
-                        <a href="{{ route('page.login') }}">
-                            <button
-                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
-                                <i class="far fa-heart text-sm"></i>
-                            </button>
-                        </a>
-                        @endif
+    <button
+        class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
+        onclick="toggleWishlist({{ $product->id }}, this, event);">
+
+        <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
+
+    </button>
+@else
+    <a href="{{ route('page.login') }}">
+        <button
+            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
+            <i class="far fa-heart text-sm"></i>
+        </button>
+    </a>
+@endif
                     </div>
 
                     <!-- Content -->
@@ -2996,7 +3004,7 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             .then(data => {
                 console.log(data);
                 console.log('Parsed data:', data);
-                console.loj('Wishlist updated successfully');
+                console.log('Wishlist updated successfully');
                 if (data.success) {
                     showNotification(data.message, 'success');
                     if (isInWishlist) {
@@ -3060,12 +3068,49 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             });
     }
 
-    function updateWishlistCount(count) {
-        const wishlistCounter = document.getElementById('wishlist-counter');
-        if (wishlistCounter) {
-            wishlistCounter.textContent = count;
+    // function updateWishlistCount(count) {
+    //     const wishlistCounter = document.getElementById('wishlist-counter');
+    //     if (wishlistCounter) {
+    //         wishlistCounter.textContent = count;
+    //     }
+    // }
+   function updateWishlistCount(count) {
+
+    const button = document.querySelector('a[href*="wishlist"] button');
+
+    let badge = document.getElementById('wishlist-counter');
+
+    if (count > 0) {
+
+        if (!badge) {
+
+            badge = document.createElement('span');
+
+            badge.id = "wishlist-counter";
+
+            badge.className =
+                "wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center";
+
+            button.appendChild(badge);
         }
+
+        badge.innerHTML = count;
+
+    } else {
+
+        if (badge) badge.remove();
     }
+
+    // dropdown badge
+    document.querySelectorAll(".wishlist-count").forEach(function(item){
+
+        item.innerHTML = count;
+
+        item.style.display = count > 0 ? "flex" : "none";
+
+    });
+
+}
 
     function showNotification(message, type) {
         const notification = document.createElement('div');
@@ -3249,6 +3294,8 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             .finally(() => {
                 button.disabled = false;
             });
+
+        updateWishlistCount(data.wishlist_count);
     }
 </script>
 
