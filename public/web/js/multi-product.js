@@ -24,6 +24,15 @@ document.addEventListener("DOMContentLoaded", function () {
         has_offer: ''
     };
 
+    // Pagination configuration
+    const perPage = 5; // Change this value to adjust products per page
+
+    // Infinite scroll state
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMorePages = true;
+    let totalPages = 1;
+
     // Get search parameter from URL on page load
     function getSearchFromURL() {
         const params = new URLSearchParams(window.location.search);
@@ -109,11 +118,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // ──────────────────────────────────────────────
     //  API Functions
     // ──────────────────────────────────────────────
-    async function fetchFilteredProducts() {
+    async function fetchFilteredProducts(isLoadMore = false) {
         try {
-            showLoading();
+            if (isLoading) return;
+            isLoading = true;
+
+            if (!isLoadMore) {
+                showLoading();
+            }
 
             const params = new URLSearchParams();
+            params.append('page', currentPage);
 
             if (currentFilters.colors && currentFilters.colors.length > 0) {
                 params.append('colors', currentFilters.colors.join(','));
@@ -170,36 +185,60 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('API Response:', data);
 
             if (data.success) {
-                updateProductsGrid(data.data);
+                // Handle direct array response (current API structure)
+                const products = Array.isArray(data.data) ? data.data : [];
+                
+                // If no products returned and we're on page > 1, we've reached the end
+                if (products.length === 0 && currentPage > 1) {
+                    hasMorePages = false;
+                    currentPage--; // Revert page increment since no products found
+                } else if (products.length === 0 && currentPage === 1) {
+                    // No products at all
+                    hasMorePages = false;
+                } else if (products.length < perPage) {
+                    // Less than full page means we're at the last page
+                    hasMorePages = false;
+                } else {
+                    // Full page returned, there might be more
+                    hasMorePages = true;
+                }
+                
+                console.log('Pagination state:', { currentPage, hasMorePages, productsCount: products.length, perPage });
+                updateProductsGrid(products, isLoadMore);
                 updateSelectedTags();
             }
         } catch (error) {
             console.error('Error fetching products:', error);
         } finally {
-            hideLoading();
+            isLoading = false;
+            if (!isLoadMore) {
+                hideLoading();
+            }
         }
     }
 
-    function updateProductsGrid(products) {
+    function updateProductsGrid(products, isLoadMore = false) {
         if (!productsContainer) return;
 
         if (!products || products.length === 0) {
-            productsContainer.innerHTML = `
-            <div class="col-span-full flex flex-col items-center justify-center py-16">
-                <div class="text-center">
-                    <div class="mb-4">
-                        <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
+            if (!isLoadMore) {
+                productsContainer.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-16">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No product found</h3>
+                        <p class="text-gray-600 mb-6">We couldn't find any products matching your criteria.</p>
+                        <button onclick="clearAllFilters()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Clear Filters
+                        </button>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">No product found</h3>
-                    <p class="text-gray-600 mb-6">We couldn't find any products matching your criteria.</p>
-                    <button onclick="clearAllFilters()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                        Clear Filters
-                    </button>
                 </div>
-            </div>
-            `;
+                `;
+            }
             return;
         }
 
@@ -320,7 +359,11 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         });
 
-        productsContainer.innerHTML = html;
+        if (isLoadMore) {
+            productsContainer.insertAdjacentHTML('beforeend', html);
+        } else {
+            productsContainer.innerHTML = html;
+        }
     }
 
     function updateSelectedTags() {
@@ -363,7 +406,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // ──────────────────────────────────────────────
     function updateFilters() {
         if (!filterForm) return;
-        
+
+        // Reset pagination when filters change
+        currentPage = 1;
+        hasMorePages = true;
+        totalPages = 1;
+
         const formData = new FormData(filterForm);
 
         const selectedCategories = formData.getAll('category[]');
@@ -540,6 +588,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Update currentFilters
                 currentFilters[optionType] = dataValue;
 
+                // Reset pagination when filter changes
+                currentPage = 1;
+                hasMorePages = true;
+                totalPages = 1;
+
                 // Close dropdown
                 menu.classList.add("hidden");
                 if (chevron) chevron.classList.remove("rotate-180");
@@ -682,6 +735,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        // Reset pagination
+        currentPage = 1;
+        hasMorePages = true;
+        totalPages = 1;
+
         currentFilters = {
             categories: [],
             occasions: [],
@@ -732,6 +790,32 @@ document.addEventListener("DOMContentLoaded", function () {
         currentFilters.has_offer = currentFilters.has_offer === '1' ? '' : '1';
         updateFilters();
     };
+
+    // ──────────────────────────────────────────────
+    //  Infinite Scroll
+    // ──────────────────────────────────────────────
+    function handleInfiniteScroll() {
+        if (isLoading || !hasMorePages) return;
+
+        const containerRect = productsContainer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Load more when products container bottom is within 200px of viewport bottom
+        // This ensures we only trigger when scrolling near the products, not the footer
+        if (containerRect.bottom <= windowHeight + 200) {
+            currentPage++;
+            fetchFilteredProducts(true);
+        }
+    }
+
+    // Throttled scroll event listener
+    let scrollTimeout;
+    window.addEventListener('scroll', function() {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(handleInfiniteScroll, 100);
+    });
 
     // Initialize search filter from URL
     currentFilters.search = getSearchFromURL();
