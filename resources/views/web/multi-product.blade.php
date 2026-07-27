@@ -1381,11 +1381,13 @@
         <div id="products-container" class="products-container">
           {{-- @dd($products->count()) --}}
           @include('web.partials.product-grid', ['products' => $products])
+          {{-- {{ $products->links('pagination::bootstrap-5') }} --}}
         </div>
 
       </div>
     </div>
   </div>
+  
 </section>
 
 <!-- Overlay -->
