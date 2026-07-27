@@ -24,7 +24,7 @@ class WishlistController extends Controller
             $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
                 ->forCurrentUser()
                 ->paginate(9);
-            
+            $wishCount = Wishlist::where('user_id', Auth::id())->get();
             Log::info('Wishlist items loaded:', ['count' => $wishlistItems->count()]);
 
             // Filter out items with null products and load stock data
@@ -108,7 +108,7 @@ class WishlistController extends Controller
                 'validItems' => $validItems->count()
             ]);
 
-            return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
+            return view('web.wishlist', compact('wishCount','wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
             
         } catch (\Exception $e) {
             Log::error('Error in wishlist index: ' . $e->getMessage(), [
