@@ -363,7 +363,7 @@ class ProductController extends Controller
                 }
             }
 
-            $products = $query->paginate(12);
+            $products = $query->paginate(5)->WithQueryString();
 
             $processedProducts = $products->map(function ($product) {
 
