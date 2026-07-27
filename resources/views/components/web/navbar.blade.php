@@ -1109,12 +1109,52 @@
     <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
 
     <!-- Main Header -->
-    <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
+    <div class="py-4 flex items-center justify-between gap-[5px] xl:container mx-auto px-3">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Desktop Navigation with Enhanced Hover Effects -->
-            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[17px] text-[15px]">
+            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[15px] text-[13px]">
                 @if (isset($categories) && count($categories) > 0)
+                <a href=""
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="" data-category-id="">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Wedding
+                        </span>
+
+                       
+                    </a>
+                    <a href="#"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="" data-category-id="">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Bridal
+                        </span>
+
+                       
+                    </a>
+                
+
                 @foreach ($categories->where('parent_id', null) as $category)
                 <div class="relative group">
                     <a href="{{ route('category.show', $category->slug) }}"
@@ -1386,6 +1426,76 @@
     <!-- Mobile Navigation -->
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
+            <!-- Wedding -->
+            <div class="menu-item has-submenu top-level-item" data-category="Wedding">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Wedding</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Bridal -->
+            <div class="menu-item has-submenu top-level-item" data-category="Bridal">
+                <button class="back-button">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Bridal</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li class="menu-item">
+                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
             @if (isset($categories) && count($categories) > 0)
             @foreach ($categories->where('parent_id', null) as $category)
             <div class="menu-item has-submenu top-level-item">
@@ -3349,6 +3459,19 @@
                     isOverNav = true;
 
                     const categoryId = this.getAttribute('data-category-id');
+                    const categoryName = this.getAttribute('data-category');
+                    const linkText = this.textContent.toLowerCase();
+                    
+                    // Hide/Show Occasion button based on category
+                    const occasionBtn = document.querySelector('[data-target="occation-products"]');
+                    if (occasionBtn) {
+                        if (linkText.includes('wedding') || linkText.includes('bridal')) {
+                            occasionBtn.style.display = 'none';
+                        } else {
+                            occasionBtn.style.display = 'block';
+                        }
+                    }
+                    
                     if (categoryId) {
                         currentCategoryId = categoryId;
                         loadCategoryData(categoryId);
@@ -3479,6 +3602,7 @@
                     const parentItem = this.closest('.top-level-item');
                     const isActive = parentItem.classList.contains('top-level-active');
                     const submenu = this.nextElementSibling;
+                    const categoryName = parentItem.getAttribute('data-category');
 
                     if (isActive) {
                         resetMobileMenu();
@@ -3508,6 +3632,17 @@
                             setTimeout(() => {
                                 submenu.style.maxHeight = submenu.scrollHeight + 'px';
                                 submenu.classList.add('active');
+                                
+                                // Hide Occasion submenu for Wedding and Bridal
+                                if (categoryName && (categoryName.toLowerCase() === 'wedding' || categoryName.toLowerCase() === 'bridal')) {
+                                    const occasionToggle = submenu.querySelector('.submenu-toggle');
+                                    if (occasionToggle) {
+                                        const occasionText = occasionToggle.textContent.toLowerCase();
+                                        if (occasionText.includes('occasion')) {
+                                            occasionToggle.closest('.menu-item').style.display = 'none';
+                                        }
+                                    }
+                                }
                             }, 10);
                         }
                     }

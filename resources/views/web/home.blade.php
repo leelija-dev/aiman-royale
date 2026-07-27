@@ -87,6 +87,7 @@
             @php
             @endphp
 
+           
             <a href="{{ route('category.show', $category->product->category->slug) }}"
                 class="group flex flex-col items-center snap-center">
                 <div class="relative mb-2">
