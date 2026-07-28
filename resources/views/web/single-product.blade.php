@@ -2904,7 +2904,7 @@
 
             // Get unique sizes for this color
             const availableSizes = [...new Set(variantsForColor.map(v => v.size))];
-
+            availableSizes.sort((a, b) => (window.sizeOrderMap[a] ?? 999) - (window.sizeOrderMap[b] ?? 999));
             // Clear existing size buttons
             sizeButtonsContainer.innerHTML = '';
 
