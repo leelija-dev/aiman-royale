@@ -156,12 +156,12 @@
                                <p class="text-gray-600 mt-1">Track and manage all your StyleHub orders in one place</p>
                            </div>
                            <div class="mt-4 sm:mt-0 flex gap-3">
-                               <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
+                               {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
                                    <i class="fas fa-download mr-2"></i>Export Orders
                                </button>
                                <button class="px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium">
                                    <i class="fas fa-plus mr-2"></i>Start Return
-                               </button>
+                               </button> --}}
                            </div>
                        </div>
                    </div>
@@ -493,7 +493,7 @@
                                        <i class="fas fa-times mr-2"></i>Cannot Cancel
                                    </button>
                                    @endif
-                                   <a href="{{route('page.contact-us')}}">
+                                   <a href="{{route('page.contact-us')}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-question-circle mr-2"></i>Get Help
                                    </button> </a>
@@ -602,9 +602,9 @@
 
                    <!-- Order Actions -->
                    <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                       {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-star mr-2"></i>Rate Products
-                       </button>
+                       </button> --}}
                        {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-receipt mr-2"></i>View Invoice
                        </button> --}}

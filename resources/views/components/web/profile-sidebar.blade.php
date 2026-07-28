@@ -98,11 +98,11 @@ $currentRoute = request()->route()->getName();
         <!-- Quick Actions - Only for authenticated users -->
         @if($user)
         <div class="mt-6">
-            <button
+            {{-- <button
                 class="w-full py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium flex items-center justify-center gap-2 mb-3">
                 <i class="fas fa-share"></i>
                 Share Wishlist
-            </button>
+            </button> --}}
             <a href="{{route('page.index')}}"><button
                 class="w-full py-3 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition font-medium flex items-center justify-center gap-2">
                 <i class="fas fa-plus"></i>
