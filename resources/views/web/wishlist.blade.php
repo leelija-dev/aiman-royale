@@ -432,6 +432,11 @@
                                 item.style.display = "none";
                             }
                         });
+                        // Update total items
+                        const totalItems = document.getElementById('wishlist-total-items');
+                        if (totalItems) {
+                            totalItems.textContent = data.wishlist_count;
+                        }
                         
                         setTimeout(() => {
                             if (productCard) {

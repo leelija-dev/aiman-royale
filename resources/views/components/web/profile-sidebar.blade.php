@@ -69,7 +69,7 @@ $currentRoute = request()->route()->getName();
             <div class="space-y-3">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Total Items</span>
-                    <span class="font-medium">{{ is_countable($wishlists) ? count($wishlists) : $wishlists->count() }}</span>
+                    <span class="font-medium" id="wishlist-total-items">{{ is_countable($wishlists) ? count($wishlists) : $wishlists->count() }}</span>
                 </div>
                 {{-- <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Collections</span>
@@ -103,11 +103,11 @@ $currentRoute = request()->route()->getName();
                 <i class="fas fa-share"></i>
                 Share Wishlist
             </button>
-            <button
+            <a href="{{route('page.index')}}"><button
                 class="w-full py-3 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition font-medium flex items-center justify-center gap-2">
                 <i class="fas fa-plus"></i>
                 Create New Collection
-            </button>
+            </button> </a>
         </div>
         @endif
     </div>
