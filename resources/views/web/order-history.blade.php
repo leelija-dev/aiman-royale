@@ -127,11 +127,11 @@
                            <div class="space-y-3">
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">Total Orders</span>
-                                   <span class="font-medium">{{count($orders)}}</span>
+                                   <span class="font-medium">{{$totalOrders ?? 0}}</span>
                                </div>
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">This Month</span>
-                                   <span class="font-medium">{{count($orders)}}</span>
+                                   <span class="font-medium">{{$thisMonthOrders ?? 0}}</span>
                                </div>
                                {{-- <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Pending</span>
@@ -139,7 +139,7 @@
                             </div> --}}
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">Delivered</span>
-                                   <span class="font-medium text-green-600">{{count($orders)}}</span>
+                                   <span class="font-medium text-green-600">{{$deliveredOrders ?? 0}}</span>
                                </div>
                            </div>
                        </div>
@@ -156,12 +156,12 @@
                                <p class="text-gray-600 mt-1">Track and manage all your StyleHub orders in one place</p>
                            </div>
                            <div class="mt-4 sm:mt-0 flex gap-3">
-                               <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
+                               {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
                                    <i class="fas fa-download mr-2"></i>Export Orders
                                </button>
                                <button class="px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium">
                                    <i class="fas fa-plus mr-2"></i>Start Return
-                               </button>
+                               </button> --}}
                            </div>
                        </div>
                    </div>
@@ -195,6 +195,7 @@
                                        onchange="document.getElementById('orderFilterForm').submit()"
                                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                                        <option value="" {{ $currentDate === '' ? 'selected' : '' }}>All Time</option>
+                                        <option value="7" {{ $currentDate === '7' ? 'selected' : '' }}>Last 7 Days</option>
                                        <option value="30" {{ $currentDate === '30' ? 'selected' : '' }}>Last 30 Days</option>
                                        <option value="90" {{ $currentDate === '90' ? 'selected' : '' }}>Last 3 Months</option>
                                        <option value="365" {{ $currentDate === '365' ? 'selected' : '' }}>Last Year</option>
@@ -202,11 +203,11 @@
                                    <select name="status"
                                        onchange="document.getElementById('orderFilterForm').submit()"
                                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
-                                       <option value="" {{ $currentStatus === '' ? 'selected' : '' }}>All Status</option>
-                                       <option value="processing" {{ in_array($currentStatus, ['processing', 'to_ship']) ? 'selected' : '' }}>Processing</option>
-                                       <option value="shipped" {{ in_array($currentStatus, ['shipped', 'to_receive']) ? 'selected' : '' }}>Shipped</option>
-                                       <option value="delivered" {{ in_array($currentStatus, ['delivered', 'completed']) ? 'selected' : '' }}>Delivered</option>
-                                       <option value="cancelled" {{ $currentStatus === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                       <option value="" {{ $currentStatus === '' ? 'selected' : '' }} >All Orders</option>
+                                       <option value="delivered" {{ in_array($currentStatus, ['delivered', 'delivered']) ? 'selected' : '' }}>Delivered</option>
+                                       <option value="pending" {{ in_array($currentStatus, ['pending', 'pending']) ? 'selected' : '' }}>Pending</option>
+                                       <option value="cancelled" {{ in_array($currentStatus, ['cancelled', 'cancelled']) ? 'selected' : '' }}>Cancelled</option>
+                                       <option value="returned" {{ $currentStatus === 'returned' ? 'selected' : '' }}>Returned</option>
                                    </select>
                                </div>
                            </div>
@@ -218,21 +219,29 @@
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === '' ? $activeTabClass : $inactiveTabClass }}">
                                All Orders
                            </a>
-                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'to_ship', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
-                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['to_ship', 'processing']) ? $activeTabClass : $inactiveTabClass }}">
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'shipped', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['shipped', 'shipped']) ? $activeTabClass : $inactiveTabClass }}">
                                To Ship
                            </a>
-                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'to_receive', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
-                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['to_receive', 'shipped']) ? $activeTabClass : $inactiveTabClass }}">
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'delivered', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['delivered', 'delivered']) ? $activeTabClass : $inactiveTabClass }}">
                                To Receive
                            </a>
-                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'completed', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
-                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['completed', 'delivered']) ? $activeTabClass : $inactiveTabClass }}">
-                               Completed
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'paid', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['paid', 'paid']) ? $activeTabClass : $inactiveTabClass }}">
+                               Order Completed
                            </a>
-                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'cancelled', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'pending', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'pending' ? $activeTabClass : $inactiveTabClass }}">
+                               Pending
+                           </a>
+                            <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'cancelled', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'cancelled' ? $activeTabClass : $inactiveTabClass }}">
                                Cancelled
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'returned', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'returned' ? $activeTabClass : $inactiveTabClass }}">
+                               Returned
                            </a>
                        </div>
                    </div>
@@ -484,9 +493,10 @@
                                        <i class="fas fa-times mr-2"></i>Cannot Cancel
                                    </button>
                                    @endif
+                                   <a href="{{route('page.contact-us')}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-question-circle mr-2"></i>Get Help
-                                   </button>
+                                   </button> </a>
                                    <a href="{{ route('order.invoice', $ord->id) }}"  class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium"><button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-receipt mr-2"></i>View Invoice
                                    </button>
@@ -592,12 +602,12 @@
 
                    <!-- Order Actions -->
                    <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                       {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-star mr-2"></i>Rate Products
-                       </button>
-                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                       </button> --}}
+                       {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-receipt mr-2"></i>View Invoice
-                       </button>
+                       </button> --}}
                    </div>
                </div>
            </div>

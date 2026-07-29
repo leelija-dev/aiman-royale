@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Pagination\LengthAwarePaginator;
 class HomeController extends Controller
 {
     public function __construct() {}
@@ -771,7 +771,7 @@ class HomeController extends Controller
                 'product_variants.price',
                 'product_variants.discount_price',
                 'product_variants.stock'
-            );
+            )->orderByDesc('product_variants.discount' );
         // dd($query);
 } else {
     // dd('else');
@@ -1014,64 +1014,130 @@ class HomeController extends Controller
         // Get products
         // $products = $query->get();
         // Get products
-        $rawProducts = $query->get();
+        // $rawProducts = $query->get();
+        // $rawProducts = $query->paginate(5)->withQueryString();
         
-        // Convert products to old array structure
-        $products = collect();
+        // // Convert products to old array structure
+        // $products = collect();
 
-        foreach ($rawProducts as $product) {
+        // foreach ($rawProducts as $product) {
 
-            $products->push([
+        //     $products->push([
 
-                'id' => $product->id,
-                'design_no' => $product->design_no,
-                'category_id' => $product->category_id,
-                'ocassion_id' => $product->ocassion_id,
-                'name' => $product->name,
-                'slug' => $product->slug,
-                'description' => $product->description,
-                'brand' => $product->brand,
-                'fabric' => $product->fabric,
-                'fit' => $product->fit,
-                'price' => $product->price,
-                'discount_price' => $product->discount_price,
-                'stock' => $product->stock,
-                'status' => $product->status,
-                'featured_image' => $product->featured_image,
-                'ready_to_ship' => $product->ready_to_ship,
-                'is_featured' => $product->is_featured,
-                'meta_title' => $product->meta_title,
-                'keywords' => $product->keywords,
-                'tags' => $product->tags,
-                'meta_description' => $product->meta_description,
-                'schema_markup' => $product->schema_markup,
-                'created_at' => $product->created_at,
-                'updated_at' => $product->updated_at,
-                'deleted_at' => $product->deleted_at,
-                'is_active' => $product->is_active,
-                'unit_id' => $product->unit_id,
+        //         'id' => $product->id,
+        //         'design_no' => $product->design_no,
+        //         'category_id' => $product->category_id,
+        //         'ocassion_id' => $product->ocassion_id,
+        //         'name' => $product->name,
+        //         'slug' => $product->slug,
+        //         'description' => $product->description,
+        //         'brand' => $product->brand,
+        //         'fabric' => $product->fabric,
+        //         'fit' => $product->fit,
+        //         'price' => $product->price,
+        //         'discount_price' => $product->discount_price,
+        //         'stock' => $product->stock,
+        //         'status' => $product->status,
+        //         'featured_image' => $product->featured_image,
+        //         'ready_to_ship' => $product->ready_to_ship,
+        //         'is_featured' => $product->is_featured,
+        //         'meta_title' => $product->meta_title,
+        //         'keywords' => $product->keywords,
+        //         'tags' => $product->tags,
+        //         'meta_description' => $product->meta_description,
+        //         'schema_markup' => $product->schema_markup,
+        //         'created_at' => $product->created_at,
+        //         'updated_at' => $product->updated_at,
+        //         'deleted_at' => $product->deleted_at,
+        //         'is_active' => $product->is_active,
+        //         'unit_id' => $product->unit_id,
 
-                // images structure expected in blade
-                'images' => [
-                    [
-                        'image' => $product->variant_image
-                    ]
-                ],
+        //         // images structure expected in blade
+        //         'images' => [
+        //             [
+        //                 'image' => $product->variant_image
+        //             ]
+        //         ],
 
-                // variants structure expected in blade
-                'variants' => [
-                    [
-                        'variant_id' => $product->variant_id,
-                        'size' => $product->size,
-                        'color' => $product->color,
-                        'price' => $product->variant_price,
-                        'discount_price' => $product->price_after_discount,
-                        'stock' => $product->variant_stock,
-                    ]
-                ]
-            ]);
-        }
+        //         // variants structure expected in blade
+        //         'variants' => [
+        //             [
+        //                 'variant_id' => $product->variant_id,
+        //                 'size' => $product->size,
+        //                 'color' => $product->color,
+        //                 'price' => $product->variant_price,
+        //                 'discount_price' => $product->price_after_discount,
+        //                 'stock' => $product->variant_stock,
+        //             ]
+        //         ]
+        //     ]);
+        // }
+            $rawProducts = $query->paginate(6)->withQueryString();
 
+// Convert current page products
+$mappedProducts = collect();
+
+foreach ($rawProducts->items() as $product) {
+
+    $mappedProducts->push([
+
+        'id' => $product->id,
+        'design_no' => $product->design_no,
+        'category_id' => $product->category_id,
+        'ocassion_id' => $product->ocassion_id,
+        'name' => $product->name,
+        'slug' => $product->slug,
+        'description' => $product->description,
+        'brand' => $product->brand,
+        'fabric' => $product->fabric,
+        'fit' => $product->fit,
+        'price' => $product->price,
+        'discount_price' => $product->discount_price,
+        'stock' => $product->stock,
+        'status' => $product->status,
+        'featured_image' => $product->featured_image,
+        'ready_to_ship' => $product->ready_to_ship,
+        'is_featured' => $product->is_featured,
+        'meta_title' => $product->meta_title,
+        'keywords' => $product->keywords,
+        'tags' => $product->tags,
+        'meta_description' => $product->meta_description,
+        'schema_markup' => $product->schema_markup,
+        'created_at' => $product->created_at,
+        'updated_at' => $product->updated_at,
+        'deleted_at' => $product->deleted_at,
+        'is_active' => $product->is_active,
+        'unit_id' => $product->unit_id,
+
+        'images' => [
+            [
+                'image' => $product->variant_image
+            ]
+        ],
+
+        'variants' => [
+            [
+                'variant_id' => $product->variant_id,
+                'size' => $product->size,
+                'color' => $product->color,
+                'price' => $product->variant_price,
+                'discount_price' => $product->price_after_discount,
+                'stock' => $product->variant_stock,
+            ]
+        ]
+    ]);
+}
+
+$products = new LengthAwarePaginator(
+    $mappedProducts,
+    $rawProducts->total(),
+    $rawProducts->perPage(),
+    $rawProducts->currentPage(),
+    [
+        'path' => request()->url(),
+        'query' => request()->query(),
+    ]
+);
         // Filter options
         $filterOptions = [
             'categories' => DB::table('categories')
@@ -1130,13 +1196,19 @@ class HomeController extends Controller
         //     $products = OfferProducts::with('productVariant');
         // }
     //    dd($products);
+    $wishlistIds = Auth::check()
+    ? \App\Models\Wishlist::where('user_id', Auth::id())
+        ->pluck('product_id')
+        ->toArray()
+    : [];
         return view(
             'web.multi-product',
             compact(
                 'products',
                 'filterOptions',
                 'priceRange',
-                'selectedFilters'
+                'selectedFilters',
+                'wishlistIds'
             )
         );
     }

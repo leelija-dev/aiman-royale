@@ -1318,8 +1318,8 @@
                @if(request('search') == 'offer' || request('search') == 'offers')
     @php
         $offer = App\Models\Offer::where('is_active', 1)
-            ->where('start_date', '<=', date('Y-m-d'))
-            ->where('end_date', '>=', date('Y-m-d'))
+            ->where('start_date', '<=', date('Y-m-d H:i'))
+            ->where('end_date', '>=', date('Y-m-d H:i'))
             ->first();
         $coupon = App\Models\Coupon::where('is_active', 1)->where('expiry_date', '>=', date('Y-m-d H:i'))->first();
     @endphp
@@ -1381,11 +1381,13 @@
         <div id="products-container" class="products-container">
           {{-- @dd($products->count()) --}}
           @include('web.partials.product-grid', ['products' => $products])
+          {{-- {{ $products->links('pagination::bootstrap-5') }} --}}
         </div>
 
       </div>
     </div>
   </div>
+  
 </section>
 
 <!-- Overlay -->

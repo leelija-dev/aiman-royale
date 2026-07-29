@@ -1320,63 +1320,33 @@ $category = \App\Models\Category::where('slug', $slug)->first();
 <section id="dynamic-content-sec-2" class="w-full bg-white py-12 lg:py-20">
   <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
-    <!-- Category Heading -->
-    {{--
-    <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
-      {{ $category->name }} - Premium {{ $category->name }} Collection by Aiman Royale
-    </h2>
-    --}}
-
-    <!-- Full Category Description Only -->
-    <!-- Category Description with Preview -->
-    <div class="prose prose-lg max-w-none">
-      <div class="leading-relaxed text-base md:text-lg">
-        <!-- Preview section -->
-        <div id="category-preview" class="mb-2">
-          {!! Str::limit(strip_tags($category->description), 200, '...') !!}
+    <details class="group" id="category-details">
+      <!-- Summary (only visible when closed) -->
+      <summary class="cursor-pointer list-none group-open:hidden">
+        <div id="category-preview" class="leading-relaxed text-base md:text-lg text-[#666]">
+          {{ Str::limit(preg_replace('/\s+/', ' ', trim(strip_tags($category->description))), 200, '...') }}
         </div>
-
-        <!-- Read more button -->
-        <button id="category-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+        @if(strlen($category->description) > 200)
+        <span class="inline-block mt-3 text-[#F21D92] font-semibold hover:text-[#B50965] transition-colors">
           Read more
-        </button>
+        </span>
+        @endif
+      </summary>
+      
+      <!-- Full content (visible when open) -->
+      <div id="category-full-content" class="mt-2 hidden group-open:block">
+        {!! $category->description !!}
 
-        <!-- Full description (initially hidden) -->
-        <div id="category-full-content" class="hidden mt-4">
-          <div class="leading-relaxed text-base md:text-lg">
-            {!! $category->description !!}
-          </div>
-
-          <!-- Show less button -->
-          <button id="category-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+        <!-- Show less button - right side at the bottom -->
+        <div class="mt-6 text-right">
+          <button type="button"
+                  onclick="document.getElementById('category-details').removeAttribute('open')"
+                  class="text-[#F21D92] font-semibold hover:text-[#B50965] transition-colors cursor-pointer">
             Show less
           </button>
         </div>
       </div>
-    </div>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const readMoreBtn = document.getElementById('category-read-more');
-        const showLessBtn = document.getElementById('category-show-less');
-        const preview = document.getElementById('category-preview');
-        const fullContent = document.getElementById('category-full-content');
-
-        if (readMoreBtn && showLessBtn && preview && fullContent) {
-          readMoreBtn.addEventListener('click', function() {
-            preview.classList.add('hidden');
-            readMoreBtn.classList.add('hidden');
-            fullContent.classList.remove('hidden');
-          });
-
-          showLessBtn.addEventListener('click', function() {
-            preview.classList.remove('hidden');
-            readMoreBtn.classList.remove('hidden');
-            fullContent.classList.add('hidden');
-          });
-        }
-      });
-    </script>
+    </details>
 
   </div>
 </section>
@@ -1386,7 +1356,7 @@ $category = \App\Models\Category::where('slug', $slug)->first();
 // Try to get category and occasion from URL slugs
 $categorySlug = request()->segment(1);
 $occasionSlug = request()->segment(2);
-
+// dd($categorySlug, $occasionSlug);
 $category = \App\Models\Category::where('slug', $categorySlug)->first();
 $occasion = \App\Models\Occasion::where('slug', $occasionSlug)->first();
 
@@ -1395,66 +1365,45 @@ if ($category && $occasion) {
 $categoryOccasionContent = \App\Models\CategoryOccasionContent::where('category_id', $category->id)
 ->where('occasion_id', $occasion->id)
 ->first();
+// dd($categoryOccasionContent);
 }
 @endphp
 @if($categoryOccasionContent)
 <section id="dynamic-content-sec-3" class="w-full bg-white py-12 lg:py-20">
   <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-gray-800 relative">
 
-    <!-- Category-Ocassion Heading -->
+    <!-- Category-Occasion Heading -->
     <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
       {{ $category->name }} for {{ $occasion->name }} - Premium Collection by Aiman Royale
     </h2>
 
-    <!-- Category-Ocassion Content with Preview -->
-    <div class="prose prose-lg max-w-none">
-      <div class="leading-relaxed text-base md:text-lg">
-        <!-- Preview section -->
-        <div id="category-occasion-preview" class="mb-2">
+    <!-- Category-Occasion Content with Preview -->
+    <details class="group">
+      <!-- Closed state: Preview + Read more -->
+      <summary class="cursor-pointer list-none group-open:hidden">
+        <div id="category-occasion-preview" class="leading-relaxed text-base md:text-lg text-[#666] mb-2">
           {!! Str::limit(strip_tags($categoryOccasionContent->content), 200, '...') !!}
         </div>
-
-        <!-- Read more button -->
-        <button id="category-occasion-read-more" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0">
+        <span class="inline-block text-secondary font-medium text-lg hover:text-primary transition-colors duration-200">
           Read more
-        </button>
+        </span>
+      </summary>
 
-        <!-- Full content (initially hidden) -->
-        <div id="category-occasion-full-content" class="hidden mt-4">
-          <div class="leading-relaxed text-base md:text-lg">
-            {!! $categoryOccasionContent->content !!}
-          </div>
+      <!-- Open state: Full content + Show less (right side) -->
+      <div id="category-occasion-full-content" class="hidden group-open:block mt-2">
+        <div class="leading-relaxed text-base md:text-lg">
+          {!! $categoryOccasionContent->content !!}
+        </div>
 
-          <!-- Show less button -->
-          <button id="category-occasion-show-less" class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 bg-transparent border-none p-0 mt-4">
+        <!-- Show less - bottom right -->
+        <div class="mt-6 text-right">
+          <span class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200"
+                onclick="this.closest('details').removeAttribute('open')">
             Show less
-          </button>
+          </span>
         </div>
       </div>
-    </div>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const readMoreBtn = document.getElementById('category-occasion-read-more');
-        const showLessBtn = document.getElementById('category-occasion-show-less');
-        const preview = document.getElementById('category-occasion-preview');
-        const fullContent = document.getElementById('category-occasion-full-content');
-
-        if (readMoreBtn && showLessBtn && preview && fullContent) {
-          readMoreBtn.addEventListener('click', function() {
-            preview.classList.add('hidden');
-            readMoreBtn.classList.add('hidden');
-            fullContent.classList.remove('hidden');
-          });
-
-          showLessBtn.addEventListener('click', function() {
-            preview.classList.remove('hidden');
-            readMoreBtn.classList.remove('hidden');
-            fullContent.classList.add('hidden');
-          });
-        }
-      });
-    </script>
+    </details>
 
   </div>
 </section>
@@ -2556,7 +2505,7 @@ art from fake trails.
 <div class="sticky bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
 
   <!-- Attractive Banner -->
-  <a href="/" class="w-full">
+  <a href="{{route('page.appointment')}}" class="w-full">
     <div class="w-full bg-gradient-to-r from-pink-500 via-red-500 to-pink-600 py-2 px-4">
       <div class="flex items-center justify-center gap-2 animate-pulse">
         <i class="fas fa-gem text-white text-sm"></i>

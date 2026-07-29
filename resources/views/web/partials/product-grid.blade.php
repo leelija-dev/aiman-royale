@@ -1,6 +1,5 @@
 @if($products->count() > 0)
 @foreach($products as $product)
-{{-- @dd($product) --}}
 <div class="item flex justify-center items-center">
     <a href="/products/{{ $product->slug ?? $product['slug'] ?? '' }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200 product-card">
         <!-- Image Wrapper -->
@@ -135,7 +134,7 @@
 
                 @if($discountPercentage > 0)
                 <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                    -{{ $discountPercentage }}% OFF
+                    {{ $discountPercentage }}% OFF
                 </span>
                 @endif
             </div>
@@ -216,3 +215,6 @@
     </div>
 </div>
 @endif
+<div>
+      {{-- {{ $products->links('pagination::bootstrap-4') }} --}}
+</div>

@@ -135,6 +135,7 @@
                                     </a>
                                     <form id="delete-form-{{ $offer->id }}"
                                         action="{{ route('offer.delete', $offer->id) }}" 
+                                        method="POST"
                                         style="display:none;">
                                         @csrf
                                         @method('DELETE')

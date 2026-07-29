@@ -1,9 +1,9 @@
 @extends('Admin.layouts.master')
-@section('source', 'Categories')
-@section('page-title', ' Product Categories')
+@section('source', 'Contacts')
+@section('page-title', 'Contacts')
 
 @section('title')
-{{config('app.name')}} - Product Categories
+{{config('app.name')}} - Contacts
 @endsection
 
 {{-- @section('title','Product Categories') --}}
@@ -12,7 +12,7 @@
 <div class="container-fluid py-4">
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-md-nowrap flex-wrap">
-      <h5 class="card-title">Product Categories</h5>
+      <h5 class="card-title">Contacts</h5>
       {{--
       <div class="d-flex gap-2 flex-sm-nowrap flex-wrap">
         <a href="{{ route('admin.categories.trash') }}" class="btn btn-outline-secondary">
@@ -77,7 +77,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="6" class="text-center">Categories not available!</td>
+                <td colspan="8" class="text-center">Contacts not found!</td>
               </tr>
             @endforelse
           </tbody>
