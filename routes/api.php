@@ -8,16 +8,11 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ReturnOrderController;
+use App\Http\Controllers\Api\WebhookController;
 
-Route::prefix('blog')->group(function () {
-    Route::get('/posts', [BlogApiController::class, 'posts']);
-    Route::get('/posts/{slug}', [BlogApiController::class, 'post']);
-    Route::get('/categories', [BlogApiController::class, 'categories']);
-    Route::get('/tags', [BlogApiController::class, 'tags']);
-});
 
 // Brand related API routes
-Route::post('/generate-slug', [BrandController::class, 'generateSlug'])->name('api.generate-slug');
+// Route::post('/generate-slug', [BrandController::class, 'generateSlug'])->name('api.generate-slug');
 
 // Category related API routes
 Route::prefix('categories')->group(function () {
@@ -63,3 +58,6 @@ Route::prefix('reviews')->group(function () {
 });
 
 Route::get('/category/filter-options/{slug}', [CategoryController::class, 'getFilterOptions'])->name('category.filter.options');
+
+// Route::get('', [WebhookController::class, 'handle'])->name('webhook');
+Route::post('/delhivery/webhook', [WebhookController::class, 'handle']);

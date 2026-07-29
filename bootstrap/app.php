@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RefreshJWTToken;
+use App\Http\Middleware\CheckSessionExpiry;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+          $middleware->redirectGuestsTo('/login');
         //
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
@@ -25,13 +27,18 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest.admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
             'check.login' => \App\Http\Middleware\CheckUserLogin::class,
             'refresh.jwt' => RefreshJWTToken::class,
-            
+            'auto.login' => \App\Http\Middleware\AutoLoginMiddleware::class,
+            'session.expiry' => CheckSessionExpiry::class, // ✅ Added here
+
         ]);
 
         // Ensure index.php paths are redirected to clean URLs in all environments
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\RedirectIndexPhp::class,
+             \App\Http\Middleware\AutoLoginMiddleware::class,
+            \App\Http\Middleware\CheckSessionExpiry::class,
             \App\Http\Middleware\DynamicSeoMiddleware::class,
+
 
         ]);
     })

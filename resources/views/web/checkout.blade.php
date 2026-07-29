@@ -174,7 +174,7 @@
                                 @endphp
 
                                 @foreach ($carts as $cart)
-                                    <div class="flex gap-4">
+                                    <div class="flex gap-4 flex-wrap justify-center items-center ">
                                         <div
                                             class="w-20 h-20 bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">
                                             @if ($cart->image)
