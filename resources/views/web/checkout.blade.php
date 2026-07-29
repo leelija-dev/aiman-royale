@@ -811,17 +811,17 @@ msg.innerHTML = "Something went wrong.";
 }
 </script>  -->
 <script>
-    let appliedDiscounts = {};
-    let appliedCoupons = {};
+    // Make all functions globally accessible
+    window.appliedDiscounts = {};
+    window.appliedCoupons = {};
 
-    function calculateTotals() {
-
+    window.calculateTotals = function() {
         let originalSubtotal = parseFloat(
             document.getElementById("subtotal").dataset.original
         );
 
         // Product coupon discount
-        let totalProductDiscount = Object.values(appliedDiscounts)
+        let totalProductDiscount = Object.values(window.appliedDiscounts)
             .reduce((sum, value) => sum + value, 0);
 
         let subtotal = originalSubtotal - totalProductDiscount;
@@ -832,46 +832,29 @@ msg.innerHTML = "Something went wrong.";
         let specialDiscount = 0;
 
         @if($coupon)
-        if (subtotal >= {
-                {
-                    $coupon - > minimum_amount
-                }
-            }) {
-            // Log::info('special discount');
-
-            specialDiscount = subtotal * {
-                {
-                    $coupon - > discount
-                }
-            }
-            / 100;
-
+        if (subtotal >= {{ $coupon->minimum_amount }}) {
+            specialDiscount = subtotal * {{ $coupon->discount }} / 100;
         }
         @endif
+
         @if($coupon)
         if (specialDiscount > 0) {
             document.getElementById("special-discount-id").value = "{{ $coupon->id }}";
             document.getElementById("special-discount-percentage").value = "{{ $coupon->discount }}";
             document.getElementById("special-discount-name").value = "{{ $coupon->code }}";
-
         } else {
             document.getElementById("special-discount-id").value = "";
             document.getElementById("special-discount-percentage").value = "";
             document.getElementById("special-discount-name").value = "";
         }
         @endif
-        // document.getElementById("special-discount").innerHTML =
-        //     specialDiscount.toFixed(2);
 
-        // document.getElementById("special-discount-hidden").value =
-        //     specialDiscount.toFixed(2);
         const specialDiscountEl = document.getElementById("special-discount");
         const specialDiscountAmt = document.getElementById("special-discount-amount");
         const specialDiscountHidden = document.getElementById("special-discount-hidden");
 
         if (specialDiscountEl) {
             specialDiscountEl.innerHTML = specialDiscount.toFixed(2);
-
         }
         if (specialDiscountAmt) {
             specialDiscountAmt.value = specialDiscount.toFixed(2);
@@ -879,11 +862,8 @@ msg.innerHTML = "Something went wrong.";
         if (specialDiscountHidden) {
             specialDiscountHidden.value = specialDiscount.toFixed(2);
         }
-        // Final subtotal after special discount
-        // subtotal = subtotal - specialDiscount;
 
-        document.getElementById("subtotal").innerHTML =
-            subtotal.toFixed(2);
+        document.getElementById("subtotal").innerHTML = subtotal.toFixed(2);
 
         // GST
         let gstPercentage = parseFloat(
@@ -892,11 +872,8 @@ msg.innerHTML = "Something went wrong.";
 
         let gst = (subtotal - specialDiscount) * gstPercentage / 100;
 
-        document.getElementById("gst").innerHTML =
-            gst.toFixed(2);
-
-        document.getElementById("gst-amount").value =
-            gst.toFixed(2);
+        document.getElementById("gst").innerHTML = gst.toFixed(2);
+        document.getElementById("gst-amount").value = gst.toFixed(2);
 
         // Shipping
         let shipping = parseFloat(
@@ -905,26 +882,15 @@ msg.innerHTML = "Something went wrong.";
 
         // Grand Total
         let grandTotal = (subtotal - specialDiscount) + gst + shipping;
-        let roundedGrandTotal = customRound(grandTotal);
-        // document.getElementById("grand-total").innerHTML =
-        //     grandTotal.toFixed(2);
-
-        // document.getElementById("grand-total-hidden").value =
-        //     grandTotal.toFixed(2);
+        let roundedGrandTotal = window.customRound(grandTotal);
+        
         document.getElementById("grand-total").innerHTML = roundedGrandTotal.toFixed(
             Number.isInteger(roundedGrandTotal) ? 0 : 1
         );
-
         document.getElementById("grand-total-hidden").value = roundedGrandTotal;
-    }
+    };
 
-    // Auto calculate on page load
-    window.addEventListener("load", function() {
-        calculateTotals();
-    });
-
-    function applyCoupon(cartId, productTotal) {
-
+    window.applyCoupon = function(cartId, productTotal) {
         let code = document.getElementById('coupon-' + cartId).value.trim();
         let msg = document.getElementById('coupon-message-' + cartId);
 
@@ -937,72 +903,63 @@ msg.innerHTML = "Something went wrong.";
         }
 
         fetch("{{ route('apply.coupon') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    coupon_code: code,
-                    total: productTotal
-                })
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                coupon_code: code,
+                total: productTotal
             })
-            .then(res => res.json())
-            .then(res => {
-
-                if (!res.status) {
-                    msg.className = "text-red-500 text-xs mt-1";
-                    msg.innerHTML = res.message;
-                    return;
-                }
-
-                let discount = parseFloat(res.coupon.discount);
-
-                let discountAmount = productTotal * discount / 100;
-
-                let newProductTotal = productTotal - discountAmount;
-
-                document.getElementById("product-total-" + cartId).innerHTML =
-                    newProductTotal.toFixed(2);
-
-                appliedCoupons[cartId] = {
-                    coupon_id: res.coupon.id,
-                    coupon_code: res.coupon.code,
-                    coupon_discount: res.coupon.discount,
-                    coupon_discount_amount: discountAmount
-                };
-
-                appliedDiscounts[cartId] = discountAmount;
-
-                msg.className = "text-green-600 text-xs mt-1";
-                msg.innerHTML = res.message;
-
-                // Recalculate all totals
-                calculateTotals();
-
-                // Disable coupon
-                document.getElementById("coupon-" + cartId).disabled = true;
-
-                let btn = document.getElementById("apply-btn-" + cartId);
-
-                btn.disabled = true;
-                btn.innerHTML = "Applied";
-                btn.classList.remove("bg-black");
-                btn.classList.add("bg-green-600");
-
-            })
-            .catch(err => {
-
-                console.log(err);
-
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (!res.status) {
                 msg.className = "text-red-500 text-xs mt-1";
-                msg.innerHTML = "Something went wrong.";
+                msg.innerHTML = res.message;
+                return;
+            }
 
-            });
+            let discount = parseFloat(res.coupon.discount);
+            let discountAmount = productTotal * discount / 100;
+            let newProductTotal = productTotal - discountAmount;
 
-    }
+            document.getElementById("product-total-" + cartId).innerHTML =
+                newProductTotal.toFixed(2);
 
-    function customRound(value) {
+            window.appliedCoupons[cartId] = {
+                coupon_id: res.coupon.id,
+                coupon_code: res.coupon.code,
+                coupon_discount: res.coupon.discount,
+                coupon_discount_amount: discountAmount
+            };
+
+            window.appliedDiscounts[cartId] = discountAmount;
+
+            msg.className = "text-green-600 text-xs mt-1";
+            msg.innerHTML = res.message;
+
+            // Recalculate all totals
+            window.calculateTotals();
+
+            // Disable coupon
+            document.getElementById("coupon-" + cartId).disabled = true;
+
+            let btn = document.getElementById("apply-btn-" + cartId);
+            btn.disabled = true;
+            btn.innerHTML = "Applied";
+            btn.classList.remove("bg-black");
+            btn.classList.add("bg-green-600");
+        })
+        .catch(err => {
+            console.error(err);
+            msg.className = "text-red-500 text-xs mt-1";
+            msg.innerHTML = "Something went wrong.";
+        });
+    };
+
+    window.customRound = function(value) {
         const decimal = value - Math.floor(value);
 
         if (decimal >= 0.5) {
@@ -1010,7 +967,15 @@ msg.innerHTML = "Something went wrong.";
         }
 
         return Math.round(value * 10) / 10;
-    }
+    };
+
+    // Auto calculate on page load
+    window.addEventListener("load", function() {
+        window.calculateTotals();
+    });
+
+    console.log('Checkout script loaded successfully with global functions');
+    console.log('typeof applyCoupon:', typeof window.applyCoupon);
 </script>
 <script>
     function toggleSpecialTerms() {
