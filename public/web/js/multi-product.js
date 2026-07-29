@@ -24,6 +24,39 @@ document.addEventListener("DOMContentLoaded", function () {
         has_offer: ''
     };
 
+     function getInitialFilters() {
+        const params = new URLSearchParams(window.location.search);
+        const filters = {
+            categories: params.get('categories') ? params.get('categories').split(',') : [],
+            occasions: params.get('occasions') ? params.get('occasions').split(',') : [],
+            colors: params.get('colors') ? params.get('colors').split(',') : [],
+            sizes: params.get('sizes') ? params.get('sizes').split(',') : [],
+            price_ranges: params.get('price_ranges') ? params.get('price_ranges').split(',') : [],
+            sort: params.get('sort') || 'date-desc',
+            search: params.get('search') || '',
+            has_offer: params.get('has_offer') || ''
+        };
+
+         if (filters.search && ['offer', 'offers'].includes(filters.search.toLowerCase())) {
+            filters.has_offer = '1';
+        }
+        
+        return filters;
+    }
+
+    function initializeFiltersFromURL() {
+        const initialFilters = getInitialFilters();
+        currentFilters = {
+            ...currentFilters,
+            ...initialFilters
+        };
+        console.log('Initialized filters from URL:', currentFilters);
+    }
+
+    // Call this function to set initial filters
+    initializeFiltersFromURL();
+
+
     // Pagination configuration
     const perPage = 5; // Change this value to adjust products per page
 

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 class HomeController extends Controller
 {
     public function __construct() {}
@@ -675,202 +676,202 @@ class HomeController extends Controller
 
         // Start building the query
         if (in_array(strtolower($search), ['offer', 'offers'])) {
-        
-    $query = DB::table('offer_products')
-        ->join('products', 'offer_products.product_id', '=', 'products.id')
-        ->join('product_variants', 'offer_products.product_variant_id', '=', 'product_variants.id')
-        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-        ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
-        ->where('products.is_active', 1)
-        ->where('products.ready_to_ship', 1)
-        ->select(
-                'products.id',
-                'products.design_no',
-                'products.category_id',
-                'products.ocassion_id',
-                'products.name',
-                'products.slug',
-                'products.description',
-                'products.brand',
-                'products.fabric',
-                'products.fit',
-                'products.price',
-                'products.discount_price',
-                'products.stock',
-                'products.status',
-                'products.featured_image',
-                'products.ready_to_ship',
-                'products.is_featured',
-                'products.meta_title',
-                'products.keywords',
-                'products.tags',
-                'products.meta_description',
-                'products.schema_markup',
-                'products.created_at',
-                'products.updated_at',
-                'products.deleted_at',
-                'products.is_active',
-                'products.unit_id',
-                'products.lehenga_fabric',
-                'products.choli_fabric',
-                'products.dupatta_fabric',
-                'products.type',
-                'products.stitching_type',
-                'products.pattern',
-                'products.sales_package',
 
-                'product_variants.id as variant_id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price as variant_price',
-                'product_variants.discount_price as price_after_discount',
-                'product_variants.stock as variant_stock',
+            $query = DB::table('offer_products')
+                ->join('products', 'offer_products.product_id', '=', 'products.id')
+                ->join('product_variants', 'offer_products.product_variant_id', '=', 'product_variants.id')
+                ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
+                ->where('products.is_active', 1)
+                ->where('products.ready_to_ship', 1)
+                ->select(
+                    'products.id',
+                    'products.design_no',
+                    'products.category_id',
+                    'products.ocassion_id',
+                    'products.name',
+                    'products.slug',
+                    'products.description',
+                    'products.brand',
+                    'products.fabric',
+                    'products.fit',
+                    'products.price',
+                    'products.discount_price',
+                    'products.stock',
+                    'products.status',
+                    'products.featured_image',
+                    'products.ready_to_ship',
+                    'products.is_featured',
+                    'products.meta_title',
+                    'products.keywords',
+                    'products.tags',
+                    'products.meta_description',
+                    'products.schema_markup',
+                    'products.created_at',
+                    'products.updated_at',
+                    'products.deleted_at',
+                    'products.is_active',
+                    'products.unit_id',
+                    'products.lehenga_fabric',
+                    'products.choli_fabric',
+                    'products.dupatta_fabric',
+                    'products.type',
+                    'products.stitching_type',
+                    'products.pattern',
+                    'products.sales_package',
 
-                DB::raw('MIN(product_images.image) as variant_image')
-            )
-            ->groupBy(
-                'products.id',
-                'products.design_no',
-                'products.category_id',
-                'products.ocassion_id',
-                'products.name',
-                'products.slug',
-                'products.description',
-                'products.brand',
-                'products.fabric',
-                'products.fit',
-                'products.price',
-                'products.discount_price',
-                'products.stock',
-                'products.status',
-                'products.featured_image',
-                'products.ready_to_ship',
-                'products.is_featured',
-                'products.meta_title',
-                'products.keywords',
-                'products.tags',
-                'products.meta_description',
-                'products.schema_markup',
-                'products.created_at',
-                'products.updated_at',
-                'products.deleted_at',
-                'products.is_active',
-                'products.unit_id',
-                'products.lehenga_fabric',
-                'products.choli_fabric',
-                'products.dupatta_fabric',
-                'products.type',
-                'products.stitching_type',
-                'products.pattern',
-                'products.sales_package',
+                    'product_variants.id as variant_id',
+                    'product_variants.size',
+                    'product_variants.color',
+                    'product_variants.price as variant_price',
+                    'product_variants.discount_price as price_after_discount',
+                    'product_variants.stock as variant_stock',
 
-                'product_variants.id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price',
-                'product_variants.discount_price',
-                'product_variants.stock'
-            )->orderByDesc('product_variants.discount' );
-        // dd($query);
-} else {
-    // dd('else');
-        $query = DB::table('products')
-            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
-            ->where('products.is_active', 1)
-            ->where('products.ready_to_ship', 1)
-            ->select(
-                'products.id',
-                'products.design_no',
-                'products.category_id',
-                'products.ocassion_id',
-                'products.name',
-                'products.slug',
-                'products.description',
-                'products.brand',
-                'products.fabric',
-                'products.fit',
-                'products.price',
-                'products.discount_price',
-                'products.stock',
-                'products.status',
-                'products.featured_image',
-                'products.ready_to_ship',
-                'products.is_featured',
-                'products.meta_title',
-                'products.keywords',
-                'products.tags',
-                'products.meta_description',
-                'products.schema_markup',
-                'products.created_at',
-                'products.updated_at',
-                'products.deleted_at',
-                'products.is_active',
-                'products.unit_id',
-                'products.lehenga_fabric',
-                'products.choli_fabric',
-                'products.dupatta_fabric',
-                'products.type',
-                'products.stitching_type',
-                'products.pattern',
-                'products.sales_package',
+                    DB::raw('MIN(product_images.image) as variant_image')
+                )
+                ->groupBy(
+                    'products.id',
+                    'products.design_no',
+                    'products.category_id',
+                    'products.ocassion_id',
+                    'products.name',
+                    'products.slug',
+                    'products.description',
+                    'products.brand',
+                    'products.fabric',
+                    'products.fit',
+                    'products.price',
+                    'products.discount_price',
+                    'products.stock',
+                    'products.status',
+                    'products.featured_image',
+                    'products.ready_to_ship',
+                    'products.is_featured',
+                    'products.meta_title',
+                    'products.keywords',
+                    'products.tags',
+                    'products.meta_description',
+                    'products.schema_markup',
+                    'products.created_at',
+                    'products.updated_at',
+                    'products.deleted_at',
+                    'products.is_active',
+                    'products.unit_id',
+                    'products.lehenga_fabric',
+                    'products.choli_fabric',
+                    'products.dupatta_fabric',
+                    'products.type',
+                    'products.stitching_type',
+                    'products.pattern',
+                    'products.sales_package',
 
-                'product_variants.id as variant_id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price as variant_price',
-                'product_variants.discount_price as price_after_discount',
-                'product_variants.stock as variant_stock',
+                    'product_variants.id',
+                    'product_variants.size',
+                    'product_variants.color',
+                    'product_variants.price',
+                    'product_variants.discount_price',
+                    'product_variants.stock'
+                )->orderByDesc('product_variants.discount');
+            // dd($query);
+        } else {
+            // dd('else');
+            $query = DB::table('products')
+                ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+                ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                ->leftJoin('ocassions', 'products.ocassion_id', '=', 'ocassions.id')
+                ->where('products.is_active', 1)
+                ->where('products.ready_to_ship', 1)
+                ->select(
+                    'products.id',
+                    'products.design_no',
+                    'products.category_id',
+                    'products.ocassion_id',
+                    'products.name',
+                    'products.slug',
+                    'products.description',
+                    'products.brand',
+                    'products.fabric',
+                    'products.fit',
+                    'products.price',
+                    'products.discount_price',
+                    'products.stock',
+                    'products.status',
+                    'products.featured_image',
+                    'products.ready_to_ship',
+                    'products.is_featured',
+                    'products.meta_title',
+                    'products.keywords',
+                    'products.tags',
+                    'products.meta_description',
+                    'products.schema_markup',
+                    'products.created_at',
+                    'products.updated_at',
+                    'products.deleted_at',
+                    'products.is_active',
+                    'products.unit_id',
+                    'products.lehenga_fabric',
+                    'products.choli_fabric',
+                    'products.dupatta_fabric',
+                    'products.type',
+                    'products.stitching_type',
+                    'products.pattern',
+                    'products.sales_package',
 
-                DB::raw('MIN(product_images.image) as variant_image')
-            )
-            ->groupBy(
-                'products.id',
-                'products.design_no',
-                'products.category_id',
-                'products.ocassion_id',
-                'products.name',
-                'products.slug',
-                'products.description',
-                'products.brand',
-                'products.fabric',
-                'products.fit',
-                'products.price',
-                'products.discount_price',
-                'products.stock',
-                'products.status',
-                'products.featured_image',
-                'products.ready_to_ship',
-                'products.is_featured',
-                'products.meta_title',
-                'products.keywords',
-                'products.tags',
-                'products.meta_description',
-                'products.schema_markup',
-                'products.created_at',
-                'products.updated_at',
-                'products.deleted_at',
-                'products.is_active',
-                'products.unit_id',
-                'products.lehenga_fabric',
-                'products.choli_fabric',
-                'products.dupatta_fabric',
-                'products.type',
-                'products.stitching_type',
-                'products.pattern',
-                'products.sales_package',
+                    'product_variants.id as variant_id',
+                    'product_variants.size',
+                    'product_variants.color',
+                    'product_variants.price as variant_price',
+                    'product_variants.discount_price as price_after_discount',
+                    'product_variants.stock as variant_stock',
 
-                'product_variants.id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.price',
-                'product_variants.discount_price',
-                'product_variants.stock'
-            );
-}
+                    DB::raw('MIN(product_images.image) as variant_image')
+                )
+                ->groupBy(
+                    'products.id',
+                    'products.design_no',
+                    'products.category_id',
+                    'products.ocassion_id',
+                    'products.name',
+                    'products.slug',
+                    'products.description',
+                    'products.brand',
+                    'products.fabric',
+                    'products.fit',
+                    'products.price',
+                    'products.discount_price',
+                    'products.stock',
+                    'products.status',
+                    'products.featured_image',
+                    'products.ready_to_ship',
+                    'products.is_featured',
+                    'products.meta_title',
+                    'products.keywords',
+                    'products.tags',
+                    'products.meta_description',
+                    'products.schema_markup',
+                    'products.created_at',
+                    'products.updated_at',
+                    'products.deleted_at',
+                    'products.is_active',
+                    'products.unit_id',
+                    'products.lehenga_fabric',
+                    'products.choli_fabric',
+                    'products.dupatta_fabric',
+                    'products.type',
+                    'products.stitching_type',
+                    'products.pattern',
+                    'products.sales_package',
+
+                    'product_variants.id',
+                    'product_variants.size',
+                    'product_variants.color',
+                    'product_variants.price',
+                    'product_variants.discount_price',
+                    'product_variants.stock'
+                );
+        }
         // Apply search filter
         if ($search != 'offer' && $search != 'offers' && !empty(trim($search))) {
 
@@ -1011,133 +1012,92 @@ class HomeController extends Controller
                 break;
         }
 
-        // Get products
-        // $products = $query->get();
-        // Get products
-        // $rawProducts = $query->get();
-        // $rawProducts = $query->paginate(5)->withQueryString();
-        
-        // // Convert products to old array structure
-        // $products = collect();
 
-        // foreach ($rawProducts as $product) {
+        $rawProducts = $query->paginate(6)->withQueryString();
 
-        //     $products->push([
+        // Convert current page products
+        $mappedProducts = collect();
 
-        //         'id' => $product->id,
-        //         'design_no' => $product->design_no,
-        //         'category_id' => $product->category_id,
-        //         'ocassion_id' => $product->ocassion_id,
-        //         'name' => $product->name,
-        //         'slug' => $product->slug,
-        //         'description' => $product->description,
-        //         'brand' => $product->brand,
-        //         'fabric' => $product->fabric,
-        //         'fit' => $product->fit,
-        //         'price' => $product->price,
-        //         'discount_price' => $product->discount_price,
-        //         'stock' => $product->stock,
-        //         'status' => $product->status,
-        //         'featured_image' => $product->featured_image,
-        //         'ready_to_ship' => $product->ready_to_ship,
-        //         'is_featured' => $product->is_featured,
-        //         'meta_title' => $product->meta_title,
-        //         'keywords' => $product->keywords,
-        //         'tags' => $product->tags,
-        //         'meta_description' => $product->meta_description,
-        //         'schema_markup' => $product->schema_markup,
-        //         'created_at' => $product->created_at,
-        //         'updated_at' => $product->updated_at,
-        //         'deleted_at' => $product->deleted_at,
-        //         'is_active' => $product->is_active,
-        //         'unit_id' => $product->unit_id,
+        foreach ($rawProducts->items() as $product) {
 
-        //         // images structure expected in blade
-        //         'images' => [
-        //             [
-        //                 'image' => $product->variant_image
-        //             ]
-        //         ],
+            $firstVariantDiscountPrice = null;
+            $firstVariantPrice = null;
 
-        //         // variants structure expected in blade
-        //         'variants' => [
-        //             [
-        //                 'variant_id' => $product->variant_id,
-        //                 'size' => $product->size,
-        //                 'color' => $product->color,
-        //                 'price' => $product->variant_price,
-        //                 'discount_price' => $product->price_after_discount,
-        //                 'stock' => $product->variant_stock,
-        //             ]
-        //         ]
-        //     ]);
-        // }
-            $rawProducts = $query->paginate(6)->withQueryString();
-
-// Convert current page products
-$mappedProducts = collect();
-
-foreach ($rawProducts->items() as $product) {
-
-    $mappedProducts->push([
-
-        'id' => $product->id,
-        'design_no' => $product->design_no,
-        'category_id' => $product->category_id,
-        'ocassion_id' => $product->ocassion_id,
-        'name' => $product->name,
-        'slug' => $product->slug,
-        'description' => $product->description,
-        'brand' => $product->brand,
-        'fabric' => $product->fabric,
-        'fit' => $product->fit,
-        'price' => $product->price,
-        'discount_price' => $product->discount_price,
-        'stock' => $product->stock,
-        'status' => $product->status,
-        'featured_image' => $product->featured_image,
-        'ready_to_ship' => $product->ready_to_ship,
-        'is_featured' => $product->is_featured,
-        'meta_title' => $product->meta_title,
-        'keywords' => $product->keywords,
-        'tags' => $product->tags,
-        'meta_description' => $product->meta_description,
-        'schema_markup' => $product->schema_markup,
-        'created_at' => $product->created_at,
-        'updated_at' => $product->updated_at,
-        'deleted_at' => $product->deleted_at,
-        'is_active' => $product->is_active,
-        'unit_id' => $product->unit_id,
-
-        'images' => [
-            [
-                'image' => $product->variant_image
-            ]
-        ],
-
-        'variants' => [
-            [
+            // Since we're only getting one variant per product in the query,
+            // we can use the variant data directly
+            $variantData = [
                 'variant_id' => $product->variant_id,
                 'size' => $product->size,
                 'color' => $product->color,
                 'price' => $product->variant_price,
                 'discount_price' => $product->price_after_discount,
                 'stock' => $product->variant_stock,
-            ]
-        ]
-    ]);
-}
+            ];
 
-$products = new LengthAwarePaginator(
-    $mappedProducts,
-    $rawProducts->total(),
-    $rawProducts->perPage(),
-    $rawProducts->currentPage(),
-    [
-        'path' => request()->url(),
-        'query' => request()->query(),
-    ]
-);
+            $firstVariantDiscountPrice = $product->price_after_discount;
+            $firstVariantPrice = $product->variant_price;
+            $mappedProducts->push([
+
+                'id' => $product->id,
+                'design_no' => $product->design_no,
+                'category_id' => $product->category_id,
+                'ocassion_id' => $product->ocassion_id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'description' => $product->description,
+                'brand' => $product->brand,
+                'fabric' => $product->fabric,
+                'fit' => $product->fit,
+                'price' => $product->price,
+                'discount_price' => $product->discount_price,
+                'first_variant_price' => $firstVariantPrice,
+                'first_variant_discount_price' => $firstVariantDiscountPrice,
+                'stock' => $product->stock,
+                'status' => $product->status,
+                'featured_image' => $product->featured_image,
+                'ready_to_ship' => $product->ready_to_ship,
+                'is_featured' => $product->is_featured,
+                'meta_title' => $product->meta_title,
+                'keywords' => $product->keywords,
+                'tags' => $product->tags,
+                'meta_description' => $product->meta_description,
+                'schema_markup' => $product->schema_markup,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at,
+                'deleted_at' => $product->deleted_at,
+                'is_active' => $product->is_active,
+                'unit_id' => $product->unit_id,
+
+                'images' => [
+                    [
+                        'image' => $product->variant_image
+                    ]
+                ],
+
+                'variants' => [
+                    [
+                        'variant_id' => $product->variant_id,
+                        'size' => $product->size,
+                        'color' => $product->color,
+                        'price' => $product->variant_price,
+                        'discount_price' => $product->price_after_discount,
+                        'stock' => $product->variant_stock,
+                    ]
+                ]
+            ]);
+        }
+
+        $products = new LengthAwarePaginator(
+            $mappedProducts,
+            $rawProducts->total(),
+            $rawProducts->perPage(),
+            $rawProducts->currentPage(),
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+        // dd($products);
         // Filter options
         $filterOptions = [
             'categories' => DB::table('categories')
@@ -1191,16 +1151,16 @@ $products = new LengthAwarePaginator(
             'price_ranges' => array_unique($priceRanges),
             'discount_ranges' => $discountRanges,
         ];
-            
+
         // if($request->search == 'offers' || $request->search == 'offer') { 
         //     $products = OfferProducts::with('productVariant');
         // }
-    //    dd($products);
-    $wishlistIds = Auth::check()
-    ? \App\Models\Wishlist::where('user_id', Auth::id())
-        ->pluck('product_id')
-        ->toArray()
-    : [];
+        //    dd($products);
+        $wishlistIds = Auth::check()
+            ? \App\Models\Wishlist::where('user_id', Auth::id())
+            ->pluck('product_id')
+            ->toArray()
+            : [];
         return view(
             'web.multi-product',
             compact(
@@ -1410,7 +1370,7 @@ $products = new LengthAwarePaginator(
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-            
+
         return view('web.single-product', compact(
             'product',
             'sizes',

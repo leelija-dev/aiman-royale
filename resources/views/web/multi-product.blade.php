@@ -1397,6 +1397,16 @@
 <div id="loading-spinner" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
   <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
 </div>
-
+<script>
+    window.initialFilters = {
+        search: '{{ request('search') }}',
+        category: '{{ request('category') }}',
+        colors: '{{ request('colors') }}',
+        sizes: '{{ request('sizes') }}',
+        price_ranges: '{{ request('price_ranges') }}',
+        sort: '{{ request('sort', 'date-desc') }}',
+        has_offer: '{{ request('has_offer') }}'
+    };
+</script>
 <script src="{{asset('web/js/multi-product.js')}}"></script>
 @endsection
