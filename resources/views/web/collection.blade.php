@@ -97,9 +97,9 @@
                                     </h3>
 
                                     <!-- Description -->
-                                    @if($category->description)
+                                    @if($category->about)
                                     <p class="text-white/60 text-[10px] md:text-xs text-center line-clamp-1 mb-2 uppercase">
-                                        {!! Str::limit($category->description, 60) !!}
+                                        {!! Str::limit($category->about, 60) !!}
                                     </p>
                                     @endif
                                     

@@ -22,9 +22,10 @@ class WishlistController extends Controller
             Log::info('Wishlist index method started');
             
             $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
-                ->forCurrentUser()
+                // ->forCurrentUser()
+                ->where('user_id', Auth::id())
                 ->paginate(9);
-            
+            // $wishCount = Wishlist::where('user_id', Auth::id())->get();
             Log::info('Wishlist items loaded:', ['count' => $wishlistItems->count()]);
 
             // Filter out items with null products and load stock data

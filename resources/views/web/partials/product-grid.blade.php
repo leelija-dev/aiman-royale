@@ -216,5 +216,5 @@
 </div>
 @endif
 <div>
-      {{ $products->links('pagination::bootstrap-4') }}
+      {{-- {{ $products->links('pagination::bootstrap-4') }} --}}
 </div>

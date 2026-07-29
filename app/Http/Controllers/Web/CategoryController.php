@@ -176,7 +176,7 @@ class CategoryController extends Controller
             ->select('products.*')
             ->latest()
             ->paginate(12);
-// dd($products);
+        // dd($products);
         // Get all occasions and categories for filters
         $occasions = Occasion::where('is_active', 1)->get();
         $categories = Category::where('is_active', 1)->get();
@@ -607,11 +607,26 @@ class CategoryController extends Controller
                 }
             }
 
-            // Apply size filter
+            //             // Apply size filter
+            //             if ($request->filled('sizes')) {
+            //                 $sizes = json_decode($request->sizes, true);
+            // dd($sizes);
+            //                 if (!empty($sizes)) {
+            //                     $query->whereHas('variants', function ($q) use ($sizes) {
+            //                         $q->whereIn('size', $sizes);
+            //                     });
+            //                 }
+            //             }
+
             if ($request->filled('sizes')) {
                 $sizes = json_decode($request->sizes, true);
 
                 if (!empty($sizes)) {
+                    // Clean the values: trim whitespace and convert to uppercase (if needed)
+                    $sizes = array_map(function ($size) {
+                        return strtoupper(trim($size));
+                    }, $sizes);
+
                     $query->whereHas('variants', function ($q) use ($sizes) {
                         $q->whereIn('size', $sizes);
                     });
@@ -630,10 +645,23 @@ class CategoryController extends Controller
             }
 
             // Apply occasion filter
+            //             if ($request->filled('occasions')) {
+            //                 $occasions = json_decode($request->occasions, true);
+            // // dd($occasions);
+            //                 if (!empty($occasions)) {
+            //                     $query->whereHas('occasion', function ($q) use ($occasions) {
+            //                         $q->whereIn('id', $occasions);
+            //                     });
+            //                 }
+            //             }
+
             if ($request->filled('occasions')) {
                 $occasions = json_decode($request->occasions, true);
 
                 if (!empty($occasions)) {
+                    // Cast all values to integers
+                    $occasions = array_map('intval', $occasions);
+
                     $query->whereHas('occasion', function ($q) use ($occasions) {
                         $q->whereIn('id', $occasions);
                     });
