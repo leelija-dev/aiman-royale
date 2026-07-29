@@ -689,7 +689,7 @@
 
     })();
 </script>
-{{-- <script>
+ <!-- <script>
         let appliedDiscounts = {};
         let appliedCoupons = {};
         const specialCoupon = @json($coupon);
@@ -809,7 +809,7 @@ msg.innerHTML = "Something went wrong.";
 });
 
 }
-</script> --}}
+</script>  -->
 <script>
     let appliedDiscounts = {};
     let appliedCoupons = {};
