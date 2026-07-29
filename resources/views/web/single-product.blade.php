@@ -2904,7 +2904,7 @@
 
             // Get unique sizes for this color
             const availableSizes = [...new Set(variantsForColor.map(v => v.size))];
-
+            availableSizes.sort((a, b) => (window.sizeOrderMap[a] ?? 999) - (window.sizeOrderMap[b] ?? 999));
             // Clear existing size buttons
             sizeButtonsContainer.innerHTML = '';
 
@@ -4001,9 +4001,10 @@
                         }
 
                         // Update all wishlist badges
-                        document.querySelectorAll('.wishlist-count').forEach(function(item) {
-                            item.textContent = data.wishlist_count;
-                        });
+                        // document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                        //     item.textContent = data.wishlist_count;
+                        // });
+                        updateWishlistCount(data.wishlist_count);
 
                     } else {
 
@@ -4025,7 +4026,33 @@
                     button.disabled = false;
                 });
         }
+        function updateWishlistCount(count) {
 
+    // Navbar badge
+    const navbarBadge = document.getElementById('wishlist-counter');
+
+    if (navbarBadge) {
+        navbarBadge.textContent = count;
+
+        if (count > 0) {
+            navbarBadge.classList.remove('hidden');
+            navbarBadge.classList.add('flex');
+        } else {
+            navbarBadge.classList.remove('flex');
+            navbarBadge.classList.add('hidden');
+        }
+    }
+
+    // Dropdown badge
+    document.querySelectorAll('.wishlist-count').forEach(function(item) {
+
+        if (item.id !== 'wishlist-counter') {
+            item.textContent = count;
+        }
+
+    });
+
+}
         function checkProductInWishlist(productId) {
             if (!productId) return;
 

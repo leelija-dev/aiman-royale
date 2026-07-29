@@ -294,12 +294,21 @@ class UserController extends Controller implements HasMiddleware
                 $query->where('created_at', '>=', now()->subDays($days));
             }
         }
+        $totalOrders = Order::where('user_id', $id)->count();
 
+        $thisMonthOrders = Order::where('user_id', $id)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        $deliveredOrders = Order::where('user_id', $id)
+            ->where('order_status', 'delivered')
+            ->count();
         $orders = $query->latest()
             ->paginate(5, '*', 'page')
             ->appends($request->except('page'));
 
-        return view('web.order-history', compact('user', 'orders'));
+        return view('web.order-history', compact('user', 'orders','totalOrders','thisMonthOrders','deliveredOrders'));
     }
 
 

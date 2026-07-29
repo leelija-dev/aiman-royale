@@ -389,7 +389,7 @@ $isEmailActive = false;
     // $isNewsletterActive=request()->routeIs('admin.news-letter');
     // $isEmailActive=request()->routeIs('admin.email-group');
 
-    $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index');
+    $isMarketingActive = str_contains(request()->path(), 'marketing-tool') || request()->routeIs('admin.newsletter.index') || request()->routeIs('admin.contact');
     $isNewsletterActive = request()->routeIs('admin.newsletter.index');
     $isEmailActive = request()->routeIs('admin.email-group');
     $isContactsActive = request()->routeIs('admin.contact');

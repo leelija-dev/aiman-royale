@@ -20,14 +20,14 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = ContactUs::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.contact.index', compact('contacts'));
+        return view('Admin.contact.index', compact('contacts'));
     }
 
     public function show($id)
 {
     $contact = ContactUs::findOrFail($id);
 
-    return view('admin.contact.single_contact', compact('contact'));
+    return view('Admin.contact.single_contact', compact('contact'));
 }
 
     public function destroy($id)
