@@ -224,7 +224,7 @@
             <form action="{{ route('cart.update') }}" method="POST" id="cartUpdateForm" enctype="multipart/form-data">
              @csrf
                 
-                <button type="submit"
+                <button id="checkout-btn" type="submit"
                   class="px-6 py-3 w-full bg-black text-white lgg:text-[1rem] text-[0.875rem] rounded-md hover:bg-gray-800" {{ $subtotal == 0 ? 'disabled' : '' }}>
                   Proceed to checkout
                 </button>
@@ -611,7 +611,7 @@ function checkAllItemsStock() {
 }
 
 function updateCheckoutButton() {
-    const checkoutBtn = document.querySelector('button[type="submit"]');
+    const checkoutBtn = document.getElementById('checkout-btn');
     const hasOutOfStock = checkAllItemsStock();
     
     if (checkoutBtn) {
