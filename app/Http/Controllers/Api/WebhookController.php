@@ -12,7 +12,6 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
-        // Store complete payload
         Log::info('Delhivery Webhook Received', [
             'payload' => $request->all()
         ]);
@@ -36,7 +35,7 @@ class WebhookController extends Controller
             $statusType  = $shipment['Status']['StatusType'] ?? null;
             $statusDate  = $shipment['Status']['StatusDateTime'] ?? null;
             $location    = $shipment['Status']['StatusLocation'] ?? null;
-            $instructions= $shipment['Status']['Instructions'] ?? null;
+            $instructions = $shipment['Status']['Instructions'] ?? null;
 
             Log::info('Shipment Details', [
                 'awb'        => $awb,
@@ -75,17 +74,14 @@ class WebhookController extends Controller
                     'order_id' => $order->id,
                     'status' => $status
                 ]);
-
             } else {
 
                 Log::warning("Order not found for AWB {$awb}");
-
             }
 
             return response()->json([
                 'success' => true
             ], 200);
-
         } catch (\Throwable $e) {
 
             Log::error('Webhook Error', [
