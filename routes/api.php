@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\WebhookController;
 // Category related API routes
 Route::prefix('categories')->group(function () {
     Route::get('/{categoryId}', [CategoryController::class, 'getChildCategories'])->name('api.categories.children');
+    Route::get('/occasion/{slug}', [CategoryController::class, 'getCategoryProductUsingOccasionSlug']);
     Route::get('/{categoryId}/occasions', [CategoryController::class, 'getOccassionByCategoryId'])->name('api.categories.occasions');
     Route::get('/all-with-children', [CategoryController::class, 'getAllCategoriesWithChildren'])->name('api.categories.all-with-children');
     Route::get('/{categoryId}/with-children', [CategoryController::class, 'getCategoryWithChildren'])->name('api.categories.with-children');

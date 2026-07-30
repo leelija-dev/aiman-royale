@@ -98,6 +98,132 @@ class CategoryController extends Controller
         }
     }
 
+    public function getCategoryProductUsingOccasionSlug($slug)
+    {
+        try {
+            // Find the occasion by slug
+            $occasion = Occasion::where('slug', $slug)->first();
+
+            if (!$occasion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Occasion not found'
+                ], 404);
+            }
+
+            $occasionId = $occasion->id;
+
+            // Get categories with products for this occasion
+            $categories = Category::whereHas('products', function ($query) use ($occasionId) {
+                $query->whereHas('occasions', function ($subQuery) use ($occasionId) {
+                    $subQuery->where('occasion_id', $occasionId);
+                })
+                    ->where('is_active', 1)
+                    ->where('ready_to_ship', 1);
+            })
+                ->where('is_active', 1)
+                ->with(['products' => function ($query) use ($occasionId) {
+                    $query->whereHas('occasions', function ($subQuery) use ($occasionId) {
+                        $subQuery->where('occasion_id', $occasionId);
+                    })
+                        ->where('is_active', 1)
+                        ->where('ready_to_ship', 1)
+                        ->with(['variants', 'images']);
+                }])
+                ->withCount(['products' => function ($query) use ($occasionId) {
+                    $query->whereHas('occasions', function ($subQuery) use ($occasionId) {
+                        $subQuery->where('occasion_id', $occasionId);
+                    })
+                        ->where('is_active', 1)
+                        ->where('ready_to_ship', 1);
+                }])
+                ->orderBy('products_count', 'desc')
+                ->get();
+
+            $products = Product::whereHas('occasions', function ($query) use ($occasionId) {
+                $query->where('occasion_id', $occasionId);
+            })
+                ->where('is_active', 1)
+                ->where('ready_to_ship', 1)
+                ->with(['variants', 'images'])
+                ->get();
+
+            // dd($products);
+               
+            // Format the response
+            $formattedCategories = $categories->map(function ($category) use ($occasionId) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                    'description' => $category->description,
+                    'image' => $category->image,
+                    'product_count' => $category->products_count,
+                    'products' => $category->products->map(function ($product) {
+                        // Get first variant price and discount
+                        $firstVariant = $product->variants->first();
+
+                        // Get first image
+                        $firstImage = $product->images->first();
+
+                        return [
+                            'id' => $product->id,
+                            'name' => $product->name,
+                            'slug' => $product->slug,
+                            'design_no' => $product->design_no,
+                            'brand' => $product->brand,
+                            'description' => $product->description,
+                            'price' => $firstVariant ? $firstVariant->price : $product->price,
+                            'discount_price' => $firstVariant ? $firstVariant->discount_price : $product->discount_price,
+                            'stock' => $product->stock,
+                            'is_featured' => $product->is_featured,
+                            'image' => $firstImage ? $firstImage->image : $product->featured_image,
+                            'variants' => $product->variants->map(function ($variant) {
+                                return [
+                                    'id' => $variant->id,
+                                    'size' => $variant->size,
+                                    'color' => $variant->color,
+                                    'price' => $variant->price,
+                                    'discount_price' => $variant->discount_price,
+                                    'stock' => $variant->stock,
+                                ];
+                            }),
+                            'images' => $product->images->map(function ($image) {
+                                return [
+                                    'id' => $image->id,
+                                    'image' => $image->image,
+                                ];
+                            }),
+                        ];
+                    }),
+                ];
+            });
+
+
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'occasion' => [
+                        'id' => $occasion->id,
+                        'name' => $occasion->name,
+                        'slug' => $occasion->slug,
+                        'description' => $occasion->description,
+                    ],
+                    'style' => $formattedCategories,
+                    'total_categories' => $categories->count(),
+                    'total_products' => $categories->sum('products_count'),
+                    'collection' => $products
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching categories and products: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getOccassionByCategoryId($categoryId): JsonResponse
     {
         try {

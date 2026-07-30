@@ -39,17 +39,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $notifications = Notification::where('viewed', 0)->latest()->get();
             $categories = Category::where('is_active', 1)->with('products')->orderBy('name')->get();
-            $wedding = Occasion::where('slug', 'wedding')->first();
-            $wedding_id = $wedding->id ?? 0;
-            $bridal = Occasion::where('slug', 'bridal')->first();
-            $bridal_id = $bridal->id ?? 0;
-            $categoriesWithWedding = 
-            // $weddingProducts = DB::table('products')
-            //     ->where('ocassion_id', $wedding_id)
-            //     ->get();
-            $weddingProducts = Product::where('ocassion_id', $wedding_id)->get();
-            $bridalProducts = Product::where('ocassion_id', $bridal_id)->get();
-            // dd($weddingProducts);
             $productCategory = ProductVariant::with(['product.category', 'product.images', 'images'])
                 ->get()
                 ->unique(function ($variant) {
