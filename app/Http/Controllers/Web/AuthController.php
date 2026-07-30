@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cookie;
+
 class AuthController extends Controller
 {
     //
@@ -493,15 +495,16 @@ class AuthController extends Controller
 
     // public function login(Request $request)
     // {
-
     //     $credentials = $request->validate([
     //         'email' => 'required|email',
     //         'password' => 'required'
     //     ]);
 
-    //     // Attempt login with JWT
-    //     if (!$token = JWTAuth::attempt($credentials)) {
-    //         // dd($credentials);
+    //     // Check if "Remember me" checkbox was checked
+    //     $remember = $request->has('remember') ? true : false;
+
+    //     // Attempt login with JWT - pass remember parameter
+    //     if (!$token = JWTAuth::attempt($credentials, $remember)) {
     //         return back()->withErrors([
     //             'email' => 'The provided credentials do not match our records.',
     //         ])->onlyInput('email');
@@ -509,9 +512,9 @@ class AuthController extends Controller
 
     //     // Get authenticated user from JWT
     //     $user = JWTAuth::user();
-    //     // dd($user);
+
     //     // Also login with Laravel's Auth for web routes
-    //     Auth::login($user);
+    //     Auth::login($user, $remember); // Pass remember parameter here too
 
     //     // Regenerate session
     //     $request->session()->regenerate();
@@ -525,6 +528,45 @@ class AuthController extends Controller
     //     return redirect()->intended(route('page.index'))->with('jwt_token', $token);
     // }
 
+
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required'
+    //     ]);
+
+    //     $remember = $request->has('remember');
+
+    //     // Attempt login with JWT
+    //     if (!$token = JWTAuth::attempt($credentials, $remember)) {
+    //         return back()->withErrors([
+    //             'email' => 'The provided credentials do not match our records.',
+    //         ])->onlyInput('email');
+    //     }
+
+    //     $user = JWTAuth::user();
+
+    //     // Update last login timestamp
+    //     $user->last_login_at = now();
+    //     $user->save();
+
+    //     // Check if user has a valid session extension
+    //     $sessionExpiry = $this->getSessionExpiry($user);
+
+    //     Auth::login($user, $remember);
+    //     $request->session()->regenerate();
+
+    //     // Set session expiry based on last login
+    //     session()->put('session_expiry', $sessionExpiry);
+
+    //     if ($request->has('redirect') && $request->redirect) {
+    //         return redirect()->to($request->redirect)->with('jwt_token', $token);
+    //     }
+
+    //     return redirect()->intended(route('page.index'))->with('jwt_token', $token);
+    // }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -532,48 +574,141 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // Check if "Remember me" checkbox was checked
-        $remember = $request->has('remember') ? true : false;
+        $remember = $request->has('remember');
 
-        // Attempt login with JWT - pass remember parameter
+        // Attempt login with JWT
         if (!$token = JWTAuth::attempt($credentials, $remember)) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
 
-        // Get authenticated user from JWT
         $user = JWTAuth::user();
 
-        // Also login with Laravel's Auth for web routes
-        Auth::login($user, $remember); // Pass remember parameter here too
+        // ✅ Update last login
+        $user->last_login_at = now();
+        $user->save();
 
-        // Regenerate session
+        // ✅ If "Remember Me" is checked, create remember token
+        if ($remember) {
+            $this->setRememberToken($user);
+        } else {
+            // Remove any existing remember token
+            $user->remember_token = null;
+            $user->save();
+        }
+
+        // Login with Laravel Auth
+        Auth::login($user, $remember);
         $request->session()->regenerate();
 
-        // Check if there's a redirect URL
+        // Set session expiry
+        $expiry = now()->addDays(15);
+        session()->put('session_expiry', $expiry);
+        session()->put('last_login_update', now());
+
+        // ✅ Set remember cookie
+        if ($remember) {
+            $this->setRememberCookie($user);
+        }
+
+        Log::info('User logged in', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'remember' => $remember,
+            'last_login_at' => $user->last_login_at
+        ]);
+
         if ($request->has('redirect') && $request->redirect) {
             return redirect()->to($request->redirect)->with('jwt_token', $token);
         }
 
-        // Default redirect if no redirect URL provided
         return redirect()->intended(route('page.index'))->with('jwt_token', $token);
     }
 
-    public function logout(Request $request)
+    /**
+     * Set remember token in database
+     */
+    protected function setRememberToken($user)
     {
-        // Invalidate JWT token if it exists
-        try {
-            if ($token = JWTAuth::getToken()) {
-                JWTAuth::invalidate($token);
+        // Generate a secure token
+        $rememberToken = Str::random(60);
+        $user->remember_token = hash('sha256', $rememberToken);
+        $user->save();
+
+        return $rememberToken;
+    }
+
+    /**
+     * Set remember cookie
+     */
+    protected function setRememberCookie($user)
+    {
+        // Create a cookie with the remember token
+        $token = Str::random(60);
+        $encryptedToken = hash('sha256', $token);
+
+        // Store in database
+        $user->remember_token = $encryptedToken;
+        $user->save();
+
+        // Set cookie for 15 days (1440 minutes * 15)
+        Cookie::queue('remember_token', $token, 60 * 24 * 15);
+        Cookie::queue('user_id', $user->id, 60 * 24 * 15);
+    }
+
+    private function getSessionExpiry($user)
+    {
+        // If user has logged in before, extend from last login
+        if ($user->last_login_at) {
+            $expiryDate = $user->last_login_at->addDays(15);
+
+            // If expiry is in the past (shouldn't happen with our logic)
+            if ($expiryDate->isPast()) {
+                $expiryDate = now()->addDays(15);
             }
-        } catch (\Exception $e) {
-            // Token might be invalid or expired, continue with logout
+
+            return $expiryDate;
         }
 
-        // Use web guard specifically
-        Auth::guard('web')->logout();
+        // First time login
+        return now()->addDays(15);
+    }
 
+    // public function logout(Request $request)
+    // {
+    //     // Invalidate JWT token if it exists
+    //     try {
+    //         if ($token = JWTAuth::getToken()) {
+    //             JWTAuth::invalidate($token);
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Token might be invalid or expired, continue with logout
+    //     }
+
+    //     // Use web guard specifically
+    //     Auth::guard('web')->logout();
+
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
+
+    //     return redirect('/login')->with('success', 'You have been logged out successfully!');
+    // }
+
+    public function logout(Request $request)
+    {
+        // Clear remember cookies
+        Cookie::queue(Cookie::forget('remember_token'));
+        Cookie::queue(Cookie::forget('user_id'));
+
+        // Clear remember token from database
+        $user = auth()->user();
+        if ($user) {
+            $user->remember_token = null;
+            $user->save();
+        }
+
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

@@ -57,9 +57,9 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/api/auth/refresh', [AuthController::class, 'refresh'])->name('api.auth.refresh');
 });
 
-Route::view('/addresses', 'web.addresses');
+// Route::view('/addresses', 'web.addresses')->middleware('auth', 'session.expiry');
 
-Route::middleware(['auth', 'refresh.jwt'])->group(function () {
+Route::middleware(['auth', 'session.expiry'])->group(function () {
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile', [Profile::class, 'update'])->name('web.profile.update');
 
@@ -124,7 +124,7 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
 
 // Authenticated Routes
-Route::middleware(['auth', 'refresh.jwt'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Profile Routes
     Route::get('/profile', [Profile::class, 'profile'])->name('web.profile');
     Route::post('/profile/update', [Profile::class, 'update'])->name('profile.update');
@@ -156,7 +156,7 @@ Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsle
 Route::post('/check-pincode', [CheckoutController::class, 'checkPincode'])->name('check.pincode')->middleware('auth');
 
 // Order tracking
-Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth');
+Route::get('/track-order/{orderId}', [CheckoutController::class, 'trackOrder'])->name('track.order')->middleware('auth')->middleware('auth', 'session.expiry');
 
 // Direct waybill tracking for staging/test Delhivery
 Route::get('/track-waybill/{waybill}', [CheckoutController::class, 'trackWaybill'])->name('track.waybill');
@@ -177,23 +177,23 @@ Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 
     ->where('categorySlug', '[a-zA-Z0-9-]+');
 
 // Test WhatsApp route
-Route::get('/test-whatsapp', function () {
-    $whatsapp = new \App\Services\WhatsAppService();
+// Route::get('/test-whatsapp', function () {
+//     $whatsapp = new \App\Services\WhatsAppService();
     
-    \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
+//     \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
     
-    $result = $whatsapp->sendOrderConfirmation(
-        '6295351230',
-        'Pavan',
-        'ORD-' . date('YmdHis')
-    );
+//     $result = $whatsapp->sendOrderConfirmation(
+//         '6295351230',
+//         'Pavan',
+//         'ORD-' . date('YmdHis')
+//     );
     
-    return [
-        'success' => $result,
-        'message_id' => $whatsapp->getLastMessageId(),
-        'phone_number_id' => config('services.whatsapp.phone_number_id')
-    ];
-});
+//     return [
+//         'success' => $result,
+//         'message_id' => $whatsapp->getLastMessageId(),
+//         'phone_number_id' => config('services.whatsapp.phone_number_id')
+//     ];
+// });
 
 // Order details route
 Route::get('/orders/{id}', function ($id) {
@@ -207,9 +207,9 @@ Route::get('/orders/{id}', function ($id) {
     }
     
     return view('orders.show', compact('order'));
-})->name('orders.show')->middleware('auth');
+})->name('orders.show')->middleware('auth', 'session.expiry');
 
-Route::middleware(['auth'])->prefix('refunds')->group(function () {
+Route::middleware(['auth', 'session.expiry'])->prefix('refunds')->group(function () {
     // Process refund
     Route::post('/orders/{orderId}', [RefundController::class, 'refund'])->name('refunds.process');
     
@@ -254,20 +254,8 @@ Route::get('/auth/google/callback', function () {
     return redirect('/dashboard');
 });
 
-// Route::get('/auth/google/redirect', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
-// Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
-
-// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
-// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
-// Route::post('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('google.disconnect')->middleware('auth');
-
 // // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
-// Google OAuth Routes
-// Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
-// Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
-// Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
-// Route::view('/invoice', 'web.invoice-temple')->name('page.invoice');
