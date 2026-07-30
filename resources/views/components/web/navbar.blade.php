@@ -1121,10 +1121,10 @@
             <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[15px] text-[13px]">
                 @if (isset($categories) && count($categories) > 0)
                 <a href=""
-                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
-                        data-category="" data-category-id="">
+                        data-category="Wedding" data-category-id="" data-occasion-endpoint="wedding">
 
                         <!-- Animated underline effect -->
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
@@ -1140,10 +1140,10 @@
                        
                     </a>
                     <a href="#"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
-                        data-category="" data-category-id="">
+                        data-category="Bridal" data-category-id="" data-occasion-endpoint="bridal">
 
                         <!-- Animated underline effect -->
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
@@ -1432,7 +1432,7 @@
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
             <!-- Wedding -->
-            <div class="menu-item has-submenu top-level-item" data-category="Wedding">
+            <div class="menu-item has-submenu top-level-item" data-category="Wedding" data-occasion-endpoint="wedding">
                 <button class="back-button">
                     <i class="fa-solid fa-arrow-left mr-2"></i> Back
                 </button>
@@ -1446,10 +1446,8 @@
                             <span class="flex-1">Style</span>
                             <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
-                        <ul class="submenu">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
-                            </li>
+                        <ul class="submenu style-submenu">
+                            <!-- Dynamic content will be loaded here -->
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
@@ -1457,17 +1455,15 @@
                             <span class="flex-1">Collection</span>
                             <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
-                        <ul class="submenu">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
-                            </li>
+                        <ul class="submenu collection-submenu">
+                            <!-- Dynamic content will be loaded here -->
                         </ul>
                     </li>
                 </ul>
             </div>
             
             <!-- Bridal -->
-            <div class="menu-item has-submenu top-level-item" data-category="Bridal">
+            <div class="menu-item has-submenu top-level-item" data-category="Bridal" data-occasion-endpoint="bridal">
                 <button class="back-button">
                     <i class="fa-solid fa-arrow-left mr-2"></i> Back
                 </button>
@@ -1481,10 +1477,8 @@
                             <span class="flex-1">Style</span>
                             <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
-                        <ul class="submenu">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
-                            </li>
+                        <ul class="submenu style-submenu">
+                            <!-- Dynamic content will be loaded here -->
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
@@ -1492,10 +1486,8 @@
                             <span class="flex-1">Collection</span>
                             <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                         </div>
-                        <ul class="submenu">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link hover:pl-6 transition-all">Coming Soon</a>
-                            </li>
+                        <ul class="submenu collection-submenu">
+                            <!-- Dynamic content will be loaded here -->
                         </ul>
                     </li>
                 </ul>
@@ -1867,11 +1859,61 @@
             }
         }
 
+        // Fetch occasion data from API (for Wedding/Bridal)
+        async function fetchOccasionData(occasionSlug) {
+            // Check cache first
+            if (categoryCache[`occasion_${occasionSlug}`]) {
+                return categoryCache[`occasion_${occasionSlug}`];
+            }
+
+            const loadingElement = document.getElementById('category-menu-loading');
+            if (loadingElement) {
+                loadingElement.classList.add('active');
+            }
+
+            try {
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/categories/occasion/${occasionSlug}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                if (data.success) {
+                    // Cache the response
+                    categoryCache[`occasion_${occasionSlug}`] = data.data;
+                    return data.data;
+                } else {
+                    throw new Error(data.message || 'Failed to fetch occasion data');
+                }
+            } catch (error) {
+                console.error('Error fetching occasion data:', error);
+                // Return fallback data structure
+                return {
+                    parent_category: {
+                        id: null,
+                        name: occasionSlug.charAt(0).toUpperCase() + occasionSlug.slice(1),
+                        slug: occasionSlug
+                    },
+                    style: [],
+                    ocassions: [],
+                    collection: [],
+                    products_by_category: {},
+                    parent_category_products: []
+                };
+            } finally {
+                if (loadingElement) {
+                    loadingElement.classList.remove('active');
+                }
+            }
+        }
+
         function renderCategoryMenuData(categoryData) {
             if (!categoryData) return;
 
             currentCategoryData = categoryData;
-            const parentCategory = categoryData.parent_category;
+            // Handle both category API and occasion API response structures
+            const parentCategory = categoryData.parent_category || categoryData.occasion;
 
             // Update category banner
             const bannerTitle = document.getElementById('category-banner-title');
@@ -2050,7 +2092,8 @@
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
-            const parentCategory = categoryData.parent_category;
+            // Handle both category API and occasion API response structures
+            const parentCategory = categoryData.parent_category || categoryData.occasion;
 
             if (!parentCategory) return;
 
@@ -2187,18 +2230,22 @@
 
             collectionList.innerHTML = '';
 
-            // Extract products from the complex data structure
+            // Extract products from the data structure
+            // Handle both category API (products_by_category) and occasion API (direct collection array)
             let products = [];
 
-            if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
-                // Get all products from all categories in products_by_category
-                const productsByCategory = categoryData.collection.products_by_category;
-
-                // Iterate through each category's product array
-                for (const categoryId in productsByCategory) {
-                    if (Array.isArray(productsByCategory[categoryId])) {
-                        products = products.concat(productsByCategory[categoryId]);
+            if (categoryData && categoryData.collection) {
+                // Check if collection has products_by_category (category API structure)
+                if (categoryData.collection.products_by_category) {
+                    const productsByCategory = categoryData.collection.products_by_category;
+                    for (const categoryId in productsByCategory) {
+                        if (Array.isArray(productsByCategory[categoryId])) {
+                            products = products.concat(productsByCategory[categoryId]);
+                        }
                     }
+                } else if (Array.isArray(categoryData.collection)) {
+                    // Occasion API structure: products directly in collection array
+                    products = categoryData.collection;
                 }
             }
 
@@ -3465,8 +3512,9 @@
 
                     const categoryId = this.getAttribute('data-category-id');
                     const categoryName = this.getAttribute('data-category');
+                    const occasionEndpoint = this.getAttribute('data-occasion-endpoint');
                     const linkText = this.textContent.toLowerCase();
-                    
+
                     // Hide/Show Occasion button based on category
                     const occasionBtn = document.querySelector('[data-target="occation-products"]');
                     if (occasionBtn) {
@@ -3476,8 +3524,11 @@
                             occasionBtn.style.display = 'block';
                         }
                     }
-                    
-                    if (categoryId) {
+
+                    // Use occasion endpoint if available (for Wedding/Bridal)
+                    if (occasionEndpoint) {
+                        loadOccasionData(occasionEndpoint);
+                    } else if (categoryId) {
                         currentCategoryId = categoryId;
                         loadCategoryData(categoryId);
                     }
@@ -3515,6 +3566,50 @@
         async function loadCategoryData(categoryId) {
             const categoryData = await fetchCategoryData(categoryId);
             renderCategoryMenuData(categoryData);
+        }
+
+        // Load occasion data from API (for Wedding/Bridal)
+        async function loadOccasionData(occasionSlug) {
+            const occasionData = await fetchOccasionData(occasionSlug);
+            renderCategoryMenuData(occasionData);
+            return occasionData;
+        }
+
+        // Populate mobile sidebar submenus with occasion data
+        function populateMobileOccasionSubmenus(parentItem, data) {
+            if (!data) return;
+
+            // Populate Style submenu
+            const styleSubmenu = parentItem.querySelector('.style-submenu');
+            if (styleSubmenu && data.style && data.style.length > 0) {
+                styleSubmenu.innerHTML = '';
+                data.style.forEach(style => {
+                    const li = document.createElement('li');
+                    li.className = 'menu-item';
+                    const a = document.createElement('a');
+                    a.href = `/collections/${style.slug}`;
+                    a.className = 'menu-link hover:pl-6 transition-all';
+                    a.textContent = style.name;
+                    li.appendChild(a);
+                    styleSubmenu.appendChild(li);
+                });
+            }
+
+            // Populate Collection submenu
+            const collectionSubmenu = parentItem.querySelector('.collection-submenu');
+            if (collectionSubmenu && data.collection && data.collection.length > 0) {
+                collectionSubmenu.innerHTML = '';
+                data.collection.forEach(product => {
+                    const li = document.createElement('li');
+                    li.className = 'menu-item';
+                    const a = document.createElement('a');
+                    a.href = `/products/${product.slug}`;
+                    a.className = 'menu-link hover:pl-6 transition-all';
+                    a.textContent = product.name;
+                    li.appendChild(a);
+                    collectionSubmenu.appendChild(li);
+                });
+            }
         }
 
         // Category sidebar button functionality
@@ -3608,6 +3703,7 @@
                     const isActive = parentItem.classList.contains('top-level-active');
                     const submenu = this.nextElementSibling;
                     const categoryName = parentItem.getAttribute('data-category');
+                    const occasionEndpoint = parentItem.getAttribute('data-occasion-endpoint');
 
                     if (isActive) {
                         resetMobileMenu();
@@ -3632,12 +3728,19 @@
                             }
                         });
 
+                        // Load data based on endpoint type
+                        if (occasionEndpoint) {
+                            loadOccasionData(occasionEndpoint).then(data => {
+                                populateMobileOccasionSubmenus(parentItem, data);
+                            });
+                        }
+
                         // Open submenu with animation
                         if (submenu) {
                             setTimeout(() => {
                                 submenu.style.maxHeight = submenu.scrollHeight + 'px';
                                 submenu.classList.add('active');
-                                
+
                                 // Hide Occasion submenu for Wedding and Bridal
                                 if (categoryName && (categoryName.toLowerCase() === 'wedding' || categoryName.toLowerCase() === 'bridal')) {
                                     const occasionToggle = submenu.querySelector('.submenu-toggle');
