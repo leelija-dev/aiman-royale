@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-             $table->string('remember_token')->nullable();
+             $table->string('remember_token',255)->nullable()->change();
              $table->timestamp('last_login_at')->nullable();
         });
     }
@@ -24,7 +24,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-              $table->dropColumn(['remember_token', 'last_login_at']);
+            $table->string('remember_token',100)->nullable()->change();
+            $table->dropColumn( 'last_login_at');
         });
     }
 };
