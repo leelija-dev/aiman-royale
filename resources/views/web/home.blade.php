@@ -87,7 +87,7 @@
             @php
             @endphp
 
-           
+
             <a href="{{ route('category.show', $category->product->category->slug) }}"
                 class="group flex flex-col items-center snap-center">
                 <div class="relative mb-2">
@@ -1163,16 +1163,16 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 <section id="unique-scroll" class="px-4 lgg:py-12 py-8 bg-gradient-to-b from-white via-gray-50/30 to-white">
     <div class="container mx-auto ">
         <!-- Header -->
-       <div class="text-center mb-10">
-    <!-- <span class="inline-block text-xs font-medium uppercase tracking-[0.2em] text-secondary mb-3">Collections</span> -->
-    <h2 class="text-3xl md:text-4xl lg:text-5xl font-light text-gray-800 mb-3 tracking-wide heading-font">
-        Elegance at Every Wear
-    </h2>
-    <div class="w-16 h-0.5 bg-gradient-to-r from-primary to-secondary mx-auto mb-4"></div>
-    <p class="text-gray-500 text-sm md:text-base font-light tracking-wide max-w-2xl mx-auto font-sans">
-        Experience class and sophistication for life's most memorable moments
-    </p>
-</div>
+        <div class="text-center mb-10">
+            <!-- <span class="inline-block text-xs font-medium uppercase tracking-[0.2em] text-secondary mb-3">Collections</span> -->
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-light text-gray-800 mb-3 tracking-wide heading-font">
+                Elegance at Every Wear
+            </h2>
+            <div class="w-16 h-0.5 bg-gradient-to-r from-primary to-secondary mx-auto mb-4"></div>
+            <p class="text-gray-500 text-sm md:text-base font-light tracking-wide max-w-2xl mx-auto font-sans">
+                Experience class and sophistication for life's most memorable moments
+            </p>
+        </div>
 
         <!-- Owl Carousel Container -->
         <div class="relative px-2">
@@ -1326,28 +1326,28 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             @endif
                         </div>
                         @php
-                          $isWishlisted = Auth::check()
-                            ? \App\Models\Wishlist::where('user_id', Auth::id())
-                                ->where('product_id', $product->id)
-                                ->exists()
-                            : false;
+                        $isWishlisted = Auth::check()
+                        ? \App\Models\Wishlist::where('user_id', Auth::id())
+                        ->where('product_id', $product->id)
+                        ->exists()
+                        : false;
                         @endphp
                         <!-- Wishlist Heart Icon -->
                         @if (Auth::check())
-                            <button
-                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
-                                onclick="toggleWishlist({{ $product->id }}, this, event);">
+                        <button
+                            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
+                            onclick="toggleWishlist({{ $product->id }}, this, event);">
 
-                                <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
+                            <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
 
-                            </button>
+                        </button>
                         @else
-                            <a href="{{ route('page.login') }}">
-                                <button
-                                    class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
-                                    <i class="far fa-heart text-sm"></i>
-                                </button>
-                            </a>
+                        <a href="{{ route('page.login') }}">
+                            <button
+                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
+                                <i class="far fa-heart text-sm"></i>
+                            </button>
+                        </a>
                         @endif
                     </div>
 
@@ -1558,6 +1558,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     </div>
 </section>
 
+{{--
 <section class="px-4 lgg:py-12 py-8 bg-[#fdfaf7]">
     <div class="container mx-auto">
         <!-- Section Title -->
@@ -1578,6 +1579,93 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             @endphp
             <div class="px-2">
                 <a href="{{ $banner->link }}" class="block w-full">
+<div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
+    style="aspect-ratio: 9/15; "
+    @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+    @else
+    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+
+    <!-- Image -->
+    <div class="absolute inset-0">
+        <img class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+            src="{{ $bannerImg }}"
+            alt="{{ $banner->title }}"
+            loading="lazy"
+            decoding="async"
+            width="600"
+            height="1000" />
+    </div>
+
+    <!-- Subtle Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-40 transition-opacity duration-500"></div>
+
+    <!-- Content - Clean Layout -->
+    <div class="absolute bottom-[5px] left-0 right-0 py-5 md:py-6 px-[14px]">
+        <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col items-center justify-center">
+            <!-- Category -->
+            @if ($banner->subtitle)
+            <span class="inline-block text-white/80 text-[9px] md:text-[10px] font-medium tracking-[0.2em] uppercase mb-1.5">
+                {{ $banner->subtitle }}
+            </span>
+            @endif
+
+            <!-- Title -->
+            <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1">
+                {{ $banner->title }}
+            </h3>
+
+            <!-- Description -->
+            @if ($banner->description)
+            <p class="text-white/60 text-[10px] md:text-xs font-light mb-3 line-clamp-1">
+                {{ $banner->description }}
+            </p>
+            @endif
+
+            <!-- Shop Now Button -->
+            <span class="inline-block rounded-[11px] bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-5 md:px-6 py-1.5 md:py-2 text-[10px] md:text-xs font-medium tracking-wide transition-all duration-300 ease-in-out cursor-pointer">
+                Shop Now
+            </span>
+        </div>
+    </div>
+</div>
+</a>
+</div>
+@endforeach
+</div>
+</div>
+</section>
+--}}
+
+<section class="px-4 lgg:py-12 py-8 bg-[#fdfaf7]">
+    <div class="container mx-auto">
+        <!-- Section Title -->
+        <div class="lgg:text-left text-center mb-5">
+            <h2 class="font-thin font-[initial] text-2xl sm:text-3xl md:text-4xl lg:text-[49px] leading-tight text-[#2c1810] mb-2">The Wedding Edit</h2>
+            <div class="w-24 h-0.5 bg-[#d4a88b] lgg:ml-0 lgg:me-auto me-auto ml-auto "></div>
+            <p class="text-gray-600 mt-3 font-serif text-sm md:text-base">Curated collections for your special day</p>
+        </div>
+
+        <div id="uniq-ads-slider" class="owl-carousel owl-theme">
+            @foreach ($mainBanners as $banner)
+            @php
+            $bannerImg = asset('uploads/banners/' . $banner->image);
+            if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
+            $parts = explode('upload/', $bannerImg);
+            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
+            }
+
+            // Build the filter URL based on banner data
+            $filterUrl = '#';
+            if ($banner->filter) {
+            if ($banner->filter_type === 'multiple' && $banner->filters) {
+            $filterUrl = '/products?' . $banner->filters;
+            } elseif ($banner->filter) {
+            $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
+            }
+            }
+            @endphp
+            <div class="px-2">
+                <a href="{{ $filterUrl }}" class="block w-full">
                     <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
                         style="aspect-ratio: 9/15; "
                         @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
@@ -1633,7 +1721,6 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         </div>
     </div>
 </section>
-
 <style>
     /* Vertical Text Utility */
     .writing-vertical {
@@ -1929,6 +2016,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     }
 </script>
 
+
 <section class="px-4 lgg:py-8 py-6 bg-white">
     <div class="container mx-auto ">
         <div class="flex flex-col lgg:flex-row gap-10 lgg:gap-14 lgg:items-center items-start ">
@@ -2021,23 +2109,24 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
                 <!-- Timer -->
                 @php
-                    $isTimmer = \App\Models\Offer::where('is_active', true)
-                        ->where('is_timer', true)
-                        ->where('end_date', '>', now())
-                        ->first();
+                $isTimmer = \App\Models\Offer::where('is_active', true)
+                ->where('is_timer', true)
+                ->where('end_date', '>', now())
+                ->first();
 
-                    $days = 0;
-                    $hours = 0;
-                    $minutes = 0;
+                $days = 0;
+                $hours = 0;
+                $minutes = 0;
 
-                    if ($isTimmer) {
-                        $end = \Carbon\Carbon::parse($isTimmer->end_date);
-                        $now = now();
+                if ($isTimmer) {
+                $end = \Carbon\Carbon::parse($isTimmer->end_date);
+                $now = now();
 
-                        $days = (int) $now->diffInDays($end, false);
-                        $hours = (int) $now->diffInHours($end, false);
-                        $minutes = (int) $now->diffInMinutes($end, false);
-                    }
+                $days = (int) $now->diffInDays($end, false);
+                $hours = (int) $now->diffInHours($end, false);
+                $minutes = (int) $now->diffInMinutes($end, false);
+                }
+
                 @endphp
                 @if($isTimmer)
                 <div class="mt-8">
@@ -2061,7 +2150,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
                         Hurry…only
                         <span id="daysLabel" class="font-semibold text-gray-900">{{ $days }}</span>
-                        {{ $days == 1 ? 'day' : 'days' }} left! 
+                        {{ $days == 1 ? 'day' : 'days' }} left!
                     </h4>
 
                     @elseif($hours > 0)
@@ -2069,7 +2158,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
                         Hurry…only
                         <span id="hoursLabel" class="font-semibold text-gray-900">{{ $hours }}</span>
-                        {{ $hours == 1 ? 'hour' : 'hours' }} left! 
+                        {{ $hours == 1 ? 'hour' : 'hours' }} left!
                     </h4>
 
                     @elseif($minutes > 0)
@@ -2077,12 +2166,12 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     <h4 class="text-xl sm:text-2xl md:text-3xl lg:text-[31px] font-medium text-gray-800 leading-tight">
                         Hurry…only
                         <span id="minutesLabel" class="font-semibold text-gray-900">{{ $minutes }}</span>
-                        {{ $minutes == 1 ? 'minute' : 'minutes' }} left! 
+                        {{ $minutes == 1 ? 'minute' : 'minutes' }} left!
                     </h4>
 
-                   @endif
+                    @endif
 
-                    
+
 
                     <div
                         class="mt-7 flex flex-wrap justify-center lgg:justify-start gap-6">
@@ -2168,8 +2257,18 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     $parts = explode('upload/', $secBannerImg);
                     $secBannerImg = $parts[0] . 'upload/w_600,h_800,c_fill,f_auto,q_auto/' . $parts[1];
                     }
+
+                    $bannerFilterUrl = '#';
+                    if ($banner->filter) {
+                    if ($banner->filter_type === 'multiple' && $banner->filters) {
+                    $bannerFilterUrl = '/products?' . $banner->filters;
+                    } elseif ($banner->filter) {
+                    $bannerFilterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
+                    }
+                    }
                     @endphp
                     <div class="item flex justify-center items-center px-2">
+                        
                         <div class="w-full bg-white shadow-lg hover:shadow-2xl transition-shadow duration-500 banner-card group relative"
                             @if($banner->filter_type === 'multiple' && $banner->filters)
                             data-filter="{{ $banner->filters }}"
@@ -2217,18 +2316,8 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
                                     <!-- CTA -->
                                     <div class="mt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
-                                        <a href="#"
-                                            class="group/btn inline-flex items-center gap-2
-        px-5 py-2
-        text-xs font-semibold uppercase tracking-[0.15em]
-        text-white
-        bg-gradient-to-r from-primary to-secondary
-        border border-transparent
-        rounded-sm
-        shadow-md
-        transition-all duration-300 ease-out
-        hover:from-secondary hover:to-primary
-        hover:shadow-xl hover:-translate-y-0.5">
+                                         <a href="{{ $bannerFilterUrl }}"
+                                class="group/btn inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white bg-gradient-to-r from-primary to-secondary border border-transparent rounded-sm shadow-md transition-all duration-300 ease-out hover:from-secondary hover:to-primary hover:shadow-xl hover:-translate-y-0.5">
 
                                             <span>Shop Now</span>
 
@@ -2255,6 +2344,8 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         </div>
     </div>
 </section>
+
+
 
 <section class="bg-white py-4 lg:py-6 border-y border-gray-100">
     <div class="container mx-auto px-4">
@@ -2545,8 +2636,8 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                             @else
                             <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
                                 @php
-                                    $discount = optional($product->variants->first())->discount ?? 0;
-                                    $value = ($discount - floor($discount) >= 0.5) ? ceil($discount) : $discount;
+                                $discount = optional($product->variants->first())->discount ?? 0;
+                                $value = ($discount - floor($discount) >= 0.5) ? ceil($discount) : $discount;
                                 @endphp
 
                                 {{ round($value, 2) }}% OFF
@@ -2602,8 +2693,8 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
     <div class="container mx-auto">
         <div class="text-center mb-12 lg:mb-16">
             <h2 class="text-3xl lg:text-4xl lg:leading-[3rem] leading-[2.5rem] font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4 heading-font">
-    Know How Celebrities Book Us for Their Occasion
-</h2>
+                Know How Celebrities Book Us for Their Occasion
+            </h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">
                 Get the perfect fit through our online portals
             </p>
@@ -3128,43 +3219,43 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
     //         wishlistCounter.textContent = count;
     //     }
     // }
-   function updateWishlistCount(count) {
+    function updateWishlistCount(count) {
 
-    const button = document.querySelector('a[href*="wishlist"] button');
+        const button = document.querySelector('a[href*="wishlist"] button');
 
-    let badge = document.getElementById('wishlist-counter');
+        let badge = document.getElementById('wishlist-counter');
 
-    if (count > 0) {
+        if (count > 0) {
 
-        if (!badge) {
+            if (!badge) {
 
-            badge = document.createElement('span');
+                badge = document.createElement('span');
 
-            badge.id = "wishlist-counter";
+                badge.id = "wishlist-counter";
 
-            badge.className =
-                "wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center";
+                badge.className =
+                    "wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center";
 
-            button.appendChild(badge);
+                button.appendChild(badge);
+            }
+
+            badge.innerHTML = count;
+
+        } else {
+
+            if (badge) badge.remove();
         }
 
-        badge.innerHTML = count;
+        // dropdown badge
+        document.querySelectorAll(".wishlist-count").forEach(function(item) {
 
-    } else {
+            item.innerHTML = count;
 
-        if (badge) badge.remove();
+            item.style.display = count > 0 ? "flex" : "none";
+
+        });
+
     }
-
-    // dropdown badge
-    document.querySelectorAll(".wishlist-count").forEach(function(item){
-
-        item.innerHTML = count;
-
-        item.style.display = count > 0 ? "flex" : "none";
-
-    });
-
-}
 
     function showNotification(message, type) {
         const notification = document.createElement('div');
@@ -3411,45 +3502,45 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
 </script> --}}
 @if($isTimmer)
 <script>
-(function () {
+    (function() {
 
-    const TARGET_DATE = new Date("{{ \Carbon\Carbon::parse($isTimmer->end_date)->format('Y-m-d H:i:s') }}");
+        const TARGET_DATE = new Date("{{ \Carbon\Carbon::parse($isTimmer->end_date)->format('Y-m-d H:i:s') }}");
 
-    const daysBox = document.getElementById('daysBox');
-    const hoursBox = document.getElementById('hoursBox');
-    const minutesBox = document.getElementById('minutesBox');
-    const secondsBox = document.getElementById('secondsBox');
-    const daysLabel = document.getElementById('daysLabel');
+        const daysBox = document.getElementById('daysBox');
+        const hoursBox = document.getElementById('hoursBox');
+        const minutesBox = document.getElementById('minutesBox');
+        const secondsBox = document.getElementById('secondsBox');
+        const daysLabel = document.getElementById('daysLabel');
 
-    function pad(num) {
-        return String(num).padStart(2, '0');
-    }
-
-    function updateCountdown() {
-
-        const now = new Date();
-        let diff = TARGET_DATE.getTime() - now.getTime();
-
-        if (diff <= 0) {
-            diff = 0;
+        function pad(num) {
+            return String(num).padStart(2, '0');
         }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
+        function updateCountdown() {
 
-        if(daysLabel) daysLabel.textContent = days;
-        if(daysBox) daysBox.textContent = days;
-        if(hoursBox) hoursBox.textContent = pad(hours);
-        if(minutesBox) minutesBox.textContent = pad(minutes);
-        if(secondsBox) secondsBox.textContent = pad(seconds);
-    }
+            const now = new Date();
+            let diff = TARGET_DATE.getTime() - now.getTime();
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+            if (diff <= 0) {
+                diff = 0;
+            }
 
-})();
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            if (daysLabel) daysLabel.textContent = days;
+            if (daysBox) daysBox.textContent = days;
+            if (hoursBox) hoursBox.textContent = pad(hours);
+            if (minutesBox) minutesBox.textContent = pad(minutes);
+            if (secondsBox) secondsBox.textContent = pad(seconds);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+    })();
 </script>
 @endif
 
