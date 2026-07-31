@@ -416,10 +416,10 @@
                 gap: 8px;
             }
 
-            #single-right-content .font-medium.mb-2::before {
+            /* #single-right-content .font-medium.mb-2::before {
                 content: '🎁';
                 font-size: 1rem;
-            }
+            } */
 
             #single-right-content .text-sm.text-gray-600 li {
                 font-size: 0.8rem;
@@ -454,7 +454,7 @@
             }
 
             /* Add to Cart Button - using Tailwind secondary */
-            #single-right-content #add-to-cart {
+            #single-right-content .action-func-button {
                 /* background: linear-gradient(135deg, #2c241c 0%, #1f1812 100%); */
                 border: none;
                 border-radius: 60px;
@@ -466,13 +466,13 @@
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
 
-            #single-right-content #add-to-cart:hover {
+            #single-right-content .action-func-button:hover {
                 /* background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%); */
                 transform: translateY(-2px);
                 box-shadow: 0 10px 22px rgba(184, 101, 46, 0.3);
             }
 
-            #single-right-content #add-to-cart i {
+            #single-right-content .action-func-button i {
                 margin-right: 8px;
             }
 
@@ -563,7 +563,7 @@
                     height: 38px;
                 }
 
-                #single-right-content #add-to-cart {
+                #single-right-content .action-func-button {
                     padding: 0.85rem;
                     font-size: 0.9rem;
                 }
@@ -859,6 +859,7 @@
                             <!-- Main Image with Hover Pan Zoom -->
                             {{--
                 <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
+                   
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
@@ -876,6 +877,11 @@
                 --}}
                             <div id="get-zoom-container"
                                 class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
+                                <button
+    id="wishlist-btn"
+    class="absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
+    <i class="far fa-heart text-[20px]"></i>
+</button>
                                 @php
                                     $firstImage = $variantImages->first();
                                     // Use the accessor - it handles both local and Cloudinary URLs
@@ -1156,17 +1162,27 @@
                             </div>
                             {{-- @dd({{ $colorsForSize->count() }}) --}}
                             <!-- Best Offers Section -->
-                            <div class="bg-secondary/5">
-                                <h3 class="font-medium mb-2">Best Offers</h3>
-                                <ul class="text-sm text-gray-600 space-y-1">
-                                    <li>• Special offer get 25% off <span class="text-secondary cursor-pointer">T&C</span>
-                                    </li>
-                                    <li>• Bank offer get 30% off on Axis Bank Credit Card <span
-                                            class="text-secondary cursor-pointer">T&C</span></li>
-                                    <li>• Wallet offer get 40% cashback via Paytm <span
-                                            class="text-secondary cursor-pointer">T&C</span></li>
-                                </ul>
-                            </div>
+                          <div class="bg-secondary/5 p-4 rounded-lg">
+    <h3 class="font-medium mb-2">
+        <i class="fas fa-truck-fast text-green-600 mr-2"></i>
+        Free Shipping
+    </h3>
+
+    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+        <li>• 7 Days Easy Return and Exchange</li>
+        <li>• Pay on Delivery Available</li>
+    </ul>
+
+    <h3 class="font-medium mb-2">
+        <i class="fas fa-tags text-red-600 mr-2"></i>
+        Best Offers
+    </h3>
+
+    <ul class="text-sm text-gray-600 space-y-1">
+        <li>• Grand Launce Offer Use Coupon Code: <strong>LAUNCE20</strong></li>
+        <li>• Get Upto 10% Extra Discount Order Above 30K</li>
+    </ul>
+</div>
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
@@ -1195,16 +1211,25 @@
         <div id="coupon-message" class="text-sm mt-2 hidden"></div>
     </div> --}}
 
-                                <div class="flex items-center gap-4">
-                                    <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}"
-                                        class="bg-secondary text-white lgg:px-8 px-4 py-4 rounded-lg hover:bg-secondary/80 font-medium flex-1 text-lg transition">
-                                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                                    </button>
-                                    <button id="wishlist-btn"
-                                        class="w-14 h-14 rounded-lg border-2 flex items-center justify-center text-2xl hover:border-red-500 transition border-gray-300">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                </div>
+                                <div class="flex flex-col sm:flex-row sm:gap-4 gap-2">
+    <!-- Add to Cart -->
+    <button
+        id="add-to-cart"
+        data-variant-id="{{ $product->variants->first()->id }}"
+        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-pink-50 via-pink-100 to-rose-100 border border-pink-200 text-secondary font-semibold text-base transition-all duration-300 hover:from-pink-100 hover:via-pink-200 hover:to-rose-200 hover:shadow-lg flex items-center justify-center gap-2">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Add to Cart</span>
+    </button>
+
+    <!-- Buy Now -->
+    <button
+        id="buy-now"
+        data-variant-id="{{ $product->variants->first()->id }}"
+        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-secondary to-red-600 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+        <i class="fas fa-bag-shopping"></i>
+        <span>Buy Now</span>
+    </button>
+</div>
 
                                 <!-- WhatsApp Share Button -->
                                 <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
