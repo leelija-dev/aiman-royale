@@ -843,19 +843,17 @@
     <div class=" w-full">
         <!-- Category Header -->
         <div
-            class=" flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4 mb-[10px]">
+            class=" flex flex-wrap items-center justify-between gap-4 pb-1">
             <!-- Left: Title & Description -->
             <div class="flex-1 min-w-[200px]">
                 <h1 class="text-h2-md md:text-h2-lg font-bold text-gray-900 tracking-tight">
                     {{ $category->title ?? ($category->name ?? 'Products') }}
                 </h1>
 
-                @if (isset($category->about))
-                <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
-                    {{ $category->about }}
-                </p>
-                @endif
+              
             </div>
+
+
 
             <!-- Right: Status Badge -->
             @if ($products->count() == 0)
@@ -870,6 +868,15 @@
                     now!</span>
             </div>
             @endif
+        </div>
+
+        <div class="pb-4 border-b border-gray-200/80 mb-[10px]">
+
+              @if (isset($category->about))
+                <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
+                    {{ $category->about }}
+                </p>
+                @endif
         </div>
 
         <!-- Products Count -->

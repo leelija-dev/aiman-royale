@@ -2092,6 +2092,7 @@
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
+            console.log(occasions)
             // Handle both category API and occasion API response structures
             const parentCategory = categoryData.parent_category || categoryData.occasion;
 
@@ -2159,7 +2160,7 @@
 
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
-                    img.src = occasion.image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.src = occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
 
                     link.appendChild(img);

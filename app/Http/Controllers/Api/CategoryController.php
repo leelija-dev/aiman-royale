@@ -39,6 +39,18 @@ class CategoryController extends Controller
                 ->get(['id', 'name', 'slug', 'description', 'image', 'parent_id', 'products_count']);
 
             // Alternative approach using direct join with product_occasions table
+            // $occasions = \App\Models\Occasion::join('product_occasions', 'ocassions.id', '=', 'product_occasions.occasion_id')
+            //     ->join('products', 'product_occasions.product_id', '=', 'products.id')
+            //     ->where('products.category_id', $categoryId)
+            //     ->where('products.status', 'active')
+            //     ->where('ocassions.is_active', true)
+            //     ->whereNull('products.deleted_at')
+            //     ->whereNull('ocassions.deleted_at')
+            //     ->select('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
+            //     ->selectRaw('COUNT(DISTINCT products.id) as products_count')
+            //     ->groupBy('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
+            //     ->get();
+
             $occasions = \App\Models\Occasion::join('product_occasions', 'ocassions.id', '=', 'product_occasions.occasion_id')
                 ->join('products', 'product_occasions.product_id', '=', 'products.id')
                 ->where('products.category_id', $categoryId)
@@ -48,6 +60,17 @@ class CategoryController extends Controller
                 ->whereNull('ocassions.deleted_at')
                 ->select('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
                 ->selectRaw('COUNT(DISTINCT products.id) as products_count')
+                ->selectSub(
+                    \App\Models\Product::join('product_occasions', 'product_occasions.product_id', '=', 'products.id')
+                        ->whereColumn('product_occasions.occasion_id', 'ocassions.id')
+                        ->where('products.category_id', $categoryId)
+                        ->where('products.status', 'active')
+                        ->whereNull('products.deleted_at')
+                        ->orderBy('products.created_at', 'desc')
+                        ->limit(1)
+                        ->select('products.featured_image'),
+                    'latest_product_image'
+                )
                 ->groupBy('ocassions.id', 'ocassions.name', 'ocassions.slug', 'ocassions.description', 'ocassions.parent_id')
                 ->get();
 
@@ -149,7 +172,7 @@ class CategoryController extends Controller
                 ->get();
 
             // dd($products);
-               
+
             // Format the response
             $formattedCategories = $categories->map(function ($category) use ($occasionId) {
                 return [
