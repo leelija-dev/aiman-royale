@@ -2165,24 +2165,24 @@ art from fake trails.
           </div>
         </div>
         <div id="explore" class="accordion-content lg:mt-8 space-y-4">
-           <a href="about-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+           <a href="{{ env('APP_URL') . '/about-us' }}" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">About Us</span>
           </a>
-          <a href="contact-us" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="{{ env('APP_URL') . '/contact-us' }}" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Contact Us</span>
           </a>
-          <a href="terms-condition" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="{{ env('APP_URL') . '/terms-condition' }}" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Terms & Conditions</span>
           </a>
 
-          <a href="return-refund-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="{{ env('APP_URL') . '/return-refund-policy' }}" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Return & Refund Policy</span>
           </a>
-          <a href="privacy-policy" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
+          <a href="{{ env('APP_URL') . '/privacy-policy' }}" class="flex items-center group/link text-gray-600 hover:text-[#EC4899] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899]/60 mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Privacy Policy</span>
           </a>

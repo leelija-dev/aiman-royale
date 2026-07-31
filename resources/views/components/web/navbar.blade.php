@@ -2092,7 +2092,7 @@
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
-            console.log(occasions)
+            // console.log(occasions)
             // Handle both category API and occasion API response structures
             const parentCategory = categoryData.parent_category || categoryData.occasion;
 
