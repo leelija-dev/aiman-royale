@@ -873,7 +873,7 @@
         <div class="pb-4 border-b border-gray-200/80 mb-[10px]">
 
               @if (isset($category->about))
-                <p class="mt-1 text-p-sm text-gray-600 max-w-2xl leading-relaxed">
+                <p class="mt-1 text-p-sm text-gray-600  leading-relaxed">
                     {{ $category->about }}
                 </p>
                 @endif
