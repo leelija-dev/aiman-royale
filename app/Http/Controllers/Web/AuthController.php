@@ -748,6 +748,38 @@ class AuthController extends Controller
     }
 
 
+    // public function completeGoogleRegistration(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'name' => 'required|string|max:255',
+    //             'email' => 'required|email|unique:users,email',
+    //             'google_id' => 'required|string|unique:users,google_id',
+    //         ]);
+
+    //         // Create user with Google data
+    //         $user = User::create([
+    //             'name' => $request->name,
+    //             'email' => $request->email,
+    //             'google_id' => $request->google_id,
+    //             'password' => Hash::make(Str::random(24)),
+    //             'email_verified_at' => now(),
+    //         ]);
+
+    //         Auth::login($user);
+
+    //         // Clear Google session data
+    //         session()->forget('google_data');
+
+
+    //         return redirect()->route('home')->with('success', 'Account created successfully with Google!');
+    //     } catch (\Exception $e) {
+    //         Log::error('Google registration error: ' . $e->getMessage());
+    //         return redirect()->route('page.register')
+    //             ->with('error', 'Failed to create account. Please try again.');
+    //     }
+    // }
+
     public function completeGoogleRegistration(Request $request)
     {
         try {
@@ -768,8 +800,21 @@ class AuthController extends Controller
 
             Auth::login($user);
 
+            // Generate JWT token (if using JWT)
+            $token = auth()->login($user); // Or however you generate your JWT
+
             // Clear Google session data
             session()->forget('google_data');
+
+            // Check for redirect URL from session or request
+            $redirectUrl = session()->pull('google_redirect_url') ?? $request->redirect ?? null;
+
+            if ($redirectUrl) {
+                // Validate the redirect URL to prevent open redirect vulnerabilities
+                if (filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+                    return redirect()->to($redirectUrl)->with('jwt_token', $token);
+                }
+            }
 
             return redirect()->route('home')->with('success', 'Account created successfully with Google!');
         } catch (\Exception $e) {
