@@ -92,12 +92,7 @@
                         <a href="https://www.instagram.com/aimanroyale/" target="_blank" class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-gradient-to-tr hover:from-[#833AB4] hover:via-[#E1306C] hover:to-[#F56040] hover:text-white hover:scale-110 transition-all duration-300">
                             <i class="fab fa-instagram text-lg"></i>
                         </a>
-                        <a href="#" class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-[#000000] hover:text-white hover:scale-110 transition-all duration-300">
-                            <i class="fab fa-tiktok text-lg"></i>
-                        </a>
-                        <a href="#" class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-[#0A66C2] hover:text-white hover:scale-110 transition-all duration-300">
-                            <i class="fab fa-linkedin-in text-lg"></i>
-                        </a>
+                       
                     </div>
                     <p class="text-center lg:text-left text-[11px] text-stone-500 mt-5 tracking-wide">Follow us for daily fashion inspiration and exclusive offers</p>
                 </div>
@@ -203,8 +198,8 @@
                 @php
                     $faqs = [
                         ['icon' => 'fa-shipping-fast', 'title' => 'Order tracking & delivery', 'desc' => 'After we ship your order, you\'ll get a tracking link via SMS and email. You can also log in to your account to see real-time updates.'],
-                        ['icon' => 'fa-exchange-alt', 'title' => '14-day return policy', 'desc' => 'You can return unused items with original tags within 14 days. Custom orders cannot be returned because they are made just for you.'],
-                        ['icon' => 'fa-rupee-sign', 'title' => 'Cash on Delivery?', 'desc' => 'Yes, we offer COD for orders under ₹12,000 (₹50 extra fee). For larger orders, we recommend prepaid payment.'],
+                        ['icon' => 'fa-exchange-alt', 'title' => '7-day return policy', 'desc' => 'You can return unused items with original tags within 7 days. Custom orders cannot be returned because they are made just for you.'],
+                        ['icon' => 'fa-rupee-sign', 'title' => 'Cash on Delivery?', 'desc' => 'Yes, we offer COD for orders. For larger orders, we recommend prepaid payment.'],
                         ['icon' => 'fa-gem', 'title' => 'Quality guarantee', 'desc' => 'All our products are made in our own workshop. We guarantee 100% authentic materials and hand-finished quality.'],
                         ['icon' => 'fa-tshirt', 'title' => 'Size help', 'desc' => 'Our stylists offer free virtual size consultations. Contact us on WhatsApp for personalized size charts.'],
                         ['icon' => 'fa-globe-asia', 'title' => 'International shipping', 'desc' => 'We ship worldwide. Customs duties are calculated at checkout. Delivery takes 7-12 business days.']

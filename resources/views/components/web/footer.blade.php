@@ -2420,7 +2420,7 @@ art from fake trails.
           </svg>
         </div>
         <p class="font-semibold text-gray-900 text-sm">Express Delivery</p>
-        <p class="text-xs text-gray-600 mt-1">2-3 Days</p>
+        <p class="text-xs text-gray-600 mt-1">4-7 Days</p>
       </div>
 
       <div class="text-center group">
@@ -2460,7 +2460,7 @@ art from fake trails.
           </svg>
         </div>
         <p class="font-semibold text-gray-900 text-sm">Easy Returns</p>
-        <p class="text-xs text-gray-600 mt-1">15 Days Policy</p>
+        <p class="text-xs text-gray-600 mt-1">7 Days Policy</p>
       </div>
     </div>
   </div>
