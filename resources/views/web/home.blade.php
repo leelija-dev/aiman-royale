@@ -1056,7 +1056,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
                     if (strpos($catImg, 'cloudinary.com') !== false && strpos($catImg, 'upload/') !== false) {
                     $parts = explode('upload/', $catImg);
-                    $catImg = $parts[0].'upload/w_700,h_950,c_fill,f_auto,q_auto/'.$parts[1];
+                    $catImg = $parts[0].'upload/w_700,h_1011,c_fill,f_auto,q_auto/'.$parts[1];
                     }
                     @endphp
 
@@ -2290,7 +2290,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             </div>
 
                             <!-- Banner Content - Bottom Left -->
-                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-[#00000005]">
+                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-[#00000005]">
                                 <div class="px-4 py-4 sm:px-5 sm:py-5 text-center text-white">
 
                                     <!-- Subtitle -->
