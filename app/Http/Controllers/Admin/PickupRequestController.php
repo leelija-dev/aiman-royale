@@ -13,29 +13,14 @@ class PickupRequestController extends Controller
 
     public function index()
     {
-        // $orders = Order::where('pick_up_request_added', false)
-        //     ->where('order_status', '!=', 'cancelled')
-        //     ->where('order_status', '!=', 'delivered')
-        //     ->whereNotNull('waybill_number') // Custom scope to filter orders with non-null waybill_number
-        //     ->paginate(10);
-
-        // return view('Admin.pick-up-request.index', compact('orders'));
-
         $query = Order::where('pick_up_request_added', false)
             ->whereNotIn('order_status', ['cancelled', 'delivered'])
-            ->whereNotNull('waybill_number');
-
-        // Search functionality
-        // if ($request->has('search') && !empty($request->search)) {
-        //     $search = $request->search;
-        //     $query->where(function($q) use ($search) {
-        //         $q->where('waybill_number', 'LIKE', "%{$search}%")
-        //           ->orWhere('order_id', 'LIKE', "%{$search}%");
-        //     });
-        // }
+            ->whereNotNull('waybill_number')
+            ->with('orderProducts.product');
 
         $orders = $query->paginate(10);
 
+        // dd($orders->toArray()); // Debugging line to inspect the data structure
         return view('Admin.pick-up-request.index', compact('orders'));
     }
 

@@ -165,6 +165,7 @@
                                     <th>Customer</th>
                                     <th>Products</th>
                                     <th>Total</th>
+                                    <th>Waybill Number</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th width="150">Actions</th>
@@ -201,6 +202,13 @@
                     </td>
                     <td>
                         <strong>{{ config('app.currency') }}{{ number_format($order->total_amount, 2) }}</strong>
+                    </td>
+                    <td>
+                        @if($order->waybill_number)
+                        <span class="text-success">{{ $order->waybill_number }}</span>
+                        @else
+                        <span class="text-muted">N/A</span>
+                        @endif
                     </td>
                     <td>
                         @php

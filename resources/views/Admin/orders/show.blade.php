@@ -34,11 +34,15 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Order Status</span>
-                                    <span class="info-box-number">
-                                        <span class="badge badge-{{ $order->order_status == 'delivered' ? 'success' : ($order->order_status == 'cancelled' ? 'danger' : ($order->order_status == 'shipped' ? 'primary' : ($order->order_status == 'paid' ? 'success' : ($order->order_status == 'confirmed' ? 'info' : 'warning')))) }}">
-                                            {{ ucfirst($order->order_status) }}
-                                        </span>
-                                    </span>
+                                    <span class="badge bg-{{ 
+    $order->order_status == 'delivered' ? 'success' : 
+    ($order->order_status == 'cancelled' ? 'danger' : 
+    ($order->order_status == 'shipped' ? 'primary' : 
+    ($order->order_status == 'paid' ? 'success' : 
+    ($order->order_status == 'confirmed' ? 'info' : 'warning')))) 
+}}">
+    {{ ucfirst($order->order_status) }}
+</span>
                                 </div>
                             </div>
                         </div>
@@ -72,16 +76,18 @@
                                     <td><strong>Phone:</strong></td>
                                     <td>{{ $order->user->phone ?? 'N/A' }}</td>
                                 </tr>
-                                @if($order->shipping_address)
                                 <tr>
-                                    <td><strong>Shipping Address:</strong></td>
+                                    <td><strong>Address:</strong></td>
                                     <td>
-                                        {{ $order->shipping_address->address ?? '' }}<br>
-                                        {{ $order->shipping_address->city ?? '' }}, {{ $order->shipping_address->state ?? '' }}<br>
-                                        {{ $order->shipping_address->country ?? '' }}
+                                        {{ $order->address_1 ?? '' }}
+                                        @if($order->address_2)
+                                            , {{ $order->address_2 }}
+                                        @endif
+                                        <br>
+                                        {{ $order->city ?? '' }}, {{ $order->state ?? '' }}<br>
+                                        PIN: {{ $order->pincode ?? '' }}
                                     </td>
                                 </tr>
-                                @endif
                             </table>
                         </div>
                         <div class="col-md-6">
@@ -92,11 +98,11 @@
                                     <td>{{ $order->created_at->format('M d, Y h:i A') }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Tracking Number:</strong></td>
+                                    <td><strong>Waybill Number:</strong></td>
                                     <td>
-                                        @if($order->tracking_number)
-                                            <code>{{ $order->tracking_number }}</code>
-                                            <button type="button" class="btn btn-xs btn-info ml-2" onclick="copyTracking('{{ $order->tracking_number }}')">
+                                        @if($order->waybill_number)
+                                            <code>{{ $order->waybill_number }}</code>
+                                            <button type="button" class="btn btn-xs btn-info ml-2" onclick="copyTracking('{{ $order->waybill_number }}')">
                                                 <i class="fas fa-copy"></i> Copy
                                             </button>
                                         @else
@@ -105,12 +111,20 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Courier:</strong></td>
+                                    <td>{{ $order->courier_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
                                     <td><strong>Payment Status:</strong></td>
                                     <td>
-                                        <span class="badge badge-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }}">
-                                            {{ ucfirst($order->payment_status ?? 'pending') }}
-                                        </span>
+                                        <span class="badge bg-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }}">
+    {{ ucfirst($order->payment_status ?? 'pending') }}
+</span>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Payment Method:</strong></td>
+                                    <td>{{ ucfirst($order->payment_method ?? 'N/A') }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -156,14 +170,18 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="badge badge-info">
-                                                        {{ $orderProduct->variant->size ?? 'N/A' }}
-                                                    </span>
-                                                    @if($orderProduct->variant && $orderProduct->variant->color)
-                                                        <span class="badge badge-secondary ml-1">{{ ucfirst($orderProduct->variant->color) }}</span>
-                                                    @endif
-                                                </td>
+                                               <td>
+    @if($orderProduct->variant)
+        <span class="badge bg-info">
+            {{ $orderProduct->variant->size ?? 'N/A' }}
+        </span>
+        @if($orderProduct->variant->color)
+            <span class="badge bg-secondary ms-1">{{ ucfirst($orderProduct->variant->color) }}</span>
+        @endif
+    @else
+        <span class="text-muted">N/A</span>
+    @endif
+</td>
                                                 <td>{{ $orderProduct->quantity }}</td>
                                                 <td>{{ config('app.currency') }}{{ number_format($orderProduct->price, 2) }}</td>
                                                 <td><strong>{{ config('app.currency') }}{{ number_format($orderProduct->total, 2) }}</strong></td>
@@ -173,16 +191,20 @@
                                     <tfoot>
                                         <tr class="bg-light">
                                             <th colspan="3" class="text-right">Subtotal:</th>
-                                            <td>{{ config('app.currency') }}{{ number_format($order->subtotal, 2) }}</td>
+                                            <td>{{ config('app.currency') }}{{ number_format($order->subtotal ?? $order->total_amount, 2) }}</td>
                                         </tr>
+                                        @if(isset($order->gst_amount) && $order->gst_amount > 0)
                                         <tr class="bg-light">
-                                            <th colspan="3" class="text-right">Shipping:</th>
-                                            <td>{{ config('app.currency') }}{{ number_format($order->shipping_cost, 2) }}</td>
+                                            <th colspan="3" class="text-right">GST:</th>
+                                            <td>{{ config('app.currency') }}{{ number_format($order->gst_amount, 2) }}</td>
                                         </tr>
+                                        @endif
+                                        @if(isset($order->special_discount_amount) && $order->special_discount_amount > 0)
                                         <tr class="bg-light">
-                                            <th colspan="3" class="text-right">Tax:</th>
-                                            <td>{{ config('app.currency') }}{{ number_format($order->tax_amount, 2) }}</td>
+                                            <th colspan="3" class="text-right">Discount:</th>
+                                            <td>-{{ config('app.currency') }}{{ number_format($order->special_discount_amount, 2) }}</td>
                                         </tr>
+                                        @endif
                                         <tr class="bg-primary text-white">
                                             <th colspan="3" class="text-right">Total:</th>
                                             <td><strong>{{ config('app.currency') }}{{ number_format($order->total_amount, 2) }}</strong></td>
@@ -193,176 +215,122 @@
                         </div>
                     </div>
 
-                    <!-- Order Actions -->
+                    <!-- Tracking Information -->
                     <div class="row mt-4">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header bg-light">
                                     <h5 class="mb-0">
-                                        <i class="fas fa-tools"></i> Order Actions
+                                        <i class="fas fa-map-marker-alt text-info"></i> Track Shipment
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <!-- Status Update -->
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label font-weight-bold">
-                                                <i class="fas fa-sync-alt text-primary"></i> Update Order Status
-                                            </label>
-                                            
-                                            <!-- Current Status Display -->
-                                            <div class="alert alert-light border mb-3">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        <small class="text-muted">Current Status:</small>
-                                                        <div class="mt-1">
-                                                            @php
-                                                            $statusClass = [
-                                                            'pending' => 'warning',
-                                                            'confirmed' => 'info', 
-                                                            'paid' => 'success',
-                                                            'shipped' => 'primary',
-                                                            'delivered' => 'success',
-                                                            'cancelled' => 'danger',
-                                                            'returned' => 'secondary',
-                                                            ][$order->order_status] ?? 'secondary';
-                                                            @endphp
-                                                            <span class="badge badge-{{ $statusClass }} badge-lg">
-                                                                <i class="fas fa-{{ 
-                                                                    $order->order_status == 'delivered' ? 'check-circle' : 
-                                                                    ($order->order_status == 'cancelled' ? 'times-circle' : 
-                                                                    ($order->order_status == 'shipped' ? 'truck' : 
-                                                                    ($order->order_status == 'paid' ? 'dollar-sign' : 
-                                                                    ($order->order_status == 'confirmed' ? 'check' : 'clock')))) 
-                                                                }}"></i>
-                                                                {{ ucfirst($order->order_status) }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <small class="text-muted">Last Updated:</small>
-                                                        <div class="mt-1">
-                                                            <small>{{ $order->updated_at->format('M d, Y h:i A') }}</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="btn-group w-100" role="group">
-                                                <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas fa-cog"></i> Change Status
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    @if($order->order_status != 'pending')
-                                                        <a class="dropdown-item" href="#" onclick="updateOrderStatus({{ $order->id }}, 'pending')">
-                                                            <i class="fas fa-clock text-warning"></i> Mark as Pending
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'confirmed')
-                                                        <a class="dropdown-item" href="#" onclick="updateOrderStatus({{ $order->id }}, 'confirmed')">
-                                                            <i class="fas fa-check text-info"></i> Mark as Confirmed
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'paid')
-                                                        <a class="dropdown-item" href="#" onclick="updateOrderStatus({{ $order->id }}, 'paid')">
-                                                            <i class="fas fa-dollar-sign text-success"></i> Mark as Paid
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'shipped')
-                                                        <a class="dropdown-item" href="#" onclick="updateOrderStatus({{ $order->id }}, 'shipped')">
-                                                            <i class="fas fa-truck text-primary"></i> Mark as Shipped
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'delivered')
-                                                        <a class="dropdown-item" href="#" onclick="updateOrderStatus({{ $order->id }}, 'delivered')">
-                                                            <i class="fas fa-check-circle text-success"></i> Mark as Delivered
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'cancelled')
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#" onclick="updateOrderStatus({{ $order->id }}, 'cancelled')">
-                                                            <i class="fas fa-times"></i> Cancel Order
-                                                        </a>
-                                                    @endif
-                                                    @if($order->order_status != 'returned')
-                                                        <a class="dropdown-item text-secondary" href="#" onclick="updateOrderStatus({{ $order->id }}, 'returned')">
-                                                            <i class="fas fa-undo"></i> Mark as Returned
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Tracking Number -->
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label font-weight-bold">
-                                                <i class="fas fa-shipping-fast text-info"></i> Tracking Number
-                                            </label>
-                                            <form action="{{ route('admin.orders.update-tracking', $order) }}" method="POST">
-                                                @csrf
-                                                <div class="input-group">
-                                                    <input type="text" 
-                                                           name="tracking_number" 
-                                                           class="form-control" 
-                                                           placeholder="Enter tracking number..." 
-                                                           value="{{ $order->tracking_number ?? '' }}">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-info">
-                                                            <i class="fas fa-save"></i> Update
+                                    @if($order->waybill_number)
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="d-flex align-items-center gap-3 mb-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-light">
+                                                            <i class="fas fa-tag"></i>
+                                                        </span>
+                                                        <input type="text" 
+                                                               id="waybill-input" 
+                                                               class="form-control" 
+                                                               value="{{ $order->waybill_number }}" 
+                                                               readonly>
+                                                        <button class="btn btn-outline-secondary" 
+                                                                onclick="copyWaybill('{{ $order->waybill_number }}')">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+                                                        <button class="btn btn-primary" 
+                                                                onclick="trackShipment('{{ $order->waybill_number }}')">
+                                                            <i class="fas fa-sync-alt"></i> Track Now
                                                         </button>
                                                     </div>
                                                 </div>
-                                                @if($order->tracking_number)
-                                                    <small class="text-muted mt-1 d-block">
-                                                        <i class="fas fa-check-circle text-success"></i> 
-                                                        Tracking: {{ $order->tracking_number }}
-                                                    </small>
-                                                @endif
-                                            </form>
-                                        </div>
-
-                                        <!-- Additional Actions -->
-                                        <div class="col-12">
-                                            <div class="d-flex flex-wrap gap-2">
-                                                <button type="button" class="btn btn-success" onclick="sendInvoice({{ $order->id }})">
-                                                    <i class="fas fa-envelope"></i> Send Invoice
-                                                </button>
                                                 
-                                                <button type="button" class="btn btn-primary" onclick="window.print()">
-                                                    <i class="fas fa-print"></i> Print Order
-                                                </button>
+                                                <!-- Tracking Status Badge -->
+                                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                                    <span class="badge badge-{{ 
+                                                        $order->tracking_status == 'Delivered' ? 'success' : 
+                                                        ($order->tracking_status == 'Out for Delivery' ? 'warning' : 
+                                                        ($order->tracking_status == 'In Transit' ? 'info' : 
+                                                        ($order->tracking_status == 'Shipment Created' ? 'primary' : 'secondary'))) 
+                                                    }} badge-lg">
+                                                        <i class="fas fa-{{ 
+                                                            $order->tracking_status == 'Delivered' ? 'check-circle' : 
+                                                            ($order->tracking_status == 'Out for Delivery' ? 'truck' : 
+                                                            ($order->tracking_status == 'In Transit' ? 'shipping-fast' : 
+                                                            ($order->tracking_status == 'Shipment Created' ? 'box' : 'clock'))) 
+                                                        }}"></i>
+                                                        {{ $order->tracking_status ?? 'Pending' }}
+                                                    </span>
+                                                    
+                                                    @if($order->last_tracking_location)
+                                                        <span class="text-muted">
+                                                            <i class="fas fa-map-pin"></i> 
+                                                            {{ $order->last_tracking_location }}
+                                                        </span>
+                                                    @endif
+                                                    
+                                                    @if($order->updated_at)
+                                                        <span class="text-muted small">
+                                                            <i class="fas fa-clock"></i> 
+                                                            Last updated: {{ $order->updated_at->format('M d, Y h:i A') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                                 
-                                                <button type="button" class="btn btn-outline-secondary" onclick="copyOrderLink({{ $order->id }})">
-                                                    <i class="fas fa-link"></i> Copy Link
-                                                </button>
-
-                                                <div class="dropdown">
-                                                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown">
-                                                        <i class="fas fa-ellipsis-h"></i> More Actions
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#" onclick="downloadInvoice({{ $order->id }})">
-                                                            <i class="fas fa-download"></i> Download Invoice
+                                                <!-- Tracking Details -->
+                                                <div id="tracking-details" class="mt-4">
+                                                    @if($order->tracking_data)
+                                                        <div class="text-center text-muted py-3">
+                                                            <i class="fas fa-check-circle text-success"></i>
+                                                            <p class="mt-2">Tracking data available. Click "Track Now" to view latest updates.</p>
+                                                        </div>
+                                                    @else
+                                                        <div class="text-center text-muted py-3">
+                                                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                                                            <p class="mt-2">Click "Track Now" to fetch latest tracking information</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <div class="bg-light p-3 rounded">
+                                                    <h6 class="font-weight-bold">
+                                                        <i class="fas fa-info-circle text-primary"></i> Quick Actions
+                                                    </h6>
+                                                    <div class="d-grid gap-2">
+                                                        <a href="https://www.delhivery.com/track/{{ $order->waybill_number }}" 
+                                                           target="_blank" 
+                                                           class="btn btn-outline-info btn-sm">
+                                                            <i class="fas fa-external-link-alt"></i> Track on Delhivery Website
                                                         </a>
-                                                        <a class="dropdown-item" href="#" onclick="sendCustomerNotification({{ $order->id }})">
-                                                            <i class="fas fa-bell"></i> Send Notification
-                                                        </a>
-                                                        <a class="dropdown-item" href="#" onclick="addOrderNotes({{ $order->id }})">
-                                                            <i class="fas fa-sticky-note"></i> Add Notes
-                                                        </a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteOrder({{ $order->id }})">
-                                                            <i class="fas fa-trash"></i> Delete Order
-                                                        </a>
+                                                        <button class="btn btn-outline-success btn-sm" 
+                                                                onclick="generateLabel('{{ $order->waybill_number }}')">
+                                                            <i class="fas fa-print"></i> Generate Shipping Label
+                                                        </button>
+                                                        <button class="btn btn-outline-secondary btn-sm" 
+                                                                onclick="refreshTracking('{{ $order->waybill_number }}')">
+                                                            <i class="fas fa-refresh"></i> Refresh Status
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <div class="alert alert-warning mb-0">
+                                            <i class="fas fa-exclamation-triangle"></i> 
+                                            No tracking number available for this order.
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -370,166 +338,299 @@
 </div>
 
 <script>
-function updateOrderStatus(orderId, status) {
-    if (confirm(`Are you sure you want to mark this order as ${status}?`)) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/admin/orders/${orderId}/status`;
-        
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = '_token';
-        tokenInput.value = csrfToken;
-        
-        const statusInput = document.createElement('input');
-        statusInput.type = 'hidden';
-        statusInput.name = 'status';
-        statusInput.value = status;
-        
-        form.appendChild(tokenInput);
-        form.appendChild(statusInput);
-        document.body.appendChild(form);
-        form.submit();
-    }
-}
-
 function copyTracking(trackingNumber) {
     navigator.clipboard.writeText(trackingNumber).then(() => {
-        // Show success message
-        const toast = document.createElement('div');
-        toast.className = 'position-fixed top-0 right-0 bg-green-500 text-white px-4 py-2 m-2 z-50';
-        toast.innerHTML = 'Tracking number copied to clipboard!';
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 2000);
+        showToast('Tracking number copied to clipboard!', 'success');
+    }).catch(() => {
+        // Fallback
+        const input = document.createElement('input');
+        input.value = trackingNumber;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('Tracking number copied to clipboard!', 'success');
     });
 }
 
-function sendInvoice(orderId) {
-    if (confirm('Send invoice to customer?')) {
-        fetch(`/admin/orders/${orderId}/send-invoice`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Invoice sent successfully!');
-            } else {
-                alert('Failed to send invoice: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while sending invoice');
-        });
-    }
-}
-
-function copyOrderLink(orderId) {
-    const orderLink = `${window.location.origin}/admin/orders/${orderId}`;
-    navigator.clipboard.writeText(orderLink).then(() => {
-        showToast('Order link copied to clipboard!', 'success');
-    }).catch(err => {
-        console.error('Failed to copy:', err);
-        showToast('Failed to copy link', 'error');
+// Track shipment function using your existing API
+function trackShipment(waybill) {
+    const trackingDetails = document.getElementById('tracking-details');
+    
+    // Show loading state
+    trackingDetails.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Fetching tracking details...</p>
+        </div>
+    `;
+    
+    // ✅ Using your existing API endpoint
+    fetch(`/track-waybill/${waybill}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.tracking) {
+            displayTrackingDetails(data.tracking);
+            showToast('Tracking updated successfully!', 'success');
+        } else {
+            showToast(data.error || 'Failed to fetch tracking details', 'error');
+            trackingDetails.innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    ${data.error || 'No tracking information available for this shipment'}
+                </div>
+            `;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('An error occurred while fetching tracking details', 'error');
+        trackingDetails.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> 
+                Error fetching tracking details. Please try again later.
+            </div>
+        `;
     });
 }
 
-function downloadInvoice(orderId) {
-    window.open(`/admin/orders/${orderId}/invoice/download`, '_blank');
-}
-
-function sendCustomerNotification(orderId) {
-    if (confirm('Send notification to customer about this order?')) {
-        fetch(`/admin/orders/${orderId}/notify`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('Notification sent successfully!', 'success');
-            } else {
-                showToast('Failed to send notification: ' + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('An error occurred while sending notification', 'error');
+// Display tracking details
+function displayTrackingDetails(trackingData) {
+    const trackingDetails = document.getElementById('tracking-details');
+    
+    // Check if we have tracking data
+    if (!trackingData || !trackingData.ShipmentData || trackingData.ShipmentData.length === 0) {
+        trackingDetails.innerHTML = `
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                No tracking information available for this shipment yet.
+            </div>
+        `;
+        return;
+    }
+    
+    const shipment = trackingData.ShipmentData[0];
+    const status = shipment.Status || {};
+    const scans = shipment.Scans || [];
+    
+    let html = `
+        <div class="card border-0 bg-light">
+            <div class="card-body">
+                <!-- Current Status -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-${status.Status == 'Delivered' ? 'success' : (status.Status == 'Out for Delivery' ? 'warning' : 'primary')} 
+                                        text-white rounded-circle d-flex align-items-center justify-content-center" 
+                                 style="width: 50px; height: 50px;">
+                                <i class="fas fa-${status.Status == 'Delivered' ? 'check' : (status.Status == 'Out for Delivery' ? 'truck' : 'shipping-fast')} fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 font-weight-bold">${status.Status || 'In Transit'}</h6>
+                                <small class="text-muted">${status.StatusDateTime || 'Last updated recently'}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-right">
+                        <span class="badge badge-${status.Status == 'Delivered' ? 'success' : 'warning'} badge-lg">
+                            ${status.Status || 'In Transit'}
+                        </span>
+                        ${status.Instruction ? `<br><small class="text-muted">${status.Instruction}</small>` : ''}
+                    </div>
+                </div>
+                
+                <!-- Tracking Timeline -->
+                <h6 class="font-weight-bold mt-3">
+                    <i class="fas fa-history text-primary"></i> Tracking History
+                </h6>
+                <div class="timeline">
+    `;
+    
+    // Display scans in reverse chronological order (newest first)
+    if (scans.length > 0) {
+        const sortedScans = [...scans].sort((a, b) => {
+            return new Date(b.ScanDateTime) - new Date(a.ScanDateTime);
         });
-    }
-}
-
-function addOrderNotes(orderId) {
-    const notes = prompt('Enter order notes:');
-    if (notes) {
-        fetch(`/admin/orders/${orderId}/notes`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ notes: notes })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('Notes added successfully!', 'success');
-                location.reload();
-            } else {
-                showToast('Failed to add notes: ' + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('An error occurred while adding notes', 'error');
+        
+        sortedScans.forEach((scan, index) => {
+            const isLatest = index === 0;
+            const statusColor = scan.Status == 'Delivered' ? 'success' : 
+                               (scan.Status == 'Out for Delivery' ? 'warning' : 
+                               (scan.Status == 'In Transit' ? 'primary' : 'secondary'));
+            
+            html += `
+                <div class="timeline-item ${isLatest ? 'active' : ''}">
+                    <div class="timeline-marker bg-${statusColor}"></div>
+                    <div class="timeline-content">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>${scan.Status || 'Update'}</strong>
+                                ${scan.Location ? `<br><small class="text-muted"><i class="fas fa-map-pin"></i> ${scan.Location}</small>` : ''}
+                                ${scan.Reason ? `<br><small class="text-muted">${scan.Reason}</small>` : ''}
+                            </div>
+                            <small class="text-muted">${formatDate(scan.ScanDateTime)}</small>
+                        </div>
+                        ${scan.Instruction ? `<div class="mt-1"><small class="text-info">${scan.Instruction}</small></div>` : ''}
+                    </div>
+                </div>
+            `;
         });
+    } else {
+        html += `
+            <div class="text-center text-muted py-3">
+                <i class="fas fa-clock"></i>
+                <p>No tracking history available yet</p>
+            </div>
+        `;
+    }
+    
+    html += `
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add CSS for timeline if not already present
+    if (!document.getElementById('tracking-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'tracking-styles';
+        styles.innerHTML = `
+            .timeline {
+                position: relative;
+                padding-left: 20px;
+            }
+            .timeline-item {
+                position: relative;
+                padding-bottom: 20px;
+                padding-left: 20px;
+            }
+            .timeline-item:last-child {
+                padding-bottom: 0;
+            }
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -10px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: #e9ecef;
+            }
+            .timeline-item:last-child::before {
+                bottom: 50%;
+            }
+            .timeline-marker {
+                position: absolute;
+                left: -14px;
+                top: 4px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+            }
+            .timeline-item.active .timeline-marker {
+                width: 14px;
+                height: 14px;
+                left: -15px;
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+            .timeline-content {
+                background: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                border: 1px solid #f0f0f0;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    trackingDetails.innerHTML = html;
+}
+
+// Format date for display
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    } catch (e) {
+        return dateString;
     }
 }
 
-function confirmDeleteOrder(orderId) {
-    if (confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/admin/orders/${orderId}`;
-        
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = '_token';
-        tokenInput.value = csrfToken;
-        
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'DELETE';
-        
-        form.appendChild(tokenInput);
-        form.appendChild(methodInput);
-        document.body.appendChild(form);
-        form.submit();
-    }
+// Copy waybill number
+function copyWaybill(waybill) {
+    navigator.clipboard.writeText(waybill).then(() => {
+        showToast('Waybill number copied to clipboard!', 'success');
+    }).catch(() => {
+        const input = document.getElementById('waybill-input');
+        if (input) {
+            input.select();
+            document.execCommand('copy');
+            showToast('Waybill number copied to clipboard!', 'success');
+        }
+    });
+}
+
+// Refresh tracking
+function refreshTracking(waybill) {
+    trackShipment(waybill);
+}
+
+// Generate shipping label (opens in new window)
+function generateLabel(waybill) {
+    window.open(`https://www.delhivery.com/print-label/${waybill}`, '_blank');
 }
 
 function showToast(message, type = 'info') {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.custom-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
     const toast = document.createElement('div');
-    toast.className = `position-fixed top-0 right-0 px-4 py-3 m-2 z-50 rounded text-white ${
+    toast.className = `custom-toast position-fixed top-0 right-0 px-4 py-3 m-2 z-50 rounded text-white ${
         type === 'success' ? 'bg-success' : 
         type === 'error' ? 'bg-danger' : 
         'bg-info'
     }`;
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 99999;
+        min-width: 250px;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideInRight 0.5s ease;
+    `;
     toast.innerHTML = `
         <div class="d-flex align-items-center">
             <i class="fas fa-${
@@ -538,16 +639,42 @@ function showToast(message, type = 'info') {
                 'info-circle'
             } mr-2"></i>
             <span>${message}</span>
+            <button type="button" class="close ml-3 text-white" onclick="this.parentElement.parentElement.remove()">
+                <span>&times;</span>
+            </button>
         </div>
     `;
     
     document.body.appendChild(toast);
     
+    // Auto remove after 5 seconds
     setTimeout(() => {
         if (toast.parentNode) {
-            toast.parentNode.removeChild(toast);
+            toast.style.animation = 'slideOutRight 0.5s ease';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 500);
         }
-    }, 3000);
+    }, 5000);
+}
+
+// Add animation styles if not present
+if (!document.getElementById('toast-styles')) {
+    const styles = document.createElement('style');
+    styles.id = 'toast-styles';
+    styles.innerHTML = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(styles);
 }
 </script>
 
@@ -557,10 +684,61 @@ function showToast(message, type = 'info') {
     border-radius: 4px;
 }
 
-.position-fixed {
-    position: fixed;
-    top: 0;
-    right: 0;
+.badge-lg {
+    font-size: 90%;
+    padding: 0.5rem 0.75rem;
+}
+
+.info-box {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: #fff;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    margin-bottom: 1rem;
+}
+
+.info-box-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 0.25rem;
+    color: #fff;
+    font-size: 2rem;
+}
+
+.info-box-content {
+    padding: 0 1rem;
+}
+
+.info-box-text {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6c757d;
+}
+
+.info-box-number {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Print styles */
+@media print {
+    .btn {
+        display: none !important;
+    }
+    .card-tools {
+        display: none !important;
+    }
+    .no-print {
+        display: none !important;
+    }
 }
 </style>
 @endsection
