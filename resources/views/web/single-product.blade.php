@@ -1178,10 +1178,20 @@
         Best Offers
     </h3>
 
-    <ul class="text-sm text-gray-600 space-y-1">
-        <li>• Grand Launce Offer Use Coupon Code: <strong>LAUNCE20</strong></li>
-        <li>• Get Upto 10% Extra Discount Order Above 30K</li>
-    </ul>
+   <ul class="text-sm text-gray-600 space-y-1">
+    <li class="flex items-center gap-2">
+        <span>•</span>
+        <span>
+            <strong>Grand Launch Offer:</strong> Use Coupon Code
+            <span class="font-bold text-red-600">LAUNCH20</span>
+        </span>
+    </li>
+
+    <li class="flex items-center gap-2">
+        <span>•</span>
+        <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
+    </li>
+</ul>
 </div>
 
                             <!-- Action Buttons -->
@@ -2836,6 +2846,7 @@
 
     <script>
         const loginUrl = "{{ route('page.login') }}";
+        const checkoutUrl = "{{ route('checkout.index') }}";
 
         // Store all product variants data
         const productVariants = @json($product->variants);
@@ -3533,25 +3544,138 @@
                 .catch(error => console.error('Error checking cart:', error));
         }
 
-        function updateAddToCartButton(inCart, quantity = 0) {
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (!addToCartBtn) return;
+        // function updateAddToCartButton(inCart, quantity = 0) {
+        //     const addToCartBtn = document.getElementById('add-to-cart');
+        //     if (!addToCartBtn) return;
 
-            if (inCart) {
-                addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added (${quantity})`;
-                addToCartBtn.classList.remove('bg-secondary');
-                addToCartBtn.classList.add('bg-green-600');
-                addToCartBtn.disabled = true;
-            } else {
-                if (customDimensions) {
-                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
-                } else {
-                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-                }
-                addToCartBtn.classList.remove('bg-green-600');
-                addToCartBtn.classList.add('bg-secondary');
-                addToCartBtn.disabled = false;
+        //     if (inCart) {
+        //         addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
+        //         addToCartBtn.classList.remove('bg-secondary');
+        //         addToCartBtn.classList.add('bg-green-600');
+        //         addToCartBtn.disabled = true;
+
+                 
+        
+        //     } else {
+        //         if (customDimensions) {
+        //             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+        //         } else {
+        //             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+        //         }
+        //         addToCartBtn.classList.remove('bg-green-600');
+        //         addToCartBtn.classList.add('bg-secondary');
+        //         addToCartBtn.disabled = false;
+        //     }
+        // }
+
+        function updateAddToCartButton(inCart, quantity = 0) {
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+
+    // Remove all existing click listeners by cloning
+    const newBtn = addToCartBtn.cloneNode(true);
+    addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
+    const freshBtn = document.getElementById('add-to-cart');
+
+    if (inCart) {
+        // Go to Cart mode - NAVIGATE ONLY
+        freshBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
+        freshBtn.classList.remove('bg-secondary');
+        freshBtn.classList.add('bg-green-600');
+        freshBtn.disabled = false;
+        
+        // ONLY redirect - NO add to cart logic
+        freshBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = '/cart';
+        };
+        
+    } else {
+        // Add to Cart mode
+        if (customDimensions) {
+            freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+        } else {
+            freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+        }
+        freshBtn.classList.remove('bg-green-600');
+        freshBtn.classList.add('bg-secondary');
+        freshBtn.disabled = false;
+        
+        // ONLY add to cart - NO redirect
+        freshBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCart(); // Your existing addToCart function
+        };
+    }
+}
+
+        function buyNow() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            if (!csrfToken) {
+                alert('Security token not found. Please refresh the page.');
+                return;
             }
+
+            const buyNowBtn = document.getElementById('buy-now');
+            if (!buyNowBtn) return;
+
+            const variantId = buyNowBtn.getAttribute('data-variant-id');
+            if (!variantId) {
+                alert('Please select a size and color');
+                return;
+            }
+
+            const requestData = {
+                variant_id: variantId,
+                type: selectedType,
+                count: 1
+            };
+
+            if (customDimensions) {
+                requestData.product_id = {{ $product?->id }};
+                requestData.custom_dimensions = customDimensions;
+            }
+
+            const originalText = buyNowBtn.innerHTML;
+            buyNowBtn.disabled = true;
+            buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+
+            fetch('/buy-now', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (response.status === 401) {
+                        const currentUrl = window.location.href.split('#')[0];
+                        const redirectUrl = currentUrl + '#action-buttons-section';
+                        window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        window.location.href = data.redirect || checkoutUrl;
+                    } else {
+                        showNotification(data?.message || 'Unable to start checkout', 'error');
+                        buyNowBtn.disabled = false;
+                        buyNowBtn.innerHTML = originalText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred while starting checkout', 'error');
+                    buyNowBtn.disabled = false;
+                    buyNowBtn.innerHTML = originalText;
+                });
         }
 
         function addToCart() {
@@ -3899,6 +4023,15 @@
                 if (selectedVariantId) {
                     checkVariantInCart(selectedVariantId);
                 }
+            }
+
+            const buyNowBtn = document.getElementById('buy-now');
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    buyNow();
+                });
             }
 
             // Wishlist button
