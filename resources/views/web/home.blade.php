@@ -1511,7 +1511,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                 </div>
 
                 <!-- Collection Badge -->
-                <div class="mt-10 text-center">
+                <a href="https://aimanroyale.com/products/" class="mt-10 text-center block">
                     <div
                         class="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-6 py-3 shadow-sm hover:border-secondary-light transition-all duration-300 cursor-pointer group">
                         <div class="flex -space-x-3">
@@ -1539,7 +1539,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             <i class="fas fa-arrow-right text-white text-sm"></i>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Right - CTA + Trust -->
@@ -1548,11 +1548,11 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                     class="text-h1-xs sm:text-h1-sm md:text-h1-md lg:text-h1-lg lgg:text-h1-lgg xl:text-h1-xl font-bold bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 bg-clip-text text-transparent animate-gradient mb-4 font-serif">
                     Make Every Entrance Unforgettable.
                 </h3>
-                <button
-                    class="w-full sm:w-auto relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20 font-sans">
+                <a href="https://aimanroyale.com/products/"
+                    class="w-full sm:w-auto mt-2 relative p-[16px_34px] bg-gradient-to-r from-secondary to-pink-500 hover:from-secondary hover:to-primary text-white font-bold text-xl rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-secondary/20 font-sans">
                     <i class="fas fa-shopping-bag mr-3 text-xl"></i>
                     Grab now
-                </button>
+                </a>
             </div>
         </div>
     </div>
