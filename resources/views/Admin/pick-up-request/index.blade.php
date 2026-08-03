@@ -39,6 +39,7 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Design No</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created Date</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pickup Requested</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Show</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
@@ -99,6 +100,10 @@
                                         {{ $order->pick_up_request_added ? 'Requested' : 'Pending' }}
                                     </span>
                                 </td>
+                                <td >
+                                    <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-info" title="View Order">
+                                <i class="fas fa-eye"></i>
+                            </a>
                                 <td class="align-middle text-center">
                                     @if(!$order->pick_up_request_added)
                                     <button type="button" class="btn btn-sm btn-primary" onclick="showSinglePickupModal('{{ $order->waybill_number }}', {{ $order->id }})">
