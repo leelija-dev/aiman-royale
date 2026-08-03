@@ -110,7 +110,7 @@
 
                         if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
                         $parts = explode('upload/', $catImage);
-                        $catImage = $parts[0] . 'upload/w_200,h_200,c_fill,f_auto,q_auto/' . $parts[1];
+                        $catImage = $parts[0] . 'upload/w_550,h_800,c_fill,f_auto,q_auto/' . $parts[1];
                         }
                         @endphp
                         <img src="{{ $catImage }}"
