@@ -75,7 +75,7 @@
         transition: max-height 0.3s ease;
     }
 
-    .menu-link {
+    .menu-link, .dif-menu-inner-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -148,7 +148,7 @@
         background: linear-gradient(135deg, #fff9f5 0%, #fef6f0 100%);
     }
 
-    .menu-link {
+    .menu-link,.dif-menu-inner-item {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-left: 3px solid transparent;
         margin: 4px 12px;
@@ -156,18 +156,18 @@
         overflow: hidden;
     }
 
-    .menu-link:hover {
+    .menu-link:hover,.dif-menu-inner-item:hover {
         background: white;
         transform: translateX(5px);
         border-left-color: #d4a574;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .menu-link i {
+    .menu-link i,.dif-menu-inner-item i {
         transition: transform 0.3s ease;
     }
 
-    .menu-link:hover i {
+    .menu-link:hover i,.dif-menu-inner-item:hover i {
         transform: translateX(3px);
         color: #d4a574;
     }
@@ -272,6 +272,23 @@
     }
 
     .menu-item.has-submenu .menu-link:hover::after {
+        background: #d4a574;
+        transform: translateY(-50%) scale(1.2);
+    }
+    .dif-menu-item .dif-menu-inner-item::after {
+        content: '';
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background: rgba(212, 165, 116, 0.3);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .dif-menu-item .dif-menu-inner-item:hover::after {
         background: #d4a574;
         transform: translateY(-50%) scale(1.2);
     }
@@ -1409,10 +1426,10 @@
     class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px]">
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b">
-        <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-3">
             <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}"
                 alt="Aiman Royal">
-        </div>
+        </a>
         <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors">
             <i class="fa-solid fa-xmark text-xl"></i>
         </button>
@@ -1575,22 +1592,17 @@
                 </ul>
             </div>
             @endforeach
-            <div class="menu-item  top-level-item">
+            <div id="dif-menu-item" class="dif-menu-item relative w-full ">
                 <button class="back-button">
                     <i class="fa-solid fa-arrow-left mr-2"></i> Back
                 </button>
                 <a href="https://aimanroyale.com/products/"
-                    class="menu-link top-level-link group">
+                    class="dif-menu-inner-item bg-white">
                     <span class="flex-1">Collections</span>
                     <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
                 </a>
 
-                <ul class="submenu">
-                    <li class="menu-item">
-                        <a href="https://aimanroyale.com/products/"
-                            class="menu-link hover:pl-6 transition-all">All Collections</a>
-                    </li>
-                </ul>
+             
 </div>
 
             @else
@@ -3658,147 +3670,234 @@
 
         // ==================== MOBILE MEGA MENU ====================
         const megaMenu = document.querySelector('.mega-menu');
-        const backButtons = document.querySelectorAll('.back-button');
-        const topLevelLinks = document.querySelectorAll('.top-level-link');
-        const submenuToggles = document.querySelectorAll('.submenu-toggle');
+const backButtons = document.querySelectorAll('.back-button');
+const topLevelLinks = document.querySelectorAll('.top-level-link');
+const submenuToggles = document.querySelectorAll('.submenu-toggle');
+const uniqueMennuItems= document.getElementById('dif-menu-item');
 
-        if (megaMenu && backButtons.length > 0) {
-            // Reset function for mobile mega menu
-            function resetMobileMenu() {
-                // Remove active classes
-                document.querySelectorAll('.top-level-active, .active').forEach(el => {
-                    el.classList.remove('top-level-active', 'active');
-                });
+if (megaMenu && backButtons.length > 0) {
+    // Reset function for mobile mega menu
+    function resetMobileMenu() {
+        // Remove active classes
+        document.querySelectorAll('.top-level-active, .active').forEach(el => {
+            el.classList.remove('top-level-active', 'active');
+        });
 
-                // Hide all back buttons
-                backButtons.forEach(btn => {
-                    btn.style.display = 'none';
-                });
+        // Hide all back buttons
+        backButtons.forEach(btn => {
+            btn.style.display = 'none';
+        });
 
-                // Show all top level items
+        // Show all top level items
+        document.querySelectorAll('.top-level-item').forEach(item => {
+            item.style.display = 'block';
+            uniqueMennuItems.style.display = 'block';
+            
+        });
+
+        // Reset all submenus
+        document.querySelectorAll('.submenu').forEach(submenu => {
+            submenu.style.maxHeight = '0';
+            submenu.classList.remove('active');
+        });
+
+        // Remove top-level-open class
+        megaMenu.classList.remove('top-level-open');
+        
+        // Remove any coming soon messages
+        document.querySelectorAll('.coming-soon-message').forEach(el => el.remove());
+    }
+
+    // Back button functionality
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', resetMobileMenu);
+    });
+
+    // Top level link clicks
+    topLevelLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const parentItem = this.closest('.top-level-item');
+            const isActive = parentItem.classList.contains('top-level-active');
+            const submenu = this.nextElementSibling;
+            const categoryName = parentItem.getAttribute('data-category');
+            const occasionEndpoint = parentItem.getAttribute('data-occasion-endpoint');
+
+            // Check if submenu has children
+            const hasChildren = submenu && submenu.querySelector('.menu-item:not(.coming-soon-message)');
+
+            if (isActive) {
+                resetMobileMenu();
+            } else {
+                // Close any open menu first
+                resetMobileMenu();
+
+                // Open this menu
+                parentItem.classList.add('top-level-active');
+                megaMenu.classList.add('top-level-open');
+
+                // Show back button
+                const backBtn = parentItem.querySelector('.back-button');
+                if (backBtn) {
+                    backBtn.style.display = 'block';
+                }
+
+                // Hide other top level items
                 document.querySelectorAll('.top-level-item').forEach(item => {
-                    item.style.display = 'block';
-                });
-
-                // Reset all submenus
-                document.querySelectorAll('.submenu').forEach(submenu => {
-                    submenu.style.maxHeight = '0';
-                    submenu.classList.remove('active');
-                });
-
-                // Remove top-level-open class
-                megaMenu.classList.remove('top-level-open');
-            }
-
-            // Back button functionality
-            backButtons.forEach(btn => {
-                btn.addEventListener('click', resetMobileMenu);
-            });
-
-            // Top level link clicks
-            topLevelLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const parentItem = this.closest('.top-level-item');
-                    const isActive = parentItem.classList.contains('top-level-active');
-                    const submenu = this.nextElementSibling;
-                    const categoryName = parentItem.getAttribute('data-category');
-                    const occasionEndpoint = parentItem.getAttribute('data-occasion-endpoint');
-
-                    if (isActive) {
-                        resetMobileMenu();
-                    } else {
-                        // Close any open menu first
-                        resetMobileMenu();
-
-                        // Open this menu
-                        parentItem.classList.add('top-level-active');
-                        megaMenu.classList.add('top-level-open');
-
-                        // Show back button
-                        const backBtn = parentItem.querySelector('.back-button');
-                        if (backBtn) {
-                            backBtn.style.display = 'block';
-                        }
-
-                        // Hide other top level items
-                        document.querySelectorAll('.top-level-item').forEach(item => {
-                            if (!item.classList.contains('top-level-active')) {
-                                item.style.display = 'none';
-                            }
-                        });
-
-                        // Load data based on endpoint type
-                        if (occasionEndpoint) {
-                            loadOccasionData(occasionEndpoint).then(data => {
-                                populateMobileOccasionSubmenus(parentItem, data);
-                            });
-                        }
-
-                        // Open submenu with animation
-                        if (submenu) {
-                            setTimeout(() => {
-                                submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                                submenu.classList.add('active');
-
-                                // Hide Occasion submenu for Wedding and Bridal
-                                if (categoryName && (categoryName.toLowerCase() === 'wedding' || categoryName.toLowerCase() === 'bridal')) {
-                                    const occasionToggle = submenu.querySelector('.submenu-toggle');
-                                    if (occasionToggle) {
-                                        const occasionText = occasionToggle.textContent.toLowerCase();
-                                        if (occasionText.includes('occasion')) {
-                                            occasionToggle.closest('.menu-item').style.display = 'none';
-                                        }
-                                    }
-                                }
-                            }, 10);
-                        }
+                    if (!item.classList.contains('top-level-active')) {
+                        item.style.display = 'none';
+                        uniqueMennuItems.style.display = 'none';
                     }
                 });
-            });
 
-            // Submenu toggle clicks
-            submenuToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                // Load data based on endpoint type
+                if (occasionEndpoint) {
+                    loadOccasionData(occasionEndpoint).then(data => {
+                        populateMobileOccasionSubmenus(parentItem, data);
+                    });
+                }
 
-                    const submenu = this.nextElementSibling;
-                    const isActive = this.classList.contains('active');
-
-                    // Close other submenus at same level
-                    const parentSubmenu = this.closest('.submenu');
-                    if (parentSubmenu) {
-                        parentSubmenu.querySelectorAll('.submenu-toggle.active').forEach(
-                            activeToggle => {
-                                if (activeToggle !== this) {
-                                    activeToggle.classList.remove('active');
-                                    const activeSubmenu = activeToggle.nextElementSibling;
-                                    if (activeSubmenu) {
-                                        activeSubmenu.style.maxHeight = '0';
-                                        activeSubmenu.classList.remove('active');
-                                    }
-                                }
-                            });
-                    }
-
-                    // Toggle current submenu
-                    if (isActive) {
-                        this.classList.remove('active');
-                        if (submenu) {
-                            submenu.style.maxHeight = '0';
-                            submenu.classList.remove('active');
-                        }
-                    } else {
-                        this.classList.add('active');
-                        if (submenu) {
+                // Open submenu with animation or show coming soon
+                if (submenu) {
+                    setTimeout(() => {
+                        // Check if submenu has actual children
+                        const hasMenuItems = submenu.querySelector('.menu-item:not(.coming-soon-message)');
+                        
+                        if (!hasMenuItems) {
+                            // Show coming soon message
+                            const comingSoon = document.createElement('div');
+                            comingSoon.className = 'coming-soon-message';
+                            comingSoon.style.cssText = `
+                                padding: 20px;
+                                text-align: center;
+                                color: #999;
+                                font-size: 16px;
+                                font-weight: 500;
+                                letter-spacing: 1px;
+                            `;
+                            comingSoon.textContent = 'Coming Soon';
+                            
+                            // Clear submenu and add coming soon
+                            submenu.innerHTML = '';
+                            submenu.appendChild(comingSoon);
+                            
+                            // Open submenu
+                            submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                            submenu.classList.add('active');
+                        } else {
+                            // Normal submenu with children
                             submenu.style.maxHeight = submenu.scrollHeight + 'px';
                             submenu.classList.add('active');
                         }
-                    }
-                });
-            });
-        }
+
+                        // Hide Occasion submenu for Wedding and Bridal
+                        if (categoryName && (categoryName.toLowerCase() === 'wedding' || categoryName.toLowerCase() === 'bridal')) {
+                            const occasionToggle = submenu.querySelector('.submenu-toggle');
+                            if (occasionToggle) {
+                                const occasionText = occasionToggle.textContent.toLowerCase();
+                                if (occasionText.includes('occasion')) {
+                                    occasionToggle.closest('.menu-item').style.display = 'none';
+                                }
+                            }
+                        }
+                    }, 10);
+                } else {
+                    // If no submenu exists, create one with coming soon
+                    const newSubmenu = document.createElement('div');
+                    newSubmenu.className = 'submenu';
+                    newSubmenu.style.cssText = `
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height 0.3s ease;
+                    `;
+                    
+                    const comingSoon = document.createElement('div');
+                    comingSoon.className = 'coming-soon-message';
+                    comingSoon.style.cssText = `
+                        padding: 20px;
+                        text-align: center;
+                        color: #999;
+                        font-size: 16px;
+                        font-weight: 500;
+                        letter-spacing: 1px;
+                    `;
+                    comingSoon.textContent = '🚧 Coming Soon';
+                    
+                    newSubmenu.appendChild(comingSoon);
+                    parentItem.appendChild(newSubmenu);
+                    
+                    // Open the submenu
+                    setTimeout(() => {
+                        newSubmenu.style.maxHeight = newSubmenu.scrollHeight + 'px';
+                        newSubmenu.classList.add('active');
+                    }, 10);
+                }
+            }
+        });
+    });
+
+    // Submenu toggle clicks
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            const submenu = this.nextElementSibling;
+            const isActive = this.classList.contains('active');
+
+            // Check if submenu has children or coming soon message
+            const hasContent = submenu && (submenu.querySelector('.menu-item') || submenu.querySelector('.coming-soon-message'));
+
+            if (!hasContent) {
+                // Show coming soon for empty submenus
+                if (submenu) {
+                    const comingSoon = document.createElement('div');
+                    comingSoon.className = 'coming-soon-message';
+                    comingSoon.style.cssText = `
+                        padding: 15px;
+                        text-align: center;
+                        color: #999;
+                        font-size: 14px;
+                        font-weight: 500;
+                    `;
+                    comingSoon.textContent = 'Coming Soon';
+                    submenu.appendChild(comingSoon);
+                }
+            }
+
+            // Close other submenus at same level
+            const parentSubmenu = this.closest('.submenu');
+            if (parentSubmenu) {
+                parentSubmenu.querySelectorAll('.submenu-toggle.active').forEach(
+                    activeToggle => {
+                        if (activeToggle !== this) {
+                            activeToggle.classList.remove('active');
+                            const activeSubmenu = activeToggle.nextElementSibling;
+                            if (activeSubmenu) {
+                                activeSubmenu.style.maxHeight = '0';
+                                activeSubmenu.classList.remove('active');
+                            }
+                        }
+                    });
+            }
+
+            // Toggle current submenu
+            if (isActive) {
+                this.classList.remove('active');
+                if (submenu) {
+                    submenu.style.maxHeight = '0';
+                    submenu.classList.remove('active');
+                }
+            } else {
+                this.classList.add('active');
+                if (submenu) {
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    submenu.classList.add('active');
+                }
+            }
+        });
+    });
+}
 
         // ==================== MOBILE SIDEBAR ====================
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
