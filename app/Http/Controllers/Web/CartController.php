@@ -132,6 +132,69 @@ class CartController extends Controller
         }
     }
 
+    public function buyNow(Request $request)
+    {
+        try {
+            $request->validate([
+                'variant_id' => 'nullable|exists:product_variants,id',
+                'product_id' => 'nullable|exists:products,id',
+                'count' => 'required|integer|min:1',
+                'type' => 'nullable|string',
+                'custom_dimensions' => 'nullable|array',
+            ]);
+
+            $variant = null;
+            if ($request->filled('variant_id')) {
+                $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
+            } elseif ($request->filled('product_id')) {
+                $variant = ProductVariant::with('product')->where('product_id', $request->product_id)->first();
+            }
+
+            if (!$variant) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please select a valid variant first.'
+                ], 422);
+            }
+
+            if ($variant->stock < $request->count) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Not enough stock available. Only ' . $variant->stock . ' items left.'
+                ], 422);
+            }
+
+            session()->put('checkout_source', 'buy_now');
+            session()->put('checkout_payload', [
+                'items' => [[
+                    'cart_id' => 0,
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'name' => $variant->product->name,
+                    'size' => $variant->size,
+                    'color' => $variant->color,
+                    'price' => $variant->discount_price ?? $variant->price,
+                    'discount' => $variant->discount ?? 0,
+                    'discount_price' => $variant->discount_price ?? $variant->price,
+                    'count' => $request->count,
+                    'type' => $request->input('type', 'stitched'),
+                    'custom_dimensions' => $request->input('custom_dimensions'),
+                    'image' => optional($variant->product)->featured_image,
+                ]]
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'redirect' => route('checkout.index')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     // public function update(Request $request, $id)
     // {
     //     try {

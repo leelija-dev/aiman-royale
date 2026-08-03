@@ -32,24 +32,28 @@ class CheckoutController extends Controller
     public function index()
     {
         $user_id = auth()->id();
+        $checkoutSource = session('checkout_source', 'cart');
 
-
-        $carts = DB::table('carts')
-            ->join('products', 'carts.product_id', '=', 'products.id')
-            ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
-            ->leftJoin('product_images', function ($join) {
-                $join->on('carts.product_id', '=', 'product_images.product_id')
-                    ->whereRaw('product_images.id = (SELECT MIN(id) FROM product_images WHERE product_id = carts.product_id)');
-            })
-            ->where('user_id', $user_id)
-            ->select(
-                'carts.id as cart_id',
-                'carts.*',
-                'products.name',
-                'product_variants.*',
-                'product_images.image'
-            )
-            ->get();
+        if ($checkoutSource === 'buy_now') {
+            $carts = $this->getBuyNowItems();
+        } else {
+            $carts = DB::table('carts')
+                ->join('products', 'carts.product_id', '=', 'products.id')
+                ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
+                ->leftJoin('product_images', function ($join) {
+                    $join->on('carts.product_id', '=', 'product_images.product_id')
+                        ->whereRaw('product_images.id = (SELECT MIN(id) FROM product_images WHERE product_id = carts.product_id)');
+                })
+                ->where('user_id', $user_id)
+                ->select(
+                    'carts.id as cart_id',
+                    'carts.*',
+                    'products.name',
+                    'product_variants.*',
+                    'product_images.image'
+                )
+                ->get();
+        }
 
 
         $occasions = \App\Models\Occasion::active()->get();
@@ -150,19 +154,24 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Get cart items
-        $carts = DB::table('carts')
-            ->join('products', 'carts.product_id', '=', 'products.id')
-            ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
-            ->where('user_id', $user_id)
-            ->select(
-                'carts.*',
-                'products.name',
-                'product_variants.price as variant_price',
-                'product_variants.discount as discount',
-                'product_variants.discount_price'
-            )
-            ->get();
+        $checkoutSource = session('checkout_source', 'cart');
+
+        if ($checkoutSource === 'buy_now') {
+            $carts = $this->getBuyNowItems();
+        } else {
+            $carts = DB::table('carts')
+                ->join('products', 'carts.product_id', '=', 'products.id')
+                ->join('product_variants', 'carts.variant_id', '=', 'product_variants.id')
+                ->where('user_id', $user_id)
+                ->select(
+                    'carts.*',
+                    'products.name',
+                    'product_variants.price as variant_price',
+                    'product_variants.discount as discount',
+                    'product_variants.discount_price'
+                )
+                ->get();
+        }
 
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
@@ -259,8 +268,11 @@ class CheckoutController extends Controller
             ];
         }
 
-        // Clear cart after order placement
-        DB::table('carts')->where('user_id', $user_id)->delete();
+        if ($checkoutSource === 'buy_now') {
+            session()->forget(['checkout_payload', 'checkout_source']);
+        } else {
+            DB::table('carts')->where('user_id', $user_id)->delete();
+        }
 
         // For COD orders, create Delhivery shipment immediately
         if ($paymentMethod === 'cod') {
@@ -336,6 +348,36 @@ class CheckoutController extends Controller
         // For online payment, redirect to payment
         return redirect()->route('checkout.payment');
     }
+    private function getBuyNowItems()
+    {
+        $payload = session('checkout_payload');
+        $items = $payload['items'] ?? [];
+
+        if (empty($items)) {
+            return collect();
+        }
+
+        return collect($items)->map(function ($item) {
+            return (object) [
+                'cart_id' => $item['cart_id'] ?? 0,
+                'id' => $item['cart_id'] ?? 0,
+                'product_id' => $item['product_id'],
+                'variant_id' => $item['variant_id'],
+                'count' => $item['count'] ?? 1,
+                'price' => $item['price'] ?? 0,
+                'variant_price' => $item['price'] ?? 0,
+                'discount' => $item['discount'] ?? 0,
+                'discount_price' => $item['discount_price'] ?? ($item['price'] ?? 0),
+                'name' => $item['name'],
+                'size' => $item['size'] ?? null,
+                'color' => $item['color'] ?? null,
+                'image' => $item['image'] ?? null,
+                'type' => $item['type'] ?? null,
+                'custom_dimensions' => $item['custom_dimensions'] ?? null,
+            ];
+        });
+    }
+
     /**
      * Create Delhivery shipment helper method
      */
