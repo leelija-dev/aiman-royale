@@ -173,7 +173,7 @@ class CartController extends Controller
                     'name' => $variant->product->name,
                     'size' => $variant->size,
                     'color' => $variant->color,
-                    'price' => $variant->discount_price ?? $variant->price,
+                    'price' => $variant->price ?? $variant->price,
                     'discount' => $variant->discount ?? 0,
                     'discount_price' => $variant->discount_price ?? $variant->price,
                     'count' => $request->count,

@@ -5,7 +5,6 @@
 @section('title')
 {{ config('app.name') }} - Pickup Requests
 @endsection
-
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
@@ -37,8 +36,10 @@
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Waybill Number</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order ID</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Design No</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created Date</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pickup Requested</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Show</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
@@ -61,10 +62,32 @@
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">{{ $order->order_id }}</h6>
+                                            <h6 class="mb-0 text-sm">{{ $order->id }}</h6>
                                         </div>
                                     </div>
                                 </td>
+
+                                <td>
+    <div class="d-flex align-items-center px-2 py-1">
+        <div class="d-flex flex-column justify-content-center">
+            @php
+                $productNames = $order->orderProducts->map(function($op) {
+                    return ($op->product->design_no ?? 'Product') . ' x' . $op->quantity;
+                })->implode(', ');
+            @endphp
+            
+            <span class="text-sm text-gray-800">
+                {{ $productNames ?: 'No products' }}
+            </span>
+            
+            @if($order->orderProducts->count() > 3)
+                <span class="text-xs text-gray-400">
+                    + {{ $order->orderProducts->count() - 3 }} more
+                </span>
+            @endif
+        </div>
+    </div>
+</td>
                                 <td>
                                     <div class="d-flex align-items-center px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
@@ -77,6 +100,10 @@
                                         {{ $order->pick_up_request_added ? 'Requested' : 'Pending' }}
                                     </span>
                                 </td>
+                                <td >
+                                    <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-info" title="View Order">
+                                <i class="fas fa-eye"></i>
+                            </a>
                                 <td class="align-middle text-center">
                                     @if(!$order->pick_up_request_added)
                                     <button type="button" class="btn btn-sm btn-primary" onclick="showSinglePickupModal('{{ $order->waybill_number }}', {{ $order->id }})">

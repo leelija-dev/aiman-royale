@@ -49,13 +49,13 @@ $isEmailActive = false;
                     <span class="nav-link-text ms-1">Store</span>
                 </a>
             </li>
-             <li class="nav-item ">
+            <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('coupon.*') ? 'active' : '' }}" href="{{ route('coupon.index') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
-                   
+
                     <span class="nav-link-text ms-1">Coupon</span>
                 </a>
             </li>
@@ -65,7 +65,7 @@ $isEmailActive = false;
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-tags"></i>
                     </div>
-                   
+
                     <span class="nav-link-text ms-1">Offer</span>
                 </a>
             </li>
@@ -437,64 +437,74 @@ $isEmailActive = false;
 
     <!-- Add this section in your sidebar after the Orders section -->
 
-<!-- Delhivery Section -->
-@php
-$isDelhiveryActive = request()->routeIs('pickup.*', 'delhivery.*');
-$isPickupActive = request()->routeIs('pickup.index');
-$isPickupHistoryActive = request()->routeIs('pickup.history');
-$isManifestActive = request()->routeIs('delhivery.manifest.*');
-$isTrackingActive = request()->routeIs('delhivery.tracking.*');
-@endphp
+    <!-- Delhivery Section -->
+    @php
+    $isDelhiveryActive = request()->routeIs('pickup.*', 'delhivery.*', 'return-orders.index', 'shipping-label.index');
+    $isPickupActive = request()->routeIs('pickup.index');
+    $isReturnOrdersActive = request()->routeIs('return-orders.index');
+    $isShippingLabelActive = request()->routeIs('shipping-label.index');
+    $isPickupHistoryActive = request()->routeIs('pickup.history');
+    $isManifestActive = request()->routeIs('delhivery.manifest.*');
+    $isTrackingActive = request()->routeIs('delhivery.tracking.*');
+    @endphp
 
-<li class="nav-item mt-3">
-    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Delhivery</h6>
-</li>
+    <li class="nav-item mt-3">
+        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Delhivery</h6>
+    </li>
 
-<li class="nav-item has-submenu">
-    <a class="nav-link submenu-toggle {{ $isDelhiveryActive ? 'active' : '' }}"
-       href="#"
-       data-bs-toggle="collapse"
-       data-bs-target="#delhivery-menu"
-       aria-expanded="{{ $isDelhiveryActive ? 'true' : 'false' }}"
-       aria-controls="delhivery-menu">
-        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-truck"></i>
-        </div>
-        <span class="nav-link-text ms-1">Delhivery</span>
-    </a>
-    <div id="delhivery-menu"
-         class="collapse submenu {{ $isDelhiveryActive ? 'show' : '' }}"
-         data-bs-parent="#menu-accordion">
-        <ul class="submenu-list list-unstyled">
-            <li class="submenu-item">
-                <a class="submenu-link {{ $isPickupActive ? 'active' : '' }}"
-                   href="{{ route('pickup.index') }}">
-                    <i class="fas fa-box-open me-1"></i> Pickup Requests
-                </a>
-            </li>
-            {{--
-            <li class="submenu-item">
-                <a class="submenu-link {{ $isPickupHistoryActive ? 'active' : '' }}"
-                   href="{{ route('pickup.history') }}">
-                    <i class="fas fa-history me-1"></i> Pickup History
-                </a>
-            </li>
+    <li class="nav-item has-submenu">
+        <a class="nav-link submenu-toggle {{ $isDelhiveryActive ? 'active' : '' }}"
+            href="#"
+            data-bs-toggle="collapse"
+            data-bs-target="#delhivery-menu"
+            aria-expanded="{{ $isDelhiveryActive ? 'true' : 'false' }}"
+            aria-controls="delhivery-menu">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-truck"></i>
+            </div>
+            <span class="nav-link-text ms-1">Delhivery</span>
+        </a>
+        <div id="delhivery-menu"
+            class="collapse submenu {{ $isDelhiveryActive ? 'show' : '' }}"
+            data-bs-parent="#menu-accordion">
+            <ul class="submenu-list list-unstyled">
+                <li class="submenu-item">
+                    <a class="submenu-link {{ $isPickupActive ? 'active' : '' }}"
+                        href="{{ route('pickup.index') }}">
+                        <i class="fas fa-box-open me-1"></i> Pickup Requests
+                    </a>
+                </li>
+
+                <li class="submenu-item">
+                    <a class="submenu-link {{ $isReturnOrdersActive ? 'active' : '' }}"
+                        href="{{ route('return-orders.index') }}">
+                        <i class="fas fa-history me-1"></i> Return Request
+                    </a>
+                </li>
+
+                <li class="submenu-item">
+                    <a class="submenu-link {{ $isShippingLabelActive ? 'active' : '' }}"
+                        href="{{ route('shipping-label.index') }}">
+                        <i class="fas fa-truck me-1"></i> Shipping Label
+                    </a>
+                </li>
+                {{--
             <li class="submenu-item">
                 <a class="submenu-link {{ $isManifestActive ? 'active' : '' }}"
-                   href="{{ route('delhivery.manifest.index') }}">
-                    <i class="fas fa-file-alt me-1"></i> Manifest
+                href="{{ route('delhivery.manifest.index') }}">
+                <i class="fas fa-file-alt me-1"></i> Manifest
                 </a>
-            </li>
-            <li class="submenu-item">
-                <a class="submenu-link {{ $isTrackingActive ? 'active' : '' }}"
-                   href="{{ route('delhivery.tracking.index') }}">
-                    <i class="fas fa-search me-1"></i> Track Shipments
-                </a>
-            </li>
-            --}}
-        </ul>
+    </li>
+    <li class="submenu-item">
+        <a class="submenu-link {{ $isTrackingActive ? 'active' : '' }}"
+            href="{{ route('delhivery.tracking.index') }}">
+            <i class="fas fa-search me-1"></i> Track Shipments
+        </a>
+    </li>
+    --}}
+    </ul>
     </div>
-</li>
+    </li>
 
     {{-- SEO Management --}}
     @php
