@@ -1,5 +1,4 @@
 @extends('layout.web.main-layout')
-
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50">
     <div class="container mx-auto">
@@ -9,6 +8,18 @@
                 <nav class="text-sm text-gray-500 mb-6">
                     Cart > Shipping > Payment
                 </nav>
+               @php
+    $isBuyNow = session()->has('checkout_source') && 
+                session()->get('checkout_source') === 'buy_now';
+@endphp
+
+@if($isBuyNow)
+    <button type="button" class="btn btn-primary" 
+        onclick="clearBuyNowAndRedirect()"
+        id="back-to-product-btn">
+        <i class="fas fa-arrow-left"></i> Back to product
+    </button>
+@endif
                 <h1 class="text-2xl font-semibold mb-8">Shipping Address</h1>
                 {{-- @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
@@ -990,5 +1001,39 @@ msg.innerHTML = "Something went wrong.";
             box.classList.add("opacity-0", "invisible");
         }
     }
+</script>
+
+<script>
+function clearBuyNowAndRedirect() {
+    const btn = document.getElementById('back-to-product-btn');
+    if (btn) {
+        // Show loading state
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+    }
+    
+    // Clear session and redirect
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    
+    fetch('{{ route("clear.buynow.session") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken || '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Session cleared:', data);
+        // Redirect to product page
+        window.location.href = '{{ route("page.multi-product") }}';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Redirect anyway
+        window.location.href = '{{ route("page.multi-product") }}';
+    });
+}
 </script>
 @endsection

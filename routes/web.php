@@ -260,3 +260,10 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
+
+// web.php
+Route::post('/clear-buynow-session', [CheckoutController::class, 'clearBuyNowSession'])
+    ->name('clear.buynow.session');
+    
+Route::get('/check-buynow-session', [CheckoutController::class, 'checkBuyNowSession'])
+    ->name('check.buynow.session');

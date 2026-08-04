@@ -36,6 +36,7 @@ class CheckoutController extends Controller
 
         if ($checkoutSource === 'buy_now') {
             $carts = $this->getBuyNowItems();
+            // dd($carts);
         } else {
             $carts = DB::table('carts')
                 ->join('products', 'carts.product_id', '=', 'products.id')
@@ -1219,4 +1220,36 @@ class CheckoutController extends Controller
             return false;
         }
     }
+
+    public function clearBuyNowSession(Request $request)
+{
+    try {
+        // Clear all buy now related session data
+        session()->forget([
+            'checkout_source',
+            'checkout_payload',
+            'buy_now_active',
+            'buy_now_product_id'
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Buy now session cleared'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
+public function checkBuyNowSession(Request $request)
+{
+    return response()->json([
+        'is_buy_now' => session()->has('checkout_source') && 
+                       session()->get('checkout_source') === 'buy_now',
+        'has_payload' => session()->has('checkout_payload')
+    ]);
+}
 }

@@ -464,7 +464,9 @@
                                <!-- Order Actions -->
 
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                                   @php $hasActiveReturn = isset($ord->active_return_requests_count) && $ord->active_return_requests_count > 0; @endphp
+                                   @php $hasActiveReturn = isset($ord->active_return_requests_count) && $ord->active_return_requests_count > 0;
+                                    $hasPickupRequest = isset($ord->pick_up_request_added) && $ord->pick_up_request_added == 1;
+                                     @endphp
                                    @if($ord->order_status == 'delivered' && !$hasActiveReturn)
                                     <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
                                        onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
@@ -474,7 +476,7 @@
                                    <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
                                        <i class="fas fa-undo mr-2"></i>Return Requested
                                    </button>
-                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']))
+                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid'])  && !$hasPickupRequest)
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
                                        onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order

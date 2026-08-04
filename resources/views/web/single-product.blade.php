@@ -2999,6 +2999,11 @@
                     addToCartBtn.setAttribute('data-variant-id', defaultVariant.id);
                 }
 
+                const buyNowBtn = document.getElementById('buy-now');
+        if (buyNowBtn) {
+            buyNowBtn.setAttribute('data-variant-id', defaultVariant.id);
+        }
+
                 checkVariantInCart(defaultVariant.id);
             }
         }
@@ -3034,6 +3039,11 @@
                 if (addToCartBtn) {
                     addToCartBtn.setAttribute('data-variant-id', selectedVariant.id);
                 }
+
+                 const buyNowBtn = document.getElementById('buy-now');
+        if (buyNowBtn) {
+            buyNowBtn.setAttribute('data-variant-id', selectedVariant.id);
+        }
 
                 // Check if variant is in cart
                 checkVariantInCart(selectedVariant.id);
@@ -3285,6 +3295,11 @@
                     addToCartBtn.setAttribute('data-variant-id', newVariant.id);
                 }
 
+                const buyNowBtn = document.getElementById('buy-now');
+                if (buyNowBtn) {
+                    buyNowBtn.setAttribute('data-variant-id', newVariant.id);
+                }
+
                 checkVariantInCart(newVariant.id);
             }
 
@@ -3452,6 +3467,11 @@
                 addToCartBtn.setAttribute('data-variant-id', variantId);
             }
 
+            const buyNowBtn = document.getElementById('buy-now');
+            if (buyNowBtn) {
+                buyNowBtn.setAttribute('data-variant-id', variantId);
+            }
+
             if (customDimensions) {
                 customDimensions = null;
                 selectedCustomColor = null;
@@ -3613,10 +3633,17 @@
             if (!buyNowBtn) return;
 
             const variantId = buyNowBtn.getAttribute('data-variant-id');
+
+            if (!variantId && typeof selectedVariantId !== 'undefined') {
+                variantId = selectedVariantId;
+            }
             if (!variantId) {
                 alert('Please select a size and color');
                 return;
             }
+
+            
+
 
             const requestData = {
                 variant_id: variantId,
@@ -3698,6 +3725,9 @@
             } else {
                 const variantId = addToCartBtn.getAttribute('data-variant-id');
 
+                if (!variantId && typeof selectedVariantId !== 'undefined') {
+                    variantId = selectedVariantId;
+                }
                 if (!variantId) {
                     alert('Please select a size and color');
                     return;
