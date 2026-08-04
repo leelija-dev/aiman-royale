@@ -1,7 +1,6 @@
 @extends('Admin.layouts.master')
 
 @section('title', 'Order Details - #' . $order->id)
-
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -9,6 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Order Details #{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</h3>
+                    {{--
                     <div class="card-tools">
                         <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-default">
                             <i class="fas fa-arrow-left"></i> Back to Orders
@@ -17,6 +17,25 @@
                             <i class="fas fa-print"></i> Print
                         </button>
                     </div>
+                    --}}
+                    <div class="card-tools">
+    <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-default">
+        <i class="fas fa-arrow-left"></i> Back to Orders
+    </a>
+    <button type="button" class="btn btn-sm btn-primary" onclick="window.print()">
+        <i class="fas fa-print"></i> Print
+    </button>
+    <!-- 🔥 NEW: Invoice Button -->
+    <a href="{{ route('admin.orders.invoice', $order->id) }}" 
+       class="btn btn-sm btn-success" 
+       target="_blank">
+        <i class="fas fa-file-invoice"></i> View Invoice
+    </a>
+    <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
+       class="btn btn-sm btn-info">
+        <i class="fas fa-download"></i> Download Invoice
+    </a>
+</div>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -142,6 +161,8 @@
                                             <th>Variant</th>
                                             <th>Quantity</th>
                                             <th>Price</th>
+                                            <th>Applied Coupon</th>
+                                            <th>Coupon Discount</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
@@ -184,6 +205,9 @@
 </td>
                                                 <td>{{ $orderProduct->quantity }}</td>
                                                 <td>{{ config('app.currency') }}{{ number_format($orderProduct->price, 2) }}</td>
+                                                
+                                                <td>{{ $orderProduct->coupon_code ?? 'N/A' }}</td>
+                                                <td><strong>{{ config('app.currency') }}{{ number_format($orderProduct->coupon_discount_amount, 2) }}</strong></td>
                                                 <td><strong>{{ config('app.currency') }}{{ number_format($orderProduct->total, 2) }}</strong></td>
                                             </tr>
                                         @endforeach

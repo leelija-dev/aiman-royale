@@ -9,6 +9,8 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class OrderManagementController extends Controller
 {
@@ -190,5 +192,36 @@ class OrderManagementController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    public function viewInvoice($id)
+    {
+        $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+        return view('Admin.orders.invoice', compact('order'));
+    }
+
+    /**
+     * Download Invoice as PDF
+     */
+    public function downloadInvoice($id)
+{
+    $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+    
+    $pdf = SnappyPdf::loadView('Admin.orders.invoice', compact('order'));
+    return $pdf->download('invoice-' . str_pad($order->id, 6, '0', STR_PAD_LEFT) . '.pdf');
+}
+
+    /**
+     * Alternative: Download Invoice with custom filename
+     */
+    public function downloadInvoiceWithName($id)
+    {
+        $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+
+        $pdf = SnappyPdf::loadView('Admin.orders.invoice', compact('order'));
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'invoice-' . str_pad($order->id, 6, '0', STR_PAD_LEFT) . '-' . date('Y-m-d') . '.pdf';
+        return $pdf->download($filename);
     }
 }
