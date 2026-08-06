@@ -62,15 +62,18 @@
                         <span class="inline-block px-4 py-1.5 bg-secondary-light/30 text-secondary text-xs font-semibold tracking-wider rounded-full border border-secondary/20">Our Philosophy</span>
                     </div>
                     <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-stone-800 mb-6 leading-tight">
-                        Crafting <span class="text-secondary">Excellence</span><br>
-                        Since A Decade
+                        Setback <span class="text-secondary">doesn’t mean</span><br>
+                         failure
                     </h2>
                     <div class="w-16 h-0.5 bg-gradient-to-r from-secondary to-secondary-light mb-6"></div>
                     <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-4">
-                        Founded in 2012, Aiman Royale emerged from a passionate vision to bridge the gap between traditional craftsmanship and contemporary luxury. What started as a small atelier in the heart of Mumbai has now blossomed into a celebrated fashion house.
+                       Every business has a story, and we are no exception. We started our company under the umbrella of <strong>Moni Designer Wear private limited</strong> that established on 25th July 2017. Our mission was to create art that could reflect when people wore it. As COVID-19 hit, just like many businesses, our manufacturing unit, supply chain, and customer commitment suffered a major hit. Rather than quitting, we chose to rebuild. 
                     </p>
                     <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-6">
-                        Every creation tells a story — of meticulous hand-embroidery, of fabric sourced from the finest mills, and of a relentless pursuit of perfection. Our designs don't just follow trends; they set benchmarks for elegance.
+                        In <strong>2023</strong>, we had our breakthrough. By updating our design collection and customer commitment, we rebuilt our entire line of operations and started from scratch. Since then, Aiman Royal has been designing premium clothing that gives women confidence to walk in any occasion, feeling like a star.
+                    </p>
+                    <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-6">
+                        Now we have a strong manufacturing unit that is distributed across Kolkata, Kashmir, and Delhi. All these units have skilled workers who redefine royalty and sophistication, and that's why we can ship our standout products pan-India. From shutdown to rebuilding again, Aiman Royal is the definition of what happens when you don't give up. Our resilience and commitment to excellence will continue in future years, and we hope that we will have your support.
                     </p>
                     <div class="flex flex-wrap gap-6 mt-8">
                         <div class="flex items-center gap-3">
@@ -104,24 +107,53 @@
                 </div>
                 
                 <!-- Right Side - Image Grid -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-4">
-                        <div class="rounded-2xl overflow-hidden shadow-xl group">
-                            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600" alt="Fashion Design" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="rounded-2xl overflow-hidden shadow-xl group">
-                            <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600" alt="Fabric Selection" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                    </div>
-                    <div class="space-y-4 pt-8">
-                        <div class="rounded-2xl overflow-hidden shadow-xl group">
-                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600" alt="Boutique" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="rounded-2xl overflow-hidden shadow-xl group">
-                            <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=600" alt="Design Process" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                    </div>
-                </div>
+                <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+    <!-- Left Column -->
+    <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
+
+        <div class="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+            <img
+                src="{{ asset('images/about-us/DSC_1624.webp') }}"
+                alt="Fashion Design"
+                loading="lazy"
+                decoding="async"
+                class="w-full aspect-[4/5] object-cover object-top transition-transform duration-500 group-hover:scale-105">
+        </div>
+
+        <div class="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+            <img
+                src="{{ asset('images/about-us/DSC_1682.webp') }}"
+                alt="Fabric Selection"
+                loading="lazy"
+                decoding="async"
+                class="w-full aspect-[4/3] object-cover object-top transition-transform duration-500 group-hover:scale-105">
+        </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6 pt-8 lg:pt-12">
+
+        <div class="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+            <img
+                src="{{ asset('images/about-us/DSC_1779.webp') }}"
+                alt="Boutique"
+                loading="lazy"
+                decoding="async"
+                class="w-full aspect-[4/3] object-cover object-top transition-transform duration-500 group-hover:scale-105">
+        </div>
+
+        <div class="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+            <img
+                src="{{ asset('images/about-us/DSC08165 copy.webp') }}"
+                alt="Design Process"
+                loading="lazy"
+                decoding="async"
+                class="w-full aspect-[4/5] object-cover object-top transition-transform duration-500 group-hover:scale-105">
+        </div>
+
+    </div>
+</div>
             </div>
         </div>
     </div>
@@ -132,10 +164,10 @@
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="inline-block px-4 py-1.5 bg-white text-secondary text-xs font-semibold tracking-wider rounded-full border border-secondary/20 shadow-sm">Core Values</span>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-stone-800 mt-5 mb-4">
-                    The <span class="text-secondary">Pillars</span> of Our Promise
+                    Art <span class="text-secondary">is what </span>we produce
                 </h2>
                 <div class="w-20 h-0.5 bg-gradient-to-r from-secondary via-secondary-light to-secondary mx-auto"></div>
-                <p class="text-stone-600 mt-5 text-lg">What guides every decision, every stitch, and every smile at Aiman Royale.</p>
+                <p class="text-stone-600 mt-5 text-lg">Why every purchase is trustworthy</p>
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -144,8 +176,8 @@
                     <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary-light/30 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-xl">
                         <i class="fas fa-gem text-4xl text-secondary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-3">Authenticity</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed">100% genuine materials sourced ethically. Every piece carries a certificate of authenticity.</p>
+                    <h3 class="text-xl font-bold text-stone-800 mb-3">Transparency</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">What you see on the website is exactly what you get delivered. There are no hidden costs</p>
                 </div>
                 
                 <!-- Value 2 -->
@@ -153,8 +185,8 @@
                     <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary-light/30 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-xl">
                         <i class="fas fa-hand-sparkles text-4xl text-secondary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-3">Artisanship</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed">Master craftsmen with decades of experience. Hand-finished details in every creation.</p>
+                    <h3 class="text-xl font-bold text-stone-800 mb-3">Special features</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">Fashion consultation and Bridal styling are built so that you can trust what you are buying </p>
                 </div>
                 
                 <!-- Value 3 -->
@@ -162,8 +194,8 @@
                     <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary-light/30 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-xl">
                         <i class="fas fa-leaf text-4xl text-secondary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-3">Sustainability</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed">Eco-conscious practices, zero-waste cutting, and biodegradable packaging.</p>
+                    <h3 class="text-xl font-bold text-stone-800 mb-3">Elite Fabric</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">Every statement piece that is made at our manufacturing unit defines royalty</p>
                 </div>
                 
                 <!-- Value 4 -->
@@ -171,8 +203,8 @@
                     <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary-light/30 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-xl">
                         <i class="fas fa-concierge-bell text-4xl text-secondary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-3">Excellence</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed">White-glove service, from personalized styling to after-sales care.</p>
+                    <h3 class="text-xl font-bold text-stone-800 mb-3">Mother Nature</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">We care for the environment as our mother; hence, we use sustainable materials and waste reduction programs</p>
                 </div>
             </div>
         </div>
@@ -199,9 +231,9 @@
                     <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-12">
                         <div class="lg:w-1/2 lg:text-right">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary hover:shadow-xl transition-all duration-300">
-                                <span class="text-3xl font-bold text-secondary">2012</span>
+                                <span class="text-3xl font-bold text-secondary">2017</span>
                                 <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">The Humble Beginning</h3>
-                                <p class="text-stone-600 text-sm">Aiman Royale opens its first atelier in Mumbai with just 5 artisans and a dream to redefine ethnic luxury.</p>
+                                <p class="text-stone-600 text-sm">We started as a fashion brand with one goal: how art looks when you wear it</p>
                             </div>
                         </div>
                         <div class="lg:w-12 flex justify-center">
@@ -222,9 +254,9 @@
                         </div>
                         <div class="lg:w-1/2">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-r-4 border-secondary-light hover:shadow-xl transition-all duration-300">
-                                <span class="text-3xl font-bold text-secondary">2015</span>
+                                <span class="text-3xl font-bold text-secondary">2018</span>
                                 <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">First Major Award</h3>
-                                <p class="text-stone-600 text-sm">Recipient of the "Emerging Designer of the Year" at India Fashion Week, putting Aiman Royale on the national map.</p>
+                                <p class="text-stone-600 text-sm">We were building our business and slowly structuring our client base</p>
                             </div>
                         </div>
                     </div>
@@ -233,9 +265,9 @@
                     <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-12">
                         <div class="lg:w-1/2 lg:text-right">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary hover:shadow-xl transition-all duration-300">
-                                <span class="text-3xl font-bold text-secondary">2018</span>
+                                <span class="text-3xl font-bold text-secondary">2019-2023</span>
                                 <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Flagship Boutique Launch</h3>
-                                <p class="text-stone-600 text-sm">Opened our flagship store in Mumbai's luxury district, featuring exclusive bridal and couture collections.</p>
+                                <p class="text-stone-600 text-sm">COVID hit us, and our business struggled. The manufacturing and distribution unit stopped.</p>
                             </div>
                         </div>
                         <div class="lg:w-12 flex justify-center">
@@ -256,9 +288,9 @@
                         </div>
                         <div class="lg:w-1/2">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-r-4 border-secondary-light hover:shadow-xl transition-all duration-300">
-                                <span class="text-3xl font-bold text-secondary">2021</span>
+                                <span class="text-3xl font-bold text-secondary">2024-2026</span>
                                 <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Global Expansion</h3>
-                                <p class="text-stone-600 text-sm">Launched international shipping, reaching fashion enthusiasts across 15+ countries worldwide.</p>
+                                <p class="text-stone-600 text-sm">Our hard work and resilience made us grow even more. During the time we struggled, we reflected on areas that needed improvement, and we were booming again.</p>
                             </div>
                         </div>
                     </div>
