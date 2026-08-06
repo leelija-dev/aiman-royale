@@ -3,11 +3,14 @@
 <div class="item flex justify-center items-center">
     <a href="/products/{{ $product->slug ?? $product['slug'] ?? '' }}" class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200 product-card">
         <!-- Image Wrapper -->
-        <div class="relative overflow-hidden bg-gray-100">
+        <div class="relative overflow-hidden bg-gray-100" style="aspect-ratio: 9/13;">
             @php
             // Handle different image structures for both object and array
             $imageUrl = null;
             $hasImage = false;
+            // Maintain 9:13 ratio - width 9, height 13
+            $imageWidth = 360;  // 9 * 40
+            $imageHeight = 520; // 13 * 40
 
             // Get product name (works for both object and array)
             $productName = is_object($product) ? ($product->name ?? 'Product') : ($product['name'] ?? 'Product');
@@ -25,13 +28,13 @@
                     // If it's an array of objects/arrays
                     $firstImage = $images[0] ?? null;
                     if ($firstImage && is_object($firstImage) && !empty($firstImage->image)) {
-                        $imageUrl = asset($firstImage->image);
+                        $imageUrl = $firstImage->image;
                         $hasImage = true;
                     } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
-                        $imageUrl = asset($firstImage['image']);
+                        $imageUrl = $firstImage['image'];
                         $hasImage = true;
                     } elseif (is_string($firstImage)) {
-                        $imageUrl = asset($firstImage);
+                        $imageUrl = $firstImage;
                         $hasImage = true;
                     }
                 } elseif (is_string($images)) {
@@ -40,10 +43,10 @@
                     if (is_array($decodedImages) && !empty($decodedImages)) {
                         $firstImage = $decodedImages[0];
                         if (is_array($firstImage) && !empty($firstImage['image'])) {
-                            $imageUrl = asset($firstImage['image']);
+                            $imageUrl = $firstImage['image'];
                             $hasImage = true;
                         } elseif (is_string($firstImage)) {
-                            $imageUrl = asset($firstImage);
+                            $imageUrl = $firstImage;
                             $hasImage = true;
                         }
                     }
@@ -59,10 +62,19 @@
                 }
             }
 
-            // Add Cloudinary optimization if applicable
-            if ($hasImage && $imageUrl && strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                $parts = explode('upload/', $imageUrl);
-                $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+            // Generate optimized Cloudinary URL with proper 9:13 ratio transformations
+            if ($hasImage && $imageUrl) {
+                if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
+                    $parts = explode('upload/', $imageUrl);
+                    // Use 9:13 ratio with proper cropping
+                    $imageUrl = $parts[0] . 'upload/w_' . $imageWidth . ',h_' . $imageHeight . ',c_fill,f_auto,q_auto:good,dpr_auto,e_blur:200/' . $parts[1];
+                    
+                    // Generate tiny placeholder (blur-up) for lazy loading - maintain 9:13 ratio
+                    $tinyUrl = $parts[0] . 'upload/w_27,h_39,c_fill,f_auto,q_1,e_blur:1000/' . $parts[1];
+                } else {
+                    // For non-Cloudinary images, add width parameters if possible
+                    $imageUrl = asset($imageUrl);
+                }
             }
 
             // Get product data (works for both object and array)
@@ -98,18 +110,47 @@
             @endphp
 
             @if($hasImage && $imageUrl)
-            <img
-                src="{{ $imageUrl }}"
-                alt="{{ $productName }}"
-                class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-                decoding="async"
-                width="600"
-                height="900"
-                onerror="this.parentElement.innerHTML = this.parentElement.innerHTML.replace(this.outerHTML, '<div class=\'w-full aspect-[9/13] flex flex-col items-center justify-center bg-gray-100\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\' /></svg><span class=\'text-gray-500 text-sm\'>No image</span></div>')" />
+                @if(isset($tinyUrl))
+                <!-- Blur-up placeholder with 9:13 ratio -->
+                <div class="absolute inset-0 w-full h-full bg-gray-200 overflow-hidden">
+                    <img 
+                        src="{{ $tinyUrl }}"
+                        alt="{{ $productName }} - placeholder"
+                        class="absolute inset-0 w-full h-full object-cover object-top object-center blur-lg scale-110"
+                        width="27"
+                        height="39"
+                        loading="lazy"
+                        aria-hidden="true"
+                    />
+                    <!-- Main image with 9:13 ratio and lazy loading -->
+                    <img
+                        src="{{ $imageUrl }}"
+                        alt="{{ $productName }}"
+                        class="absolute inset-0 w-full h-full object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        width="{{ $imageWidth }}"
+                        height="{{ $imageHeight }}"
+                        onload="this.style.opacity='1'"
+                        style="opacity:0; transition: opacity 0.3s ease-in-out;"
+                        onerror="this.parentElement.parentElement.innerHTML = this.parentElement.parentElement.innerHTML.replace(this.parentElement.outerHTML, '<div class=\'w-full h-full flex flex-col items-center justify-center bg-gray-100\' style=\'aspect-ratio:9/13;\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\' /></svg><span class=\'text-gray-500 text-sm\'>No image</span></div>')" 
+                    />
+                </div>
+                @else
+                <img
+                    src="{{ $imageUrl }}"
+                    alt="{{ $productName }}"
+                    class="w-full h-full object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    width="{{ $imageWidth }}"
+                    height="{{ $imageHeight }}"
+                    onerror="this.parentElement.innerHTML = this.parentElement.innerHTML.replace(this.outerHTML, '<div class=\'w-full h-full flex flex-col items-center justify-center bg-gray-100\' style=\'aspect-ratio:9/13;\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\' /></svg><span class=\'text-gray-500 text-sm\'>No image</span></div>')" 
+                />
+                @endif
             @else
-            <!-- SVG Placeholder -->
-            <div class="w-full aspect-[9/13] flex flex-col items-center justify-center bg-gray-100">
+            <!-- SVG Placeholder with 9:13 ratio -->
+            <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100" style="aspect-ratio: 9/13;">
                 <svg class="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -177,17 +218,12 @@
                     <span class="text-xs text-gray-400 line-through font-sans">{{ config('app.currency') }} {{ number_format($originalPrice, 2) }}</span>
                     @endif
                 </div>
-
-               
             </div>
-
-          
         </div>
     </a>
 </div>
 @endforeach
 @else
-{{-- @dd("this is test") --}}
 <!-- No Products Found Message -->
 <div class="col-span-full flex flex-col items-center justify-center py-16">
     <div class="text-center">
