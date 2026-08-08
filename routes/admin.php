@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\PickupRequestController;
 use App\Http\Controllers\Admin\DelhiveryController;
 use App\Http\Controllers\Admin\ShippingLabelController;
 use App\Http\Controllers\Admin\ReturnOrder;
+// use App\Http\Controllers\Admin\OrderController;
 
 
 use App\Http\Controllers\Admin\ServicesController;
@@ -57,6 +58,7 @@ use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\OfferController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StoreController;
 
 // use App\Http\Controllers\ShopController;
@@ -567,4 +569,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::post('/update/{id}', [OfferController::class, 'update'])->name('offer.update');
         Route::delete('/delete/{id}', [OfferController::class, 'delete'])->name('offer.delete');
     });
+
+   // Invoice Routes
+Route::get('/orders/{order}/invoice', [OrderManagementController::class, 'viewInvoice'])->name('admin.orders.invoice');
+Route::get('/orders/{order}/invoice/download', [OrderManagementController::class, 'downloadInvoice'])->name('admin.orders.invoice.download');
 });

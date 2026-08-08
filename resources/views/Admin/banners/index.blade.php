@@ -33,8 +33,14 @@
                                 <tr>
                                     <td>{{ $banner->id }}</td>
                                     <td>
+
                                         @if($banner->image)
-                                        <img src="{{ asset('uploads/banners/' . $banner->image) }}"
+                                        @php
+                                        $imageUrl = $banner->image;
+                                        $isCloudinary = str_contains($imageUrl, 'cloudinary.com');
+                                        $isFullUrl = filter_var($imageUrl, FILTER_VALIDATE_URL);
+                                        @endphp
+                                        <img src="{{ $isCloudinary || $isFullUrl ? $imageUrl : asset('uploads/banners/' . $banner->image) }}"
                                             alt="{{ $banner->title }}"
                                             style="width: 100px; height: 60px; object-fit: cover;">
                                         @else
@@ -45,13 +51,13 @@
                                     <td>{{ $banner->subtitle ?? '-' }}</td>
                                     <td>
                                         @if($banner->type === 'main')
-                                            <span class="badge bg-primary">Main</span>
+                                        <span class="badge bg-primary">Main</span>
                                         @elseif($banner->type === 'secondary')
-                                            <span class="badge bg-info">Secondary</span>
+                                        <span class="badge bg-info">Secondary</span>
                                         @elseif($banner->type === 'editor')
-                                            <span class="badge bg-success">Editor's Pick</span>
+                                        <span class="badge bg-success">Editor's Pick</span>
                                         @else
-                                            <span class="badge bg-secondary">{{ ucfirst($banner->type) }}</span>
+                                        <span class="badge bg-secondary">{{ ucfirst($banner->type) }}</span>
                                         @endif
                                     </td>
                                     <td>

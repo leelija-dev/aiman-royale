@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
+use App\Traits\CloudinaryUploadTrait;  // ← Add this line
+use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class BannerController extends Controller
 {
+    use CloudinaryUploadTrait;
     public function index()
     {
         $banners = Banner::ordered()->get();
@@ -38,7 +42,7 @@ class BannerController extends Controller
         ]);
 
         $data = $request->all();
-        
+
         // Handle multiple filters
         if ($request->filter_type === 'multiple' && $request->has('filter_types') && $request->has('filter_values')) {
             $filters = [];
@@ -65,11 +69,37 @@ class BannerController extends Controller
             $data['filters'] = null;
         }
 
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        //     $image->move(public_path('uploads/banners'), $imageName);
+        //     $data['image'] = $imageName;
+        // }
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/banners'), $imageName);
-            $data['image'] = $imageName;
+
+            // UPLOAD NEW IMAGE TO CLOUDINARY
+            $uploadResult = $this->uploadToCloudinary($image, 'aiman/banners', [
+                'quality' => 'auto:good',
+                'fetch_format' => 'auto',
+                'transformation' => [
+                    'width' => 800,
+                    'height' => 800,
+                    'crop' => 'limit',
+                ],
+            ]);
+
+            if ($uploadResult) {
+                $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+                $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+                Log::info('Banner image uploaded to Cloudinary', [
+                    'public_id' => $uploadResult['public_id'],
+                    'path' => $uploadResult['path']
+                ]);
+            } else {
+                throw new \Exception('Failed to upload image to Cloudinary');
+            }
         }
 
         Banner::create($data);
@@ -110,7 +140,7 @@ class BannerController extends Controller
         ]);
 
         $data = $request->all();
-        
+
         // Handle multiple filters
         if ($request->filter_type === 'multiple' && $request->has('filter_types') && $request->has('filter_values')) {
             $filters = [];
@@ -141,17 +171,58 @@ class BannerController extends Controller
             $data['filter_type'] = 'single'; // Explicitly set filter type
         }
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($banner->image && file_exists(public_path('uploads/banners/' . $banner->image))) {
-                unlink(public_path('uploads/banners/' . $banner->image));
-            }
+        // if ($request->hasFile('image')) {
+        //     // Delete old image
+        //     if ($banner->image && file_exists(public_path('uploads/banners/' . $banner->image))) {
+        //         unlink(public_path('uploads/banners/' . $banner->image));
+        //     }
 
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/banners'), $imageName);
-            $data['image'] = $imageName;
-        }
+        //     $image = $request->file('image');
+        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        //     $image->move(public_path('uploads/banners'), $imageName);
+        //     $data['image'] = $imageName;
+        // }
+
+          if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                // DELETE OLD IMAGE FROM CLOUDINARY
+                if ($banner->image_public_id) {
+                    try {
+                        $this->deleteFromCloudinary($banner->image_public_id);
+                        Log::info('Old banner image deleted from Cloudinary', [
+                            'banner_id' => $banner->id,
+                            'public_id' => $banner->image_public_id
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::warning('Failed to delete old image from Cloudinary: ' . $e->getMessage());
+                    }
+                }
+
+                // UPLOAD NEW IMAGE TO CLOUDINARY
+                $uploadResult = $this->uploadToCloudinary($image, 'aiman/banners', [
+                    'quality' => 'auto:good',
+                    'fetch_format' => 'auto',
+                    'transformation' => [
+                        'width' => 800,
+                        'height' => 800,
+                        'crop' => 'limit',
+                    ],
+                ]);
+
+                if ($uploadResult) {
+                    // FIXED: Use 'path' instead of 'url'
+                    $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+                    $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+                    Log::info('New banner image uploaded to Cloudinary', [
+                        'banner_id' => $banner->id,
+                        'public_id' => $uploadResult['public_id'],
+                        'path' => $uploadResult['path']
+                    ]);
+                } else {
+                    throw new \Exception('Failed to upload image to Cloudinary');
+                }
+            }
 
         $banner->update($data);
 

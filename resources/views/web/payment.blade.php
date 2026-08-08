@@ -214,7 +214,7 @@
                 console.log('Cashfree initialized, available methods:', Object.getOwnPropertyNames(cashfree));
                 console.log('Cashfree initialized, opening payment modal...');
                 
-                // Try different payment methods for v3 SDK
+                // Try different payment methods for v3 SDKchanges
                 try {
                     // Method 1: Try checkout method (preferred for v3)
                     if (typeof cashfree.checkout === 'function') {

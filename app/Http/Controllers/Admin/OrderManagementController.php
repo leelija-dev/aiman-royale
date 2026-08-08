@@ -9,6 +9,8 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderManagementController extends Controller
 {
@@ -190,5 +192,49 @@ class OrderManagementController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    public function viewInvoice($id)
+    {
+        $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+        return view('Admin.orders.invoice', compact('order'));
+    }
+
+    public function downloadInvoice($id)
+    {
+        try {
+            $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+
+            // Generate PDF using DomPDF
+            $pdf = Pdf::loadView('Admin.orders.invoice', compact('order'));
+            $pdf->setPaper('A4', 'portrait');
+
+            // Set options for better compatibility
+            $pdf->setOptions([
+                'defaultFont' => 'sans-serif',
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true
+            ]);
+
+            return $pdf->download('invoice-' . str_pad($order->id, 6, '0', STR_PAD_LEFT) . '.pdf');
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+        }
+    }
+
+    public function streamInvoice($id)
+    {
+        try {
+            $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
+
+            $pdf = Pdf::loadView('Admin.orders.invoice', compact('order'));
+            $pdf->setPaper('A4', 'portrait');
+
+            return $pdf->stream('invoice-' . str_pad($order->id, 6, '0', STR_PAD_LEFT) . '.pdf');
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+        }
     }
 }
