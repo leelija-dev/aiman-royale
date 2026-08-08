@@ -236,24 +236,24 @@ Route::middleware(['auth', 'session.expiry'])->prefix('refunds')->group(function
 // Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
 // Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
 
-Route::get('/auth/google/redirect', function () {
-    return Socialite::driver('google')->redirect();
-});
+// Route::get('/auth/google/redirect', function () {
+//     return Socialite::driver('google')->redirect();
+// });
 
-Route::get('/auth/google/callback', function () {
-    $googleUser = Socialite::driver('google')->user();
+// Route::get('/auth/google/callback', function () {
+//     $googleUser = Socialite::driver('google')->user();
 
-    $user = User::updateOrCreate([
-        'email' => $googleUser->email,
-    ], [
-        'name' => $googleUser->name,
-        'google_id' => $googleUser->id,
-    ]);
+//     $user = User::updateOrCreate([
+//         'email' => $googleUser->email,
+//     ], [
+//         'name' => $googleUser->name,
+//         'google_id' => $googleUser->id,
+//     ]);
 
-    Auth::login($user);
+//     Auth::login($user);
 
-    return redirect('/dashboard');
-});
+//     return redirect('/dashboard');
+// });
 
 // // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');

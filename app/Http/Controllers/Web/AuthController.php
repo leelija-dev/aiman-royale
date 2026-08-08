@@ -493,40 +493,7 @@ class AuthController extends Controller
         }
     }
 
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required'
-    //     ]);
 
-    //     // Check if "Remember me" checkbox was checked
-    //     $remember = $request->has('remember') ? true : false;
-
-    //     // Attempt login with JWT - pass remember parameter
-    //     if (!$token = JWTAuth::attempt($credentials, $remember)) {
-    //         return back()->withErrors([
-    //             'email' => 'The provided credentials do not match our records.',
-    //         ])->onlyInput('email');
-    //     }
-
-    //     // Get authenticated user from JWT
-    //     $user = JWTAuth::user();
-
-    //     // Also login with Laravel's Auth for web routes
-    //     Auth::login($user, $remember); // Pass remember parameter here too
-
-    //     // Regenerate session
-    //     $request->session()->regenerate();
-
-    //     // Check if there's a redirect URL
-    //     if ($request->has('redirect') && $request->redirect) {
-    //         return redirect()->to($request->redirect)->with('jwt_token', $token);
-    //     }
-
-    //     // Default redirect if no redirect URL provided
-    //     return redirect()->intended(route('page.index'))->with('jwt_token', $token);
-    // }
 
 
     // public function login(Request $request)
@@ -807,7 +774,11 @@ class AuthController extends Controller
             session()->forget('google_data');
 
             // Check for redirect URL from session or request
+            if($request->has('redirect') && $request->redirect) {
+                session(['google_redirect_url' => $request->redirect]);
+            }
             $redirectUrl = session()->pull('google_redirect_url') ?? $request->redirect ?? null;
+            
 
             if ($redirectUrl) {
                 // Validate the redirect URL to prevent open redirect vulnerabilities

@@ -451,26 +451,9 @@ class DelhiveryService
             }
 
             // Prepare shipment data
-            $shipmentData = [
-                'shipments' => [
-                    [
-                        'name' => $orderData['customer_name'],
-                        'add' => $orderData['address'],
-                        'city' => $orderData['city'],
-                        'state' => $orderData['state'],
-                        'country' => 'India',
-                        'pin' => $orderData['pincode'],
-                        'phone' => $orderData['phone'],
-                        'order' => (string) $orderData['order_id'],
-                        'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid',
-                        'total_amount' => (float) $orderData['total_amount'],
-                        'pickup_location' => $this->pickupLocation,
-                        'declared_value' => (float) $orderData['total_amount'],
-                        'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0,
-                        'products' => $products
-                    ]
-                ]
-            ];
+            $shipmentData = ['shipments' => [['name' => $orderData['customer_name'], 'add' => $orderData['address'], 'city' => $orderData['city'], 'state' => $orderData['state'], 'country' => 'India', 'pin' => $orderData['pincode'], 'phone' => $orderData['phone'], 'order' => (string) $orderData['order_id'], 'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid', 'total_amount' => (float) $orderData['total_amount'], 'declared_value' => (float) $orderData['total_amount'], 'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0, 'products' => $products,],], 'pickup_location' => ['name' => $this->pickupLocation,],];
+
+
 
             Log::info('Delhivery shipment payload', [
                 'payload' => $shipmentData
