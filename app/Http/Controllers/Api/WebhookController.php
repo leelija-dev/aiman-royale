@@ -68,9 +68,9 @@ class WebhookController extends Controller
             /**
              * Save tracking history
              */
-            ShipmentTracking::updateOrCreate([
+            ShipmentTracking::updateOrCreate(
                 ['awb' => $awb],
-                'awb'          => $awb,
+                [
                 'order_id'     => $order ? $order->id : null,
                 'reference_no' => $referenceNo,
                 'status'       => $status,
@@ -88,9 +88,9 @@ class WebhookController extends Controller
             // Debugging line to check the order object
             if ($order) {
 
-                $order->shipment_status = $status;
-                $order->tracking_status = $statusType;
-                $order->tracking_location = $location;
+                $order->delhivery_status = $status;
+                // $order->tracking_status = $statusType;
+                // $order->tracking_location = $location;
                 $order->save();
 
                 Log::info("Order Updated", [

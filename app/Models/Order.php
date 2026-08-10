@@ -12,6 +12,7 @@ class Order extends Model
         'user_id',
         'total_amount',
         'order_status',
+        'delhivery_status',
         'is_fake_order',
         'transection_id',
         'payment_status',
@@ -33,7 +34,7 @@ class Order extends Model
         'special_discount',
         'special_discount_amount',
         'special_discount_id',
-        'special_discount_name'
+        'special_discount_name',
     ];
 
 
