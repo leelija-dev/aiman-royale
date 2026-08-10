@@ -441,6 +441,7 @@ class DelhiveryService
         try {
             // Format products
             $products = [];
+            $totalQuantity = 0;
             foreach ($orderItems as $item) {
                 $products[] = [
                     'name' => $item->name ?? 'Product',
@@ -450,8 +451,11 @@ class DelhiveryService
                 ];
             }
 
+            $productNames = array_column($products, 'name');
+            $products_desc = implode(', ', $productNames);
+
             // Prepare shipment data
-            $shipmentData = ['shipments' => [['name' => $orderData['customer_name'], 'add' => $orderData['address'], 'city' => $orderData['city'], 'state' => $orderData['state'], 'country' => 'India', 'pin' => $orderData['pincode'], 'phone' => $orderData['phone'], 'order' => (string) $orderData['order_id'], 'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid', 'total_amount' => (float) $orderData['total_amount'], 'declared_value' => (float) $orderData['total_amount'], 'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0, 'products' => $products,],], 'pickup_location' => ['name' => $this->pickupLocation,],];
+            $shipmentData = ['shipments' => [['name' => $orderData['customer_name'], 'add' => $orderData['address'], 'city' => $orderData['city'], 'state' => $orderData['state'], 'country' => 'India', 'pin' => $orderData['pincode'], 'phone' => $orderData['phone'], 'order' => (string) $orderData['order_id'], 'payment_mode' => $orderData['payment_method'] === 'cod' ? 'COD' : 'Prepaid', 'total_amount' => (float) $orderData['total_amount'], 'declared_value' => (float) $orderData['total_amount'], 'cod_amount' => $orderData['payment_method'] === 'cod' ? (float) $orderData['total_amount'] : 0, 'products' => $products, 'products_desc' => $products_desc,],], 'pickup_location' => ['name' => $this->pickupLocation,],];
 
 
 

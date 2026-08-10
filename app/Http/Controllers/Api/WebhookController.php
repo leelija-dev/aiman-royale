@@ -16,6 +16,25 @@ class WebhookController extends Controller
             'payload' => $request->all()
         ]);
 
+        $token = $request->header('Authorization');
+        // print_r($token); // Debugging line to check the token value
+
+        // Remove "Bearer " prefix if present
+        $token = str_replace('Bearer ', '', $token);
+        // print_r($token);
+        $expectedToken = env('DELHIVERY_API_TOKEN');
+        // print_r($expectedToken);
+        if (empty($token) || $token !== $expectedToken) {
+            Log::warning('Invalid API Token', [
+                'provided' => $token,
+                'expected' => $expectedToken
+            ]);
+
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
         try {
 
             $shipment = $request->input('Shipment');
@@ -29,6 +48,7 @@ class WebhookController extends Controller
             }
 
             $awb         = $shipment['AWB'] ?? null;
+
             $referenceNo = $shipment['ReferenceNo'] ?? null;
 
             $status      = $shipment['Status']['Status'] ?? null;
@@ -43,12 +63,15 @@ class WebhookController extends Controller
                 'statusType' => $statusType,
                 'location'   => $location
             ]);
-
+            $order = Order::where('waybill_number', $awb)->first();
+            
             /**
              * Save tracking history
              */
-            ShipmentTracking::create([
+            ShipmentTracking::updateOrCreate([
+                ['awb' => $awb],
                 'awb'          => $awb,
+                'order_id'     => $order ? $order->id : null,
                 'reference_no' => $referenceNo,
                 'status'       => $status,
                 'status_type'  => $statusType,
@@ -61,8 +84,8 @@ class WebhookController extends Controller
             /**
              * Update order
              */
-            $order = Order::where('awb', $awb)->first();
 
+            // Debugging line to check the order object
             if ($order) {
 
                 $order->shipment_status = $status;
@@ -75,7 +98,6 @@ class WebhookController extends Controller
                     'status' => $status
                 ]);
             } else {
-
                 Log::warning("Order not found for AWB {$awb}");
             }
 
