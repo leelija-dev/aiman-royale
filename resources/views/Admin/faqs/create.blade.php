@@ -23,25 +23,25 @@
                 </div>
                 @endif
 
-                <form action="{{ route('faqs.store') }}" method="POST">
+                <form action="{{ route('faqs.store') }}" method="POST" id="faqForm">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="question">Heading <span class="text-danger">*</span></label>
+                                <label for="heading">Heading <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('heading') is-invalid @enderror"
                                     id="heading" name="heading" value="{{ old('heading') }}" maxlength="255" required>
-                                @error('question')
+                                @error('heading')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
-                      <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="product_id">Product <span class="text-danger">*</span></label>
                                 <select class="form-control @error('product_id') is-invalid @enderror" id="product_id" name="product_id">
-                                    <option value="">Select Product </option>
+                                    <option value="">Select Product</option>
                                     @foreach($products as $id => $name)
                                         <option value="{{ $id }}" {{ old('product_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
@@ -62,41 +62,55 @@
                                         <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
-                                {{--
-                                @error('category_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                --}}
-                            </div>
-                        </div>
-                      
-
-                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="question">Question <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('question') is-invalid @enderror"
-                                    id="question" name="question" value="{{ old('question') }}" maxlength="255" required>
-                                @error('question')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
                             </div>
                         </div>
                     </div>
 
+                    <!-- Dynamic Question-Answer Pairs Container -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group">
-                                <label for="answer">Answer <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('answer') is-invalid @enderror"
-                                    id="answer" name="answer" rows="4" required>{{ old('answer') }}</textarea>
-                                @error('answer')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Questions & Answers</h5>
+                                    <button type="button" class="btn btn-success btn-sm float-right" id="addMoreBtn">
+                                        <i class="fas fa-plus"></i> Add Question
+                                    </button>
+                                </div>
+                                <div class="card-body" id="faqContainer">
+                                    <!-- Default FAQ Pair -->
+                                    <div class="faq-item border p-3 mb-3 rounded">
+                                        <div class="row">
+                                            <div class="col-11">
+                                                <div class="form-group">
+                                                    <label>Question <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control @error('faqs.0.question') is-invalid @enderror"
+                                                        name="faqs[0][question]" placeholder="Enter question" required>
+                                                    @error('faqs.0.question')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Answer <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control @error('faqs.0.answer') is-invalid @enderror"
+                                                        name="faqs[0][answer]" rows="3" placeholder="Enter answer" required></textarea>
+                                                    @error('faqs.0.answer')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-1 d-flex align-items-start">
+                                                <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 30px;" disabled>
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="sort_order">Sort Order</label>
@@ -135,4 +149,88 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    let faqIndex = 1; // Start counter for new FAQs
+
+    // Add new FAQ pair
+    $('#addMoreBtn').on('click', function() {
+        const newFaq = `
+            <div class="faq-item border p-3 mb-3 rounded">
+                <div class="row">
+                    <div class="col-11">
+                        <div class="form-group">
+                            <label>Question <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" 
+                                name="faqs[${faqIndex}][question]" 
+                                placeholder="Enter question" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Answer <span class="text-danger">*</span></label>
+                            <textarea class="form-control" 
+                                name="faqs[${faqIndex}][answer]" 
+                                rows="3" placeholder="Enter answer" required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-1 d-flex align-items-start">
+                        <button type="button" class="btn btn-danger btn-sm remove-btn" style="margin-top: 30px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $('#faqContainer').append(newFaq);
+        faqIndex++;
+        
+        // Enable remove buttons if more than 1 item
+        if ($('.faq-item').length > 1) {
+            $('.remove-btn').prop('disabled', false);
+        }
+    });
+
+    // Remove FAQ pair
+    $(document).on('click', '.remove-btn', function() {
+        if ($('.faq-item').length <= 1) {
+            alert('You must have at least one FAQ item.');
+            return;
+        }
+        
+        if (confirm('Are you sure you want to remove this question-answer pair?')) {
+            $(this).closest('.faq-item').remove();
+            
+            // Disable remove button if only 1 item left
+            if ($('.faq-item').length === 1) {
+                $('.remove-btn').prop('disabled', true);
+            }
+        }
+    });
+});
+</script>
+@endpush
+
+<style>
+.faq-item {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    background-color: #f1f3f5;
+    border-color: #adb5bd;
+}
+
+.remove-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#addMoreBtn {
+    margin-top: -5px;
+}
+</style>
 @endsection
