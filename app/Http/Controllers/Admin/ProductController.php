@@ -577,7 +577,7 @@ class ProductController extends Controller
     //     return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
     // }
 
-      public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
@@ -692,7 +692,7 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
-        }
+    }
 
     public function delete($id)
     {

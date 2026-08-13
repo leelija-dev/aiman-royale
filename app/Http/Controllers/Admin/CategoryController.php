@@ -128,9 +128,10 @@ class CategoryController extends Controller
                 ],
             ]);
 
+            
             if ($uploadResult) {
                 $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
-                $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+                $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
                 Log::info('Category image uploaded to Cloudinary', [
                     'public_id' => $uploadResult['public_id'],
                     'path' => $uploadResult['path']
@@ -267,7 +268,6 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
-        
         try {
             $data = $request->validated();
             $data['slug']  = Str::slug($data['name']);
@@ -280,15 +280,17 @@ class CategoryController extends Controller
 
             // CHECK IF NEW IMAGE UPLOADED
             if ($request->hasFile('image')) {
+               
                 $image = $request->file('image');
 
                 // DELETE OLD IMAGE FROM CLOUDINARY
-                if ($category->image_public_id) {
+                if ($category->public_id) {
+                   
                     try {
-                        $this->deleteFromCloudinary($category->image_public_id);
+                        $this->deleteFromCloudinary($category->public_id);
                         Log::info('Old category image deleted from Cloudinary', [
                             'category_id' => $category->id,
-                            'public_id' => $category->image_public_id
+                            'public_id' => $category->public_id
                         ]);
                     } catch (\Exception $e) {
                         Log::warning('Failed to delete old image from Cloudinary: ' . $e->getMessage());
@@ -309,7 +311,7 @@ class CategoryController extends Controller
                 if ($uploadResult) {
                     // FIXED: Use 'path' instead of 'url'
                     $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
-                    $data['image_public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+                    $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
                     Log::info('New category image uploaded to Cloudinary', [
                         'category_id' => $category->id,
                         'public_id' => $uploadResult['public_id'],

@@ -97,9 +97,9 @@ class PickupRequestController extends Controller
                 'expected_package_count' => count($waybills),
                 'client_name' => $firstOrder->name ?? 'Customer',
                 'client_address' => $firstOrder->address_1 ?? 'Address',
-                'client_city' => $firstOrder->city ?? 'hooghly',
-                'client_pincode' => $firstOrder->pincode ?? '712134',
-                'client_phone' => $firstOrder->phone_no ?? '6295351230',
+                'client_city' => $firstOrder->city ?? 'Barasat',
+                'client_pincode' => $firstOrder->pincode ?? '700125',
+                'client_phone' => $firstOrder->phone_no ?? '8240525716',
                 'waybills' => implode(',', $waybills),
             ];
 

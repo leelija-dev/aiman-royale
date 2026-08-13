@@ -144,24 +144,69 @@ trait CloudinaryUploadTrait
      * @param string $publicId
      * @return bool
      */
-    public function deleteFromCloudinary($publicId)
-    {
-        try {
-            // Skip if no public_id (local file)
-            if (!$publicId) {
-                return true;
-            }
+    // public function deleteFromCloudinary($publicId)
+    // {
+    //     // dd($publicId);
+    //     try {
+    //         // Skip if no public_id (local file)
+    //         if (!$publicId) {
+    //             return true;
+    //         }
 
-            // Check if Cloudinary is configured
-            if (config('filesystems.disks.cloudinary')) {
-                Storage::disk('cloudinary')->delete($publicId);
-            }
+    //         // Check if Cloudinary is configured
+    //         if (config('filesystems.disks.cloudinary')) {
+    //             Storage::disk('cloudinary')->delete($publicId);
+    //         }
+    //         return true;
+    //     } catch (\Exception $e) {
+    //         \Log::error('Cloudinary delete failed: ' . $e->getMessage());
+    //         return false;
+    //     }
+    // }
+public function deleteFromCloudinary($publicId)
+{
+    try {
+        if (!$publicId) {
             return true;
-        } catch (\Exception $e) {
-            \Log::error('Cloudinary delete failed: ' . $e->getMessage());
+        }
+
+        // Remove file extension if present
+        $cleanPublicId = pathinfo($publicId, PATHINFO_FILENAME);
+        
+        \Log::info("Attempting to delete Cloudinary image: {$cleanPublicId}");
+        
+        // Use the cloudinary helper
+        $result = cloudinary()->uploadApi()->destroy($cleanPublicId);
+        
+        // Safely check the result
+        $isSuccess = false;
+        $resultArray = [];
+        
+        if (is_array($result)) {
+            $resultArray = $result;
+            $isSuccess = isset($result['result']) && $result['result'] === 'ok';
+        } elseif (is_object($result)) {
+            $resultArray = (array) $result;
+            $isSuccess = isset($resultArray['result']) && $resultArray['result'] === 'ok';
+        }
+        
+        if ($isSuccess) {
+            \Log::info("Successfully deleted Cloudinary image: {$cleanPublicId}");
+            return true;
+        } else {
+            
+            \Log::warning("Failed to delete Cloudinary image: {$cleanPublicId}", $resultArray);
             return false;
         }
+        
+    } catch (\Exception $e) {
+        \Log::error('Cloudinary delete failed: ' . $e->getMessage(), [
+            'public_id' => $publicId,
+            'error' => $e->getMessage()
+        ]);
+        return false;
     }
+}
 
     /**
      * Delete local file

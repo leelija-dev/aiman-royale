@@ -32,6 +32,7 @@ class Category extends Model
         'description',
         'parent_id',
         'image',
+        'public_id',
         'is_active',
         'is_home',
         'home_position',
