@@ -109,7 +109,9 @@ class FaqController extends Controller
             // Get FAQs using product ID with only category name and product name
             $faqs = Faq::where('is_active', 1)
                 ->where('product_id', $product->id)
-                ->with(['category:id,category_name', 'product:id,name'])
+                // ->with(['category:id,category_name', 'product:id,name'])
+                ->with(['product:id,name'])
+
                 ->get();
 
             if ($faqs->isEmpty()) {
