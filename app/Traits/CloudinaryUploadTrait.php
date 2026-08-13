@@ -170,34 +170,36 @@ public function deleteFromCloudinary($publicId)
             return true;
         }
 
-        // Remove file extension if present
-        $cleanPublicId = pathinfo($publicId, PATHINFO_FILENAME);
+        // Don't strip the path - keep the full public_id with folder structure
+        // Just remove file extension if present
+        $cleanPublicId = $publicId;
+        if (pathinfo($publicId, PATHINFO_EXTENSION)) {
+            $cleanPublicId = pathinfo($publicId, PATHINFO_FILENAME);
+        }
         
         \Log::info("Attempting to delete Cloudinary image: {$cleanPublicId}");
         
-        // Use the cloudinary helper
-        $result = cloudinary()->uploadApi()->destroy($cleanPublicId);
+        // Use the cloudinary helper with the full path
+        $result = cloudinary()->uploadApi()->destroy($cleanPublicId, [
+            'invalidate' => true
+        ]);
         
-        // Safely check the result
-        $isSuccess = false;
-        $resultArray = [];
+        \Log::info('Cloudinary delete result:', ['result' => $result]);
         
-        if (is_array($result)) {
-            $resultArray = $result;
-            $isSuccess = isset($result['result']) && $result['result'] === 'ok';
-        } elseif (is_object($result)) {
-            $resultArray = (array) $result;
-            $isSuccess = isset($resultArray['result']) && $resultArray['result'] === 'ok';
-        }
-        
-        if ($isSuccess) {
+        // Check the result
+        if (isset($result['result']) && $result['result'] === 'ok') {
             \Log::info("Successfully deleted Cloudinary image: {$cleanPublicId}");
             return true;
-        } else {
-            
-            \Log::warning("Failed to delete Cloudinary image: {$cleanPublicId}", $resultArray);
-            return false;
+        } elseif (isset($result['result']) && $result['result'] === 'not found') {
+            \Log::info("Cloudinary image already deleted or not found: {$cleanPublicId}");
+            return true; // Consider it success
         }
+        
+        \Log::warning("Cloudinary delete failed", [
+            'public_id' => $cleanPublicId,
+            'result' => $result
+        ]);
+        return false;
         
     } catch (\Exception $e) {
         \Log::error('Cloudinary delete failed: ' . $e->getMessage(), [
