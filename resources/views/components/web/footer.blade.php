@@ -1704,7 +1704,7 @@ $isProductPage = !empty($productSlug);
         const question = faq.question || '';
         const answer = faq.answer || '';
         const categoryName = faq.category?.category_name || 'General';
-        const displayQuestion = heading && heading.trim() !== '' ? heading : question;
+        const displayQuestion = question && question.trim() !== '' ? question : heading;
         const finalQuestion = displayQuestion && displayQuestion.trim() !== '' ? displayQuestion : 'Helpful information';
 
         // Add border-bottom except last item
