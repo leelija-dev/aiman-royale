@@ -1,0 +1,180 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_DIR = '/var/www/aiman-royale-staging'
+        DEPLOY_USER = 'deploy'
+        VPS_HOST = '82.25.104.117'
+        STAGING_BRANCH = 'staging'
+        COMPOSE_FILE = 'docker-compose.staging.yml'
+        BUILD_NUMBER = "${env.BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage('Verify Staging Environment') {
+            steps {
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+
+                            echo "======================================"
+                            echo " VERIFY AIMAN ROYALE STAGING"
+                            echo "======================================"
+
+                            test -d "${PROJECT_DIR}"
+
+                            cd "${PROJECT_DIR}"
+
+                            echo "Directory:"
+                            pwd
+
+                            echo ""
+                            echo "Branch:"
+                            git branch --show-current
+
+                            echo ""
+                            echo "Compose file:"
+                            test -f "${COMPOSE_FILE}"
+                            ls -lh "${COMPOSE_FILE}"
+
+                            echo ""
+                            echo "Environment:"
+                            test -f .env
+                            grep -E "^(APP_ENV|APP_URL|DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME|NGINX_PORT)=" .env
+
+                            echo ""
+                            echo "Docker Compose:"
+                            docker compose version
+
+                            echo ""
+                            echo "Validating staging compose:"
+                            docker compose -f "${COMPOSE_FILE}" config > /tmp/aiman-staging-compose-check.yml
+
+                            echo ""
+                            echo "Staging containers:"
+                            docker compose -f "${COMPOSE_FILE}" ps
+                        '
+                    """
+                }
+            }
+        }
+
+
+        stage('Deploy Staging') {
+            steps {
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+
+                            cd "${PROJECT_DIR}"
+
+                            echo "======================================"
+                            echo " DEPLOYING AIMAN ROYALE STAGING"
+                            echo "======================================"
+
+                            echo "[1] Fetching staging branch..."
+                            git fetch origin
+
+                            echo "[2] Checking out staging..."
+                            git checkout "${STAGING_BRANCH}"
+
+                            echo "[3] Resetting to origin/staging..."
+                            git reset --hard "origin/${STAGING_BRANCH}"
+
+                            echo "[4] Verifying staging compose file..."
+                            test -f "${COMPOSE_FILE}"
+
+                            echo "[5] Validating compose..."
+                            docker compose -f "${COMPOSE_FILE}" config > /tmp/aiman-staging-compose-check.yml
+
+                            echo "[6] Verifying staging database configuration..."
+                            grep -E "^(APP_ENV|APP_URL|DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME|NGINX_PORT)=" .env
+
+                            echo "[7] Building staging Docker images..."
+                            docker compose -f "${COMPOSE_FILE}" build --pull
+
+                            echo "[8] Starting staging containers..."
+                            docker compose -f "${COMPOSE_FILE}" up -d
+
+                            echo "[9] Waiting for containers..."
+                            sleep 20
+
+                            echo "[10] Container status..."
+                            docker compose -f "${COMPOSE_FILE}" ps
+
+                            echo "[11] Testing staging database..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan tinker --execute="
+                                    DB::connection()->getPdo();
+                                    echo 'DB CONNECTION OK'.PHP_EOL;
+                                    echo 'DATABASE: '.DB::connection()->getDatabaseName().PHP_EOL;
+                                "
+
+                            echo "[12] Fixing Laravel permissions..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                chown -R deploy:deploy storage bootstrap/cache
+
+                            echo "[13] Running staging migrations..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan migrate --force
+
+                            echo "[14] Clearing Laravel cache..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan optimize:clear
+
+                            echo "[15] Caching views..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan view:cache
+
+                            echo "[16] Caching config..."
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan config:cache
+
+                            echo "[17] Saving deployment version..."
+                            echo "${BUILD_NUMBER}" > .deployed-version
+
+                            echo "======================================"
+                            echo " STAGING DEPLOYMENT COMPLETE"
+                            echo "======================================"
+
+                            echo "Commit:"
+                            git rev-parse HEAD
+                        '
+                    """
+                }
+            }
+        }
+
+
+        stage('Staging Health Check') {
+            steps {
+                sh """
+                    echo "Checking staging website..."
+
+                    curl -skSf --max-time 30 \
+                        https://staging.aimanroyale.com/ \
+                        > /dev/null
+
+                    echo "Staging health check PASSED"
+                """
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+
+            script {
+                if (currentBuild.currentResult == 'SUCCESS') {
+                    echo "Aiman Royale staging deployment #${BUILD_NUMBER} successful"
+                } else {
+                    echo "Aiman Royale staging deployment #${BUILD_NUMBER} failed"
+                }
+            }
+        }
+    }
+}
