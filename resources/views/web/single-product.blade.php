@@ -3774,7 +3774,8 @@
                 })
                 .then(data => {
                     if (data && data.success) {
-                        showNotification('Product added to cart successfully!', 'success');
+                        showNotificationWithCart('Product added to cart successfully!', 'success', true);
+                        // showNotification('Product added to cart successfully!', 'success');
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
@@ -3831,6 +3832,58 @@
                 }, 3000);
             }
         }
+
+        function showNotificationWithCart(message, type = 'success', showCartButton = true) {
+    if (typeof Swal !== 'undefined') {
+        // SweetAlert2 implementation with "Go to Cart" button
+        Swal.fire({
+            icon: type,
+            title: type === 'success' ? 'Success!' : 'Error!',
+            text: message,
+            showCancelButton: showCartButton && type === 'success',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Go to Cart 🛒',
+            cancelButtonColor: '#4CAF50',
+            confirmButtonColor: '#3085d6',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = '/cart';
+            }
+        });
+    } else {
+        // Fallback for when SweetAlert2 is not available
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        
+        notification.innerHTML = `
+            <div class="flex items-center justify-between gap-4">
+                <span>${message}</span>
+                ${showCartButton && type === 'success' ? `
+                    <button onclick="window.location.href='/cart'" 
+                            class="bg-white text-green-600 px-4 py-1 rounded-lg font-medium hover:bg-gray-100 transition">
+                        Go to Cart 🛒
+                    </button>
+                ` : ''}
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 5000);
+    }
+}
 
         function updateCartCount(count) {
             const cartCountElements = document.querySelectorAll('.cart-count');

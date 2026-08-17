@@ -63,7 +63,7 @@ class PickupRequestController extends Controller
 
             // Get the first order for client details
             $firstOrder = $orders->first();
-
+           
             // Log order details for debugging
             Log::info('Preparing pickup request', [
                 'order_count' => $orders->count(),
@@ -79,7 +79,7 @@ class PickupRequestController extends Controller
             // Determine base URL based on environment
             $baseUrl = $isSandbox
                 ? ($config['sandbox_url'] ?? 'https://staging-express.delhivery.com')
-                : ($config['production_url'] ?? 'https://express.delhivery.com');
+                : ($config['production_url'] ?? 'https://api.delhivery.com');
 
 
             $url = $baseUrl . '/fm/request/new/';
