@@ -1200,14 +1200,14 @@
                                 data-product-variants="{{ json_encode($product->variants) }}">
 
                                 <!-- Coupon Toggle Button -->
-                                {{-- <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+                               <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
         <i class="fas fa-ticket-alt"></i>
         <span>Have a coupon? Click here</span>
         <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
-    </button> --}}
+    </button> 
 
                                 <!-- Coupon Input Block (Hidden by default) -->
-                                {{-- <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+                                <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
         <div class="flex gap-2 flex-col xxs:flex-row">
             <input type="text" 
                    id="coupon-input" 
@@ -1219,7 +1219,7 @@
             </button>
         </div>
         <div id="coupon-message" class="text-sm mt-2 hidden"></div>
-    </div> --}}
+    </div> 
 
                                 <div class="flex flex-col sm:flex-row sm:gap-4 gap-2">
     <!-- Add to Cart -->
@@ -4524,49 +4524,72 @@
             });
 
             // Apply coupon
-            applyCouponBtn.addEventListener('click', function() {
-                const couponCode = couponInput.value.trim();
+        // Apply coupon
+applyCouponBtn.addEventListener('click', function() {
+    const couponCode = couponInput.value.trim();
 
-                if (!couponCode) {
-                    showCouponMessage('Please enter a coupon code', 'red');
-                    return;
+    if (!couponCode) {
+        showCouponMessage('Please enter a coupon code', 'red');
+        return;
+    }
+
+    // Get the current product price
+    const priceElement = document.querySelector('#price-container .text-xl');
+    const priceText = priceElement ? priceElement.textContent.trim() : '0';
+    const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+
+    // Show loading state
+    applyCouponBtn.disabled = true;
+    applyCouponBtn.textContent = 'Applying...';
+
+    fetch('/apply-coupon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ 
+            coupon_code: couponCode,  // Changed from 'coupon' to 'coupon_code'
+            total: total              // Added total
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        applyCouponBtn.disabled = false;
+        applyCouponBtn.textContent = 'Apply';
+        
+        if (data.status) {
+            showCouponMessage(data.message || 'Coupon applied successfully!', 'green');
+            
+            // Optional: Update price display with discount
+            if (data.coupon && data.coupon.discount) {
+                const discount = data.coupon.discount;
+                const discountAmount = (total * discount) / 100;
+                const newTotal = total - discountAmount;
+                
+                // Update price display
+                const priceContainer = document.getElementById('price-container');
+                if (priceContainer) {
+                    // You can modify this to show discounted price
+                    priceContainer.innerHTML = `
+                        <span class="text-xl text-gray-900 font-semibold">Rs. ${newTotal.toFixed(2)}</span>
+                        <span class="line-through text-gray-400">Rs. ${total}</span>
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
+                    `;
                 }
-
-                // Here you would typically make an AJAX request to validate the coupon
-                // For demonstration, I'll show a success message
-                // Replace this with your actual coupon validation logic
-
-                // Example AJAX call (uncomment and modify as needed):
-                /*
-                fetch('/validate-coupon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ coupon: couponCode })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        showCouponMessage('Coupon applied successfully!', 'green');
-                        // Update price or do other actions
-                    } else {
-                        showCouponMessage('Invalid coupon code', 'red');
-                    }
-                })
-                .catch(error => {
-                    showCouponMessage('Error applying coupon', 'red');
-                });
-                */
-
-                // For demonstration purposes only - remove this in production
-                if (couponCode.length > 3) {
-                    showCouponMessage('✓ Coupon "' + couponCode + '" applied successfully!', 'green');
-                } else {
-                    showCouponMessage('✗ Invalid coupon code. Please try again.', 'red');
-                }
-            });
+            }
+        } else {
+            showCouponMessage(data.message || 'Invalid coupon code', 'red');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        applyCouponBtn.disabled = false;
+        applyCouponBtn.textContent = 'Apply';
+        showCouponMessage('Error applying coupon. Please try again.', 'red');
+    });
+});
 
             // Allow Enter key to apply coupon
             couponInput.addEventListener('keypress', function(e) {
