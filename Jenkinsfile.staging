@@ -100,11 +100,7 @@ pipeline {
 
                             echo "[11] Testing staging database"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
-                                php artisan tinker --execute="
-                                    DB::connection()->getPdo();
-                                    echo 'DB CONNECTION OK'.PHP_EOL;
-                                    echo 'DATABASE: '.DB::connection()->getDatabaseName().PHP_EOL;
-                                "
+                                php artisan tinker --execute="DB::connection()->getPdo(); dump(DB::connection()->getDatabaseName());"
 
                             echo "[12] Building frontend assets"
                             docker compose -f "${COMPOSE_FILE}" run --rm node
