@@ -7,6 +7,7 @@ pipeline {
         VPS_HOST = '82.25.104.117'
         STAGING_BRANCH = 'staging'
         COMPOSE_FILE = 'docker-compose.staging.yml'
+        STAGING_URL = 'https://staging.aimanroyale.com'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
     }
 
@@ -19,13 +20,13 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
                             set -e
 
-                            echo "======================================"
-                            echo " VERIFY AIMAN ROYALE STAGING"
-                            echo "======================================"
+                            cd "${PROJECT_DIR}"
+
+                            echo "===== STAGING ENVIRONMENT ====="
 
                             test -d "${PROJECT_DIR}"
-
-                            cd "${PROJECT_DIR}"
+                            test -f "${COMPOSE_FILE}"
+                            test -f .env
 
                             echo "Directory:"
                             pwd
@@ -35,32 +36,23 @@ pipeline {
                             git branch --show-current
 
                             echo ""
-                            echo "Compose file:"
-                            test -f "${COMPOSE_FILE}"
-                            ls -lh "${COMPOSE_FILE}"
-
-                            echo ""
                             echo "Environment:"
-                            test -f .env
-                            grep -E "^(APP_ENV|APP_URL|DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME|NGINX_PORT)=" .env
+                            grep -E "^(APP_ENV|APP_URL)=" .env
 
                             echo ""
-                            echo "Docker Compose:"
-                            docker compose version
+                            echo "Database:"
+                            grep -E "^(DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME)=" .env
 
                             echo ""
-                            echo "Validating staging compose:"
-                            docker compose -f "${COMPOSE_FILE}" config > /tmp/aiman-staging-compose-check.yml
+                            echo "Compose validation:"
+                            docker compose -f "${COMPOSE_FILE}" config >/tmp/aiman-staging-compose-check.yml
 
-                            echo ""
-                            echo "Staging containers:"
-                            docker compose -f "${COMPOSE_FILE}" ps
+                            echo "Compose validation OK"
                         '
                     """
                 }
             }
         }
-
 
         stage('Deploy Staging') {
             steps {
@@ -75,37 +67,38 @@ pipeline {
                             echo " DEPLOYING AIMAN ROYALE STAGING"
                             echo "======================================"
 
-                            echo "[1] Fetching staging branch..."
+                            echo "[1] Fetching staging branch"
                             git fetch origin
 
-                            echo "[2] Checking out staging..."
+                            echo "[2] Checking out staging branch"
                             git checkout "${STAGING_BRANCH}"
 
-                            echo "[3] Resetting to origin/staging..."
+                            echo "[3] Resetting staging to origin/staging"
                             git reset --hard "origin/${STAGING_BRANCH}"
 
-                            echo "[4] Verifying staging compose file..."
+                            echo "[4] Verifying staging files"
+                            test -f .env
                             test -f "${COMPOSE_FILE}"
 
-                            echo "[5] Validating compose..."
-                            docker compose -f "${COMPOSE_FILE}" config > /tmp/aiman-staging-compose-check.yml
+                            echo "[5] Validating compose"
+                            docker compose -f "${COMPOSE_FILE}" config >/tmp/aiman-staging-compose-check.yml
 
-                            echo "[6] Verifying staging database configuration..."
-                            grep -E "^(APP_ENV|APP_URL|DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME|NGINX_PORT)=" .env
+                            echo "[6] Verifying staging database target"
+                            grep -E "^(APP_ENV|APP_URL|DB_HOST|DB_PORT|DB_DATABASE|DB_USERNAME)=" .env
 
-                            echo "[7] Building staging Docker images..."
-                            docker compose -f "${COMPOSE_FILE}" build --pull
+                            echo "[7] Building staging app image"
+                            docker compose -f "${COMPOSE_FILE}" build --pull app
 
-                            echo "[8] Starting staging containers..."
-                            docker compose -f "${COMPOSE_FILE}" up -d
+                            echo "[8] Starting staging runtime"
+                            docker compose -f "${COMPOSE_FILE}" up -d redis app nginx
 
-                            echo "[9] Waiting for containers..."
-                            sleep 20
+                            echo "[9] Waiting for application"
+                            sleep 10
 
-                            echo "[10] Container status..."
+                            echo "[10] Staging container status"
                             docker compose -f "${COMPOSE_FILE}" ps
 
-                            echo "[11] Testing staging database..."
+                            echo "[11] Testing staging database"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
                                 php artisan tinker --execute="
                                     DB::connection()->getPdo();
@@ -113,28 +106,54 @@ pipeline {
                                     echo 'DATABASE: '.DB::connection()->getDatabaseName().PHP_EOL;
                                 "
 
-                            echo "[12] Fixing Laravel permissions..."
-                            docker compose -f "${COMPOSE_FILE}" exec -T app \
-                                chown -R deploy:deploy storage bootstrap/cache
+                            echo "[12] Building frontend assets"
+                            docker compose -f "${COMPOSE_FILE}" run --rm node
 
-                            echo "[13] Running staging migrations..."
+                            echo "[13] Verifying frontend build"
+                            test -f public/build/manifest.json
+                            test -f public/build/assets/css/main.css
+                            test -f public/build/assets/css/main2.css
+
+                            echo "Frontend build OK"
+
+                            echo "[14] Fixing Laravel storage permissions"
+                            chown -R 1001:1001 storage bootstrap/cache
+
+                            find storage bootstrap/cache \
+                                -type d \
+                                -exec chmod 2775 {} +
+
+                            find storage bootstrap/cache \
+                                -type f \
+                                -exec chmod 0664 {} +
+
+                            echo "[15] Testing Laravel write access"
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                sh -c '
+                                    touch storage/framework/jenkins-write-test &&
+                                    rm -f storage/framework/jenkins-write-test
+                                '
+
+                            echo "Laravel write test OK"
+
+                            echo "[16] Running staging migrations"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
                                 php artisan migrate --force
 
-                            echo "[14] Clearing Laravel cache..."
+                            echo "[17] Clearing Laravel cache"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
                                 php artisan optimize:clear
 
-                            echo "[15] Caching views..."
-                            docker compose -f "${COMPOSE_FILE}" exec -T app \
-                                php artisan view:cache
-
-                            echo "[16] Caching config..."
+                            echo "[18] Caching Laravel config"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
                                 php artisan config:cache
 
-                            echo "[17] Saving deployment version..."
-                            echo "${BUILD_NUMBER}" > .deployed-version
+                            echo "[19] Verifying routes"
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                php artisan route:list >/dev/null
+
+                            echo "[20] Saving deployment version"
+                            printf "%s\n" "${BUILD_NUMBER}" > .deployed-version
 
                             echo "======================================"
                             echo " STAGING DEPLOYMENT COMPLETE"
@@ -142,21 +161,43 @@ pipeline {
 
                             echo "Commit:"
                             git rev-parse HEAD
+
+                            echo "Build:"
+                            echo "${BUILD_NUMBER}"
                         '
                     """
                 }
             }
         }
 
-
         stage('Staging Health Check') {
             steps {
                 sh """
-                    echo "Checking staging website..."
+                    set -e
+
+                    echo "===== STAGING HEALTH CHECK ====="
 
                     curl -skSf --max-time 30 \
-                        https://staging.aimanroyale.com/ \
-                        > /dev/null
+                        "${STAGING_URL}/" \
+                        -o /tmp/aiman-staging-home.html
+
+                    grep -q "<html" /tmp/aiman-staging-home.html
+
+                    curl -skSf --max-time 30 \
+                        "${STAGING_URL}/web/css/home-page.css" \
+                        -o /dev/null
+
+                    curl -skSf --max-time 30 \
+                        "${STAGING_URL}/web/css/custom.css" \
+                        -o /dev/null
+
+                    curl -skSf --max-time 30 \
+                        "${STAGING_URL}/build/assets/css/main.css" \
+                        -o /dev/null
+
+                    curl -skSf --max-time 30 \
+                        "${STAGING_URL}/build/assets/css/main2.css" \
+                        -o /dev/null
 
                     echo "Staging health check PASSED"
                 """
