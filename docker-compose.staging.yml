@@ -8,6 +8,12 @@ services:
       dockerfile: Dockerfile
     container_name: aiman-staging-app
 
+    entrypoint: ["sh", "-c"]
+    command: >
+      "
+      exec php-fpm
+      "
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

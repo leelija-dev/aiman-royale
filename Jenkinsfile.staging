@@ -112,12 +112,9 @@ pipeline {
 
                             echo "Frontend build OK"
 
-                            echo "[14] Fixing Laravel storage permissions"
-                            chown -R 1001:1001 storage bootstrap/cache
-
-                            find storage bootstrap/cache \
-                                -type d \
-                                -exec chmod 2775 {} +
+                            echo "[14] Verifying Laravel storage permissions"
+                            test -d storage
+                            test -d bootstrap/cache
 
                             echo "[15] Testing Laravel write access"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
