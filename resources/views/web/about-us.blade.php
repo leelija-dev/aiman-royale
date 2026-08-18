@@ -73,7 +73,13 @@
                         In <strong>2023</strong>, we had our breakthrough. By updating our design collection and customer commitment, we rebuilt our entire line of operations and started from scratch. Since then, Aiman Royal has been designing premium clothing that gives women confidence to walk in any occasion, feeling like a star.
                     </p>
                     <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-6">
-                        Now we have a strong manufacturing unit that is distributed across Kolkata, Kashmir, and Delhi. All these units have skilled workers who redefine royalty and sophistication, and that's why we can ship our standout products pan-India. From shutdown to rebuilding again, Aiman Royal is the definition of what happens when you don't give up. Our resilience and commitment to excellence will continue in future years, and we hope that we will have your support.
+                        Now we have a strong manufacturing unit that is distributed across Kolkata, Kashmir, Hyderabad, and Delhi. All these units have skilled workers who redefine royalty and sophistication, and that's why we can ship our standout products pan-India.
+                    </p>
+                    <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-6">
+                        Behind the name Aiman Royale is R.J. Fashions, the business identity through which our collections come to you, including the billing and GST details reflected on your invoice. Moni Designer Wear Private Limited remains the parent company behind our journey. A name may appear differently on paper, but the vision remains the same. Aiman Royale and R.J. Fashions are one business that serves with love, care, and trust. 
+                    </p>
+                    <p class="text-stone-600 text-base md:text-lg leading-relaxed mb-6">
+                       From shutdown to rebuilding again, Aiman Royal is the definition of what happens when you don't give up. Our resilience and commitment to excellence will continue in future years, and we hope that we will have your support.
                     </p>
                     <div class="flex flex-wrap gap-6 mt-8">
                         <div class="flex items-center gap-3">
@@ -232,7 +238,7 @@
                         <div class="lg:w-1/2 lg:text-right">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary hover:shadow-xl transition-all duration-300">
                                 <span class="text-3xl font-bold text-secondary">2017</span>
-                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">The Humble Beginning</h3>
+                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">The first stitch</h3>
                                 <p class="text-stone-600 text-sm">We started as a fashion brand with one goal: how art looks when you wear it</p>
                             </div>
                         </div>
@@ -255,7 +261,7 @@
                         <div class="lg:w-1/2">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-r-4 border-secondary-light hover:shadow-xl transition-all duration-300">
                                 <span class="text-3xl font-bold text-secondary">2018</span>
-                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">First Major Award</h3>
+                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Building Our Foundation</h3>
                                 <p class="text-stone-600 text-sm">We were building our business and slowly structuring our client base</p>
                             </div>
                         </div>
@@ -266,7 +272,7 @@
                         <div class="lg:w-1/2 lg:text-right">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary hover:shadow-xl transition-all duration-300">
                                 <span class="text-3xl font-bold text-secondary">2019-2023</span>
-                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Flagship Boutique Launch</h3>
+                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Resilience Through Adversity</h3>
                                 <p class="text-stone-600 text-sm">COVID hit us, and our business struggled. The manufacturing and distribution unit stopped.</p>
                             </div>
                         </div>
@@ -289,28 +295,13 @@
                         <div class="lg:w-1/2">
                             <div class="bg-white rounded-2xl p-6 shadow-lg border-r-4 border-secondary-light hover:shadow-xl transition-all duration-300">
                                 <span class="text-3xl font-bold text-secondary">2024-2026</span>
-                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Global Expansion</h3>
+                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">A New Era of Growth</h3>
                                 <p class="text-stone-600 text-sm">Our hard work and resilience made us grow even more. During the time we struggled, we reflected on areas that needed improvement, and we were booming again.</p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- 2024 -->
-                    <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-                        <div class="lg:w-1/2 lg:text-right">
-                            <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary hover:shadow-xl transition-all duration-300">
-                                <span class="text-3xl font-bold text-secondary">2024</span>
-                                <h3 class="text-xl font-bold text-stone-800 mt-2 mb-3">Digital Atelier</h3>
-                                <p class="text-stone-600 text-sm">Launched virtual consultations and 3D fitting rooms, bringing personalized luxury to digital screens.</p>
-                            </div>
-                        </div>
-                        <div class="lg:w-12 flex justify-center">
-                            <div class="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center z-10 shadow-lg">
-                                <i class="fas fa-laptop text-sm"></i>
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2"></div>
-                    </div>
+                  
                 </div>
             </div>
         </div>
