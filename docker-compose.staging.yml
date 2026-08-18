@@ -75,7 +75,7 @@ services:
   node:
     image: node:22-alpine
     container_name: aiman-staging-node
-    restart: unless-stopped
+    restart: "no"
 
     working_dir: /var/www/html
 
@@ -88,8 +88,9 @@ services:
 
     command: >
       sh -c "
-      npm install &&
+      npm ci &&
       npm run build &&
+      chown -R 1001:1001 /var/www/html/public/build &&
       rm -f /var/www/html/public/hot
       "
 
