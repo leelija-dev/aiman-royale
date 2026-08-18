@@ -938,7 +938,7 @@
             text-primary px-4 py-2 rounded-full shadow-sm border border-primary/20">
 
                     <span class="animate-pulse text-secondary">🔥</span>
-                    <span>New Arrivals!</span>
+                    <span>New Arrivals! for testing</span>
 
                     <span class="text-gray-400">|</span>
 
