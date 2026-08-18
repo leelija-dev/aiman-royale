@@ -119,16 +119,12 @@ pipeline {
                                 -type d \
                                 -exec chmod 2775 {} +
 
-                            find storage bootstrap/cache \
-                                -type f \
-                                -exec chmod 0664 {} +
-
                             echo "[15] Testing Laravel write access"
                             docker compose -f "${COMPOSE_FILE}" exec -T app \
-                                sh -c '
-                                    touch storage/framework/jenkins-write-test &&
-                                    rm -f storage/framework/jenkins-write-test
-                                '
+                                touch storage/framework/jenkins-write-test
+
+                            docker compose -f "${COMPOSE_FILE}" exec -T app \
+                                rm -f storage/framework/jenkins-write-test
 
                             echo "Laravel write test OK"
 
