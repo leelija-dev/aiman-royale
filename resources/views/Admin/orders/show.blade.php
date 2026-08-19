@@ -130,6 +130,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Pickup ID:</strong></td>
+                                    <td>{{ $order->pickup_id ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
                                     <td><strong>Courier:</strong></td>
                                     <td>{{ $order->courier_name ?? 'N/A' }}</td>
                                 </tr>
