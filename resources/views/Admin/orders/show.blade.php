@@ -180,7 +180,7 @@
                                                                 <img src="{{ asset($orderProduct->product->images->first()->image) }}" 
                                                                      alt="{{ $orderProduct->product->name }}" 
                                                                      class="img-thumbnail" 
-                                                                     style="width: 50px; height: 50px; object-fit: cover;">
+                                                                     style="width: 50px; height: 50px; object-fit: cover;"  onclick="showImagePreview(this.src, '{{ $orderProduct->product->name }}')">
                                                             @else
                                                                 <div class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
                                                                     <i class="fas fa-box text-gray-500"></i>
@@ -704,7 +704,80 @@ if (!document.getElementById('toast-styles')) {
     `;
     document.head.appendChild(styles);
 }
+
+function showImagePreview(imageSrc, productName) {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: pointer;
+    `;
+    
+    // Create image container
+    const container = document.createElement('div');
+    container.style.cssText = `
+        max-width: 90%;
+        max-height: 90%;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        position: relative;
+    `;
+    
+    // Create image
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    img.alt = productName;
+    img.style.cssText = `
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        display: block;
+    `;
+    
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '×';
+    closeBtn.style.cssText = `
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 30px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #333;
+    `;
+    closeBtn.onclick = (e) => {
+        e.stopPropagation();
+        document.body.removeChild(overlay);
+    };
+    
+    // Add click to close
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            document.body.removeChild(overlay);
+        }
+    };
+    
+    // Build and append
+    container.appendChild(img);
+    container.appendChild(closeBtn);
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+}
 </script>
+
 
 <style>
 .img-thumbnail {
