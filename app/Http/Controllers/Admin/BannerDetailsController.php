@@ -13,8 +13,7 @@ class BannerDetailsController extends Controller
     {
         $search = request('search');
 
-        $bannerDetails = BannerDetails::where('is_active', true)
-            ->when($search, function ($query) use ($search) {
+        $bannerDetails = BannerDetails::when($search, function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%")
                     ->orWhere('offer', 'like', "%{$search}%")
                     ->orWhere('short_description', 'like', "%{$search}%")
@@ -87,6 +86,7 @@ class BannerDetailsController extends Controller
 
     public function update($id, Request $request)
     {
+        // dd($request->all());
         $data = $request->validate([
             'title' => 'nullable|string',
             'short_description' => 'nullable|string',
@@ -95,7 +95,7 @@ class BannerDetailsController extends Controller
             // 'position' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
             'mobile_screen_image' => 'nullable|image',
-            'is_active' => 'boolean',
+            'status' => 'boolean',
         ]);
         try {
             $bannerDetails = BannerDetails::findOrFail($id);
@@ -127,6 +127,7 @@ class BannerDetailsController extends Controller
                 $data['mobile_screen_image'] = $upload['secure_url'];
                 $data['mobile_screen_image_public_id'] = $upload['public_id'];
             }
+            $data['is_active'] = $data['status'] ?? true;
             $data['position'] = null ;
             $bannerDetails->update($data);
             return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Updated successfully');
