@@ -334,8 +334,7 @@
                 <h1>{{ config('app.name', 'Ayman Royale') }}</h1>
                 <p class="subtitle">Premium Fashion & Lifestyle</p>
                 <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">
-                    <i class="fas fa-map-marker-alt"></i>{{ $store->address ?? 'Fashion World
-107/1 PARK 5TH FLOOR, PNB BUILDING, Kolkata,
+                    <i class="fas fa-map-marker-alt"></i>{{ $store->address ?? '107/1 PARK 5TH FLOOR, PNB BUILDING, Kolkata,
 West Bengal' }}<br>
                     <i class="fas fa-phone"></i>{{ $store->phone_number ?? '+91 9876543210' }}<br>
                     <i class="fas fa-envelope"></i> {{ $store->email ?? 'info@aymanroyale.com'}}
