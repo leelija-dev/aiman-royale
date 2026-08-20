@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\Store;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -196,8 +197,9 @@ class OrderManagementController extends Controller
 
     public function viewInvoice($id)
     {
+        $store = Store::first();
         $order = Order::with(['user', 'orderProducts.product', 'orderProducts.variant'])->findOrFail($id);
-        return view('Admin.orders.invoice', compact('order'));
+        return view('Admin.orders.invoice', compact('order', 'store'));
     }
 
     public function downloadInvoice($id)

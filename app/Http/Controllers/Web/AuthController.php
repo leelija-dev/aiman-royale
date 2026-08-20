@@ -134,7 +134,6 @@ class AuthController extends Controller
 
     public function sendOTP(Request $request)
     {
-
         $request->validate([
             'email' => 'nullable|required_without:phone|email|unique:users',
             'phone' => 'nullable|required_without:email|string|unique:users'
@@ -774,11 +773,11 @@ class AuthController extends Controller
             session()->forget('google_data');
 
             // Check for redirect URL from session or request
-            if($request->has('redirect') && $request->redirect) {
+            if ($request->has('redirect') && $request->redirect) {
                 session(['google_redirect_url' => $request->redirect]);
             }
             $redirectUrl = session()->pull('google_redirect_url') ?? $request->redirect ?? null;
-            
+
 
             if ($redirectUrl) {
                 // Validate the redirect URL to prevent open redirect vulnerabilities

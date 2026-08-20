@@ -329,15 +329,31 @@
     <div class="invoice-container" id="invoice-content">
         <!-- Header -->
         <div class="invoice-header">
+            @if(isset($store))
+                 <div class="company-info">
+                <h1>{{ config('app.name', 'Ayman Royale') }}</h1>
+                <p class="subtitle">Premium Fashion & Lifestyle</p>
+                <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">
+                    <i class="fas fa-map-marker-alt"></i>{{ $store->address ?? 'Fashion World
+107/1 PARK 5TH FLOOR, PNB BUILDING, Kolkata,
+West Bengal' }}<br>
+                    <i class="fas fa-phone"></i>{{ $store->phone_number ?? '+91 9876543210' }}<br>
+                    <i class="fas fa-envelope"></i> {{ $store->email ?? 'info@aymanroyale.com'}}
+                </p>
+            </div>
+            @else
             <div class="company-info">
                 <h1>{{ config('app.name', 'Ayman Royale') }}</h1>
                 <p class="subtitle">Premium Fashion & Lifestyle</p>
                 <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">
-                    <i class="fas fa-map-marker-alt"></i> 123 Fashion Street, Mumbai, India<br>
+                    <i class="fas fa-map-marker-alt"></i> Fashion World
+107/1 PARK 5TH FLOOR , PNB BUILDING, Kolkata,
+West Bengal<br>
                     <i class="fas fa-phone"></i> +91 9876543210<br>
                     <i class="fas fa-envelope"></i> info@aymanroyale.com
                 </p>
             </div>
+            @endif
             <div class="invoice-title">
                 <h2>INVOICE</h2>
                 <div class="invoice-number">

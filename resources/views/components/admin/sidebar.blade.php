@@ -546,7 +546,7 @@ $isEmailActive = false;
             <span class="nav-link-text ms-1">Orders</span>
         </a>
     </li>
-
+    
     @if ($admin->hasPermissionTo('view reports') || $admin->hasPermissionTo('view roles') || $admin->hasPermissionTo('view page') || $roles[0] == 'superadmin')
     @php
     $isUserManagement = request()->routeIs('admin.roles*','admin.roles.edit-role', 'admin.users*', "admin.permissions*");
