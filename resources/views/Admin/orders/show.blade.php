@@ -175,7 +175,7 @@
                                             <tr>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <div class="mr-3">
+                                                        <div class="mr-3" style="min-width: 50px; min-height: 50px;">
                                                             @if($orderProduct->product->images && $orderProduct->product->images->first())
                                                                 <img src="{{ asset($orderProduct->product->images->first()->image) }}" 
                                                                      alt="{{ $orderProduct->product->name }}" 
