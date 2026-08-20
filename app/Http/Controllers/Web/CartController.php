@@ -17,6 +17,21 @@ class CartController extends Controller
 {
     public function index(): View
     {
+        if (session()->has('checkout_source') && session()->get('checkout_source') === 'buy_now') {
+            session()->forget([
+                'checkout_source',
+                'checkout_payload',
+                'buy_now_active',
+                'buy_now_product_id',
+                'buy_now_product_url',
+                'checkout_started_at',
+                'last_checkout_url',
+                'buy_now_items'
+            ]);
+
+            // Optional: Flash a message to inform the user
+            session()->flash('info', 'Buy Now session cleared. Your cart items are shown below.');
+        }
         $userId = Auth::id();
         $sessionId = session()->getId();
 
@@ -29,18 +44,18 @@ class CartController extends Controller
                 }
             })
             ->get();
-       
+
 
         $subtotal = $cartItems->sum(function ($item) {
-                //  dd($item->variant->discount_price);
+            //  dd($item->variant->discount_price);
 
             return (($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count);
         });
-        
+
         $shipping = $subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
         $cartCount = $cartItems->sum('count');
-        
+
         $occasions = \App\Models\Occasion::active()->get();
 
         // Check if we need to force refresh (coming from checkout)
@@ -85,7 +100,7 @@ class CartController extends Controller
             if ($existingCart) {
                 // Update existing cart item
                 $newCount = $existingCart->count + $request->count;
-                
+
                 if ($variant->stock < $newCount) {
                     return response()->json([
                         'success' => false,
@@ -99,7 +114,7 @@ class CartController extends Controller
                 ]);
 
                 $cartCount = $this->getCartCount();
-                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Cart updated successfully!',
@@ -247,7 +262,7 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        
+
         try {
             $userId = Auth::id();
             $sessionId = $userId ? null : session()->getId();
@@ -319,76 +334,76 @@ class CartController extends Controller
         ]);
     }
     public function update(Request $request)
-{
-    $data=$request->validate([
-        'cart_id' => 'required|array',
-        'cart_id.*' => 'integer|exists:carts,id',
-        'quantity' => 'required|array',
-        'quantity.*' => 'integer|min:1',
-    ]);
-    // dd($data);
-    foreach ($request->cart_id as $index => $cartId) {
+    {
+        $data = $request->validate([
+            'cart_id' => 'required|array',
+            'cart_id.*' => 'integer|exists:carts,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1',
+        ]);
+        // dd($data);
+        foreach ($request->cart_id as $index => $cartId) {
 
-        $cart = Cart::findorFail($cartId);
+            $cart = Cart::findorFail($cartId);
 
-        if ($cart) {
-            $cart->count = $request->quantity[$index];
-            $cart->save();
+            if ($cart) {
+                $cart->count = $request->quantity[$index];
+                $cart->save();
+            }
         }
+
+        return redirect()->route('checkout.index');
     }
 
-    return redirect()->route('checkout.index');
-}
 
 
+    public function applyCoupon(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'coupon_code' => 'required',
+            'total' => 'required|numeric',
+        ]);
 
-public function applyCoupon(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-    'coupon_code' => 'required',
-    'total' => 'required|numeric',
-]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
 
-if ($validator->fails()) {
-    return response()->json([
-        'status' => false,
-        'message' => $validator->errors()->first(),
-    ]);
-}
+        $coupon = Coupon::where('code', $request->coupon_code)->where('code_type', '!=', 'special-discount')
+            // ->where('expiry_date', '>=', Carbon::now())
+            ->where('is_active', 1)->select('id', 'code', 'discount', 'expiry_date')
+            ->first();
 
-    $coupon = Coupon::where('code', $request->coupon_code)->where('code_type','!=','special-discount') 
-        // ->where('expiry_date', '>=', Carbon::now())
-        ->where('is_active', 1)->select('id','code','discount','expiry_date')
-        ->first();
+        if (!$coupon) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid coupon code.'
+            ]);
+        }
 
-    if (!$coupon) {
+        if (Carbon::now()->gt($coupon->expiry_date)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Coupon has expired.'
+            ]);
+        }
+
+        // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Minimum order amount is ₹'.$coupon->minimum_amount
+        //     ]);
+        // }
+
+        // $discount = ($request->total * $coupon->discount) / 100;
+        // $grandTotal = $request->total - $discount;
+
         return response()->json([
-            'status' => false,
-            'message' => 'Invalid coupon code.'
+            'status' => true,
+            'message' => 'Coupon applied successfully.',
+            'coupon' => $coupon
         ]);
     }
-
-    if (Carbon::now()->gt($coupon->expiry_date)) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Coupon has expired.'
-        ]);
-    }
-
-    // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
-    //     return response()->json([
-    //         'status' => false,
-    //         'message' => 'Minimum order amount is ₹'.$coupon->minimum_amount
-    //     ]);
-    // }
-
-    // $discount = ($request->total * $coupon->discount) / 100;
-    // $grandTotal = $request->total - $discount;
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Coupon applied successfully.',
-        'coupon' => $coupon
-    ]);
-}
 }

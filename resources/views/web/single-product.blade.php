@@ -1200,14 +1200,14 @@
                                 data-product-variants="{{ json_encode($product->variants) }}">
 
                                 <!-- Coupon Toggle Button -->
-                                {{-- <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+                               <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
         <i class="fas fa-ticket-alt"></i>
         <span>Have a coupon? Click here</span>
         <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
-    </button> --}}
+    </button> 
 
                                 <!-- Coupon Input Block (Hidden by default) -->
-                                {{-- <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+                                <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
         <div class="flex gap-2 flex-col xxs:flex-row">
             <input type="text" 
                    id="coupon-input" 
@@ -1219,7 +1219,7 @@
             </button>
         </div>
         <div id="coupon-message" class="text-sm mt-2 hidden"></div>
-    </div> --}}
+    </div> 
 
                                 <div class="flex flex-col sm:flex-row sm:gap-4 gap-2">
     <!-- Add to Cart -->
@@ -3774,7 +3774,8 @@
                 })
                 .then(data => {
                     if (data && data.success) {
-                        showNotification('Product added to cart successfully!', 'success');
+                        showNotificationWithCart('Product added to cart successfully!', 'success', true);
+                        // showNotification('Product added to cart successfully!', 'success');
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
@@ -3831,6 +3832,58 @@
                 }, 3000);
             }
         }
+
+        function showNotificationWithCart(message, type = 'success', showCartButton = true) {
+    if (typeof Swal !== 'undefined') {
+        // SweetAlert2 implementation with "Go to Cart" button
+        Swal.fire({
+            icon: type,
+            title: type === 'success' ? 'Success!' : 'Error!',
+            text: message,
+            showCancelButton: showCartButton && type === 'success',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Go to Cart 🛒',
+            cancelButtonColor: '#4CAF50',
+            confirmButtonColor: '#3085d6',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = '/cart';
+            }
+        });
+    } else {
+        // Fallback for when SweetAlert2 is not available
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        
+        notification.innerHTML = `
+            <div class="flex items-center justify-between gap-4">
+                <span>${message}</span>
+                ${showCartButton && type === 'success' ? `
+                    <button onclick="window.location.href='/cart'" 
+                            class="bg-white text-green-600 px-4 py-1 rounded-lg font-medium hover:bg-gray-100 transition">
+                        Go to Cart 🛒
+                    </button>
+                ` : ''}
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 5000);
+    }
+}
 
         function updateCartCount(count) {
             const cartCountElements = document.querySelectorAll('.cart-count');
@@ -4524,49 +4577,72 @@
             });
 
             // Apply coupon
-            applyCouponBtn.addEventListener('click', function() {
-                const couponCode = couponInput.value.trim();
+        // Apply coupon
+applyCouponBtn.addEventListener('click', function() {
+    const couponCode = couponInput.value.trim();
 
-                if (!couponCode) {
-                    showCouponMessage('Please enter a coupon code', 'red');
-                    return;
+    if (!couponCode) {
+        showCouponMessage('Please enter a coupon code', 'red');
+        return;
+    }
+
+    // Get the current product price
+    const priceElement = document.querySelector('#price-container .text-xl');
+    const priceText = priceElement ? priceElement.textContent.trim() : '0';
+    const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+
+    // Show loading state
+    applyCouponBtn.disabled = true;
+    applyCouponBtn.textContent = 'Applying...';
+
+    fetch('/apply-coupon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ 
+            coupon_code: couponCode,  // Changed from 'coupon' to 'coupon_code'
+            total: total              // Added total
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        applyCouponBtn.disabled = false;
+        applyCouponBtn.textContent = 'Apply';
+        
+        if (data.status) {
+            showCouponMessage(data.message || 'Coupon applied successfully!', 'green');
+            
+            // Optional: Update price display with discount
+            if (data.coupon && data.coupon.discount) {
+                const discount = data.coupon.discount;
+                const discountAmount = (total * discount) / 100;
+                const newTotal = total - discountAmount;
+                
+                // Update price display
+                const priceContainer = document.getElementById('price-container');
+                if (priceContainer) {
+                    // You can modify this to show discounted price
+                    priceContainer.innerHTML = `
+                        <span class="text-xl text-gray-900 font-semibold">Rs. ${newTotal.toFixed(2)}</span>
+                        <span class="line-through text-gray-400">Rs. ${total}</span>
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
+                    `;
                 }
-
-                // Here you would typically make an AJAX request to validate the coupon
-                // For demonstration, I'll show a success message
-                // Replace this with your actual coupon validation logic
-
-                // Example AJAX call (uncomment and modify as needed):
-                /*
-                fetch('/validate-coupon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ coupon: couponCode })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        showCouponMessage('Coupon applied successfully!', 'green');
-                        // Update price or do other actions
-                    } else {
-                        showCouponMessage('Invalid coupon code', 'red');
-                    }
-                })
-                .catch(error => {
-                    showCouponMessage('Error applying coupon', 'red');
-                });
-                */
-
-                // For demonstration purposes only - remove this in production
-                if (couponCode.length > 3) {
-                    showCouponMessage('✓ Coupon "' + couponCode + '" applied successfully!', 'green');
-                } else {
-                    showCouponMessage('✗ Invalid coupon code. Please try again.', 'red');
-                }
-            });
+            }
+        } else {
+            showCouponMessage(data.message || 'Invalid coupon code', 'red');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        applyCouponBtn.disabled = false;
+        applyCouponBtn.textContent = 'Apply';
+        showCouponMessage('Error applying coupon. Please try again.', 'red');
+    });
+});
 
             // Allow Enter key to apply coupon
             couponInput.addEventListener('keypress', function(e) {
