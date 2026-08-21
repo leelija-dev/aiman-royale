@@ -86,6 +86,11 @@ class SizeController extends Controller
         $data['uk_size'] = $request->uk;
         // dd($data);
         $size->update($data);
+        dd(
+    route('admin.sizes'), 
+    url('/admin/sizes'), 
+    config('app.url')
+);
 
         return redirect()->route('admin.sizes')->with('success', 'Size updated successfully!');
     }
