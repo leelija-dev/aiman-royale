@@ -64,7 +64,7 @@ use App\Http\Controllers\Admin\StoreController;
 // use App\Http\Controllers\ShopController;
 
 
-Route::middleware(['web'])->prefix('admin')->group(function () {
+Route::prefix('admin')->group(function () {  //middleware(['web'])->
     Route::view('/login', 'Admin.login')->name('login')->middleware(['guest.admin', 'prevent.back.history']);
     //Route::get('/login', [AuthController::class, 'showLoginForm'])->name('Admin.showLogin');
     Route::post('/login', [AuthController::class, 'login'])->name('Admin.login')->middleware('guest.admin');
@@ -74,7 +74,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
 
 
-    Route::get('/dashboard', [HomeController::class, 'home'])->name('Admin.dashboard')->middleware('auth:admin');
+    Route::get('/dashboard', [HomeController::class, 'home'])->name('admin.dashboard')->middleware('auth:admin');
     Route::get('/dashboard/data', [HomeController::class, 'getDashboardData'])->name('admin.dashboard.data')->middleware('auth:admin');
     Route::fallback(function () {
         abort(404);
