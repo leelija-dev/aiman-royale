@@ -64,7 +64,7 @@ use App\Http\Controllers\Admin\StoreController;
 // use App\Http\Controllers\ShopController;
 
 
-Route::prefix('admin')->group(function () {  //middleware(['web'])->
+Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware(['web'])->
     Route::view('/login', 'Admin.login')->name('login')->middleware(['guest.admin', 'prevent.back.history']);
     //Route::get('/login', [AuthController::class, 'showLoginForm'])->name('Admin.showLogin');
     Route::post('/login', [AuthController::class, 'login'])->name('Admin.login')->middleware('guest.admin');
