@@ -20,7 +20,7 @@ $isEmailActive = false;
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 "
     id="sidenav-main" style="background: white !important;">
     <div class="sidenav-header">
-        <a class="navbar-brand m-0" href="{{route('Admin.dashboard')}}">
+        <a class="navbar-brand m-0" href="{{route('admin.dashboard')}}">
             <div class="d-flex align-items-center" style="font-size: 27px;"><strong><span class="text-success">Aiman</span><span class="text-info"> Royale</span></strong>
             </div>
             {{-- <img src="{{ asset('web/images/amarmaa-text.webp') }}" alt="logo" class="pe-md-4"> --}}
@@ -32,7 +32,7 @@ $isEmailActive = false;
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav" id="menu-accordion">
             <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('Admin.dashboard') ? 'active' : '' }}" href="{{ route('Admin.dashboard') }}">
+                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa fa-home" aria-hidden="true"></i>
