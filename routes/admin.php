@@ -217,7 +217,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // Sizes
         Route::resource('sizes', SizeController::class, [
             'names' => [
-                'index' => 'admin.sizes',
+                'index' => 'admin.sizes.index',
                 'create' => 'admin.sizes.create',
                 'store' => 'admin.sizes.store',
                 'edit' => 'admin.sizes.edit',
