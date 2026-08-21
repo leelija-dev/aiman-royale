@@ -91,9 +91,9 @@ class SizeController extends Controller
         //     url('/admin/sizes'),
         //     config('app.url')
         // );
-        // return redirect('/admin/sizes')->with('success', 'Size created successfully!');
+        return redirect('/admin/sizes')->with('success', 'Size created successfully!');
 
-        return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully!');
+        // return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully!');
     }
 
     /**
