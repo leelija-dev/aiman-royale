@@ -205,7 +205,7 @@ Route::prefix('admin')->group(function () {  //middleware(['web'])->
         // Colors
         Route::resource('colors', ColorController::class, [
             'names' => [
-                'index' => 'admin.colors',
+                'index' => 'admin.colors.index',
                 'create' => 'admin.colors.create',
                 'store' => 'admin.colors.store',
                 'edit' => 'admin.colors.edit',
