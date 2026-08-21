@@ -309,8 +309,8 @@ $isEmailActive = false;
                                 href="{{ route('admin.colors') }}">Colors</a>
                         </li>
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.sizes.*','admin.sizes') ? 'active' : '' }} "
-                                href="{{ route('admin.sizes') }}">Sizes</a>
+                            <a class="submenu-link {{ request()->routeIs('admin.sizes.*','admin.sizes.index') ? 'active' : '' }} "
+                                href="{{ route('admin.sizes.index') }}">Sizes</a>
                         </li>
                         <li class="submenu-item">
                             <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.product-variants','admin.product-variants.create') ? 'active' : '' }} "
