@@ -87,12 +87,13 @@ class SizeController extends Controller
         // dd($data);
         $size->update($data);
         dd(
-    route('admin.sizes'), 
-    url('/admin/sizes'), 
-    config('app.url')
-);
+            route('admin.sizes'),
+            url('/admin/sizes'),
+            config('app.url')
+        );
+        return redirect('/admin/sizes')->with('success', 'Size created successfully!');
 
-        return redirect()->route('admin.sizes')->with('success', 'Size updated successfully!');
+        // return redirect()->route('admin.sizes')->with('success', 'Size updated successfully!');
     }
 
     /**
