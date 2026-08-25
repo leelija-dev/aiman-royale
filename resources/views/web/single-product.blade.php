@@ -983,9 +983,9 @@
                                     $originalPrice = $firstVariant->price;
                                     $discount = $firstVariant->discount;
                                 @endphp
-                                <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
+                                <span class="text-xl  text-gray-900">₹ {{ $currentPrice }}</span>
                                 @if ($originalPrice != $currentPrice)
-                                    <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
+                                    <span class="line-through text-gray-400">₹ {{ $originalPrice }}</span>
                                 @endif
                                 @if ($discount > 0)
                                     <span
@@ -2015,10 +2015,10 @@
 
                                 <!-- Price -->
                                 <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                         {{ $variant->discount_price ?? $variant->price ?? $relatedProduct->price }}</span>
                                     @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        <span class="text-xs text-gray-400 line-through font-sans">₹
                                             {{ $variant->price }}</span>
                                     @endif
                                 </div>
@@ -2135,10 +2135,10 @@
 
                                 <!-- Price -->
                                 <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                         {{ $variant->discount_price ?? $variant->price }}</span>
                                     @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        <span class="text-xs text-gray-400 line-through font-sans">₹
                                             {{ $variant->price }}</span>
                                     @endif
                                 </div>
@@ -2247,10 +2247,10 @@
 
                             <!-- Price -->
                             <div class="flex items-center gap-2 flex-wrap mt-1">
-                                <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                     {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
                                 @if (isset($lastViewedProduct['discount_price']) && $lastViewedProduct['discount_price'] != $lastViewedProduct['price'])
-                                    <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                    <span class="text-xs text-gray-400 line-through font-sans">₹
                                         {{ $lastViewedProduct['price'] }}</span>
                                 @endif
                             </div>
@@ -3530,11 +3530,11 @@
 
                 let originalPriceHtml = '';
                 if (originalPrice != currentPrice) {
-                    originalPriceHtml = `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>`;
+                    originalPriceHtml = `<span class="line-through text-gray-400">₹ ${originalPrice}</span>`;
                 }
 
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${currentPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${currentPrice}</span>
             ${originalPriceHtml}
             ${discountHtml}
         `;
@@ -4185,7 +4185,7 @@
             const priceContainer = document.getElementById('price-container');
             if (priceContainer) {
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${customPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${customPrice}</span>
             <span class="text-sm text-gray-500 ml-2">(Custom)</span>
         `;
             }
@@ -4590,8 +4590,6 @@ applyCouponBtn.addEventListener('click', function() {
     const priceElement = document.querySelector('#price-container .text-xl');
     const priceText = priceElement ? priceElement.textContent.trim() : '0';
     const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-    console.log('Total:',priceText);
-    console.log('Code:',total);
 
     // Show loading state
     applyCouponBtn.disabled = true;
@@ -4622,14 +4620,13 @@ applyCouponBtn.addEventListener('click', function() {
                 const discount = data.coupon.discount;
                 const discountAmount = (total * discount) / 100;
                 const newTotal = total - discountAmount;
-                
-                // Update price display
+              // Update price display
                 const priceContainer = document.getElementById('price-container');
                 if (priceContainer) {
                     // You can modify this to show discounted price
                     priceContainer.innerHTML = `
-                        <span class="text-xl text-gray-900 font-semibold">Rs. ${newTotal.toFixed(2)}</span>
-                        <span class="line-through text-gray-400">Rs. ${total}</span>
+                        <span class="text-xl text-gray-900 font-semibold">₹ ${newTotal.toFixed(2)}</span>
+                        <span class="line-through text-gray-400">₹ ${total}</span>
                         <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
                     `;
                 }
