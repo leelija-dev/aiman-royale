@@ -1163,36 +1163,36 @@
                             {{-- @dd({{ $colorsForSize->count() }}) --}}
                             <!-- Best Offers Section -->
                           <div class="bg-secondary/5 p-4 rounded-lg">
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-truck-fast text-green-600 mr-2"></i>
-        Free Shipping
-    </h3>
+                            <h3 class="font-medium mb-2">
+                                <i class="fas fa-truck-fast text-green-600 mr-2"></i>
+                                Free Shipping
+                            </h3>
 
-    <ul class="text-sm text-gray-600 space-y-1 mb-4">
-        <li>• 7 Days Easy Return and Exchange</li>
-        <li>• Pay on Delivery Available</li>
-    </ul>
+                            <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                                <li>• 7 Days Easy Return and Exchange</li>
+                                <li>• Pay on Delivery Available</li>
+                            </ul>
 
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-tags text-red-600 mr-2"></i>
-        Best Offers
-    </h3>
+                            <h3 class="font-medium mb-2">
+                                <i class="fas fa-tags text-red-600 mr-2"></i>
+                                Best Offers
+                            </h3>
 
-   <ul class="text-sm text-gray-600 space-y-1">
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>
-            <strong>Grand Launch Offer:</strong> Use Coupon Code
-            <span class="font-bold text-red-600">LAUNCH20</span>
-        </span>
-    </li>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center gap-2">
+                                <span>•</span>
+                                <span>
+                                    <strong>Grand Launch Offer:</strong> Use Coupon Code
+                                    <span class="font-bold text-red-600">LAUNCH20</span>
+                                </span>
+                            </li>
 
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
-    </li>
-</ul>
-</div>
+                            <li class="flex items-center gap-2">
+                                <span>•</span>
+                                <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
+                            </li>
+                        </ul>
+                        </div>
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
@@ -4590,6 +4590,8 @@ applyCouponBtn.addEventListener('click', function() {
     const priceElement = document.querySelector('#price-container .text-xl');
     const priceText = priceElement ? priceElement.textContent.trim() : '0';
     const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+    console.log('Total:',priceText);
+    console.log('Code:',total);
 
     // Show loading state
     applyCouponBtn.disabled = true;

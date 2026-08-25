@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\File;
 use App\Traits\CloudinaryUploadTrait;  // ← Add this line
 use Cloudinary\Cloudinary;
 use Illuminate\Support\Facades\Log;
+use App\Models\Unit;
 
 
 class ProductVariantController extends Controller
@@ -57,8 +58,9 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
+        $units = Unit::all();
         $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
-        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes','coupons'));
+        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes','coupons','units'));
     }
 
 
@@ -71,8 +73,9 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
+        $units = Unit::all();
         $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
-        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes','coupons'));
+        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes','coupons','units'));
     }
 
     /**
@@ -154,6 +157,12 @@ class ProductVariantController extends Controller
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'video_url' => 'nullable|url|max:500',
+            'weight' => 'required|numeric|min:0',
+            'weight_unit_id' => 'required|exists:units,id',
+            'height' => 'required|numeric|min:0',
+            'height_unit_id' => 'required|exists:units,id',
+            'width' => 'required|numeric|min:0',
+            'width_unit_id' => 'required|exists:units,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
@@ -245,8 +254,8 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->pluck('name', 'code');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes'));
+        $units = Unit::all();
+        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes','units'));
     }
 
     /**
@@ -359,6 +368,12 @@ class ProductVariantController extends Controller
             'final_price'  => 'nullable|numeric',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
+            'weight' => 'required|numeric|min:0',
+            'weight_unit_id' => 'required|exists:units,id',
+            'height' => 'required|numeric|min:0',
+            'height_unit_id' => 'required|exists:units,id',
+            'width' => 'required|numeric|min:0',
+            'width_unit_id' => 'required|exists:units,id',
             'images' => 'nullable|array',
             'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
@@ -402,6 +417,13 @@ class ProductVariantController extends Controller
             'color_code'      => $data['color_code'],
             'size'            => $request->size,
             'video_url'       => $request->video_url,
+            'weight'          => $request->weight,
+            'weight_unit_id'  => $request->weight_unit_id,
+            'height'          => $request->height,
+            'height_unit_id'  => $request->height_unit_id,
+            'width'           => $request->width,
+            'width_unit_id'   => $request->width_unit_id,
+            
         ]);
 
         $product = Product::find($data['product_id']);
