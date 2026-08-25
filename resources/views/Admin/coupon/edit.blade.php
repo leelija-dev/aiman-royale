@@ -70,7 +70,7 @@
                                 <!-- validity-->
                                 <div class="mb-3">
                                     <label for="validity" class="form-label">Validity(Day)<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="validity" name="validity" value="{{ $coupon->validity }}">
+                                    <input type="number" class="form-control" id="validity" name="validity" value="{{ (int)$coupon->validity }}">
                                     
                                     @error('validity')
                                         <div class="text-danger small">{{ $message }}</div>

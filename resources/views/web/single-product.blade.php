@@ -974,18 +974,21 @@
                                 <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }}
                                     {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                             </div>
-
-                            <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]"
-                                id="price-container">
-                                @php
+                             @php
                                     $firstVariant = $product->variants->first();
                                     $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
                                     $originalPrice = $firstVariant->price;
                                     $discount = $firstVariant->discount;
-                                @endphp
-                                <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
+                            @endphp
+                            <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]"
+                                id="price-container"
+                                 data-original-price="{{ $originalPrice }}"
+                                 data-current-price="{{ $currentPrice }}"
+                                 data-product-discount="{{ $discount }}">
+                               
+                                <span class="text-xl  text-gray-900">₹ {{ $currentPrice }}</span>
                                 @if ($originalPrice != $currentPrice)
-                                    <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
+                                    <span class="line-through text-gray-400">₹ {{ $originalPrice }}</span>
                                 @endif
                                 @if ($discount > 0)
                                     <span
@@ -1163,36 +1166,36 @@
                             {{-- @dd({{ $colorsForSize->count() }}) --}}
                             <!-- Best Offers Section -->
                           <div class="bg-secondary/5 p-4 rounded-lg">
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-truck-fast text-green-600 mr-2"></i>
-        Free Shipping
-    </h3>
+                            <h3 class="font-medium mb-2">
+                                <i class="fas fa-truck-fast text-green-600 mr-2"></i>
+                                Free Shipping
+                            </h3>
 
-    <ul class="text-sm text-gray-600 space-y-1 mb-4">
-        <li>• 7 Days Easy Return and Exchange</li>
-        <li>• Pay on Delivery Available</li>
-    </ul>
+                            <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                                <li>• 7 Days Easy Return and Exchange</li>
+                                <li>• Pay on Delivery Available</li>
+                            </ul>
 
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-tags text-red-600 mr-2"></i>
-        Best Offers
-    </h3>
+                            <h3 class="font-medium mb-2">
+                                <i class="fas fa-tags text-red-600 mr-2"></i>
+                                Best Offers
+                            </h3>
 
-   <ul class="text-sm text-gray-600 space-y-1">
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>
-            <strong>Grand Launch Offer:</strong> Use Coupon Code
-            <span class="font-bold text-red-600">LAUNCH20</span>
-        </span>
-    </li>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center gap-2">
+                                <span>•</span>
+                                <span>
+                                    <strong>Grand Launch Offer:</strong> Use Coupon Code
+                                    <span class="font-bold text-red-600">LAUNCH20</span>
+                                </span>
+                            </li>
 
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
-    </li>
-</ul>
-</div>
+                            <li class="flex items-center gap-2">
+                                <span>•</span>
+                                <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
+                            </li>
+                        </ul>
+                        </div>
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
@@ -2015,10 +2018,10 @@
 
                                 <!-- Price -->
                                 <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                         {{ $variant->discount_price ?? $variant->price ?? $relatedProduct->price }}</span>
                                     @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        <span class="text-xs text-gray-400 line-through font-sans">₹
                                             {{ $variant->price }}</span>
                                     @endif
                                 </div>
@@ -2135,10 +2138,10 @@
 
                                 <!-- Price -->
                                 <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                    <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                         {{ $variant->discount_price ?? $variant->price }}</span>
                                     @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        <span class="text-xs text-gray-400 line-through font-sans">₹
                                             {{ $variant->price }}</span>
                                     @endif
                                 </div>
@@ -2247,10 +2250,10 @@
 
                             <!-- Price -->
                             <div class="flex items-center gap-2 flex-wrap mt-1">
-                                <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
+                                <span class="text-lg font-semibold text-gray-900 font-sans">₹
                                     {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
                                 @if (isset($lastViewedProduct['discount_price']) && $lastViewedProduct['discount_price'] != $lastViewedProduct['price'])
-                                    <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                    <span class="text-xs text-gray-400 line-through font-sans">₹
                                         {{ $lastViewedProduct['price'] }}</span>
                                 @endif
                             </div>
@@ -3530,11 +3533,11 @@
 
                 let originalPriceHtml = '';
                 if (originalPrice != currentPrice) {
-                    originalPriceHtml = `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>`;
+                    originalPriceHtml = `<span class="line-through text-gray-400">₹ ${originalPrice}</span>`;
                 }
 
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${currentPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${currentPrice}</span>
             ${originalPriceHtml}
             ${discountHtml}
         `;
@@ -4185,7 +4188,7 @@
             const priceContainer = document.getElementById('price-container');
             if (priceContainer) {
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${customPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${customPrice}</span>
             <span class="text-sm text-gray-500 ml-2">(Custom)</span>
         `;
             }
@@ -4585,12 +4588,19 @@ applyCouponBtn.addEventListener('click', function() {
         showCouponMessage('Please enter a coupon code', 'red');
         return;
     }
+    const priceContainer = document.getElementById('price-container');
+    const originalPrice2 =parseFloat(priceContainer.dataset.originalPrice) || 0;
 
+    // 2. Current price BEFORE coupon
+    const currentPrice =parseFloat(priceContainer.dataset.currentPrice) || 0;
+
+    // 3. Product discount
+    const productDiscount =parseFloat(priceContainer.dataset.productDiscount) || 0;
     // Get the current product price
     const priceElement = document.querySelector('#price-container .text-xl');
     const priceText = priceElement ? priceElement.textContent.trim() : '0';
     const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-
+    // const preOrginalPrice = 
     // Show loading state
     applyCouponBtn.disabled = true;
     applyCouponBtn.textContent = 'Applying...';
@@ -4620,16 +4630,48 @@ applyCouponBtn.addEventListener('click', function() {
                 const discount = data.coupon.discount;
                 const discountAmount = (total * discount) / 100;
                 const newTotal = total - discountAmount;
-                
-                // Update price display
+              // Update price display
                 const priceContainer = document.getElementById('price-container');
                 if (priceContainer) {
                     // You can modify this to show discounted price
+                    // priceContainer.innerHTML = `
+                    // <span class="line-through text-gray-400">₹ ${total.toFixed(2)}</span>
+                    //     <span class="line-through text-gray-400">₹ ${originalPrice2}</span>
+                    //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${productDiscount}% off)</span>
+                    //     <span class="text-xl text-gray-900 font-semibold">₹ ${newTotal.toFixed(2)}</span>
+                    //     <span class="line-through text-gray-400">₹ ${total}</span>
+                    //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
+                    // `;
                     priceContainer.innerHTML = `
-                        <span class="text-xl text-gray-900 font-semibold">Rs. ${newTotal.toFixed(2)}</span>
-                        <span class="line-through text-gray-400">Rs. ${total}</span>
-                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
-                    `;
+                    <!-- First line: Before coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+                        <span class="line-through text-gray-400">
+                            ₹ ${originalPrice2.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${productDiscount}% off)
+                        </span>
+                    </div>
+
+                    <!-- Second line: After coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xl text-gray-900 font-semibold">
+                            ₹ ${newTotal.toFixed(2)}
+                        </span>
+
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${discount}% off with coupon)
+                        </span>
+                    </div>
+                `;
                 }
             }
         } else {
