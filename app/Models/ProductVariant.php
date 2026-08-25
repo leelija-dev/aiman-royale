@@ -38,8 +38,14 @@ class ProductVariant extends Model
         'discount_price',
         'stock',
         'video_url',
-    ];
+        'weight',
+        'weight_unit_id',
+        'height',
+        'height_unit_id',
+        'width',
+        'width_unit_id',
 
+    ];
     /**
      * The attributes that should be cast.
      *

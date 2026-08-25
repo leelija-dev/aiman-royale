@@ -368,6 +368,90 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                <div class="row">
+                                                                    <!-- Weight -->
+                                                                    <div class="col-md-7 mb-3">
+                                                                        <label for="weight" class="form-label">Weight<span class="text-danger">*</span></label>
+                                                                        <input type="number"  id="weight" name="weight" value="{{ $variant->weight }}" placeholder="Weight.." class="form-control" required>
+                                                                        @error('weight')
+                                                                            <div class="text-danger small">{{ $message }}
+                                                                            </div>
+                                                                        @enderror
+
+                                                                    </div>
+                                                                    <div class="col-md-5 mb-3">
+                                                                        <label for="weight_unit_id" class="form-label">Wegiht Unit<span class="text-danger">*</span></label>
+                                                                        <select class="form-control" id="weight_unit_id" name="weight_unit_id">
+                                                                            <option value="" selected hidden>Select Wegiht Unit</option>
+                                                                            @foreach ($units as $unit)
+                                                                                <option value="{{ $unit->id }}" {{ $unit->name }}  {{ $unit->id == $variant->weight_unit_id ? 'selected' : '' }}>
+                                                                                    {{ $unit->name }} ({{ $unit->code }})
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('weight_unit_id')
+                                                                            <div class="text-danger small">{{ $message }}</div>
+                                                                        @enderror
+                                                                        <div id="weight-unit-id-error" class="text-danger small" style="display: none;"></div>
+
+                                                                    </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <!-- Height -->
+                                                                        <div class="col-md-7 mb-3">
+                                                                        <label for="height" class="form-label">Height<span class="text-danger">*</span></label>
+                                                                        <input type="number"  id="height" name="height" placeholder="Height.." value="{{ $variant->height }}" class="form-control" required>
+                                                                        @error('height')
+                                                                            <div class="text-danger small">{{ $message }}
+                                                                            </div>
+                                                                        @enderror
+
+                                                                    </div>
+                                                                    <div class="col-md-5 mb-3">
+                                                                        <label for="height_unit_id" class="form-label"> Height Unit<span class="text-danger">*</span></label>
+                                                                        <select class="form-control" id="height_unit_id" name="height_unit_id">
+                                                                            <option value="" selected hidden>Select Height Unit</option>
+                                                                            @foreach ($units as $unit)
+                                                                                <option value="{{ $unit->id }}" {{ $unit->name }} {{ $unit->id == $variant->height_unit_id ? 'selected' : '' }}>
+                                                                                    {{ $unit->name }} ({{ $unit->code }})
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('height_unit_id')
+                                                                            <div class="text-danger small">{{ $message }}</div>
+                                                                        @enderror
+                                                                        <div id="weight-unit-id-error" class="text-danger small" style="display: none;"></div>
+
+                                                                    </div>
+                                                                    </div>
+                                                                <div class="row">
+                                                                    <!-- Height -->
+                                                                    <div class="col-md-7 mb-3">
+                                                                        <label for="width" class="form-label">Width<span class="text-danger">*</span></label>
+                                                                        <input type="number" id="width" name="width" placeholder="Width.." value="{{ $variant->width }}" class="form-control" required>
+                                                                        @error('width')
+                                                                            <div class="text-danger small">{{ $message }}
+                                                                            </div>
+                                                                        @enderror
+
+                                                                    </div>
+                                                                    <div class="col-md-5 mb-3">
+                                                                        <label for="width_unit_id" class="form-label"> Width Unit<span class="text-danger">*</span></label>
+                                                                        <select class="form-control" id="width_unit_id" name="width_unit_id">
+                                                                            <option value="" selected hidden>Select Width Unit</option>
+                                                                            @foreach ($units as $unit)
+                                                                                <option value="{{ $unit->id }}" {{ $unit->name }} {{ $unit->id == $variant->width_unit_id ? 'selected' : '' }}>
+                                                                                    {{ $unit->name }} ({{ $unit->code }})
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('width_unit_id')
+                                                                            <div class="text-danger small">{{ $message }}</div>
+                                                                        @enderror
+                                                                        <div id="width-unit-id-error" class="text-danger small" style="display: none;"></div>
+
+                                                                    </div>
+                                                                </div>
                                                                 <div class="mb-3 d-flex align-items-center">
                                                                     <hr class="flex-grow-1 hr-line">
                                                                     <span class="px-1 text-muted fw-bold">Price</span>
