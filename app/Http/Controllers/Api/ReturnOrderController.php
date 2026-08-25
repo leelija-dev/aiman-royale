@@ -179,6 +179,9 @@ class ReturnOrderController extends Controller
                 'awb_status' => 'generated',
             ]);
 
+            $order->update([
+                'return_request_added' => 1
+            ]);
             DB::commit();
 
             return response()->json([
@@ -227,7 +230,7 @@ class ReturnOrderController extends Controller
     {
         try {
             $orderId = $request->query('order_id');
-// dd($orderId);
+            // dd($orderId);
             if (!$orderId) {
                 return response()->json([
                     'success' => false,
