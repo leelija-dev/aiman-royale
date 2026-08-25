@@ -974,15 +974,18 @@
                                 <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }}
                                     {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                             </div>
-
-                            <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]"
-                                id="price-container">
-                                @php
+                             @php
                                     $firstVariant = $product->variants->first();
                                     $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
                                     $originalPrice = $firstVariant->price;
                                     $discount = $firstVariant->discount;
-                                @endphp
+                            @endphp
+                            <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]"
+                                id="price-container"
+                                 data-original-price="{{ $originalPrice }}"
+                                 data-current-price="{{ $currentPrice }}"
+                                 data-product-discount="{{ $discount }}">
+                               
                                 <span class="text-xl  text-gray-900">₹ {{ $currentPrice }}</span>
                                 @if ($originalPrice != $currentPrice)
                                     <span class="line-through text-gray-400">₹ {{ $originalPrice }}</span>
@@ -4585,12 +4588,19 @@ applyCouponBtn.addEventListener('click', function() {
         showCouponMessage('Please enter a coupon code', 'red');
         return;
     }
+    const priceContainer = document.getElementById('price-container');
+    const originalPrice2 =parseFloat(priceContainer.dataset.originalPrice) || 0;
 
+    // 2. Current price BEFORE coupon
+    const currentPrice =parseFloat(priceContainer.dataset.currentPrice) || 0;
+
+    // 3. Product discount
+    const productDiscount =parseFloat(priceContainer.dataset.productDiscount) || 0;
     // Get the current product price
     const priceElement = document.querySelector('#price-container .text-xl');
     const priceText = priceElement ? priceElement.textContent.trim() : '0';
     const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-
+    // const preOrginalPrice = 
     // Show loading state
     applyCouponBtn.disabled = true;
     applyCouponBtn.textContent = 'Applying...';
@@ -4624,11 +4634,44 @@ applyCouponBtn.addEventListener('click', function() {
                 const priceContainer = document.getElementById('price-container');
                 if (priceContainer) {
                     // You can modify this to show discounted price
+                    // priceContainer.innerHTML = `
+                    // <span class="line-through text-gray-400">₹ ${total.toFixed(2)}</span>
+                    //     <span class="line-through text-gray-400">₹ ${originalPrice2}</span>
+                    //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${productDiscount}% off)</span>
+                    //     <span class="text-xl text-gray-900 font-semibold">₹ ${newTotal.toFixed(2)}</span>
+                    //     <span class="line-through text-gray-400">₹ ${total}</span>
+                    //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
+                    // `;
                     priceContainer.innerHTML = `
-                        <span class="text-xl text-gray-900 font-semibold">₹ ${newTotal.toFixed(2)}</span>
-                        <span class="line-through text-gray-400">₹ ${total}</span>
-                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
-                    `;
+                    <!-- First line: Before coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+                        <span class="line-through text-gray-400">
+                            ₹ ${originalPrice2.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${productDiscount}% off)
+                        </span>
+                    </div>
+
+                    <!-- Second line: After coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xl text-gray-900 font-semibold">
+                            ₹ ${newTotal.toFixed(2)}
+                        </span>
+
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${discount}% off with coupon)
+                        </span>
+                    </div>
+                `;
                 }
             }
         } else {
