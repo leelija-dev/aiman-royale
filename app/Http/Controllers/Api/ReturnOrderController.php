@@ -16,6 +16,7 @@ class ReturnOrderController extends Controller
 {
     public function store(Request $request, ?int $orderId = null): JsonResponse
     {
+       
         $validated = $request->validate([
             'order_id' => 'nullable|integer|exists:orders,id',
             'return_reason' => 'nullable|string|max:500',

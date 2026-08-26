@@ -91,6 +91,7 @@ class WebhookController extends Controller
                 $order->delhivery_status = $status;
                 if($status == 'Delivered') {
                     $order->delivered_at = now();
+                    $order->order_status = 'delivered';
                 }
 
                 if($instructions == 'Pickup scheduled'){

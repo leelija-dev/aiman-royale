@@ -10,6 +10,7 @@ class Order extends Model
     protected $table = 'orders';
     protected $fillable = [
         'user_id',
+        'customer_name',
         'total_amount',
         'order_status',
         'delhivery_status',
