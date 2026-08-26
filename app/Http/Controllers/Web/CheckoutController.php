@@ -154,7 +154,9 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
         }
-
+        //Remove session 
+        session()->forget('applied_coupons');
+        
         $checkoutSource = session('checkout_source', 'cart');
 
         if ($checkoutSource === 'buy_now') {
@@ -272,6 +274,7 @@ class CheckoutController extends Controller
         if ($checkoutSource === 'buy_now') {
             session()->forget(['checkout_payload', 'checkout_source']);
         } else {
+            session()->forget('applied_coupons');
             DB::table('carts')->where('user_id', $user_id)->delete();
         }
 
