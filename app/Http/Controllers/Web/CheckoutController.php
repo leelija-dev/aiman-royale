@@ -195,10 +195,11 @@ class CheckoutController extends Controller
         $special_discount_amount = $request->input('special_discount_amount');
         // Get payment method
         $paymentMethod = $request->input('payment_method', 'cashfree');
-
+        $customerName = $request->firstName . " " . $request->lastName;
         // Create order
         $order_id = DB::table('orders')->insertGetId([
             'user_id' => $user_id,
+            'customer_name' => $customerName,
             'phone_no' => $request->phone,
             'address_1' => $request->address1,
             'address_2' => $request->address2,
@@ -619,7 +620,7 @@ class CheckoutController extends Controller
             if (!$order->waybill_number) {
                 // Get order details from request (stored in order table)
                 $orderData = [
-                    'customer_name' => $user->name ?? 'Customer',
+                    'customer_name' => $order->customer_name ?? $user->name ?? 'Customer',
                     'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
                     'city' => $order->city,
                     'state' => $order->state,
@@ -930,7 +931,7 @@ class CheckoutController extends Controller
 
             $orderData = [
                 'order_id' => $orderId,
-                'customer_name' => $customerName,
+                'customer_name' => $order->customer_name ?? $customerName,
                 'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
                 'city' => $order->city,
                 'state' => $order->state,
