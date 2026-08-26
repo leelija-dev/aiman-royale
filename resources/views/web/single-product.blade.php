@@ -42,14 +42,14 @@
     @if ($product == true)
         <style>
             /* ========================================
-           PRODUCT SECTION STYLES
-           Targeting ONLY #single-right-content
-           Respects Tailwind custom properties
-           ======================================== */
+               PRODUCT SECTION STYLES
+               Targeting ONLY #single-right-content
+               Respects Tailwind custom properties
+               ======================================== */
 
             /* #single-right-content {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        } */
+                font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            } */
 
             /* ========== TYPOGRAPHY & HEADINGS ========== */
 
@@ -195,11 +195,11 @@
 
             /* Stitched button - using Tailwind secondary */
             /* #single-right-content .type-btn[data-type="stitched"] {
-            background: var(--secondary, #b8652e);
-            background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%);
-            border-color: var(--secondary, #b8652e);
-            color: white;
-        } */
+                background: var(--secondary, #b8652e);
+                background: linear-gradient(135deg, var(--secondary, #b8652e) 0%, #9a4d22 100%);
+                border-color: var(--secondary, #b8652e);
+                color: white;
+            } */
 
             #single-right-content .type-btn[data-type="stitched"]:hover {
                 transform: translateY(-2px);
@@ -417,9 +417,9 @@
             }
 
             /* #single-right-content .font-medium.mb-2::before {
-                content: '🎁';
-                font-size: 1rem;
-            } */
+                    content: '🎁';
+                    font-size: 1rem;
+                } */
 
             #single-right-content .text-sm.text-gray-600 li {
                 font-size: 0.8rem;
@@ -431,8 +431,8 @@
             }
 
             /* #single-right-content .text-secondary {
-            color: var(--secondary, #b8652e) !important;
-        } */
+                color: var(--secondary, #b8652e) !important;
+            } */
 
             #single-right-content .text-secondary.cursor-pointer {
                 font-weight: 500;
@@ -491,20 +491,20 @@
             }
 
             /* #single-right-content #wishlist-btn:hover {
-            border-color: #e06c4a;
-            background: #fff8f5;
-            transform: scale(1.02);
-        }
+                border-color: #e06c4a;
+                background: #fff8f5;
+                transform: scale(1.02);
+            }
 
-        #single-right-content #wishlist-btn i {
-            transition: color 0.2s;
-            font-size: 1.3rem;
-            color: #b8a28c;
-        }
+            #single-right-content #wishlist-btn i {
+                transition: color 0.2s;
+                font-size: 1.3rem;
+                color: #b8a28c;
+            }
 
-        #single-right-content #wishlist-btn:hover i {
-            color: #e06c4a;
-        } */
+            #single-right-content #wishlist-btn:hover i {
+                color: #e06c4a;
+            } */
 
             /* WhatsApp Button */
             #single-right-content .bg-\[\\#25D366\] {
@@ -877,11 +877,10 @@
                 --}}
                             <div id="get-zoom-container"
                                 class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
-                                <button
-    id="wishlist-btn"
-    class="absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
-    <i class="far fa-heart text-[20px]"></i>
-</button>
+                                <button id="wishlist-btn"
+                                    class="absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
+                                    <i class="far fa-heart text-[20px]"></i>
+                                </button>
                                 @php
                                     $firstImage = $variantImages->first();
                                     // Use the accessor - it handles both local and Cloudinary URLs
@@ -905,59 +904,49 @@
                         <div id="single-right-content" class="space-y-2 w-full md:max-w-[50%] sm:min-w-[270px]">
                             <div class="relative pr-12">
 
-    <!-- Product Information -->
-    <div class="space-y-2">
-        <!-- Product Name -->
-        <h1
-            class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg font-semibold leading-tight text-gray-900">
-            {{ $product->name }}
-        </h1>
+                                <!-- Product Information -->
+                                <div class="space-y-2">
+                                    <!-- Product Name -->
+                                    <h1
+                                        class="text-h3-xs sm:text-h3-sm md:text-h3-md lg:text-h3-lg lgg:text-h3-lgg font-semibold leading-tight text-gray-900">
+                                        {{ $product->name }}
+                                    </h1>
 
-        <!-- Brand -->
-        <div class="flex items-center gap-2 text-sm">
-            <span class="font-medium text-gray-900">
-                {{ $product->brand ?? 'Aiman Royale' }}
-            </span>
+                                    <!-- Brand -->
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <span class="font-medium text-gray-900">
+                                            {{ $product->brand ?? 'Aiman Royale' }}
+                                        </span>
 
-            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                                        <span class="w-1 h-1 rounded-full bg-gray-300"></span>
 
-            <span class="text-gray-500">
-                Premium Collection
-            </span>
-        </div>
+                                        <span class="text-gray-500">
+                                            Premium Collection
+                                        </span>
+                                    </div>
 
-        <!-- Manufacturer -->
-        <p class="text-sm text-gray-500">
-            Manufactured & Packed by
-            <span class="font-medium text-gray-700">Aiman Royale</span>
-        </p>
-    </div>
+                                    <!-- Manufacturer -->
+                                    <p class="text-sm text-gray-500">
+                                        Manufactured & Packed by
+                                        <span class="font-medium text-gray-700">Aiman Royale</span>
+                                    </p>
+                                </div>
 
-    <!-- Share Button -->
-    <button
-        type="button"
-        onclick="openShareModal()"
-        aria-label="Share Product"
-        class="group absolute top-0 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-primary hover:bg-primary hover:shadow-lg">
+                                <!-- Share Button -->
+                                <button type="button" onclick="openShareModal()" aria-label="Share Product"
+                                    class="group absolute top-0 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-primary hover:bg-primary hover:shadow-lg">
 
-        <svg xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 22 20"
-            fill="none"
-            class="transition-colors duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        viewBox="0 0 22 20" fill="none" class="transition-colors duration-300">
 
-            <path
-                d="M12.6053 12.3608C6.28947 11.9245 2.90351 16.5426 1.5 18.9062C2.34211 8.87003 8.74561 5.9063 12.6053 5.17896V1.9945C12.6053 1.56713 13.1067 1.33675 13.431 1.61513L20.6463 7.80961C21.1006 8.19968 21.1117 8.89973 20.671 9.30514L13.4446 15.9523C13.1241 16.2471 12.6053 16.0205 12.6053 15.5851V12.3608Z"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-gray-600 group-hover:text-white" />
-        </svg>
-    </button>
+                                        <path
+                                            d="M12.6053 12.3608C6.28947 11.9245 2.90351 16.5426 1.5 18.9062C2.34211 8.87003 8.74561 5.9063 12.6053 5.17896V1.9945C12.6053 1.56713 13.1067 1.33675 13.431 1.61513L20.6463 7.80961C21.1006 8.19968 21.1117 8.89973 20.671 9.30514L13.4446 15.9523C13.1241 16.2471 12.6053 16.0205 12.6053 15.5851V12.3608Z"
+                                            stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                                            stroke-linejoin="round" class="text-gray-600 group-hover:text-white" />
+                                    </svg>
+                                </button>
 
-</div>
+                            </div>
 
                             <div class="flex items-center gap-2">
                                 <div class="flex text-yellow-400 text-sm">
@@ -973,29 +962,45 @@
                                 </div>
                                 <span class="text-sm text-gray-500">{{ $averageRating }} · {{ $reviewCount }}
                                     {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
+                                
                             </div>
+                            @php
+                                $firstVariant = $product->variants->first();
+                                $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
+                                $originalPrice = $firstVariant->price;
+                                $discount = $firstVariant->discount;
 
+                                // Get all variant coupons
+                                $appliedCoupons = session('applied_coupons', []);
+
+                                // Get coupon for THIS variant only
+                                $appliedCoupon = $appliedCoupons[$firstVariant->id] ?? null;
+
+                                $couponForThisVariant = $appliedCoupon !== null;
+                                // dd($appliedCoupons)
+                                
+                            @endphp
+                            
                             <div class="flex items-center gap-3 flex-wrap bg-secondary/5 border-secondary/25 border-[1px]"
-                                id="price-container">
-                                @php
-                                    $firstVariant = $product->variants->first();
-                                    $currentPrice = $firstVariant->discount_price ?? $firstVariant->price;
-                                    $originalPrice = $firstVariant->price;
-                                    $discount = $firstVariant->discount;
-                                @endphp
-                                <span class="text-xl  text-gray-900">Rs. {{ $currentPrice }}</span>
+                                id="price-container" data-variant-id="{{ $firstVariant->id }}"
+                                data-original-price="{{ $originalPrice }}" data-current-price="{{ $currentPrice }}"
+                                data-product-discount="{{ $discount }}">
+
+                                <span class="text-xl  text-gray-900">₹ {{ $currentPrice }}</span>
                                 @if ($originalPrice != $currentPrice)
-                                    <span class="line-through text-gray-400">Rs. {{ $originalPrice }}</span>
+                                    <span class="line-through text-gray-400">₹ {{ $originalPrice }}</span>
                                 @endif
                                 @if ($discount > 0)
                                     <span
-                                        class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round($discount,2) }}%
+                                        class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">({{ round($discount, 2) }}%
                                         off)</span>
                                 @else
                                     <span class="text-white font-medium px-2 py-1 rounded bg-[#A13015]">Trending</span>
                                 @endif
                             </div>
-
+                            <script>
+                                const savedCoupon = @json($couponForThisVariant ? $appliedCoupon : null);
+                            </script>
                             <!-- Type Selection -->
                             <div>
                                 <h3 class="font-medium mb-3 text-gray-800">Select Type</h3>
@@ -1049,8 +1054,7 @@
                                         <div class="flex flex-wrap gap-2">
                                             @if (isset($colors) && $colors->count() > 0)
                                                 @foreach ($colors as $color)
-                                                 
-                                                <button
+                                                    <button
                                                         class="custom-color-btn w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-all"
                                                         style="background-color: {{ $color->code }};"
                                                         data-color="{{ $color->code }}"
@@ -1074,39 +1078,44 @@
 
                             <!-- Size Selection -->
                             <!-- Size Selection -->
-<div id="size-selection-section" class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-    <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
-        <div class="w-fit">
-            <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-expand-alt text-secondary"></i> Select Size
-            </h3>
-            <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
-        </div>
-        <button type="button" data-size-guide-trigger
-            class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
-            <i class="fas fa-ruler-combined"></i> View Size Guide
-        </button>
-    </div>
+                            <div id="size-selection-section"
+                                class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                                <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+                                    <div class="w-fit">
+                                        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                            <i class="fas fa-expand-alt text-secondary"></i> Select Size
+                                        </h3>
+                                        <p class="text-sm text-primary/80 mt-1">Choose your perfect fit</p>
+                                    </div>
+                                    <button type="button" data-size-guide-trigger
+                                        class="px-4 min-w-[155px] py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 justify-center text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all shadow hover:shadow-md flex items-center gap-2 w-fit">
+                                        <i class="fas fa-ruler-combined"></i> View Size Guide
+                                    </button>
+                                </div>
 
-    <div class="flex gap-3 flex-wrap" id="size-buttons">
-        @php
-            // Get unique sizes from variants that exist in the sizes table
-            $productSizeCodes = $product->variants->pluck('size')->unique()->filter()->toArray();
-            // Filter sizes to only those that have variants
-            $availableSizes = $sizes->filter(function($size) use ($productSizeCodes) {
-                return in_array($size->code, $productSizeCodes);
-            });
-        @endphp
-        @foreach($availableSizes as $size)
-            <button
-                class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
-                data-size="{{ $size->code }}"
-                data-size-id="{{ $size->id }}">
-                <span class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size->code }}</span>
-            </button>
-        @endforeach
-    </div>
-</div>
+                                <div class="flex gap-3 flex-wrap" id="size-buttons">
+                                    @php
+                                        // Get unique sizes from variants that exist in the sizes table
+                                        $productSizeCodes = $product->variants
+                                            ->pluck('size')
+                                            ->unique()
+                                            ->filter()
+                                            ->toArray();
+                                        // Filter sizes to only those that have variants
+                                        $availableSizes = $sizes->filter(function ($size) use ($productSizeCodes) {
+                                            return in_array($size->code, $productSizeCodes);
+                                        });
+                                    @endphp
+                                    @foreach ($availableSizes as $size)
+                                        <button
+                                            class="size-btn relative w-14 h-14 rounded-full border-2 border-gray-200 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group"
+                                            data-size="{{ $size->code }}" data-size-id="{{ $size->id }}">
+                                            <span
+                                                class="text-lg font-semibold text-gray-800 group-hover:text-secondary">{{ $size->code }}</span>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
 
                             <!-- Color Selection -->
                             <div id="color-selection-section">
@@ -1138,12 +1147,12 @@
                                                 $variantImage = $firstImage->image_url; // Use accessor
                                             } elseif ($variant->image) {
                                                 // If variant has direct image property, check if it's a URL
-                                                $imagePath = trim($variant->image);
-                                                $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL)
-                                                    ? $imagePath
-                                                    : asset(ltrim($imagePath, '/'));
-                                            } else {
-                                                $variantImage = asset('assets/images/placeholder.jpg');
+    $imagePath = trim($variant->image);
+    $variantImage = filter_var($imagePath, FILTER_VALIDATE_URL)
+        ? $imagePath
+        : asset(ltrim($imagePath, '/'));
+} else {
+    $variantImage = asset('assets/images/placeholder.jpg');
                                             }
                                         @endphp
                                         <button
@@ -1162,37 +1171,38 @@
                             </div>
                             {{-- @dd({{ $colorsForSize->count() }}) --}}
                             <!-- Best Offers Section -->
-                          <div class="bg-secondary/5 p-4 rounded-lg">
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-truck-fast text-green-600 mr-2"></i>
-        Free Shipping
-    </h3>
+                            <div class="bg-secondary/5 p-4 rounded-lg">
+                                <h3 class="font-medium mb-2">
+                                    <i class="fas fa-truck-fast text-green-600 mr-2"></i>
+                                    Free Shipping
+                                </h3>
 
-    <ul class="text-sm text-gray-600 space-y-1 mb-4">
-        <li>• 7 Days Easy Return and Exchange</li>
-        <li>• Pay on Delivery Available</li>
-    </ul>
+                                <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                                    <li>• 7 Days Easy Return and Exchange</li>
+                                    <li>• Pay on Delivery Available</li>
+                                </ul>
 
-    <h3 class="font-medium mb-2">
-        <i class="fas fa-tags text-red-600 mr-2"></i>
-        Best Offers
-    </h3>
+                                <h3 class="font-medium mb-2">
+                                    <i class="fas fa-tags text-red-600 mr-2"></i>
+                                    Best Offers
+                                </h3>
 
-   <ul class="text-sm text-gray-600 space-y-1">
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>
-            <strong>Grand Launch Offer:</strong> Use Coupon Code
-            <span class="font-bold text-red-600">LAUNCH20</span>
-        </span>
-    </li>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li class="flex items-center gap-2">
+                                        <span>•</span>
+                                        <span>
+                                            <strong>Grand Launch Offer:</strong> Use Coupon Code
+                                            <span class="font-bold text-red-600">LAUNCH20</span>
+                                        </span>
+                                    </li>
 
-    <li class="flex items-center gap-2">
-        <span>•</span>
-        <span>Get up to <strong>10% Extra Discount</strong> on orders above <strong>₹30,000</strong>.</span>
-    </li>
-</ul>
-</div>
+                                    <li class="flex items-center gap-2">
+                                        <span>•</span>
+                                        <span>Get up to <strong>10% Extra Discount</strong> on orders above
+                                            <strong>₹30,000</strong>.</span>
+                                    </li>
+                                </ul>
+                            </div>
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
@@ -1200,46 +1210,47 @@
                                 data-product-variants="{{ json_encode($product->variants) }}">
 
                                 <!-- Coupon Toggle Button -->
-                               <button id="coupon-toggle-btn" class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
-        <i class="fas fa-ticket-alt"></i>
-        <span>Have a coupon? Click here</span>
-        <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="coupon-arrow"></i>
-    </button> 
+                                <button id="coupon-toggle-btn"
+                                    class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <span>Have a coupon? Click here</span>
+                                    <i class="fas fa-chevron-down text-xs transition-transform duration-300"
+                                        id="coupon-arrow"></i>
+                                </button>
 
                                 <!-- Coupon Input Block (Hidden by default) -->
-                                <div id="coupon-block" class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
-        <div class="flex gap-2 flex-col xxs:flex-row">
-            <input type="text" 
-                   id="coupon-input" 
-                   placeholder="Enter coupon code" 
-                   class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
-            <button id="apply-coupon-btn" 
-                    class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
-                Apply
-            </button>
-        </div>
-        <div id="coupon-message" class="text-sm mt-2 hidden"></div>
-    </div> 
+                                <div id="coupon-block"
+                                    class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+                                    <div class="flex gap-2 flex-col xxs:flex-row">
+                                        <input type="text" id="coupon-input" value="{{ $appliedCoupon &&
+        isset($appliedCoupon['variant_id']) &&
+        (int) $appliedCoupon['variant_id'] === (int) $variant->id
+            ? $appliedCoupon['code']
+            : ''}}" placeholder="Enter coupon code"
+                                            class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
+                                        <button id="apply-coupon-btn"
+                                            class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
+                                            Apply
+                                        </button>
+                                    </div>
+                                    <div id="coupon-message" class="text-sm mt-2 hidden"></div>
+                                </div>
 
                                 <div class="flex flex-col sm:flex-row sm:gap-4 gap-2">
-    <!-- Add to Cart -->
-    <button
-        id="add-to-cart"
-        data-variant-id="{{ $product->variants->first()->id }}"
-        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-pink-50 via-pink-100 to-rose-100 border border-pink-200 text-secondary font-semibold text-base transition-all duration-300 hover:from-pink-100 hover:via-pink-200 hover:to-rose-200 hover:shadow-lg flex items-center justify-center gap-2">
-        <i class="fas fa-shopping-cart"></i>
-        <span>Add to Cart</span>
-    </button>
+                                    <!-- Add to Cart -->
+                                    <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}"
+                                        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-pink-50 via-pink-100 to-rose-100 border border-pink-200 text-secondary font-semibold text-base transition-all duration-300 hover:from-pink-100 hover:via-pink-200 hover:to-rose-200 hover:shadow-lg flex items-center justify-center gap-2">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span>Add to Cart</span>
+                                    </button>
 
-    <!-- Buy Now -->
-    <button
-        id="buy-now"
-        data-variant-id="{{ $product->variants->first()->id }}"
-        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-secondary to-red-600 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
-        <i class="fas fa-bag-shopping"></i>
-        <span>Buy Now</span>
-    </button>
-</div>
+                                    <!-- Buy Now -->
+                                    <button id="buy-now" data-variant-id="{{ $product->variants->first()->id }}"
+                                        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-secondary to-red-600 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                                        <i class="fas fa-bag-shopping"></i>
+                                        <span>Buy Now</span>
+                                    </button>
+                                </div>
 
                                 <!-- WhatsApp Share Button -->
                                 <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
@@ -1273,52 +1284,53 @@
         </div>
 
         <!-- Product Details and Specifications Section -->
-      <section class="px-4 lgg:py-12 py-6">
-   <div class="container mx-auto">
-      <!-- DESKTOP TABS -->
-      <div class="hidden md:block">
-         <div class="flex gap-10 border-b text-p-lg xl:text-p-xl 2xl:text-p-2xl">
-            <button class="tab-btn border-b-2 border-black pb-2 text-black font-sans" data-tab="details">Product
-            Details</button>
-            <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
-               data-tab="specification">Specification</button>
-            <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
-               data-tab="reviews">Ratings & Reviews</button>
-         </div>
-         <!-- Tab Content Container -->
-         <div class="mt-6 relative min-h-[300px]">
-            <!-- Product Details Tab -->
-            <div class="tab-content active" id="details">
-               <h3
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2 font-sans">
-                  Product Details
-               </h3>
-               <p
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                  {{ $product->description ?? 'No description available.' }}
-               </p>
-               @if ($product->fabric)
-               <h3
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
-                  Material & Care
-               </h3>
-               <p
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                  {{ $product->material_care }}
-               </p>
-               @endif
-               @if ($product->fit)
-               <h3
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
-                  Size & Fit
-               </h3>
-               <p
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                  {{ $product->fit }}
-               </p>
-               @endif
-               <!-- Product Parts with Fabric and Stitching Type -->
-               {{--
+        <section class="px-4 lgg:py-12 py-6">
+            <div class="container mx-auto">
+                <!-- DESKTOP TABS -->
+                <div class="hidden md:block">
+                    <div class="flex gap-10 border-b text-p-lg xl:text-p-xl 2xl:text-p-2xl">
+                        <button class="tab-btn border-b-2 border-black pb-2 text-black font-sans"
+                            data-tab="details">Product
+                            Details</button>
+                        <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
+                            data-tab="specification">Specification</button>
+                        <button class="tab-btn border-b-2 border-transparent pb-2 text-gray-500 font-sans"
+                            data-tab="reviews">Ratings & Reviews</button>
+                    </div>
+                    <!-- Tab Content Container -->
+                    <div class="mt-6 relative min-h-[300px]">
+                        <!-- Product Details Tab -->
+                        <div class="tab-content active" id="details">
+                            <h3
+                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-2 font-sans">
+                                Product Details
+                            </h3>
+                            <p
+                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                {{ $product->description ?? 'No description available.' }}
+                            </p>
+                            @if ($product->fabric)
+                                <h3
+                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                                    Material & Care
+                                </h3>
+                                <p
+                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                    {{ $product->material_care }}
+                                </p>
+                            @endif
+                            @if ($product->fit)
+                                <h3
+                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                                    Size & Fit
+                                </h3>
+                                <p
+                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                    {{ $product->fit }}
+                                </p>
+                            @endif
+                            <!-- Product Parts with Fabric and Stitching Type -->
+                            {{--
                @if ($product->parts && $product->parts->count() > 0)
                <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2 font-sans">Product Parts</h3>
                <div class="space-y-3">
@@ -1346,130 +1358,135 @@
                </div>
                @endif
                --}}
-               <div class="mt-4 p-3 border rounded-lg bg-gray-50">
-                  <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     @if ($product->type)
-                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 font-sans">Type</span>
-                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
-                     </div>
-                     @endif
-                     @if ($product->color)
-                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 font-sans">Color</span>
-                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
-                     </div>
-                     @endif
-                     @if ($product->fit)
-                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 font-sans">Fit</span>
-                        <span class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
-                     </div>
-                     @endif
-                     @if ($product->fabric && !$product->parts)
-                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 font-sans">Fabric</span>
-                        <span
-                           class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
-                     </div>
-                     @endif
-                     @if ($product->sales_package)
-                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 font-sans">Package Contains</span>
-                        <span
-                           class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
-                     </div>
-                     @endif
-                  </div>
-               </div>
-            </div>
-            <!-- Specification Tab -->
-            <div class="tab-content hidden" id="specification">
-               <h3
-                  class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-4 font-sans">
-                  Product Specifications
-               </h3>
-               <div class="css-175oi2r"
-                  style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
-                  <!-- Stitching Type -->
-                  @if ($product->stitching_type)
-                  <div class="mb-4 p-3 border rounded-lg bg-gray-50">
-                     <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Stitching Information
-                     </h4>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Stitching Type</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ ucfirst($product->stitching_type) }}</span>
+                            <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                                <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional
+                                    Information</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    @if ($product->type)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 font-sans">Type</span>
+                                            <span
+                                                class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                                        </div>
+                                    @endif
+                                    @if ($product->color)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 font-sans">Color</span>
+                                            <span
+                                                class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                                        </div>
+                                    @endif
+                                    @if ($product->fit)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 font-sans">Fit</span>
+                                            <span
+                                                class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                                        </div>
+                                    @endif
+                                    @if ($product->fabric && !$product->parts)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                                            <span
+                                                class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                                        </div>
+                                    @endif
+                                    @if ($product->sales_package)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 font-sans">Package Contains</span>
+                                            <span
+                                                class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-                  @endif
-                  <!-- Display Product Parts -->
-                  @if ($product->parts && $product->parts->count() > 0)
-                  @foreach ($product->parts as $part)
-                  <div class="mb-6 p-4 border rounded-lg bg-gray-50">
-                     <h4 class="font-semibold text-lg mb-3 font-sans"
-                        style="color: #333; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
-                        {{ $part->part_name }}
-                     </h4>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @if ($part->fabric)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Fabric</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->fabric }}</span>
-                        </div>
-                        @endif
-                        @if ($part->work_type)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Work Type</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->work_type }}</span>
-                        </div>
-                        @endif
-                        @if ($part->color)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Color</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->color }}</span>
-                        </div>
-                        @endif
-                        @if ($part->pattern)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Pattern</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->pattern }}</span>
-                        </div>
-                        @endif
-                        @if ($part->embroidery)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Embroidery</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->embroidery }}</span>
-                        </div>
-                        @endif
-                        @if ($part->lining)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Lining</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $part->lining }}</span>
-                        </div>
-                        @endif
-                        @if ($part->description)
-                        <div class="flex flex-col md:col-span-2">
-                           <span class="text-sm text-gray-500 font-sans">Details</span>
-                           <span
-                              class="text-base text-gray-900 font-sans">{{ $part->description }}</span>
-                        </div>
-                        @endif
-                     </div>
-                  </div>
-                  @endforeach
-                  @endif
-                  <!-- Common Specifications -->
-                  {{--
+                        <!-- Specification Tab -->
+                        <div class="tab-content hidden" id="specification">
+                            <h3
+                                class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mb-4 font-sans">
+                                Product Specifications
+                            </h3>
+                            <div class="css-175oi2r"
+                                style="flex-flow: wrap; flex: 1 1 0%; padding: 16px 32px 16px 16px; margin-right: -24px;">
+                                <!-- Stitching Type -->
+                                @if ($product->stitching_type)
+                                    <div class="mb-4 p-3 border rounded-lg bg-gray-50">
+                                        <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Stitching
+                                            Information
+                                        </h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Stitching Type</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ ucfirst($product->stitching_type) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <!-- Display Product Parts -->
+                                @if ($product->parts && $product->parts->count() > 0)
+                                    @foreach ($product->parts as $part)
+                                        <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                                            <h4 class="font-semibold text-lg mb-3 font-sans"
+                                                style="color: #333; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
+                                                {{ $part->part_name }}
+                                            </h4>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                @if ($part->fabric)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->fabric }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->work_type)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Work Type</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->work_type }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->color)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Color</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->color }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->pattern)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Pattern</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->pattern }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->embroidery)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Embroidery</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->embroidery }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->lining)
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm text-gray-500 font-sans">Lining</span>
+                                                        <span
+                                                            class="text-base font-medium text-gray-900 font-sans">{{ $part->lining }}</span>
+                                                    </div>
+                                                @endif
+                                                @if ($part->description)
+                                                    <div class="flex flex-col md:col-span-2">
+                                                        <span class="text-sm text-gray-500 font-sans">Details</span>
+                                                        <span
+                                                            class="text-base text-gray-900 font-sans">{{ $part->description }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                <!-- Common Specifications -->
+                                {{--
                   <div class="mt-4 p-3 border rounded-lg bg-gray-50">
                      <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information</h4>
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1506,151 +1523,154 @@
                      </div>
                   </div>
                   --}}
-               </div>
-            </div>
-            <!-- Reviews Tab -->
-            <div class="tab-content hidden" id="reviews">
-               <div class="p-6 lg:p-8">
-                  <!-- Header with rating summary row -->
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
-                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 tracking-tight font-sans">Ratings & Reviews</h3>
-                        <p class="text-gray-500 mt-1 text-sm font-sans">What our customers are saying</p>
-                     </div>
-                     <!-- Overall rating badge with stars -->
-                     <div
-                        class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
-                        <div class="text-center">
-                           <span id="average-rating"
-                              class="text-4xl font-extrabold text-gray-900 font-sans">0.0</span>
-                           <span class="text-gray-500 text-sm font-sans">/5</span>
-                           <div id="average-stars"
-                              class="flex items-center justify-center mt-1 star-rating">
-                              <!-- Stars will be generated dynamically -->
-                           </div>
+                            </div>
                         </div>
-                        <div class="border-l border-gray-300 pl-4">
-                           <div class="text-sm text-gray-600 font-sans"><span id="total-reviews"
-                              class="font-semibold text-gray-900 font-sans">0</span> verified reviews</div>
-                           <div id="verified-percentage" class="text-xs text-green-600 mt-0.5 font-sans"><i
-                              class="fas fa-check-circle mr-1"></i> 0% recommend</div>
+                        <!-- Reviews Tab -->
+                        <div class="tab-content hidden" id="reviews">
+                            <div class="p-6 lg:p-8">
+                                <!-- Header with rating summary row -->
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-gray-900 tracking-tight font-sans">Ratings &
+                                            Reviews</h3>
+                                        <p class="text-gray-500 mt-1 text-sm font-sans">What our customers are saying</p>
+                                    </div>
+                                    <!-- Overall rating badge with stars -->
+                                    <div
+                                        class="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100">
+                                        <div class="text-center">
+                                            <span id="average-rating"
+                                                class="text-4xl font-extrabold text-gray-900 font-sans">0.0</span>
+                                            <span class="text-gray-500 text-sm font-sans">/5</span>
+                                            <div id="average-stars"
+                                                class="flex items-center justify-center mt-1 star-rating">
+                                                <!-- Stars will be generated dynamically -->
+                                            </div>
+                                        </div>
+                                        <div class="border-l border-gray-300 pl-4">
+                                            <div class="text-sm text-gray-600 font-sans"><span id="total-reviews"
+                                                    class="font-semibold text-gray-900 font-sans">0</span> verified reviews
+                                            </div>
+                                            <div id="verified-percentage" class="text-xs text-green-600 mt-0.5 font-sans">
+                                                <i class="fas fa-check-circle mr-1"></i> 0% recommend</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Rating breakdown bars (visual summary) -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                                    <div id="rating-breakdown" class="space-y-3">
+                                        <!-- Rating bars will be generated dynamically -->
+                                        <div class="flex items-center gap-2 text-sm font-sans">
+                                            <span class="w-12 text-gray-600 font-medium font-sans">5 ★</span>
+                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="5"
+                                                    style="width: 0%"></div>
+                                            </div>
+                                            <span class="w-8 text-gray-500 text-xs percentage-5 font-sans">0%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm font-sans">
+                                            <span class="w-12 text-gray-600 font-medium font-sans">4 ★</span>
+                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="4"
+                                                    style="width: 0%"></div>
+                                            </div>
+                                            <span class="w-8 text-gray-500 text-xs percentage-4 font-sans">0%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm font-sans">
+                                            <span class="w-12 text-gray-600 font-medium font-sans">3 ★</span>
+                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                <div class="bg-yellow-400 h-full rounded-full" data-rating="3"
+                                                    style="width: 0%"></div>
+                                            </div>
+                                            <span class="w-8 text-gray-500 text-xs percentage-3 font-sans">0%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm font-sans">
+                                            <span class="w-12 text-gray-600 font-medium font-sans">2 ★</span>
+                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                <div class="bg-gray-300 h-full rounded-full" data-rating="2"
+                                                    style="width: 0%"></div>
+                                            </div>
+                                            <span class="w-8 text-gray-500 text-xs percentage-2 font-sans">0%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm font-sans">
+                                            <span class="w-12 text-gray-600 font-medium font-sans">1 ★</span>
+                                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                                <div class="bg-gray-300 h-full rounded-full" data-rating="1"
+                                                    style="width: 0%"></div>
+                                            </div>
+                                            <span class="w-8 text-gray-500 text-xs percentage-1 font-sans">0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center lg:justify-end">
+                                        <div
+                                            class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
+                                            <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
+                                            <p class="text-xs font-medium text-indigo-700 font-sans">Top-rated product</p>
+                                            <p class="text-xs text-gray-600 mt-1 font-sans">⭐ Featured in "Customer
+                                                Favorites"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Reviews list header with sorting mock -->
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
+                                    <h4 class="font-semibold text-gray-800 text-lg font-sans">Customer reviews</h4>
+                                    <div
+                                        class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700 font-sans">
+                                        <span>Most relevant</span>
+                                        <i class="fas fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                                <!-- Dynamic reviews list (beautiful cards) -->
+                                <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
+                                    <!-- Loading state -->
+                                    <div class="text-center py-12">
+                                        <div
+                                            class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark">
+                                        </div>
+                                        <p class="text-gray-500 mt-3 font-sans">Loading reviews...</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-                  <!-- Rating breakdown bars (visual summary) -->
-                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-                     <div id="rating-breakdown" class="space-y-3">
-                        <!-- Rating bars will be generated dynamically -->
-                        <div class="flex items-center gap-2 text-sm font-sans">
-                           <span class="w-12 text-gray-600 font-medium font-sans">5 ★</span>
-                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="bg-yellow-400 h-full rounded-full" data-rating="5"
-                                 style="width: 0%"></div>
-                           </div>
-                           <span class="w-8 text-gray-500 text-xs percentage-5 font-sans">0%</span>
+                    </div>
+                </div>
+                <!-- MOBILE ACCORDION - FIXED VERSION -->
+                <div class="md:hidden border-t border-b">
+                    <div class="accordion-wrapper border-b">
+                        <div class="flex justify-between items-center py-4 cursor-pointer">
+                            <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Product
+                                Details</span>
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
-                        <div class="flex items-center gap-2 text-sm font-sans">
-                           <span class="w-12 text-gray-600 font-medium font-sans">4 ★</span>
-                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="bg-yellow-400 h-full rounded-full" data-rating="4"
-                                 style="width: 0%"></div>
-                           </div>
-                           <span class="w-8 text-gray-500 text-xs percentage-4 font-sans">0%</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm font-sans">
-                           <span class="w-12 text-gray-600 font-medium font-sans">3 ★</span>
-                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="bg-yellow-400 h-full rounded-full" data-rating="3"
-                                 style="width: 0%"></div>
-                           </div>
-                           <span class="w-8 text-gray-500 text-xs percentage-3 font-sans">0%</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm font-sans">
-                           <span class="w-12 text-gray-600 font-medium font-sans">2 ★</span>
-                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="bg-gray-300 h-full rounded-full" data-rating="2"
-                                 style="width: 0%"></div>
-                           </div>
-                           <span class="w-8 text-gray-500 text-xs percentage-2 font-sans">0%</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm font-sans">
-                           <span class="w-12 text-gray-600 font-medium font-sans">1 ★</span>
-                           <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div class="bg-gray-300 h-full rounded-full" data-rating="1"
-                                 style="width: 0%"></div>
-                           </div>
-                           <span class="w-8 text-gray-500 text-xs percentage-1 font-sans">0%</span>
-                        </div>
-                     </div>
-                     <div class="flex items-center justify-center lg:justify-end">
-                        <div
-                           class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center w-full max-w-[220px] border border-indigo-100">
-                           <i class="fas fa-medal text-indigo-500 text-2xl mb-1"></i>
-                           <p class="text-xs font-medium text-indigo-700 font-sans">Top-rated product</p>
-                           <p class="text-xs text-gray-600 mt-1 font-sans">⭐ Featured in "Customer Favorites"</p>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- Reviews list header with sorting mock -->
-                  <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-5">
-                     <h4 class="font-semibold text-gray-800 text-lg font-sans">Customer reviews</h4>
-                     <div
-                        class="flex items-center gap-1 text-sm text-gray-500 cursor-pointer hover:text-gray-700 font-sans">
-                        <span>Most relevant</span>
-                        <i class="fas fa-chevron-down text-xs"></i>
-                     </div>
-                  </div>
-                  <!-- Dynamic reviews list (beautiful cards) -->
-                  <div id="reviews-list" class="space-y-5 reviews-list max-h-[500px] overflow-y-auto pr-1">
-                     <!-- Loading state -->
-                     <div class="text-center py-12">
-                        <div
-                           class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-dark">
-                        </div>
-                        <p class="text-gray-500 mt-3 font-sans">Loading reviews...</p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- MOBILE ACCORDION - FIXED VERSION -->
-      <div class="md:hidden border-t border-b">
-         <div class="accordion-wrapper border-b">
-            <div class="flex justify-between items-center py-4 cursor-pointer">
-               <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Product
-               Details</span>
-               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
-            </div>
-            <div class="accordion-content-block">
-               <div class="pb-4">
-                  <p
-                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                     {{ $product->description ?? 'No description available.' }}
-                  </p>
-                  @if ($product->fabric)
-                  <h3
-                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
-                     Material & Care
-                  </h3>
-                  <p
-                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                     {{ $product->fabric }}<br />{{ $product->material_care }}
-                  </p>
-                  @endif
-                  @if ($product->fit)
-                  <h3
-                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
-                     Size & Fit
-                  </h3>
-                  <p
-                     class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
-                     {{ $product->fit }}
-                  </p>
-                  @endif
-                  <!-- Product Parts with Fabric and Stitching Type -->
-                  {{--
+                        <div class="accordion-content-block">
+                            <div class="pb-4">
+                                <p
+                                    class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                    {{ $product->description ?? 'No description available.' }}
+                                </p>
+                                @if ($product->fabric)
+                                    <h3
+                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                                        Material & Care
+                                    </h3>
+                                    <p
+                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                        {{ $product->fabric }}<br />{{ $product->material_care }}
+                                    </p>
+                                @endif
+                                @if ($product->fit)
+                                    <h3
+                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-1 font-sans">
+                                        Size & Fit
+                                    </h3>
+                                    <p
+                                        class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl text-gray-700 font-sans">
+                                        {{ $product->fit }}
+                                    </p>
+                                @endif
+                                <!-- Product Parts with Fabric and Stitching Type -->
+                                {{--
                   @if ($product->parts && $product->parts->count() > 0)
                   <h3 class="text-p-xs sm:text-p-sm md:text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-semibold mt-4 mb-2 font-sans">Product Parts</h3>
                   <div class="space-y-3">
@@ -1678,593 +1698,627 @@
                   </div>
                   @endif
                   --}}
-                  <div class="mt-4 p-3 border rounded-lg bg-gray-50">
-                     <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional Information
-                     </h4>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @if ($product->type)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Type</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                                <div class="mt-4 p-3 border rounded-lg bg-gray-50">
+                                    <h4 class="font-semibold text-lg mb-2 font-sans" style="color: #333;">Additional
+                                        Information
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        @if ($product->type)
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Type</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ $product->type }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($product->color)
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Color</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($product->fit)
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Fit</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($product->fabric && !$product->parts)
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Fabric</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($product->sales_package)
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 font-sans">Package Contains</span>
+                                                <span
+                                                    class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        @endif
-                        @if ($product->color)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Color</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $product->color }}</span>
+                    </div>
+                    <div class="accordion-wrapper border-b">
+                        <div class="flex justify-between items-center py-4 cursor-pointer">
+                            <span
+                                class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Specification</span>
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
-                        @endif
-                        @if ($product->fit)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Fit</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $product->fit }}</span>
+                        <div class="accordion-content-block">
+                            <div class="pb-4">
+                                @if ($product->stitching_type)
+                                    <div class="mb-4 p-3 border rounded bg-gray-50">
+                                        <h5 class="font-semibold mb-2 font-sans">Stitching Information</h5>
+                                        <div class="flex justify-between py-1 font-sans">
+                                            <span class="text-gray-500 font-sans">Stitching Type:</span>
+                                            <span
+                                                class="font-medium font-sans">{{ ucfirst($product->stitching_type) }}</span>
+                                        </div>
+                                    </div>
+                                @endif
+                                @if ($product->parts && $product->parts->count() > 0)
+                                    @foreach ($product->parts as $part)
+                                        <div class="mb-4 p-3 border rounded bg-gray-50">
+                                            <h5 class="font-semibold mb-2 font-sans">{{ $part->part_name }}</h5>
+                                            @if ($part->fabric)
+                                                <div class="flex justify-between py-1 font-sans">
+                                                    <span class="text-gray-500 font-sans">Fabric:</span>
+                                                    <span class="font-medium font-sans">{{ $part->fabric }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($part->work_type)
+                                                <div class="flex justify-between py-1 font-sans">
+                                                    <span class="text-gray-500 font-sans">Work Type:</span>
+                                                    <span class="font-medium font-sans">{{ $part->work_type }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($part->color)
+                                                <div class="flex justify-between py-1 font-sans">
+                                                    <span class="text-gray-500 font-sans">Color:</span>
+                                                    <span class="font-medium font-sans">{{ $part->color }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($part->pattern)
+                                                <div class="flex justify-between py-1 font-sans">
+                                                    <span class="text-gray-500 font-sans">Pattern:</span>
+                                                    <span class="font-medium font-sans">{{ $part->pattern }}</span>
+                                                </div>
+                                            @endif
+                                            @if ($part->embroidery)
+                                                <div class="flex justify-between py-1 font-sans">
+                                                    <span class="text-gray-500 font-sans">Embroidery:</span>
+                                                    <span class="font-medium font-sans">{{ $part->embroidery }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-gray-700 font-sans">Specification details will appear here.</p>
+                                @endif
+                            </div>
                         </div>
-                        @endif
-                        @if ($product->fabric && !$product->parts)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Fabric</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $product->fabric }}</span>
+                    </div>
+                    <div class="accordion-wrapper">
+                        <div class="flex justify-between items-center py-4 cursor-pointer group">
+                            <div class="flex flex-col">
+                                <span class="text-lg font-semibold text-gray-900 font-sans">Ratings & Reviews</span>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <div class="star-rating flex gap-0.5">
+                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 font-medium font-sans">{{ $averageRating }} ·
+                                        {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
+                                </div>
+                            </div>
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                                src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
-                        @endif
-                        @if ($product->sales_package)
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-500 font-sans">Package Contains</span>
-                           <span
-                              class="text-base font-medium text-gray-900 font-sans">{{ $product->sales_package }}</span>
+                        <div class="accordion-content-block">
+                            <div class="pb-4 space-y-6">
+                                <!-- Compact rating summary card for mobile -->
+                                <div
+                                    class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+                                    <div>
+                                        <div class="text-3xl font-bold text-gray-900 font-sans">{{ $averageRating }}</div>
+                                        <div class="star-rating text-xs mt-1">
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="fas fa-star text-yellow-400"></i>
+                                            @endfor
+                                            @if ($hasHalfStar)
+                                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                            @endif
+                                            @for ($i = 0; $i < $emptyStars; $i++)
+                                                <i class="far fa-star text-yellow-400"></i>
+                                            @endfor
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 font-sans">Based on {{ $reviewCount }}
+                                            reviews</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full font-sans"><i
+                                                class="fas fa-check-circle mr-1"></i>
+                                            {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Rating breakdown bars (mobile friendly) -->
+                                <div class="space-y-2">
+                                    @php
+                                        $fiveStarCount = $reviews->where('rating', 5)->count();
+                                        $fourStarCount = $reviews->where('rating', 4)->count();
+                                        $threeStarCount = $reviews->where('rating', 3)->count();
+                                        $fivePercent =
+                                            $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
+                                        $fourPercent =
+                                            $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
+                                        $threePercent =
+                                            $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
+                                    @endphp
+                                    <div class="flex items-center gap-2 text-xs font-sans">
+                                        <span class="w-8 font-sans">5★</span>
+                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                                            <div class="bg-yellow-400 h-full rounded-full"
+                                                style="width: {{ $fivePercent }}%"></div>
+                                        </div>
+                                        <span class="text-gray-500 w-8 font-sans">{{ $fivePercent }}%</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs font-sans">
+                                        <span class="w-8 font-sans">4★</span>
+                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                                            <div class="bg-yellow-400 h-full rounded-full"
+                                                style="width: {{ $fourPercent }}%"></div>
+                                        </div>
+                                        <span class="text-gray-500 w-8 font-sans">{{ $fourPercent }}%</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs font-sans">
+                                        <span class="w-8 font-sans">3★</span>
+                                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
+                                            <div class="bg-yellow-400 h-full rounded-full"
+                                                style="width: {{ $threePercent }}%"></div>
+                                        </div>
+                                        <span class="text-gray-500 w-8 font-sans">{{ $threePercent }}%</span>
+                                    </div>
+                                </div>
+                                <!-- Reviews list for mobile (clean card design) -->
+                                <div class="space-y-4 max-h-[420px] overflow-y-auto">
+                                    @forelse($reviews->take(4) as $review)
+                                        <div class="border-b border-gray-100 pb-4 last:border-0">
+                                            <div class="flex justify-between items-center">
+                                                <div class="flex items-center gap-2">
+                                                    <div
+                                                        class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold font-sans">
+                                                        {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
+                                                    </div>
+                                                    <span
+                                                        class="font-semibold text-sm font-sans">{{ $review->name ?? 'Anonymous User' }}</span>
+                                                </div>
+                                                <div class="star-rating text-[10px]">
+                                                    @for ($i = 0; $i < floor($review->rating); $i++)
+                                                        <i class="fas fa-star text-yellow-400"></i>
+                                                    @endfor
+                                                    @if ($review->rating - floor($review->rating) >= 0.5)
+                                                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                                                    @endif
+                                                    @for ($i = 0; $i < 5 - ceil($review->rating); $i++)
+                                                        <i class="far fa-star text-gray-300"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-600 text-xs mt-2 leading-relaxed font-sans">
+                                                {{ $review->review ?? 'No review text provided.' }}
+                                            </p>
+                                            <div class="flex gap-3 mt-2 text-[11px] text-gray-400 font-sans">
+                                                <span class="font-sans"><i class="far fa-thumbs-up"></i>
+                                                    {{ $review->helpful_count ?? 0 }}</span>
+                                                <span
+                                                    class="font-sans">{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="text-center py-8">
+                                            <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
+                                            <p class="text-gray-500 text-sm font-sans">No reviews yet. Be the first to
+                                                review this
+                                                product!
+                                            </p>
+                                        </div>
+                                    @endforelse
+                                </div>
+                                <p class="text-center text-[11px] text-gray-400 font-sans">Showing
+                                    {{ min(4, $reviewCount) }} of
+                                    {{ $reviewCount }} reviews
+                                </p>
+                            </div>
                         </div>
-                        @endif
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
-         </div>
-         <div class="accordion-wrapper border-b">
-            <div class="flex justify-between items-center py-4 cursor-pointer">
-               <span
-                  class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Specification</span>
-               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
-            </div>
-            <div class="accordion-content-block">
-               <div class="pb-4">
-                  @if ($product->stitching_type)
-                  <div class="mb-4 p-3 border rounded bg-gray-50">
-                     <h5 class="font-semibold mb-2 font-sans">Stitching Information</h5>
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Stitching Type:</span>
-                        <span class="font-medium font-sans">{{ ucfirst($product->stitching_type) }}</span>
-                     </div>
-                  </div>
-                  @endif
-                  @if ($product->parts && $product->parts->count() > 0)
-                  @foreach ($product->parts as $part)
-                  <div class="mb-4 p-3 border rounded bg-gray-50">
-                     <h5 class="font-semibold mb-2 font-sans">{{ $part->part_name }}</h5>
-                     @if ($part->fabric)
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Fabric:</span>
-                        <span class="font-medium font-sans">{{ $part->fabric }}</span>
-                     </div>
-                     @endif
-                     @if ($part->work_type)
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Work Type:</span>
-                        <span class="font-medium font-sans">{{ $part->work_type }}</span>
-                     </div>
-                     @endif
-                     @if ($part->color)
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Color:</span>
-                        <span class="font-medium font-sans">{{ $part->color }}</span>
-                     </div>
-                     @endif
-                     @if ($part->pattern)
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Pattern:</span>
-                        <span class="font-medium font-sans">{{ $part->pattern }}</span>
-                     </div>
-                     @endif
-                     @if ($part->embroidery)
-                     <div class="flex justify-between py-1 font-sans">
-                        <span class="text-gray-500 font-sans">Embroidery:</span>
-                        <span class="font-medium font-sans">{{ $part->embroidery }}</span>
-                     </div>
-                     @endif
-                  </div>
-                  @endforeach
-                  @else
-                  <p class="text-gray-700 font-sans">Specification details will appear here.</p>
-                  @endif
-               </div>
-            </div>
-         </div>
-         <div class="accordion-wrapper">
-            <div class="flex justify-between items-center py-4 cursor-pointer group">
-               <div class="flex flex-col">
-                  <span class="text-lg font-semibold text-gray-900 font-sans">Ratings & Reviews</span>
-                  <div class="flex items-center gap-2 mt-1">
-                     <div class="star-rating flex gap-0.5">
-                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                        <i class="fas fa-star text-yellow-400 text-sm"></i>
-                        <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
-                     </div>
-                     <span class="text-xs text-gray-500 font-medium font-sans">{{ $averageRating }} ·
-                     {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
-                  </div>
-               </div>
-               <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
-                  src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
-            </div>
-            <div class="accordion-content-block">
-               <div class="pb-4 space-y-6">
-                  <!-- Compact rating summary card for mobile -->
-                  <div
-                     class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
-                     <div>
-                        <div class="text-3xl font-bold text-gray-900 font-sans">{{ $averageRating }}</div>
-                        <div class="star-rating text-xs mt-1">
-                           @for ($i = 0; $i < $fullStars; $i++)
-                           <i class="fas fa-star text-yellow-400"></i>
-                           @endfor
-                           @if ($hasHalfStar)
-                           <i class="fas fa-star-half-alt text-yellow-400"></i>
-                           @endif
-                           @for ($i = 0; $i < $emptyStars; $i++)
-                           <i class="far fa-star text-yellow-400"></i>
-                           @endfor
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1 font-sans">Based on {{ $reviewCount }} reviews</p>
-                     </div>
-                     <div class="text-right">
-                        <div class="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full font-sans"><i
-                           class="fas fa-check-circle mr-1"></i>
-                           {{ $reviewCount > 0 ? round(($averageRating / 5) * 100) : 0 }}% recommend
-                        </div>
-                     </div>
-                  </div>
-                  <!-- Rating breakdown bars (mobile friendly) -->
-                  <div class="space-y-2">
-                     @php
-                     $fiveStarCount = $reviews->where('rating', 5)->count();
-                     $fourStarCount = $reviews->where('rating', 4)->count();
-                     $threeStarCount = $reviews->where('rating', 3)->count();
-                     $fivePercent =
-                     $reviewCount > 0 ? round(($fiveStarCount / $reviewCount) * 100) : 0;
-                     $fourPercent =
-                     $reviewCount > 0 ? round(($fourStarCount / $reviewCount) * 100) : 0;
-                     $threePercent =
-                     $reviewCount > 0 ? round(($threeStarCount / $reviewCount) * 100) : 0;
-                     @endphp
-                     <div class="flex items-center gap-2 text-xs font-sans">
-                        <span class="w-8 font-sans">5★</span>
-                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                           <div class="bg-yellow-400 h-full rounded-full"
-                              style="width: {{ $fivePercent }}%"></div>
-                        </div>
-                        <span class="text-gray-500 w-8 font-sans">{{ $fivePercent }}%</span>
-                     </div>
-                     <div class="flex items-center gap-2 text-xs font-sans">
-                        <span class="w-8 font-sans">4★</span>
-                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                           <div class="bg-yellow-400 h-full rounded-full"
-                              style="width: {{ $fourPercent }}%"></div>
-                        </div>
-                        <span class="text-gray-500 w-8 font-sans">{{ $fourPercent }}%</span>
-                     </div>
-                     <div class="flex items-center gap-2 text-xs font-sans">
-                        <span class="w-8 font-sans">3★</span>
-                        <div class="flex-1 h-1.5 bg-gray-200 rounded-full">
-                           <div class="bg-yellow-400 h-full rounded-full"
-                              style="width: {{ $threePercent }}%"></div>
-                        </div>
-                        <span class="text-gray-500 w-8 font-sans">{{ $threePercent }}%</span>
-                     </div>
-                  </div>
-                  <!-- Reviews list for mobile (clean card design) -->
-                  <div class="space-y-4 max-h-[420px] overflow-y-auto">
-                     @forelse($reviews->take(4) as $review)
-                     <div class="border-b border-gray-100 pb-4 last:border-0">
-                        <div class="flex justify-between items-center">
-                           <div class="flex items-center gap-2">
-                              <div
-                                 class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold font-sans">
-                                 {{ strtoupper(substr($review->name ?? 'U', 0, 2)) }}
-                              </div>
-                              <span
-                                 class="font-semibold text-sm font-sans">{{ $review->name ?? 'Anonymous User' }}</span>
-                           </div>
-                           <div class="star-rating text-[10px]">
-                              @for ($i = 0; $i < floor($review->rating); $i++)
-                              <i class="fas fa-star text-yellow-400"></i>
-                              @endfor
-                              @if ($review->rating - floor($review->rating) >= 0.5)
-                              <i class="fas fa-star-half-alt text-yellow-400"></i>
-                              @endif
-                              @for ($i = 0; $i < 5 - ceil($review->rating); $i++)
-                              <i class="far fa-star text-gray-300"></i>
-                              @endfor
-                           </div>
-                        </div>
-                        <p class="text-gray-600 text-xs mt-2 leading-relaxed font-sans">
-                           {{ $review->review ?? 'No review text provided.' }}
-                        </p>
-                        <div class="flex gap-3 mt-2 text-[11px] text-gray-400 font-sans">
-                           <span class="font-sans"><i class="far fa-thumbs-up"></i>
-                           {{ $review->helpful_count ?? 0 }}</span>
-                           <span class="font-sans">{{ $review->created_at ? $review->created_at->diffForHumans() : 'Recently' }}</span>
-                        </div>
-                     </div>
-                     @empty
-                     <div class="text-center py-8">
-                        <i class="fas fa-star text-gray-300 text-4xl mb-2"></i>
-                        <p class="text-gray-500 text-sm font-sans">No reviews yet. Be the first to review this
-                           product!
-                        </p>
-                     </div>
-                     @endforelse
-                  </div>
-                  <p class="text-center text-[11px] text-gray-400 font-sans">Showing {{ min(4, $reviewCount) }} of
-                     {{ $reviewCount }} reviews
-                  </p>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-</section>
+        </section>
 
         <!-- Related Products Section -->
-       <section class="px-4 lgg:py-12 py-6 bg-gray-50">
-    <div class="container mx-auto">
-        <!-- Related Products Section -->
-        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
-            <div>
-                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
-                    Related Products
-                </h2>
-                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
-            </div>
-            <a href="{{ route('page.multi-product') }}"
-                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
-                View All
-                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
-            </a>
-        </div>
-
-        <div class="main-owl owl-carousel owl-theme">
-            @if (isset($relatedProducts))
-                @forelse($relatedProducts as $relatedProduct)
-                    @php
-                        $variant = $relatedProduct->variants->first();
-                        $productImage = $relatedProduct->images->first();
-                        $imagePath = $productImage
-                            ? ltrim($productImage->image, '/')
-                            : 'assets/images/placeholder.jpg';
-                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
-                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                            $parts = explode('upload/', $imageUrl);
-                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
-                        }
-                    @endphp
-                    <div class="item flex justify-center items-center">
-                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
-                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
-                            
-                            <!-- Image Wrapper -->
-                            <div class="relative overflow-hidden bg-gray-100">
-                                <img src="{{ $imageUrl }}"
-                                    alt="{{ $relatedProduct->name }}"
-                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
-                                    loading="lazy"
-                                    decoding="async"
-                                    width="600"
-                                    height="900" />
-
-                                <!-- Quick View Overlay -->
-                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
-                                        Quick View
-                                    </button>
-                                </div>
-
-                                <!-- Badges -->
-                                <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                    @if ($variant && $variant->discount && $variant->discount > 0)
-                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                            {{ number_format(
-                                                ($variant->discount - floor($variant->discount)) >= 0.5
-                                                    ? ceil($variant->discount)
-                                                    : $variant->discount,
-                                                2
-                                            ) }}% OFF
-                                        </span>
-                                    @elseif($relatedProduct->is_trending ?? false)
-                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
-                                            Trending
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-2">
-                                <div class="flex items-start justify-between">
-                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
-                                        {{ $relatedProduct->name }}
-                                    </h3>
-                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
-                                </div>
-
-                                <!-- Rating -->
-                                <div class="flex items-center gap-2">
-                                    <div class="flex items-center gap-0.5">
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                    </div>
-                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
-                                </div>
-
-                                <!-- Price -->
-                                <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
-                                        {{ $variant->discount_price ?? $variant->price ?? $relatedProduct->price }}</span>
-                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
-                                            {{ $variant->price }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+        <section class="px-4 lgg:py-12 py-6 bg-gray-50">
+            <div class="container mx-auto">
+                <!-- Related Products Section -->
+                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
+                    <div>
+                        <h2
+                            class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                            Related Products
+                        </h2>
+                        <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
                     </div>
-                @empty
-                    <div class="text-center py-8">
-                        <p class="text-gray-500 font-sans">No related products found.</p>
-                    </div>
-                @endforelse
-            @else
-                <div class="text-center py-8">
-                    <p class="text-gray-500 font-sans">Related products not available.</p>
+                    <a href="{{ route('page.multi-product') }}"
+                        class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                        View All
+                        <span class="group-hover:translate-x-1 transition-transform duration-300"
+                            aria-hidden="true">→</span>
+                    </a>
                 </div>
-            @endif
-        </div>
 
-        
-    </div>
-</section>
+                <div class="main-owl owl-carousel owl-theme">
+                    @if (isset($relatedProducts))
+                        @forelse($relatedProducts as $relatedProduct)
+                            @php
+                                $variant = $relatedProduct->variants->first();
+                                $productImage = $relatedProduct->images->first();
+                                $imagePath = $productImage
+                                    ? ltrim($productImage->image, '/')
+                                    : 'assets/images/placeholder.jpg';
+                                $imageUrl = $relatedProduct->featured_image
+                                    ? asset($relatedProduct->featured_image)
+                                    : asset('assets/images/placeholder.jpg');
+                                if (
+                                    strpos($imageUrl, 'cloudinary.com') !== false &&
+                                    strpos($imageUrl, 'upload/') !== false
+                                ) {
+                                    $parts = explode('upload/', $imageUrl);
+                                    $imageUrl =
+                                        $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                                }
+                            @endphp
+                            <div class="item flex justify-center items-center">
+                                <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                                    onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
 
-<section class="px-4 lgg:py-12 py-6 ">
-    <div class="container mx-auto">
-        <!-- Most Wishlisted Products Section -->
-        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6 ">
-            <div>
-                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
-                    Most Wishlisted Products
-                </h2>
-                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
-            </div>
-            <a href="{{ route('page.multi-product') }}"
-                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
-                View All
-                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
-            </a>
-        </div>
+                                    <!-- Image Wrapper -->
+                                    <div class="relative overflow-hidden bg-gray-100">
+                                        <img src="{{ $imageUrl }}" alt="{{ $relatedProduct->name }}"
+                                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                            loading="lazy" decoding="async" width="600" height="900" />
 
-        <div class="main-owl owl-carousel owl-theme">
-            @if (isset($mostWishlistedProducts))
-                @forelse($mostWishlistedProducts as $relatedProduct)
-                    @php
-                        $variant = $relatedProduct->variants->first();
-                        $imageUrl = $relatedProduct->featured_image ? asset($relatedProduct->featured_image) : asset('assets/images/placeholder.jpg');
-                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                            $parts = explode('upload/', $imageUrl);
-                            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
-                        }
-                        if (!$variant) {
-                            continue;
-                        }
-                    @endphp
-                    <div class="item flex justify-center items-center">
-                        <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
-                            onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
-                            
-                            <!-- Image Wrapper -->
-                            <div class="relative overflow-hidden bg-gray-100">
-                                <img src="{{ $imageUrl }}"
-                                    alt="{{ $relatedProduct->name }}"
-                                    class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
-                                    loading="lazy"
-                                    decoding="async"
-                                    width="600"
-                                    height="900" />
+                                        <!-- Quick View Overlay -->
+                                        <div
+                                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                            <button
+                                                class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                                Quick View
+                                            </button>
+                                        </div>
 
-                                <!-- Quick View Overlay -->
-                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                                    <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
-                                        Quick View
-                                    </button>
-                                </div>
-
-                                <!-- Badges -->
-                                <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                    @if ($variant && $variant->discount && $variant->discount > 0)
-                                        <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                            {{ number_format(
-                                                ($variant->discount - floor($variant->discount)) >= 0.5
-                                                    ? ceil($variant->discount)
-                                                    : $variant->discount,
-                                                2
-                                            ) }}% OFF
-                                        </span>
-                                    @elseif($relatedProduct->is_trending ?? false)
-                                        <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
-                                            Trending
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-4 space-y-2">
-                                <div class="flex items-start justify-between">
-                                    <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
-                                        {{ $relatedProduct->name }}
-                                    </h3>
-                                    <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
-                                </div>
-
-                                <!-- Rating -->
-                                <div class="flex items-center gap-2">
-                                    <div class="flex items-center gap-0.5">
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                        <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                        <!-- Badges -->
+                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                            @if ($variant && $variant->discount && $variant->discount > 0)
+                                                <span
+                                                    class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                                    {{ number_format(
+                                                        $variant->discount - floor($variant->discount) >= 0.5 ? ceil($variant->discount) : $variant->discount,
+                                                        2,
+                                                    ) }}%
+                                                    OFF
+                                                </span>
+                                            @elseif($relatedProduct->is_trending ?? false)
+                                                <span
+                                                    class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                                    Trending
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <span class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
-                                </div>
 
-                                <!-- Price -->
-                                <div class="flex items-center gap-2 flex-wrap mt-1">
-                                    <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
-                                        {{ $variant->discount_price ?? $variant->price }}</span>
-                                    @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
-                                            {{ $variant->price }}</span>
-                                    @endif
+                                    <!-- Content -->
+                                    <div class="p-4 space-y-2">
+                                        <div class="flex items-start justify-between">
+                                            <h3
+                                                class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                                {{ $relatedProduct->name }}
+                                            </h3>
+                                            <span
+                                                class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                        </div>
+
+                                        <!-- Rating -->
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex items-center gap-0.5">
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                            </div>
+                                            <span
+                                                class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                        </div>
+
+                                        <!-- Price -->
+                                        <div class="flex items-center gap-2 flex-wrap mt-1">
+                                            <span class="text-lg font-semibold text-gray-900 font-sans">₹
+                                                {{ $variant->discount_price ?? ($variant->price ?? $relatedProduct->price) }}</span>
+                                            @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                                <span class="text-xs text-gray-400 line-through font-sans">₹
+                                                    {{ $variant->price }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        @empty
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 font-sans">No related products found.</p>
+                            </div>
+                        @endforelse
+                    @else
+                        <div class="text-center py-8">
+                            <p class="text-gray-500 font-sans">Related products not available.</p>
                         </div>
-                    </div>
-                @empty
-                    <div class="text-center py-8">
-                        <p class="text-gray-500 font-sans">No wishlisted products found.</p>
-                    </div>
-                @endforelse
-            @else
-                <div class="text-center py-8">
-                    <p class="text-gray-500 font-sans">Wishlisted products not available.</p>
+                    @endif
                 </div>
-            @endif
-        </div>
-</div>
-</section>
+
+
+            </div>
+        </section>
+
+        <section class="px-4 lgg:py-12 py-6 ">
+            <div class="container mx-auto">
+                <!-- Most Wishlisted Products Section -->
+                <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6 ">
+                    <div>
+                        <h2
+                            class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                            Most Wishlisted Products
+                        </h2>
+                        <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
+                    </div>
+                    <a href="{{ route('page.multi-product') }}"
+                        class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                        View All
+                        <span class="group-hover:translate-x-1 transition-transform duration-300"
+                            aria-hidden="true">→</span>
+                    </a>
+                </div>
+
+                <div class="main-owl owl-carousel owl-theme">
+                    @if (isset($mostWishlistedProducts))
+                        @forelse($mostWishlistedProducts as $relatedProduct)
+                            @php
+                                $variant = $relatedProduct->variants->first();
+                                $imageUrl = $relatedProduct->featured_image
+                                    ? asset($relatedProduct->featured_image)
+                                    : asset('assets/images/placeholder.jpg');
+                                if (
+                                    strpos($imageUrl, 'cloudinary.com') !== false &&
+                                    strpos($imageUrl, 'upload/') !== false
+                                ) {
+                                    $parts = explode('upload/', $imageUrl);
+                                    $imageUrl =
+                                        $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                                }
+                                if (!$variant) {
+                                    continue;
+                                }
+                            @endphp
+                            <div class="item flex justify-center items-center">
+                                <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                                    onclick="window.location.href='{{ route('page.single-product', $relatedProduct->slug) }}';">
+
+                                    <!-- Image Wrapper -->
+                                    <div class="relative overflow-hidden bg-gray-100">
+                                        <img src="{{ $imageUrl }}" alt="{{ $relatedProduct->name }}"
+                                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                            loading="lazy" decoding="async" width="600" height="900" />
+
+                                        <!-- Quick View Overlay -->
+                                        <div
+                                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                            <button
+                                                class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                                Quick View
+                                            </button>
+                                        </div>
+
+                                        <!-- Badges -->
+                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                            @if ($variant && $variant->discount && $variant->discount > 0)
+                                                <span
+                                                    class="bg-gradient-to-r from-red-500 to-red-600 text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                                    {{ number_format(
+                                                        $variant->discount - floor($variant->discount) >= 0.5 ? ceil($variant->discount) : $variant->discount,
+                                                        2,
+                                                    ) }}%
+                                                    OFF
+                                                </span>
+                                            @elseif($relatedProduct->is_trending ?? false)
+                                                <span
+                                                    class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                                    Trending
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="p-4 space-y-2">
+                                        <div class="flex items-start justify-between">
+                                            <h3
+                                                class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                                {{ $relatedProduct->name }}
+                                            </h3>
+                                            <span
+                                                class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $relatedProduct->brand ?? '' }}</span>
+                                        </div>
+
+                                        <!-- Rating -->
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex items-center gap-0.5">
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                            </div>
+                                            <span
+                                                class="text-xs font-sans text-gray-400">({{ $relatedProduct->rating_count ?? rand(10, 200) }})</span>
+                                        </div>
+
+                                        <!-- Price -->
+                                        <div class="flex items-center gap-2 flex-wrap mt-1">
+                                            <span class="text-lg font-semibold text-gray-900 font-sans">₹
+                                                {{ $variant->discount_price ?? $variant->price }}</span>
+                                            @if ($variant && $variant->discount_price && $variant->discount_price != $variant->price)
+                                                <span class="text-xs text-gray-400 line-through font-sans">₹
+                                                    {{ $variant->price }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 font-sans">No wishlisted products found.</p>
+                            </div>
+                        @endforelse
+                    @else
+                        <div class="text-center py-8">
+                            <p class="text-gray-500 font-sans">Wishlisted products not available.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </section>
 
 
         <!-- Last Viewed Products Section -->
         @if ($lastViewedProducts && $lastViewedProducts->isNotEmpty())
 
-           <section class="px-4 lgg:py-12 py-6 bg-gray-50">
-    <div class="container mx-auto">
-        <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
-            <div>
-                <h2 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
-                    Last Viewed Products
-                </h2>
-                <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
-            </div>
-            <a href="{{ route('page.multi-product') }}"
-                class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
-                View All
-                <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
-            </a>
-        </div>
-
-        <div class="main-owl owl-carousel owl-theme">
-            @forelse($lastViewedProducts as $lastViewedProduct)
-                @php
-                    $imageUrl = $lastViewedProduct['featured_image'] 
-                        ? asset($lastViewedProduct['featured_image']) 
-                        : asset('assets/images/placeholder.jpg');
-                    if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                        $parts = explode('upload/', $imageUrl);
-                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
-                    }
-                @endphp
-                <div class="item flex justify-center items-center">
-                    <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
-                        onclick="window.location.href='{{ route('page.single-product', $lastViewedProduct['slug']) }}';">
-                        
-                        <!-- Image Wrapper -->
-                        <div class="relative overflow-hidden bg-gray-100">
-                            <img src="{{ $imageUrl }}"
-                                alt="{{ $lastViewedProduct['name'] }}"
-                                class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
-                                loading="lazy"
-                                decoding="async"
-                                width="600"
-                                height="900" />
-
-                            <!-- Quick View Overlay -->
-                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                                <button class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
-                                    Quick View
-                                </button>
-                            </div>
-
-                            <!-- Badges -->
-                            <div class="absolute top-3 left-3 flex flex-col gap-2">
-                                @if ($lastViewedProduct['is_trending'] ?? false)
-                                    <span class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
-                                        Trending
-                                    </span>
-                                @endif
-                                <span class="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
-                                    Recently Viewed
-                                </span>
-                            </div>
+            <section class="px-4 lgg:py-12 py-6 bg-gray-50">
+                <div class="container mx-auto">
+                    <div class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-6">
+                        <div>
+                            <h2
+                                class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-light text-gray-800 heading-font tracking-wide">
+                                Last Viewed Products
+                            </h2>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
                         </div>
+                        <a href="{{ route('page.multi-product') }}"
+                            class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                            View All
+                            <span class="group-hover:translate-x-1 transition-transform duration-300"
+                                aria-hidden="true">→</span>
+                        </a>
+                    </div>
 
-                        <!-- Content -->
-                        <div class="p-4 space-y-2">
-                            <div class="flex items-start justify-between">
-                                <h3 class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
-                                    {{ $lastViewedProduct['name'] }}
-                                </h3>
-                                <span class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $lastViewedProduct['brand'] ?? '' }}</span>
-                            </div>
+                    <div class="main-owl owl-carousel owl-theme">
+                        @forelse($lastViewedProducts as $lastViewedProduct)
+                            @php
+                                $imageUrl = $lastViewedProduct['featured_image']
+                                    ? asset($lastViewedProduct['featured_image'])
+                                    : asset('assets/images/placeholder.jpg');
+                                if (
+                                    strpos($imageUrl, 'cloudinary.com') !== false &&
+                                    strpos($imageUrl, 'upload/') !== false
+                                ) {
+                                    $parts = explode('upload/', $imageUrl);
+                                    $imageUrl =
+                                        $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
+                                }
+                            @endphp
+                            <div class="item flex justify-center items-center">
+                                <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
+                                    onclick="window.location.href='{{ route('page.single-product', $lastViewedProduct['slug']) }}';">
 
-                            <!-- Rating -->
-                            <div class="flex items-center gap-2">
-                                <div class="flex items-center gap-0.5">
-                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
-                                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                    <!-- Image Wrapper -->
+                                    <div class="relative overflow-hidden bg-gray-100">
+                                        <img src="{{ $imageUrl }}" alt="{{ $lastViewedProduct['name'] }}"
+                                            class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
+                                            loading="lazy" decoding="async" width="600" height="900" />
+
+                                        <!-- Quick View Overlay -->
+                                        <div
+                                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                            <button
+                                                class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                                Quick View
+                                            </button>
+                                        </div>
+
+                                        <!-- Badges -->
+                                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                            @if ($lastViewedProduct['is_trending'] ?? false)
+                                                <span
+                                                    class="bg-black/90 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider border border-white/20">
+                                                    Trending
+                                                </span>
+                                            @endif
+                                            <span
+                                                class="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white text-[11px] font-medium px-3 py-1.5 rounded-full font-sans uppercase tracking-wider shadow-lg">
+                                                Recently Viewed
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="p-4 space-y-2">
+                                        <div class="flex items-start justify-between">
+                                            <h3
+                                                class="text-[14px] font-medium text-gray-800 truncate font-sans uppercase tracking-wide flex-1 pr-2">
+                                                {{ $lastViewedProduct['name'] }}
+                                            </h3>
+                                            <span
+                                                class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $lastViewedProduct['brand'] ?? '' }}</span>
+                                        </div>
+
+                                        <!-- Rating -->
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex items-center gap-0.5">
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                            </div>
+                                            <span class="text-xs font-sans text-gray-400">({{ rand(10, 200) }})</span>
+                                        </div>
+
+                                        <!-- Price -->
+                                        <div class="flex items-center gap-2 flex-wrap mt-1">
+                                            <span class="text-lg font-semibold text-gray-900 font-sans">₹
+                                                {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
+                                            @if (isset($lastViewedProduct['discount_price']) && $lastViewedProduct['discount_price'] != $lastViewedProduct['price'])
+                                                <span class="text-xs text-gray-400 line-through font-sans">₹
+                                                    {{ $lastViewedProduct['price'] }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
-                                <span class="text-xs font-sans text-gray-400">({{ rand(10, 200) }})</span>
                             </div>
-
-                            <!-- Price -->
-                            <div class="flex items-center gap-2 flex-wrap mt-1">
-                                <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
-                                    {{ $lastViewedProduct['discount_price'] ?? $lastViewedProduct['price'] }}</span>
-                                @if (isset($lastViewedProduct['discount_price']) && $lastViewedProduct['discount_price'] != $lastViewedProduct['price'])
-                                    <span class="text-xs text-gray-400 line-through font-sans">Rs.
-                                        {{ $lastViewedProduct['price'] }}</span>
-                                @endif
+                        @empty
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 font-sans">No recently viewed products.</p>
                             </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
-            @empty
-                <div class="text-center py-8">
-                    <p class="text-gray-500 font-sans">No recently viewed products.</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</section>
+            </section>
         @endif
 
         <!-- Editor's Pick Section -->
@@ -2397,29 +2451,29 @@
         $variant = $product?->variants?->first();
         $basePrice = $variant?->discount_price ?? ($variant?->price ?? 0);
     @endphp
-<script>
-    // ===== PASS SIZES DATA FROM DATABASE =====
-    // Create a mapping of size code to sort_order
-    const sizeOrderMap = {};
-    @foreach($sizes as $size)
-        sizeOrderMap['{{ $size->code }}'] = {{ $size->sort_order }};
-    @endforeach
-    
-    // Get ordered size codes
-    const orderedSizeCodes = [];
-    @foreach($sizes->sortBy('sort_order') as $size)
-        orderedSizeCodes.push('{{ $size->code }}');
-    @endforeach
-    
-    // Store in window for global access
-    window.sizeOrderMap = sizeOrderMap;
-    window.orderedSizeCodes = orderedSizeCodes;
-    window.productVariants = @json($product->variants);
-    
-    console.log('Size Order Map (code => sort_order):', window.sizeOrderMap);
-    console.log('Ordered Size Codes:', window.orderedSizeCodes);
-    console.log('Product Variants:', window.productVariants);
-</script>
+    <script>
+        // ===== PASS SIZES DATA FROM DATABASE =====
+        // Create a mapping of size code to sort_order
+        const sizeOrderMap = {};
+        @foreach ($sizes as $size)
+            sizeOrderMap['{{ $size->code }}'] = {{ $size->sort_order }};
+        @endforeach
+
+        // Get ordered size codes
+        const orderedSizeCodes = [];
+        @foreach ($sizes->sortBy('sort_order') as $size)
+            orderedSizeCodes.push('{{ $size->code }}');
+        @endforeach
+
+        // Store in window for global access
+        window.sizeOrderMap = sizeOrderMap;
+        window.orderedSizeCodes = orderedSizeCodes;
+        window.productVariants = @json($product->variants);
+
+        console.log('Size Order Map (code => sort_order):', window.sizeOrderMap);
+        console.log('Ordered Size Codes:', window.orderedSizeCodes);
+        console.log('Product Variants:', window.productVariants);
+    </script>
 
     <!-- share modal code  -->
     <script>
@@ -3010,9 +3064,9 @@
                 }
 
                 const buyNowBtn = document.getElementById('buy-now');
-        if (buyNowBtn) {
-            buyNowBtn.setAttribute('data-variant-id', defaultVariant.id);
-        }
+                if (buyNowBtn) {
+                    buyNowBtn.setAttribute('data-variant-id', defaultVariant.id);
+                }
 
                 checkVariantInCart(defaultVariant.id);
             }
@@ -3050,10 +3104,10 @@
                     addToCartBtn.setAttribute('data-variant-id', selectedVariant.id);
                 }
 
-                 const buyNowBtn = document.getElementById('buy-now');
-        if (buyNowBtn) {
-            buyNowBtn.setAttribute('data-variant-id', selectedVariant.id);
-        }
+                const buyNowBtn = document.getElementById('buy-now');
+                if (buyNowBtn) {
+                    buyNowBtn.setAttribute('data-variant-id', selectedVariant.id);
+                }
 
                 // Check if variant is in cart
                 checkVariantInCart(selectedVariant.id);
@@ -3530,11 +3584,11 @@
 
                 let originalPriceHtml = '';
                 if (originalPrice != currentPrice) {
-                    originalPriceHtml = `<span class="line-through text-gray-400">Rs. ${originalPrice}</span>`;
+                    originalPriceHtml = `<span class="line-through text-gray-400">₹ ${originalPrice}</span>`;
                 }
 
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${currentPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${currentPrice}</span>
             ${originalPriceHtml}
             ${discountHtml}
         `;
@@ -3574,8 +3628,8 @@
         //         addToCartBtn.classList.add('bg-green-600');
         //         addToCartBtn.disabled = true;
 
-                 
-        
+
+
         //     } else {
         //         if (customDimensions) {
         //             addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
@@ -3589,47 +3643,47 @@
         // }
 
         function updateAddToCartButton(inCart, quantity = 0) {
-    const addToCartBtn = document.getElementById('add-to-cart');
-    if (!addToCartBtn) return;
+            const addToCartBtn = document.getElementById('add-to-cart');
+            if (!addToCartBtn) return;
 
-    // Remove all existing click listeners by cloning
-    const newBtn = addToCartBtn.cloneNode(true);
-    addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
-    const freshBtn = document.getElementById('add-to-cart');
+            // Remove all existing click listeners by cloning
+            const newBtn = addToCartBtn.cloneNode(true);
+            addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
+            const freshBtn = document.getElementById('add-to-cart');
 
-    if (inCart) {
-        // Go to Cart mode - NAVIGATE ONLY
-        freshBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
-        freshBtn.classList.remove('bg-secondary');
-        freshBtn.classList.add('bg-green-600');
-        freshBtn.disabled = false;
-        
-        // ONLY redirect - NO add to cart logic
-        freshBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = '/cart';
-        };
-        
-    } else {
-        // Add to Cart mode
-        if (customDimensions) {
-            freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
-        } else {
-            freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+            if (inCart) {
+                // Go to Cart mode - NAVIGATE ONLY
+                freshBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
+                freshBtn.classList.remove('bg-secondary');
+                freshBtn.classList.add('bg-green-600');
+                freshBtn.disabled = false;
+
+                // ONLY redirect - NO add to cart logic
+                freshBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = '/cart';
+                };
+
+            } else {
+                // Add to Cart mode
+                if (customDimensions) {
+                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+                } else {
+                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+                }
+                freshBtn.classList.remove('bg-green-600');
+                freshBtn.classList.add('bg-secondary');
+                freshBtn.disabled = false;
+
+                // ONLY add to cart - NO redirect
+                freshBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    addToCart(); // Your existing addToCart function
+                };
+            }
         }
-        freshBtn.classList.remove('bg-green-600');
-        freshBtn.classList.add('bg-secondary');
-        freshBtn.disabled = false;
-        
-        // ONLY add to cart - NO redirect
-        freshBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            addToCart(); // Your existing addToCart function
-        };
-    }
-}
 
         function buyNow() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -3652,7 +3706,7 @@
                 return;
             }
 
-            
+
 
 
             const requestData = {
@@ -3834,56 +3888,56 @@
         }
 
         function showNotificationWithCart(message, type = 'success', showCartButton = true) {
-    if (typeof Swal !== 'undefined') {
-        // SweetAlert2 implementation with "Go to Cart" button
-        Swal.fire({
-            icon: type,
-            title: type === 'success' ? 'Success!' : 'Error!',
-            text: message,
-            showCancelButton: showCartButton && type === 'success',
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Go to Cart 🛒',
-            cancelButtonColor: '#4CAF50',
-            confirmButtonColor: '#3085d6',
-            reverseButtons: true,
-        }).then((result) => {
-            if (result.dismiss === Swal.DismissReason.cancel) {
-                window.location.href = '/cart';
-            }
-        });
-    } else {
-        // Fallback for when SweetAlert2 is not available
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+            if (typeof Swal !== 'undefined') {
+                // SweetAlert2 implementation with "Go to Cart" button
+                Swal.fire({
+                    icon: type,
+                    title: type === 'success' ? 'Success!' : 'Error!',
+                    text: message,
+                    showCancelButton: showCartButton && type === 'success',
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Go to Cart 🛒',
+                    cancelButtonColor: '#4CAF50',
+                    confirmButtonColor: '#3085d6',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.cancel) {
+                        window.location.href = '/cart';
+                    }
+                });
+            } else {
+                // Fallback for when SweetAlert2 is not available
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
             type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
         }`;
-        
-        notification.innerHTML = `
+
+                notification.innerHTML = `
             <div class="flex items-center justify-between gap-4">
                 <span>${message}</span>
                 ${showCartButton && type === 'success' ? `
-                    <button onclick="window.location.href='/cart'" 
-                            class="bg-white text-green-600 px-4 py-1 rounded-lg font-medium hover:bg-gray-100 transition">
-                        Go to Cart 🛒
-                    </button>
-                ` : ''}
+                        <button onclick="window.location.href='/cart'" 
+                                class="bg-white text-green-600 px-4 py-1 rounded-lg font-medium hover:bg-gray-100 transition">
+                            Go to Cart 🛒
+                        </button>
+                    ` : ''}
             </div>
         `;
 
-        document.body.appendChild(notification);
+                document.body.appendChild(notification);
 
-        // Auto dismiss after 5 seconds
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateY(-20px)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
-        }, 5000);
-    }
-}
+                // Auto dismiss after 5 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 5000);
+            }
+        }
 
         function updateCartCount(count) {
             const cartCountElements = document.querySelectorAll('.cart-count');
@@ -4185,7 +4239,7 @@
             const priceContainer = document.getElementById('price-container');
             if (priceContainer) {
                 priceContainer.innerHTML = `
-            <span class="text-xl text-gray-900 font-semibold">Rs. ${customPrice}</span>
+            <span class="text-xl text-gray-900 font-semibold">₹ ${customPrice}</span>
             <span class="text-sm text-gray-500 ml-2">(Custom)</span>
         `;
             }
@@ -4267,33 +4321,35 @@
                     button.disabled = false;
                 });
         }
+
         function updateWishlistCount(count) {
 
-    // Navbar badge
-    const navbarBadge = document.getElementById('wishlist-counter');
+            // Navbar badge
+            const navbarBadge = document.getElementById('wishlist-counter');
 
-    if (navbarBadge) {
-        navbarBadge.textContent = count;
+            if (navbarBadge) {
+                navbarBadge.textContent = count;
 
-        if (count > 0) {
-            navbarBadge.classList.remove('hidden');
-            navbarBadge.classList.add('flex');
-        } else {
-            navbarBadge.classList.remove('flex');
-            navbarBadge.classList.add('hidden');
+                if (count > 0) {
+                    navbarBadge.classList.remove('hidden');
+                    navbarBadge.classList.add('flex');
+                } else {
+                    navbarBadge.classList.remove('flex');
+                    navbarBadge.classList.add('hidden');
+                }
+            }
+
+            // Dropdown badge
+            document.querySelectorAll('.wishlist-count').forEach(function(item) {
+
+                if (item.id !== 'wishlist-counter') {
+                    item.textContent = count;
+                }
+
+            });
+
         }
-    }
 
-    // Dropdown badge
-    document.querySelectorAll('.wishlist-count').forEach(function(item) {
-
-        if (item.id !== 'wishlist-counter') {
-            item.textContent = count;
-        }
-
-    });
-
-}
         function checkProductInWishlist(productId) {
             if (!productId) return;
 
@@ -4564,7 +4620,7 @@
             const couponInput = document.getElementById('coupon-input');
             const applyCouponBtn = document.getElementById('apply-coupon-btn');
             const couponMessage = document.getElementById('coupon-message');
-
+            const priceContainer = document.getElementById('price-container');
             // Toggle coupon block visibility
             couponToggleBtn.addEventListener('click', function() {
                 couponBlock.classList.toggle('hidden');
@@ -4577,75 +4633,203 @@
             });
 
             // Apply coupon
-        // Apply coupon
-applyCouponBtn.addEventListener('click', function() {
-    const couponCode = couponInput.value.trim();
+            // Apply coupon
+            applyCouponBtn.addEventListener('click', function() {
+                const couponCode = couponInput.value.trim();
 
-    if (!couponCode) {
-        showCouponMessage('Please enter a coupon code', 'red');
-        return;
-    }
-
-    // Get the current product price
-    const priceElement = document.querySelector('#price-container .text-xl');
-    const priceText = priceElement ? priceElement.textContent.trim() : '0';
-    const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-
-    // Show loading state
-    applyCouponBtn.disabled = true;
-    applyCouponBtn.textContent = 'Applying...';
-
-    fetch('/apply-coupon', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ 
-            coupon_code: couponCode,  // Changed from 'coupon' to 'coupon_code'
-            total: total              // Added total
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        applyCouponBtn.disabled = false;
-        applyCouponBtn.textContent = 'Apply';
-        
-        if (data.status) {
-            showCouponMessage(data.message || 'Coupon applied successfully!', 'green');
-            
-            // Optional: Update price display with discount
-            if (data.coupon && data.coupon.discount) {
-                const discount = data.coupon.discount;
-                const discountAmount = (total * discount) / 100;
-                const newTotal = total - discountAmount;
-                
-                // Update price display
-                const priceContainer = document.getElementById('price-container');
-                if (priceContainer) {
-                    // You can modify this to show discounted price
-                    priceContainer.innerHTML = `
-                        <span class="text-xl text-gray-900 font-semibold">Rs. ${newTotal.toFixed(2)}</span>
-                        <span class="line-through text-gray-400">Rs. ${total}</span>
-                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
-                    `;
+                if (!couponCode) {
+                    showCouponMessage('Please enter a coupon code', 'red');
+                    return;
                 }
-            }
-        } else {
-            showCouponMessage(data.message || 'Invalid coupon code', 'red');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        applyCouponBtn.disabled = false;
-        applyCouponBtn.textContent = 'Apply';
-        showCouponMessage('Error applying coupon. Please try again.', 'red');
-    });
-});
+                
+                const originalPrice2 = parseFloat(priceContainer.dataset.originalPrice) || 0;
+
+                // 2. Current price BEFORE coupon
+                const currentPrice = parseFloat(priceContainer.dataset.currentPrice) || 0;
+
+                // 3. Product discount
+                const productDiscount = parseFloat(priceContainer.dataset.productDiscount) || 0;
+                const variant_id = priceContainer.dataset.variantId;
+                // Get the current product price
+                // const priceElement = document.querySelector('#price-container .text-xl');
+                // const priceText = priceElement ? priceElement.textContent.trim() : '0';
+                // const total = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+                const total = currentPrice;
+                // const preOrginalPrice = 
+                // Show loading state
+                applyCouponBtn.disabled = true;
+                applyCouponBtn.textContent = 'Applying...';
+
+                fetch('/apply-coupon', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            coupon_code: couponCode, // Changed from 'coupon' to 'coupon_code'
+                            total: total, // Added total
+                            variant_id: variant_id
+
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        applyCouponBtn.disabled = false;
+                        applyCouponBtn.textContent = 'Apply';
+
+                        if (data.status) {
+                            showCouponMessage(data.message || 'Coupon applied successfully!', 'green');
+
+                            // Optional: Update price display with discount
+                            if (data.coupon && data.coupon.discount) {
+                                const discount = data.coupon.discount;
+                                const discountAmount = (total * discount) / 100;
+                                const newTotal = total - discountAmount;
+                                // Update price display
+                                const priceContainer = document.getElementById('price-container');
+                                if (priceContainer) {
+                                    // You can modify this to show discounted price
+                                    // priceContainer.innerHTML = `
+                                // <span class="line-through text-gray-400">₹ ${total.toFixed(2)}</span>
+                                //     <span class="line-through text-gray-400">₹ ${originalPrice2}</span>
+                                //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${productDiscount}% off)</span>
+                                //     <span class="text-xl text-gray-900 font-semibold">₹ ${newTotal.toFixed(2)}</span>
+                                //     <span class="line-through text-gray-400">₹ ${total}</span>
+                                //     <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">(${discount}% off with coupon)</span>
+                                // `;
+                                    priceContainer.innerHTML = `
+                    <!-- First line: Before coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+                        <span class="line-through text-gray-400">
+                            ₹ ${originalPrice2.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${productDiscount}% off)
+                        </span>
+                    </div>
+
+                    <!-- Second line: After coupon -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xl text-gray-900 font-semibold">
+                            ₹ ${newTotal.toFixed(2)}
+                        </span>
+
+                        <span class="line-through text-gray-400">
+                            ₹ ${total.toFixed(2)}
+                        </span>
+
+                        <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                            (${discount}% off with coupon)
+                        </span>
+                    </div>
+                `;
+                                }
+                            }
+                        } else {
+                            showCouponMessage(data.message || 'Invalid coupon code', 'red');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        applyCouponBtn.disabled = false;
+                        applyCouponBtn.textContent = 'Apply';
+                        showCouponMessage('Error applying coupon. Please try again.', 'red');
+                    });
+            });
+            if (
+    savedCoupon &&
+    priceContainer &&
+    parseInt(savedCoupon.variant_id) ===
+        parseInt(priceContainer.dataset.variantId)
+) {
+    console.log('Saved coupon:', savedCoupon);
+
+    // Fill coupon input
+    couponInput.value = savedCoupon.code;
+
+    // Get product prices
+    const originalPrice =
+        parseFloat(priceContainer.dataset.originalPrice) || 0;
+
+    const currentPrice =
+        parseFloat(priceContainer.dataset.currentPrice) || 0;
+
+    const productDiscount =
+        parseFloat(priceContainer.dataset.productDiscount) || 0;
+
+    // Coupon discount
+    const couponDiscount =
+        parseFloat(savedCoupon.discount) || 0;
+
+    // Final price saved in session
+    const newTotal =
+        parseFloat(savedCoupon.final_price) || 0;
+
+    console.log('Original Price:', originalPrice);
+    console.log('Current Price:', currentPrice);
+    console.log('Product Discount:', productDiscount);
+    console.log('Coupon Discount:', couponDiscount);
+    console.log('Final Price:', newTotal);
+
+    // Update price display
+    priceContainer.innerHTML = `
+        <!-- BEFORE COUPON -->
+        <div class="w-full flex items-center gap-2 flex-wrap">
+            <span class="line-through text-gray-400">
+                ₹ ${currentPrice.toFixed(2)}
+            </span>
+            <span class="line-through text-gray-400">
+                ₹ ${originalPrice.toFixed(2)}
+            </span>
+
+            
+
+            <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                (${productDiscount}% off)
+            </span>
+        </div>
+
+        <!-- AFTER COUPON -->
+        <div class="w-full flex items-center gap-2 flex-wrap">
+            <span class="text-xl text-gray-900 font-semibold">
+                ₹ ${newTotal.toFixed(2)}
+            </span>
+
+            <span class="line-through text-gray-400">
+                ₹ ${currentPrice.toFixed(2)}
+            </span>
+
+            <span class="text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                (${couponDiscount}% off with coupon)
+            </span>
+        </div>
+    `;
+
+    // Show coupon section
+    couponBlock.classList.remove('hidden');
+
+    couponArrow.style.transform = 'rotate(180deg)';
+
+    // Message
+    showCouponMessage(
+        `Coupon ${savedCoupon.code} already applied.`,
+        'green'
+    );
+
+    // Disable Apply button
+    applyCouponBtn.textContent = 'Already Applied';
+    applyCouponBtn.disabled = true;
+}
 
             // Allow Enter key to apply coupon
             couponInput.addEventListener('keypress', function(e) {
+                
                 if (e.key === 'Enter') {
                     applyCouponBtn.click();
                 }

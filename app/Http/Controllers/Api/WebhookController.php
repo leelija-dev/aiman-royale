@@ -89,6 +89,13 @@ class WebhookController extends Controller
             if ($order) {
 
                 $order->delhivery_status = $status;
+                if($status == 'Delivered') {
+                    $order->delivered_at = now();
+                }
+
+                if($instructions == 'Pickup scheduled'){
+                    $order->pick_up_request_added = true;
+                }
                 // $order->tracking_status = $statusType;
                 // $order->tracking_location = $location;
                 $order->save();

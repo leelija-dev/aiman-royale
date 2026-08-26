@@ -45,7 +45,7 @@ class CartController extends Controller
             })
             ->get();
 
-
+               
         $subtotal = $cartItems->sum(function ($item) {
             //  dd($item->variant->discount_price);
 
@@ -362,6 +362,7 @@ class CartController extends Controller
         $validator = Validator::make($request->all(), [
             'coupon_code' => 'required',
             'total' => 'required|numeric',
+            'variant_id'  => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -389,7 +390,53 @@ class CartController extends Controller
                 'message' => 'Coupon has expired.'
             ]);
         }
+        // Current variant price
+        $currentPrice = (float) $request->total;
 
+        // Coupon discount %
+        $couponDiscount = (float) $coupon->discount;
+
+        // Calculate coupon amount
+        $discountAmount = ($currentPrice * $couponDiscount) / 100;
+
+        // Final price
+        $newTotal = $currentPrice - $discountAmount;
+
+        // Store coupon in session
+        // session([
+        //     'applied_coupon' => [
+        //         'coupon_id'       => $coupon->id,
+        //         'code'            => $coupon->code,
+        //         'discount'        => $couponDiscount,
+        //         'type'            => 'percentage',
+        //         'variant_id'      => (int) $request->variant_id,
+        //         'current_price'   => $currentPrice,
+        //         'discount_amount' => $discountAmount,
+        //         'final_price'     => $newTotal,
+        //     ]
+        // ]);
+        $variantId = (int) $request->variant_id;
+
+// Get all previously applied coupons
+$appliedCoupons = session('applied_coupons', []);
+
+// Store/update coupon for this specific variant
+$appliedCoupons[$variantId] = [
+    'coupon_id'       => $coupon->id,
+    'code'            => $coupon->code,
+    'discount'        => $couponDiscount,
+    'type'            => 'percentage',
+    'variant_id'      => $variantId,
+    'current_price'   => $currentPrice,
+    'discount_amount' => $discountAmount,
+    'final_price'     => $newTotal,
+];
+
+// Save all coupons back to session
+session([
+    'applied_coupons' => $appliedCoupons
+]);
+        
         // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
         //     return response()->json([
         //         'status' => false,
@@ -403,7 +450,14 @@ class CartController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Coupon applied successfully.',
-            'coupon' => $coupon
+            // 'coupon' => $coupon
+            'coupon' => [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+            'discount' => $couponDiscount,
+            'discount_amount' => $discountAmount,
+            'final_price' => $newTotal,
+        ]
         ]);
     }
 }
