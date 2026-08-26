@@ -371,6 +371,31 @@ class CartController extends Controller
                 'message' => $validator->errors()->first(),
             ]);
         }
+        
+    $variantId = (int) $request->variant_id;
+
+    // Get existing coupons from session
+    $appliedCoupons = session('applied_coupons', []);
+
+    // If this variant already has a coupon, don't add it again
+    if (isset($appliedCoupons[$variantId])) {
+
+    $sessionCoupon = $appliedCoupons[$variantId];
+
+    return response()->json([
+        'status' => true,
+        'already_applied' => true,
+        'message' => 'Coupon already applied for this product.',
+
+        'coupon' => [
+            'id' => $sessionCoupon['coupon_id'] ?? null,
+            'code' => $sessionCoupon['code'] ?? '',
+            'discount' => $sessionCoupon['discount'] ?? 0,
+            'discount_amount' => $sessionCoupon['discount_amount'] ?? 0,
+            'final_price' => $sessionCoupon['final_price'] ?? 0,
+        ],
+    ]);
+}
 
         $coupon = Coupon::where('code', $request->coupon_code)->where('code_type', '!=', 'special-discount')
             // ->where('expiry_date', '>=', Carbon::now())

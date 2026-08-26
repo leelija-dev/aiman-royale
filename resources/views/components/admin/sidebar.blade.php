@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*','admin.unit','admin.add-unit','admin.colors.index', 'admin.products.*','admin.products-trashed','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash','admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.product-variants','admin.categories.create','admin.sizes', 'banners.*', 'admin.sales.*', 'faqCategory.*', 'faqs.*','hero-section.*') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*','admin.unit','admin.add-unit','admin.colors.index', 'admin.products.*','admin.products-trashed','admin.occasions.index','admin.occasions.create','admin.occasions.edit','admin.occasions.trash','admin.products','admin.add-product','admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.product-variants','admin.categories.create','admin.sizes', 'banners.*', 'admin.sales.*', 'faqCategory.*', 'faqs.*','hero-section.*','admin.category-occasion-content.*') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp

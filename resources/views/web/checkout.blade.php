@@ -185,6 +185,15 @@
                     @endphp
 
                     @foreach ($carts as $cart)
+                    @php
+                        $appliedCoupons = session('applied_coupons', []);
+                        // Get coupon for THIS variant only
+                        $appliedCoupon = $appliedCoupons[$cart->variant_id] ?? null;
+                        $couponForThisVariant = $appliedCoupon !== null;
+                        $currentPrice = $cart->price - (($cart->price * $cart->discount) / 100);
+                        // dd($appliedCoupons);
+                    @endphp
+                  
                     <div class="flex gap-4 border-b-[1px] border-[#dfdfdf] smxl:flex-row flex-col smxl:justify-start smxl:items-start items-center smxl:text-left text-center">
                         <div
                             class="smxl:w-auto h-auto aspect-[2/3] smxl:max-w-full max-w-[100px]  max-h-[120px] bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">
@@ -194,8 +203,19 @@
                             @endif
                         </div>
                         @php
-                        $productTotal =
-                        ($cart->price - ($cart->price * $cart->discount) / 100) * $cart->count;
+                            // if ($couponForThisVariant) {
+                            //     // Session already contains the final unit price
+                            //     $unitPrice = (float) $appliedCoupon['final_price'];
+                            // } else {
+                            //     // Normal database/table price
+                            //     $unitPrice = (float) (
+                            //         $cart->price -
+                            //         (($cart->price * $cart->discount) / 100)
+                            //     );
+                            // }
+
+                            // $productTotal = $unitPrice * $cart->count;
+                            $productTotal = ($cart->price - ($cart->price * $cart->discount) / 100) * $cart->count;
                         @endphp
                         <div class="flex-1">
                             <p class="font-medium">{{ $cart->name }} </p>
@@ -210,16 +230,38 @@
                             </span>
                         </p>
                             <div class="flex items-center gap-1 mt-2">
-                                <input type="text" id="coupon-{{ $cart->cart_id }}"
+                                {{-- <input type="text" id="coupon-{{ $cart->cart_id }}"
+                                    value="{{ $appliedCoupon['code'] ?? '' }}"
                                     class="w-28 border border-gray-300 rounded-md px-2 py-1 text-xs"
-                                    placeholder="Coupon">
+                                    placeholder="Coupon"> --}}
+                                    <input type="text"
+                                        id="coupon-{{ $cart->cart_id }}"
+                                        value="{{ $appliedCoupon['code'] ?? '' }}"
+                                        data-variant-id="{{ $cart->variant_id }}"
+                                        data-product-total="{{ $productTotal }}"
+                                        class="w-28 border border-gray-300 rounded-md px-2 py-1 text-xs"
+                                        placeholder="Coupon">
 
                                 <button id="apply-btn-{{ $cart->cart_id }}" type="button"
-                                    onclick="applyCoupon({{ $cart->cart_id }}, {{ $productTotal }})"
+                                    onclick="applyCoupon({{ $cart->cart_id }}, {{ $productTotal }},{{ $cart->variant_id }})"
                                     class="px-3 py-1 bg-black text-white rounded-md text-xs">
                                     Apply
                                 </button>
                             </div>
+                            {{-- @if($appliedCoupon && !empty($appliedCoupon['code']))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Automatically call backend only if session coupon exists
+    applyCoupon(
+        {{ $cart->cart_id }},
+        {{ $productTotal }},
+        {{ $cart->variant_id }}
+    );
+
+});
+</script>
+@endif --}}
                             <p id="coupon-message-{{ $cart->cart_id }}" class="text-sm mt-2"></p>
                         </div>
 
@@ -641,7 +683,8 @@
             if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid &&
                 isAddress1Valid && isCityValid && isStateValid && isPincodeValid) {
                 document.getElementById('applied-coupons').value =
-                    JSON.stringify(appliedCoupons);
+                    JSON.stringify(window.appliedCoupons);
+                    console.log('appliedCoupons:', window.appliedCoupons);
                 form.submit();
             } else {
                 // Scroll to the first invalid field
@@ -901,7 +944,7 @@ msg.innerHTML = "Something went wrong.";
         document.getElementById("grand-total-hidden").value = roundedGrandTotal;
     };
 
-    window.applyCoupon = function(cartId, productTotal) {
+    window.applyCoupon = function(cartId, productTotal, variantId) {
         let code = document.getElementById('coupon-' + cartId).value.trim();
         let msg = document.getElementById('coupon-message-' + cartId);
 
@@ -921,7 +964,8 @@ msg.innerHTML = "Something went wrong.";
             },
             body: JSON.stringify({
                 coupon_code: code,
-                total: productTotal
+                total: productTotal,
+                variant_id: variantId
             })
         })
         .then(res => res.json())
@@ -987,6 +1031,52 @@ msg.innerHTML = "Something went wrong.";
 
     console.log('Checkout script loaded successfully with global functions');
     console.log('typeof applyCoupon:', typeof window.applyCoupon);
+   document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {
+
+        // Only auto-apply when coupon came from session
+        if (input.value.trim() === '') {
+            return;
+        }
+
+        const cartId = input.id.replace('coupon-', '');
+
+        // Get variant ID directly from input
+        const variantId = parseInt(input.dataset.variantId);
+
+        // Get ORIGINAL product total from Blade
+        const productTotal = parseFloat(input.dataset.productTotal) || 0;
+
+        if (!variantId || !productTotal) {
+            console.error(
+                'Missing variantId or productTotal',
+                {
+                    cartId: cartId,
+                    variantId: variantId,
+                    productTotal: productTotal
+                }
+            );
+            return;
+        }
+
+        console.log('Auto applying session coupon:', {
+            cartId: cartId,
+            variantId: variantId,
+            coupon: input.value,
+            productTotal: productTotal
+        });
+
+        // Call backend automatically
+        window.applyCoupon(
+            cartId,
+            productTotal,
+            variantId
+        );
+
+    });
+
+});
 </script>
 <script>
     function toggleSpecialTerms() {
