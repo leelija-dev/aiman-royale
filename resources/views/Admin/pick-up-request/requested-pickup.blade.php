@@ -319,6 +319,7 @@
             is_single: document.getElementById('is_single').value,
         };
 
+        console.log('Submitting Pickup Request:', data);
         // Show loading
         Swal.fire({
             title: 'Creating Pickup Request...',

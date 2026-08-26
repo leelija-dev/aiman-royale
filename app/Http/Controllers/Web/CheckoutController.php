@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CashfreeService;
 use App\Services\DelhiveryService;
 use App\Services\WhatsAppService;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -196,10 +197,11 @@ class CheckoutController extends Controller
         $special_discount_amount = $request->input('special_discount_amount');
         // Get payment method
         $paymentMethod = $request->input('payment_method', 'cashfree');
-
+        $customerName = $request->firstName . " " . $request->lastName;
         // Create order
         $order_id = DB::table('orders')->insertGetId([
             'user_id' => $user_id,
+            'customer_name' => $customerName,
             'phone_no' => $request->phone,
             'address_1' => $request->address1,
             'address_2' => $request->address2,
@@ -621,7 +623,7 @@ class CheckoutController extends Controller
             if (!$order->waybill_number) {
                 // Get order details from request (stored in order table)
                 $orderData = [
-                    'customer_name' => $user->name ?? 'Customer',
+                    'customer_name' => $order->customer_name ?? $user->name ?? 'Customer',
                     'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
                     'city' => $order->city,
                     'state' => $order->state,
@@ -932,7 +934,7 @@ class CheckoutController extends Controller
 
             $orderData = [
                 'order_id' => $orderId,
-                'customer_name' => $customerName,
+                'customer_name' => $order->customer_name ?? $customerName,
                 'address' => $order->address_1 . " " . ($order->address_2 ?? ''),
                 'city' => $order->city,
                 'state' => $order->state,
@@ -996,6 +998,7 @@ class CheckoutController extends Controller
 
         // ✅ Send WhatsApp confirmation with proper phone number
         $this->sendOrderWhatsAppConfirmation($orderId, $order->phone_no, $customerName);
+        $this->sendOrderEmailConfirmation($orderId, $request->email ?? 'N/A', $customerName);
 
         // Clear cart and session
         DB::table('carts')->where('user_id', auth()->id())->delete();
@@ -1223,6 +1226,43 @@ class CheckoutController extends Controller
             return false;
         }
     }
+
+    private function sendOrderEmailConfirmation($orderId, $customerEmail, $customerName)
+{
+    try {
+        // Fetch order details
+        $order = \App\Models\Order::with(['items', 'user'])->find($orderId);
+        
+        if (!$order) {
+            Log::error('Order not found for email confirmation', ['order_id' => $orderId]);
+            return false;
+        }
+
+        // Get admin email from configuration
+        $adminEmail = config('mail.admin_email') ?? 'aimanroyale9@gmail.com';
+
+        // Send email to customer
+        \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmation($order, $customerName));
+
+        // Send email to admin
+        \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order, $customerName));
+
+        Log::info('Order email confirmation sent', [
+            'order_id' => $orderId,
+            'customer_email' => $customerEmail,
+            'admin_email' => $adminEmail
+        ]);
+
+        return true;
+
+    } catch (\Exception $e) {
+        Log::error('Email send error: ' . $e->getMessage(), [
+            'order_id' => $orderId,
+            'customer_email' => $customerEmail ?? 'unknown'
+        ]);
+        return false;
+    }
+}
 
     public function clearBuyNowSession(Request $request)
 {

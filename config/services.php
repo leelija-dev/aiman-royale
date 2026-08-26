@@ -31,11 +31,11 @@ return [
 
     'delhivery' => [
         'api_key' => env('DELHIVERY_API_KEY'),
-        'sandbox' => env('DELHIVERY_SANDBOX', true),
-        'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse'),
+        'sandbox' => env('DELHIVERY_SANDBOX', false),
+        'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale'),
         'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE', '110001'),
-        'return_name' => env('DELHIVERY_RETURN_NAME', env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse')),
-        'return_add' => env('DELHIVERY_RETURN_ADDRESS', env('DELHIVERY_PICKUP_LOCATION', 'Default Warehouse')),
+        'return_name' => env('DELHIVERY_RETURN_NAME', env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale')),
+        'return_add' => env('DELHIVERY_RETURN_ADDRESS', env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale')),
         'return_city' => env('DELHIVERY_RETURN_CITY', 'Default City'),
         'return_state' => env('DELHIVERY_RETURN_STATE', 'Default State'),
         'return_pin' => env('DELHIVERY_RETURN_PINCODE', env('DELHIVERY_PICKUP_PINCODE', '110001')),
