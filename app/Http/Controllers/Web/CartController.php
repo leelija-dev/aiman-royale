@@ -45,7 +45,7 @@ class CartController extends Controller
             })
             ->get();
 
-
+               
         $subtotal = $cartItems->sum(function ($item) {
             //  dd($item->variant->discount_price);
 

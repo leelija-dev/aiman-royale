@@ -25,7 +25,7 @@
             Cart ({{ $cartCount }} {{ $cartCount == 1 ? 'item' : 'items' }})
           </div>
     </div>
-
+   
     <div class="flex flex-col lgg:flex-row gap-8">
       <!-- Cart Items - Now using a table -->
       <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden">
@@ -37,6 +37,7 @@
                 <th class="px-6 py-4">Product</th>
                 <th class="px-6 py-4 text-center">Price</th>
                 <th class="px-6 py-4 text-center">After Discount</th>
+                <th class="px-6 py-4 text-center">After Coupon Apply</th>
                 <th class="px-6 py-4 text-center">Quantity</th>
                 <th class="px-6 py-4 text-center">Subtotal</th>
                 <th class="px-6 py-4 text-center"></th>
@@ -45,7 +46,13 @@
             </thead>
             <tbody>
               @forelse ($cartItems as $item)
-             
+              @php
+                $appliedCoupons = session('applied_coupons', []);
+                  // Get coupon for THIS variant only
+                $appliedCoupon = $appliedCoupons[$item->variant_id] ?? null;
+                $couponForThisVariant = $appliedCoupon !== null;
+                // dd($appliedCoupons);
+              @endphp
               <tr class="border-b border-gray-200 hover:bg-gray-50">
                 
                 <td class="px-6 py-6">
@@ -78,7 +85,15 @@
                  
                 <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</td>
                 <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
-
+                @if($couponForThisVariant)
+                @php
+                $afterDiscount = $item->variant->price - (($item->variant->price * $item->variant->discount) / 100);
+                $afterApplyCoupon = $afterDiscount - (($afterDiscount * $appliedCoupon['discount']) / 100);
+                @endphp
+                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($afterApplyCoupon, 2) }}</td>
+                @else
+                <td class="px-6 py-6 text-center"></td>
+                @endif
                 <td class="px-6 py-6 text-center">
                   <div
                     class="flex items-center justify-center border border-gray-300 rounded-md inline-flex">
@@ -110,10 +125,21 @@
                   </div>
                 </td>
                 
+                @if($couponForThisVariant)
+                  @php
+                  $afterDiscount = $item->variant->price - (($item->variant->price * $item->variant->discount) / 100);
+                  $afterApplyCoupon = $afterDiscount - (($afterDiscount * $appliedCoupon['discount']) / 100);
 
-                <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}">
-                  {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
-                </td>
+                  @endphp
+                  
+                  <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$appliedCoupon['final_price']}}">
+                    {{config('app.currency')}}{{ number_format($afterApplyCoupon * $item->count, 2) }}
+                  </td>
+                @else
+                  <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}">
+                    {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
+                  </td>
+                @endif
 
                 <td class="px-6 py-6 text-center">
                   <button
