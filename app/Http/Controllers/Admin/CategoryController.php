@@ -114,32 +114,76 @@ class CategoryController extends Controller
         }
 
         // Handle image upload to Cloudinary
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
 
-            // UPLOAD NEW IMAGE TO CLOUDINARY
-            $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
-                'quality' => 'auto:good',
-                'fetch_format' => 'auto',
-                'transformation' => [
-                    'width' => 800,
-                    'height' => 800,
-                    'crop' => 'limit',
-                ],
-            ]);
+        //     // UPLOAD NEW IMAGE TO CLOUDINARY
+        //     $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
+        //         'quality' => 'auto:good',
+        //         'fetch_format' => 'auto',
+        //         'transformation' => [
+        //             'width' => 800,
+        //             'height' => 800,
+        //             'crop' => 'limit',
+        //         ],
+        //     ]);
 
             
-            if ($uploadResult) {
-                $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
-                $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
-                Log::info('Category image uploaded to Cloudinary', [
-                    'public_id' => $uploadResult['public_id'],
-                    'path' => $uploadResult['path']
-                ]);
-            } else {
-                throw new \Exception('Failed to upload image to Cloudinary');
+        //     if ($uploadResult) {
+        //         $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+        //         $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+        //         Log::info('Category image uploaded to Cloudinary', [
+        //             'public_id' => $uploadResult['public_id'],
+        //             'path' => $uploadResult['path']
+        //         ]);
+        //     } else {
+        //         throw new \Exception('Failed to upload image to Cloudinary');
+        //     }
+        // }
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                // CREATE FOLDER IF NOT EXISTS
+                $path = public_path('uploads/category');
+                
+                // Ensure directory exists with proper permissions
+                if (!File::exists($path)) {
+                    try {
+                        File::makeDirectory($path, 0775, true, true);
+                        
+                        // Set ownership if possible (for Linux servers)
+                        if (function_exists('chown')) {
+                            @chown($path, 'www-data');
+                            @chgrp($path, 'www-data');
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Failed to create upload directory: ' . $e->getMessage());
+                        throw new \Exception('Unable to create upload directory. Please check server permissions.');
+                    }
+                }
+
+                // Check if directory is writable
+                if (!is_writable($path)) {
+                    Log::error('Upload directory is not writable: ' . $path);
+                    throw new \Exception('Upload directory is not writable. Please check server permissions.');
+                }
+
+                // CREATE UNIQUE NAME
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+
+                // MOVE FILE with error handling
+                try {
+                    $image->move($path, $filename);
+                    Log::info('File uploaded successfully: ' . $filename);
+                } catch (\Exception $e) {
+                    Log::error('Failed to move uploaded file: ' . $e->getMessage());
+                    throw new \Exception('Failed to save uploaded file. Please check server permissions and disk space.');
+                }
+
+                $data['image'] = $filename;
             }
-        }
+
 
         // Create category with error handling
         try {
@@ -279,47 +323,71 @@ class CategoryController extends Controller
             // }
 
             // CHECK IF NEW IMAGE UPLOADED
-            if ($request->hasFile('image')) {
+            // if ($request->hasFile('image')) {
                
+            //     $image = $request->file('image');
+
+            //     // DELETE OLD IMAGE FROM CLOUDINARY
+            //     if ($category->public_id) {
+                   
+            //         try {
+            //             $this->deleteFromCloudinary($category->public_id);
+            //             Log::info('Old category image deleted from Cloudinary', [
+            //                 'category_id' => $category->id,
+            //                 'public_id' => $category->public_id
+            //             ]);
+            //         } catch (\Exception $e) {
+            //             Log::warning('Failed to delete old image from Cloudinary: ' . $e->getMessage());
+            //         }
+            //     }
+
+            //     // UPLOAD NEW IMAGE TO CLOUDINARY
+            //     $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
+            //         'quality' => 'auto:good',
+            //         'fetch_format' => 'auto',
+            //         'transformation' => [
+            //             'width' => 800,
+            //             'height' => 800,
+            //             'crop' => 'limit',
+            //         ],
+            //     ]);
+
+            //     if ($uploadResult) {
+            //         // FIXED: Use 'path' instead of 'url'
+            //         $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+            //         $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+            //         Log::info('New category image uploaded to Cloudinary', [
+            //             'category_id' => $category->id,
+            //             'public_id' => $uploadResult['public_id'],
+            //             'path' => $uploadResult['path']
+            //         ]);
+            //     } else {
+            //         throw new \Exception('Failed to upload image to Cloudinary');
+            //     }
+            // }
+
+            if ($request->hasFile('image')) {
+
                 $image = $request->file('image');
 
-                // DELETE OLD IMAGE FROM CLOUDINARY
-                if ($category->public_id) {
-                   
-                    try {
-                        $this->deleteFromCloudinary($category->public_id);
-                        Log::info('Old category image deleted from Cloudinary', [
-                            'category_id' => $category->id,
-                            'public_id' => $category->public_id
-                        ]);
-                    } catch (\Exception $e) {
-                        Log::warning('Failed to delete old image from Cloudinary: ' . $e->getMessage());
-                    }
+                // CREATE FOLDER IF NOT EXISTS
+                $path = public_path('uploads/category');
+
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, 0777, true, true);
                 }
 
-                // UPLOAD NEW IMAGE TO CLOUDINARY
-                $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
-                    'quality' => 'auto:good',
-                    'fetch_format' => 'auto',
-                    'transformation' => [
-                        'width' => 800,
-                        'height' => 800,
-                        'crop' => 'limit',
-                    ],
-                ]);
-
-                if ($uploadResult) {
-                    // FIXED: Use 'path' instead of 'url'
-                    $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
-                    $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
-                    Log::info('New category image uploaded to Cloudinary', [
-                        'category_id' => $category->id,
-                        'public_id' => $uploadResult['public_id'],
-                        'path' => $uploadResult['path']
-                    ]);
-                } else {
-                    throw new \Exception('Failed to upload image to Cloudinary');
+                // DELETE OLD IMAGE
+                if ($category->image && File::exists($path . '/' . $category->image)) {
+                    File::delete($path . '/' . $category->image);
                 }
+
+                // SAVE NEW IMAGE
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+
+                $image->move($path, $filename);
+
+                $data['image'] = $filename;
             }
 
             // Set home_position to null if is_home is 0

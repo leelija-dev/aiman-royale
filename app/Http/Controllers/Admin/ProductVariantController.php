@@ -145,7 +145,6 @@ class ProductVariantController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'size' => 'required|string|max:20',
@@ -195,47 +194,65 @@ class ProductVariantController extends Controller
         ]);
 
         // Handle image uploads with Cloudinary
-        if ($variant && $request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                // Upload to Cloudinary
-                $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$variant->id}", [
-                    'quality' => 'auto:good',
-                    'fetch_format' => 'auto',
-                    'transformation' => [
-                        'width' => 800,
-                        'height' => 800,
-                        'crop' => 'limit',
-                    ],
-                ]);
+        // if ($variant && $request->hasFile('images')) {
+        //     foreach ($request->file('images') as $image) {
+        //         // Upload to Cloudinary
+        //         $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$variant->id}", [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //             'transformation' => [
+        //                 'width' => 800,
+        //                 'height' => 800,
+        //                 'crop' => 'limit',
+        //             ],
+        //         ]);
 
-                if ($uploadResult) {
-                    ProductImage::create([
-                        'product_id' => $variant->product_id,
-                        'variant_id' => $variant->id,
-                        'image' => $uploadResult['path'], // Cloudinary URL
-                        'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
-                    ]);
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $variant->product_id,
+        //                 'variant_id' => $variant->id,
+        //                 'image' => $uploadResult['path'], // Cloudinary URL
+        //                 'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
+        //             ]);
 
-                    \Log::info('Variant image uploaded to Cloudinary', [
-                        'variant_id' => $variant->id,
-                        'public_id' => $uploadResult['public_id']
-                    ]);
-                } else {
-                    // Fallback to local upload if Cloudinary fails
+        //             \Log::info('Variant image uploaded to Cloudinary', [
+        //                 'variant_id' => $variant->id,
+        //                 'public_id' => $uploadResult['public_id']
+        //             ]);
+        //         } else {
+        //             // Fallback to local upload if Cloudinary fails
+        //             $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+        //             $folder = 'uploads/variants';
+        //             $image->move(public_path('uploads/variants'), $filename);
+        //             $imagePath = $folder . '/' . $filename;
+
+        //             ProductImage::create([
+        //                 'product_id' => $variant->product_id,
+        //                 'variant_id' => $variant->id,
+        //                 'image' => $imagePath,
+        //                 'public_id' => null, // No public_id for local files
+        //             ]);
+        //         }
+        //     }
+        // }
+
+          if ($variant && $request->hasFile('images')) {
+
+                foreach ($request->file('images') as $image) {
+
                     $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
                     $folder = 'uploads/variants';
                     $image->move(public_path('uploads/variants'), $filename);
                     $imagePath = $folder . '/' . $filename;
-
+                    // dd($variant->id);
                     ProductImage::create([
                         'product_id' => $variant->product_id,
                         'variant_id' => $variant->id,
-                        'image' => $imagePath,
-                        'public_id' => null, // No public_id for local files
+                        'image' => $imagePath //$filename
                     ]);
                 }
-            }
-        }
+
+          }
 
         // Create stock entry for the new variant
         StockIn::create([
@@ -432,77 +449,115 @@ class ProductVariantController extends Controller
         ]);
 
         // Handle removed images from Cloudinary
-        if ($request->removed_images) {
+        // if ($request->removed_images) {
+        //     $removedIds = explode(',', $request->removed_images);
+
+        //     foreach ($removedIds as $id) {
+        //         $image = ProductImage::find($id);
+
+        //         if ($image) {
+        //             // Delete from Cloudinary if public_id exists
+        //             if ($image->public_id) {
+        //                 try {
+        //                     $this->deleteFromCloudinary($image->public_id);
+        //                     Log::info('Deleted variant image from Cloudinary', [
+        //                         'image_id' => $id,
+        //                         'public_id' => $image->public_id
+        //                     ]);
+        //                 } catch (\Exception $e) {
+        //                     Log::warning('Failed to delete image from Cloudinary: ' . $e->getMessage());
+        //                 }
+        //             } elseif ($image->image && File::exists(public_path($image->image))) {
+        //                 // Fallback for local files
+        //                 File::delete(public_path($image->image));
+        //             }
+
+        //             $image->delete();
+        //         }
+        //     }
+        // }
+
+        // Store new images to Cloudinary
+        // if ($request->hasFile('images')) {
+        //     //    dd($request->file('images'));
+        //     foreach ($request->file('images') as $image) {
+        //         // Upload to Cloudinary
+        //         $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$productVariant->id}", [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //             'transformation' => [
+        //                 'width' => 800,
+        //                 'height' => 800,
+        //                 'crop' => 'limit',
+        //             ],
+        //         ]);
+
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $request->product_id,
+        //                 'variant_id' => $productVariant->id,
+        //                 'image' => $uploadResult['path'], // Cloudinary URL
+        //                 'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
+        //             ]);
+
+        //             Log::info('Variant image uploaded to Cloudinary', [
+        //                 'variant_id' => $productVariant->id,
+        //                 'public_id' => $uploadResult['public_id']
+        //             ]);
+        //         } else {
+        //             // Fallback to local upload if Cloudinary fails
+        //             $folder = 'uploads/variants';
+        //             $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+        //             $imagePath = $folder . '/' . $filename;
+        //             $image->move(public_path('uploads/variants'), $filename);
+
+        //             ProductImage::create([
+        //                 'product_id' => $request->product_id,
+        //                 'variant_id' => $productVariant->id,
+        //                 'image' => $imagePath,
+        //                 'public_id' => null, // No public_id for local files
+        //             ]);
+        //         }
+        //     }
+        // }
+
+         if ($request->removed_images) {
+
             $removedIds = explode(',', $request->removed_images);
 
             foreach ($removedIds as $id) {
+
                 $image = ProductImage::find($id);
 
                 if ($image) {
-                    // Delete from Cloudinary if public_id exists
-                    if ($image->public_id) {
-                        try {
-                            $this->deleteFromCloudinary($image->public_id);
-                            Log::info('Deleted variant image from Cloudinary', [
-                                'image_id' => $id,
-                                'public_id' => $image->public_id
-                            ]);
-                        } catch (\Exception $e) {
-                            Log::warning('Failed to delete image from Cloudinary: ' . $e->getMessage());
-                        }
-                    } elseif ($image->image && File::exists(public_path($image->image))) {
-                        // Fallback for local files
-                        File::delete(public_path($image->image));
+
+                    $path = public_path('uploads/variants/' . $image->image);
+
+                    if (File::exists($path)) {
+                        File::delete($path);
                     }
 
                     $image->delete();
                 }
             }
         }
-
-        // Store new images to Cloudinary
+        //store images
         if ($request->hasFile('images')) {
-            //    dd($request->file('images'));
+            
             foreach ($request->file('images') as $image) {
-                // Upload to Cloudinary
-                $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$productVariant->id}", [
-                    'quality' => 'auto:good',
-                    'fetch_format' => 'auto',
-                    'transformation' => [
-                        'width' => 800,
-                        'height' => 800,
-                        'crop' => 'limit',
-                    ],
+                $folder = 'uploads/variants';
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+                $imagePath = $folder . '/' . $filename;
+                $image->move(public_path('uploads/variants'), $filename);
+
+                ProductImage::create([
+                    'product_id' => $request->product_id,
+                    'variant_id' => $productVariant->id,
+                    'image' => $imagePath //$filename
                 ]);
-
-                if ($uploadResult) {
-                    ProductImage::create([
-                        'product_id' => $request->product_id,
-                        'variant_id' => $productVariant->id,
-                        'image' => $uploadResult['path'], // Cloudinary URL
-                        'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
-                    ]);
-
-                    Log::info('Variant image uploaded to Cloudinary', [
-                        'variant_id' => $productVariant->id,
-                        'public_id' => $uploadResult['public_id']
-                    ]);
-                } else {
-                    // Fallback to local upload if Cloudinary fails
-                    $folder = 'uploads/variants';
-                    $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
-                    $imagePath = $folder . '/' . $filename;
-                    $image->move(public_path('uploads/variants'), $filename);
-
-                    ProductImage::create([
-                        'product_id' => $request->product_id,
-                        'variant_id' => $productVariant->id,
-                        'image' => $imagePath,
-                        'public_id' => null, // No public_id for local files
-                    ]);
-                }
             }
         }
+
 
         return redirect()->back()->with('success', 'Product variant updated successfully with Cloudinary!');
     }
