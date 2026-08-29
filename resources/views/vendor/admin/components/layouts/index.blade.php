@@ -129,7 +129,7 @@
                 <div class="mt-auto">
                     <div class="border-t bg-white py-2 text-center text-xs sm:text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-white">
                         @lang('admin::app.components.layouts.powered-by.description', [
-                            'sitename' => '<a class="text-blue-600 hover:underline dark:text-darkBlue" href="https://leelija.com">Leelija</a>'
+                            'sitename' => '<a class="text-blue-600 hover:underline dark:text-darkBlue" href="https://aimanroyale.com/">Aiman Royale</a>'
                         ])
                     </div>
                 </div>
