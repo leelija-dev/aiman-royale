@@ -51,10 +51,8 @@
 
     <!-- Dynamic Schema Markup -->
     @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
-   
-    <script type="application/ld+json">
        {!! $pageMeta->schema_markup !!}
-    </script>
+    
     @endif
 
     <!-- PWA Manifest - FIXED PATH -->
