@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="../images/logo/favicon.png" type="image/png">
-    <title> Leelija - Sign In Page</title>
+    <title> Aiman Royale - Sign In Page</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 
     {{-- <link href="../plugins/fontawesome-6.1.1/css/all.css" rel="stylesheet" type="text/css"> --}}
