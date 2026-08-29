@@ -14,6 +14,8 @@
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.28",
         "laravel/tinker": "^2.10.1",
+        "predis/predis": "^3.6",
+        "rafoabbas/laravel-image-proxy": "^0.6.0",
         "spatie/laravel-backup": "^9.3",
         "spatie/laravel-permission": "^6.20",
         "tymon/jwt-auth": "^2.3"
