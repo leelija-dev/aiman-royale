@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @if(in_array(request()->getHost(), ['aimanroyale.com','www.aimanroyale.com']))
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="googlebot" content="noindex, nofollow">
-    <meta name="googlebot-news" content="noindex, nofollow">
-    <meta name="googlebot-image" content="noindex, nofollow">
-    <meta name="googlebot-video" content="noindex, nofollow">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="googlebot-news" content="index, follow">
+    <meta name="googlebot-image" content="index, follow">
+    <meta name="googlebot-video" content="index, follow">
     @endif
 
     <title>{{ $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}</title>

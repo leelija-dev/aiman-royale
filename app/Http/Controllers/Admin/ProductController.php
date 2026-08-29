@@ -384,63 +384,116 @@ class ProductController extends Controller
         }
 
         // Handle multiple product images with Cloudinary
+        // if ($request->hasFile('image')) {
+        //     $images = $request->file('image');
+        //     // If single file, wrap in array
+        //     if (!is_array($images)) {
+        //         $images = [$images];
+        //     }
+
+        //     // foreach ($images as $index => $image) {
+        //     //     $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
+        //     //         'quality' => 'auto:good',
+        //     //         'fetch_format' => 'auto',
+        //     //     ]);
+
+        //     //     if ($uploadResult) {
+        //     //         ProductImage::create([
+        //     //             'product_id' => $product->id,
+        //     //             'image' => $uploadResult['path'],
+        //     //             'public_id' => $uploadResult['public_id'],
+        //     //             'is_primary' => $index === 0, // First image as primary
+        //     //         ]);
+        //     //     }
+        //     // }
+
+        //     foreach ($images as $index => $image) {
+        //         $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //         ]);
+
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $product->id,
+        //                 'image' => $uploadResult['path'],
+        //                 'public_id' => $uploadResult['public_id'],
+        //                 'is_primary' => $index === 0, // First image as primary
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        // // Handle featured image with Cloudinary optimization
+        // if ($request->hasFile('featured_image')) {
+        //     $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
+        //         'quality' => 'auto:best',
+        //         'fetch_format' => 'auto',
+        //         'transformation' => [
+        //             'width' => 800,
+        //             'height' => 800,
+        //             'crop' => 'limit',
+        //         ],
+        //     ]);
+
+        //     if ($uploadResult) {
+        //         $product->featured_image = $uploadResult['path'];
+        //         $product->featured_image_public_id = $uploadResult['public_id'];
+        //         $product->save();
+        //     }
+        // }
+
         if ($request->hasFile('image')) {
-            $images = $request->file('image');
-            // If single file, wrap in array
-            if (!is_array($images)) {
-                $images = [$images];
+            $image = $request->file('image');
+
+            $filename = time() . '_' . $image->getClientOriginalName();
+
+            // Folder inside public
+            $folder = 'uploads/products';
+
+            // Absolute path for moving file
+            $uploadPath = public_path($folder);
+
+            // Create directory if not exists
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
             }
 
-            // foreach ($images as $index => $image) {
-            //     $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
-            //         'quality' => 'auto:good',
-            //         'fetch_format' => 'auto',
-            //     ]);
+            // Move file
+            $image->move($uploadPath, $filename);
 
-            //     if ($uploadResult) {
-            //         ProductImage::create([
-            //             'product_id' => $product->id,
-            //             'image' => $uploadResult['path'],
-            //             'public_id' => $uploadResult['public_id'],
-            //             'is_primary' => $index === 0, // First image as primary
-            //         ]);
-            //     }
-            // }
+            // Path to store in DB (relative path)
+            $imagePath = $folder . '/' . $filename;
 
-            foreach ($images as $index => $image) {
-                $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
-                    'quality' => 'auto:good',
-                    'fetch_format' => 'auto',
-                ]);
-
-                if ($uploadResult) {
-                    ProductImage::create([
-                        'product_id' => $product->id,
-                        'image' => $uploadResult['path'],
-                        'public_id' => $uploadResult['public_id'],
-                        'is_primary' => $index === 0, // First image as primary
-                    ]);
-                }
-            }
+            ProductImage::create([
+                'product_id' => $product->id,
+                // 'image'      => $filename,     // optional
+                'image' => $imagePath,    // save full path
+            ]);
         }
 
-        // Handle featured image with Cloudinary optimization
+        // Handle featured image upload if present
         if ($request->hasFile('featured_image')) {
-            $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
-                'quality' => 'auto:best',
-                'fetch_format' => 'auto',
-                'transformation' => [
-                    'width' => 800,
-                    'height' => 800,
-                    'crop' => 'limit',
-                ],
-            ]);
+            $featuredImage = $request->file('featured_image');
 
-            if ($uploadResult) {
-                $product->featured_image = $uploadResult['path'];
-                $product->featured_image_public_id = $uploadResult['public_id'];
-                $product->save();
+            // Create directory if not exists
+            $featuredFolder = 'uploads/featured';
+            $featuredUploadPath = public_path($featuredFolder);
+            if (!file_exists($featuredUploadPath)) {
+                mkdir($featuredUploadPath, 0777, true);
             }
+
+            // Generate unique filename
+            $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+
+            // Upload image without compression
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+
+            //  $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+
+            // Update product with featured image path
+            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+            $product->save();
         }
 
         // Handle product parts
@@ -617,62 +670,133 @@ class ProductController extends Controller
             $product->occasions()->sync($request->occasion_id);
         }
 
-        // Handle product images update with Cloudinary
-        if ($request->hasFile('image')) {
-            // Delete existing images from Cloudinary
+        // // Handle product images update with Cloudinary
+        // if ($request->hasFile('image')) {
+        //     // Delete existing images from Cloudinary
+        //     $existingImages = ProductImage::where('product_id', $id)->get();
+        //     foreach ($existingImages as $existingImage) {
+        //         if ($existingImage->public_id) {
+        //             $this->deleteFromCloudinary($existingImage->public_id);
+        //         }
+        //         $existingImage->delete();
+        //     }
+
+        //     // Upload new images to Cloudinary
+        //     $images = $request->file('image');
+        //     if (!is_array($images)) {
+        //         $images = [$images];
+        //     }
+
+        //     foreach ($images as $index => $image) {
+        //         $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //         ]);
+
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $product->id,
+        //                 'image' => $uploadResult['path'],
+        //                 'public_id' => $uploadResult['public_id'],
+        //                 'is_primary' => $index === 0,
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        // // Handle featured image update
+        // if ($request->hasFile('featured_image')) {
+        //     // Delete old featured image from Cloudinary
+        //     if ($product->featured_image_public_id) {
+        //         $this->deleteFromCloudinary($product->featured_image_public_id);
+        //     }
+
+        //     $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
+        //         'quality' => 'auto:best',
+        //         'fetch_format' => 'auto',
+        //         'transformation' => [
+        //             'width' => 800,
+        //             'height' => 800,
+        //             'crop' => 'limit',
+        //         ],
+        //     ]);
+
+        //     if ($uploadResult) {
+        //         $product->featured_image = $uploadResult['path'];
+        //         $product->featured_image_public_id = $uploadResult['public_id'];
+        //         $product->save();
+        //     }
+        // }
+
+              if ($request->hasFile('image')) {
+
+            $folder = 'uploads/products';
+            $uploadPath = public_path($folder);
+
+            // 1️⃣ Delete existing images from DB + storage
             $existingImages = ProductImage::where('product_id', $id)->get();
+
             foreach ($existingImages as $existingImage) {
-                if ($existingImage->public_id) {
-                    $this->deleteFromCloudinary($existingImage->public_id);
+                if (!empty($existingImage->image_path)) {
+                    $fullPath = public_path($existingImage->image_path);
+                    if (file_exists($fullPath)) {
+                        unlink($fullPath);
+                    }
                 }
                 $existingImage->delete();
             }
 
-            // Upload new images to Cloudinary
-            $images = $request->file('image');
-            if (!is_array($images)) {
-                $images = [$images];
+            // 2️⃣ Upload new image
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+
+            // Create directory if not exists
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
             }
 
-            foreach ($images as $index => $image) {
-                $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
-                    'quality' => 'auto:good',
-                    'fetch_format' => 'auto',
-                ]);
+            $image->move($uploadPath, $filename);
 
-                if ($uploadResult) {
-                    ProductImage::create([
-                        'product_id' => $product->id,
-                        'image' => $uploadResult['path'],
-                        'public_id' => $uploadResult['public_id'],
-                        'is_primary' => $index === 0,
-                    ]);
-                }
-            }
+            // 3️⃣ Save relative path in DB
+            $imagePath = $folder . '/' . $filename;
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                // 'image'      => $filename,     // optional
+                'image' => $imagePath,    // important
+            ]);
         }
 
-        // Handle featured image update
+        // Handle featured image upload if present
         if ($request->hasFile('featured_image')) {
-            // Delete old featured image from Cloudinary
-            if ($product->featured_image_public_id) {
-                $this->deleteFromCloudinary($product->featured_image_public_id);
+            $featuredImage = $request->file('featured_image');
+
+            // Delete existing featured image
+            if ($product->featured_image && file_exists(public_path($product->featured_image))) {
+                unlink(public_path($product->featured_image));
             }
 
-            $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
-                'quality' => 'auto:best',
-                'fetch_format' => 'auto',
-                'transformation' => [
-                    'width' => 800,
-                    'height' => 800,
-                    'crop' => 'limit',
-                ],
-            ]);
-
-            if ($uploadResult) {
-                $product->featured_image = $uploadResult['path'];
-                $product->featured_image_public_id = $uploadResult['public_id'];
-                $product->save();
+            // Create directory if not exists
+            $featuredFolder = 'uploads/featured';
+            $featuredUploadPath = public_path($featuredFolder);
+            if (!file_exists($featuredUploadPath)) {
+                mkdir($featuredUploadPath, 0777, true);
             }
+
+            // Generate unique filename
+            $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+
+            //without compress image
+            $featuredImage->move($featuredUploadPath, $featuredFilename);
+
+            // Compress and save image to ~10KB
+            // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+
+            // Update product with new featured image path
+            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+            $product->save();
+        } else {
+            // No featured image uploaded
         }
 
         // Handle product parts

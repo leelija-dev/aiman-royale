@@ -56,7 +56,7 @@ class SizeController extends Controller
         $data['uk_size'] = $request->uk_size;
         Size::create($data);
 
-        return redirect()->route('admin.sizes')->with('success', 'Size created successfully!');
+        return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully!');
     }
 
     /**
@@ -86,8 +86,14 @@ class SizeController extends Controller
         $data['uk_size'] = $request->uk;
         // dd($data);
         $size->update($data);
+        // dd(
+        //     route('admin.sizes'),
+        //     url('/admin/sizes'),
+        //     config('app.url')
+        // );
+        return redirect('/admin/sizes')->with('success', 'Size created successfully!');
 
-        return redirect()->route('admin.sizes')->with('success', 'Size updated successfully!');
+        // return redirect()->route('admin.sizes.index')->with('success', 'Size updated successfully!');
     }
 
     /**
@@ -97,6 +103,6 @@ class SizeController extends Controller
     {
         $size->delete();
 
-        return redirect()->route('admin.sizes')->with('success', 'Size deleted successfully!');
+        return redirect()->route('admin.sizes.index')->with('success', 'Size deleted successfully!');
     }
 }

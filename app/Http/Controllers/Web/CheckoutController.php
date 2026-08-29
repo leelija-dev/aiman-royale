@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CashfreeService;
 use App\Services\DelhiveryService;
 use App\Services\WhatsAppService;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -154,7 +155,9 @@ class CheckoutController extends Controller
                 'updated_at' => now(),
             ]);
         }
-
+        //Remove session 
+        session()->forget('applied_coupons');
+        
         $checkoutSource = session('checkout_source', 'cart');
 
         if ($checkoutSource === 'buy_now') {
@@ -273,6 +276,7 @@ class CheckoutController extends Controller
         if ($checkoutSource === 'buy_now') {
             session()->forget(['checkout_payload', 'checkout_source']);
         } else {
+            session()->forget('applied_coupons');
             DB::table('carts')->where('user_id', $user_id)->delete();
         }
 
@@ -994,6 +998,7 @@ class CheckoutController extends Controller
 
         // ✅ Send WhatsApp confirmation with proper phone number
         $this->sendOrderWhatsAppConfirmation($orderId, $order->phone_no, $customerName);
+        $this->sendOrderEmailConfirmation($orderId, $request->email ?? 'N/A', $customerName);
 
         // Clear cart and session
         DB::table('carts')->where('user_id', auth()->id())->delete();
@@ -1221,6 +1226,43 @@ class CheckoutController extends Controller
             return false;
         }
     }
+
+    private function sendOrderEmailConfirmation($orderId, $customerEmail, $customerName)
+{
+    try {
+        // Fetch order details
+        $order = \App\Models\Order::with(['items', 'user'])->find($orderId);
+        
+        if (!$order) {
+            Log::error('Order not found for email confirmation', ['order_id' => $orderId]);
+            return false;
+        }
+
+        // Get admin email from configuration
+        $adminEmail = config('mail.admin_email') ?? 'aimanroyale9@gmail.com';
+
+        // Send email to customer
+        \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmation($order, $customerName));
+
+        // Send email to admin
+        \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order, $customerName));
+
+        Log::info('Order email confirmation sent', [
+            'order_id' => $orderId,
+            'customer_email' => $customerEmail,
+            'admin_email' => $adminEmail
+        ]);
+
+        return true;
+
+    } catch (\Exception $e) {
+        Log::error('Email send error: ' . $e->getMessage(), [
+            'order_id' => $orderId,
+            'customer_email' => $customerEmail ?? 'unknown'
+        ]);
+        return false;
+    }
+}
 
     public function clearBuyNowSession(Request $request)
 {

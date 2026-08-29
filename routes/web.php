@@ -267,3 +267,8 @@ Route::post('/clear-buynow-session', [CheckoutController::class, 'clearBuyNowSes
     
 Route::get('/check-buynow-session', [CheckoutController::class, 'checkBuyNowSession'])
     ->name('check.buynow.session');
+Route::get('/clear-coupon-session', function () {
+    session()->forget('applied_coupons');
+
+    return 'Coupon session cleared';
+});

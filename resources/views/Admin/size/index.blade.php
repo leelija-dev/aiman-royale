@@ -12,11 +12,11 @@
         <div class="card mb-4 ty-4 tx-4 ">
             <div class="card-header pb-0 d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-center">
                 <!-- Search Form -->
-                <form method="GET" action="{{ route('admin.sizes') }}" class="mb-2 mb-md-0 d-flex w-100 w-lg-50">
+                <form method="GET" action="{{ route('admin.sizes.index') }}" class="mb-2 mb-md-0 d-flex w-100 w-lg-50">
                     <div class="d-flex gap-2 col-12 flex-sm-nowrap flex-wrap justify-content-sm-start justify-content-end">
                         <input type="text" name="search" class="form-control me-2" style="height:40px;width:100%;" placeholder="Search by name or code" value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary me-2 mb-sm-3 mb-1" style="height:40px;">Search</button>
-                        <a href="{{ route('admin.sizes') }}" class="btn btn-danger mb-sm-3 mb-1" style="height:40px;">Reset</a>
+                        <a href="{{ route('admin.sizes.index') }}" class="btn btn-danger mb-sm-3 mb-1" style="height:40px;">Reset</a>
                     </div>
                 </form>
 

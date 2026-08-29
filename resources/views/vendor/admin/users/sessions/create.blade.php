@@ -100,7 +100,7 @@
             <!-- Powered By -->
             <div class="text-sm font-normal">
                 @lang('admin::app.users.sessions.powered-by-description', [
-                    'sitename' => '<a class="text-blue-600 hover:underline" href="https://leelija.com/">Leelija</a>'
+                    'sitename' => '<a class="text-blue-600 hover:underline" href="https://aimanroyale.com/">Aiman Royale</a>'
                 ])
             </div>
         </div>

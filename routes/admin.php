@@ -64,7 +64,7 @@ use App\Http\Controllers\Admin\StoreController;
 // use App\Http\Controllers\ShopController;
 
 
-Route::middleware(['web'])->prefix('admin')->group(function () {
+Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware(['web'])->
     Route::view('/login', 'Admin.login')->name('login')->middleware(['guest.admin', 'prevent.back.history']);
     //Route::get('/login', [AuthController::class, 'showLoginForm'])->name('Admin.showLogin');
     Route::post('/login', [AuthController::class, 'login'])->name('Admin.login')->middleware('guest.admin');
@@ -74,7 +74,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
 
 
-    Route::get('/dashboard', [HomeController::class, 'home'])->name('Admin.dashboard')->middleware('auth:admin');
+    Route::get('/dashboard', [HomeController::class, 'home'])->name('admin.dashboard')->middleware('auth:admin');
     Route::get('/dashboard/data', [HomeController::class, 'getDashboardData'])->name('admin.dashboard.data')->middleware('auth:admin');
     Route::fallback(function () {
         abort(404);
@@ -205,7 +205,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // Colors
         Route::resource('colors', ColorController::class, [
             'names' => [
-                'index' => 'admin.colors',
+                'index' => 'admin.colors.index',
                 'create' => 'admin.colors.create',
                 'store' => 'admin.colors.store',
                 'edit' => 'admin.colors.edit',
@@ -217,7 +217,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         // Sizes
         Route::resource('sizes', SizeController::class, [
             'names' => [
-                'index' => 'admin.sizes',
+                'index' => 'admin.sizes.index',
                 'create' => 'admin.sizes.create',
                 'store' => 'admin.sizes.store',
                 'edit' => 'admin.sizes.edit',

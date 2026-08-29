@@ -977,6 +977,7 @@
                                 $appliedCoupon = $appliedCoupons[$firstVariant->id] ?? null;
 
                                 $couponForThisVariant = $appliedCoupon !== null;
+                                // dd($appliedCoupons)
                                 
                             @endphp
                             
