@@ -1285,19 +1285,52 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
+            
             @foreach ($products as $product)
             <div class="item flex justify-center items-center ">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative overflow-hidden bg-gray-100">
-                        @php
-                        $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
-                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                        $parts = explode('upload/', $imageUrl);
-                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
-                        }
-                        @endphp
+                     @php
+    $imagePath = $product->featured_image;
+    $imageUrl = '';
+    
+    // Check if it's a Cloudinary URL or path
+    $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
+                    str_contains($imagePath, 'res.cloudinary.com') ||
+                    str_contains($imagePath, 'aiman/');
+    
+    if ($isCloudinary) {
+        // Cloudinary handling
+        if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com') && str_contains($imagePath, 'upload/')) {
+            $parts = explode('upload/', $imagePath);
+            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . ($parts[1] ?? '');
+        } elseif (str_contains($imagePath, 'aiman/')) {
+            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+        } else {
+            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+        }
+    } else {
+        // Local image - use image-proxy
+        if ($imagePath) {
+            // Check if file exists in both locations
+            $publicPath = public_path($imagePath);
+            $storagePath = storage_path('app/public/' . $imagePath);
+            
+            if (file_exists($publicPath) || file_exists($storagePath)) {
+                // Use the proxy URL with the full path
+                $imageUrl = url('/img/' . $imagePath . '?w=600&q=80');
+            } else {
+                // Fallback to placeholder
+                $imageUrl = asset('assets/images/placeholder.jpg');
+            }
+        } else {
+            // Fallback to placeholder
+            $imageUrl = asset('assets/images/placeholder.jpg');
+        }
+    }
+@endphp
                         <img src="{{ $imageUrl }}"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
@@ -2305,7 +2338,8 @@ $bannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
     if ($isCloudinary) {
         $secBannerImg = $banner->image; // Use Cloudinary URL directly
     } else {
-        $secBannerImg = asset('uploads/banners/' . $banner->image);
+       // $secBannerImg = asset('uploads/banners/' . $banner->image);
+       $secBannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
     }
 
 

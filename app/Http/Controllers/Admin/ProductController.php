@@ -437,9 +437,10 @@ class ProductController extends Controller
         // }
 
         if ($request->hasFile('featured_image')) {
+            // dd('featured image uploaded');
 
             $featuredImage = $request->file('featured_image');
-            dd($featuredImage);
+            // dd($featuredImage);
             $folder = 'uploads/featured';
 
             // 1️⃣ Delete existing featured image
