@@ -5,66 +5,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @if(in_array(request()->getHost(), ['aimanroyale.com','www.aimanroyale.com']))
-    <meta name="robots" content="index, follow">
-    <meta name="googlebot" content="index, follow">
-    <meta name="googlebot-news" content="index, follow">
-    <meta name="googlebot-image" content="index, follow">
-    <meta name="googlebot-video" content="index, follow">
-    <meta name="google-site-verification" content="x0lp9usDncN6FhmKBxRaE0b2ALbm_xq3P-X9wTGxj9g" />
+    @if (in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com']))
+        <meta name="robots" content="index, follow">
+        <meta name="googlebot" content="index, follow">
+        <meta name="googlebot-news" content="index, follow">
+        <meta name="googlebot-image" content="index, follow">
+        <meta name="googlebot-video" content="index, follow">
+        <meta name="google-site-verification" content="x0lp9usDncN6FhmKBxRaE0b2ALbm_xq3P-X9wTGxj9g" />
     @endif
 
     <title>{{ $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}</title>
-    <meta name="description" content="{{ $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
-    <meta name="keywords" content="{{ $pageMeta->meta_keyword ?? 'fashion, designer wear, traditional clothing, premium fashion, aiman royale' }}">
-    <meta name="tags" content="{{ $pageMeta->meta_tags ?? 'fashion, clothing, designer, premium, traditional, contemporary' }}">
+    <meta name="description"
+        content="{{ $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta name="keywords"
+        content="{{ $pageMeta->meta_keyword ?? 'fashion, designer wear, traditional clothing, premium fashion, aiman royale' }}">
+    <meta name="tags"
+        content="{{ $pageMeta->meta_tags ?? 'fashion, clothing, designer, premium, traditional, contemporary' }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
-    <meta property="og:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta property="og:title"
+        content="{{ $ogMeta['title'] ?? ($pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection') }}">
+    <meta property="og:description"
+        content="{{ $ogMeta['description'] ?? ($pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.') }}">
     <meta property="og:type" content="{{ $ogMeta['type'] ?? 'website' }}">
     <meta property="og:url" content="{{ $ogMeta['url'] ?? url()->current() }}">
     <meta property="og:site_name" content="{{ $ogMeta['site_name'] ?? 'Aiman Royale' }}">
     <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-logo.png') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    @if(isset($ogMeta['locale']))
-    <meta property="og:locale" content="{{ $ogMeta['locale'] }}">
+    @if (isset($ogMeta['locale']))
+        <meta property="og:locale" content="{{ $ogMeta['locale'] }}">
     @endif
-    @if(isset($ogMeta['publisher']))
-    <meta property="article:publisher" content="{{ $ogMeta['publisher'] }}">
+    @if (isset($ogMeta['publisher']))
+        <meta property="article:publisher" content="{{ $ogMeta['publisher'] }}">
     @endif
-    @if(isset($ogMeta['section']))
-    <meta property="article:section" content="{{ $ogMeta['section'] }}">
+    @if (isset($ogMeta['section']))
+        <meta property="article:section" content="{{ $ogMeta['section'] }}">
     @endif
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
-    <meta name="twitter:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.' }}">
+    <meta name="twitter:title"
+        content="{{ $ogMeta['title'] ?? ($pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection') }}">
+    <meta name="twitter:description"
+        content="{{ $ogMeta['description'] ?? ($pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.') }}">
     <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-logo.png') }}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Dynamic Schema Markup -->
-    @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
-    <script type="application/ld+json">
+    @if (isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
+        <script type="application/ld+json">
        {!! $pageMeta->schema_markup !!}
     </script>
-
     @endif
 
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-logo.png')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-logo.png')}}" />
-    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-logo.png')}}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('web/images/company-logo/aiman-logo.png')}}" />
+    <link rel="icon" type="image/png" href="{{ asset('web/images/company-logo/aiman-logo.png') }}"
+        sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
 
 
     @yield('styles')
@@ -72,7 +79,9 @@
     @stack('styles')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap"
         rel="stylesheet" />
@@ -88,63 +97,85 @@
     <!-- <link rel="stylesheet" href="web/css/staging.css"> -->
 
     <!-- Owl Carousel CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
-    <link rel="stylesheet" href="{{asset('web/css/home-page.css')}}">
-    <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
+    <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}">
+    <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @if(isset($ogMeta))
-    <x-blog.og-tags
-        :title="$ogMeta['title'] ?? ''"
-        :description="$ogMeta['description'] ?? ''"
-        :keywords="$ogMeta['keywords'] ?? []"
-        :image="$ogMeta['image'] ?? null"
-        :type="$ogMeta['type'] ?? 'website'"
-        :url="$ogMeta['url'] ?? url()->current()"
-        :locale="$ogMeta['locale'] ?? 'en_US'"
-        :siteName="$ogMeta['site_name'] ?? config('app.name')"
-        :publisher="$ogMeta['publisher'] ?? config('app.name')"
-        :publishedTime="$ogMeta['published_time'] ?? null"
-        :modifiedTime="$ogMeta['modified_time'] ?? null"
-        :section="$ogMeta['section'] ?? 'Blog'"
-        :tags="$ogMeta['tags'] ?? []"
-        :author="$ogMeta['author'] ?? 'Admin'"
-        :readingTime="$ogMeta['reading_time'] ?? null"
-        :imageWidth="$ogMeta['image_width'] ?? 1200"
-        :imageHeight="$ogMeta['image_height'] ?? 630"
-        :imageType="$ogMeta['image_type'] ?? 'image/jpeg'"
-        :schema="$ogMeta['schema'] ?? null" />
+    @if (isset($ogMeta))
+        <x-blog.og-tags :title="$ogMeta['title'] ?? ''" :description="$ogMeta['description'] ?? ''" :keywords="$ogMeta['keywords'] ?? []" :image="$ogMeta['image'] ?? null" :type="$ogMeta['type'] ?? 'website'"
+            :url="$ogMeta['url'] ?? url()->current()" :locale="$ogMeta['locale'] ?? 'en_US'" :siteName="$ogMeta['site_name'] ?? config('app.name')" :publisher="$ogMeta['publisher'] ?? config('app.name')" :publishedTime="$ogMeta['published_time'] ?? null" :modifiedTime="$ogMeta['modified_time'] ?? null"
+            :section="$ogMeta['section'] ?? 'Blog'" :tags="$ogMeta['tags'] ?? []" :author="$ogMeta['author'] ?? 'Admin'" :readingTime="$ogMeta['reading_time'] ?? null" :imageWidth="$ogMeta['image_width'] ?? 1200"
+            :imageHeight="$ogMeta['image_height'] ?? 630" :imageType="$ogMeta['image_type'] ?? 'image/jpeg'" :schema="$ogMeta['schema'] ?? null" />
     @endif
 
-    <link rel="stylesheet" href="{{asset('web/css/app-popup.css')}}">
-    
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5MP8JR47');</script>
+    <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}">
+
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
+    </script>
+
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1931344804203776');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1931344804203776&ev=PageView&noscript=1" /></noscript>
 
 </head>
 
 <body class="overflow-x-hidden px-0">
-    
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MP8JR47"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
-    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MP8JR47" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+
+    @if (!request()->is('login') && !request()->is('register') && !request()->is('404'))
+        <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
     @endif
 
 
     <main class="">
         @yield('content')
     </main>
-    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
-    <x-web.footer />
+    @if (!request()->is('login') && !request()->is('register') && !request()->is('404'))
+        <x-web.footer />
     @endif
     <!-- Add this temporarily for testing -->
     <!-- <button onclick="localStorage.clear(); location.reload();"
@@ -196,11 +227,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
-    <!-- <script src="{{asset('web/js/pwa-installation.js')}}"></script> -->
+    <!-- <script src="{{ asset('web/js/pwa-installation.js') }}"></script> -->
 
 
     <!-- common js  -->
-    <script src="{{asset('web/js/main.js')}}"></script>
+    <script src="{{ asset('web/js/main.js') }}"></script>
 </body>
 
 </html>
