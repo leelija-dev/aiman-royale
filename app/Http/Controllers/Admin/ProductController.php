@@ -11,6 +11,7 @@ use App\Models\ProductOccasion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Brand;
 use App\Traits\CloudinaryUploadTrait;  // ← Add this line
 use Cloudinary\Cloudinary;
@@ -93,254 +94,6 @@ class ProductController extends Controller
             return response()->json(['error' => 'Failed to load parts'], 500);
         }
     }
-
-    // public function store(Request $request)
-    // {
-    //     // dd($request);
-    //     $data = $request->validate([
-    //         'design_no' => 'required|string|max:40|unique:products,design_no',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'occasion_id' => 'nullable|exists:ocassions,id',
-    //         'name' => 'required|string|max:200',
-    //         'slug' => 'required|string|max:200|unique:products,slug',
-    //         'description' => 'nullable|string',
-    //         'brand' => 'nullable|string|max:500',
-    //         'fabric' => 'nullable|string|max:500',
-    //         'material_care' => 'nullable|string|max:1000',
-    //         'fit' => 'nullable|string|max:50',
-    //         'price' => 'required|numeric|min:0',
-    //         'discount_price' => 'nullable|numeric|min:0',
-    //         'stock' => 'required|integer|min:0',
-    //         'status' => 'required|in:active,inactive',
-    //         'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240', // Max 10MB
-    //         'is_featured' => 'required|boolean',
-    //         'meta_title' => 'required|string',
-    //         'keywords' => 'required|string',
-    //         'tags' => 'required|string',
-    //         'meta_description' => 'required|string',
-    //         'schema_markup' => 'nullable|string',
-    //         // 'image' => 'required|image|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
-    //         'lehenga_fabric' => 'nullable|string|max:500',
-    //         'choli_fabric' => 'nullable|string|max:500',
-    //         'dupatta_fabric' => 'nullable|string|max:500',
-    //         'type' => 'nullable|string',
-    //         'stitching_type' => 'nullable|string|max:500',
-    //         'pattern' => 'nullable|string',
-    //         'sales_package' => 'nullable|string|max:500',
-    //         'color' => 'nullable|string',
-    //     ]);
-    //     // $data['ocassion_id'] = $request->occasion_id;
-
-
-
-    //     $product = Product::create($data);
-
-    //     if ($request->has('occasion_id')) {
-    //         $product->occasions()->sync($request->occasion_id);
-    //     }
-
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-
-    //         $filename = time() . '_' . $image->getClientOriginalName();
-
-    //         // Folder inside public
-    //         $folder = 'uploads/products';
-
-    //         // Absolute path for moving file
-    //         $uploadPath = public_path($folder);
-
-    //         // Create directory if not exists
-    //         if (!file_exists($uploadPath)) {
-    //             mkdir($uploadPath, 0777, true);
-    //         }
-
-    //         // Move file
-    //         $image->move($uploadPath, $filename);
-
-    //         // Path to store in DB (relative path)
-    //         $imagePath = $folder . '/' . $filename;
-
-    //         ProductImage::create([
-    //             'product_id' => $product->id,
-    //             // 'image'      => $filename,     // optional
-    //             'image' => $imagePath,    // save full path
-    //         ]);
-    //     }
-
-    //     // Handle featured image upload if present
-    //     if ($request->hasFile('featured_image')) {
-    //         $featuredImage = $request->file('featured_image');
-
-    //         // Create directory if not exists
-    //         $featuredFolder = 'uploads/featured';
-    //         $featuredUploadPath = public_path($featuredFolder);
-    //         if (!file_exists($featuredUploadPath)) {
-    //             mkdir($featuredUploadPath, 0777, true);
-    //         }
-
-    //         // Generate unique filename
-    //         $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
-
-    //         // Upload image without compression
-    //         $featuredImage->move($featuredUploadPath, $featuredFilename);
-
-    //         //  $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
-
-    //         // Update product with featured image path
-    //         $product->featured_image = $featuredFolder . '/' . $featuredFilename;
-    //         $product->save();
-    //     }
-
-    //     // Handle product parts
-    //     if ($request->has('parts') && is_array($request->parts)) {
-    //         foreach ($request->parts as $partData) {
-    //             if (!empty($partData['part_name'])) {
-    //                 $product->parts()->create([
-    //                     'part_name' => $partData['part_name'],
-    //                     'fabric' => $partData['fabric'] ?? null,
-    //                     'work_type' => $partData['work_type'] ?? null,
-    //                     'order' => $partData['order'] ?? 1
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-    //     return redirect()->route('admin.products')->with('success', 'Product created successfully!');
-    // }
-    // public function update(Request $request, $id)
-    // {
-    //     //    dd($request);
-    //     $data = $request->validate([
-    //         'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
-    //         'category_id' => 'required|exists:categories,id',
-    //         'occasion_id' => 'nullable|array',
-    //         'occasion_id.*' => 'exists:ocassions,id',
-    //         'name' => 'required|string|max:200',
-    //         'slug' => 'required|string|max:200|unique:products,slug,' . $id,
-    //         'description' => 'nullable|string',
-    //         'brand' => 'nullable|string|max:500',
-    //         'fabric' => 'nullable|string|max:500',
-    //         'material_care' => 'nullable|string|max:1000',
-    //         'fit' => 'nullable|string|max:50',
-    //         'price' => 'required|numeric|min:0',
-    //         'discount_price' => 'nullable|numeric|min:0',
-    //         'stock' => 'required|integer|min:0',
-    //         'status' => 'required|in:active,inactive',
-    //         'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
-    //         'is_featured' => 'required|boolean',
-    //         'meta_title' => 'required|string',
-    //         'keywords' => 'required|string',
-    //         'tags' => 'required|string',
-    //         'meta_description' => 'required|string',
-    //         'schema_markup' => 'nullable|string',
-    //         'type' => 'nullable|string|max:500',
-    //         'stitching_type' => 'nullable|string|max:500',
-    //         'pattern' => 'nullable|string|max:500',
-    //         'sales_package' => 'nullable|string|max:500',
-    //         'color' => 'nullable|string|max:500',
-
-    //     ]);
-
-    //     $product = Product::findOrFail($id);
-    //     $product->update($data);
-
-    //     // Handle multiple occasions sync
-    //     if ($request->has('occasion_id')) {
-    //         $product->occasions()->sync($request->occasion_id);
-    //     }
-
-    //     if ($request->hasFile('image')) {
-
-    //         $folder = 'uploads/products';
-    //         $uploadPath = public_path($folder);
-
-    //         // 1️⃣ Delete existing images from DB + storage
-    //         $existingImages = ProductImage::where('product_id', $id)->get();
-
-    //         foreach ($existingImages as $existingImage) {
-    //             if (!empty($existingImage->image_path)) {
-    //                 $fullPath = public_path($existingImage->image_path);
-    //                 if (file_exists($fullPath)) {
-    //                     unlink($fullPath);
-    //                 }
-    //             }
-    //             $existingImage->delete();
-    //         }
-
-    //         // 2️⃣ Upload new image
-    //         $image = $request->file('image');
-    //         $filename = time() . '_' . $image->getClientOriginalName();
-
-    //         // Create directory if not exists
-    //         if (!file_exists($uploadPath)) {
-    //             mkdir($uploadPath, 0777, true);
-    //         }
-
-    //         $image->move($uploadPath, $filename);
-
-    //         // 3️⃣ Save relative path in DB
-    //         $imagePath = $folder . '/' . $filename;
-
-    //         ProductImage::create([
-    //             'product_id' => $product->id,
-    //             // 'image'      => $filename,     // optional
-    //             'image' => $imagePath,    // important
-    //         ]);
-    //     }
-
-    //     // Handle featured image upload if present
-    //     if ($request->hasFile('featured_image')) {
-    //         $featuredImage = $request->file('featured_image');
-
-    //         // Delete existing featured image
-    //         if ($product->featured_image && file_exists(public_path($product->featured_image))) {
-    //             unlink(public_path($product->featured_image));
-    //         }
-
-    //         // Create directory if not exists
-    //         $featuredFolder = 'uploads/featured';
-    //         $featuredUploadPath = public_path($featuredFolder);
-    //         if (!file_exists($featuredUploadPath)) {
-    //             mkdir($featuredUploadPath, 0777, true);
-    //         }
-
-    //         // Generate unique filename
-    //         $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
-
-    //         //without compress image
-    //         $featuredImage->move($featuredUploadPath, $featuredFilename);
-
-    //         // Compress and save image to ~10KB
-    //         // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
-
-    //         // Update product with new featured image path
-    //         $product->featured_image = $featuredFolder . '/' . $featuredFilename;
-    //         $product->save();
-    //     } else {
-    //         // No featured image uploaded
-    //     }
-
-    //     // Handle product parts
-    //     if ($request->has('parts') && is_array($request->parts)) {
-    //         // Delete existing parts
-    //         $product->parts()->delete();
-
-    //         // Add new parts
-    //         foreach ($request->parts as $partData) {
-    //             if (!empty($partData['part_name'])) {
-    //                 $product->parts()->create([
-    //                     'part_name' => $partData['part_name'],
-    //                     'fabric' => $partData['fabric'] ?? null,
-    //                     'work_type' => $partData['work_type'] ?? null,
-    //                     'order' => $partData['order'] ?? 1
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-    //     return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
-    // }
 
     public function store(Request $request)
     {
@@ -513,125 +266,11 @@ class ProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Product created successfully with Cloudinary!');
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $data = $request->validate([
-    //         'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
-    //         'category_id' => 'required|exists:categories,id',
-    //         'occasion_id' => 'nullable|array',
-    //         'occasion_id.*' => 'exists:ocassions,id',
-    //         'name' => 'required|string|max:200',
-    //         'slug' => 'required|string|max:200|unique:products,slug,' . $id,
-    //         'description' => 'nullable|string',
-    //         'brand' => 'nullable|string|max:500',
-    //         'fabric' => 'nullable|string|max:500',
-    //         'material_care' => 'nullable|string|max:1000',
-    //         'fit' => 'nullable|string|max:50',
-    //         'price' => 'required|numeric|min:0',
-    //         'discount_price' => 'nullable|numeric|min:0',
-    //         'stock' => 'required|integer|min:0',
-    //         'status' => 'required|in:active,inactive',
-    //         'featured_image' => 'nullable|mimes:jpeg,jpg,png,gif,webp,avif|max:10240',
-    //         'is_featured' => 'required|boolean',
-    //         'meta_title' => 'required|string',
-    //         'keywords' => 'required|string',
-    //         'tags' => 'required|string',
-    //         'meta_description' => 'required|string',
-    //         'schema_markup' => 'nullable|string',
-    //         'type' => 'nullable|string|max:500',
-    //         'stitching_type' => 'nullable|string|max:500',
-    //         'pattern' => 'nullable|string|max:500',
-    //         'sales_package' => 'nullable|string|max:500',
-    //         'color' => 'nullable|string|max:500',
-    //     ]);
 
-    //     $product = Product::findOrFail($id);
-    //     $product->update($data);
-
-    //     // Handle multiple occasions sync
-    //     if ($request->has('occasion_id')) {
-    //         $product->occasions()->sync($request->occasion_id);
-    //     }
-
-    //     // Handle product images update with Cloudinary
-    //     if ($request->hasFile('image')) {
-    //         // Delete existing images from Cloudinary
-    //         $existingImages = ProductImage::where('product_id', $id)->get();
-    //         foreach ($existingImages as $existingImage) {
-    //             if ($existingImage->public_id) {
-    //                 $this->deleteFromCloudinary($existingImage->public_id);
-    //             }
-    //             $existingImage->delete();
-    //         }
-
-    //         // Upload new images to Cloudinary
-    //         $images = $request->file('image');
-    //         if (!is_array($images)) {
-    //             $images = [$images];
-    //         }
-
-    //         foreach ($images as $index => $image) {
-    //             $uploadResult = $this->uploadToCloudinary($image, 'products/' . $product->id, [
-    //                 'quality' => 'auto:good',
-    //                 'fetch_format' => 'auto',
-    //             ]);
-
-    //             if ($uploadResult) {
-    //                 ProductImage::create([
-    //                     'product_id' => $product->id,
-    //                     'image' => $uploadResult['path'],
-    //                     'public_id' => $uploadResult['public_id'],
-    //                     'is_primary' => $index === 0,
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-    //     // Handle featured image update
-    //     if ($request->hasFile('featured_image')) {
-    //         // Delete old featured image from Cloudinary
-    //         if ($product->featured_image_public_id) {
-    //             $this->deleteFromCloudinary($product->featured_image_public_id);
-    //         }
-
-    //         $uploadResult = $this->uploadToCloudinary($request->file('featured_image'), 'products/featured', [
-    //             'quality' => 'auto:best',
-    //             'fetch_format' => 'auto',
-    //             'transformation' => [
-    //                 'width' => 800,
-    //                 'height' => 800,
-    //                 'crop' => 'limit',
-    //             ],
-    //         ]);
-
-    //         if ($uploadResult) {
-    //             $product->featured_image = $uploadResult['path'];
-    //             $product->featured_image_public_id = $uploadResult['public_id'];
-    //             $product->save();
-    //         }
-    //     }
-
-    //     // Handle product parts
-    //     if ($request->has('parts') && is_array($request->parts)) {
-    //         $product->parts()->delete();
-
-    //         foreach ($request->parts as $partData) {
-    //             if (!empty($partData['part_name'])) {
-    //                 $product->parts()->create([
-    //                     'part_name' => $partData['part_name'],
-    //                     'fabric' => $partData['fabric'] ?? null,
-    //                     'work_type' => $partData['work_type'] ?? null,
-    //                     'order' => $partData['order'] ?? 1
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-    //     return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
-    // }
 
     public function update(Request $request, $id)
     {
+       
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
@@ -728,75 +367,103 @@ class ProductController extends Controller
         //     }
         // }
 
-              if ($request->hasFile('image')) {
-
-            $folder = 'uploads/products';
-            $uploadPath = public_path($folder);
+        if ($request->hasFile('image')) {
 
             // 1️⃣ Delete existing images from DB + storage
             $existingImages = ProductImage::where('product_id', $id)->get();
 
             foreach ($existingImages as $existingImage) {
-                if (!empty($existingImage->image_path)) {
-                    $fullPath = public_path($existingImage->image_path);
-                    if (file_exists($fullPath)) {
-                        unlink($fullPath);
-                    }
+                if (!empty($existingImage->image_path) && Storage::disk('public')->exists($existingImage->image_path)) {
+                    Storage::disk('public')->delete($existingImage->image_path);
                 }
                 $existingImage->delete();
             }
 
             // 2️⃣ Upload new image
             $image = $request->file('image');
-            $filename = time() . '_' . $image->getClientOriginalName();
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $folder = 'uploads/products';
 
             // Create directory if not exists
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
+            if (!Storage::disk('public')->exists($folder)) {
+                Storage::disk('public')->makeDirectory($folder);
             }
 
-            $image->move($uploadPath, $filename);
+            try {
+                // Store in storage/app/public/uploads/products/
+                $path = $image->storeAs($folder, $imageName, 'public');
 
-            // 3️⃣ Save relative path in DB
-            $imagePath = $folder . '/' . $filename;
-
-            ProductImage::create([
-                'product_id' => $product->id,
-                // 'image'      => $filename,     // optional
-                'image' => $imagePath,    // important
-            ]);
+                if ($path) {
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image' => $path,
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::error('Error storing product image: ' . $e->getMessage());
+            }
         }
 
         // Handle featured image upload if present
+        // if ($request->hasFile('featured_image')) {
+        //     $featuredImage = $request->file('featured_image');
+
+        //     // Delete existing featured image
+        //     if ($product->featured_image && file_exists(public_path($product->featured_image))) {
+        //         unlink(public_path($product->featured_image));
+        //     }
+
+        //     // Create directory if not exists
+        //     $featuredFolder = 'uploads/featured';
+        //     $featuredUploadPath = public_path($featuredFolder);
+        //     if (!file_exists($featuredUploadPath)) {
+        //         mkdir($featuredUploadPath, 0777, true);
+        //     }
+
+        //     // Generate unique filename
+        //     $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+
+        //     //without compress image
+        //     $featuredImage->move($featuredUploadPath, $featuredFilename);
+
+        //     // Compress and save image to ~10KB
+        //     // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
+
+        //     // Update product with new featured image path
+        //     $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+        //     $product->save();
+        // } else {
+        //     // No featured image uploaded
+        // }
+
         if ($request->hasFile('featured_image')) {
+
             $featuredImage = $request->file('featured_image');
+            dd($featuredImage);
+            $folder = 'uploads/featured';
 
-            // Delete existing featured image
-            if ($product->featured_image && file_exists(public_path($product->featured_image))) {
-                unlink(public_path($product->featured_image));
+            // 1️⃣ Delete existing featured image
+            if ($product->featured_image && Storage::disk('public')->exists($product->featured_image)) {
+                Storage::disk('public')->delete($product->featured_image);
             }
 
-            // Create directory if not exists
-            $featuredFolder = 'uploads/featured';
-            $featuredUploadPath = public_path($featuredFolder);
-            if (!file_exists($featuredUploadPath)) {
-                mkdir($featuredUploadPath, 0777, true);
+            // 2️⃣ Create directory if not exists
+            if (!Storage::disk('public')->exists($folder)) {
+                Storage::disk('public')->makeDirectory($folder);
             }
 
-            // Generate unique filename
-            $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+            // 3️⃣ Upload new image
+            try {
+                $filename = time() . '_featured_' . $featuredImage->getClientOriginalName();
+                $path = $featuredImage->storeAs($folder, $filename, 'public');
 
-            //without compress image
-            $featuredImage->move($featuredUploadPath, $featuredFilename);
-
-            // Compress and save image to ~10KB
-            // $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
-
-            // Update product with new featured image path
-            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
-            $product->save();
-        } else {
-            // No featured image uploaded
+                if ($path) {
+                    $product->featured_image = $path;
+                    $product->save();
+                }
+            } catch (\Exception $e) {
+                Log::error('Error storing featured image: ' . $e->getMessage());
+            }
         }
 
         // Handle product parts
@@ -839,34 +506,6 @@ class ProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Product and associated images deleted successfully!');
     }
 
-    // In your controller
-    // public function update(Request $request, $id)
-    // {
-    //     // Check if file exists
-    //     if ($request->hasFile('featured_image')) {
-    //         dd([
-    //             'file_exists' => true,
-    //             'file_info' => [
-    //                 'original_name' => $request->file('featured_image')->getClientOriginalName(),
-    //                 'size' => $request->file('featured_image')->getSize(),
-    //                 'mime' => $request->file('featured_image')->getMimeType(),
-    //                 'extension' => $request->file('featured_image')->getClientOriginalExtension(),
-    //                 'is_valid' => $request->file('featured_image')->isValid(),
-    //             ],
-    //             'all_request_data' => $request->except(['_token', '_method']),
-    //             'files' => $_FILES, // Raw files data
-    //         ]);
-    //     }
-
-    //     dd('No file uploaded', $request->all(), $_FILES);
-    // }
-    // public function delete($id)
-    // {
-    //     $product = Product::findOrFail($id);
-    //     $product->delete();
-
-    //     return redirect()->route('admin.products')->with('success', 'Product deleted successfully!');
-    // }
     public function trashed()
     {
         $data = Product::onlyTrashed()->get();
