@@ -11,6 +11,7 @@
     <meta name="googlebot-news" content="index, follow">
     <meta name="googlebot-image" content="index, follow">
     <meta name="googlebot-video" content="index, follow">
+    <meta name="google-site-verification" content="x0lp9usDncN6FhmKBxRaE0b2ALbm_xq3P-X9wTGxj9g" />
     @endif
 
     <title>{{ $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}</title>
@@ -120,9 +121,19 @@
     @endif
 
     <link rel="stylesheet" href="{{asset('web/css/app-popup.css')}}">
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5MP8JR47');</script>
+
 </head>
 
 <body class="overflow-x-hidden px-0">
+    
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MP8JR47"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
     <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />

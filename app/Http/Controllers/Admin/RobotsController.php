@@ -53,56 +53,56 @@ public function store(Request $request)
         ->with('success', 'robots.txt uploaded successfully.');
 }
 
-  public function generate()
-    {
-        $urls = [];
+//   public function generate()
+//     {
+//         $urls = [];
 
-        foreach (Route::getRoutes() as $route) {
+//         foreach (Route::getRoutes() as $route) {
 
-            // Only GET/HEAD routes
-            if (!in_array('GET', $route->methods())) {
-                continue;
-            }
+//             // Only GET/HEAD routes
+//             if (!in_array('GET', $route->methods())) {
+//                 continue;
+//             }
 
-            $uri = $route->uri();
+//             $uri = $route->uri();
 
-            // Skip Laravel/system routes
-            if (
-                str_contains($uri, '{') ||
-                str_starts_with($uri, 'admin') ||
-                str_starts_with($uri, 'api') ||
-                in_array($uri, [
-                    'login',
-                    'register',
-                    'logout',
-                    'cart',
-                    'checkout',
-                    'checkout/cancel',
-                    'checkout/success',
-                    'checkout/payment',
-                    'purchase',
-                    'sitemap.xml',
-                ])
-            ) {
-                continue;
-            }
+//             // Skip Laravel/system routes
+//             if (
+//                 str_contains($uri, '{') ||
+//                 str_starts_with($uri, 'admin') ||
+//                 str_starts_with($uri, 'api') ||
+//                 in_array($uri, [
+//                     'login',
+//                     'register',
+//                     'logout',
+//                     'cart',
+//                     'checkout',
+//                     'checkout/cancel',
+//                     'checkout/success',
+//                     'checkout/payment',
+//                     'purchase',
+//                     'sitemap.xml',
+//                 ])
+//             ) {
+//                 continue;
+//             }
 
-            // Generate URL
-            $url = url($uri);
+//             // Generate URL
+//             $url = url($uri);
 
-            $urls[] = [
-                'loc' => $url,
-                'lastmod' => now()->toAtomString(),
-            ];
-        }
+//             $urls[] = [
+//                 'loc' => $url,
+//                 'lastmod' => now()->toAtomString(),
+//             ];
+//         }
 
-        // Remove duplicate URLs
-        $urls = collect($urls)
-            ->unique('loc')
-            ->values();
+//         // Remove duplicate URLs
+//         $urls = collect($urls)
+//             ->unique('loc')
+//             ->values();
 
-        return response()
-            ->view('sitemap', compact('urls'))
-            ->header('Content-Type', 'application/xml');
-    }
+//         return response()
+//             ->view('sitemap', compact('urls'))
+//             ->header('Content-Type', 'application/xml');
+//     }
 }
