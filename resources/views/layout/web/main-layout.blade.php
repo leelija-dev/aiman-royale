@@ -53,7 +53,7 @@
     @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
     <script type="application/ld+json">
         {
-            !!$pageMeta - > schema_markup!!
+            !!$pageMeta->schema_markup!!
         }
     </script>
 
