@@ -1,2 +1,19 @@
 User-agent: *
-Disallow:
+Disallow: /wishlist
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /payment
+Disallow: /track
+Disallow: /user
+Disallow: /profile
+Disallow: /orders
+Disallow: /order-history
+Disallow: /addresses
+Disallow: /custom-request
+Disallow: /my-account
+Disallow: /account
+Disallow: /dashboard
+
+
+Sitemap: https://aimanroyale.com/sitemap.xml

@@ -4,6 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="googlebot-news" content="noindex, nofollow">
+    <meta name="googlebot-image" content="noindex, nofollow">
+    <meta name="googlebot-video" content="noindex, nofollow">
     <link rel="icon" href="../images/logo/favicon.png" type="image/png">
     <title> Aiman Royale - Sign In Page</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -187,7 +192,7 @@
         <div class="col-4 mx-auto p-2">
 
             <div class="login-logo">
-                <a href="#">Leelija</a>
+                <a href="#"></a>
             </div> --}}
 
 

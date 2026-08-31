@@ -50,6 +50,15 @@ $isEmailActive = false;
                 </a>
             </li>
             <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('robots.index') ? 'active' : '' }}" href="{{ route('robots.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-store" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Robots TEXT</span>
+                </a>
+            </li>
+            <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('coupon.*') ? 'active' : '' }}" href="{{ route('coupon.index') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
