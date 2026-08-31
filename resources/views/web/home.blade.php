@@ -1051,7 +1051,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
                     @php
                     $catImg = $category->latestProductWithImage->featured_image
-                    ? $category->latestProductWithImage->featured_image
+                    ? url('/img/' . $category->latestProductWithImage->featured_image . '?w=600&q=80')
                     : $category->image;
 
                     if (strpos($catImg, 'cloudinary.com') !== false && strpos($catImg, 'upload/') !== false) {
@@ -1190,6 +1190,10 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                 $parts = explode('upload/', $tagImage);
                 $tagImage = $parts[0] . 'upload/w_600,h_850,c_fill,f_auto,q_auto/' . $parts[1];
                 }
+                else {
+        // Local image - use proxy with specific folder
+        $tagImage = url('/img/' . $tagImage . '?w=600&q=80');
+    }
                 @endphp
 
                 <div class="item ">
@@ -2683,7 +2687,7 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             @forelse($mostWishlisted as $index => $product)
             @php
             $variant = $product->variants->first();
-            $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
+            $imageUrl = $product->featured_image ? url('/img/' . $product->featured_image. '?w=600&q=80') : asset('assets/images/placeholder.jpg');
             if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
             $parts = explode('upload/', $imageUrl);
             $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
