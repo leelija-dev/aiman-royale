@@ -42,8 +42,14 @@
                     <div class="mb-4">
 
                         <label class="form-label fw-bold">
-                            Current File
+                            Current Robots.txt File
                         </label>
+
+                        <div class="alert alert-warning mt-2">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Important:</strong> This file controls how search engines crawl your website.
+                            Please do not modify or replace it unless instructed by an authorized SEO expert.
+                        </div>
 
                         <div class="border rounded p-3">
 
