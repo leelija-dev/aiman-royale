@@ -6,7 +6,7 @@ use App\Services\MetaConversionsService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Log;
 class MetaTracking
 {
     public function handle(
@@ -35,7 +35,7 @@ class MetaTracking
                     ]
                 );
             } catch (\Throwable $e) {
-                \Log::error('Meta automatic tracking failed', [
+                Log::error('Meta automatic tracking failed', [
                     'url' => $request->fullUrl(),
                     'error' => $e->getMessage(),
                 ]);
