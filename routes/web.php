@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\File;
 // use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\DB;
+ use App\Services\SitemapService;
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');
@@ -289,5 +290,13 @@ Route::get('/robots.txt', function () {
         200
     )->header('Content-Type', 'text/plain');
 });
-Route::get('/sitemap.xml', [RobotsController::class, 'generate'])
-    ->name('sitemap');
+// Route::get('/sitemap.xml', [RobotsController::class, 'generate'])
+//     ->name('sitemap');
+   
+
+Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
+
+    $sitemapService->generate();
+
+    return 'Sitemap generated successfully.';
+});
