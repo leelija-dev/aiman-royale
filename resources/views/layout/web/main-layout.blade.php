@@ -154,6 +154,10 @@
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '3223171547852999');
         fbq('track', 'PageView');
+
+        @if (!empty(trim($__env->yieldContent('event'))))
+        fbq('track', @json($__env->yieldContent('event')));
+        @endif
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=3223171547852999&ev=PageView&noscript=1" /></noscript>

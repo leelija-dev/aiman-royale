@@ -208,7 +208,7 @@
                 
                 // Initialize Cashfree payment - v3 API
                 const cashfree = new Cashfree({
-                    mode: 'production',
+                    mode: 'sandbox', //production',
                 });
                 
                 console.log('Cashfree initialized, available methods:', Object.getOwnPropertyNames(cashfree));

@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-
+@section('event', 'ViewCart')
 @section('content')
 
 

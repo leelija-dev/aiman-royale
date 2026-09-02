@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-
+@section('event', 'AddToWishlist')
 @section('content')
 @if(!auth()->check())
 <!-- Guest User Login Prompt -->

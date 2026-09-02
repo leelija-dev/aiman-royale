@@ -1,23 +1,5 @@
 @extends('layout.web.main-layout')
 
-@section('head')
-<script>
-    // Track CompleteRegistration event with Facebook Pixel on successful registration
-    @if(session('registration_success'))
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'CompleteRegistration', {
-            status: 'completed',
-            currency: 'INR',
-            value: 0
-        });
-        // Clear session after firing event
-        @php session()->forget('registration_success'); @endphp
-    }
-    @endif
-</script>
-@parent
-@endsection
-
 @section('content')
 <style>
     /* Your original gradient colors */

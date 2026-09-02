@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-
+@section('event', 'AddToWishlist')
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
     <div class="container mx-auto">

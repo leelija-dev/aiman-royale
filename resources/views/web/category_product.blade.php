@@ -1,4 +1,5 @@
 @extends('layout.web.main-layout')
+@section('event', 'AddToWishlist')
 
 @section('content')
 <style>
@@ -1873,6 +1874,12 @@
                     } else {
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
+                        if (typeof fbq !== 'undefined') {
+                            fbq('track', 'AddToWishlist', {
+                                content_ids: [String(productId)],
+                                content_type: 'product'
+                            });
+                        }
                     }
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
                         item.textContent = data.wishlist_count;
