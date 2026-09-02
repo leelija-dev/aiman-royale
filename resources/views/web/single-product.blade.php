@@ -1191,7 +1191,7 @@
                                     <li class="flex items-center gap-2">
                                         <span>•</span>
                                         <span>
-                                            <strong>Grand Launch Offer:</strong> Use Coupon Code:
+                                            Get 20% instant discount use Coupon Code:
                                             <span class="font-bold text-red-600"> LAUNCH20</span>
                                         </span>
                                     </li>
