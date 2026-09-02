@@ -71,7 +71,7 @@
                                         $isFullUrl = filter_var($imageUrl, FILTER_VALIDATE_URL);
                                         @endphp
 
-                                        <img src="{{ $isCloudinary || $isFullUrl ? $imageUrl : asset('uploads/banners/' . $imageUrl) }}"
+                                        <img src="{{ $isCloudinary || $isFullUrl ? $imageUrl : url('img/uploads/banners/' . $imageUrl) }}"
                                             alt="{{ $banner->title }}"
                                             style="width: 100px; height: 60px; object-fit: cover; display: block; margin-top: 5px;">
                                     </div>

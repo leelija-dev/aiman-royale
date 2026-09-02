@@ -40,7 +40,7 @@
                                         $isCloudinary = str_contains($imageUrl, 'cloudinary.com');
                                         $isFullUrl = filter_var($imageUrl, FILTER_VALIDATE_URL);
                                         @endphp
-                                        <img src="{{ $isCloudinary || $isFullUrl ? $imageUrl : asset('uploads/banners/' . $banner->image) }}"
+                                        <img src="{{ $isCloudinary || $isFullUrl ? $imageUrl : url('img/uploads/banners/' . $banner->image) }}"
                                             alt="{{ $banner->title }}"
                                             style="width: 100px; height: 60px; object-fit: cover;">
                                         @else
