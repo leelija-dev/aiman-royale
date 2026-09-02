@@ -3828,6 +3828,19 @@
                 })
                 .then(data => {
                     if (data && data.success) {
+                        // Track AddToCart event with Facebook Pixel
+                        if (typeof fbq !== 'undefined') {
+                            const productPrice = {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }};
+                            fbq('track', 'AddToCart', {
+                                content_name: '{{ $product->name ?? '' }}',
+                                content_ids: ['{{ $product->id ?? '' }}'],
+                                content_type: 'product',
+                                value: productPrice,
+                                currency: 'INR',
+                                num_items: 1
+                            });
+                        }
+
                         showNotificationWithCart('Product added to cart successfully!', 'success', true);
                         // showNotification('Product added to cart successfully!', 'success');
                         setTimeout(() => {
@@ -4614,6 +4627,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Track ViewContent event with Facebook Pixel
+            @if(isset($product))
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'ViewContent', {
+                    content_name: '{{ $product->name ?? '' }}',
+                    content_ids: ['{{ $product->id ?? '' }}'],
+                    content_type: 'product',
+                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                    currency: 'INR'
+                });
+            }
+            @endif
+
             const couponToggleBtn = document.getElementById('coupon-toggle-btn');
             const couponBlock = document.getElementById('coupon-block');
             const couponArrow = document.getElementById('coupon-arrow');

@@ -83,10 +83,10 @@ class SitemapService
 
             // Excluded pages
             || in_array($uri, [
-                'login',
-                'register',
+                // 'login',
+                // 'register',
                 'logout',
-                'cart',
+                // 'cart',
                 'checkout',
                 'checkout/cancel',
                 'checkout/success',
