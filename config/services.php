@@ -80,5 +80,9 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT'),
     ],
+    'meta' => [
+    'pixel_id' => env('META_PIXEL_ID'),
+    'access_token' => env('META_CONVERSIONS_API_ACCESS_TOKEN'),
+],
 
 ];
