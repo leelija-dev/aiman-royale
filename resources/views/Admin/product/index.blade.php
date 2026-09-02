@@ -288,7 +288,7 @@
                                     name="featured_image" accept="image/*">
                                 @if($product->featured_image)
                                 <div class="mt-2">
-                                    <img src="{{ asset($product->featured_image) }}"
+                                    <img src="{{ url('/img/' . $product->featured_image . '?w=600&q=80') }}"
                                         alt="Current Featured Image"
                                         class="img-thumbnail"
                                         style="max-width: 100px; max-height: 100px; object-fit: cover;">
@@ -562,7 +562,7 @@
                         name="image" accept="image/*">
                     @if ($product->images->count() > 0)
                     <div class="mt-2">
-                        <img src="{{ asset($product->images->first()->image) }}"
+                        <img src="{{ url('/img/' . $product->images->first()->image . '?w=600&q=80') }}"
                             alt="Current Image"
                             class="img-thumbnail"
                             style="max-width: 100px; max-height: 100px; object-fit: cover;">

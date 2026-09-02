@@ -102,7 +102,6 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'occasion_id' => 'nullable|exists:ocassions,id',
             'name' => 'required|string|max:200',
-            'slug' => 'required|string|max:200|unique:products,slug',
             'description' => 'nullable|string',
             'brand' => 'nullable|string|max:500',
             'fabric' => 'nullable|string|max:500',
@@ -128,7 +127,13 @@ class ProductController extends Controller
             'sales_package' => 'nullable|string|max:500',
             'color' => 'nullable|string',
         ]);
-
+        $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        $originalSlug = $data['slug'];
+        $count = 1;
+        while (Product::where('slug', $data['slug'])->exists()) {
+            $data['slug'] = $originalSlug . '-' . $count;
+            $count++;
+        }
         $product = Product::create($data);
 
         // Handle occasions
@@ -196,59 +201,38 @@ class ProductController extends Controller
         //     }
         // }
 
+
+        // For product images
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 
+            // Generate unique filename
             $filename = time() . '_' . $image->getClientOriginalName();
 
-            // Folder inside public
-            $folder = 'uploads/products';
+            // Store in storage/app/public/uploads/products
+            $path = $image->storeAs('uploads/products', $filename, 'public');
 
-            // Absolute path for moving file
-            $uploadPath = public_path($folder);
-
-            // Create directory if not exists
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-
-            // Move file
-            $image->move($uploadPath, $filename);
-
-            // Path to store in DB (relative path)
-            $imagePath = $folder . '/' . $filename;
-
+            // Store in database (relative to storage/app/public)
             ProductImage::create([
                 'product_id' => $product->id,
-                // 'image'      => $filename,     // optional
-                'image' => $imagePath,    // save full path
+                'image' => $path, // This will store 'uploads/products/filename.jpg'
             ]);
         }
 
-        // Handle featured image upload if present
+        // For featured image
         if ($request->hasFile('featured_image')) {
             $featuredImage = $request->file('featured_image');
-
-            // Create directory if not exists
-            $featuredFolder = 'uploads/featured';
-            $featuredUploadPath = public_path($featuredFolder);
-            if (!file_exists($featuredUploadPath)) {
-                mkdir($featuredUploadPath, 0777, true);
-            }
 
             // Generate unique filename
             $featuredFilename = time() . '_featured_' . $featuredImage->getClientOriginalName();
 
-            // Upload image without compression
-            $featuredImage->move($featuredUploadPath, $featuredFilename);
+            // Store in storage/app/public/uploads/featured
+            $featuredPath = $featuredImage->storeAs('uploads/featured', $featuredFilename, 'public');
 
-            //  $this->compressImage($featuredImage, $featuredUploadPath . '/' . $featuredFilename, 10);
-
-            // Update product with featured image path
-            $product->featured_image = $featuredFolder . '/' . $featuredFilename;
+            // Update product with path
+            $product->featured_image = $featuredPath;
             $product->save();
         }
-
         // Handle product parts
         if ($request->has('parts') && is_array($request->parts)) {
             foreach ($request->parts as $partData) {
@@ -270,7 +254,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-       
+
         $data = $request->validate([
             'design_no' => 'required|string|max:40|unique:products,design_no,' . $id,
             'category_id' => 'required|exists:categories,id',
