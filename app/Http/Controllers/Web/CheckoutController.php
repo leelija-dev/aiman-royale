@@ -768,7 +768,7 @@ class CheckoutController extends Controller
                 Log::error('Failed to track Meta Purchase event for COD: ' . $e->getMessage());
             }
 
-            return redirect()->route('page.index')->with('success', 'Order placed successfully! You will pay cash on delivery.');
+            return redirect()->route('user.order-history',base64_encode(Auth::user()->id))->with('success', 'Order placed successfully! You will pay cash on delivery.');
         } catch (\Exception $e) {
             Log::error('COD processing error: ' . $e->getMessage());
             return redirect()->route('checkout.payment')->with('error', 'Failed to process COD order. Please try again.');

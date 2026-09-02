@@ -981,4 +981,27 @@
            }, 5000);
        }
    </script>
+   @if (session('purchase_event_data'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const purchaseData = @json(json_decode(session('purchase_event_data'), true));
+
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    content_ids: purchaseData.content_ids,
+                    content_type: purchaseData.content_type,
+                    value: purchaseData.value,
+                    currency: purchaseData.currency,
+                    num_items: purchaseData.num_items,
+                    transaction_id: purchaseData.transaction_id
+                });
+            }
+        });
+    </script>
+
+    @php
+        session()->forget('purchase_event_data');
+    @endphp
+@endif
    @endsection

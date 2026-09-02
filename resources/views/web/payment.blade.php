@@ -208,7 +208,7 @@
                 
                 // Initialize Cashfree payment - v3 API
                 const cashfree = new Cashfree({
-                    mode: 'sandbox', //production',
+                    mode: 'production',
                 });
                 
                 console.log('Cashfree initialized, available methods:', Object.getOwnPropertyNames(cashfree));
@@ -316,6 +316,16 @@
             
             button.disabled = false;
             button.textContent = originalText;
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'AddPaymentInfo', {
+                value: {{ $total }},
+                currency: '{{ $currency }}'
+            });
         }
     });
 </script>
