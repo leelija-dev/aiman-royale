@@ -56,7 +56,7 @@
                                         <div>
                                             
                                             @if($banner->image)
-                                                <img src="{{ $banner->image }}" class="avatar avatar-sm me-3" alt="Banner">
+                                                <img src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="avatar avatar-sm me-3" alt="Banner">
                                             @else
                                                 <span>No Image</span>
                                             @endif
