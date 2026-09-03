@@ -1291,7 +1291,7 @@
                   </label>
                   <label class="flex items-center gap-2">
                     <input type="checkbox" name="price_ranges[]" value="400-500" class="accent-gray-800 filter-checkbox">
-                    Above {{config('app.currency')}}100000
+                    Above {{config('app.currency')}}10000
                   </label>
                   {{--
                   <label class="flex items-center gap-2">
