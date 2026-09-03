@@ -14,7 +14,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\MetaConversionsService;
-
+use App\Models\RegistrationOtpHistory;
 class AuthController extends Controller
 {
     protected MetaConversionsService $metaService;
@@ -69,7 +69,7 @@ class AuthController extends Controller
                     ->subject('Email Verification OTP - Aiman Royale');
             });
             // dd($otp);
-
+     
             // Store OTP in database for verification
             EmailVerification::updateOrCreate(
                 ['email' => $request->email],
@@ -163,10 +163,28 @@ class AuthController extends Controller
         try {
             if ($request->email) {
                 // Send OTP email
+                try{
                 Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
                     $message->to($request->email)
                         ->subject('Email Verification OTP - Aiman Royale');
                 });
+                 RegistrationOtpHistory::create([
+                    'otp_send_to' => $request->email,
+                    'otp' => $otp,
+                    'status' => 'sent',
+                    'message' => 'OTP sent successfully to '.$request->email,
+                    'failed_reason' => ''
+                ]);
+                }catch(\Exception $e){
+                     RegistrationOtpHistory::create([
+                    'otp_send_to' => $request->email,
+                    'otp' => $otp,
+                    'status' => 'failed',
+                    'message' => 'Failed to send OTP to '.$request->email,
+                    'failed_reason' => $e->getMessage()
+                ]);
+                    return back()->with('error', 'Failed to send OTP. Please try again.');
+                }
 
                 // Store OTP in database
                 EmailVerification::updateOrCreate(

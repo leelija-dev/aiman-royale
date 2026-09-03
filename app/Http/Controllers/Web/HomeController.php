@@ -666,7 +666,7 @@ class HomeController extends Controller
     //     return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
     // }
 
-    public function ShowAllProduct(Request $request)
+    public function ShowAllProduct(Request $request, MetaConversionsService $metaService)
     {
         // Get filter parameters from request
         $categories = $request->input('category', []);
@@ -1387,7 +1387,13 @@ class HomeController extends Controller
                 'price' => $defaultVariant ? ($defaultVariant->discount_price ?? $defaultVariant->price) : $product->price,
             ];
 
-            $this->metaService->trackViewContent($productData);
+            // $this->metaService->trackViewContent($productData);
+            $result = $this->metaService->trackViewContent($productData);
+
+            Log::info('Meta ViewContent result', [
+                'product_id' => $product->id,
+                'result' => $result,
+            ]);
 
             Log::info('Meta ViewContent event tracked for product: ' . $product->id);
         } catch (\Exception $e) {

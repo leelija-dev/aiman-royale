@@ -241,6 +241,11 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     if (!isValid) {
         e.preventDefault();
     } else {
+    if (typeof fbq === 'function') {
+        fbq('track', 'sendOtp', {
+            method: 'email'
+        });
+    }
         // Show loading state
         const submitBtn = this.querySelector('button[type="submit"]');
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending OTP...';
