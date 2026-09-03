@@ -331,11 +331,13 @@
                                                         <i class="fas fa-info-circle text-primary"></i> Quick Actions
                                                     </h6>
                                                     <div class="d-grid gap-2">
+                                                        {{--
                                                         <a href="https://www.delhivery.com/track/{{ $order->waybill_number }}" 
                                                            target="_blank" 
                                                            class="btn btn-outline-info btn-sm">
                                                             <i class="fas fa-external-link-alt"></i> Track on Delhivery Website
                                                         </a>
+                                                        --}}
                                                         <button class="btn btn-outline-success btn-sm" 
                                                                 onclick="generateLabel('{{ $order->waybill_number }}')">
                                                             <i class="fas fa-print"></i> Generate Shipping Label
