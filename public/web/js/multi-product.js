@@ -252,6 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Sending filters to API:', params.toString());
 
             const url = `/api/products/filter${params.toString() ? '?' + params.toString() : ''}`;
+            console.log('Fetching products from URL:', url);
             const response = await fetch(url);
             const data = await response.json();
 
