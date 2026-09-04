@@ -143,7 +143,7 @@ class HomeController extends Controller
             }])
             ->get();
 
-        // dd($categoriesWithProduct);
+        dd($categoriesWithProduct);
         $occasions = \App\Models\Occasion::active()->get();
         $homeCategories = Category::where('is_home', 1)
             ->whereNotNull('home_position')
