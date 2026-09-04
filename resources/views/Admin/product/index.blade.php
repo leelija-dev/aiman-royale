@@ -60,7 +60,7 @@
                                     <div class="d-flex px-2 py-1">
                                         <div>
                                             @if ($product->images->count() > 0)
-                                            <img src="{{ asset($product->images->first()->image) }}"
+                                            <img src="{{ url('/img/' . $product->images->first()->image . '?w=600&q=80') }}"
                                                 class="avatar avatar-sm me-3" alt="{{ $product->name }}">
                                             @else
                                             <img src="https://via.placeholder.com/40"
@@ -134,7 +134,7 @@
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
                                             @if($product->featured_image)
-                                            <img src="{{ asset($product->featured_image) }}"
+                                            <img src="{{ url('/img/' . $product->featured_image. '?w=600&q=80') }}"
                                                 alt="Featured Image"
                                                 class="avatar avatar-sm me-2"
                                                 style="max-width: 40px; max-height: 40px; object-fit: cover;">
@@ -288,7 +288,7 @@
                                     name="featured_image" accept="image/*">
                                 @if($product->featured_image)
                                 <div class="mt-2">
-                                    <img src="{{ asset($product->featured_image) }}"
+                                    <img src="{{ url('/img/' . $product->featured_image . '?w=600&q=80') }}"
                                         alt="Current Featured Image"
                                         class="img-thumbnail"
                                         style="max-width: 100px; max-height: 100px; object-fit: cover;">
@@ -562,7 +562,7 @@
                         name="image" accept="image/*">
                     @if ($product->images->count() > 0)
                     <div class="mt-2">
-                        <img src="{{ asset($product->images->first()->image) }}"
+                        <img src="{{ url('/img/' . $product->images->first()->image . '?w=600&q=80') }}"
                             alt="Current Image"
                             class="img-thumbnail"
                             style="max-width: 100px; max-height: 100px; object-fit: cover;">

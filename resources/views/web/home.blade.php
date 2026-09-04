@@ -210,7 +210,7 @@ $bannerImage = $parts[0] . 'upload/w_750,h_1500,c_fill,f_auto,q_auto/' . $parts[
             }
             @endphp
             <img class="slide-top absolute inset-0 object-cover h-full w-full object-top object-center transition-opacity duration-1000 transform group-hover:scale-110 {{ $index == 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}"
-                src="{{ $bannerImage }}" alt="{{ $banner->title }}"
+                src="{{ asset('storage/uploads/banners/' . $banner->image)  }}" alt="{{ $banner->title }}"
                 data-link="{{ $banner->redirect_link }}" data-title="{{ $banner->title }}"
                 data-short="{{ $banner->short_description }}" data-offer="{{ $banner->offer }}"
                 loading="lazy"
@@ -803,8 +803,8 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             <div class="slide-item relative">
 
                 {{-- @if($banner-> --}}
-                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ $banner->image }}" class="w-full h-full object-cover md:hidden  " alt=""> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
-                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ $banner->mobile_screen_image }}" class="w-full h-full object-cover md:block  hidden" alt=""></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
+                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt=""> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
+                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt=""></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
 
 
 
@@ -1051,7 +1051,7 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
                     @php
                     $catImg = $category->latestProductWithImage->featured_image
-                    ? $category->latestProductWithImage->featured_image
+                    ? url('/img/' . $category->latestProductWithImage->featured_image . '?w=600&q=80')
                     : $category->image;
 
                     if (strpos($catImg, 'cloudinary.com') !== false && strpos($catImg, 'upload/') !== false) {
@@ -1190,6 +1190,10 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                 $parts = explode('upload/', $tagImage);
                 $tagImage = $parts[0] . 'upload/w_600,h_850,c_fill,f_auto,q_auto/' . $parts[1];
                 }
+                else {
+        // Local image - use proxy with specific folder
+        $tagImage = url('/img/' . $tagImage . '?w=600&q=80');
+    }
                 @endphp
 
                 <div class="item ">
@@ -1285,19 +1289,52 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
+            
             @foreach ($products as $product)
             <div class="item flex justify-center items-center ">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative overflow-hidden bg-gray-100">
-                        @php
-                        $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
-                        if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
-                        $parts = explode('upload/', $imageUrl);
-                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
-                        }
-                        @endphp
+                     @php
+    $imagePath = $product->featured_image;
+    $imageUrl = '';
+    
+    // Check if it's a Cloudinary URL or path
+    $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
+                    str_contains($imagePath, 'res.cloudinary.com') ||
+                    str_contains($imagePath, 'aiman/');
+    
+    if ($isCloudinary) {
+        // Cloudinary handling
+        if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com') && str_contains($imagePath, 'upload/')) {
+            $parts = explode('upload/', $imagePath);
+            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . ($parts[1] ?? '');
+        } elseif (str_contains($imagePath, 'aiman/')) {
+            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+        } else {
+            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+        }
+    } else {
+        // Local image - use image-proxy
+        if ($imagePath) {
+            // Check if file exists in both locations
+            $publicPath = public_path($imagePath);
+            $storagePath = storage_path('app/public/' . $imagePath);
+            
+            if (file_exists($publicPath) || file_exists($storagePath)) {
+                // Use the proxy URL with the full path
+                $imageUrl = url('/img/' . $imagePath . '?w=600&q=80');
+            } else {
+                // Fallback to placeholder
+                $imageUrl = asset('assets/images/placeholder.jpg');
+            }
+        } else {
+            // Fallback to placeholder
+            $imageUrl = asset('assets/images/placeholder.jpg');
+        }
+    }
+@endphp
                         <img src="{{ $imageUrl }}"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
@@ -1571,7 +1608,9 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         <div id="uniq-ads-slider" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             @php
-            $bannerImg = asset('uploads/banners/' . $banner->image);
+// Build the URL
+$bannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
+            
             if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
             $parts = explode('upload/', $bannerImg);
             $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
@@ -1645,33 +1684,75 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             <p class="text-gray-600 mt-3 font-serif text-sm md:text-base">Curated collections for your special day</p>
         </div>
 
-        {{--
         <div id="uniq-ads-slider" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             @php
-            $bannerImg = asset('uploads/banners/' . $banner->image);
-            if (strpos($bannerImg, 'cloudinary.com') !== false && strpos($bannerImg, 'upload/') !== false) {
-            $parts = explode('upload/', $bannerImg);
-            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $parts[1];
-            }
+                // Get the image path from database
+                $imagePath = $banner->image;
+                
+                // Check if it's a Cloudinary URL or path
+                $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
+                                str_contains($imagePath, 'res.cloudinary.com') ||
+                                str_contains($imagePath, 'aiman/banners/');
+                
+                // Default banner image
+                $bannerImg = '';
+                
+                if ($isCloudinary) {
+                    // Cloudinary image handling
+                    if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com')) {
+                        if (str_contains($imagePath, 'upload/')) {
+                            $parts = explode('upload/', $imagePath);
+                            $cloudinaryPath = $parts[1] ?? '';
+                            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $cloudinaryPath;
+                        } else {
+                            $bannerImg = $imagePath;
+                        }
+                    } elseif (str_contains($imagePath, 'aiman/banners/')) {
+                        $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
+                    } else {
+                        $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
+                    }
+                } else {
+                    // LOCAL IMAGE - Use the proxy URL
+                    // Check if file exists in storage
+                    $storagePath = 'uploads/banners/' . $imagePath;
+                    $publicPath = public_path('uploads/banners/' . $imagePath);
+                    $storageFullPath = storage_path('app/public/' . $storagePath);
+                    
+                    if (file_exists($storageFullPath) || file_exists($publicPath)) {
+                        // Use the image-proxy URL for optimization
+                        $bannerImg = url('/img/uploads/banners/' . $imagePath . '?w=600&q=80');
+                    } else {
+                        // Fallback to default image
+                        $bannerImg = asset('uploads/banners/default.jpg');
+                        \Log::warning('Banner image not found:', [
+                            'image' => $imagePath,
+                            'storage_path' => $storageFullPath,
+                            'public_path' => $publicPath
+                        ]);
+                    }
+                }
 
-            // Build the filter URL based on banner data
-            $filterUrl = '#';
-            if ($banner->filter) {
-            if ($banner->filter_type === 'multiple' && $banner->filters) {
-            $filterUrl = '/products?' . $banner->filters;
-            } elseif ($banner->filter) {
-            $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
-            }
-            }
+                // Build the filter URL based on banner data
+                $filterUrl = '#';
+                if ($banner->filter) {
+                    if ($banner->filter_type === 'multiple' && $banner->filters) {
+                        $filterUrl = '/products?' . $banner->filters;
+                    } elseif ($banner->filter) {
+                        $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
+                    }
+                }
             @endphp
             <div class="px-2">
                 <a href="{{ $filterUrl }}" class="block w-full">
                     <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
                         style="aspect-ratio: 9/15; "
-                        @if ($banner->filter_type === 'multiple' && $banner->filters) data-filter="{{ $banner->filters }}"
+                        @if ($banner->filter_type === 'multiple' && $banner->filters) 
+                            data-filter="{{ $banner->filters }}"
                         @else
-                        data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
+                            data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" 
+                        @endif>
 
                         <!-- Image -->
                         <div class="absolute inset-0">
@@ -1720,117 +1801,6 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
             </div>
             @endforeach
         </div>
-        --}}
-        <div id="uniq-ads-slider" class="owl-carousel owl-theme">
-    @foreach ($mainBanners as $banner)
-    @php
-        // Get the image URL properly
-        $imagePath = $banner->image;
-        
-        // Check if it's a Cloudinary URL or path
-        $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
-                        str_contains($imagePath, 'res.cloudinary.com') ||
-                        str_contains($imagePath, 'aiman/banners/');
-        
-        if ($isCloudinary) {
-            // If it's a full Cloudinary URL
-            if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com')) {
-                // Extract the path after 'upload/'
-                if (str_contains($imagePath, 'upload/')) {
-                    $parts = explode('upload/', $imagePath);
-                    $cloudinaryPath = $parts[1] ?? '';
-                    // Add transformations for better quality and size
-                    $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $cloudinaryPath;
-                } else {
-                    $bannerImg = $imagePath;
-                }
-            } 
-            // If it's a Cloudinary path (without domain)
-            elseif (str_contains($imagePath, 'aiman/banners/')) {
-                $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
-            } 
-            // If it's just a Cloudinary ID
-            else {
-                $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
-            }
-        } else {
-            // Local file - check if it exists
-            $localPath = public_path('uploads/banners/' . $imagePath);
-            if (file_exists($localPath)) {
-                $bannerImg = asset('uploads/banners/' . $imagePath);
-            } else {
-                // Fallback to default image
-                $bannerImg = asset('uploads/banners/default.jpg');
-            }
-        }
-
-        // Build the filter URL based on banner data
-        $filterUrl = '#';
-        if ($banner->filter) {
-            if ($banner->filter_type === 'multiple' && $banner->filters) {
-                $filterUrl = '/products?' . $banner->filters;
-            } elseif ($banner->filter) {
-                $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
-            }
-        }
-    @endphp
-    <div class="px-2">
-        <a href="{{ $filterUrl }}" class="block w-full">
-            <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
-                style="aspect-ratio: 9/15; "
-                @if ($banner->filter_type === 'multiple' && $banner->filters) 
-                    data-filter="{{ $banner->filters }}"
-                @else
-                    data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" 
-                @endif>
-
-                <!-- Image -->
-                <div class="absolute inset-0">
-                    <img class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                        src="{{ $bannerImg }}"
-                        alt="{{ $banner->title }}"
-                        loading="lazy"
-                        decoding="async"
-                        width="600"
-                        height="1000" />
-                </div>
-
-                <!-- Subtle Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-40 transition-opacity duration-500"></div>
-
-                <!-- Content - Clean Layout -->
-                <div class="absolute bottom-[5px] left-0 right-0 py-5 md:py-6 px-[14px]">
-                    <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col items-center justify-center">
-                        <!-- Category -->
-                        @if ($banner->subtitle)
-                        <span class="inline-block text-white/80 text-[9px] md:text-[10px] font-medium tracking-[0.2em] uppercase mb-1.5">
-                            {{ $banner->subtitle }}
-                        </span>
-                        @endif
-
-                        <!-- Title -->
-                        <h3 class="text-white text-lg md:text-xl lg:text-2xl font-light tracking-wide leading-tight mb-1">
-                            {{ $banner->title }}
-                        </h3>
-
-                        <!-- Description -->
-                        @if ($banner->description)
-                        <p class="text-white/60 text-[10px] md:text-xs font-light mb-3 line-clamp-1">
-                            {{ $banner->description }}
-                        </p>
-                        @endif
-
-                        <!-- Shop Now Button -->
-                        <span class="inline-block rounded-[11px] bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-5 md:px-6 py-1.5 md:py-2 text-[10px] md:text-xs font-medium tracking-wide transition-all duration-300 ease-in-out cursor-pointer">
-                            Shop Now
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    @endforeach
-</div>
     </div>
 </section>
 <style>
@@ -2372,7 +2342,8 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     if ($isCloudinary) {
         $secBannerImg = $banner->image; // Use Cloudinary URL directly
     } else {
-        $secBannerImg = asset('uploads/banners/' . $banner->image);
+       // $secBannerImg = asset('uploads/banners/' . $banner->image);
+       $secBannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
     }
 
 
@@ -2716,7 +2687,7 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
             @forelse($mostWishlisted as $index => $product)
             @php
             $variant = $product->variants->first();
-            $imageUrl = $product->featured_image ? asset($product->featured_image) : asset('assets/images/placeholder.jpg');
+            $imageUrl = $product->featured_image ? url('/img/' . $product->featured_image. '?w=600&q=80') : asset('assets/images/placeholder.jpg');
             if (strpos($imageUrl, 'cloudinary.com') !== false && strpos($imageUrl, 'upload/') !== false) {
             $parts = explode('upload/', $imageUrl);
             $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];

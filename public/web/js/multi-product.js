@@ -21,7 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
             imageUrl.includes('upload/')) {
             const parts = imageUrl.split('upload/');
             return parts[0] + 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' + parts[1];
-        }
+        } else if (
+    imageUrl &&
+    typeof imageUrl === 'string' &&
+    !imageUrl.includes('cloudinary.com') &&
+    imageUrl.startsWith('/uploads/products/')
+) {
+    imageUrl = '/img' + imageUrl;
+}
+
+
         
         return imageUrl;
     }

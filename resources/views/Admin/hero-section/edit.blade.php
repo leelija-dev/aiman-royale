@@ -110,7 +110,7 @@
                                     <small class="text-muted">Upload an image for the desktop hero section. Recommended aspect ratio: <strong>16:6</strong>.</small>
 
                                     <div class="mt-3">
-                                        <img id="imagePreview" src="{{ $hero->image ?? '' }}" alt="Hero Image"
+                                        <img id="imagePreview" src="{{ url('/img/' . $hero->image . '?w=200&q=80') ?? '' }}" alt="Hero Image"
                                             style="width:200px; max-height:100px; border:1px solid #ddd; padding:5px; {{ empty($hero->image) ? 'display:none;' : '' }}">
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@
                                         <!-- Image Preview -->
                                         <div class="mt-2">
                                            <img id="mobileImagePreview"
-     src="{{ $hero->mobile_screen_image ?? '' }}"
+     src="{{ asset('storage/uploads/banners/' . $hero->mobile_screen_image) ?? '' }}"
      alt="Image Preview"
      class="img-thumbnail"
      style="width:80px; height:120px; object-fit:cover; {{ empty($hero->mobile_screen_image) ? 'display:none;' : '' }}">
