@@ -59,8 +59,30 @@ class CheckoutController extends Controller
                 )
                 ->get();
         }
+    if (count($carts) == 0) {
+            session()->flash('force_cart_refresh', true);
+            return redirect()->route('cart.index');
+        }
+ try {
+        $contentIds = [];
+        $numItems = 0;
+        $totalValue = 0;
 
+        foreach ($carts as $cart) {
+            $contentIds[] = $cart->product_id;
+            $numItems += $cart->count;
+            $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
+        }
 
+        $this->metaService->trackInitiateCheckout([
+            'content_ids' => $contentIds,
+            'value'       => $totalValue,
+            'num_items'   => $numItems,
+            'currency'    => 'INR',
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
+    }
         $occasions = \App\Models\Occasion::active()->get();
 
 
@@ -70,10 +92,7 @@ class CheckoutController extends Controller
             ->get();
 
 
-        if (count($carts) == 0) {
-            session()->flash('force_cart_refresh', true);
-            return redirect()->route('cart.index');
-        }
+        
         $store = Store::where('is_active', true)->first();
         $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
         return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon'));
@@ -132,15 +151,15 @@ class CheckoutController extends Controller
                 $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
             }
 
-            $checkoutData = [
-                'content_ids' => $contentIds,
-                'value' => $totalValue,
-                'num_items' => $numItems,
-            ];
+            // $checkoutData = [
+            //     'content_ids' => $contentIds,
+            //     'value' => $totalValue,
+            //     'num_items' => $numItems,
+            // ];
 
-            $this->metaService->trackInitiateCheckout($checkoutData);
+            // $this->metaService->trackInitiateCheckout($checkoutData);
 
-            Log::info('Meta InitiateCheckout event tracked on placeOrder');
+            // Log::info('Meta InitiateCheckout event tracked on placeOrder');
         } catch (\Exception $e) {
             Log::error('Failed to track Meta InitiateCheckout on placeOrder: ' . $e->getMessage());
         }
@@ -735,38 +754,47 @@ class CheckoutController extends Controller
             session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
 
             // Track Purchase event for COD orders
-            try {
-                $contentIds = [];
-                $numItems = 0;
+           // Track Purchase event for COD orders
+try {
+    $contentIds = [];
+    $numItems = 0;
 
-                foreach ($orderedProducts as $item) {
-                    $contentIds[] = $item->product_id;
-                    $numItems += $item->quantity;
-                }
+    foreach ($orderedProducts as $item) {
+        $contentIds[] = $item->product_id;
+        $numItems += $item->quantity;
+    }
 
-                $purchaseData = [
-                    'content_ids' => $contentIds,
-                    'value' => $order->total_amount,
-                    'num_items' => $numItems,
-                    'transaction_id' => $orderId,
-                ];
+    $purchaseData = [
+        'order_id'    => $orderId,          // Important
+        'content_ids' => $contentIds,
+        'value'       => $order->total_amount,
+        'num_items'   => $numItems,
+        'currency'    => 'INR',
+    ];
 
-                $this->metaService->trackPurchase($purchaseData);
+    // Extra user data (better matching)
+    $extraUserData = [];
+    if (!empty($order->phone_no)) {
+        $extraUserData['ph'] = [$this->metaService->hashPhone($order->phone_no)];
+    }
 
-                // Store purchase data for frontend Pixel tracking
-                session(['purchase_event_data' => json_encode([
-                    'content_ids' => $contentIds,
-                    'content_type' => 'product',
-                    'value' => $order->total_amount,
-                    'currency' => 'INR',
-                    'num_items' => $numItems,
-                    'transaction_id' => $orderId,
-                ])]);
+    $this->metaService->trackPurchase($purchaseData, $extraUserData, (string) $orderId);
 
-                Log::info('Meta Purchase event tracked for COD order: ' . $orderId);
-            } catch (\Exception $e) {
-                Log::error('Failed to track Meta Purchase event for COD: ' . $e->getMessage());
-            }
+    // For frontend Pixel (deduplication)
+    session(['purchase_event_data' => json_encode([
+        'content_ids'    => $contentIds,
+        'content_type'   => 'product',
+        'value'          => $order->total_amount,
+        'currency'       => 'INR',
+        'num_items'      => $numItems,
+        'order_id'       => $orderId,
+        'event_id'       => (string) $orderId,   // Same event_id for Pixel
+    ])]);
+
+    Log::info('Meta Purchase tracked for COD order: ' . $orderId);
+} catch (\Exception $e) {
+    Log::error('Failed to track Meta Purchase (COD): ' . $e->getMessage());
+}
 
             return redirect()->route('user.order-history',base64_encode(Auth::user()->id))->with('success', 'Order placed successfully! You will pay cash on delivery.');
         } catch (\Exception $e) {
@@ -1083,43 +1111,51 @@ class CheckoutController extends Controller
             'cf_order_id'
         ]);
 
-        // Track Purchase event with Meta Conversions API
-        try {
-            $orderItems = DB::table('ordered_products')
-                ->where('order_id', $orderId)
-                ->get();
+       // Track Purchase event with Meta Conversions API
+try {
+    $orderItems = DB::table('ordered_products')
+        ->where('order_id', $orderId)
+        ->get();
 
-            $contentIds = [];
-            $numItems = 0;
+    $contentIds = [];
+    $numItems = 0;
 
-            foreach ($orderItems as $item) {
-                $contentIds[] = $item->product_id;
-                $numItems += $item->quantity;
-            }
+    foreach ($orderItems as $item) {
+        $contentIds[] = $item->product_id;
+        $numItems += $item->quantity;
+    }
 
-            $purchaseData = [
-                'content_ids' => $contentIds,
-                'value' => $order->total_amount,
-                'num_items' => $numItems,
-                'transaction_id' => $order->id,
-            ];
+    $purchaseData = [
+        'order_id'    => $orderId,
+        'content_ids' => $contentIds,
+        'value'       => $order->total_amount,
+        'num_items'   => $numItems,
+        'currency'    => 'INR',
+    ];
 
-            $this->metaService->trackPurchase($purchaseData);
+    // Better matching with phone
+    $extraUserData = [];
+    if (!empty($order->phone_no)) {
+        $extraUserData['ph'] = [$this->metaService->hashPhone($order->phone_no)];
+    }
 
-            // Store purchase data for frontend Pixel tracking
-            session(['purchase_event_data' => json_encode([
-                'content_ids' => $contentIds,
-                'content_type' => 'product',
-                'value' => $order->total_amount,
-                'currency' => 'INR',
-                'num_items' => $numItems,
-                'transaction_id' => $order->id,
-            ])]);
+    $this->metaService->trackPurchase($purchaseData, $extraUserData, (string) $orderId);
 
-            Log::info('Meta Purchase event tracked for order: ' . $orderId);
-        } catch (\Exception $e) {
-            Log::error('Failed to track Meta Purchase event: ' . $e->getMessage());
-        }
+    // For frontend Pixel deduplication
+    session(['purchase_event_data' => json_encode([
+        'content_ids'  => $contentIds,
+        'content_type' => 'product',
+        'value'        => $order->total_amount,
+        'currency'     => 'INR',
+        'num_items'    => $numItems,
+        'order_id'     => $orderId,
+        'event_id'     => (string) $orderId,
+    ])]);
+
+    Log::info('Meta Purchase tracked for order: ' . $orderId);
+} catch (\Exception $e) {
+    Log::error('Failed to track Meta Purchase: ' . $e->getMessage());
+}
 
         return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
             ->with('success', 'Payment successful! Order placed.');

@@ -129,7 +129,12 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-
+            try {
+                $this->metaService->trackCompleteRegistration();
+                Log::info('Meta CompleteRegistration tracked for user: ' . $user->id);
+            } catch (\Exception $e) {
+                Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+            }
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
@@ -800,7 +805,13 @@ class AuthController extends Controller
             ]);
 
             Auth::login($user);
-
+            // Track CompleteRegistration for Google signup
+                try {
+                    $this->metaService->trackCompleteRegistration();
+                    Log::info('Meta CompleteRegistration tracked for Google user: ' . $user->id);
+                } catch (\Exception $e) {
+                    Log::error('Meta CompleteRegistration (Google) failed: ' . $e->getMessage());
+                }
             // Generate JWT token (if using JWT)
             $token = auth()->login($user); // Or however you generate your JWT
 

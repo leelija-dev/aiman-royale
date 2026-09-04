@@ -10,12 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\MetaConversionsService;
 class WishlistController extends Controller
 {
     /**
      * Display wishlist page
      */
+
+    protected MetaConversionsService $metaService;
+
+    public function __construct(MetaConversionsService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
     public function index()
     {
         try {
@@ -167,7 +174,26 @@ class WishlistController extends Controller
                 'variant_id' => $request->variant_id,
                 'session_id' => $sessionId,
             ]);
+            try {
+            $product = Product::with('variants')->find($request->product_id);
 
+            if ($product) {
+                $defaultVariant = $product->variants->first();
+
+                $this->metaService->trackAddToWishlist([
+                    'id'       => $product->id,
+                    'name'     => $product->name,
+                    'price'    => $defaultVariant
+                                    ? ($defaultVariant->discount_price ?? $defaultVariant->price)
+                                    : ($product->discount_price ?? $product->price),
+                    'currency' => 'INR',
+                ]);
+
+                Log::info('Meta AddToWishlist tracked for product: ' . $product->id);
+            }
+        } catch (\Exception $e) {
+            Log::error('Meta AddToWishlist failed: ' . $e->getMessage());
+        }
             $wishlistCount = $this->getWishlistCount();
 
             return response()->json([
