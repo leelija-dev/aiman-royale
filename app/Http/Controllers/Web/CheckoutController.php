@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CashfreeService;
 use App\Services\DelhiveryService;
 use App\Services\WhatsAppService;
+use App\Services\MetaConversionsService;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -22,11 +23,13 @@ class CheckoutController extends Controller
 {
     protected $delhiveryService;
     protected $whatsAppService;
+    protected $metaService;
 
-    public function __construct(DelhiveryService $delhiveryService, WhatsAppService $whatsAppService)
+    public function __construct(DelhiveryService $delhiveryService, WhatsAppService $whatsAppService, MetaConversionsService $metaService)
     {
         $this->delhiveryService = $delhiveryService;
         $this->whatsAppService = $whatsAppService;
+        $this->metaService = $metaService;
     }
 
 
@@ -105,6 +108,42 @@ class CheckoutController extends Controller
             'pinCode' => 'required|string|size:6',
             // 'grand_total' => 'required|numeric|min:1',
         ]);
+
+        // Track InitiateCheckout event when user starts checkout
+        try {
+            $user_id = auth()->id();
+            $checkoutSource = session('checkout_source', 'cart');
+
+            if ($checkoutSource === 'buy_now') {
+                $carts = $this->getBuyNowItems();
+            } else {
+                $carts = DB::table('carts')
+                    ->where('user_id', $user_id)
+                    ->get();
+            }
+
+            $contentIds = [];
+            $numItems = 0;
+            $totalValue = 0;
+
+            foreach ($carts as $cart) {
+                $contentIds[] = $cart->product_id;
+                $numItems += $cart->count;
+                $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
+            }
+
+            $checkoutData = [
+                'content_ids' => $contentIds,
+                'value' => $totalValue,
+                'num_items' => $numItems,
+            ];
+
+            $this->metaService->trackInitiateCheckout($checkoutData);
+
+            Log::info('Meta InitiateCheckout event tracked on placeOrder');
+        } catch (\Exception $e) {
+            Log::error('Failed to track Meta InitiateCheckout on placeOrder: ' . $e->getMessage());
+        }
 
         // Check pincode serviceability
         // $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
@@ -695,8 +734,41 @@ class CheckoutController extends Controller
             DB::table('carts')->where('user_id', auth()->id())->delete();
             session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
 
+            // Track Purchase event for COD orders
+            try {
+                $contentIds = [];
+                $numItems = 0;
 
-            return redirect()->route('page.index')->with('success', 'Order placed successfully! You will pay cash on delivery.');
+                foreach ($orderedProducts as $item) {
+                    $contentIds[] = $item->product_id;
+                    $numItems += $item->quantity;
+                }
+
+                $purchaseData = [
+                    'content_ids' => $contentIds,
+                    'value' => $order->total_amount,
+                    'num_items' => $numItems,
+                    'transaction_id' => $orderId,
+                ];
+
+                $this->metaService->trackPurchase($purchaseData);
+
+                // Store purchase data for frontend Pixel tracking
+                session(['purchase_event_data' => json_encode([
+                    'content_ids' => $contentIds,
+                    'content_type' => 'product',
+                    'value' => $order->total_amount,
+                    'currency' => 'INR',
+                    'num_items' => $numItems,
+                    'transaction_id' => $orderId,
+                ])]);
+
+                Log::info('Meta Purchase event tracked for COD order: ' . $orderId);
+            } catch (\Exception $e) {
+                Log::error('Failed to track Meta Purchase event for COD: ' . $e->getMessage());
+            }
+
+            return redirect()->route('user.order-history',base64_encode(Auth::user()->id))->with('success', 'Order placed successfully! You will pay cash on delivery.');
         } catch (\Exception $e) {
             Log::error('COD processing error: ' . $e->getMessage());
             return redirect()->route('checkout.payment')->with('error', 'Failed to process COD order. Please try again.');
@@ -1010,6 +1082,44 @@ class CheckoutController extends Controller
             'cashfree_transaction_id',
             'cf_order_id'
         ]);
+
+        // Track Purchase event with Meta Conversions API
+        try {
+            $orderItems = DB::table('ordered_products')
+                ->where('order_id', $orderId)
+                ->get();
+
+            $contentIds = [];
+            $numItems = 0;
+
+            foreach ($orderItems as $item) {
+                $contentIds[] = $item->product_id;
+                $numItems += $item->quantity;
+            }
+
+            $purchaseData = [
+                'content_ids' => $contentIds,
+                'value' => $order->total_amount,
+                'num_items' => $numItems,
+                'transaction_id' => $order->id,
+            ];
+
+            $this->metaService->trackPurchase($purchaseData);
+
+            // Store purchase data for frontend Pixel tracking
+            session(['purchase_event_data' => json_encode([
+                'content_ids' => $contentIds,
+                'content_type' => 'product',
+                'value' => $order->total_amount,
+                'currency' => 'INR',
+                'num_items' => $numItems,
+                'transaction_id' => $order->id,
+            ])]);
+
+            Log::info('Meta Purchase event tracked for order: ' . $orderId);
+        } catch (\Exception $e) {
+            Log::error('Failed to track Meta Purchase event: ' . $e->getMessage());
+        }
 
         return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
             ->with('success', 'Payment successful! Order placed.');

@@ -2417,7 +2417,7 @@ art from fake trails.
           </svg>
         </div>
         <p class="font-semibold text-gray-900 text-sm">Express Delivery</p>
-        <p class="text-xs text-gray-600 mt-1">4-7 Days</p>
+        <p class="text-xs text-gray-600 mt-1">7-10 Days</p>
       </div>
 
       <div class="text-center group">

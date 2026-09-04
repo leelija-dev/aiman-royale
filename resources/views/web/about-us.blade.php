@@ -7,11 +7,11 @@
 <section class="relative overflow-hidden bg-[#FFFBF5]">
     
     <!-- SECTION 1: Hero Banner with Story Introduction -->
-    <div class="relative min-h-[70vh] flex items-center">
+    <div class="relative  flex items-center">
         <!-- Background with overlay -->
         <div class="absolute inset-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/70 to-transparent z-10"></div>
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=1600')] bg-cover bg-center bg-no-repeat"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-secondary/70 via-secondary/40 to-transparent z-10"></div>
+            <img src="{{ asset('web/images/about-us/About.png') }}" alt="Aiman Royale Fashion" class="w-full h-full object-cover object-right">
         </div>
         
         <div class="container mx-auto px-6 md:px-10 lg:px-16 relative z-20 py-20 md:py-28">

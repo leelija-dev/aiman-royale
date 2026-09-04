@@ -41,6 +41,7 @@ class ProductController extends Controller
    
     public function filterProducts(Request $request): JsonResponse
     {
+       
         try {
             if ($request->search == 'offers' || $request->search == 'offer') {
                 $query = OfferProducts::join('product_variants', 'offer_products.product_variant_id', '=', 'product_variants.id')
@@ -57,6 +58,7 @@ class ProductController extends Controller
                         'product.occasion'
                     ]);
             } else {
+                
                 $query = Product::where('is_active', 1)
                     ->where('products.ready_to_ship', 1)
                     ->with(['variants', 'category', 'occasion']);
@@ -171,16 +173,17 @@ class ProductController extends Controller
 
             // Filter by price range
             if ($request->filled('price_range')) {
+                 
                 $priceRange = $request->input('price_range');
                 if (strpos($priceRange, '-') !== false) {
                     [$minPrice, $maxPrice] = explode('-', $priceRange);
 
                     $query->whereHas('variants', function ($q) use ($minPrice, $maxPrice) {
                         if (is_numeric($minPrice)) {
-                            $q->where('price', '>=', $minPrice);
+                            $q->where('discount_price', '>=', $minPrice);
                         }
                         if (is_numeric($maxPrice)) {
-                            $q->where('price', '<=', $maxPrice);
+                            $q->where('discount_price', '<=', $maxPrice);
                         }
                     });
                 }
@@ -188,7 +191,9 @@ class ProductController extends Controller
 
             // Filter by price ranges (comma-separated or array)
             if ($request->filled('price_ranges')) {
+                
                 $priceRanges = $request->input('price_ranges');
+               
                 $rangeArray = is_string($priceRanges) ? explode(',', $priceRanges) : $priceRanges;
                 $rangeArray = array_filter(array_map('trim', $rangeArray));
 
@@ -200,10 +205,10 @@ class ProductController extends Controller
                                     [$minPrice, $maxPrice] = explode('-', $range);
                                     $subQ->orWhere(function ($orQ) use ($minPrice, $maxPrice) {
                                         if (is_numeric($minPrice)) {
-                                            $orQ->where('price', '>=', $minPrice);
+                                            $orQ->where('discount_price', '>=', $minPrice);
                                         }
                                         if (is_numeric($maxPrice)) {
-                                            $orQ->where('price', '<=', $maxPrice);
+                                            $orQ->where('discount_price', '<=', $maxPrice);
                                         }
                                     });
                                 }

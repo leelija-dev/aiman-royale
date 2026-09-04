@@ -13,10 +13,17 @@ use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cookie;
-
+use App\Services\MetaConversionsService;
+use App\Models\RegistrationOtpHistory;
 class AuthController extends Controller
 {
-    //
+    protected MetaConversionsService $metaService;
+
+    public function __construct(MetaConversionsService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
+
     public function showLogin(Request $request)
     {
         // Store redirect URL in session if present (for registration flow)
@@ -62,7 +69,7 @@ class AuthController extends Controller
                     ->subject('Email Verification OTP - Aiman Royale');
             });
             // dd($otp);
-
+     
             // Store OTP in database for verification
             EmailVerification::updateOrCreate(
                 ['email' => $request->email],
@@ -156,10 +163,28 @@ class AuthController extends Controller
         try {
             if ($request->email) {
                 // Send OTP email
+                try{
                 Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
                     $message->to($request->email)
                         ->subject('Email Verification OTP - Aiman Royale');
                 });
+                 RegistrationOtpHistory::create([
+                    'otp_send_to' => $request->email,
+                    'otp' => $otp,
+                    'status' => 'sent',
+                    'message' => 'OTP sent successfully to '.$request->email,
+                    'failed_reason' => ''
+                ]);
+                }catch(\Exception $e){
+                     RegistrationOtpHistory::create([
+                    'otp_send_to' => $request->email,
+                    'otp' => $otp,
+                    'status' => 'failed',
+                    'message' => 'Failed to send OTP to '.$request->email,
+                    'failed_reason' => $e->getMessage()
+                ]);
+                    return back()->with('error', 'Failed to send OTP. Please try again.');
+                }
 
                 // Store OTP in database
                 EmailVerification::updateOrCreate(
@@ -256,8 +281,18 @@ class AuthController extends Controller
             // Auto login with Laravel Auth
             Auth::login($user);
 
+            // Track CompleteRegistration event for Meta Conversions API
+            try {
+                $this->metaService->trackCompleteRegistration();
+
+                Log::info('Meta CompleteRegistration event tracked for user: ' . $user->id);
+            } catch (\Exception $e) {
+                Log::error('Failed to track Meta CompleteRegistration event: ' . $e->getMessage());
+            }
+
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
+            session(['registration_success' => true]);
 
             // Check for redirect URL from registration session
             $redirectUrl = session('redirect_after_registration');

@@ -438,5 +438,18 @@
             }
         });
     </script>
+    @if (session('registration_success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
 
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'CompleteRegistration');
+                }
+
+                @php
+                    session()->forget('registration_success');
+                @endphp
+            });
+        </script>
+    @endif
     @endsection

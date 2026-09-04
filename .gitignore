@@ -26,3 +26,5 @@ yarn-error.log
 /public/uploads
 robots.txt
 /testsprite_tests
+/public/sitemaps/
+/public/sitemap.xml

@@ -59,6 +59,8 @@ use App\Http\Controllers\Admin\BannerDetailsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\OfferController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RegistrationOtpHistoryController;
+use App\Http\Controllers\Admin\RobotsController;
 use App\Http\Controllers\Admin\StoreController;
 
 // use App\Http\Controllers\ShopController;
@@ -569,8 +571,13 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
         Route::post('/update/{id}', [OfferController::class, 'update'])->name('offer.update');
         Route::delete('/delete/{id}', [OfferController::class, 'delete'])->name('offer.delete');
     });
-
+    Route::prefix('registration-otp-history')->group(function(){
+        Route::get('/',[RegistrationOtpHistoryController::class,'index'])->name('registration-otp-history.index');
+    });
    // Invoice Routes
 Route::get('/orders/{order}/invoice', [OrderManagementController::class, 'viewInvoice'])->name('admin.orders.invoice');
 Route::get('/orders/{order}/invoice/download', [OrderManagementController::class, 'downloadInvoice'])->name('admin.orders.invoice.download');
+
+Route::get('/robots',[RobotsController::class,'index'])->name('robots.index');
+Route::post('/robots/store',[RobotsController::class,'store'])->name('robots.store');
 });

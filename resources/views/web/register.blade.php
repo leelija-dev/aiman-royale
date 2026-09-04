@@ -115,9 +115,9 @@
                     <button type="button" id="emailTab" onclick="switchTab('email')" class="flex-1 py-3 px-4 rounded-lg text-sm font-medium transition tab-active">
                         <i class="fas fa-envelope mr-2"></i>Email
                     </button>
-                    <button type="button" id="phoneTab" onclick="switchTab('phone')" class="flex-1 py-3 px-4 rounded-lg text-sm font-medium transition">
+                    {{-- <button type="button" id="phoneTab" onclick="switchTab('phone')" class="flex-1 py-3 px-4 rounded-lg text-sm font-medium transition">
                         <i class="fas fa-phone mr-2"></i>Mobile
-                    </button>
+                    </button> --}}
                 </div>
 
                 <form action="{{ route('web.register.send-otp') }}" method="post" id="registerForm" class="space-y-5" novalidate>
@@ -127,7 +127,7 @@
                     <div id="emailField">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <div class="relative">
-                            <input type="email" id="email" name="email" required
+                            <input type="email" id="email" placeholder="example@gmail.com" name="email" required
                                 class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                             <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         </div>
@@ -138,7 +138,7 @@
                     </div>
 
                     <!-- Phone Field -->
-                    <div id="phoneField" class="hidden">
+                    {{-- <div id="phoneField" class="hidden">
                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
                         <div class="relative">
                             <input type="tel" id="phone" name="phone" required
@@ -150,7 +150,7 @@
                         @error('phone')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <!-- Submit Button -->
                     <button type="submit" class="w-full fashion-gradient text-white py-3 px-4 rounded-xl font-semibold hover:opacity-90 transition flex items-center justify-center">
@@ -241,6 +241,11 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     if (!isValid) {
         e.preventDefault();
     } else {
+    if (typeof fbq === 'function') {
+        fbq('track', 'sendOtp', {
+            method: 'email'
+        });
+    }
         // Show loading state
         const submitBtn = this.querySelector('button[type="submit"]');
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending OTP...';

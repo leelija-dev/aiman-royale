@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-
+@section('event', 'AddToWishlist')
 @section('content')
 
 <style>
@@ -1278,21 +1278,22 @@
               <div class="accordion-content-block">
                 <div class="space-y-2 text-sm mt-4">
                   <label class="flex items-center gap-2">
-                    <input type="checkbox" name="price_ranges[]" value="0-200" class="accent-gray-800 filter-checkbox">
-                    Below {{config('app.currency')}}200
+                    <input type="checkbox" name="price_ranges[]" value="0-5000" class="accent-gray-800 filter-checkbox">
+                    Below {{config('app.currency')}}5000
                   </label>
                   <label class="flex items-center gap-2">
-                    <input type="checkbox" name="price_ranges[]" value="200-300" class="accent-gray-800 filter-checkbox">
-                    {{config('app.currency')}}200 - {{config('app.currency')}}300
+                    <input type="checkbox" name="price_ranges[]" value="5000-8000" class="accent-gray-800 filter-checkbox">
+                    {{config('app.currency')}}5000 - {{config('app.currency')}}8000
                   </label>
                   <label class="flex items-center gap-2">
-                    <input type="checkbox" name="price_ranges[]" value="300-400" class="accent-gray-800 filter-checkbox">
-                    {{config('app.currency')}}300 - {{config('app.currency')}}400
+                    <input type="checkbox" name="price_ranges[]" value="8000-10000" class="accent-gray-800 filter-checkbox">
+                    {{config('app.currency')}}8000 - {{config('app.currency')}}10000
                   </label>
                   <label class="flex items-center gap-2">
-                    <input type="checkbox" name="price_ranges[]" value="400-500" class="accent-gray-800 filter-checkbox">
-                    {{config('app.currency')}}400 - {{config('app.currency')}}500
+                    <input type="checkbox" name="price_ranges[]" value="10000-15000" class="accent-gray-800 filter-checkbox">
+                    {{config('app.currency')}}10000 - {{config('app.currency')}}15000
                   </label>
+                  {{--
                   <label class="flex items-center gap-2">
                     <input type="checkbox" name="price_ranges[]" value="500-600" class="accent-gray-800 filter-checkbox">
                     {{config('app.currency')}}500 - {{config('app.currency')}}600
@@ -1301,6 +1302,7 @@
                     <input type="checkbox" name="price_ranges[]" value="600-5000" class="accent-gray-800 filter-checkbox">
                     {{config('app.currency')}}600 & Above
                   </label>
+                  --}}
                 </div>
               </div>
             </div>

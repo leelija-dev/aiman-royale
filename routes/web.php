@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\FalseReviewsController;
+use App\Http\Controllers\Admin\RobotsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\CartController;
@@ -23,8 +24,10 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use Illuminate\Support\Facades\File;
 // use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\DB;
+ use App\Services\SitemapService;
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');
@@ -271,4 +274,29 @@ Route::get('/clear-coupon-session', function () {
     session()->forget('applied_coupons');
 
     return 'Coupon session cleared';
+});
+
+Route::get('/robots.txt', function () {
+
+    $path = public_path('robots.txt');
+
+    if (!File::exists($path)) {
+        return response("User-agent: *\nDisallow:", 404)
+            ->header('Content-Type', 'text/plain');
+    }
+
+    return response(
+        File::get($path),
+        200
+    )->header('Content-Type', 'text/plain');
+});
+// Route::get('/sitemap.xml', [RobotsController::class, 'generate'])
+//     ->name('sitemap');
+   
+
+Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
+
+    $sitemapService->generate();
+
+    return 'Sitemap generated successfully.';
 });

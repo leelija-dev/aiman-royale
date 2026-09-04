@@ -12,9 +12,18 @@ use Illuminate\View\View;
 use Carbon\Carbon;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Validator;
+use App\Services\MetaConversionsService;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
+    protected MetaConversionsService $metaService;
+
+    public function __construct(MetaConversionsService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
+
     public function index(): View
     {
         if (session()->has('checkout_source') && session()->get('checkout_source') === 'buy_now') {
@@ -113,6 +122,22 @@ class CartController extends Controller
                     'price' => $variant->discount_price ?? $variant->price
                 ]);
 
+                // Track AddToCart event
+                try {
+                    $productData = [
+                        'id' => $variant->product_id,
+                        'name' => $variant->product->name ?? 'Product',
+                        'price' => $variant->discount_price ?? $variant->price,
+                        'quantity' => $request->count,
+                    ];
+
+                    $this->metaService->trackAddToCart($productData);
+
+                    Log::info('Meta AddToCart event tracked for product: ' . $variant->product_id);
+                } catch (\Exception $e) {
+                    Log::error('Failed to track Meta AddToCart event: ' . $e->getMessage());
+                }
+
                 $cartCount = $this->getCartCount();
 
                 return response()->json([
@@ -130,6 +155,22 @@ class CartController extends Controller
                     'count' => $request->count,
                     'price' => $variant->discount_price ?? $variant->price
                 ]);
+
+                // Track AddToCart event
+                try {
+                    $productData = [
+                        'id' => $variant->product_id,
+                        'name' => $variant->product->name ?? 'Product',
+                        'price' => $variant->discount_price ?? $variant->price,
+                        'quantity' => $request->count,
+                    ];
+
+                    $this->metaService->trackAddToCart($productData);
+
+                    Log::info('Meta AddToCart event tracked for new product: ' . $variant->product_id);
+                } catch (\Exception $e) {
+                    Log::error('Failed to track Meta AddToCart event for new item: ' . $e->getMessage());
+                }
 
                 $cartCount = $this->getCartCount();
 

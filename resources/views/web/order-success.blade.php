@@ -1,6 +1,18 @@
 @extends('layout.web.main-layout')
 
 @section('content')
+<script>
+    // Track Purchase event with Facebook Pixel on order success
+    @if(session('purchase_event_data'))
+    if (typeof fbq !== 'undefined') {
+        const purchaseData = {{ session('purchase_event_data') }};
+        fbq('track', 'Purchase', purchaseData);
+        // Clear session after firing event
+        @php session()->forget('purchase_event_data'); @endphp
+    }
+    @endif
+</script>
+
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 min-h-screen">
     <div class="container mx-auto max-w-2xl">
         <div class="bg-white rounded-lg shadow-sm p-8 text-center">

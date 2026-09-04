@@ -15,6 +15,7 @@
 
             </h6>
         </nav>
+        
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-lg-0 me-0  w-auto d-flex justify-content-end" id="navbar">
             <!-- <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                 <div class="input-group">
@@ -22,6 +23,26 @@
                     <input type="text" class="form-control" placeholder="Type here...">
                 </div>
             </div> -->
+            @php 
+            $otpCount = \App\Models\RegistrationOtpHistory::count();
+            @endphp
+           <li class="nav-item align-items-center me-4" style="list-style: none;">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-sm font-weight-bold text-body">
+                        Registration OTP Sent:
+                    </span>
+
+                    <span class="badge bg-primary px-2 py-1">
+                        {{ $otpCount }}
+                    </span>
+
+                    <a href="{{route('registration-otp-history.index')}}"
+                    class="btn btn-sm btn-outline-primary mb-0 px-3">
+                        <i class="fa-solid fa-eye me-1"></i>
+                        View
+                    </a>
+                </div>
+            </li>
             <ul class="navbar-nav  justify-content-end gap-2 w-auto">
                 <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -139,6 +160,7 @@
                         </li>
                     </ul>
                 </li> --}}
+                
                 <li class="nav-item d-lg-flex d-none align-items-center ">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

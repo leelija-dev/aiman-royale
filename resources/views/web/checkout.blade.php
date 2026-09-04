@@ -1032,6 +1032,22 @@ msg.innerHTML = "Something went wrong.";
     console.log('Checkout script loaded successfully with global functions');
     console.log('typeof applyCoupon:', typeof window.applyCoupon);
    document.addEventListener("DOMContentLoaded", function () {
+        // Track InitiateCheckout event with Facebook Pixel
+        // @if(isset($carts) && count($carts) > 0)
+        // if (typeof fbq !== 'undefined') {
+        //     const totalValue = {{ $total ?? 0 }};
+        //     const contentIds = @js($carts->pluck('product_id')->toArray());
+        //     const numItems = {{ $carts->sum('count') ?? 0 }};
+
+        //     fbq('track', 'InitiateCheckout', {
+        //         content_ids: contentIds,
+        //         content_type: 'product',
+        //         value: totalValue,
+        //         currency: 'INR',
+        //         num_items: numItems
+        //     });
+        // }
+        // @endif
 
     document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {
 

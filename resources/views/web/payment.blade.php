@@ -319,4 +319,14 @@
         }
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'AddPaymentInfo', {
+                value: {{ $total }},
+                currency: '{{ $currency }}'
+            });
+        }
+    });
+</script>
 @endsection

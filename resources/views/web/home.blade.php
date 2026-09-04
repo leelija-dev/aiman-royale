@@ -3501,6 +3501,15 @@ data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" @endif>
                     } else {
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
+                        if (typeof fbq !== 'undefined') {
+                                fbq('track', 'AddToWishlist', {
+                                    content_name: @json($product->name ?? ''),
+                                    content_ids: [@json($product->id ?? '')],
+                                    content_type: 'product',
+                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                    currency: 'INR'
+                                });
+                            }
                     }
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
                         item.textContent = data.wishlist_count;

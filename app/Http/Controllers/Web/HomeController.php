@@ -18,11 +18,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
 use Illuminate\Support\Facades\Log;
+use App\Services\MetaConversionsService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomeController extends Controller
 {
-    public function __construct() {}
+    protected MetaConversionsService $metaService;
+
+    public function __construct(MetaConversionsService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
+
     public function home()
     {
         $data = Service::all();
@@ -659,7 +666,7 @@ class HomeController extends Controller
     //     return view('web.multi-product', compact('products', 'filterOptions', 'priceRange', 'selectedFilters'));
     // }
 
-    public function ShowAllProduct(Request $request)
+    public function ShowAllProduct(Request $request, MetaConversionsService $metaService)
     {
         // Get filter parameters from request
         $categories = $request->input('category', []);
@@ -1371,13 +1378,39 @@ class HomeController extends Controller
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
 
+        // Track ViewContent event for Meta Conversions API
+        try {
+            $defaultVariant = $product->variants->first();
+            $productData = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $defaultVariant ? ($defaultVariant->discount_price ?? $defaultVariant->price) : $product->price,
+            ];
+
+            // $this->metaService->trackViewContent($productData);
+            $result = $this->metaService->trackViewContent($productData);
+
+            Log::info('Meta ViewContent result', [
+                'product_id' => $product->id,
+                'result' => $result,
+            ]);
+
+            Log::info('Meta ViewContent event tracked for product: ' . $product->id);
+        } catch (\Exception $e) {
+            Log::error('Failed to track Meta ViewContent event: ' . $e->getMessage());
+        }
+
+        // Check for applied coupon in session
+        $appliedCoupon = session('applied_coupon');
+
         return view('web.single-product', compact(
             'product',
             'sizes',
             'relatedProducts',
             'colors',
             'mostWishlistedProducts',
-            'lastViewedProducts'
+            'lastViewedProducts',
+            'appliedCoupon'
         ));
     }
 }

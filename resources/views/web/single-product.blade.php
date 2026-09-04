@@ -1191,8 +1191,8 @@
                                     <li class="flex items-center gap-2">
                                         <span>•</span>
                                         <span>
-                                            <strong>Grand Launch Offer:</strong> Use Coupon Code
-                                            <span class="font-bold text-red-600">LAUNCH20</span>
+                                            Get 20% instant discount use Coupon Code:
+                                            <span class="font-bold text-red-600"> LAUNCH20</span>
                                         </span>
                                     </li>
 
@@ -1253,7 +1253,7 @@
                                 </div>
 
                                 <!-- WhatsApp Share Button -->
-                                <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->price) }}"
+                                <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->discount_price) }}"
                                     target="_blank" rel="noopener noreferrer"
                                     class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
                                     <i class="fab fa-whatsapp text-xl"></i>
