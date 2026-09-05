@@ -1,6 +1,7 @@
 @extends('Admin.layouts.master')
 @section('source', 'Occasions')
 @section('page-title', ' Edit Occasion')
+@section('title', 'Edit Occasion')
 
 @section('title')
 {{config('app.name')}} - Edit Occasion

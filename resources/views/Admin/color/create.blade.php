@@ -61,7 +61,7 @@
                     <!-- Submit Buttons -->
                     <div class="row">
                         <div class="col-12 text-end">
-                            <a href="{{ route('admin.colors') }}" class="btn btn-danger me-3" >
+                            <a href="{{ route('admin.colors.index') }}" class="btn btn-danger me-3" >
                                 <i class="fas fa-times me-3"></i>Cancel
                             </a>
                             <button type="submit" class="btn btn-primary">

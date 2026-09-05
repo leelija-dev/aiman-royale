@@ -113,7 +113,7 @@
                     <!-- Submit Buttons -->
                     <div class="row">
                         <div class="col-12 text-end">
-                            <a href="{{ route('admin.sizes') }}" class="btn btn-danger">
+                            <a href="{{ route('admin.sizes.index') }}" class="btn btn-danger">
                                 <i class="fas fa-times me-2"></i>Cancel
                             </a>
                             <button type="submit" class="btn btn-primary">

@@ -1,7 +1,7 @@
 @extends('Admin.layouts.master')
 @section('source', 'Occasions')
 @section('page-title', ' Trashed Occasions')
-
+@section('title', 'Trashed Occasions')
 @section('title')
     {{ config('app.name') }} - Trashed Occasions
 @endsection
@@ -25,15 +25,15 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                   <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Slug</th>
-                                <th>Parent</th>
-                                <th>Deleted At</th>
-                                <th>Actions</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Slug</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Parent</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Deleted At</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
