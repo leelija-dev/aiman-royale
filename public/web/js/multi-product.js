@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     !imageUrl.includes('cloudinary.com') &&
     imageUrl.startsWith('/uploads/products/')
 ) {
-    imageUrl = '/img' + imageUrl;
+    imageUrl = '/img' + imageUrl + '?w=600&q=80';
 }
 
 
