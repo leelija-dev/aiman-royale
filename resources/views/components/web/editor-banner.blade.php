@@ -106,7 +106,7 @@
 
                 @foreach ($editorBanners as $index => $banner)
                 @php
-                $editorImg = asset('uploads/banners/' . $banner->image);
+                $editorImg = url('/img/' . 'uploads/banners/' . $banner->image . '?w=800&q=80');
                 if (strpos($editorImg, 'cloudinary.com') !== false && strpos($editorImg, 'upload/') !== false) {
                 $parts = explode('upload/', $editorImg);
                 $editorImg = $parts[0] . 'upload/w_800,h_600,c_fill,f_auto,q_auto/' . $parts[1];
