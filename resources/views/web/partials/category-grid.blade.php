@@ -10,7 +10,7 @@
         if ($product->images && $product->images->isNotEmpty()) {
         $firstImage = $product->images->first();
         if ($firstImage && !empty($firstImage->image)) {
-        $imageUrl = asset($firstImage->image);
+        $imageUrl = url('/img/' . $firstImage->image . '?w=600&q=80');
         $hasImage = true;
         }
         }
@@ -18,7 +18,7 @@
 
         @if($hasImage && $imageUrl)
         <img
-            src="{{ $product->featured_image }}"
+            src="{{ $imageUrl }}"
             alt="{{ $product->name }}"
             class="product-img w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105" />
         @else
@@ -137,7 +137,8 @@
         if ($product->images && $product->images->isNotEmpty()) {
         $firstImage = $product->images->first();
         if ($firstImage && !empty($firstImage->image)) {
-        $imageUrl = asset($firstImage->image);
+        // $imageUrl = asset($firstImage->image);
+        $imageUrl = url('/img/' . $firstImage->image . '?w=600&q=80');
         $hasImage = true;
         }
         }
@@ -145,7 +146,7 @@
 
         @if($hasImage && $imageUrl)
         <img
-            src="{{ $product->featured_image }}"
+            src="{{ $imageUrl }}"
             alt="{{ $product->name }}"
             class="product-img w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105" />
         @else
