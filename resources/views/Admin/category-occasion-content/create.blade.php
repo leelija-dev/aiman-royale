@@ -2,10 +2,7 @@
 
 @section('source', 'Category Occasion Content')
 @section('page-title', 'Add Category Occasion Content')
-
-@section('title')
-{{ config('app.name') }} - Add Category Occasion Content
-@endsection
+@section('title', 'Add Category Occasion Content')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -15,17 +12,17 @@
             <div class="card">
 
                 <!-- Header -->
-                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card-header bg-primary front-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
                         <i class="fas fa-plus-circle me-2"></i>
                         Add New Content
                     </h5>
                     <a href="{{ route('admin.category-occasion-content.index') }}" class="btn btn-light btn-sm">
-                        Back
+                        ⬅ Back
                     </a>
                 </div>
 
-                <div class="card-body">
+                <div class="card px-4 py-3">
 
                     <!-- Error Block -->
                     @if ($errors->any())
@@ -123,7 +120,7 @@
 
                         <!-- Buttons -->
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="{{ route('admin.category-occasion-content.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('admin.category-occasion-content.index') }}" class="btn btn-danger">
                                 Cancel
                             </a>
 
