@@ -1207,7 +1207,7 @@
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
-    class="flex flex-col gap-3 md:pt-4 pt-2 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-[#fffbfb] md:p-4 p-2 backdrop-blur-[23px]"
+    class="flex flex-col gap-3 md:pt-4 pt-2 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-[#FFE5E5] md:p-4 p-2 backdrop-blur-[23px]"
     data-product-variants="{{ json_encode($product->variants) }}">
 
     <!-- Coupon Toggle Button -->
