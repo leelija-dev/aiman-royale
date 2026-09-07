@@ -348,7 +348,7 @@
                                            {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
 
-                                                   src="{{asset($orderProduct->product->featured_image ?? '')}}"
+                                                   src="{{url('img/' . $orderProduct->product->featured_image ?? '')}}"
                                                    class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                                                    alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                        </div>

@@ -198,7 +198,7 @@
                         <div
                             class="smxl:w-auto h-auto aspect-[2/3] smxl:max-w-full max-w-[100px]  max-h-[120px] bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">
                             @if ($cart->image)
-                            <img src="{{ asset($cart->image) }}" alt="{{ $cart->name }}"
+                            <img src="{{ url('img/' . $cart->image) }}" alt="{{ $cart->name }}"
                                 class="w-full h-19 object-cover">
                             @endif
                         </div>
