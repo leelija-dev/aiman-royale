@@ -2577,7 +2577,7 @@
                         if (productImage.startsWith('/')) {
                             productImage = getBaseUrl() + productImage;
                         } else {
-                            productImage = getBaseUrl() + '/' + productImage;
+                            productImage = getBaseUrl() + '/img/' + productImage;
                         }
                     }
 
