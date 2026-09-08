@@ -1377,6 +1377,7 @@ class HomeController extends Controller
                 $product->price + 1000
             ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
+        dd($relatedProducts);
 
         // Track ViewContent event for Meta Conversions API
        // Track ViewContent event for Meta Conversions API
