@@ -1975,7 +1975,7 @@
 
                 <div class="main-owl owl-carousel owl-theme">
                     @if (isset($relatedProducts))
-                    @dd($relatedProducts)
+                    
                         @forelse($relatedProducts as $relatedProduct)
                             @php
                                 $variant = $relatedProduct->variants->first();
