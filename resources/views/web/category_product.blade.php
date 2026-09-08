@@ -910,7 +910,7 @@
     </div>
 
     <!-- Pagination -->
-     {{--
+    
     @if ($products->hasPages())
     <div class="mt-8">
         {{ $products->links() }}
@@ -924,7 +924,7 @@
         </div>
     </div>
     @endif
-    --}}
+  
     </div>
     </div>
  </div>
