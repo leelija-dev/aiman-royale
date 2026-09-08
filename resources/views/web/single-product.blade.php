@@ -814,13 +814,13 @@
                                 @php
                                     // Get images of the currently selected variant
                                     $currentVariant = $product->variants->first();
-                                   
+                                   dd($currentVariant);
                                     $variantImages = collect();
 
                                     if ($currentVariant) {
                                         if ($currentVariant->images && $currentVariant->images->isNotEmpty()) {
                                             $variantImages = $currentVariant->images;
-                                            dd($variantImages);
+                                            
                                         } elseif ($currentVariant->image) {
                                             // Create a collection with single image
                                             $stdClass = new \stdClass();
@@ -828,7 +828,6 @@
                                             $variantImages = collect([$stdClass]);
                                         }
                                     }
-
                                     // Fallback to product images if no variant images
                                     if ($variantImages->isEmpty()) {
                                         $variantImages = $product->images;
