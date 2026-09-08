@@ -814,6 +814,7 @@
                                 @php
                                     // Get images of the currently selected variant
                                     $currentVariant = $product->variants->first();
+                                    dd($currentVariant);
                                    
                                     $variantImages = collect();
 
