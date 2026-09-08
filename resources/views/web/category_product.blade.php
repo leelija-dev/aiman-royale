@@ -890,6 +890,15 @@
         @include('web.partials.category-grid', ['products' => $products])
     </div>
 
+    <!-- Pagination Wrapper -->
+<div id="pagination-wrapper">
+    @if ($products->hasPages())
+    <div class="mt-8">
+        {{ $products->links() }}
+    </div>
+    @endif
+</div>
+
     <!-- Loading Spinner -->
     <div id="loading-spinner" class="hidden text-center py-8">
         <div
@@ -2513,10 +2522,15 @@
                     if (productsCountDiv && data.data.pagination) {
                         const pagination = data.data.pagination;
                         productsCountDiv.innerHTML = `Showing ${pagination.from} - ${pagination.to} of ${pagination.total} products`;
+                        
+                         currentFilters.lastPage = pagination.last_page;
                     }
 
+                       if (data.data.pagination) {
+                updatePagination(data.data.pagination);
+            }
                     // Update pagination
-                    updatePagination(data.data.pagination);
+                    // updatePagination(data.data.pagination);
 
                     // Re-attach product card handlers
                     attachProductCardHandlers();
@@ -2669,91 +2683,257 @@
         //  Update Pagination
         // ──────────────────────────────────────────────
 
+        // function updatePagination(pagination) {
+        //     // Remove old pagination if exists
+        //     const oldPagination = document.querySelector('.mt-8');
+        //     if (oldPagination) {
+        //         oldPagination.remove();
+        //     }
+
+        //     if (pagination.last_page <= 1) {
+        //         return;
+        //     }
+
+        //     const paginationContainer = document.createElement('div');
+        //     paginationContainer.className = 'mt-8';
+
+        //     let html = '<nav class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">';
+        //     html += '<div class="flex flex-1 justify-between sm:hidden">';
+        //     html += `<a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed'}" 
+        //                onclick="changePage(${pagination.current_page - 1})">Previous</a>`;
+        //     html += `<a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
+        //                onclick="changePage(${pagination.current_page + 1})">Next</a>`;
+        //     html += '</div>';
+
+        //     html += '<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">';
+        //     html += `<div><p class="text-sm text-gray-700">Showing <span class="font-medium">${pagination.from}</span> to <span class="font-medium">${pagination.to}</span> of <span class="font-medium">${pagination.total}</span> results</p></div>`;
+        //     html += '<div><nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">';
+
+        //     html += `<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
+        //                onclick="changePage(${pagination.current_page - 1})">
+        //                 <span class="sr-only">Previous</span>
+        //                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        //                     <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+        //                 </svg>
+        //             </a>`;
+
+        //     const startPage = Math.max(1, pagination.current_page - 2);
+        //     const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
+
+        //     if (startPage > 1) {
+        //         html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+        //                    onclick="changePage(1)">1</a>`;
+        //         if (startPage > 2) {
+        //             html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+        //         }
+        //     }
+
+        //     for (let i = startPage; i <= endPage; i++) {
+        //         const isCurrent = i === pagination.current_page;
+        //         html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ${isCurrent ? 'bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}"
+        //                    onclick="changePage(${i})">${i}</a>`;
+        //     }
+
+        //     if (endPage < pagination.last_page) {
+        //         if (endPage < pagination.last_page - 1) {
+        //             html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+        //         }
+        //         html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+        //                    onclick="changePage(${pagination.last_page})">${pagination.last_page}</a>`;
+        //     }
+
+        //     html += `<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
+        //                onclick="changePage(${pagination.current_page + 1})">
+        //                 <span class="sr-only">Next</span>
+        //                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        //                     <path fill-rule="evenodd" d="M7.21 5.23a.75.75 0 01.02 1.06L11.168 10 7.23 13.71a.75.75 0 101.04 1.08l4.5-4.25a.75.75 0 000-1.08l-4.5-4.25a.75.75 0 01-1.06.02z" clip-rule="evenodd" />
+        //                 </svg>
+        //             </a>`;
+
+        //     html += '</nav></div></div></nav>';
+
+        //     paginationContainer.innerHTML = html;
+
+        //     // Insert after products container
+        //     if (productsContainer && productsContainer.parentNode) {
+        //         productsContainer.parentNode.insertBefore(paginationContainer, productsContainer.nextSibling);
+        //     }
+        // }
+
         function updatePagination(pagination) {
-            // Remove old pagination if exists
-            const oldPagination = document.querySelector('.mt-8');
-            if (oldPagination) {
-                oldPagination.remove();
-            }
-
-            if (pagination.last_page <= 1) {
-                return;
-            }
-
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'mt-8';
-
-            let html = '<nav class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">';
-            html += '<div class="flex flex-1 justify-between sm:hidden">';
-            html += `<a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed'}" 
-                       onclick="changePage(${pagination.current_page - 1})">Previous</a>`;
-            html += `<a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
-                       onclick="changePage(${pagination.current_page + 1})">Next</a>`;
-            html += '</div>';
-
-            html += '<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">';
-            html += `<div><p class="text-sm text-gray-700">Showing <span class="font-medium">${pagination.from}</span> to <span class="font-medium">${pagination.to}</span> of <span class="font-medium">${pagination.total}</span> results</p></div>`;
-            html += '<div><nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">';
-
-            html += `<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
-                       onclick="changePage(${pagination.current_page - 1})">
-                        <span class="sr-only">Previous</span>
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
-                        </svg>
-                    </a>`;
-
-            const startPage = Math.max(1, pagination.current_page - 2);
-            const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
-
-            if (startPage > 1) {
-                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                           onclick="changePage(1)">1</a>`;
-                if (startPage > 2) {
-                    html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
-                }
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                const isCurrent = i === pagination.current_page;
-                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ${isCurrent ? 'bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}"
-                           onclick="changePage(${i})">${i}</a>`;
-            }
-
-            if (endPage < pagination.last_page) {
-                if (endPage < pagination.last_page - 1) {
-                    html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
-                }
-                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                           onclick="changePage(${pagination.last_page})">${pagination.last_page}</a>`;
-            }
-
-            html += `<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed'}"
-                       onclick="changePage(${pagination.current_page + 1})">
-                        <span class="sr-only">Next</span>
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M7.21 5.23a.75.75 0 01.02 1.06L11.168 10 7.23 13.71a.75.75 0 101.04 1.08l4.5-4.25a.75.75 0 000-1.08l-4.5-4.25a.75.75 0 01-1.06.02z" clip-rule="evenodd" />
-                        </svg>
-                    </a>`;
-
-            html += '</nav></div></div></nav>';
-
-            paginationContainer.innerHTML = html;
-
-            // Insert after products container
-            if (productsContainer && productsContainer.parentNode) {
-                productsContainer.parentNode.insertBefore(paginationContainer, productsContainer.nextSibling);
-            }
+    // Find or create pagination wrapper
+    let paginationWrapper = document.getElementById('pagination-wrapper');
+    
+    // If wrapper doesn't exist, create it
+    if (!paginationWrapper) {
+        paginationWrapper = document.createElement('div');
+        paginationWrapper.id = 'pagination-wrapper';
+        paginationWrapper.className = 'mt-8';
+        
+        // Insert after products container
+        if (productsContainer && productsContainer.parentNode) {
+            productsContainer.parentNode.insertBefore(paginationWrapper, productsContainer.nextSibling);
         }
+    }
+
+    // Clear existing pagination
+    paginationWrapper.innerHTML = '';
+
+    // If only one page, hide pagination
+    if (pagination.last_page <= 1) {
+        paginationWrapper.style.display = 'none';
+        return;
+    }
+
+    paginationWrapper.style.display = 'block';
+
+    // Build pagination HTML
+    let html = '<nav class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6" aria-label="Pagination">';
+    
+    // Mobile view
+    html += '<div class="flex flex-1 justify-between sm:hidden">';
+    html += `<a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}" 
+               onclick="changePage(${pagination.current_page - 1}); return false;">
+                Previous
+            </a>`;
+    html += `<a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+               onclick="changePage(${pagination.current_page + 1}); return false;">
+                Next
+            </a>`;
+    html += '</div>';
+
+    // Desktop view
+    html += '<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">';
+    html += `<div>
+                <p class="text-sm text-gray-700">
+                    Showing <span class="font-medium">${pagination.from || 0}</span> 
+                    to <span class="font-medium">${pagination.to || 0}</span> 
+                    of <span class="font-medium">${pagination.total || 0}</span> results
+                </p>
+            </div>`;
+    html += '<div><nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">';
+
+    // Previous page
+    html += `<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+               onclick="changePage(${pagination.current_page - 1}); return false;">
+                <span class="sr-only">Previous</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                </svg>
+            </a>`;
+
+    // Page numbers
+    const startPage = Math.max(1, pagination.current_page - 2);
+    const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
+
+    if (startPage > 1) {
+        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                   onclick="changePage(1); return false;">1</a>`;
+        if (startPage > 2) {
+            html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        const isCurrent = i === pagination.current_page;
+        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ${isCurrent ? 'bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}"
+                   onclick="changePage(${i}); return false;">${i}</a>`;
+    }
+
+    if (endPage < pagination.last_page) {
+        if (endPage < pagination.last_page - 1) {
+            html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+        }
+        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                   onclick="changePage(${pagination.last_page}); return false;">${pagination.last_page}</a>`;
+    }
+
+    // Next page
+    html += `<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+               onclick="changePage(${pagination.current_page + 1}); return false;">
+                <span class="sr-only">Next</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M7.21 5.23a.75.75 0 01.02 1.06L11.168 10 7.23 13.71a.75.75 0 101.04 1.08l4.5-4.25a.75.75 0 000-1.08l-4.5-4.25a.75.75 0 01-1.06.02z" clip-rule="evenodd" />
+                </svg>
+            </a>`;
+
+    html += '</nav></div></div></nav>';
+    
+    paginationWrapper.innerHTML = html;
+}
+
+        // function changePage(page) {
+        //     if (!currentFilters) return;
+        //     currentFilters.page = page;
+        //     applyFilters();
+        //     if (productsContainer) {
+        //         productsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        //     }
+        // }
 
         function changePage(page) {
-            if (!currentFilters) return;
-            currentFilters.page = page;
-            applyFilters();
-            if (productsContainer) {
-                productsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+    if (!currentFilters) return;
+    if (page < 1 || page > currentFilters.lastPage) return;
+    
+    currentFilters.page = page;
+    applyFilters();
+    
+    // Scroll to top of products
+    if (productsContainer) {
+        const topOffset = productsContainer.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ behavior: 'smooth', top: topOffset });
+    }
+}
+function initializePagination() {
+    const paginationWrapper = document.getElementById('pagination-wrapper');
+    if (!paginationWrapper) return;
+    
+    // Get pagination data from the existing pagination links
+    const paginationLinks = document.querySelector('.mt-8');
+    if (!paginationLinks) return;
+    
+    // Extract pagination data from the existing HTML
+    const currentPage = parseInt(document.querySelector('.page-item.active .page-link')?.textContent || 1);
+    const totalPages = parseInt(document.querySelector('.page-item:last-child .page-link')?.textContent || 1);
+    
+    // Get the showing text
+    const showingText = document.querySelector('.text-sm.text-gray-700');
+    let from = 0, to = 0, total = 0;
+    if (showingText) {
+        const match = showingText.textContent.match(/Showing\s+(\d+)\s+to\s+(\d+)\s+of\s+(\d+)/);
+        if (match) {
+            from = parseInt(match[1]);
+            to = parseInt(match[2]);
+            total = parseInt(match[3]);
         }
+    }
+    
+    // Get previous and next URLs
+    const prevLink = document.querySelector('.page-item:first-child .page-link');
+    const nextLink = document.querySelector('.page-item:last-child .page-link');
+    
+    const paginationData = {
+        total: total || 0,
+        per_page: 12,
+        current_page: currentPage || 1,
+        last_page: totalPages || 1,
+        from: from || 0,
+        to: to || 0,
+        prev_page_url: prevLink?.href || null,
+        next_page_url: nextLink?.href || null
+    };
+    
+    // Store in currentFilters
+    if (typeof currentFilters !== 'undefined') {
+        currentFilters.lastPage = paginationData.last_page;
+        currentFilters.page = paginationData.current_page;
+    }
+    
+    // Replace with our custom pagination if more than one page
+    if (paginationData.last_page > 1) {
+        updatePagination(paginationData);
+    }
+}
 
         function showErrorMessage(message) {
             if (!productsContainer) return;
