@@ -2172,7 +2172,7 @@
 
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
-                    img.src = occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.src = '/img/' + occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
 
                     link.appendChild(img);
