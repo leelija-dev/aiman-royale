@@ -1372,10 +1372,10 @@ class HomeController extends Controller
         //     ->limit(8)
         //     ->get();
         $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
-            ->whereBetween('price', [
-                $product->price - 1000,
-                $product->price + 1000
-            ])
+            // ->whereBetween('price', [
+            //     $product->price - 1000,
+            //     $product->price + 1000
+            // ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
         
 
