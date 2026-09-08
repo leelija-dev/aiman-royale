@@ -891,6 +891,7 @@
     </div>
 
     <!-- Pagination Wrapper -->
+     {{--
 <div id="pagination-wrapper">
     @if ($products->hasPages())
     <div class="mt-8">
@@ -898,6 +899,8 @@
     </div>
     @endif
 </div>
+
+--}}
 
     <!-- Loading Spinner -->
     <div id="loading-spinner" class="hidden text-center py-8">
