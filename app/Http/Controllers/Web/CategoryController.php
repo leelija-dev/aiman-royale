@@ -534,6 +534,7 @@ class CategoryController extends Controller
 
     public function filter($slug, Request $request)
     {
+       
         try {
             // Get category
             $category = Category::where('slug', $slug)
