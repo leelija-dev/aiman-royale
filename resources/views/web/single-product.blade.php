@@ -3749,7 +3749,7 @@
                         const currentUrl = window.location.href.split('#')[0];
                         const redirectUrl = currentUrl + '#action-buttons-section';
                         window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                        return;
+                        return Promise.reject('Authentication required');;
                     }
                     return response.json();
                 })
@@ -3763,6 +3763,10 @@
                     }
                 })
                 .catch(error => {
+                     if (error === 'Authentication required') {
+                // Already redirected, do nothing
+                return;
+            }
                     console.error('Error:', error);
                     showNotification('An error occurred while starting checkout', 'error');
                     buyNowBtn.disabled = false;
@@ -3833,7 +3837,7 @@
                         const currentUrl = window.location.href.split('#')[0];
                         const redirectUrl = currentUrl + '#action-buttons-section';
                         window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                        return;
+                        return Promise.reject('Authentication required');
                     }
                     return response.json();
                 })
@@ -3864,7 +3868,12 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                   
+                     if (error === 'Authentication required') {
+        // Already redirected, do nothing - NO ERROR MESSAGE
+        return;
+    }
+     console.error('Error:', error);
                     showNotification('An error occurred while adding to cart', 'error');
                     addToCartBtn.disabled = false;
                     addToCartBtn.innerHTML = originalText;
