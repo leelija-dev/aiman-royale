@@ -1,7 +1,8 @@
 @extends('Admin.layouts.master')
 
 @section('title', 'Orders Management')
-
+@section('source', 'Orders')
+@section('page-title', 'Orders')
 @section('content')
     <div class="container-fluid mt-4 md-4">
         <div class="row">
