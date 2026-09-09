@@ -1717,7 +1717,7 @@ $isProductPage = !empty($productSlug);
                   <span class="faq-question-text font-semibold text-gray-800 group-hover:text-primary-dark transition-colors leading-tight">
                     ${escapeHtml(finalQuestion)}
                   </span>
-                  <span class="faq-category-badge inline-block mt-1.5 w-fit">${escapeHtml(categoryName)}</span>
+                  
                 </div>
                 <span class="icon-span text-2xl font-semibold text-primary-dark/70 group-hover:text-primary-dark transition-colors w-7 text-center flex-shrink-0">+</span>
               </button>
