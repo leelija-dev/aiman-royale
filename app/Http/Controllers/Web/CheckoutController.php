@@ -335,7 +335,7 @@ class CheckoutController extends Controller
             session()->forget(['checkout_payload', 'checkout_source']);
         } else {
             session()->forget('applied_coupons');
-            DB::table('carts')->where('user_id', $user_id)->delete();
+            // DB::table('carts')->where('user_id', $user_id)->delete();
         }
 
         // For COD orders, create Delhivery shipment immediately
@@ -735,7 +735,7 @@ class CheckoutController extends Controller
             ];
 
 
-            DB::table('orders')->where('id', $orderId)->update($updateData);
+            $comOrder = DB::table('orders')->where('id', $orderId)->update($updateData);
 
 
             // Reduce stock
@@ -748,11 +748,11 @@ class CheckoutController extends Controller
                 }
             }
 
-
+            if($comOrder){
             // Clear cart
             DB::table('carts')->where('user_id', auth()->id())->delete();
             session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
-
+            }
             // Track Purchase event for COD orders
            // Track Purchase event for COD orders
 try {
