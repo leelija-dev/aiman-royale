@@ -1902,7 +1902,7 @@
     }
 </script> -->
 
-// Replace the entire script section with this:
+
 
 <!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
