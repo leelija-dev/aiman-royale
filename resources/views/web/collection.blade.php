@@ -1,5 +1,5 @@
 @extends('layout.web.main-layout')
-@section('event', 'AddToWishlist')
+{{-- @section('event', 'AddToWishlist') --}}
 @section('content')
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
     <div class="container mx-auto">
@@ -48,7 +48,7 @@
                             <!-- Image -->
                             <div class="absolute inset-0">
                                 <img 
-                                    src="{{ $category->image ?  $category->image : asset('assets/images/placeholder.jpg') }}" 
+                                    src="{{ $category->image ?  asset('uploads/category/' . $category->image) : asset('assets/images/placeholder.jpg') }}" 
                                     alt="{{ $category->name }}" 
                                     class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                                     loading="lazy" 

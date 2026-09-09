@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ReturnOrderController;
 use App\Http\Controllers\Api\WebhookController;
+use App\Http\Controllers\Api\ProductFilterController;
 
 
 // Brand related API routes
@@ -33,6 +34,7 @@ Route::prefix('products')->group(function () {
     Route::get('/shipped', [ProductController::class, 'getShippedProducts']);
     Route::get('/delivered', [ProductController::class, 'getDeliveredProducts']);
     Route::get('/cancelled', [ProductController::class, 'getCancelledProducts']);
+    Route::get('/category/{slug}/filter', [ProductFilterController::class, 'filter']);
 });
 
 Route::prefix('faqs')->group(function () {

@@ -122,21 +122,25 @@ class CartController extends Controller
                     'price' => $variant->discount_price ?? $variant->price
                 ]);
 
-                // Track AddToCart event
-                try {
-                    $productData = [
-                        'id' => $variant->product_id,
-                        'name' => $variant->product->name ?? 'Product',
-                        'price' => $variant->discount_price ?? $variant->price,
-                        'quantity' => $request->count,
-                    ];
+               // Track AddToCart event
+try {
+    $productData = [
+        'id'       => $variant->product_id,
+        'name'     => $variant->product->name ?? 'Product',
+        'price'    => $variant->discount_price ?? $variant->price,
+        'quantity' => $request->count,
+        'currency' => 'INR',
+    ];
 
-                    $this->metaService->trackAddToCart($productData);
+    $this->metaService->trackAddToCart($productData);
 
-                    Log::info('Meta AddToCart event tracked for product: ' . $variant->product_id);
-                } catch (\Exception $e) {
-                    Log::error('Failed to track Meta AddToCart event: ' . $e->getMessage());
-                }
+    Log::info('Meta AddToCart tracked', [
+        'product_id' => $variant->product_id,
+        'quantity'   => $request->count
+    ]);
+} catch (\Exception $e) {
+    Log::error('Meta AddToCart failed: ' . $e->getMessage());
+}
 
                 $cartCount = $this->getCartCount();
 

@@ -1,7 +1,7 @@
 @extends('Admin.layouts.master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4 mb-4">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -11,7 +11,7 @@
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
                 </div>
-                <div class="card-body">
+                <div class="card px-4 py-4">
                     <form action="{{ route('banners.update', $banner->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -230,7 +230,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Banner
                             </button>
-                            <a href="{{ route('banners.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('banners.index') }}" class="btn btn-danger ms-2">
                                 <i class="fas fa-times"></i> Cancel
                             </a>
                         </div>

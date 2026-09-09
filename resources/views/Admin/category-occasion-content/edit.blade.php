@@ -2,10 +2,8 @@
 
 @section('source', 'Category Occasion Content')
 @section('page-title', 'Edit Category Occasion Content')
-
-@section('title')
-{{ config('app.name') }} - Edit Category Occasion Content
-@endsection
+@section('title', 'Edit Category Occasion Content')
+@section('title', 'Edit Category Occasion Content')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -93,7 +91,7 @@
                     </div>
 
                     <!-- Info Box -->
-                    <div class="alert alert-info">
+                    <div class="alert alert-light alert-info">
                         <h6 class="mb-2">
                             <i class="fas fa-info-circle me-2"></i>Current Information
                         </h6>

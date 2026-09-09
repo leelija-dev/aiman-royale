@@ -1372,33 +1372,37 @@ class HomeController extends Controller
         //     ->limit(8)
         //     ->get();
         $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
-            ->whereBetween('price', [
-                $product->price - 1000,
-                $product->price + 1000
-            ])
+            // ->whereBetween('price', [
+            //     $product->price - 1000,
+            //     $product->price + 1000
+            // ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
+        
 
         // Track ViewContent event for Meta Conversions API
-        try {
-            $defaultVariant = $product->variants->first();
-            $productData = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $defaultVariant ? ($defaultVariant->discount_price ?? $defaultVariant->price) : $product->price,
-            ];
+       // Track ViewContent event for Meta Conversions API
+try {
+    $defaultVariant = $product->variants->first();
 
-            // $this->metaService->trackViewContent($productData);
-            $result = $this->metaService->trackViewContent($productData);
+    $productData = [
+        'id'       => $product->id,
+        'name'     => $product->name,
+        'price'    => $defaultVariant 
+                        ? ($defaultVariant->discount_price ?? $defaultVariant->price) 
+                        : $product->price,
+        'currency' => 'INR',
+        'category' => $product->category->name ?? null,
+    ];
 
-            Log::info('Meta ViewContent result', [
-                'product_id' => $product->id,
-                'result' => $result,
-            ]);
+    $result = $this->metaService->trackViewContent($productData);
 
-            Log::info('Meta ViewContent event tracked for product: ' . $product->id);
-        } catch (\Exception $e) {
-            Log::error('Failed to track Meta ViewContent event: ' . $e->getMessage());
-        }
+    Log::info('Meta ViewContent tracked', [
+        'product_id' => $product->id,
+        'result'     => $result,
+    ]);
+} catch (\Exception $e) {
+    Log::error('Meta ViewContent failed: ' . $e->getMessage());
+}
 
         // Check for applied coupon in session
         $appliedCoupon = session('applied_coupon');

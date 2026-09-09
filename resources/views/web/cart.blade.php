@@ -63,7 +63,7 @@
                       @if($item->product && $item->product->images->first())
                       <img
                         class="object-cover object-top object-center w-full h-full"
-                        src="{{ asset($item->product->images->first()->image) }}"
+                        src="{{ url('img/' . $item->product->images->first()->image) }}"
                         alt="{{ $item->product->name }}" />
                       @else
                       <span>No Image</span>

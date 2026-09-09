@@ -2,7 +2,7 @@
 
 @section('source', 'Category Occasion Content')
 @section('page-title', 'Category Occasion Content')
-
+@section('title', 'Category Occasion Content')
 @section('title')
 {{ config('app.name') }} - Category Occasion Content
 @endsection
@@ -66,14 +66,14 @@
 
                 <!-- Table -->
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
+                    <table class="table align-items-center mb-0">
+                        <thead >
                             <tr>
-                                <th>Category</th>
-                                <th>Occasion</th>
-                                <th>Content</th>
-                                <th>Created</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Occasion</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Content</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

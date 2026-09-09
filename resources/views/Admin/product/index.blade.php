@@ -80,9 +80,9 @@
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm">{{ $product->name }}</h6>
-                                            @if ($product->fabric)
+                                            {{-- @if ($product->fabric)
                                             <p class="text-xs text-secondary mb-0">{{ $product->fabric }}</p>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 </td>
@@ -600,7 +600,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </div>
 </form>

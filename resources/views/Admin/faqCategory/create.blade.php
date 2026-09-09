@@ -53,7 +53,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Create FAQ Category
                             </button>
-                            <a href="{{ route('faqCategory.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('faqCategory.index') }}" class="btn btn-danger ms-3">
                                 <i class="fas fa-times"></i> Cancel
                             </a>
                         </div>

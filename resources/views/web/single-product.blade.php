@@ -456,7 +456,7 @@
             /* Add to Cart Button - using Tailwind secondary */
             #single-right-content .action-func-button {
                 /* background: linear-gradient(135deg, #2c241c 0%, #1f1812 100%); */
-                border: none;
+                /* border: none; */
                 border-radius: 60px;
                 padding: 1rem;
                 font-weight: 700;
@@ -464,6 +464,7 @@
                 transition: all 0.25s ease;
                 cursor: pointer;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                height:100% !important;
             }
 
             #single-right-content .action-func-button:hover {
@@ -564,7 +565,7 @@
                 }
 
                 #single-right-content .action-func-button {
-                    padding: 0.85rem;
+                    padding: 0.5rem;
                     font-size: 0.9rem;
                 }
 
@@ -813,11 +814,14 @@
                                 @php
                                     // Get images of the currently selected variant
                                     $currentVariant = $product->variants->first();
+                                    
+                                   
                                     $variantImages = collect();
 
                                     if ($currentVariant) {
                                         if ($currentVariant->images && $currentVariant->images->isNotEmpty()) {
                                             $variantImages = $currentVariant->images;
+                                            
                                         } elseif ($currentVariant->image) {
                                             // Create a collection with single image
                                             $stdClass = new \stdClass();
@@ -825,7 +829,6 @@
                                             $variantImages = collect([$stdClass]);
                                         }
                                     }
-
                                     // Fallback to product images if no variant images
                                     if ($variantImages->isEmpty()) {
                                         $variantImages = $product->images;
@@ -1206,60 +1209,67 @@
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
-                                class="flex flex-col gap-3 pt-4 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-white/32 p-4 backdrop-blur-[23px]"
-                                data-product-variants="{{ json_encode($product->variants) }}">
+    class="flex flex-col gap-3 md:pt-4 pt-2 md:relative fixed md:bottom-auto md:left-auto md:z-0 md:bg-transparent md:backdrop-blur-none lgg:px-0 md:pb-0 bottom-0 left-0 w-full z-[1000] bg-[#FFE5E5] md:p-4 p-2 backdrop-blur-[23px]"
+    data-product-variants="{{ json_encode($product->variants) }}">
 
-                                <!-- Coupon Toggle Button -->
-                                <button id="coupon-toggle-btn"
-                                    class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
-                                    <i class="fas fa-ticket-alt"></i>
-                                    <span>Have a coupon? Click here</span>
-                                    <i class="fas fa-chevron-down text-xs transition-transform duration-300"
-                                        id="coupon-arrow"></i>
-                                </button>
+    <!-- Coupon Toggle Button -->
+    <button id="coupon-toggle-btn"
+        class="text-secondary hover:text-secondary/80 font-medium text-sm flex items-center justify-center gap-2 transition w-full">
+        <i class="fas fa-ticket-alt"></i>
+        <span>Have a coupon? Click here</span>
+        <i class="fas fa-chevron-down text-xs transition-transform duration-300"
+            id="coupon-arrow"></i>
+    </button>
 
-                                <!-- Coupon Input Block (Hidden by default) -->
-                                <div id="coupon-block"
-                                    class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
-                                    <div class="flex gap-2 flex-col xxs:flex-row">
-                                        <input type="text" id="coupon-input" value="{{ $appliedCoupon &&
-        isset($appliedCoupon['variant_id']) &&
-        (int) $appliedCoupon['variant_id'] === (int) $variant->id
-            ? $appliedCoupon['code']
-            : ''}}" placeholder="Enter coupon code"
-                                            class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
-                                        <button id="apply-coupon-btn"
-                                            class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
-                                            Apply
-                                        </button>
-                                    </div>
-                                    <div id="coupon-message" class="text-sm mt-2 hidden"></div>
-                                </div>
+    <!-- Coupon Input Block (Hidden by default) -->
+    <div id="coupon-block"
+        class="hidden bg-gray-50 rounded-lg p-3 border border-gray-200 transition-all duration-300">
+        <div class="flex gap-2 flex-col xxs:flex-row">
+            <input type="text" id="coupon-input" value="{{ $appliedCoupon &&
+                isset($appliedCoupon['variant_id']) &&
+                (int) $appliedCoupon['variant_id'] === (int) $variant->id
+                    ? $appliedCoupon['code']
+                    : ''}}" placeholder="Enter coupon code"
+                class="flex-1 px-3 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm">
+            <button id="apply-coupon-btn"
+                class="bg-secondary min-w-[100px] text-white px-4 py-2 rounded-lg hover:bg-secondary/80 transition text-sm font-medium whitespace-nowrap">
+                Apply
+            </button>
+        </div>
+        <div id="coupon-message" class="text-sm mt-2 hidden"></div>
+    </div>
 
-                                <div class="flex flex-col sm:flex-row sm:gap-4 gap-2">
-                                    <!-- Add to Cart -->
-                                    <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}"
-                                        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-pink-50 via-pink-100 to-rose-100 border border-pink-200 text-secondary font-semibold text-base transition-all duration-300 hover:from-pink-100 hover:via-pink-200 hover:to-rose-200 hover:shadow-lg flex items-center justify-center gap-2">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        <span>Add to Cart</span>
-                                    </button>
+    <!-- Action Buttons - Responsive -->
+    <div class="md:flex-col-reverse md:gap-3 flex flex-row gap-2">
+        <!-- WhatsApp Share Button -->
+        <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->discount_price) }}"
+            target="_blank" rel="noopener noreferrer"
+            class="bg-[#25D366] text-white hover:bg-[#128C7E] transition flex items-center justify-center md:w-full md:h-14  md:gap-2 md:text-base md:px-4 md:py-3 w-11 h-11 rounded-full flex-shrink-0 text-decoration-none">
+            <i class="fab fa-whatsapp md:text-xl text-lg"></i>
+            <span class="md:inline hidden">Order on WhatsApp</span>
+        </a>
 
-                                    <!-- Buy Now -->
-                                    <button id="buy-now" data-variant-id="{{ $product->variants->first()->id }}"
-                                        class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-secondary to-red-600 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
-                                        <i class="fas fa-bag-shopping"></i>
-                                        <span>Buy Now</span>
-                                    </button>
-                                </div>
+        <!-- Buttons Container for Large Screens -->
+        <div class="flex md:flex-row md:gap-3 flex-1  lgg:w-full gap-2">
+            <!-- Add to Cart -->
+            <button id="add-to-cart" data-variant-id="{{ $product->variants->first()->id }}"
+                class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-pink-50 via-pink-100 to-rose-100 border border-pink-200 text-secondary font-semibold text-base transition-all duration-300 hover:from-pink-100 hover:via-pink-200 hover:to-rose-200 hover:shadow-lg flex items-center justify-center gap-2">
+                <i class="fas fa-shopping-cart"></i>
+                <span><span class="lg:inline md:hidden smxl:inline hidden ">Add to</span> Cart</span>
+            </button>
 
-                                <!-- WhatsApp Share Button -->
-                                <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->discount_price) }}"
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="bg-[#25D366] text-white px-4 py-3 rounded-lg hover:bg-[#128C7E] font-medium flex items-center justify-center gap-2 transition w-full text-decoration-none">
-                                    <i class="fab fa-whatsapp text-xl"></i>
-                                    <span>Order on WhatsApp</span>
-                                </a>
-                            </div>
+            <!-- Buy Now -->
+            <button id="buy-now" data-variant-id="{{ $product->variants->first()->id }}"
+                class="action-func-button flex-1 h-14 rounded-xl bg-gradient-to-r from-secondary to-red-600 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                <i class="fas fa-bag-shopping"></i>
+                <span>Buy <span class="lg:inline md:hidden smxl:inline hidden">Now</span></span>
+            </button>
+        </div>
+
+        <!-- Small Screen Buttons (hidden on large screens) -->
+        
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -1967,6 +1977,7 @@
 
                 <div class="main-owl owl-carousel owl-theme">
                     @if (isset($relatedProducts))
+                    
                         @forelse($relatedProducts as $relatedProduct)
                             @php
                                 $variant = $relatedProduct->variants->first();
@@ -1975,7 +1986,7 @@
                                     ? ltrim($productImage->image, '/')
                                     : 'assets/images/placeholder.jpg';
                                 $imageUrl = $relatedProduct->featured_image
-                                    ? asset($relatedProduct->featured_image)
+                                    ? url('img/' . $relatedProduct->featured_image)
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
@@ -2102,7 +2113,7 @@
                             @php
                                 $variant = $relatedProduct->variants->first();
                                 $imageUrl = $relatedProduct->featured_image
-                                    ? asset($relatedProduct->featured_image)
+                                    ? url('img/' . $relatedProduct->featured_image)
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
@@ -2231,7 +2242,7 @@
                         @forelse($lastViewedProducts as $lastViewedProduct)
                             @php
                                 $imageUrl = $lastViewedProduct['featured_image']
-                                    ? asset($lastViewedProduct['featured_image'])
+                                    ? url('img/' . $lastViewedProduct['featured_image'])
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
@@ -3120,7 +3131,7 @@
                 const addToCartBtn = document.getElementById('add-to-cart');
                 if (addToCartBtn) {
                     addToCartBtn.removeAttribute('data-custom-dimensions');
-                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
                     addToCartBtn.classList.remove('bg-green-600');
                     addToCartBtn.classList.add('bg-secondary');
                     addToCartBtn.disabled = false;
@@ -3541,7 +3552,7 @@
                 selectedCustomColor = null;
                 if (addToCartBtn) {
                     addToCartBtn.removeAttribute('data-custom-dimensions');
-                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
                     addToCartBtn.classList.remove('bg-green-600');
                     addToCartBtn.classList.add('bg-secondary');
                     addToCartBtn.disabled = false;
@@ -3670,7 +3681,7 @@
                 if (customDimensions) {
                     freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
                 } else {
-                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
                 }
                 freshBtn.classList.remove('bg-green-600');
                 freshBtn.classList.add('bg-secondary');

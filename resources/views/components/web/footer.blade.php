@@ -2482,12 +2482,12 @@ art from fake trails.
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
 <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
-  class="fixed {{ $isProductPage ? 'bottom-[13.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
+  class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
 
   <!-- Main Button -->
-  <div class="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-[0_10px_25px_rgba(236,72,153,0.35)] hover:shadow-[0_15px_35px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all duration-300">
+  <div class="relative  flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-[0_10px_25px_rgba(236,72,153,0.35)] hover:shadow-[0_15px_35px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all duration-300">
 
     <i class="fab fa-whatsapp text-white text-2xl md:text-3xl drop-shadow"></i>
 
@@ -2499,7 +2499,7 @@ art from fake trails.
 
 
 <!-- Light-themed Mobile Navigation Bar -->
-<div class="sticky bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
+<div class="sticky {{ $isProductPage ? 'hidden' : 'block' }} bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden block">
 
   <!-- Attractive Banner -->
   <a href="{{route('page.appointment')}}" class="w-full">

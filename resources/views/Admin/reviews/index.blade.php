@@ -3,7 +3,7 @@
 @section('title', 'Reviews Management')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -15,7 +15,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card">
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -25,18 +25,18 @@
                     <!-- Bulk Actions -->
                     
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
                                         <th width="50">
                                             <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
                                         </th>
-                                        <th>Product</th>
-                                        <th>Reviewer</th>
-                                        <th>Rating</th>
-                                        <th>Review Text</th>
-                                        <th>Date</th>
-                                        <th width="150">Actions</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Product</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Reviewer</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Rating</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Review Text</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

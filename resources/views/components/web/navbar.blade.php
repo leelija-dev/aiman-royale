@@ -1201,7 +1201,7 @@
                 </div>
                 @endforeach
                 <div class="relative group">
-                    <a href="https://aimanroyale.com/products/"
+                    <a href="{{ route('page.multi-product') }}"
                         class="hover:text-black  flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
@@ -2172,7 +2172,7 @@
 
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
-                    img.src = occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.src = '/img/' + occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
 
                     link.appendChild(img);
@@ -2308,7 +2308,13 @@
                         price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
                         originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
                         // image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                        image: product.featured_image ? (product.featured_image.startsWith('http') ? product.featured_image : getBaseUrl() + '/' + product.featured_image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        // image: product.featured_image ? (product.featured_image.startsWith('http') ? product.featured_image : getBaseUrl() + '/' + product.featured_image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                         image: product.featured_image ? 
+        (product.featured_image.startsWith('http') ? 
+            product.featured_image : 
+            getBaseUrl() + '/img/' + product.featured_image + '?w=600&q=80'
+        ) : 
+        "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
                         slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
                     });
                     collectionList.appendChild(productCard);
@@ -2571,7 +2577,7 @@
                         if (productImage.startsWith('/')) {
                             productImage = getBaseUrl() + productImage;
                         } else {
-                            productImage = getBaseUrl() + '/' + productImage;
+                            productImage = getBaseUrl() + '/img/' + productImage;
                         }
                     }
 

@@ -2,7 +2,7 @@
 
 @section('title', 'Order Details - #' . $order->id)
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mb-4 mt-4">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -19,25 +19,25 @@
                     </div>
                     --}}
                     <div class="card-tools">
-    <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-default">
-        <i class="fas fa-arrow-left"></i> Back to Orders
-    </a>
-    <button type="button" class="btn btn-sm btn-primary" onclick="window.print()">
-        <i class="fas fa-print"></i> Print
-    </button>
-    <!-- 🔥 NEW: Invoice Button -->
-    <a href="{{ route('admin.orders.invoice', $order->id) }}" 
-       class="btn btn-sm btn-success" 
-       target="_blank">
-        <i class="fas fa-file-invoice"></i> View Invoice
-    </a>
-    <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
-       class="btn btn-sm btn-info">
-        <i class="fas fa-download"></i> Download Invoice
-    </a>
-</div>
+                        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-default">
+                            <i class="fas fa-arrow-left"></i> Back to Orders
+                        </a>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <!--  NEW: Invoice Button -->
+                        <a href="{{ route('admin.orders.invoice', $order->id) }}" 
+                        class="btn btn-sm btn-success" 
+                        target="_blank">
+                            <i class="fas fa-file-invoice"></i> View Invoice
+                        </a>
+                        <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
+                        class="btn btn-sm btn-info">
+                            <i class="fas fa-download"></i> Download Invoice
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card py-3 px-4">
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -54,14 +54,14 @@
                                 <div class="info-box-content">
                                     <span class="info-box-text">Order Status</span>
                                     <span class="badge bg-{{ 
-    $order->order_status == 'delivered' ? 'success' : 
-    ($order->order_status == 'cancelled' ? 'danger' : 
-    ($order->order_status == 'shipped' ? 'primary' : 
-    ($order->order_status == 'paid' ? 'success' : 
-    ($order->order_status == 'confirmed' ? 'info' : 'warning')))) 
-}}">
-    {{ ucfirst($order->order_status) }}
-</span>
+                                        $order->order_status == 'delivered' ? 'success' : 
+                                        ($order->order_status == 'cancelled' ? 'danger' : 
+                                        ($order->order_status == 'shipped' ? 'primary' : 
+                                        ($order->order_status == 'paid' ? 'success' : 
+                                        ($order->order_status == 'confirmed' ? 'info' : 'warning')))) 
+                                         }}">
+                                        {{ ucfirst($order->order_status) }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                             <h5><i class="fas fa-box"></i> Order Items ({{ $order->orderProducts->count() }})</h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
-                                    <thead>
+                                    <thead class="bg-light">
                                         <tr>
                                             <th>Product</th>
                                             <th>Variant</th>
@@ -196,17 +196,17 @@
                                                     </div>
                                                 </td>
                                                <td>
-    @if($orderProduct->variant)
-        <span class="badge bg-info">
-            {{ $orderProduct->variant->size ?? 'N/A' }}
-        </span>
-        @if($orderProduct->variant->color)
-            <span class="badge bg-secondary ms-1">{{ ucfirst($orderProduct->variant->color) }}</span>
-        @endif
-    @else
-        <span class="text-muted">N/A</span>
-    @endif
-</td>
+                                                    @if($orderProduct->variant)
+                                                        <span class="badge bg-info">
+                                                            {{ $orderProduct->variant->size ?? 'N/A' }}
+                                                        </span>
+                                                        @if($orderProduct->variant->color)
+                                                            <span class="badge bg-secondary ms-1">{{ ucfirst($orderProduct->variant->color) }}</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-muted">N/A</span>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $orderProduct->quantity }}</td>
                                                 <td>{{ config('app.currency') }}{{ number_format($orderProduct->price, 2) }}</td>
                                                 
@@ -233,7 +233,7 @@
                                             <td>-{{ config('app.currency') }}{{ number_format($order->special_discount_amount, 2) }}</td>
                                         </tr>
                                         @endif
-                                        <tr class="bg-primary text-white">
+                                        <tr class="bg-light text-white">
                                             <th colspan="3" class="text-right">Total:</th>
                                             <td><strong>{{ config('app.currency') }}{{ number_format($order->total_amount, 2) }}</strong></td>
                                         </tr>
