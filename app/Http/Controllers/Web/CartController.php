@@ -61,7 +61,7 @@ class CartController extends Controller
             return (($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count);
         });
 
-        $shipping = $subtotal > 400 ? 0 : 50; // Free shipping over $400
+        $shipping = 0;//$subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
         $cartCount = $cartItems->sum('count');
 
