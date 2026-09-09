@@ -3732,6 +3732,7 @@
                 });
 
                 const data = await response.json();
+                console.log('API response:', data);
 
                 if (data.success && productsContainer) {
                     // Render products using the API data
@@ -4044,6 +4045,12 @@
         init();
     });
 
+    // Check if user is logged in
+    function isUserLoggedIn() {
+        const metaTag = document.querySelector('meta[name="user-logged-in"]');
+        return metaTag ? metaTag.getAttribute('content') === 'true' : false;
+    }
+
     // Wishlist toggle function
     function toggleWishlist(productId, button, event) {
         if (event) {
@@ -4053,6 +4060,14 @@
 
         if (!productId) {
             alert('Product ID not found');
+            return;
+        }
+
+        // Check if user is logged in
+        if (!isUserLoggedIn()) {
+            // Redirect to login page with return URL
+            const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+            window.location.href = `/login?redirect=${returnUrl}`;
             return;
         }
 
@@ -4083,7 +4098,23 @@
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
+
+                    // Update wishlist count if exists
+                    document.querySelectorAll('.wishlist-count').forEach(function(item) {
+                        item.textContent = data.wishlist_count;
+                        if (data.wishlist_count > 0) {
+                            item.style.display = "flex";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
                 } else {
+                    // If the API returns a login required response
+                    if (data.requires_login) {
+                        const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = `/login?redirect=${returnUrl}`;
+                        return;
+                    }
                     button.classList.add('text-red-500');
                     button.innerHTML = '<i class="fas fa-heart"></i>';
                 }
@@ -4095,6 +4126,57 @@
                 button.disabled = false;
             });
     }
+    // Wishlist toggle function
+    // function toggleWishlist(productId, button, event) {
+    //     if (event) {
+    //         event.preventDefault();
+    //         event.stopPropagation();
+    //     }
+
+    //     if (!productId) {
+    //         alert('Product ID not found');
+    //         return;
+    //     }
+
+    //     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    //     const isInWishlist = button.classList.contains('text-red-500');
+    //     const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+    //     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    //     button.disabled = true;
+
+    //     fetch(url, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-CSRF-TOKEN': csrfToken
+    //             },
+    //             body: JSON.stringify({
+    //                 product_id: productId
+    //             })
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 if (isInWishlist) {
+    //                     button.classList.remove('text-red-500');
+    //                     button.innerHTML = '<i class="far fa-heart"></i>';
+    //                 } else {
+    //                     button.classList.add('text-red-500');
+    //                     button.innerHTML = '<i class="fas fa-heart"></i>';
+    //                 }
+    //             } else {
+    //                 button.classList.add('text-red-500');
+    //                 button.innerHTML = '<i class="fas fa-heart"></i>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error(error);
+    //         })
+    //         .finally(() => {
+    //             button.disabled = false;
+    //         });
+    // }
 </script>
 
 @endsection
