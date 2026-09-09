@@ -219,8 +219,8 @@
     }
 </style>
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
- <div class="container mx-auto">
-       
+    <div class="container mx-auto">
+
         <div class="mb-[0px] flex items-center justify-between gap-3 px-4 lgg:px-6 lgg:hidden ">
 
             <!-- Mobile Filter Button -->
@@ -714,130 +714,130 @@
 
 
 
-    <div class="w-full">
-        <div class="flex flex-row gap-3 relative">
-            @if($category!=null)
-            <!-- Filters Sidebar -->
-            <div id="filter-sidebar"
-                class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] lgg:min-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 lg:z-[200] z-[20003] transition-all duration-300 ease-in-out">
-                <button id="close-filter" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Filters</h2>
+        <div class="w-full">
+            <div class="flex flex-row gap-3 relative">
+                @if($category!=null)
+                <!-- Filters Sidebar -->
+                <div id="filter-sidebar"
+                    class="lgg:sticky fixed lgg:top-0 lgg:left-0 top-0 left-0 lgg:max-w-[300px] lgg:min-w-[300px] max-w-[260px] lgg:h-fit h-full lgg:max-h-max max-h-screen w-full bg-white rounded-xl shadow-md py-5 px-2 lg:z-[200] z-[20003] transition-all duration-300 ease-in-out">
+                    <button id="close-filter" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                    <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Filters</h2>
 
-                    <!-- Occasion Filter -->
-                    @if (isset($occasions) && $occasions->isNotEmpty())
-                    <div class="mb-6">
-                        <h3 class="font-semibold text-gray-900 mb-3">Occasion</h3>
-                        <div class="space-y-2">
-                            @foreach ($occasions as $occasion)
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="occasion[]" value="{{ $occasion->id }}"
-                                    class="occasion-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                                <span class="text-sm text-gray-700">{{ $occasion->name }}</span>
-                            </label>
-                            @endforeach
+                        <!-- Occasion Filter -->
+                        @if (isset($occasions) && $occasions->isNotEmpty())
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-900 mb-3">Occasion</h3>
+                            <div class="space-y-2">
+                                @foreach ($occasions as $occasion)
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="occasion[]" value="{{ $occasion->id }}"
+                                        class="occasion-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                                    <span class="text-sm text-gray-700">{{ $occasion->name }}</span>
+                                </label>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                    @endif
+                        @endif
 
-                    <!-- Custom Price Range Slider (Optional - can keep or remove) -->
-                    {{-- <div class="mb-6">
+                        <!-- Custom Price Range Slider (Optional - can keep or remove) -->
+                        {{-- <div class="mb-6">
             <h3 class="font-semibold text-gray-900 mb-3">Custom Price Range</h3>
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">Rs. <span id="min-price-display">{{ number_format($priceRange['min']) }}</span></span>
-                    <span class="text-sm text-gray-600">Rs. <span id="max-price-display">{{ number_format($priceRange['max']) }}</span></span>
+                        <span class="text-sm text-gray-600">Rs. <span id="max-price-display">{{ number_format($priceRange['max']) }}</span></span>
+                    </div>
+                    <input
+                        type="range"
+                        id="min-price"
+                        min="{{ $priceRange['min'] }}"
+                        max="{{ $priceRange['max'] }}"
+                        value="{{ $priceRange['min'] }}"
+                        class="w-full accent-primary">
+                    <input
+                        type="range"
+                        id="max-price"
+                        min="{{ $priceRange['min'] }}"
+                        max="{{ $priceRange['max'] }}"
+                        value="{{ $priceRange['max'] }}"
+                        class="w-full accent-primary">
                 </div>
-                <input
-                    type="range"
-                    id="min-price"
-                    min="{{ $priceRange['min'] }}"
-                    max="{{ $priceRange['max'] }}"
-                    value="{{ $priceRange['min'] }}"
-                    class="w-full accent-primary">
-                <input
-                    type="range"
-                    id="max-price"
-                    min="{{ $priceRange['min'] }}"
-                    max="{{ $priceRange['max'] }}"
-                    value="{{ $priceRange['max'] }}"
-                    class="w-full accent-primary">
+            </div> --}}
+
+            <!-- Size Filter -->
+            @if (isset($sizes) && $sizes->isNotEmpty())
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-900 mb-3">Size</h3>
+                <div class="space-y-2">
+                    @foreach ($sizes as $size)
+                    @php
+                    $sizeId = is_object($size) ? $size->id : $size;
+                    $sizeName = is_object($size) ? $size->name : $size;
+                    $sizeCode = is_object($size) && isset($size->code) ? $size->code : '';
+                    $displayText = $sizeCode ? "$sizeCode" : $sizeName;
+                    @endphp
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="size[]" value="{{ $displayText }}"
+                            class="size-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                        <span class="text-sm text-gray-700">{{ $displayText }}</span>
+                    </label>
+                    @endforeach
+                </div>
             </div>
-        </div> --}}
+            @endif
 
-        <!-- Size Filter -->
-        @if (isset($sizes) && $sizes->isNotEmpty())
-        <div class="mb-6">
-            <h3 class="font-semibold text-gray-900 mb-3">Size</h3>
-            <div class="space-y-2">
-                @foreach ($sizes as $size)
-                @php
-                $sizeId = is_object($size) ? $size->id : $size;
-                $sizeName = is_object($size) ? $size->name : $size;
-                $sizeCode = is_object($size) && isset($size->code) ? $size->code : '';
-                $displayText = $sizeCode ? "$sizeCode" : $sizeName;
-                @endphp
-                <label class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" name="size[]" value="{{ $displayText }}"
-                        class="size-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                    <span class="text-sm text-gray-700">{{ $displayText }}</span>
-                </label>
-                @endforeach
+            <!-- Color Filter -->
+            @if (isset($colors) && $colors->isNotEmpty())
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-900 mb-3">Color</h3>
+                <div class="space-y-2">
+                    @foreach ($colors as $color)
+                    @php
+                    $colorId = is_object($color) ? $color->id : $color;
+                    $colorName = is_object($color) ? $color->name : $color;
+                    @endphp
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="color[]" value="{{ $colorId }}"
+                            class="color-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                        <span class="text-sm text-gray-700">{{ $colorName }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+
+            <!-- Price Range Filter - Dynamic from Product Variants -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
+                <div class="space-y-2">
+                    @foreach ($priceRanges as $range)
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="price_range[]" value="{{ $range['value'] }}"
+                            class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
+                        <span class="text-sm text-gray-700">{{ $range['label'] }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div id="active-filters" class="mb-4 hidden">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2">Active Filters:</h4>
+                <div id="filter-tags" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Filter Actions -->
+            <div class="flex gap-2 mt-4">
+                <button id="clear-filters"
+                    class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                    Clear Filters
+                </button>
             </div>
         </div>
-        @endif
-
-        <!-- Color Filter -->
-        @if (isset($colors) && $colors->isNotEmpty())
-        <div class="mb-6">
-            <h3 class="font-semibold text-gray-900 mb-3">Color</h3>
-            <div class="space-y-2">
-                @foreach ($colors as $color)
-                @php
-                $colorId = is_object($color) ? $color->id : $color;
-                $colorName = is_object($color) ? $color->name : $color;
-                @endphp
-                <label class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" name="color[]" value="{{ $colorId }}"
-                        class="color-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                    <span class="text-sm text-gray-700">{{ $colorName }}</span>
-                </label>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
-
-        <!-- Price Range Filter - Dynamic from Product Variants -->
-        <div class="mb-6">
-            <h3 class="font-semibold text-gray-900 mb-3">Price</h3>
-            <div class="space-y-2">
-                @foreach ($priceRanges as $range)
-                <label class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" name="price_range[]" value="{{ $range['value'] }}"
-                        class="price-range-filter rounded border-gray-300 text-primary focus:ring-primary filter-checkbox">
-                    <span class="text-sm text-gray-700">{{ $range['label'] }}</span>
-                </label>
-                @endforeach
-            </div>
-        </div>
-
-        <!-- Active Filters Display -->
-        <div id="active-filters" class="mb-4 hidden">
-            <h4 class="text-sm font-semibold text-gray-700 mb-2">Active Filters:</h4>
-            <div id="filter-tags" class="flex flex-wrap gap-2"></div>
-        </div>
-
-        <!-- Filter Actions -->
-        <div class="flex gap-2 mt-4">
-            <button id="clear-filters"
-                class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-                Clear Filters
-            </button>
-        </div>
-    </div>
     </div>
 
     <!-- Products Grid -->
@@ -851,7 +851,7 @@
                     {{ $category->title ?? ($category->name ?? 'Products') }}
                 </h1>
 
-              
+
             </div>
 
 
@@ -873,11 +873,11 @@
 
         <div class="pb-4 border-b border-gray-200/80 mb-[10px]">
 
-              @if (isset($category->about))
-                <p class="mt-1 text-p-sm text-gray-600  leading-relaxed">
-                    {{ $category->about }}
-                </p>
-                @endif
+            @if (isset($category->about))
+            <p class="mt-1 text-p-sm text-gray-600  leading-relaxed">
+                {{ $category->about }}
+            </p>
+            @endif
         </div>
 
         <!-- Products Count -->
@@ -890,17 +890,6 @@
         @include('web.partials.category-grid', ['products' => $products])
     </div>
 
-    <!-- Pagination Wrapper -->
-     {{--
-<div id="pagination-wrapper">
-    @if ($products->hasPages())
-    <div class="mt-8">
-        {{ $products->links() }}
-    </div>
-    @endif
-</div>
-
---}}
 
     <!-- Loading Spinner -->
     <div id="loading-spinner" class="hidden text-center py-8">
@@ -909,13 +898,7 @@
         </div>
     </div>
 
-    <!-- Pagination -->
-    
-    @if ($products->hasPages())
-    <div class="mt-8">
-        {{ $products->links() }}
-    </div>
-    @endif
+
     </div>
     @else
     <div class="container mx-auto">
@@ -924,10 +907,10 @@
         </div>
     </div>
     @endif
-  
+
     </div>
     </div>
- </div>
+    </div>
 </section>
 
 <!-- Overlay -->
@@ -1921,7 +1904,7 @@
 
 // Replace the entire script section with this:
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize filters
         let currentFilters = {
@@ -2527,13 +2510,13 @@
                     if (productsCountDiv && data.data.pagination) {
                         const pagination = data.data.pagination;
                         productsCountDiv.innerHTML = `Showing ${pagination.from} - ${pagination.to} of ${pagination.total} products`;
-                        
-                         currentFilters.lastPage = pagination.last_page;
+
+                        currentFilters.lastPage = pagination.last_page;
                     }
 
-                       if (data.data.pagination) {
-                updatePagination(data.data.pagination);
-            }
+                    if (data.data.pagination) {
+                        updatePagination(data.data.pagination);
+                    }
                     // Update pagination
                     // updatePagination(data.data.pagination);
 
@@ -2766,60 +2749,60 @@
         // }
 
         function updatePagination(pagination) {
-    // Find or create pagination wrapper
-    let paginationWrapper = document.getElementById('pagination-wrapper');
-    
-    // If wrapper doesn't exist, create it
-    if (!paginationWrapper) {
-        paginationWrapper = document.createElement('div');
-        paginationWrapper.id = 'pagination-wrapper';
-        paginationWrapper.className = 'mt-8';
-        
-        // Insert after products container
-        if (productsContainer && productsContainer.parentNode) {
-            productsContainer.parentNode.insertBefore(paginationWrapper, productsContainer.nextSibling);
-        }
-    }
+            // Find or create pagination wrapper
+            let paginationWrapper = document.getElementById('pagination-wrapper');
 
-    // Clear existing pagination
-    paginationWrapper.innerHTML = '';
+            // If wrapper doesn't exist, create it
+            if (!paginationWrapper) {
+                paginationWrapper = document.createElement('div');
+                paginationWrapper.id = 'pagination-wrapper';
+                paginationWrapper.className = 'mt-8';
 
-    // If only one page, hide pagination
-    if (pagination.last_page <= 1) {
-        paginationWrapper.style.display = 'none';
-        return;
-    }
+                // Insert after products container
+                if (productsContainer && productsContainer.parentNode) {
+                    productsContainer.parentNode.insertBefore(paginationWrapper, productsContainer.nextSibling);
+                }
+            }
 
-    paginationWrapper.style.display = 'block';
+            // Clear existing pagination
+            paginationWrapper.innerHTML = '';
 
-    // Build pagination HTML
-    let html = '<nav class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6" aria-label="Pagination">';
-    
-    // Mobile view
-    html += '<div class="flex flex-1 justify-between sm:hidden">';
-    html += `<a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}" 
+            // If only one page, hide pagination
+            if (pagination.last_page <= 1) {
+                paginationWrapper.style.display = 'none';
+                return;
+            }
+
+            paginationWrapper.style.display = 'block';
+
+            // Build pagination HTML
+            let html = '<nav class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6" aria-label="Pagination">';
+
+            // Mobile view
+            html += '<div class="flex flex-1 justify-between sm:hidden">';
+            html += `<a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}" 
                onclick="changePage(${pagination.current_page - 1}); return false;">
                 Previous
             </a>`;
-    html += `<a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+            html += `<a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
                onclick="changePage(${pagination.current_page + 1}); return false;">
                 Next
             </a>`;
-    html += '</div>';
+            html += '</div>';
 
-    // Desktop view
-    html += '<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">';
-    html += `<div>
+            // Desktop view
+            html += '<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">';
+            html += `<div>
                 <p class="text-sm text-gray-700">
                     Showing <span class="font-medium">${pagination.from || 0}</span> 
                     to <span class="font-medium">${pagination.to || 0}</span> 
                     of <span class="font-medium">${pagination.total || 0}</span> results
                 </p>
             </div>`;
-    html += '<div><nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">';
+            html += '<div><nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">';
 
-    // Previous page
-    html += `<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+            // Previous page
+            html += `<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.prev_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
                onclick="changePage(${pagination.current_page - 1}); return false;">
                 <span class="sr-only">Previous</span>
                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -2827,34 +2810,34 @@
                 </svg>
             </a>`;
 
-    // Page numbers
-    const startPage = Math.max(1, pagination.current_page - 2);
-    const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
+            // Page numbers
+            const startPage = Math.max(1, pagination.current_page - 2);
+            const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
 
-    if (startPage > 1) {
-        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            if (startPage > 1) {
+                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                    onclick="changePage(1); return false;">1</a>`;
-        if (startPage > 2) {
-            html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
-        }
-    }
+                if (startPage > 2) {
+                    html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+                }
+            }
 
-    for (let i = startPage; i <= endPage; i++) {
-        const isCurrent = i === pagination.current_page;
-        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ${isCurrent ? 'bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}"
+            for (let i = startPage; i <= endPage; i++) {
+                const isCurrent = i === pagination.current_page;
+                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold ${isCurrent ? 'bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'}"
                    onclick="changePage(${i}); return false;">${i}</a>`;
-    }
+            }
 
-    if (endPage < pagination.last_page) {
-        if (endPage < pagination.last_page - 1) {
-            html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
-        }
-        html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            if (endPage < pagination.last_page) {
+                if (endPage < pagination.last_page - 1) {
+                    html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300">...</span>`;
+                }
+                html += `<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                    onclick="changePage(${pagination.last_page}); return false;">${pagination.last_page}</a>`;
-    }
+            }
 
-    // Next page
-    html += `<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
+            // Next page
+            html += `<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${pagination.next_page_url ? '' : 'opacity-50 cursor-not-allowed pointer-events-none'}"
                onclick="changePage(${pagination.current_page + 1}); return false;">
                 <span class="sr-only">Next</span>
                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -2862,10 +2845,10 @@
                 </svg>
             </a>`;
 
-    html += '</nav></div></div></nav>';
-    
-    paginationWrapper.innerHTML = html;
-}
+            html += '</nav></div></div></nav>';
+
+            paginationWrapper.innerHTML = html;
+        }
 
         // function changePage(page) {
         //     if (!currentFilters) return;
@@ -2877,68 +2860,1035 @@
         // }
 
         function changePage(page) {
-    if (!currentFilters) return;
-    if (page < 1 || page > currentFilters.lastPage) return;
-    
-    currentFilters.page = page;
-    applyFilters();
-    
-    // Scroll to top of products
-    if (productsContainer) {
-        const topOffset = productsContainer.getBoundingClientRect().top + window.pageYOffset - 100;
-        window.scrollTo({ behavior: 'smooth', top: topOffset });
-    }
-}
-function initializePagination() {
-    const paginationWrapper = document.getElementById('pagination-wrapper');
-    if (!paginationWrapper) return;
-    
-    // Get pagination data from the existing pagination links
-    const paginationLinks = document.querySelector('.mt-8');
-    if (!paginationLinks) return;
-    
-    // Extract pagination data from the existing HTML
-    const currentPage = parseInt(document.querySelector('.page-item.active .page-link')?.textContent || 1);
-    const totalPages = parseInt(document.querySelector('.page-item:last-child .page-link')?.textContent || 1);
-    
-    // Get the showing text
-    const showingText = document.querySelector('.text-sm.text-gray-700');
-    let from = 0, to = 0, total = 0;
-    if (showingText) {
-        const match = showingText.textContent.match(/Showing\s+(\d+)\s+to\s+(\d+)\s+of\s+(\d+)/);
-        if (match) {
-            from = parseInt(match[1]);
-            to = parseInt(match[2]);
-            total = parseInt(match[3]);
+            if (!currentFilters) return;
+            if (page < 1 || page > currentFilters.lastPage) return;
+
+            currentFilters.page = page;
+            applyFilters();
+
+            // Scroll to top of products
+            if (productsContainer) {
+                const topOffset = productsContainer.getBoundingClientRect().top + window.pageYOffset - 100;
+                window.scrollTo({
+                    behavior: 'smooth',
+                    top: topOffset
+                });
+            }
         }
+
+        function initializePagination() {
+            const paginationWrapper = document.getElementById('pagination-wrapper');
+            if (!paginationWrapper) return;
+
+            // Get pagination data from the existing pagination links
+            const paginationLinks = document.querySelector('.mt-8');
+            if (!paginationLinks) return;
+
+            // Extract pagination data from the existing HTML
+            const currentPage = parseInt(document.querySelector('.page-item.active .page-link')?.textContent || 1);
+            const totalPages = parseInt(document.querySelector('.page-item:last-child .page-link')?.textContent || 1);
+
+            // Get the showing text
+            const showingText = document.querySelector('.text-sm.text-gray-700');
+            let from = 0,
+                to = 0,
+                total = 0;
+            if (showingText) {
+                const match = showingText.textContent.match(/Showing\s+(\d+)\s+to\s+(\d+)\s+of\s+(\d+)/);
+                if (match) {
+                    from = parseInt(match[1]);
+                    to = parseInt(match[2]);
+                    total = parseInt(match[3]);
+                }
+            }
+
+            // Get previous and next URLs
+            const prevLink = document.querySelector('.page-item:first-child .page-link');
+            const nextLink = document.querySelector('.page-item:last-child .page-link');
+
+            const paginationData = {
+                total: total || 0,
+                per_page: 12,
+                current_page: currentPage || 1,
+                last_page: totalPages || 1,
+                from: from || 0,
+                to: to || 0,
+                prev_page_url: prevLink?.href || null,
+                next_page_url: nextLink?.href || null
+            };
+
+            // Store in currentFilters
+            if (typeof currentFilters !== 'undefined') {
+                currentFilters.lastPage = paginationData.last_page;
+                currentFilters.page = paginationData.current_page;
+            }
+
+            // Replace with our custom pagination if more than one page
+            if (paginationData.last_page > 1) {
+                updatePagination(paginationData);
+            }
+        }
+
+        function showErrorMessage(message) {
+            if (!productsContainer) return;
+            productsContainer.innerHTML = `
+                <div class="col-span-full text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Error loading products</h3>
+                    <p class="mt-1 text-sm text-gray-500">${message}</p>
+                    <button onclick="applyFilters()" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // ──────────────────────────────────────────────
+        //  Attach Product Card Handlers
+        // ──────────────────────────────────────────────
+
+        function attachProductCardHandlers() {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('button') || e.target.closest('a')) {
+                        return;
+                    }
+                    const productSlug = this.getAttribute('data-product-slug');
+                    if (productSlug) {
+                        window.location.href = `/products/${productSlug}`;
+                    }
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Setup Filter Checkboxes
+        // ──────────────────────────────────────────────
+
+        function setupFilterCheckboxes() {
+            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Setup Clear Filters Button
+        // ──────────────────────────────────────────────
+
+        function setupClearFilters() {
+            const clearFiltersBtn = document.getElementById('clear-filters');
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', function() {
+                    document.querySelectorAll('.price-range-filter, .size-filter, .color-filter, .occasion-filter').forEach(cb => {
+                        cb.checked = false;
+                    });
+
+                    // Reset collection
+                    const collectionOptions = document.querySelectorAll('.collection-option');
+                    collectionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultCollection = document.querySelector('.collection-option[data-value="all"]');
+                    if (defaultCollection) {
+                        defaultCollection.classList.add('active');
+                        const checkmark = defaultCollection.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.collection = 'all';
+                        document.getElementById('collection-label').textContent = 'Collection';
+                    }
+
+                    // Reset filter
+                    const filterOptions = document.querySelectorAll('.filter-option');
+                    filterOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultFilter = document.querySelector('.filter-option[data-value="new-arrival"]');
+                    if (defaultFilter) {
+                        defaultFilter.classList.add('active');
+                        const checkmark = defaultFilter.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.filter = 'new-arrival';
+                        document.getElementById('filter-label').textContent = 'Filter';
+                    }
+
+                    // Reset sort
+                    const sortOptions = document.querySelectorAll('.sort-option');
+                    sortOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    const defaultSort = document.querySelector('.sort-option[data-value="date-desc"]');
+                    if (defaultSort) {
+                        defaultSort.classList.add('active');
+                        const checkmark = defaultSort.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '1';
+                        currentFilters.sort = 'date-desc';
+                        document.getElementById('sort-label').textContent = 'Sort by';
+                    }
+
+                    // Reset occasion
+                    const occasionOptions = document.querySelectorAll('.occasion-option');
+                    occasionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+                    currentFilters.occasions = [];
+                    document.getElementById('occasion-label').textContent = 'Occasion';
+
+                    applyFilters();
+                });
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Initialize
+        // ──────────────────────────────────────────────
+
+        function init() {
+            setupCollectionDropdown();
+            setupFilterDropdown();
+            setupOccasionDropdown();
+            setupSortDropdown();
+            setupFilterCheckboxes();
+            setupClearFilters();
+            attachProductCardHandlers();
+
+            document.addEventListener('click', function(e) {
+                const isClickInsideDropdown = e.target.closest('.relative.inline-block.text-left');
+                if (!isClickInsideDropdown) {
+                    closeAllDropdowns();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Initial load
+            applyFilters();
+        }
+
+        init();
+    });
+
+    // Wishlist toggle function
+    function toggleWishlist(productId, button, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (!productId) {
+            alert('Product ID not found');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const isInWishlist = button.classList.contains('text-red-500');
+        const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
+
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (isInWishlist) {
+                        button.classList.remove('text-red-500');
+                        button.innerHTML = '<i class="far fa-heart"></i>';
+                    } else {
+                        button.classList.add('text-red-500');
+                        button.innerHTML = '<i class="fas fa-heart"></i>';
+                    }
+                } else {
+                    button.classList.add('text-red-500');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
     }
-    
-    // Get previous and next URLs
-    const prevLink = document.querySelector('.page-item:first-child .page-link');
-    const nextLink = document.querySelector('.page-item:last-child .page-link');
-    
-    const paginationData = {
-        total: total || 0,
-        per_page: 12,
-        current_page: currentPage || 1,
-        last_page: totalPages || 1,
-        from: from || 0,
-        to: to || 0,
-        prev_page_url: prevLink?.href || null,
-        next_page_url: nextLink?.href || null
-    };
-    
-    // Store in currentFilters
-    if (typeof currentFilters !== 'undefined') {
-        currentFilters.lastPage = paginationData.last_page;
-        currentFilters.page = paginationData.current_page;
-    }
-    
-    // Replace with our custom pagination if more than one page
-    if (paginationData.last_page > 1) {
-        updatePagination(paginationData);
-    }
-}
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize filters
+        let currentFilters = {
+            priceRanges: [],
+            customPrice: {
+                min: 0,
+                max: 10000
+            },
+            sizes: [],
+            colors: [],
+            occasions: [],
+            filter: 'new-arrival',
+            collection: '', // Will be set dynamically
+            sort: 'date-desc',
+            perPage: 12
+        };
+
+        let filterTimeout;
+        let isLoading = false;
+
+        // DOM Elements
+        const productsContainer = document.getElementById('products-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const productsCountDiv = document.getElementById('products-count');
+
+        // Get category slug from the page
+        const categorySlug = window.location.pathname.split('/').pop();
+
+        // Track currently open dropdown
+        let currentlyOpenDropdown = null;
+
+        // ──────────────────────────────────────────────
+        //  Dropdown Management Functions
+        // ──────────────────────────────────────────────
+
+        function closeAllDropdowns() {
+            const dropdowns = ['filter-menu', 'occasion-menu', 'collection-menu', 'sort-menu'];
+            const buttons = {
+                'filter-menu': {
+                    button: 'filter-dropdown-button',
+                    chevron: 'filter-chevron'
+                },
+                'occasion-menu': {
+                    button: 'occasion-dropdown-button',
+                    chevron: 'occasion-chevron'
+                },
+                'collection-menu': {
+                    button: 'collection-dropdown-button',
+                    chevron: 'collection-chevron'
+                },
+                'sort-menu': {
+                    button: 'sort-button',
+                    chevron: 'chevron-icon'
+                }
+            };
+
+            dropdowns.forEach(menuId => {
+                const menu = document.getElementById(menuId);
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    const btnConfig = buttons[menuId];
+                    if (btnConfig) {
+                        const chevron = document.getElementById(btnConfig.chevron);
+                        if (chevron) chevron.style.transform = 'rotate(0deg)';
+                        const button = document.getElementById(btnConfig.button);
+                        if (button) button.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+            currentlyOpenDropdown = null;
+        }
+
+        function setupDropdownToggle(buttonId, menuId, chevronId) {
+            const button = document.getElementById(buttonId);
+            const menu = document.getElementById(menuId);
+            const chevron = document.getElementById(chevronId);
+
+            if (!button || !menu || !chevron) return;
+
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                const isHidden = menu.classList.contains('hidden');
+
+                if (!isHidden) {
+                    menu.classList.add('hidden');
+                    chevron.style.transform = 'rotate(0deg)';
+                    button.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+                    return;
+                }
+
+                closeAllDropdowns();
+
+                menu.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+                button.setAttribute('aria-expanded', 'true');
+                currentlyOpenDropdown = menuId;
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Collection Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupCollectionDropdown() {
+            const collectionMenu = document.getElementById('collection-menu');
+            const collectionButton = document.getElementById('collection-dropdown-button');
+            const collectionChevron = document.getElementById('collection-chevron');
+            const collectionLabel = document.getElementById('collection-label');
+
+            const collectionOptions = document.querySelectorAll('.collection-option');
+
+            if (!collectionMenu || !collectionButton || !collectionChevron || !collectionLabel) {
+                console.warn('Collection dropdown elements not found');
+                return;
+            }
+
+            setupDropdownToggle('collection-dropdown-button', 'collection-menu', 'collection-chevron');
+
+            let defaultActive = false;
+            collectionOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.collection = value;
+                    collectionLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            if (!defaultActive && collectionOptions.length > 0) {
+                const firstOption = collectionOptions[0];
+                firstOption.classList.add('active');
+                const checkmark = firstOption.querySelector('.checkmark');
+                if (checkmark) checkmark.style.opacity = '1';
+                const value = firstOption.getAttribute('data-value');
+                const text = firstOption.querySelector('span').textContent;
+                currentFilters.collection = value;
+                collectionLabel.textContent = text;
+            }
+
+            collectionOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+
+                    collectionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+
+                    currentFilters.collection = value;
+                    collectionLabel.textContent = text;
+
+                    collectionMenu.classList.add('hidden');
+                    collectionChevron.style.transform = 'rotate(0deg)';
+                    collectionButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Filter Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupFilterDropdown() {
+            const filterMenu = document.getElementById('filter-menu');
+            const filterButton = document.getElementById('filter-dropdown-button');
+            const filterChevron = document.getElementById('filter-chevron');
+            const filterLabel = document.getElementById('filter-label');
+            const filterOptions = document.querySelectorAll('.filter-option');
+
+            if (!filterMenu || !filterButton || !filterChevron || !filterLabel) return;
+
+            setupDropdownToggle('filter-dropdown-button', 'filter-menu', 'filter-chevron');
+
+            let defaultActive = false;
+            filterOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.filter = value;
+                    filterLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            if (!defaultActive && filterOptions.length > 0) {
+                const defaultOption = document.querySelector('.filter-option[data-value="new-arrival"]');
+                if (defaultOption) {
+                    defaultOption.classList.add('active');
+                    const checkmark = defaultOption.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    const text = defaultOption.querySelector('span').textContent;
+                    currentFilters.filter = 'new-arrival';
+                    filterLabel.textContent = text;
+                }
+            }
+
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+
+                    filterOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+
+                    currentFilters.filter = value;
+                    filterLabel.textContent = text;
+
+                    filterMenu.classList.add('hidden');
+                    filterChevron.style.transform = 'rotate(0deg)';
+                    filterButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Occasion Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupOccasionDropdown() {
+            const occasionMenu = document.getElementById('occasion-menu');
+            const occasionButton = document.getElementById('occasion-dropdown-button');
+            const occasionChevron = document.getElementById('occasion-chevron');
+            const occasionLabel = document.getElementById('occasion-label');
+            const occasionOptions = document.querySelectorAll('.occasion-option');
+
+            if (!occasionMenu || !occasionButton || !occasionChevron || !occasionLabel) return;
+
+            setupDropdownToggle('occasion-dropdown-button', 'occasion-menu', 'occasion-chevron');
+
+            occasionOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+
+                    occasionOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+
+                    // Update both dropdown and sidebar checkboxes
+                    currentFilters.occasions = [value];
+                    occasionLabel.textContent = text;
+
+                    // Also check the sidebar checkbox if it exists
+                    document.querySelectorAll('.occasion-filter').forEach(cb => {
+                        cb.checked = cb.value === value;
+                    });
+
+                    occasionMenu.classList.add('hidden');
+                    occasionChevron.style.transform = 'rotate(0deg)';
+                    occasionButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Sort Dropdown Setup
+        // ──────────────────────────────────────────────
+
+        function setupSortDropdown() {
+            const sortMenu = document.getElementById('sort-menu');
+            const sortButton = document.getElementById('sort-button');
+            const sortChevron = document.getElementById('chevron-icon');
+            const sortLabel = document.getElementById('sort-label');
+            const sortOptions = document.querySelectorAll('.sort-option');
+
+            if (!sortMenu || !sortButton || !sortChevron || !sortLabel) return;
+
+            setupDropdownToggle('sort-button', 'sort-menu', 'chevron-icon');
+
+            let defaultActive = false;
+            sortOptions.forEach(option => {
+                if (option.classList.contains('active')) {
+                    const value = option.getAttribute('data-value');
+                    const text = option.querySelector('span').textContent;
+                    currentFilters.sort = value;
+                    sortLabel.textContent = text;
+                    defaultActive = true;
+                }
+            });
+
+            if (!defaultActive && sortOptions.length > 0) {
+                const defaultOption = document.querySelector('.sort-option[data-value="date-desc"]');
+                if (defaultOption) {
+                    defaultOption.classList.add('active');
+                    const checkmark = defaultOption.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    const text = defaultOption.querySelector('span').textContent;
+                    currentFilters.sort = 'date-desc';
+                    sortLabel.textContent = text;
+                }
+            }
+
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+
+                    const value = this.getAttribute('data-value');
+                    const text = this.querySelector('span').textContent;
+
+                    sortOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkmark = opt.querySelector('.checkmark');
+                        if (checkmark) checkmark.style.opacity = '0';
+                    });
+
+                    this.classList.add('active');
+                    const selectedCheckmark = this.querySelector('.checkmark');
+                    if (selectedCheckmark) selectedCheckmark.style.opacity = '1';
+
+                    currentFilters.sort = value;
+                    sortLabel.textContent = text;
+
+                    sortMenu.classList.add('hidden');
+                    sortChevron.style.transform = 'rotate(0deg)';
+                    sortButton.setAttribute('aria-expanded', 'false');
+                    currentlyOpenDropdown = null;
+
+                    applyFilters();
+                });
+            });
+        }
+
+        // ──────────────────────────────────────────────
+        //  Collect Filters Function
+        // ──────────────────────────────────────────────
+
+        function collectFilters() {
+            // Price ranges
+            currentFilters.priceRanges = Array.from(document.querySelectorAll('.price-range-filter:checked')).map(cb => cb.value);
+
+            // Sizes
+            currentFilters.sizes = Array.from(document.querySelectorAll('.size-filter:checked')).map(cb => cb.value);
+
+            // Colors
+            currentFilters.colors = Array.from(document.querySelectorAll('.color-filter:checked')).map(cb => cb.value);
+
+            // Occasions - check both dropdown and sidebar
+            const dropdownOccasion = document.querySelector('.occasion-option.active');
+            const sidebarOccasions = Array.from(document.querySelectorAll('.occasion-filter:checked')).map(cb => cb.value);
+
+            if (dropdownOccasion) {
+                currentFilters.occasions = [dropdownOccasion.getAttribute('data-value')];
+            } else if (sidebarOccasions.length > 0) {
+                currentFilters.occasions = sidebarOccasions;
+            } else {
+                currentFilters.occasions = [];
+            }
+
+            // Collection - get from dropdown
+            const collectionOption = document.querySelector('.collection-option.active');
+            if (collectionOption) {
+                currentFilters.collection = collectionOption.getAttribute('data-value');
+            }
+
+            // Filter and Sort are already updated via dropdown clicks
+        }
+
+        // ──────────────────────────────────────────────
+        //  Update Active Filters Display
+        // ──────────────────────────────────────────────
+
+        function updateActiveFiltersDisplay() {
+            const activeFiltersDiv = document.getElementById('active-filters');
+            const filterTagsDiv = document.getElementById('filter-tags');
+
+            if (!activeFiltersDiv || !filterTagsDiv) return;
+
+            const activeFilters = [];
+
+            // Add collection filter
+            const collectionOption = document.querySelector('.collection-option.active');
+            if (collectionOption && collectionOption.getAttribute('data-value') !== 'all') {
+                const text = collectionOption.querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'collection',
+                    text: `Collection: ${text}`,
+                    value: collectionOption.getAttribute('data-value')
+                });
+            }
+
+            // Add filter type
+            const filterOption = document.querySelector('.filter-option.active');
+            if (filterOption) {
+                const text = filterOption.querySelector('span').textContent;
+                if (text !== 'Filter') {
+                    activeFilters.push({
+                        type: 'filter',
+                        text: text,
+                        value: filterOption.getAttribute('data-value')
+                    });
+                }
+            }
+
+            // Add price range filters
+            document.querySelectorAll('.price-range-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'price',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add size filters
+            document.querySelectorAll('.size-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'size',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add color filters
+            document.querySelectorAll('.color-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'color',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            // Add occasion filters
+            const occasionActive = document.querySelector('.occasion-option.active');
+            if (occasionActive) {
+                const text = occasionActive.querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'occasion',
+                    text: `Occasion: ${text}`,
+                    value: occasionActive.getAttribute('data-value')
+                });
+            }
+
+            document.querySelectorAll('.occasion-filter:checked').forEach(cb => {
+                const label = cb.closest('label').querySelector('span').textContent;
+                activeFilters.push({
+                    type: 'occasion',
+                    text: label,
+                    value: cb.value
+                });
+            });
+
+            if (activeFilters.length > 0) {
+                activeFiltersDiv.classList.remove('hidden');
+                filterTagsDiv.innerHTML = activeFilters.map(filter => `
+                    <span class="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                        ${filter.text}
+                        <button onclick="removeFilter('${filter.type}', '${filter.value || ''}')" class="hover:text-primary-dark">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </span>
+                `).join('');
+            } else {
+                activeFiltersDiv.classList.add('hidden');
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Remove Filter
+        // ──────────────────────────────────────────────
+
+        window.removeFilter = function(type, value) {
+            if (type === 'collection') {
+                const collectionOptions = document.querySelectorAll('.collection-option');
+                collectionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                const defaultCollection = document.querySelector('.collection-option[data-value="all"]');
+                if (defaultCollection) {
+                    defaultCollection.classList.add('active');
+                    const checkmark = defaultCollection.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.collection = 'all';
+                    document.getElementById('collection-label').textContent = 'Collection';
+                }
+            } else if (type === 'filter') {
+                const filterOptions = document.querySelectorAll('.filter-option');
+                filterOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                const defaultFilter = document.querySelector('.filter-option[data-value="new-arrival"]');
+                if (defaultFilter) {
+                    defaultFilter.classList.add('active');
+                    const checkmark = defaultFilter.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '1';
+                    currentFilters.filter = 'new-arrival';
+                    document.getElementById('filter-label').textContent = 'Filter';
+                }
+            } else if (type === 'price') {
+                document.querySelectorAll(`.price-range-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            } else if (type === 'size') {
+                document.querySelectorAll(`.size-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            } else if (type === 'color') {
+                document.querySelectorAll(`.color-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+            } else if (type === 'occasion') {
+                document.querySelectorAll(`.occasion-filter[value="${value}"]`).forEach(cb => cb.checked = false);
+                const occasionOptions = document.querySelectorAll('.occasion-option');
+                occasionOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    const checkmark = opt.querySelector('.checkmark');
+                    if (checkmark) checkmark.style.opacity = '0';
+                });
+                currentFilters.occasions = [];
+                document.getElementById('occasion-label').textContent = 'Occasion';
+            }
+
+            applyFilters();
+        };
+
+        // ──────────────────────────────────────────────
+        //  Apply Filters - Updated for API (No Pagination)
+        // ──────────────────────────────────────────────
+
+        async function applyFilters() {
+            if (isLoading) return;
+
+            collectFilters();
+            updateActiveFiltersDisplay();
+
+            // Show loading
+            isLoading = true;
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+            if (productsContainer) productsContainer.style.opacity = '0.5';
+
+            // Build query string - NO PAGE PARAMETER
+            const params = new URLSearchParams({
+                price_ranges: JSON.stringify(currentFilters.priceRanges),
+                custom_min_price: currentFilters.customPrice.min,
+                custom_max_price: currentFilters.customPrice.max,
+                sizes: JSON.stringify(currentFilters.sizes),
+                colors: JSON.stringify(currentFilters.colors),
+                occasions: JSON.stringify(currentFilters.occasions),
+                filter: currentFilters.filter,
+                collection: currentFilters.collection,
+                sort: currentFilters.sort,
+                per_page: currentFilters.perPage || 12
+                // page parameter removed
+            });
+
+            console.log('Applying filters with params:', params.toString());
+
+            try {
+                // Use the API endpoint
+                const response = await fetch(`/api/products/category/${categorySlug}/filter?${params.toString()}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success && productsContainer) {
+                    // Render products using the API data
+                    renderProducts(data.data.products);
+
+                    // Update products count - using the count from API
+                    if (productsCountDiv && data.data.pagination) {
+                        const pagination = data.data.pagination;
+                        productsCountDiv.innerHTML = `Showing ${pagination.from || 0} - ${pagination.to || 0} of ${pagination.total || 0} products`;
+                    }
+
+                    // Re-attach product card handlers
+                    attachProductCardHandlers();
+                } else {
+                    console.error('API returned error:', data.error || 'Unknown error');
+                    showErrorMessage('Failed to load products. Please try again.');
+                }
+            } catch (error) {
+                console.error('Filter error:', error);
+                showErrorMessage('Network error. Please check your connection and try again.');
+            } finally {
+                isLoading = false;
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+                if (productsContainer) productsContainer.style.opacity = '1';
+            }
+        }
+
+        // ──────────────────────────────────────────────
+        //  Render Products from API
+        // ──────────────────────────────────────────────
+
+        function renderProducts(products) {
+            if (!productsContainer) return;
+
+            if (!products || products.length === 0) {
+                productsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">No products found</h3>
+                        <p class="mt-1 text-sm text-gray-500">Try adjusting your filters or search terms.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            products.forEach(product => {
+                html += createProductCard(product);
+            });
+
+            productsContainer.innerHTML = html;
+        }
+
+        // ──────────────────────────────────────────────
+        //  Create Product Card
+        // ──────────────────────────────────────────────
+
+        function createProductCard(product) {
+            let price = product.price;
+            let discountPrice = product.discount_price;
+            let image = product.image || '/img/placeholder.jpg';
+            let stock = product.stock || 0;
+            let isInStock = stock > 0;
+
+            // If product has variants, find the lowest price
+            if (product.variants && product.variants.length > 0) {
+                const prices = product.variants.map(v => v.price).filter(p => p !== null);
+                const discountPrices = product.variants.map(v => v.discount_price).filter(p => p !== null);
+
+                if (prices.length > 0) {
+                    price = Math.min(...prices);
+                }
+                if (discountPrices.length > 0) {
+                    discountPrice = Math.min(...discountPrices);
+                }
+            }
+
+            const formattedPrice = formatPrice(price);
+            const formattedDiscountPrice = discountPrice ? formatPrice(discountPrice) : null;
+            const hasDiscount = discountPrice && discountPrice < price;
+
+            return `
+                <div class="product-card group relative bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer" 
+                     data-product-id="${product.id}" 
+                     data-product-slug="${product.slug}">
+                    <div class="image-wrapper">
+                        <img src="${image}" 
+                             alt="${product.title || product.name}" 
+                             class="product-img"
+                             loading="lazy"
+                             onerror="this.src='/img/placeholder.jpg'">
+                        
+                        ${hasDiscount ? `
+                            <div class="badge-container">
+                                <span class="discount-badge">
+                                    ${Math.round(((price - discountPrice) / price) * 100)}% OFF
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        ${!isInStock ? `
+                            <span class="absolute top-2 left-2 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                Out of Stock
+                            </span>
+                        ` : ''}
+                        
+                        <button onclick="toggleWishlist(${product.id}, this, event)" 
+                                class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-content">
+                        <h3 class="product-title" title="${product.title || product.name}">
+                            ${product.title || product.name}
+                        </h3>
+                        
+                        <div class="price-row">
+                            ${formattedDiscountPrice ? `
+                                <span class="current-price">${formattedDiscountPrice}</span>
+                                <span class="old-price">${formattedPrice}</span>
+                            ` : `
+                                <span class="current-price">${formattedPrice}</span>
+                            `}
+                        </div>
+                        
+                        ${product.variants && product.variants.length > 0 ? `
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                ${getUniqueVariants(product.variants, 'size').slice(0, 3).map(size => `
+                                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${size}</span>
+                                `).join('')}
+                                ${getUniqueVariants(product.variants, 'size').length > 3 ? `
+                                    <span class="text-xs text-gray-400">+${getUniqueVariants(product.variants, 'size').length - 3}</span>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getUniqueVariants(variants, key) {
+            const values = variants.map(v => v[key]).filter(v => v !== null && v !== '');
+            return [...new Set(values)];
+        }
+
+        function formatPrice(price) {
+            if (!price) return '₹0';
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(price);
+        }
 
         function showErrorMessage(message) {
             if (!productsContainer) return;
@@ -3147,5 +4097,4 @@ function initializePagination() {
     }
 </script>
 
-    
 @endsection
