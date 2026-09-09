@@ -18,6 +18,140 @@ class ProductFilterController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    // public function filter($slug, Request $request)
+    // {
+    //     try {
+    //         // Validate request
+    //         $validator = \Validator::make($request->all(), [
+    //             'price_ranges' => 'sometimes|json',
+    //             'custom_min_price' => 'sometimes|numeric|min:0',
+    //             'custom_max_price' => 'sometimes|numeric|min:0|gte:custom_min_price',
+    //             'sizes' => 'sometimes|json',
+    //             'colors' => 'sometimes|json',
+    //             'occasions' => 'sometimes|json',
+    //             'filter' => 'sometimes|in:best-seller,new-arrival,featured,top-rated',
+    //             'collection' => 'sometimes|string',
+    //             'sort' => 'sometimes|in:price-asc,price-desc,name-asc,name-desc,date-desc,date-asc',
+    //             'per_page' => 'sometimes|integer|min:1|max:100',
+    //             'page' => 'sometimes|integer|min:1'
+    //         ]);
+
+    //         if ($validator->fails()) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'errors' => $validator->errors()
+    //             ], 422);
+    //         }
+
+    //         // Get category
+    //         $category = Category::where('slug', $slug)
+    //             ->where('is_active', 1)
+    //             ->firstOrFail();
+
+    //         // Get category IDs (including children)
+    //         $categoryIds = [$category->id];
+
+    //         if ($category->parent_id == null) {
+    //             $childCategories = Category::where('parent_id', $category->id)
+    //                 ->where('is_active', 1)
+    //                 ->pluck('id')
+    //                 ->toArray();
+    //             $categoryIds = array_merge($categoryIds, $childCategories);
+    //         }
+
+    //         // Build base query
+    //         $query = Product::whereIn('category_id', $categoryIds)
+    //             ->where('is_active', 1)
+    //             ->whereHas('variants')
+    //             ->with(['images' => function ($query) {
+    //                 $query->select('product_id', 'image');
+    //             }, 'variants' => function ($query) {
+    //                 $query->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock');
+    //             }])
+    //             ->select('products.*')
+    //             ->distinct();
+
+    //         // Apply price range filters
+    //         $this->applyPriceRangeFilters($query, $request);
+
+    //         // Apply custom price range (slider)
+    //         $this->applyCustomPriceRange($query, $request);
+
+    //         // Apply size filter
+    //         $this->applySizeFilter($query, $request);
+
+    //         // Apply color filter
+    //         $this->applyColorFilter($query, $request);
+
+    //         // Apply occasion filter
+    //         $this->applyOccasionFilter($query, $request);
+
+    //         // Apply filter (featured, best-seller, new-arrival, top-rated)
+    //         $this->applyFilterType($query, $request);
+
+    //         // Apply collection filter
+    //         $this->applyCollectionFilter($query, $request);
+
+    //         // Apply sort
+    //         $this->applySort($query, $request);
+
+    //         // Get pagination parameters
+    //         $perPage = $request->input('per_page', 12);
+
+    //         // Execute query with pagination
+    //         try {
+    //             $products = $query->paginate($perPage);
+    //         } catch (\Exception $e) {
+    //             // Fallback query without complex joins
+    //             $query = Product::whereIn('category_id', $categoryIds)
+    //                 ->where('is_active', 1)
+    //                 ->whereHas('variants')
+    //                 ->with(['images', 'variants']);
+
+    //             $products = $query->paginate($perPage);
+    //         }
+
+    //         // Get latest products for recommendations
+    //         $latestProducts = Product::where('is_active', 1)
+    //             ->whereHas('variants')
+    //             ->with(['images' => function ($query) {
+    //                 $query->select('product_id', 'image');
+    //             }])
+    //             ->select('products.*')
+    //             ->latest()
+    //             ->take(5)
+    //             ->get();
+
+    //         // Transform products for API response
+    //         $transformedProducts = $this->transformProducts($products);
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => [
+    //                 'products' => $transformedProducts,
+    //                 'latest_products' => $this->transformProducts($latestProducts),
+    //                 'pagination' => [
+    //                     'total' => $products->total(),
+    //                     'per_page' => $products->perPage(),
+    //                     'current_page' => $products->currentPage(),
+    //                     'last_page' => $products->lastPage(),
+    //                     'from' => $products->firstItem(),
+    //                     'to' => $products->lastItem(),
+    //                     'path' => $products->path(),
+    //                     'next_page_url' => $products->nextPageUrl(),
+    //                     'prev_page_url' => $products->previousPageUrl()
+    //                 ]
+    //             ]
+    //         ]);
+
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     public function filter($slug, Request $request)
     {
         try {
@@ -31,9 +165,8 @@ class ProductFilterController extends Controller
                 'occasions' => 'sometimes|json',
                 'filter' => 'sometimes|in:best-seller,new-arrival,featured,top-rated',
                 'collection' => 'sometimes|string',
-                'sort' => 'sometimes|in:price-asc,price-desc,name-asc,name-desc,date-desc,date-asc',
-                'per_page' => 'sometimes|integer|min:1|max:100',
-                'page' => 'sometimes|integer|min:1'
+                'sort' => 'sometimes|in:price-asc,price-desc,name-asc,name-desc,date-desc,date-asc'
+                // 'per_page' and 'page' removed from validation
             ]);
 
             if ($validator->fails()) {
@@ -95,12 +228,9 @@ class ProductFilterController extends Controller
             // Apply sort
             $this->applySort($query, $request);
 
-            // Get pagination parameters
-            $perPage = $request->input('per_page', 12);
-            
-            // Execute query with pagination
+            // Execute query with NO pagination and NO limit - get ALL products
             try {
-                $products = $query->paginate($perPage);
+                $products = $query->get();
             } catch (\Exception $e) {
                 // Fallback query without complex joins
                 $query = Product::whereIn('category_id', $categoryIds)
@@ -108,7 +238,7 @@ class ProductFilterController extends Controller
                     ->whereHas('variants')
                     ->with(['images', 'variants']);
 
-                $products = $query->paginate($perPage);
+                $products = $query->get();
             }
 
             // Get latest products for recommendations
@@ -130,20 +260,10 @@ class ProductFilterController extends Controller
                 'data' => [
                     'products' => $transformedProducts,
                     'latest_products' => $this->transformProducts($latestProducts),
-                    'pagination' => [
-                        'total' => $products->total(),
-                        'per_page' => $products->perPage(),
-                        'current_page' => $products->currentPage(),
-                        'last_page' => $products->lastPage(),
-                        'from' => $products->firstItem(),
-                        'to' => $products->lastItem(),
-                        'path' => $products->path(),
-                        'next_page_url' => $products->nextPageUrl(),
-                        'prev_page_url' => $products->previousPageUrl()
-                    ]
+                    'total' => $products->count()
+                    // No pagination data returned
                 ]
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
