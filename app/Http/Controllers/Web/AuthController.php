@@ -703,7 +703,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $previousUrl = url()->previous();
+        $previousUrl = $request->input('redirect_url', url()->current());
+        // dd($previousUrl);
         // Clear remember cookies
         Cookie::queue(Cookie::forget('remember_token'));
         Cookie::queue(Cookie::forget('user_id'));
@@ -724,13 +725,13 @@ class AuthController extends Controller
             str_contains($previousUrl, '/addresses') || 
             str_contains($previousUrl, '/user/wishlist') || 
             str_contains($previousUrl, '/user/notifications') || 
-            str_contains($previousUrl, '/user/change-password' || 
+            str_contains($previousUrl, '/user/change-password') || 
             str_contains($previousUrl, '/custom-request') || 
             str_contains($previousUrl, '/wishlist') || 
             str_contains($previousUrl, '/wishlist') ||
             str_contains($previousUrl, '/cart') 
 
-            )) {
+            ) {
         return redirect('/')
             ->with('success', 'You have been logged out successfully!');
         }

@@ -1108,7 +1108,7 @@
                             @csrf
                                <input type="hidden"
                                 name="redirect_url"
-                                value="{{ url()->previous() }}">
+                                value="{{ url()->current() }}">
                             <button type="submit"
                                 class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                 <i class="fa-solid fa-right-from-bracket w-4"></i>
