@@ -703,6 +703,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $previousUrl = url()->previous();
         // Clear remember cookies
         Cookie::queue(Cookie::forget('remember_token'));
         Cookie::queue(Cookie::forget('user_id'));
@@ -717,8 +718,25 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        if (
+            str_contains($previousUrl, '/profile')||
+            str_contains($previousUrl, '/user/order-history') ||
+            str_contains($previousUrl, '/addresses') || 
+            str_contains($previousUrl, '/user/wishlist') || 
+            str_contains($previousUrl, '/user/notifications') || 
+            str_contains($previousUrl, '/user/change-password' || 
+            str_contains($previousUrl, '/custom-request') || 
+            str_contains($previousUrl, '/wishlist') || 
+            str_contains($previousUrl, '/wishlist') ||
+            str_contains($previousUrl, '/cart') 
 
-        return redirect('/login')->with('success', 'You have been logged out successfully!');
+            )) {
+        return redirect('/')
+            ->with('success', 'You have been logged out successfully!');
+        }
+        // return redirect('/login')->with('success', 'You have been logged out successfully!');
+        return redirect()->to($previousUrl)
+        ->with('success', 'You have been logged out successfully!');
     }
 
     /**
