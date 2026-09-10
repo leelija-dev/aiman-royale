@@ -584,7 +584,7 @@
                                                                     <label for="current_stock" class="form-label">Current
                                                                         Stock</label>
                                                                     <input type="number" class="form-control"
-                                                                        id="current_stock" readonly>
+                                                                        id="current_stock" name="current_stock" >
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="new_stock" class="form-label">Stock to Add
