@@ -32,12 +32,15 @@ class ProductController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('design_no', 'like', "%{$search}%")
-                    ->orWhere('brand', 'like', "%{$search}%");
+                    ->orWhere('brand', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($cat) use ($search) {
+                         $cat->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
 
-        $data = $query->paginate(10);
+        $data = $query->orderBy('created_at', 'desc')->paginate(10);
 
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $occasions = Occasion::select('id', 'name')->orderBy('name')->get();
