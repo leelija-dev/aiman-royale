@@ -10,6 +10,7 @@ use Cloudinary\Cloudinary;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class BannerController extends Controller
 {
@@ -202,6 +203,9 @@ class BannerController extends Controller
 
         Banner::create($data);
 
+        Cache::forget('home.banners.main');
+        Cache::forget('home.banners.secondary');
+
         return redirect()->route('banners.index')->with('success', 'Banner created successfully!');
     }
 
@@ -360,6 +364,9 @@ class BannerController extends Controller
 
         $banner->update($data);
 
+        Cache::forget('home.mainBanners');
+        Cache::forget('home.secondaryBanners');
+
         return redirect()->route('banners.index')->with('success', 'Banner updated successfully!');
     }
 
@@ -373,6 +380,8 @@ class BannerController extends Controller
         }
 
         $banner->delete();
+        Cache::forget('home.mainBanners');
+        Cache::forget('home.secondaryBanners');
 
         return redirect()->route('banners.index')->with('success', 'Banner deleted successfully!');
     }

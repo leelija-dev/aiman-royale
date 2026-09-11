@@ -9,6 +9,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class BannerDetailsController extends Controller
 {
@@ -157,6 +158,8 @@ class BannerDetailsController extends Controller
 
             $data['position'] = null;
             $bannerDetails = BannerDetails::create($data);
+
+            Cache::forget('home.bannerHeroSection');
             if ($bannerDetails) {
                 return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Created successfully');
             }
@@ -187,7 +190,7 @@ class BannerDetailsController extends Controller
             $bannerDetails = BannerDetails::findOrFail($id);
 
             if ($request->hasFile('image')) {
-               
+
                 if ($bannerDetails->image) {
                     $oldImagePath = storage_path('app/public/uploads/banners/' . $bannerDetails->image);
                     if (File::exists($oldImagePath)) {
@@ -272,6 +275,9 @@ class BannerDetailsController extends Controller
             $data['position'] = null;
             // dd($data);
             $bannerDetails->update($data);
+
+            Cache::forget('home.bannerHeroSection');
+
             return redirect()->route('hero-section.index')->with('success', 'Banner Hero Section Updated successfully');
             // return view('Admin.hero-section.index',compact('bannerDetails'));
         } catch (\Exception $e) {
@@ -290,7 +296,7 @@ class BannerDetailsController extends Controller
                     Cloudinary::uploadApi()->destroy($bannerDetails->mobile_screen_image_public_id);
                 }
                 $bannerDetails->delete();
-
+                Cache::forget('home.bannerHeroSection');
                 return back()->with('success', 'Banner Hero Section Deleted successfully');
             } else {
                 return back()->with('error', 'Banner Hero Section not found');
