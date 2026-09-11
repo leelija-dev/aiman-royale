@@ -4293,6 +4293,7 @@
                     })
                 })
                 .then(response => {
+                    console.log('Wishlist response status:', response.status);
                     if (response.status === 401) {
                         const currentUrl = window.location.href.split('#')[0];
                         const redirectUrl = currentUrl + '#action-buttons-section';

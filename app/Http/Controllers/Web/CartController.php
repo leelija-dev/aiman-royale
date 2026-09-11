@@ -54,14 +54,14 @@ class CartController extends Controller
             })
             ->get();
 
-               
+
         $subtotal = $cartItems->sum(function ($item) {
             //  dd($item->variant->discount_price);
 
             return (($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count);
         });
 
-        $shipping = 0;//$subtotal > 400 ? 0 : 50; // Free shipping over $400
+        $shipping = 0; //$subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
         $cartCount = $cartItems->sum('count');
 
@@ -81,8 +81,16 @@ class CartController extends Controller
                 'count' => 'required|integer|min:1',
             ]);
 
+            if (!Auth::check()) {
+                session(['guest_variant_id' => $request->variant_id]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Authentication required',
+                ], 401);
+            }
+
             $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
-            // dd($variant);
             // Check if variant is in stock
             if ($variant->stock < $request->count) {
                 return response()->json([
@@ -122,25 +130,25 @@ class CartController extends Controller
                     'price' => $variant->discount_price ?? $variant->price
                 ]);
 
-               // Track AddToCart event
-try {
-    $productData = [
-        'id'       => $variant->product_id,
-        'name'     => $variant->product->name ?? 'Product',
-        'price'    => $variant->discount_price ?? $variant->price,
-        'quantity' => $request->count,
-        'currency' => 'INR',
-    ];
+                // Track AddToCart event
+                try {
+                    $productData = [
+                        'id'       => $variant->product_id,
+                        'name'     => $variant->product->name ?? 'Product',
+                        'price'    => $variant->discount_price ?? $variant->price,
+                        'quantity' => $request->count,
+                        'currency' => 'INR',
+                    ];
 
-    $this->metaService->trackAddToCart($productData);
+                    $this->metaService->trackAddToCart($productData);
 
-    Log::info('Meta AddToCart tracked', [
-        'product_id' => $variant->product_id,
-        'quantity'   => $request->count
-    ]);
-} catch (\Exception $e) {
-    Log::error('Meta AddToCart failed: ' . $e->getMessage());
-}
+                    Log::info('Meta AddToCart tracked', [
+                        'product_id' => $variant->product_id,
+                        'quantity'   => $request->count
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Meta AddToCart failed: ' . $e->getMessage());
+                }
 
                 $cartCount = $this->getCartCount();
 
@@ -416,31 +424,31 @@ try {
                 'message' => $validator->errors()->first(),
             ]);
         }
-        
-    $variantId = (int) $request->variant_id;
 
-    // Get existing coupons from session
-    $appliedCoupons = session('applied_coupons', []);
+        $variantId = (int) $request->variant_id;
 
-    // If this variant already has a coupon, don't add it again
-    if (isset($appliedCoupons[$variantId])) {
+        // Get existing coupons from session
+        $appliedCoupons = session('applied_coupons', []);
 
-    $sessionCoupon = $appliedCoupons[$variantId];
+        // If this variant already has a coupon, don't add it again
+        if (isset($appliedCoupons[$variantId])) {
 
-    return response()->json([
-        'status' => true,
-        'already_applied' => true,
-        'message' => 'Coupon already applied for this product.',
+            $sessionCoupon = $appliedCoupons[$variantId];
 
-        'coupon' => [
-            'id' => $sessionCoupon['coupon_id'] ?? null,
-            'code' => $sessionCoupon['code'] ?? '',
-            'discount' => $sessionCoupon['discount'] ?? 0,
-            'discount_amount' => $sessionCoupon['discount_amount'] ?? 0,
-            'final_price' => $sessionCoupon['final_price'] ?? 0,
-        ],
-    ]);
-}
+            return response()->json([
+                'status' => true,
+                'already_applied' => true,
+                'message' => 'Coupon already applied for this product.',
+
+                'coupon' => [
+                    'id' => $sessionCoupon['coupon_id'] ?? null,
+                    'code' => $sessionCoupon['code'] ?? '',
+                    'discount' => $sessionCoupon['discount'] ?? 0,
+                    'discount_amount' => $sessionCoupon['discount_amount'] ?? 0,
+                    'final_price' => $sessionCoupon['final_price'] ?? 0,
+                ],
+            ]);
+        }
 
         $coupon = Coupon::where('code', $request->coupon_code)->where('code_type', '!=', 'special-discount')
             // ->where('expiry_date', '>=', Carbon::now())
@@ -487,26 +495,26 @@ try {
         // ]);
         $variantId = (int) $request->variant_id;
 
-// Get all previously applied coupons
-$appliedCoupons = session('applied_coupons', []);
+        // Get all previously applied coupons
+        $appliedCoupons = session('applied_coupons', []);
 
-// Store/update coupon for this specific variant
-$appliedCoupons[$variantId] = [
-    'coupon_id'       => $coupon->id,
-    'code'            => $coupon->code,
-    'discount'        => $couponDiscount,
-    'type'            => 'percentage',
-    'variant_id'      => $variantId,
-    'current_price'   => $currentPrice,
-    'discount_amount' => $discountAmount,
-    'final_price'     => $newTotal,
-];
+        // Store/update coupon for this specific variant
+        $appliedCoupons[$variantId] = [
+            'coupon_id'       => $coupon->id,
+            'code'            => $coupon->code,
+            'discount'        => $couponDiscount,
+            'type'            => 'percentage',
+            'variant_id'      => $variantId,
+            'current_price'   => $currentPrice,
+            'discount_amount' => $discountAmount,
+            'final_price'     => $newTotal,
+        ];
 
-// Save all coupons back to session
-session([
-    'applied_coupons' => $appliedCoupons
-]);
-        
+        // Save all coupons back to session
+        session([
+            'applied_coupons' => $appliedCoupons
+        ]);
+
         // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
         //     return response()->json([
         //         'status' => false,
@@ -522,12 +530,47 @@ session([
             'message' => 'Coupon applied successfully.',
             // 'coupon' => $coupon
             'coupon' => [
-            'id' => $coupon->id,
-            'code' => $coupon->code,
-            'discount' => $couponDiscount,
-            'discount_amount' => $discountAmount,
-            'final_price' => $newTotal,
-        ]
+                'id' => $coupon->id,
+                'code' => $coupon->code,
+                'discount' => $couponDiscount,
+                'discount_amount' => $discountAmount,
+                'final_price' => $newTotal,
+            ]
         ]);
+    }
+
+    // app/Http/Controllers/Web/CartController.php (or wherever)
+
+    public function addVariantToUserCart(ProductVariant $variant, int $userId, int $count = 1): bool
+    {
+        if ($variant->stock < $count) {
+            return false;
+        }
+
+        $existing = Cart::where('variant_id', $variant->id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existing) {
+            $newCount = $existing->count + $count;
+            if ($variant->stock < $newCount) {
+                return false;
+            }
+            $existing->update([
+                'count' => $newCount,
+                'price' => $variant->discount_price ?? $variant->price,
+            ]);
+        } else {
+            Cart::create([
+                'product_id' => $variant->product_id,
+                'variant_id' => $variant->id,
+                'user_id'    => $userId,
+                'session_id' => null,
+                'count'      => $count,
+                'price'      => $variant->discount_price ?? $variant->price,
+            ]);
+        }
+
+        return true;
     }
 }

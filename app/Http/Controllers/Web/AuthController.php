@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\MetaConversionsService;
 use App\Models\RegistrationOtpHistory;
+use App\Models\ProductVariant;
+
 class AuthController extends Controller
 {
     protected MetaConversionsService $metaService;
@@ -69,7 +71,7 @@ class AuthController extends Controller
                     ->subject('Email Verification OTP - Aiman Royale');
             });
             // dd($otp);
-     
+
             // Store OTP in database for verification
             EmailVerification::updateOrCreate(
                 ['email' => $request->email],
@@ -168,26 +170,26 @@ class AuthController extends Controller
         try {
             if ($request->email) {
                 // Send OTP email
-                try{
-                Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
-                    $message->to($request->email)
-                        ->subject('Email Verification OTP - Aiman Royale');
-                });
-                 RegistrationOtpHistory::create([
-                    'otp_send_to' => $request->email,
-                    'otp' => $otp,
-                    'status' => 'sent',
-                    'message' => 'OTP sent successfully to '.$request->email,
-                    'failed_reason' => ''
-                ]);
-                }catch(\Exception $e){
-                     RegistrationOtpHistory::create([
-                    'otp_send_to' => $request->email,
-                    'otp' => $otp,
-                    'status' => 'failed',
-                    'message' => 'Failed to send OTP to '.$request->email,
-                    'failed_reason' => $e->getMessage()
-                ]);
+                try {
+                    Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
+                        $message->to($request->email)
+                            ->subject('Email Verification OTP - Aiman Royale');
+                    });
+                    RegistrationOtpHistory::create([
+                        'otp_send_to' => $request->email,
+                        'otp' => $otp,
+                        'status' => 'sent',
+                        'message' => 'OTP sent successfully to ' . $request->email,
+                        'failed_reason' => ''
+                    ]);
+                } catch (\Exception $e) {
+                    RegistrationOtpHistory::create([
+                        'otp_send_to' => $request->email,
+                        'otp' => $otp,
+                        'status' => 'failed',
+                        'message' => 'Failed to send OTP to ' . $request->email,
+                        'failed_reason' => $e->getMessage()
+                    ]);
                     return back()->with('error', 'Failed to send OTP. Please try again.');
                 }
 
@@ -625,6 +627,28 @@ class AuthController extends Controller
             'last_login_at' => $user->last_login_at
         ]);
 
+        if ($variantId = session('guest_variant_id')) {
+            session()->forget('guest_variant_id');
+
+            $variant = ProductVariant::find($variantId);
+            if ($variant) {
+                app(\App\Http\Controllers\Web\CartController::class)
+                    ->addVariantToUserCart($variant, $user->id, 1);
+            }
+        }
+
+        if($variantId = session('guest_variant_id_for_wishlist')) {
+            dd($variantId);
+            session()->forget('guest_variant_id_for_wishlist');
+
+            $variant = ProductVariant::find($variantId);
+            if ($variant) {
+                app(\App\Http\Controllers\Web\WishlistController::class)
+                    ->addVariantToUserWishlist($variant, $user->id);
+            }
+        }
+
+
         if ($request->has('redirect') && $request->redirect) {
             return redirect()->to($request->redirect)->with('jwt_token', $token);
         }
@@ -720,24 +744,24 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         if (
-            str_contains($previousUrl, '/profile')||
+            str_contains($previousUrl, '/profile') ||
             str_contains($previousUrl, '/user/order-history') ||
-            str_contains($previousUrl, '/addresses') || 
-            str_contains($previousUrl, '/user/wishlist') || 
-            str_contains($previousUrl, '/user/notifications') || 
-            str_contains($previousUrl, '/user/change-password') || 
-            str_contains($previousUrl, '/custom-request') || 
-            str_contains($previousUrl, '/wishlist') || 
+            str_contains($previousUrl, '/addresses') ||
+            str_contains($previousUrl, '/user/wishlist') ||
+            str_contains($previousUrl, '/user/notifications') ||
+            str_contains($previousUrl, '/user/change-password') ||
+            str_contains($previousUrl, '/custom-request') ||
             str_contains($previousUrl, '/wishlist') ||
-            str_contains($previousUrl, '/cart') 
+            str_contains($previousUrl, '/wishlist') ||
+            str_contains($previousUrl, '/cart')
 
-            ) {
-        return redirect('/')
-            ->with('success', 'You have been logged out successfully!');
+        ) {
+            return redirect('/')
+                ->with('success', 'You have been logged out successfully!');
         }
         // return redirect('/login')->with('success', 'You have been logged out successfully!');
         return redirect()->to($previousUrl)
-        ->with('success', 'You have been logged out successfully!');
+            ->with('success', 'You have been logged out successfully!');
     }
 
     /**
@@ -825,12 +849,12 @@ class AuthController extends Controller
 
             Auth::login($user);
             // Track CompleteRegistration for Google signup
-                try {
-                    $this->metaService->trackCompleteRegistration();
-                    Log::info('Meta CompleteRegistration tracked for Google user: ' . $user->id);
-                } catch (\Exception $e) {
-                    Log::error('Meta CompleteRegistration (Google) failed: ' . $e->getMessage());
-                }
+            try {
+                $this->metaService->trackCompleteRegistration();
+                Log::info('Meta CompleteRegistration tracked for Google user: ' . $user->id);
+            } catch (\Exception $e) {
+                Log::error('Meta CompleteRegistration (Google) failed: ' . $e->getMessage());
+            }
             // Generate JWT token (if using JWT)
             $token = auth()->login($user); // Or however you generate your JWT
 

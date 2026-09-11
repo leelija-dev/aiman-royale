@@ -102,7 +102,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add')->middleware('check.login');
+
 Route::post('/buy-now', [CartController::class, 'buyNow'])->name('buy.now')->middleware('check.login');
 Route::post('/cart/update/', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
@@ -110,7 +110,7 @@ Route::post('/cart/check', [CartController::class, 'checkVariantInCart'])->name(
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');
+// Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add')->middleware('check.login');
 Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');
 Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
@@ -300,3 +300,6 @@ Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
 
     return 'Sitemap generated successfully.';
 });
+
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');

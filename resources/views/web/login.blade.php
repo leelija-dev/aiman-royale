@@ -1,6 +1,5 @@
 @extends('layout.web.main-layout')
 @section('content')
-
 <style>
     html,
     body {
