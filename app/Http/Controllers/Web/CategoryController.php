@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -19,142 +20,252 @@ class CategoryController extends Controller
      * @param string $slug
      * @return \Illuminate\View\View
      */
+
     // public function show($slug)
     // {
-    //     $category = Category::where('slug', $slug)
-    //         ->where('is_active', 1)
-    //         ->firstOrFail();
 
-    //     $products = $category->products()
+    //     $occasion = Occasion::where('slug', $slug)
+    //         ->where('is_active', 1)
+    //         ->first();
+    //     // dd($occasion);
+
+    //     if ($occasion) {
+    //         // Handle occasion-based filtering
+    //         return $this->handleOccasionProducts($occasion, $slug);
+    //     }
+    //     $categoryExist = Category::where('slug', $slug)->first();
+
+    //     if ($categoryExist) {
+
+    //         $category = Category::where('slug', $slug)
+    //             ->where('is_active', 1)
+    //             ->firstOrFail();
+    //     } else {
+    //         $category = $categoryExist;
+    //         $product = '';
+    //         $priceRanges = '';
+    //         $priceRange = [
+    //             'min' => '',
+    //             'max' => '',
+    //         ];
+    //         return view('web.category_product', compact('category', 'product', 'priceRanges', 'priceRange'));
+    //     }
+    //     // Get products from current category and its child categories if it's a parent
+    //     $categoryIds = [$category->id];
+
+    //     // If this is a parent category, get all child category IDs
+    //     if ($category->parent_id == null) {
+    //         $childCategories = Category::where('parent_id', $category->id)
+    //             ->where('is_active', 1)
+    //             ->pluck('id')
+    //             ->toArray();
+    //         $categoryIds = array_merge($categoryIds, $childCategories);
+    //     }
+
+    //     $products = Product::whereIn('category_id', $categoryIds)
     //         ->where('is_active', 1)
     //         ->whereHas('variants') // Only include products that have variants
-    //         ->with(['images' => function($query) {
+    //         ->with(['images' => function ($query) {
     //             $query->select('product_id', 'image');
+    //         }, 'variants' => function ($query) {
+    //             $query->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock');
     //         }])
     //         ->select('products.*')
     //         ->latest()
     //         ->paginate(12);
 
     //     $occasions = Occasion::where('is_active', 1)->get();
+    //     $categories = Category::where('is_active', 1)->get();
 
-    //     return view('web.category_product', compact('category', 'products', 'occasions'));
+    //     // Get all available sizes from variants (including child categories)
+    //     $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($categoryIds) {
+    //         $query->whereIn('category_id', $categoryIds)->where('is_active', 1);
+    //     })->get();
+
+    //     // Get unique sizes (handle both string and potential JSON)
+    //     $sizes = $allVariants->pluck('size')
+    //         ->filter()
+    //         ->map(function ($size) {
+    //             // If size is JSON, decode it
+    //             if (is_string($size) && $this->isJson($size)) {
+    //                 return json_decode($size, true);
+    //             }
+    //             return $size;
+    //         })
+    //         ->flatten()
+    //         ->unique()
+    //         ->filter()
+    //         ->sort()
+    //         ->values();
+
+    //     // Get unique colors (handle both string and potential JSON)
+    //     $colors = $allVariants->pluck('color')
+    //         ->filter()
+    //         ->map(function ($color) {
+    //             // If color is JSON, decode it
+    //             if (is_string($color) && $this->isJson($color)) {
+    //                 return json_decode($color, true);
+    //             }
+    //             return $color;
+    //         })
+    //         ->flatten()
+    //         ->unique()
+    //         ->filter()
+    //         ->sort()
+    //         ->values();
+
+    //     // Get price range
+    //     $priceRange = [
+    //         'min' => $allVariants->min('discount_price') ?? $allVariants->min('price') ?? 0,
+    //         'max' => $allVariants->max('price') ?? 10000
+    //     ];
+
+    //     // Calculate dynamic price ranges based on actual product data
+    //     $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
+
+    //     $latestProducts = Product::where('is_active', 1)
+    //         ->whereHas('variants')
+    //         ->with(['images' => function ($query) {
+    //             $query->select('product_id', 'image');
+    //         }])
+    //         ->select('products.*')
+    //         ->latest()
+    //         ->take(5)
+    //         ->get();
+
+    //     // dd($latestProducts);
+
+    //     return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
     // }
 
     public function show($slug)
     {
-
         $occasion = Occasion::where('slug', $slug)
             ->where('is_active', 1)
             ->first();
-        // dd($occasion);
 
         if ($occasion) {
-            // Handle occasion-based filtering
             return $this->handleOccasionProducts($occasion, $slug);
         }
+
         $categoryExist = Category::where('slug', $slug)->first();
 
         if ($categoryExist) {
-
-            $category = Category::where('slug', $slug)
-                ->where('is_active', 1)
-                ->firstOrFail();
+            $category = Cache::tags(['categories'])->remember("category.slug.{$slug}", 1800, function () use ($slug) {
+                return Category::where('slug', $slug)->where('is_active', 1)->firstOrFail();
+            });
         } else {
             $category = $categoryExist;
             $product = '';
             $priceRanges = '';
-            $priceRange = [
-                'min' => '',
-                'max' => '',
-            ];
+            $priceRange = ['min' => '', 'max' => ''];
             return view('web.category_product', compact('category', 'product', 'priceRanges', 'priceRange'));
         }
-        // Get products from current category and its child categories if it's a parent
-        $categoryIds = [$category->id];
 
-        // If this is a parent category, get all child category IDs
-        if ($category->parent_id == null) {
-            $childCategories = Category::where('parent_id', $category->id)
-                ->where('is_active', 1)
-                ->pluck('id')
-                ->toArray();
-            $categoryIds = array_merge($categoryIds, $childCategories);
-        }
+        // Category IDs (parent + children)
+        $categoryIds = Cache::tags(['categories'])->remember("category.ids.{$slug}", 1800, function () use ($category) {
+            $ids = [$category->id];
+            if ($category->parent_id == null) {
+                $childIds = Category::where('parent_id', $category->id)
+                    ->where('is_active', 1)
+                    ->pluck('id')
+                    ->toArray();
+                $ids = array_merge($ids, $childIds);
+            }
+            return $ids;
+        });
 
-        $products = Product::whereIn('category_id', $categoryIds)
-            ->where('is_active', 1)
-            ->whereHas('variants') // Only include products that have variants
-            ->with(['images' => function ($query) {
-                $query->select('product_id', 'image');
-            }, 'variants' => function ($query) {
-                $query->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock');
-            }])
-            ->select('products.*')
-            ->latest()
-            ->paginate(12);
+        // Products — cached per slug and per page
+        $page = request()->get('page', 1);
+        $products = Cache::tags(['products', 'categories'])
+            ->remember("category.{$slug}.products.page.{$page}", 600, function () use ($categoryIds) {
+                return Product::whereIn('category_id', $categoryIds)
+                    ->where('is_active', 1)
+                    ->whereHas('variants')
+                    ->with([
+                        'images' => fn($q) => $q->select('product_id', 'image'),
+                        'variants' => fn($q) => $q->select('product_id', 'size', 'color', 'price', 'discount_price', 'stock'),
+                    ])
+                    ->select('products.*')
+                    ->latest()
+                    ->paginate(12);
+            });
 
-        $occasions = Occasion::where('is_active', 1)->get();
-        $categories = Category::where('is_active', 1)->get();
+        // Shared globally
+        $occasions = Cache::tags(['occasions'])->remember('occasions.all', 1800, function () {
+            return Occasion::where('is_active', 1)->get();
+        });
 
-        // Get all available sizes from variants (including child categories)
-        $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($categoryIds) {
-            $query->whereIn('category_id', $categoryIds)->where('is_active', 1);
-        })->get();
+        $categories = Cache::tags(['categories'])->remember('categories.all', 1800, function () {
+            return Category::where('is_active', 1)->get();
+        });
 
-        // Get unique sizes (handle both string and potential JSON)
-        $sizes = $allVariants->pluck('size')
-            ->filter()
-            ->map(function ($size) {
-                // If size is JSON, decode it
-                if (is_string($size) && $this->isJson($size)) {
-                    return json_decode($size, true);
-                }
-                return $size;
-            })
-            ->flatten()
-            ->unique()
-            ->filter()
-            ->sort()
-            ->values();
+        // Variant aggregates — expensive, cache per slug
+        $variantsData = Cache::tags(['products', 'categories'])
+            ->remember("category.{$slug}.variants_data", 900, function () use ($categoryIds) {
+                $allVariants = \App\Models\ProductVariant::whereHas('product', function ($query) use ($categoryIds) {
+                    $query->whereIn('category_id', $categoryIds)->where('is_active', 1);
+                })->get();
 
-        // Get unique colors (handle both string and potential JSON)
-        $colors = $allVariants->pluck('color')
-            ->filter()
-            ->map(function ($color) {
-                // If color is JSON, decode it
-                if (is_string($color) && $this->isJson($color)) {
-                    return json_decode($color, true);
-                }
-                return $color;
-            })
-            ->flatten()
-            ->unique()
-            ->filter()
-            ->sort()
-            ->values();
+                $sizes = $allVariants->pluck('size')
+                    ->filter()
+                    ->map(function ($size) {
+                        return is_string($size) && $this->isJson($size) ? json_decode($size, true) : $size;
+                    })
+                    ->flatten()
+                    ->unique()
+                    ->filter()
+                    ->sort()
+                    ->values();
 
-        // Get price range
-        $priceRange = [
-            'min' => $allVariants->min('discount_price') ?? $allVariants->min('price') ?? 0,
-            'max' => $allVariants->max('price') ?? 10000
-        ];
+                $colors = $allVariants->pluck('color')
+                    ->filter()
+                    ->map(function ($color) {
+                        return is_string($color) && $this->isJson($color) ? json_decode($color, true) : $color;
+                    })
+                    ->flatten()
+                    ->unique()
+                    ->filter()
+                    ->sort()
+                    ->values();
 
-        // Calculate dynamic price ranges based on actual product data
+                $priceRange = [
+                    'min' => $allVariants->min('discount_price') ?? $allVariants->min('price') ?? 0,
+                    'max' => $allVariants->max('price') ?? 10000,
+                ];
+
+                return compact('sizes', 'colors', 'priceRange');
+            });
+
+        $sizes = $variantsData['sizes'];
+        $colors = $variantsData['colors'];
+        $priceRange = $variantsData['priceRange'];
+
+        // Depends on priceRange — compute after retrieving cache
         $priceRanges = $this->calculateDynamicPriceRanges($priceRange['min'], $priceRange['max']);
 
-        $latestProducts = Product::where('is_active', 1)
-            ->whereHas('variants')
-            ->with(['images' => function ($query) {
-                $query->select('product_id', 'image');
-            }])
-            ->select('products.*')
-            ->latest()
-            ->take(5)
-            ->get();
+        // Latest products — global
+        $latestProducts = Cache::tags(['products'])->remember('products.latest', 900, function () {
+            return Product::where('is_active', 1)
+                ->whereHas('variants')
+                ->with(['images' => fn($q) => $q->select('product_id', 'image')])
+                ->select('products.*')
+                ->latest()
+                ->take(5)
+                ->get();
+        });
 
-        // dd($latestProducts);
-
-        return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
+        return view('web.category_product', compact(
+            'category',
+            'products',
+            'occasions',
+            'sizes',
+            'colors',
+            'priceRange',
+            'priceRanges',
+            'latestProducts',
+            'categories'
+        ));
     }
 
     private function handleOccasionProducts($occasion, $slug)
@@ -534,7 +645,7 @@ class CategoryController extends Controller
 
     public function filter($slug, Request $request)
     {
-       
+
         try {
             // Get category
             $category = Category::where('slug', $slug)
