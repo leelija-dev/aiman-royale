@@ -66,7 +66,7 @@ class BannerDetailsController extends Controller
                 // Delete old image from storage
 
                 $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'desktop_' . time() . '.' . $image->getClientOriginalExtension();
 
                 // Store in storage/app/public/uploads/banners/
                 try {
@@ -119,7 +119,7 @@ class BannerDetailsController extends Controller
                 // Delete old image from storage
 
                 $image = $request->file('mobile_screen_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'mobile_' . time() . '.' . $image->getClientOriginalExtension();
 
                 // Store in storage/app/public/uploads/banners/
                 try {
@@ -179,7 +179,7 @@ class BannerDetailsController extends Controller
             'offer' => 'nullable|string',
             'redirect_link' => 'nullable|string',
             // 'position' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
+            'image' => 'nullable|image',
             'mobile_screen_image' => 'nullable|image',
             'status' => 'boolean',
         ]);
@@ -197,7 +197,7 @@ class BannerDetailsController extends Controller
 
                 $image = $request->file('image');
                
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'desktop_' . time() . '.' . $image->getClientOriginalExtension();
                 try {
                     $path = $image->storeAs('uploads/banners', $imageName, 'public');
                     if ($path) {
@@ -237,7 +237,7 @@ class BannerDetailsController extends Controller
                 }
 
                 $image = $request->file('mobile_screen_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'mobile_' . time() . '.' . $image->getClientOriginalExtension();
                 try {
                     $path = $image->storeAs('uploads/banners', $imageName, 'public');
                     if ($path) {
