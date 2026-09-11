@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Brand;
 use App\Traits\CloudinaryUploadTrait;  // ← Add this line
 use Cloudinary\Cloudinary;
-
+use Illuminate\Support\Facades\Cache;
 
 
 class ProductController extends Controller
@@ -34,7 +34,7 @@ class ProductController extends Controller
                     ->orWhere('design_no', 'like', "%{$search}%")
                     ->orWhere('brand', 'like', "%{$search}%")
                     ->orWhereHas('category', function ($cat) use ($search) {
-                         $cat->where('name', 'like', "%{$search}%");
+                        $cat->where('name', 'like', "%{$search}%");
                     });
             });
         }
@@ -249,6 +249,12 @@ class ProductController extends Controller
                 }
             }
         }
+
+        Cache::forget('home.products.featured');
+        Cache::forget('home.products.wishlisted');
+        Cache::forget('home.categories.with_products');
+        Cache::forget('home.categories');
+        Cache::forget('home.categories.grouped');
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully with Cloudinary!');
     }
@@ -469,6 +475,12 @@ class ProductController extends Controller
                 }
             }
         }
+
+        Cache::forget('home.products.featured');
+        Cache::forget('home.products.wishlisted');
+        Cache::forget('home.categories.with_products');
+        Cache::forget('home.categories');
+        Cache::forget('home.categories.grouped');
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
     }

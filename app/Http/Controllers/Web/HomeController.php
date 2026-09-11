@@ -20,6 +20,7 @@ use App\Models\Size;
 use Illuminate\Support\Facades\Log;
 use App\Services\MetaConversionsService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -30,129 +31,264 @@ class HomeController extends Controller
         $this->metaService = $metaService;
     }
 
+    // public function home()
+    // {
+    //     $data = Service::all();
+
+    //     // Get active banners from database
+    //     $mainBanners = Banner::active()->main()->ordered()->get();
+    //     $secondaryBanners = Banner::active()->secondary()->ordered()->get();
+    //     $bannerHeroSection = BannerDetails::where('is_active', true)->get();   //banner hero section
+    //     // Debug: Log the counts
+    //     Log::info('Main Banners count: ' . $mainBanners->count());
+    //     Log::info('Secondary Banners count: ' . $secondaryBanners->count());
+
+    //     $products = DB::table('products')
+    //         ->Join('product_variants', function ($join) {
+    //             $join->on('products.id', '=', 'product_variants.product_id')
+    //                 ->where('product_variants.stock', '>', 0)
+    //                 ->whereRaw('product_variants.id = (
+    //                      SELECT MIN(id) FROM product_variants 
+    //                      WHERE product_id = products.id AND stock > 0
+    //                  )');
+    //         })
+    //         ->leftJoin('product_images', function ($join) {
+    //             $join->on('products.id', '=', 'product_images.product_id')
+    //                 ->whereRaw('product_images.id = (
+    //                      SELECT MIN(id) FROM product_images 
+    //                      WHERE product_id = products.id
+    //                  )');
+    //         })
+    //         ->where('products.is_active', 1)
+    //         ->where('products.ready_to_ship', 1)
+    //         ->select(
+    //             'products.id',
+    //             'products.name',
+    //             'products.brand',
+    //             'products.description',
+    //             'products.category_id',
+    //             'products.ocassion_id',
+    //             'products.fabric',
+    //             'products.fit',
+    //             'products.status',
+    //             'products.is_featured',
+    //             'products.featured_image',
+    //             'products.slug',
+    //             'products.created_at',
+    //             'product_variants.id as variant_id',
+    //             'product_variants.size',
+    //             'product_variants.color',
+    //             'product_variants.color_code',
+    //             'product_variants.price',
+    //             'product_variants.discount_price as price_after_discount',
+    //             'product_variants.stock',
+    //             'product_images.image as product_image',
+    //             'product_variants.discount as discount'
+    //         )
+    //         ->latest('products.created_at')
+    //         ->take(12)
+    //         ->get();
+
+    //     // $mostWishlisted = Product::with('wishlists', 'images', 'variants')
+    //     //     ->withCount('wishlists')
+    //     //     ->orderByDesc('wishlists_count')
+    //     //     ->take(12)
+    //     //     ->get();
+    //     // 🔹 Step 1: Get Most Wishlisted Products
+    //     $mostWishlisted = Product::with('images', 'variants')
+    //         ->withCount('wishlists')
+    //         ->whereHas('wishlists') // only products in wishlist
+    //         ->orderByDesc('wishlists_count')
+    //         ->take(12)
+    //         ->get();
+
+    //     $wishlistCount = $mostWishlisted->count();
+
+    //     // 🔹 Step 2: If less than 12 → add remaining normal products
+    //     if ($wishlistCount < 12) {
+
+    //         $remaining = 12 - $wishlistCount;
+
+    //         $otherProducts = Product::with('images', 'variants')
+    //             ->whereNotIn('id', $mostWishlisted->pluck('id'))
+    //             ->where('is_active', 1)
+    //             ->take($remaining)
+    //             ->get();
+
+    //         $mostWishlisted = $mostWishlisted->merge($otherProducts);
+    //     }
+
+    //     // dd($mostWishlisted);
+
+    //     // dd($products);
+
+    //     $categories = Category::Where('is_active', 1)->get();
+    //     // $categories = Category::whereHas('products', function($query) {
+    //     //     $query->where('is_active', 1)
+    //     //           ->whereHas('variants');
+    //     // })
+    //     // ->withCount(['products' => function($query) {
+    //     //     $query->where('is_active', 1)
+    //     //           ->whereHas('variants');
+    //     // }])
+    //     // ->get();
+
+    //     $categoriesWithProduct = Category::whereHas('products', function ($query) {
+    //         $query->where('is_active', 1)
+    //             ->whereHas('variants');
+    //     })
+    //         ->with('latestProductWithImage.images') // Eager load latest product with its images
+    //         ->withCount(['products' => function ($query) {
+    //             $query->where('is_active', 1)
+    //                 ->whereHas('variants');
+    //         }])
+    //         ->get();
+
+    //     // dd($categoriesWithProduct);
+    //     $occasions = \App\Models\Occasion::active()->get();
+    //     $homeCategories = Category::where('is_home', 1)
+    //         ->whereNotNull('home_position')
+    //         ->get()
+    //         ->groupBy('home_position');
+
+
+    //     $testimonials = [];
+    //     return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners', 'categories', 'bannerHeroSection'));
+    // }
+
     public function home()
     {
-        $data = Service::all();
+        $data = Cache::remember('home.services', 1800, function () {
+            return Service::all();
+        });
 
-        // Get active banners from database
-        $mainBanners = Banner::active()->main()->ordered()->get();
-        $secondaryBanners = Banner::active()->secondary()->ordered()->get();
-        $bannerHeroSection = BannerDetails::where('is_active', true)->get();   //banner hero section
+        $mainBanners = Cache::remember('home.mainBanners', 1800, function () {
+            return Banner::active()->main()->ordered()->get();
+        });
+
+        $secondaryBanners = Cache::remember('home.secondaryBanners', 1800, function () {
+            return Banner::active()->secondary()->ordered()->get();
+        });
+
+        $bannerHeroSection = Cache::remember('home.bannerHeroSection', 1800, function () {
+            return BannerDetails::where('is_active', true)->get();
+        });
+
         // Debug: Log the counts
         Log::info('Main Banners count: ' . $mainBanners->count());
         Log::info('Secondary Banners count: ' . $secondaryBanners->count());
 
-        $products = DB::table('products')
-            ->Join('product_variants', function ($join) {
-                $join->on('products.id', '=', 'product_variants.product_id')
-                    ->where('product_variants.stock', '>', 0)
-                    ->whereRaw('product_variants.id = (
+        $products = Cache::remember('home.products.featured', 900, function () {
+            return DB::table('products')
+                ->Join('product_variants', function ($join) {
+                    $join->on('products.id', '=', 'product_variants.product_id')
+                        ->where('product_variants.stock', '>', 0)
+                        ->whereRaw('product_variants.id = (
                          SELECT MIN(id) FROM product_variants 
                          WHERE product_id = products.id AND stock > 0
                      )');
-            })
-            ->leftJoin('product_images', function ($join) {
-                $join->on('products.id', '=', 'product_images.product_id')
-                    ->whereRaw('product_images.id = (
+                })
+                ->leftJoin('product_images', function ($join) {
+                    $join->on('products.id', '=', 'product_images.product_id')
+                        ->whereRaw('product_images.id = (
                          SELECT MIN(id) FROM product_images 
                          WHERE product_id = products.id
                      )');
-            })
-            ->where('products.is_active', 1)
-            ->where('products.ready_to_ship', 1)
-            ->select(
-                'products.id',
-                'products.name',
-                'products.brand',
-                'products.description',
-                'products.category_id',
-                'products.ocassion_id',
-                'products.fabric',
-                'products.fit',
-                'products.status',
-                'products.is_featured',
-                'products.featured_image',
-                'products.slug',
-                'products.created_at',
-                'product_variants.id as variant_id',
-                'product_variants.size',
-                'product_variants.color',
-                'product_variants.color_code',
-                'product_variants.price',
-                'product_variants.discount_price as price_after_discount',
-                'product_variants.stock',
-                'product_images.image as product_image',
-                'product_variants.discount as discount'
-            )
-            ->latest('products.created_at')
-            ->take(12)
-            ->get();
+                })
+                ->where('products.is_active', 1)
+                ->where('products.ready_to_ship', 1)
+                ->select(
+                    'products.id',
+                    'products.name',
+                    'products.brand',
+                    'products.description',
+                    'products.category_id',
+                    'products.ocassion_id',
+                    'products.fabric',
+                    'products.fit',
+                    'products.status',
+                    'products.is_featured',
+                    'products.featured_image',
+                    'products.slug',
+                    'products.created_at',
+                    'product_variants.id as variant_id',
+                    'product_variants.size',
+                    'product_variants.color',
+                    'product_variants.color_code',
+                    'product_variants.price',
+                    'product_variants.discount_price as price_after_discount',
+                    'product_variants.stock',
+                    'product_images.image as product_image',
+                    'product_variants.discount as discount'
+                )
+                ->latest('products.created_at')
+                ->take(12)
+                ->get();
+        });
 
-        // $mostWishlisted = Product::with('wishlists', 'images', 'variants')
-        //     ->withCount('wishlists')
-        //     ->orderByDesc('wishlists_count')
-        //     ->take(12)
-        //     ->get();
-        // 🔹 Step 1: Get Most Wishlisted Products
-        $mostWishlisted = Product::with('images', 'variants')
-            ->withCount('wishlists')
-            ->whereHas('wishlists') // only products in wishlist
-            ->orderByDesc('wishlists_count')
-            ->take(12)
-            ->get();
-
-        $wishlistCount = $mostWishlisted->count();
-
-        // 🔹 Step 2: If less than 12 → add remaining normal products
-        if ($wishlistCount < 12) {
-
-            $remaining = 12 - $wishlistCount;
-
-            $otherProducts = Product::with('images', 'variants')
-                ->whereNotIn('id', $mostWishlisted->pluck('id'))
-                ->where('is_active', 1)
-                ->take($remaining)
+        $mostWishlisted = Cache::remember('home.products.wishlisted', 900, function () {
+            $mostWishlisted = Product::with('images', 'variants')
+                ->withCount('wishlists')
+                ->whereHas('wishlists')
+                ->orderByDesc('wishlists_count')
+                ->take(12)
                 ->get();
 
-            $mostWishlisted = $mostWishlisted->merge($otherProducts);
-        }
+            if ($mostWishlisted->count() < 12) {
+                $remaining = 12 - $mostWishlisted->count();
+                $otherProducts = Product::with('images', 'variants')
+                    ->whereNotIn('id', $mostWishlisted->pluck('id'))
+                    ->where('is_active', 1)
+                    ->take($remaining)
+                    ->get();
+                $mostWishlisted = $mostWishlisted->merge($otherProducts);
+            }
 
-        // dd($mostWishlisted);
+            return $mostWishlisted;
+        });
 
-        // dd($products);
+        // Cache categories
+        $categories = Cache::remember('home.categories', 1800, function () {
+            return Category::where('is_active', 1)->get();
+        });
 
-        $categories = Category::Where('is_active', 1)->get();
-        // $categories = Category::whereHas('products', function($query) {
-        //     $query->where('is_active', 1)
-        //           ->whereHas('variants');
-        // })
-        // ->withCount(['products' => function($query) {
-        //     $query->where('is_active', 1)
-        //           ->whereHas('variants');
-        // }])
-        // ->get();
+        $categoriesWithProduct = Cache::remember('home.categories.with_products', 1800, function () {
+            return Category::whereHas('products', function ($query) {
+                $query->where('is_active', 1)->whereHas('variants');
+            })
+                ->with('latestProductWithImage.images')
+                ->withCount(['products' => function ($query) {
+                    $query->where('is_active', 1)->whereHas('variants');
+                }])
+                ->get();
+        });
 
-        $categoriesWithProduct = Category::whereHas('products', function ($query) {
-            $query->where('is_active', 1)
-                ->whereHas('variants');
-        })
-            ->with('latestProductWithImage.images') // Eager load latest product with its images
-            ->withCount(['products' => function ($query) {
-                $query->where('is_active', 1)
-                    ->whereHas('variants');
-            }])
-            ->get();
+        $occasions = Cache::remember('home.occasions', 1800, function () {
+            return \App\Models\Occasion::active()->get();
+        });
 
-        // dd($categoriesWithProduct);
-        $occasions = \App\Models\Occasion::active()->get();
-        $homeCategories = Category::where('is_home', 1)
-            ->whereNotNull('home_position')
-            ->get()
-            ->groupBy('home_position');
-
+        $homeCategories = Cache::remember('home.categories.grouped', 1800, function () {
+            return Category::where('is_home', 1)
+                ->whereNotNull('home_position')
+                ->get()
+                ->groupBy('home_position');
+        });
 
         $testimonials = [];
-        return view('web.home', compact('data', 'testimonials', 'categoriesWithProduct', 'products', 'occasions', 'homeCategories', 'mostWishlisted', 'mainBanners', 'secondaryBanners', 'categories', 'bannerHeroSection'));
+
+        return view('web.home', compact(
+            'data',
+            'testimonials',
+            'categoriesWithProduct',
+            'products',
+            'occasions',
+            'homeCategories',
+            'mostWishlisted',
+            'mainBanners',
+            'secondaryBanners',
+            'categories',
+            'bannerHeroSection'
+        ));
     }
 
     public function BannerFilter(Request $request)
@@ -1377,32 +1513,32 @@ class HomeController extends Controller
             //     $product->price + 1000
             // ])
             ->whereHas('variants')->with(['variants', 'images'])->get();
-        
+
 
         // Track ViewContent event for Meta Conversions API
-       // Track ViewContent event for Meta Conversions API
-try {
-    $defaultVariant = $product->variants->first();
+        // Track ViewContent event for Meta Conversions API
+        try {
+            $defaultVariant = $product->variants->first();
 
-    $productData = [
-        'id'       => $product->id,
-        'name'     => $product->name,
-        'price'    => $defaultVariant 
-                        ? ($defaultVariant->discount_price ?? $defaultVariant->price) 
-                        : $product->price,
-        'currency' => 'INR',
-        'category' => $product->category->name ?? null,
-    ];
+            $productData = [
+                'id'       => $product->id,
+                'name'     => $product->name,
+                'price'    => $defaultVariant
+                    ? ($defaultVariant->discount_price ?? $defaultVariant->price)
+                    : $product->price,
+                'currency' => 'INR',
+                'category' => $product->category->name ?? null,
+            ];
 
-    $result = $this->metaService->trackViewContent($productData);
+            $result = $this->metaService->trackViewContent($productData);
 
-    Log::info('Meta ViewContent tracked', [
-        'product_id' => $product->id,
-        'result'     => $result,
-    ]);
-} catch (\Exception $e) {
-    Log::error('Meta ViewContent failed: ' . $e->getMessage());
-}
+            Log::info('Meta ViewContent tracked', [
+                'product_id' => $product->id,
+                'result'     => $result,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Meta ViewContent failed: ' . $e->getMessage());
+        }
 
         // Check for applied coupon in session
         $appliedCoupon = session('applied_coupon');

@@ -8,6 +8,7 @@ use App\Models\Occasion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class OccasionController extends Controller
 {
@@ -66,7 +67,7 @@ class OccasionController extends Controller
         try {
             $occasion = Occasion::withTrashed()->findOrFail($id);
             $occasion->restore();
-
+            Cache::forget('home.occasions');
             return redirect()->route('admin.occasions.trash')
                 ->with('success', 'Occasion has been restored successfully.');
         } catch (\Exception $e) {
@@ -112,10 +113,10 @@ class OccasionController extends Controller
             $data = $request->validated();
             $data['slug'] = Str::slug($data['name']);
 
-            
-            
-            Occasion::create($data);
 
+
+            Occasion::create($data);
+            Cache::forget('home.occasions');
             return redirect()->route('admin.occasions.index')
                 ->with('success', 'Occasion created successfully.');
         } catch (\Exception $e) {
@@ -146,14 +147,14 @@ class OccasionController extends Controller
             }
 
             $occasions = Occasion::where('id', '!=', $occasion->id)->latest()->get();
-            
+
             // Debug: Log occasions data
             Log::info('Occasions for edit dropdown', [
                 'current_occasion_id' => $occasion->id,
                 'occasions_count' => $occasions->count(),
                 'occasions' => $occasions->toArray()
             ]);
-            
+
             return view('Admin.occasions.edit', compact('occasion', 'occasions'));
         } catch (\Exception $e) {
             Log::error('Error in OccasionController@edit', [
@@ -179,7 +180,7 @@ class OccasionController extends Controller
             $data['slug'] = Str::slug($data['name']);
 
             $occasion->update($data);
-
+            Cache::forget('home.occasions');
             return redirect()->route('admin.occasions.index')
                 ->with('success', 'Occasion updated successfully');
         } catch (\Exception $e) {
@@ -203,7 +204,7 @@ class OccasionController extends Controller
     {
         try {
             $occasion->delete();
-
+            Cache::forget('home.occasions');
             return redirect()->route('admin.occasions.index')
                 ->with('success', 'Occasion moved to trash successfully');
         } catch (\Exception $e) {

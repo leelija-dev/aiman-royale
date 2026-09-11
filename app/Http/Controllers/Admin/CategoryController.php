@@ -14,6 +14,7 @@ use DOMXPath;
 use LibXMLError;
 use App\Traits\CloudinaryUploadTrait;  // ← Add this line
 use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -71,6 +72,7 @@ class CategoryController extends Controller
             $category = Category::withTrashed()->findOrFail($id);
             $category->restore();
 
+            
             return redirect()->route('admin.categories.trash')
                 ->with('success', 'Category has been restored successfully.');
         } catch (\Exception $e) {
@@ -101,57 +103,57 @@ class CategoryController extends Controller
      * @param  \App\Http\Requests\Admin\CategoryRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-   public function store(CategoryRequest $request)
-{
-    try {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-        $data['title'] = $request->title;
-        $data['about'] = $request->about;
-        
-        if ($request->has('description')) {
-            $data['description'] = $this->removeHtmlStyles($request->description);
-        }
+    public function store(CategoryRequest $request)
+    {
+        try {
+            $data = $request->validated();
+            $data['slug'] = Str::slug($data['name']);
+            $data['title'] = $request->title;
+            $data['about'] = $request->about;
 
-        // Handle image upload to Cloudinary
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
+            if ($request->has('description')) {
+                $data['description'] = $this->removeHtmlStyles($request->description);
+            }
 
-        //     // UPLOAD NEW IMAGE TO CLOUDINARY
-        //     $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
-        //         'quality' => 'auto:good',
-        //         'fetch_format' => 'auto',
-        //         'transformation' => [
-        //             'width' => 800,
-        //             'height' => 800,
-        //             'crop' => 'limit',
-        //         ],
-        //     ]);
+            // Handle image upload to Cloudinary
+            // if ($request->hasFile('image')) {
+            //     $image = $request->file('image');
 
-            
-        //     if ($uploadResult) {
-        //         $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
-        //         $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
-        //         Log::info('Category image uploaded to Cloudinary', [
-        //             'public_id' => $uploadResult['public_id'],
-        //             'path' => $uploadResult['path']
-        //         ]);
-        //     } else {
-        //         throw new \Exception('Failed to upload image to Cloudinary');
-        //     }
-        // }
+            //     // UPLOAD NEW IMAGE TO CLOUDINARY
+            //     $uploadResult = $this->uploadToCloudinary($image, 'aiman/categories', [
+            //         'quality' => 'auto:good',
+            //         'fetch_format' => 'auto',
+            //         'transformation' => [
+            //             'width' => 800,
+            //             'height' => 800,
+            //             'crop' => 'limit',
+            //         ],
+            //     ]);
+
+
+            //     if ($uploadResult) {
+            //         $data['image'] = $uploadResult['path']; // Store the Cloudinary URL
+            //         $data['public_id'] = $uploadResult['public_id']; // Store public_id for future deletion
+            //         Log::info('Category image uploaded to Cloudinary', [
+            //             'public_id' => $uploadResult['public_id'],
+            //             'path' => $uploadResult['path']
+            //         ]);
+            //     } else {
+            //         throw new \Exception('Failed to upload image to Cloudinary');
+            //     }
+            // }
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
 
                 // CREATE FOLDER IF NOT EXISTS
                 $path = public_path('uploads/category');
-                
+
                 // Ensure directory exists with proper permissions
                 if (!File::exists($path)) {
                     try {
                         File::makeDirectory($path, 0775, true, true);
-                        
+
                         // Set ownership if possible (for Linux servers)
                         if (function_exists('chown')) {
                             @chown($path, 'www-data');
@@ -185,30 +187,32 @@ class CategoryController extends Controller
             }
 
 
-        // Create category with error handling
-        try {
-            $category = Category::create($data);
-            Log::info('Category created successfully with ID: ' . $category->id);
+            // Create category with error handling
+            try {
+                $category = Category::create($data);
+                Cache::forget('home.categories');
+                Cache::forget('home.categories.with_products');
+                Cache::forget('home.categories.grouped');
+                Log::info('Category created successfully with ID: ' . $category->id);
+            } catch (\Exception $e) {
+                Log::error('Failed to create category in database: ' . $e->getMessage());
+                throw new \Exception('Failed to save category to database: ' . $e->getMessage());
+            }
+
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Product category created successfully with Cloudinary!');
         } catch (\Exception $e) {
-            Log::error('Failed to create category in database: ' . $e->getMessage());
-            throw new \Exception('Failed to save category to database: ' . $e->getMessage());
+            Log::error('Error creating product category', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'request_data' => $request->all(),
+            ]);
+
+            return back()->withInput()
+                ->with('error', 'Error: ' . $e->getMessage());
         }
-
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Product category created successfully with Cloudinary!');
-            
-    } catch (\Exception $e) {
-        Log::error('Error creating product category', [
-            'error' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'request_data' => $request->all(),
-        ]);
-
-        return back()->withInput()
-            ->with('error', 'Error: ' . $e->getMessage());
     }
-}
 
     /**
      * Show the form for editing the specified product category.
@@ -254,61 +258,6 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
-    // public function update(CategoryRequest $request, Category $category)
-    // {
-    //     // dd($request);
-    //     try {
-    //         $data = $request->validated();
-    //         $data['slug'] = Str::slug($data['name']);
-    //         $data['title'] = $request->title;
-    //         $data['about'] = $request->about;
-
-    //         if ($request->has('description')) {
-    //             $data['description'] = $this->removeHtmlStyles($request->description);
-    //         }
-    //         // dd($data['image']);
-    //         // CHECK IF NEW IMAGE UPLOADED
-    //         if ($request->hasFile('image')) {
-
-    //             $image = $request->file('image');
-
-    //             // CREATE FOLDER IF NOT EXISTS
-    //             $path = public_path('uploads/category');
-
-    //             if (!File::exists($path)) {
-    //                 File::makeDirectory($path, 0777, true, true);
-    //             }
-
-    //             // DELETE OLD IMAGE
-    //             if ($category->image && File::exists($path . '/' . $category->image)) {
-    //                 File::delete($path . '/' . $category->image);
-    //             }
-
-    //             // SAVE NEW IMAGE
-    //             $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
-
-    //             $image->move($path, $filename);
-
-    //             $data['image'] = $filename;
-    //         }
-    //         if ($data['is_home'] == 0) {
-    //             $data['home_position'] = null;
-    //         }
-
-    //         $category->update($data);
-
-    //         return redirect()->route('admin.categories.index')
-    //             ->with('success', 'Product category updated successfully');
-    //     } catch (\Exception $e) {
-    //         Log::error('Error updating product category', [
-    //             'error' => $e->getMessage(),
-    //             'trace' => $e->getTraceAsString()
-    //         ]);
-
-    //         return back()->withInput()
-    //             ->with('error', 'An error occurred while updating the product category.');
-    //     }
-    // }
 
     public function update(CategoryRequest $request, Category $category)
     {
@@ -324,12 +273,12 @@ class CategoryController extends Controller
 
             // CHECK IF NEW IMAGE UPLOADED
             // if ($request->hasFile('image')) {
-               
+
             //     $image = $request->file('image');
 
             //     // DELETE OLD IMAGE FROM CLOUDINARY
             //     if ($category->public_id) {
-                   
+
             //         try {
             //             $this->deleteFromCloudinary($category->public_id);
             //             Log::info('Old category image deleted from Cloudinary', [
@@ -397,6 +346,10 @@ class CategoryController extends Controller
 
             // Update the category
             $category->update($data);
+
+            Cache::forget('home.categories');
+            Cache::forget('home.categories.with_products');
+            Cache::forget('home.categories.grouped');
 
             return redirect()->route('admin.categories.index')
                 ->with('success', 'Product category updated successfully with Cloudinary!');
