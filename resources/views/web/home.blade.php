@@ -799,12 +799,18 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
     <div class="container mx-auto">
         <div class="hero-carousel owl-carousel owl-theme ">
             <!-- Slide 1 -->
-            @foreach($bannerHeroSection as $banner)
+            @foreach($bannerHeroSection as $key=>$banner)
             <div class="slide-item relative">
 
                 {{-- @if($banner-> --}}
-                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt=""> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
-                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt=""></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
+                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt="" 
+                @if($key == 0)
+                    fetchpriority="high"
+                @else
+                    loading="lazy"
+                @endif
+                decoding="async"> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
+                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
 
 
 
