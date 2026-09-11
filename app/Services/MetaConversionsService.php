@@ -118,7 +118,10 @@ class MetaConversionsService
             }
 
             $userData['external_id'] = [$this->hashData((string) $user->id)];
-        }
+        } else {
+        // For guest users, hash IP as fallback to satisfy Meta's requirement
+        $userData['external_id'] = [$this->hashData(request()->ip())];
+    }
 
         // Merge extra data (guest users etc.)
         foreach ($additionalData as $key => $value) {

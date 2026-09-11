@@ -35,10 +35,11 @@ class MetaTracking
 
                 $this->meta->sendEvent(
                     'PageView',
-                    [
-                        'client_ip_address' => $request->ip(),
-                        'client_user_agent' => $request->userAgent(),
-                    ],
+                    // [
+                    //     'client_ip_address' => $request->ip(),
+                    //     'client_user_agent' => $request->userAgent(),
+                    // ],
+                     $this->meta->createUserData(),
                     [
                         'currency' => 'INR',
                         'value' => 0,
