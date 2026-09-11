@@ -825,12 +825,9 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
                             class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
                             width="750"
                             height="1000"
-                            @if($key == 0)
-                                fetchpriority="high"
-                                loading="eager"
-                            @else
-                                loading="lazy"
-                            @endif
+                          
+                            loading="eager"
+        
                             decoding="async">
                     </picture>
                 </a>
