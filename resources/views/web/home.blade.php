@@ -794,7 +794,7 @@
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
-                    @dd($category)
+                    
                     @php
                     $catImg = $category->latestProductWithImage->featured_image
                     ? url('/img/' . $category->latestProductWithImage->featured_image . '?w=600&q=80')
