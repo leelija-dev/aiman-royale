@@ -2,7 +2,9 @@
 {{-- <link href="../plugins/fontawesome-6.1.1/css/all.css" rel='stylesheet' type='text/css' /> --}}
 @php
 $user = auth('admin')->user(); // or auth('admin')->user() if using custom guard
-
+// if (!$user) {
+//     return redirect()->route('Admin.login');
+// }
 $userId = $user['user_id'];
 
 use App\Models\Admin;

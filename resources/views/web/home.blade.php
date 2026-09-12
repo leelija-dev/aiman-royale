@@ -800,19 +800,37 @@ $rightBanners = $bannerHeroSection->where('position', 'right')->values();
         <div class="hero-carousel owl-carousel owl-theme ">
             <!-- Slide 1 -->
             @foreach($bannerHeroSection as $key=>$banner)
-            <div class="slide-item relative">
+            {{--don't remove this comment code need for later check -}}
+            {{-- <div class="slide-item relative">
 
-                {{-- @if($banner-> --}}
                 <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt="" 
                 @if($key == 0)
-                    fetchpriority="high"
+                    fetchpriority=""
                 @else
                     loading="lazy"
                 @endif
-                decoding="async"> </a>{{--asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp')--}}
-                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a> {{--asset('web/images/custom_design/portrait-image.jpg')--}}
+                decoding="async"> </a>
+                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a> 
 
+            </div> --}}
+            <div class="slide-item relative">
 
+                <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
+                    <picture>
+                        <source media="(min-width: 768px)"
+                            srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
+                        <img
+                            src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
+                            alt="{{ $banner->title ?? '' }}"
+                            class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
+                            width="750"
+                            height="1000"
+                          
+                            loading="eager"
+        
+                            decoding="async">
+                    </picture>
+                </a>
 
                 <!-- <div class="slide-content">
                     <h2 class="brand-name"><span>Seema Gujral</span></h2>
