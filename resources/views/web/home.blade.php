@@ -100,7 +100,7 @@
 
                         $productImage = $category->product->images->sortByDesc('id')->first()?->image;
                         $catagoryImage = $category->product->category->image;
-                        $catImage = $variantImage ?: $productImage ?: $catagoryImage;
+                        $catImage =  $productImage ?: $catagoryImage;
 
                         // Optional: placeholder if neither exists
                         // if (!$catImage) {
