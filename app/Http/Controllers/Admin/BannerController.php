@@ -364,8 +364,8 @@ class BannerController extends Controller
 
         $banner->update($data);
 
-        Cache::forget('home.mainBanners');
-        Cache::forget('home.secondaryBanners');
+        Cache::deleteMultiple(['home.mainBanners', 'home.secondaryBanners']);
+        // Cache::forget('home.secondaryBanners');
 
         return redirect()->route('banners.index')->with('success', 'Banner updated successfully!');
     }
