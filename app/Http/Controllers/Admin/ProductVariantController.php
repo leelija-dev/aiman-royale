@@ -16,6 +16,7 @@ use App\Traits\CloudinaryUploadTrait;  // ← Add this line
 use Cloudinary\Cloudinary;
 use Illuminate\Support\Facades\Log;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Cache;
 
 
 class ProductVariantController extends Controller
@@ -59,8 +60,8 @@ class ProductVariantController extends Controller
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
         $units = Unit::all();
-        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
-        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes','coupons','units'));
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type', '!=', 'special-discount')->get();
+        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes', 'coupons', 'units'));
     }
 
 
@@ -74,8 +75,8 @@ class ProductVariantController extends Controller
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
         $units = Unit::all();
-        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type' ,'!=' , 'special-discount')->get();
-        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes','coupons','units'));
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type', '!=', 'special-discount')->get();
+        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes', 'coupons', 'units'));
     }
 
     /**
@@ -236,29 +237,30 @@ class ProductVariantController extends Controller
         //     }
         // }
 
-          if ($variant && $request->hasFile('images')) {
+        if ($variant && $request->hasFile('images')) {
 
-                foreach ($request->file('images') as $image) {
+            foreach ($request->file('images') as $image) {
 
-                    $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
-                    $folder = 'uploads/variants';
-                    $image->move(public_path('uploads/variants'), $filename);
-                    $imagePath = $folder . '/' . $filename;
-                    // dd($variant->id);
-                    ProductImage::create([
-                        'product_id' => $variant->product_id,
-                        'variant_id' => $variant->id,
-                        'image' => $imagePath //$filename
-                    ]);
-                }
-
-          }
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+                $folder = 'uploads/variants';
+                $image->move(public_path('uploads/variants'), $filename);
+                $imagePath = $folder . '/' . $filename;
+                // dd($variant->id);
+                ProductImage::create([
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'image' => $imagePath //$filename
+                ]);
+            }
+        }
 
         // Create stock entry for the new variant
         StockIn::create([
             'product_variant_id' => $variant->id,
             'stock' => $data['stock'],
         ]);
+
+         Cache::forget('product_categories');
 
         return redirect()->route('admin.product-variants')->with('success', 'Product variant created successfully with Cloudinary!');
     }
@@ -272,7 +274,7 @@ class ProductVariantController extends Controller
         $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->pluck('name', 'code');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
         $units = Unit::all();
-        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes','units'));
+        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes', 'units'));
     }
 
     /**
@@ -281,7 +283,7 @@ class ProductVariantController extends Controller
     public function update(Request $request, ProductVariant $productVariant)
     {
         // dd($request->all());
-        
+
         // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -304,7 +306,7 @@ class ProductVariantController extends Controller
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
-        
+
         $color = Color::Where('code', $data['color_code'])->select('name')->first();
         if ($color) {
             $data['color'] = $color->name;
@@ -320,7 +322,7 @@ class ProductVariantController extends Controller
             ->where('id', '!=', $productVariant->id)
             ->first();
 
-        
+
 
         if ($existingVariant) {
             // dd($existingVariant);
@@ -348,7 +350,7 @@ class ProductVariantController extends Controller
             'height_unit_id'  => $request->height_unit_id,
             'width'           => $request->width,
             'width_unit_id'   => $request->width_unit_id,
-            
+
         ]);
 
         $product = Product::find($data['product_id']);
@@ -429,7 +431,7 @@ class ProductVariantController extends Controller
         //     }
         // }
 
-         if ($request->removed_images) {
+        if ($request->removed_images) {
 
             $removedIds = explode(',', $request->removed_images);
 
@@ -451,7 +453,7 @@ class ProductVariantController extends Controller
         }
         //store images
         if ($request->hasFile('images')) {
-            
+
             foreach ($request->file('images') as $image) {
                 $folder = 'uploads/variants';
                 $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
@@ -466,7 +468,7 @@ class ProductVariantController extends Controller
             }
         }
 
-
+        Cache::forget('product_categories');
         return redirect()->back()->with('success', 'Product variant updated successfully with Cloudinary!');
     }
 
@@ -479,6 +481,7 @@ class ProductVariantController extends Controller
         StockIn::where('product_variant_id', $productVariant->id)->delete();
 
         $productVariant->delete();
+        Cache::forget('product_categories');
 
         return redirect()->route('admin.product-variants')->with('success', 'Product variant deleted successfully!');
     }

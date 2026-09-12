@@ -176,6 +176,7 @@ class WishlistController extends Controller
                 'session_id' => $sessionId,
             ]);
             Cache::forget('home.products.wishlisted');
+            Cache::forget("user:{$userId}:wishlists");
             try {
             $product = Product::with('variants')->find($request->product_id);
 
@@ -243,6 +244,7 @@ class WishlistController extends Controller
 
             $wishlistItem->delete();
             Cache::forget('home.products.wishlisted');
+            Cache::forget("user:{$userId}:wishlists");
 
             $wishlistCount = $this->getWishlistCount();
 
