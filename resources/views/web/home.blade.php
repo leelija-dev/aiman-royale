@@ -630,7 +630,6 @@
         <div class="relative ">
             <div id="categories-carousel" class="owl-carousel owl-theme">
                 @if (!isset($categoriesWithProduct))
-                @dd('categoriesWithProduct variable is not set. Please check the controller or data passed to the view.');
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
@@ -792,11 +791,10 @@
                     </a>
                 </div>
                 @else
-                @dd($categoriesWithProduct)
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
-
+                    @dd($category)
                     @php
                     $catImg = $category->latestProductWithImage->featured_image
                     ? url('/img/' . $category->latestProductWithImage->featured_image . '?w=600&q=80')
