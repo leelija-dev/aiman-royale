@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\MetaConversionsService;
+use Illuminate\Support\Facades\Cache;
 class WishlistController extends Controller
 {
     /**
@@ -174,6 +175,7 @@ class WishlistController extends Controller
                 'variant_id' => $request->variant_id,
                 'session_id' => $sessionId,
             ]);
+            Cache::forget('home.products.wishlisted');
             try {
             $product = Product::with('variants')->find($request->product_id);
 
@@ -240,6 +242,7 @@ class WishlistController extends Controller
             }
 
             $wishlistItem->delete();
+            Cache::forget('home.products.wishlisted');
 
             $wishlistCount = $this->getWishlistCount();
 

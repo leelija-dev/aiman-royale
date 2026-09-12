@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -19,26 +20,6 @@ class CategoryController extends Controller
      * @param string $slug
      * @return \Illuminate\View\View
      */
-    // public function show($slug)
-    // {
-    //     $category = Category::where('slug', $slug)
-    //         ->where('is_active', 1)
-    //         ->firstOrFail();
-
-    //     $products = $category->products()
-    //         ->where('is_active', 1)
-    //         ->whereHas('variants') // Only include products that have variants
-    //         ->with(['images' => function($query) {
-    //             $query->select('product_id', 'image');
-    //         }])
-    //         ->select('products.*')
-    //         ->latest()
-    //         ->paginate(12);
-
-    //     $occasions = Occasion::where('is_active', 1)->get();
-
-    //     return view('web.category_product', compact('category', 'products', 'occasions'));
-    // }
 
     public function show($slug)
     {
@@ -156,6 +137,8 @@ class CategoryController extends Controller
 
         return view('web.category_product', compact('category', 'products', 'occasions', 'sizes', 'colors', 'priceRange', 'priceRanges', 'latestProducts', 'categories'));
     }
+
+
 
     private function handleOccasionProducts($occasion, $slug)
     {
@@ -534,7 +517,7 @@ class CategoryController extends Controller
 
     public function filter($slug, Request $request)
     {
-       
+
         try {
             // Get category
             $category = Category::where('slug', $slug)
