@@ -791,6 +791,7 @@
                     </a>
                 </div>
                 @else
+                @dd($categoriesWithProduct)
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
