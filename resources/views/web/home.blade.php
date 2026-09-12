@@ -630,6 +630,7 @@
         <div class="relative ">
             <div id="categories-carousel" class="owl-carousel owl-theme">
                 @if (!isset($categoriesWithProduct))
+                @dd('categoriesWithProduct variable is not set. Please check the controller or data passed to the view.');
                 <!-- Category 1 -->
                 <div class="item p-2">
                     <a href="#" class="group block relative overflow-hidden rounded-3xl">
