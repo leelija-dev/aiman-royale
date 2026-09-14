@@ -15,7 +15,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Support\Facades\Log;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -55,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
             //     ->values();
 
             $productCategory = Cache::remember('product_categories', 3600, function () {
+                log::info('product_categories');
                 return ProductVariant::with(['product.category', 'product.images', 'images'])
                     ->get()
                     ->unique(function ($variant) {
