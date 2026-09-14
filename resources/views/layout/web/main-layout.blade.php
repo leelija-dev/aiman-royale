@@ -134,7 +134,7 @@
             :imageHeight="$ogMeta['image_height'] ?? 630" :imageType="$ogMeta['image_type'] ?? 'image/jpeg'" :schema="$ogMeta['schema'] ?? null" />
     @endif
 
-    <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}"> -->
 
     <script>
         (function(w, d, s, l, i) {
@@ -147,12 +147,14 @@
                 j = d.createElement(s),
                 dl = l != 'dataLayer' ? '&l=' + l : '';
             j.async = true;
+            j.defer = true;
             j.src =
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
     </script>
     <script>
+        window.addEventListener('load', function() {
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function() {
@@ -177,6 +179,7 @@
         @if (!empty(trim($__env->yieldContent('event'))))
         fbq('track', @json($__env->yieldContent('event')));
         @endif
+});
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=3223171547852999&ev=PageView&noscript=1" /></noscript>
