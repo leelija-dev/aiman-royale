@@ -254,6 +254,7 @@
 
     <!-- common js  -->
     <script src="{{ asset('web/js/main.js') }}"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

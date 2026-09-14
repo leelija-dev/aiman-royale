@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cookie;
 use App\Services\MetaConversionsService;
 use App\Models\RegistrationOtpHistory;
 use App\Models\ProductVariant;
+use App\Rules\Turnstile;
 
 class AuthController extends Controller
 {
@@ -85,6 +86,81 @@ class AuthController extends Controller
             return redirect()->route('page.verify-email')->with('success', 'OTP sent to your email. Please verify to complete registration.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send OTP. Please try again.');
+        }
+    }
+
+    public function registerWithoutOTP(Request $request)
+    {
+        // 1. Validate basic fields first
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|max:255', // "email" here = combined email/phone field
+            'password' => 'required|min:6',
+        ]);
+
+        // 2. Detect if input is email or phone
+        $input   = trim($request->input('email'));
+        $isEmail = filter_var($input, FILTER_VALIDATE_EMAIL) !== false;
+        $isPhone = !$isEmail && preg_match('/^\+?[0-9\s\-\(\)]{7,20}$/', $input);
+
+        if (!$isEmail && !$isPhone) {
+            return back()
+                ->withErrors(['email' => 'Please enter a valid email address or phone number.'])
+                ->withInput();
+        }
+
+        // 3. Normalize values
+        $email = $isEmail ? strtolower($input) : null;
+        $phone = $isPhone ? preg_replace('/[\s\-\(\)]/', '', $input) : null;
+        
+
+        // 4. Check uniqueness against the right column
+        if ($email && User::where('email', $email)->exists()) {
+            return back()
+                ->withErrors(['email' => 'This email is already registered.'])
+                ->withInput();
+        }
+
+        if ($phone && User::where('phone', $phone)->exists()) {
+            return back()
+                ->withErrors(['email' => 'This phone number is already registered.'])
+                ->withInput();
+        }
+
+        // 5. Create user account directly without OTP
+        try {
+            // dd($request->all());
+            $user = User::create([
+                'name'              => $request->name,
+                'email'             => $email,
+                'phone'             => $phone,
+                'password'          => Hash::make($request->password),
+                'email_verified_at' => $email ? now() : null, // only mark verified if email
+                'cf-turnstile-response' => ['required', new Turnstile],
+                // If you have a phone_verified_at column:
+                // 'phone_verified_at' => $phone ? now() : null,
+            ]);
+            
+
+            // Auto login with Laravel Auth
+            Auth::login($user);
+
+            // Generate JWT token
+            $token = JWTAuth::fromUser($user);
+
+            // Store JWT token in session
+            session(['jwt_token' => $token]);
+
+            return redirect()
+                ->route('page.index')
+                ->with('success', 'Account created successfully!')
+                ->with('jwt_token', $token);
+        } catch (\Exception $e) {
+            \Log::error('Registration failed: ' . $e->getMessage());
+
+            return back()
+                ->with('error', 'Failed to create account. Please try again.')
+                ->withInput();
         }
     }
 
@@ -637,7 +713,7 @@ class AuthController extends Controller
             }
         }
 
-        if($variantId = session('guest_variant_id_for_wishlist')) {
+        if ($variantId = session('guest_variant_id_for_wishlist')) {
             dd($variantId);
             session()->forget('guest_variant_id_for_wishlist');
 
