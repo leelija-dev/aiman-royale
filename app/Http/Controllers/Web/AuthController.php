@@ -96,6 +96,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|max:255', // "email" here = combined email/phone field
             'password' => 'required|min:6',
+            'cf-turnstile-response' => ['required', new Turnstile],
         ]);
 
         // 2. Detect if input is email or phone
@@ -136,7 +137,7 @@ class AuthController extends Controller
                 'phone'             => $phone,
                 'password'          => Hash::make($request->password),
                 'email_verified_at' => $email ? now() : null, // only mark verified if email
-                'cf-turnstile-response' => ['required', new Turnstile],
+                
                 // If you have a phone_verified_at column:
                 // 'phone_verified_at' => $phone ? now() : null,
             ]);
