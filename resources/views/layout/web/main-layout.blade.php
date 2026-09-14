@@ -98,10 +98,28 @@
     <!-- <link rel="stylesheet" href="web/css/staging.css"> -->
 
     <!-- Owl Carousel CSS -->
-    <link rel="stylesheet"
+    {{-- <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" /> --}}
+        {{--this to --}}
+        <link rel="preload"
+            as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+            onload="this.onload=null;this.rel='stylesheet'">
+
+        <link rel="preload"
+            as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+            onload="this.onload=null;this.rel='stylesheet'">
+
+        <noscript>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+        </noscript> 
+        <!-- end this -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
     <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}">
