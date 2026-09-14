@@ -366,3 +366,8 @@ html::-webkit-scrollbar-corner {
   padding:20px 0 !important ;
 }
 
+.product-img {
+    aspect-ratio: 9/13;
+    width: 100%;
+    height: auto;
+}
