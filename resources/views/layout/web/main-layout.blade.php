@@ -80,7 +80,7 @@
     @stack('styles')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
+    <!-- <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link
@@ -89,7 +89,7 @@
 
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500&display=swap"
-        rel="stylesheet" />
+        rel="stylesheet" /> -->
     <!-- Font Awesome in  project -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
@@ -98,10 +98,28 @@
     <!-- <link rel="stylesheet" href="web/css/staging.css"> -->
 
     <!-- Owl Carousel CSS -->
-    <link rel="stylesheet"
+    {{-- <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" /> --}}
+        {{--this to --}}
+        <link rel="preload"
+            as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+            onload="this.onload=null;this.rel='stylesheet'">
+
+        <link rel="preload"
+            as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+            onload="this.onload=null;this.rel='stylesheet'">
+
+        <noscript>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+        </noscript> 
+        <!-- end this -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
     <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}">
@@ -116,7 +134,7 @@
             :imageHeight="$ogMeta['image_height'] ?? 630" :imageType="$ogMeta['image_type'] ?? 'image/jpeg'" :schema="$ogMeta['schema'] ?? null" />
     @endif
 
-    <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}"> -->
 
     <script>
         (function(w, d, s, l, i) {
@@ -129,12 +147,14 @@
                 j = d.createElement(s),
                 dl = l != 'dataLayer' ? '&l=' + l : '';
             j.async = true;
+            j.defer = true;
             j.src =
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
     </script>
     <script>
+        window.addEventListener('load', function() {
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function() {
@@ -159,6 +179,7 @@
         @if (!empty(trim($__env->yieldContent('event'))))
         fbq('track', @json($__env->yieldContent('event')));
         @endif
+});
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=3223171547852999&ev=PageView&noscript=1" /></noscript>
@@ -236,6 +257,7 @@
 
     <!-- common js  -->
     <script src="{{ asset('web/js/main.js') }}"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

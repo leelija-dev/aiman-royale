@@ -113,7 +113,7 @@
                         } 
                        // else{
                        //     $catImage = 'img/' . $catImage . '?w=600&q=80';
-                       // }
+                      //   }
                         @endphp
                         <img src="{{ $catImage }}"
                             alt="{{ $category->product->category->name }}"
