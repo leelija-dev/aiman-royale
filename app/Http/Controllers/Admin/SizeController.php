@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SizeController extends Controller
 {
@@ -55,7 +56,7 @@ class SizeController extends Controller
 
         $data['uk_size'] = $request->uk_size;
         Size::create($data);
-
+        Cache::forget('sizes'); // Clear the cache for sizes after creating a new size
         return redirect()->route('admin.sizes.index')->with('success', 'Size created successfully!');
     }
 
@@ -84,8 +85,9 @@ class SizeController extends Controller
         ]);
 
         $data['uk_size'] = $request->uk;
-        // dd($data);
+     
         $size->update($data);
+        Cache::forget('sizes'); // Clear the cache for sizes after updating
         // dd(
         //     route('admin.sizes'),
         //     url('/admin/sizes'),

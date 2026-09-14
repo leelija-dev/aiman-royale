@@ -193,6 +193,8 @@ class CategoryController extends Controller
                 Cache::forget('home.categories');
                 Cache::forget('home.categories.with_products');
                 Cache::forget('home.categories.grouped');
+                Cache::forget('product_categories');
+
                 Log::info('Category created successfully with ID: ' . $category->id);
             } catch (\Exception $e) {
                 Log::error('Failed to create category in database: ' . $e->getMessage());
@@ -350,6 +352,8 @@ class CategoryController extends Controller
             Cache::forget('home.categories');
             Cache::forget('home.categories.with_products');
             Cache::forget('home.categories.grouped');
+            Cache::forget('categories_active');
+            Cache::forget('product_categories');
 
             return redirect()->route('admin.categories.index')
                 ->with('success', 'Product category updated successfully with Cloudinary!');
@@ -376,6 +380,7 @@ class CategoryController extends Controller
         try {
             $category->delete();
 
+            Cache::forget('product_categories');
             return redirect()->route('admin.categories.index')
                 ->with('success', 'Product category moved to trash successfully');
         } catch (\Exception $e) {
@@ -400,6 +405,8 @@ class CategoryController extends Controller
         try {
             $category = Category::withTrashed()->findOrFail($id);
             $category->forceDelete();
+
+            Cache::forget('product_categories');
 
             return redirect()->route('admin.categories.trash')
                 ->with('success', 'Category has been permanently deleted.');
