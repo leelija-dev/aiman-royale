@@ -938,12 +938,12 @@
             text-primary px-4 py-2 rounded-full shadow-sm border border-primary/20">
 
                     <span class="animate-pulse text-secondary">🔥</span>
-                    <span>New Arrivals! for testing</span>
+                    <span>New Arrivals Just In</span>
 
                     <span class="text-gray-400">|</span>
 
                     <span>
-                        Get up to
+                         Enjoy Up to 
                         <span class="font-semibold text-secondary">70% OFF</span>
 
                     </span>
