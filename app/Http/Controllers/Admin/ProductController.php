@@ -255,6 +255,7 @@ class ProductController extends Controller
         Cache::forget('home.categories.with_products');
         Cache::forget('home.categories');
         Cache::forget('home.categories.grouped');
+        Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully with Cloudinary!');
     }
@@ -476,13 +477,22 @@ class ProductController extends Controller
             }
         }
 
-       Cache::deleteMultiple([
-            'home.services', 'home.mainBanners', 'home.secondaryBanners',
-            'home.bannerHeroSection', 'home.products.featured',
-            'home.products.wishlisted', 'home.categories',
-            'home.categories.with_products', 'home.occasions',
-            'home.categories.grouped', 'product_categories',
+        Cache::deleteMultiple([
+            'home.services',
+            'home.mainBanners',
+            'home.secondaryBanners',
+            'home.bannerHeroSection',
+            'home.products.featured',
+            'home.products.wishlisted',
+            'home.categories',
+            'home.categories.with_products',
+            'home.occasions',
+            'home.categories.grouped',
+            'product_categories',
         ]);
+        Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
+
+
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully with Cloudinary!');
     }
@@ -518,12 +528,18 @@ class ProductController extends Controller
         $product = Product::onlyTrashed()->findOrFail($id);
         $product->restore();
 
-         Cache::deleteMultiple([
-            'home.services', 'home.mainBanners', 'home.secondaryBanners',
-            'home.bannerHeroSection', 'home.products.featured',
-            'home.products.wishlisted', 'home.categories',
-            'home.categories.with_products', 'home.occasions',
-            'home.categories.grouped', 'product_categories',
+        Cache::deleteMultiple([
+            'home.services',
+            'home.mainBanners',
+            'home.secondaryBanners',
+            'home.bannerHeroSection',
+            'home.products.featured',
+            'home.products.wishlisted',
+            'home.categories',
+            'home.categories.with_products',
+            'home.occasions',
+            'home.categories.grouped',
+            'product_categories',
         ]);
         //$data=Product::all();
         return (redirect()->route('admin.products-trashed'))->with('success', 'Product restored successfully!');
