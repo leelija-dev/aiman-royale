@@ -23,21 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        if (app()->environment(['production', 'staging'])) {
-            URL::forceScheme('https');
-        }
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('superadmin') ? true : null;
-        });
-        View::composer('*', function ($view) {
+        // Resolve once per request/job; never share a user's wishlist across requests.
+        $this->app->scoped('view.shared-data', function () {
             $notifications = Notification::where('viewed', 0)->latest()->get();
             // $categories = Category::where('is_active', 1)->with('products')->orderBy('name')->get();
 
@@ -89,8 +76,23 @@ class AppServiceProvider extends ServiceProvider
                 });
             }
 
-            $view->with('notifications', $notifications)->with('categories', $categories)->with('sizes', $sizes)
-                ->with('wishlists', $wishlists)->with('productCategory', $productCategory);
+            return compact('notifications', 'categories', 'sizes', 'wishlists', 'productCategory');
+        });
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        if (app()->environment(['production', 'staging'])) {
+            URL::forceScheme('https');
+        }
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('superadmin') ? true : null;
+        });
+        View::composer('*', function ($view) {
+            $view->with($this->app->make('view.shared-data'));
         });
     }
 }

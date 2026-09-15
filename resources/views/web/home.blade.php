@@ -551,7 +551,8 @@
                             width="750"
                             height="1000"
                           
-                            loading="eager"
+                            loading="{{ $loop->first ? 'eager' : 'lazy' }}"
+                            fetchpriority="{{ $loop->first ? 'high' : 'auto' }}"
         
                             decoding="async">
                     </picture>
@@ -2708,7 +2709,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <!-- Cart Functionality -->
 <script>
     function toggleHomeWishlist(productId, event) {
