@@ -1319,169 +1319,30 @@ class HomeController extends Controller
     }
 
 
-    // public function ShowSingleProduct($slug)
-    // {
-    //     $data = Product::where('slug', $slug)->first();
-
-
-    //     if (!$data) {
-    //         abort(404);
-    //     }
-
-    //     $product = $data;
-    //     $product->load(['images', 'variants', 'category', 'parts']);
-
-    //     $sizes = Size::orderBy('sort_order')->get();
-    //     $colors = Color::orderBy('id')->get();
-
-    //     // Get session products
-    //     $lastViewed = session()->get('last_viewed', []);
-
-    //     // Remove current product if already exists
-    //     $lastViewed = array_filter($lastViewed, function ($item) use ($product) {
-    //         return $item['id'] != $product->id;
-    //     });
-
-    //     // Add current product at beginning
-    //     array_unshift($lastViewed, [
-    //         'id' => $product->id,
-    //         'name' => $product->name,
-    //         'slug' => $product->slug,
-    //         'featured_image' => $product->featured_image,
-    //         'price' => $product->price,
-    //         'discount_price' => $product->discount_price,
-    //         'is_trending' => $product->is_trending ?? false,
-    //         'viewed_at' => now()->timestamp
-    //     ]);
-
-    //     // Keep only 5 products
-    //     $lastViewed = array_slice($lastViewed, 0, 5);
-
-    //     // Store again in session
-    //     session()->put('last_viewed', $lastViewed);
-
-    //     // Convert to collection for blade
-    //     $lastViewedProducts = collect($lastViewed);
-
-    //     if ($colors->count() === 0) {
-
-    //         $defaultColors = [
-    //             ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
-    //             ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
-    //             ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
-    //             ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
-    //             ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
-    //             ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
-    //             ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
-    //             ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
-    //         ];
-
-    //         foreach ($defaultColors as $colorData) {
-    //             Color::create($colorData);
-    //         }
-
-    //         $colors = Color::orderBy('id')->get();
-    //     }
-
-    //     $mostWishlistedProducts = Product::where('is_active', 1)
-    //         ->withCount('wishlists')
-    //         ->orderBy('wishlists_count', 'desc')
-    //         ->limit(8)
-    //         ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
-
-    //     $mostWishlistedProducts->load(['variants', 'images']);
-
-    //     $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
-    //         ->whereHas('variants')->with(['variants', 'images'])->get();
-
-    //     try {
-    //         $defaultVariant = $product->variants->first();
-
-    //         $productData = [
-    //             'id'       => $product->id,
-    //             'name'     => $product->name,
-    //             'price'    => $defaultVariant
-    //                 ? ($defaultVariant->discount_price ?? $defaultVariant->price)
-    //                 : $product->price,
-    //             'currency' => 'INR',
-    //             'category' => $product->category->name ?? null,
-    //         ];
-
-    //         $result = $this->metaService->trackViewContent($productData);
-
-    //         Log::info('Meta ViewContent tracked', [
-    //             'product_id' => $product->id,
-    //             'result'     => $result,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Meta ViewContent failed: ' . $e->getMessage());
-    //     }
-
-    //     // Check for applied coupon in session
-    //     $appliedCoupon = session('applied_coupon');
-
-    //     return view('web.single-product', compact(
-    //         'product',
-    //         'sizes',
-    //         'relatedProducts',
-    //         'colors',
-    //         'mostWishlistedProducts',
-    //         'lastViewedProducts',
-    //         'appliedCoupon'
-    //     ));
-    // }
-
     public function ShowSingleProduct($slug)
     {
-        // Cache the product lookup + relations for 1 hour
-        $product = Cache::tags(['products', 'product_slug_' . $slug])
-            ->remember("product.slug.{$slug}", now()->addHour(), function () use ($slug) {
-                return Product::where('slug', $slug)
-                    ->with(['images', 'variants', 'category', 'parts'])
-                    ->first();
-            });
+        $data = Product::where('slug', $slug)->first();
 
-        if (!$product) {
+
+        if (!$data) {
             abort(404);
         }
 
-        // Cache sizes and colors (rarely change) for 24 hours
-        $sizes = Cache::tags(['sizes'])->remember('sizes.all', now()->addDay(), function () {
-            return Size::orderBy('sort_order')->get();
-        });
+        $product = $data;
+        $product->load(['images', 'variants', 'category', 'parts']);
 
-        $colors = Cache::tags(['colors'])->remember('colors.all', now()->addDay(), function () {
-            $colors = Color::orderBy('id')->get();
+        $sizes = Size::orderBy('sort_order')->get();
+        $colors = Color::orderBy('id')->get();
 
-            if ($colors->count() === 0) {
-                $defaultColors = [
-                    ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
-                    ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
-                    ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
-                    ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
-                    ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
-                    ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
-                    ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
-                    ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
-                ];
-
-                foreach ($defaultColors as $colorData) {
-                    Color::create($colorData);
-                }
-
-                $colors = Color::orderBy('id')->get();
-            }
-
-            return $colors;
-        });
-
-        // Session-based (keep as is - per user)
+        // Get session products
         $lastViewed = session()->get('last_viewed', []);
 
+        // Remove current product if already exists
         $lastViewed = array_filter($lastViewed, function ($item) use ($product) {
             return $item['id'] != $product->id;
         });
 
+        // Add current product at beginning
         array_unshift($lastViewed, [
             'id' => $product->id,
             'name' => $product->name,
@@ -1493,32 +1354,46 @@ class HomeController extends Controller
             'viewed_at' => now()->timestamp
         ]);
 
+        // Keep only 5 products
         $lastViewed = array_slice($lastViewed, 0, 5);
+
+        // Store again in session
         session()->put('last_viewed', $lastViewed);
+
+        // Convert to collection for blade
         $lastViewedProducts = collect($lastViewed);
 
-        // Cache most wishlisted products for 30 minutes
-        $mostWishlistedProducts = Cache::tags(['products', 'wishlists'])
-            ->remember('products.most_wishlisted', now()->addMinutes(30), function () {
-                return Product::where('is_active', 1)
-                    ->withCount('wishlists')
-                    ->orderBy('wishlists_count', 'desc')
-                    ->limit(8)
-                    ->with(['variants', 'images'])
-                    ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
-            });
+        if ($colors->count() === 0) {
 
-        // Cache related products per category for 1 hour
-        $relatedProducts = Cache::tags(['products', 'category_' . $product->category_id])
-            ->remember("products.related.category.{$product->category_id}", now()->addHour(), function () use ($product) {
-                return Product::where('category_id', $product->category_id)
-                    ->where('is_active', 1)
-                    ->whereHas('variants')
-                    ->with(['variants', 'images'])
-                    ->get();
-            });
+            $defaultColors = [
+                ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
+                ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
+                ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
+                ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
+                ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
+                ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
+                ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
+                ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
+            ];
 
-        // Meta tracking - NOT cached (per user request/analytics)
+            foreach ($defaultColors as $colorData) {
+                Color::create($colorData);
+            }
+
+            $colors = Color::orderBy('id')->get();
+        }
+
+        $mostWishlistedProducts = Product::where('is_active', 1)
+            ->withCount('wishlists')
+            ->orderBy('wishlists_count', 'desc')
+            ->limit(8)
+            ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
+
+        $mostWishlistedProducts->load(['variants', 'images']);
+
+        $relatedProducts = Product::where('category_id', '=', $product->category_id)->where('is_active', 1)
+            ->whereHas('variants')->with(['variants', 'images'])->get();
+
         try {
             $defaultVariant = $product->variants->first();
 
@@ -1542,6 +1417,7 @@ class HomeController extends Controller
             Log::error('Meta ViewContent failed: ' . $e->getMessage());
         }
 
+        // Check for applied coupon in session
         $appliedCoupon = session('applied_coupon');
 
         return view('web.single-product', compact(
@@ -1554,4 +1430,128 @@ class HomeController extends Controller
             'appliedCoupon'
         ));
     }
+
+    // public function ShowSingleProduct($slug)
+    // {
+    //     // Cache the product lookup + relations for 1 hour
+    //     $product = Cache::tags(['products', 'product_slug_' . $slug])
+    //         ->remember("product.slug.{$slug}", now()->addHour(), function () use ($slug) {
+    //             return Product::where('slug', $slug)
+    //                 ->with(['images', 'variants', 'category', 'parts'])
+    //                 ->first();
+    //         });
+
+    //     if (!$product) {
+    //         abort(404);
+    //     }
+
+    //     // Cache sizes and colors (rarely change) for 24 hours
+    //     $sizes = Cache::tags(['sizes'])->remember('sizes.all', now()->addDay(), function () {
+    //         return Size::orderBy('sort_order')->get();
+    //     });
+
+    //     $colors = Cache::tags(['colors'])->remember('colors.all', now()->addDay(), function () {
+    //         $colors = Color::orderBy('id')->get();
+
+    //         if ($colors->count() === 0) {
+    //             $defaultColors = [
+    //                 ['name' => 'Red', 'code' => '#FF0000', 'color_tone' => 'warm'],
+    //                 ['name' => 'Blue', 'code' => '#0000FF', 'color_tone' => 'cool'],
+    //                 ['name' => 'Green', 'code' => '#00FF00', 'color_tone' => 'cool'],
+    //                 ['name' => 'Yellow', 'code' => '#FFFF00', 'color_tone' => 'warm'],
+    //                 ['name' => 'Black', 'code' => '#000000', 'color_tone' => 'neutral'],
+    //                 ['name' => 'White', 'code' => '#FFFFFF', 'color_tone' => 'neutral'],
+    //                 ['name' => 'Pink', 'code' => '#FFC0CB', 'color_tone' => 'warm'],
+    //                 ['name' => 'Purple', 'code' => '#800080', 'color_tone' => 'cool'],
+    //             ];
+
+    //             foreach ($defaultColors as $colorData) {
+    //                 Color::create($colorData);
+    //             }
+
+    //             $colors = Color::orderBy('id')->get();
+    //         }
+
+    //         return $colors;
+    //     });
+
+    //     // Session-based (keep as is - per user)
+    //     $lastViewed = session()->get('last_viewed', []);
+
+    //     $lastViewed = array_filter($lastViewed, function ($item) use ($product) {
+    //         return $item['id'] != $product->id;
+    //     });
+
+    //     array_unshift($lastViewed, [
+    //         'id' => $product->id,
+    //         'name' => $product->name,
+    //         'slug' => $product->slug,
+    //         'featured_image' => $product->featured_image,
+    //         'price' => $product->price,
+    //         'discount_price' => $product->discount_price,
+    //         'is_trending' => $product->is_trending ?? false,
+    //         'viewed_at' => now()->timestamp
+    //     ]);
+
+    //     $lastViewed = array_slice($lastViewed, 0, 5);
+    //     session()->put('last_viewed', $lastViewed);
+    //     $lastViewedProducts = collect($lastViewed);
+
+    //     // Cache most wishlisted products for 30 minutes
+    //     $mostWishlistedProducts = Cache::tags(['products', 'wishlists'])
+    //         ->remember('products.most_wishlisted', now()->addMinutes(30), function () {
+    //             return Product::where('is_active', 1)
+    //                 ->withCount('wishlists')
+    //                 ->orderBy('wishlists_count', 'desc')
+    //                 ->limit(8)
+    //                 ->with(['variants', 'images'])
+    //                 ->get(['id', 'name', 'slug', 'featured_image', 'price', 'category_id', 'is_trending']);
+    //         });
+
+    //     // Cache related products per category for 1 hour
+    //     $relatedProducts = Cache::tags(['products', 'category_' . $product->category_id])
+    //         ->remember("products.related.category.{$product->category_id}", now()->addHour(), function () use ($product) {
+    //             return Product::where('category_id', $product->category_id)
+    //                 ->where('is_active', 1)
+    //                 ->whereHas('variants')
+    //                 ->with(['variants', 'images'])
+    //                 ->get();
+    //         });
+
+    //     // Meta tracking - NOT cached (per user request/analytics)
+    //     try {
+    //         $defaultVariant = $product->variants->first();
+
+    //         $productData = [
+    //             'id'       => $product->id,
+    //             'name'     => $product->name,
+    //             'price'    => $defaultVariant
+    //                 ? ($defaultVariant->discount_price ?? $defaultVariant->price)
+    //                 : $product->price,
+    //             'currency' => 'INR',
+    //             'category' => $product->category->name ?? null,
+    //         ];
+
+    //         $result = $this->metaService->trackViewContent($productData);
+
+    //         Log::info('Meta ViewContent tracked', [
+    //             'product_id' => $product->id,
+    //             'result'     => $result,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Meta ViewContent failed: ' . $e->getMessage());
+    //     }
+
+    //     $appliedCoupon = session('applied_coupon');
+
+    //     return view('web.single-product', compact(
+    //         'product',
+    //         'sizes',
+    //         'relatedProducts',
+    //         'colors',
+    //         'mostWishlistedProducts',
+    //         'lastViewedProducts',
+    //         'appliedCoupon'
+    //     ));
+    // }
 }
