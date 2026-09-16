@@ -844,8 +844,9 @@
                                         data-display="{{ $fullImagePath }}" data-large="{{ $fullImagePath }}"
                                         onclick="updateMainImage('{{ $fullImagePath }}', '{{ $product->name }}', this)">
                                         <img src="{{ $fullImagePath }}"
+                                            
                                             class="w-full h-full object-cover object-center object-top"
-                                            alt="{{ $product->name }}" />
+                                            alt="{{ $product->name }}" loading="lazy" />
                                     </div>
                                 @empty
                                     <div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
@@ -854,7 +855,7 @@
                                         onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
                                         <img src="{{ asset('assets/images/placeholder.jpg') }}"
                                             class="w-full h-full object-cover object-center object-top"
-                                            alt="{{ $product->name ?? 'Product' }}" />
+                                            alt="{{ $product->name ?? 'Product' }}"  loading="lazy"   />
                                     </div>
                                 @endforelse
                             </div>
@@ -893,7 +894,7 @@
                                 @endphp
                                 <img src="{{ $mainImagePath }}"
                                     class="w-full h-full object-contain object-center object-top"
-                                    alt="{{ $product->name ?? 'Product' }}" id="main-image" />
+                                    alt="{{ $product->name ?? 'Product' }}"  fetchpriority="high" loading="eager" id="main-image" />
                                 <div
                                     class="absolute bottom-4 right-4 bg-white/90 backdrop-blur rounded-full p-3 shadow-lg opacity-0 transition-opacity fullscreen-btn">
                                     <button id="fullscreen-btn" class="text-gray-800 hover:text-blue-700">
@@ -1288,7 +1289,7 @@
                 <i class="fas fa-times"></i>
             </button>
             <div class="max-w-6xl max-h-full p-8">
-                <img src="" id="zoom-modal-image" alt="Zoomed Image"
+                <img src="" id="zoom-modal-image" alt="Zoomed Image" loading="lazy"
                     class="max-w-full max-h-full object-contain" />
             </div>
         </div>
@@ -1650,7 +1651,7 @@
                         <div class="flex justify-between items-center py-4 cursor-pointer">
                             <span class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Product
                                 Details</span>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" loading="lazy"
                                 src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
                         <div class="accordion-content-block">
@@ -1757,7 +1758,7 @@
                         <div class="flex justify-between items-center py-4 cursor-pointer">
                             <span
                                 class="text-p-md lg:text-p-lg lgg:text-p-lgg xl:text-p-xl font-medium font-sans">Specification</span>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" loading="lazy"
                                 src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
                         <div class="accordion-content-block">
@@ -1830,7 +1831,7 @@
                                         {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}</span>
                                 </div>
                             </div>
-                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]"
+                            <img class="accordion-chevron min-w-[23px] min-h-[23px] w-[23px] h-[23px]" loading="lazy"
                                 src="{{ asset('images/icons/up-arrow.png') }}" alt="Toggle" />
                         </div>
                         <div class="accordion-content-block">
@@ -3497,7 +3498,7 @@
 
                         const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
                         thumbnailsHtml +=
-                            `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                            `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" loading="lazy" /></div>`;
                     });
                     thumbnailContainer.innerHTML = thumbnailsHtml;
                 }
