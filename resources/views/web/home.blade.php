@@ -100,7 +100,7 @@
 
                         $productImage = $category->product->images->sortByDesc('id')->first()?->image;
                         $catagoryImage = $category->product->category->image;
-                        $catImage =  $productImage ?: $catagoryImage;
+                        $catImage = $productImage ?: $catagoryImage;
 
                         // Optional: placeholder if neither exists
                         // if (!$catImage) {
@@ -110,12 +110,18 @@
                         if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
                         $parts = explode('upload/', $catImage);
                         $catImage = $parts[0] . 'upload/w_550,h_800,c_fill,f_auto,q_auto/' . $parts[1];
-                        } 
+                        }
                         else{
-                            $catImage = 'img/' . $catImage . '?w=600&q=80';
-                         }
+                        $catImage = 'img/' . $catImage . '?w=600&q=80';
+                        }
                         @endphp
                         <img src="{{ $catImage }}"
+                            srcset="{{ $catImage }}?w=200&q=80 200w,
+             {{ $catImage }}?w=400&q=80 400w,
+             {{ $catImage }}?w=600&q=80 600w"
+                            sizes="(max-width: 640px) 200px,
+            (max-width: 1024px) 300px,
+            400px"
                             alt="{{ $category->product->category->name }}"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
@@ -528,63 +534,61 @@
             {{--don't remove this comment code need for later check -}}
             {{-- <div class="slide-item relative">
 
-                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt="" 
-                @if($key == 0)
-                    fetchpriority=""
+                <a href="{{$banner->redirect_link}}"><img class="hero-carousel-desktop" src="{{ asset('storage/uploads/banners/' . $banner->image) }}" class="w-full h-full object-cover md:hidden  " alt=""
+                @if($key==0)
+                fetchpriority=""
                 @else
-                    loading="lazy"
+                loading="lazy"
                 @endif
                 decoding="async"> </a>
-                <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a> 
+            <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a>
 
-            </div> --}}
-            <div class="slide-item relative">
+        </div> --}}
+        <div class="slide-item relative">
 
-                <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
-                    <picture>
-                        <source media="(min-width: 768px)"
-                            srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
-                        <img
-                            src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
-                            alt="{{ $banner->title ?? '' }}"
-                            class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
-                            width="750"
-                            height="1000"
-                          
-                            loading="eager"
-        
-                            decoding="async">
-                    </picture>
-                </a>
+            <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
+                <picture>
+                    <source media="(min-width: 768px)"
+                        srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
+                    <img
+                        src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
+                        alt="{{ $banner->title ?? '' }}"
+                        class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
+                        width="750"
+                        height="1000"
+                        @if($key==0) fetchpriority="high" @else loading="eager" @endif
+                        decoding="async">
+                </picture>
+            </a>
 
-                <!-- <div class="slide-content">
+            <!-- <div class="slide-content">
                     <h2 class="brand-name"><span>Seema Gujral</span></h2>
                     <p class="tagline">An ode to timeless elegance</p>
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                 </div> -->
-            </div>
-            @endforeach
+        </div>
+        @endforeach
 
-            <!-- Slide 2 -->
-            {{-- <div class="slide-item relative">
-                
-                     <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden block" alt="">
-            <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="">
-
-            <!-- <div class="slide-content">
-                        <h2 class="brand-name"><span>Seema Gujral</span></h2>
-                        <p class="tagline">An ode to timeless elegance</p>
-                        <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
-                    </div> -->
-        </div> --}}
-
-        <!-- Slide 3 -->
+        <!-- Slide 2 -->
         {{-- <div class="slide-item relative">
-               
+                
                      <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden block" alt="">
         <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="">
 
         <!-- <div class="slide-content">
+                        <h2 class="brand-name"><span>Seema Gujral</span></h2>
+                        <p class="tagline">An ode to timeless elegance</p>
+                        <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
+                    </div> -->
+    </div> --}}
+
+    <!-- Slide 3 -->
+    {{-- <div class="slide-item relative">
+               
+                     <img class="hero-carousel-desktop" src="{{ asset('web/images/custom_design/1784293240602women-the-celebration-closet.webp') }}" class="w-full h-full object-cover md:hidden block" alt="">
+    <img class="hero-carousel-mobile" src="{{ asset('web/images/custom_design/portrait-image.jpg') }}" class="w-full h-full object-cover md:block  hidden" alt="">
+
+    <!-- <div class="slide-content">
                     <h2 class="brand-name"><span>Seema Gujral</span></h2>
                     <p class="tagline">An ode to timeless elegance</p>
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
@@ -633,171 +637,14 @@
         <div class="relative ">
             <div id="categories-carousel" class="owl-carousel owl-theme">
                 @if (!isset($categoriesWithProduct))
-                <!-- Category 1 -->
-                <div class="item p-2">
-                    <a href="#" class="group block relative overflow-hidden rounded-3xl">
-                        <!-- Main Image Container -->
-                        <div class="relative h-96 overflow-hidden rounded-3xl">
-                            <!-- Image with zoom effect -->
-                            <img src="{{ asset('web/images/banner-images/red-plazo-6.webp') }}"
-                                alt="Salwar Kameez"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                loading="lazy"
-                                decoding="async" />
-                            <!-- Transparent Overlay Content - Shows on hover -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
-                                <!-- Floating Badge -->
-                                <div class="absolute top-6 left-6">
-                                    <span
-                                        class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
-                                        <span class="flex items-center">
-                                            <svg class="w-3 h-3 mr-1 animate-pulse" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            Popular
-                                        </span>
-                                    </span>
-                                </div>
-                                <!-- Category Name -->
-                                <h3
-                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                    Salwar Kameez
-                                </h3>
-                                <!-- Description -->
-                                <p
-                                    class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                                    Traditional elegance with modern designs
-                                </p>
-                                <!-- Styles Count -->
-                                <div
-                                    class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
-                                    <span
-                                        class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                        120+ Designs
-                                    </span>
-                                </div>
-                                <!-- Shop Now Button -->
-                                <div
-                                    class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                                    <span
-                                        class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
-                                        Shop Now
-                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                                            fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Minimal Content Visible Before Hover -->
-                            <div
-                                class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
-                                <h3 class="text-2xl font-bold text-white mb-2">Salwar Kameez</h3>
-                                <div class="flex items-center">
-                                    <span class="flex items-center text-sm text-white/90">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                        120+ Designs
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Category 2 -->
-                <div class="item p-2">
-                    <a href="#" class="group block relative overflow-hidden rounded-3xl">
-                        <div class="relative h-96 overflow-hidden rounded-3xl">
-                            <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
-                                alt="Lehanga"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                loading="lazy"
-                                decoding="async" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
-                                <div class="absolute top-6 left-6">
-                                    <span
-                                        class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
-                                        <span class="flex items-center">
-                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-                                            </svg>
-                                            Bridal
-                                        </span>
-                                    </span>
-                                </div>
-                                <h3
-                                    class="smui:text-3xl text-[1.5rem] smui:leading-[2.25rem] leading-[1.6rem] font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                    Lehengas
-                                </h3>
-                                <p
-                                    class="text-gray-200 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                                    Royal bridal collections
-                                </p>
-                                <div
-                                    class="flex items-center mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
-                                    <span
-                                        class="flex items-center text-sm font-medium text-white bg-white/20 px-4 py-2 rounded-full border border-white/30">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-2" fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                        80+ Collections
-                                    </span>
-                                </div>
-                                <div
-                                    class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                                    <span
-                                        class="inline-flex items-center text-sm font-semibold text-white bg-white/20 px-5 py-2.5 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
-                                        Shop Now
-                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                                            fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Minimal Content Before Hover -->
-                            <div
-                                class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/60 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300">
-                                <h3 class="text-2xl font-bold text-white mb-2">Lehengas</h3>
-                                <div class="flex items-center">
-                                    <span class="flex items-center text-sm text-white/90">
-                                        <svg class="w-4 h-4 text-yellow-300 mr-1" fill="currentColor"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                        80+ Collections
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                <div class="item p-2 text-center py-8">
+                    <p class="text-gray-500 font-sans">No categories available at the moment.</p>
                 </div>
                 @else
                 <!-- Dynamic Categories -->
                 @foreach ($categoriesWithProduct as $category)
                 <div class="item p-2">
-                    
+
                     @php
                     $catImg = $category->latestProductWithImage->featured_image
                     ? url('/img/' . $category->latestProductWithImage->featured_image . '?w=600&q=80')
@@ -816,8 +663,17 @@
 
                         <img
                             src="{{ $catImg }}"
+                            srcset="{{ $catImg }}?w=300&q=80 300w,
+                            {{ $catImg }}?w=450&q=80 450w,
+                            {{ $catImg }}?w=600&q=80 600w,
+                            {{ $catImg }}?w=800&q=80 800w"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt="{{ $category->name }}"
-                            class="w-full aspect-[9/13] object-cover object-top transition duration-700 group-hover:scale-105">
+                            class="w-full aspect-[9/13] object-cover object-top transition duration-700 group-hover:scale-105"
+                            width="450"
+                            height="650"
+                            loading="lazy"
+                            decoding="async">
 
                         <!-- Overlay -->
 
@@ -940,9 +796,9 @@
                 $tagImage = $parts[0] . 'upload/w_600,h_850,c_fill,f_auto,q_auto/' . $parts[1];
                 }
                 else {
-        // Local image - use proxy with specific folder
-        $tagImage = url('/img/' . $tagImage . '?w=600&q=80');
-    }
+                // Local image - use proxy with specific folder
+                $tagImage = url('/img/' . $tagImage . '?w=600&q=80');
+                }
                 @endphp
 
                 <div class="item ">
@@ -958,6 +814,10 @@
 
                                 <img
                                     src="{{ $tagImage }}"
+                                    srcset="{{ $tagImage }}?w=300&q=80 300w,
+                                            {{ $tagImage }}?w=400&q=80 400w,
+                                            {{ $tagImage }}?w=600&q=80 600w"
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 15vw"
                                     alt="{{ $category->name }}"
                                     loading="lazy"
                                     decoding="async"
@@ -1038,53 +898,57 @@
 
         <div class="main-owl owl-carousel owl-theme">
             @if ($products && $products->count() > 0)
-            
+
             @foreach ($products as $product)
             <div class="item flex justify-center items-center ">
                 <div class="group w-full bg-white xxs:max-w-full max-w-[320px] rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200"
                     onclick="window.location.href='{{ route('page.single-product', $product->slug) }}';">
                     <!-- Image Wrapper -->
                     <div class="relative overflow-hidden bg-gray-100">
-                     @php
-    $imagePath = $product->featured_image;
-    $imageUrl = '';
-    
-    // Check if it's a Cloudinary URL or path
-    $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
-                    str_contains($imagePath, 'res.cloudinary.com') ||
-                    str_contains($imagePath, 'aiman/');
-    
-    if ($isCloudinary) {
-        // Cloudinary handling
-        if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com') && str_contains($imagePath, 'upload/')) {
-            $parts = explode('upload/', $imagePath);
-            $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . ($parts[1] ?? '');
-        } elseif (str_contains($imagePath, 'aiman/')) {
-            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
-        } else {
-            $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
-        }
-    } else {
-        // Local image - use image-proxy
-        if ($imagePath) {
-            // Check if file exists in both locations
-            $publicPath = public_path($imagePath);
-            $storagePath = storage_path('app/public/' . $imagePath);
-            
-            if (file_exists($publicPath) || file_exists($storagePath)) {
-                // Use the proxy URL with the full path
-                $imageUrl = url('/img/' . $imagePath . '?w=600&q=80');
-            } else {
-                // Fallback to placeholder
-                $imageUrl = asset('assets/images/placeholder.jpg');
-            }
-        } else {
-            // Fallback to placeholder
-            $imageUrl = asset('assets/images/placeholder.jpg');
-        }
-    }
-@endphp
+                        @php
+                        $imagePath = $product->featured_image;
+                        $imageUrl = '';
+
+                        // Check if it's a Cloudinary URL or path
+                        $isCloudinary = str_contains($imagePath, 'cloudinary.com') ||
+                        str_contains($imagePath, 'res.cloudinary.com') ||
+                        str_contains($imagePath, 'aiman/');
+
+                        if ($isCloudinary) {
+                        // Cloudinary handling
+                        if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com') && str_contains($imagePath, 'upload/')) {
+                        $parts = explode('upload/', $imagePath);
+                        $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . ($parts[1] ?? '');
+                        } elseif (str_contains($imagePath, 'aiman/')) {
+                        $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+                        } else {
+                        $imageUrl = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_900,c_fill,f_auto,q_auto/' . $imagePath;
+                        }
+                        } else {
+                        // Local image - use image-proxy
+                        if ($imagePath) {
+                        // Check if file exists in both locations
+                        $publicPath = public_path($imagePath);
+                        $storagePath = storage_path('app/public/' . $imagePath);
+
+                        if (file_exists($publicPath) || file_exists($storagePath)) {
+                        // Use the proxy URL with the full path
+                        $imageUrl = url('/img/' . $imagePath . '?w=600&q=80');
+                        } else {
+                        // Fallback to placeholder
+                        $imageUrl = asset('assets/images/placeholder.jpg');
+                        }
+                        } else {
+                        // Fallback to placeholder
+                        $imageUrl = asset('assets/images/placeholder.jpg');
+                        }
+                        }
+                        @endphp
                         <img src="{{ $imageUrl }}"
+                            srcset="{{ $imageUrl }}?w=300&q=80 300w,
+                                    {{ $imageUrl }}?w=450&q=80 450w,
+                                    {{ $imageUrl }}?w=600&q=80 600w"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
                             loading="lazy"
@@ -1231,11 +1095,17 @@
                         class="absolute top-0 right-8 w-36 h-36 transform rotate-12 hover:-rotate-6 transition-transform duration-500 cursor-pointer group z-10">
                         <div class="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-pink-500/10 rounded-xl">
                         </div>
-                        <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=400&q=80"
+                            srcset="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=300&q=80 300w,
+                                    {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=400&q=80 400w,
+                                    {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=600&q=80 600w"
+                            sizes="(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 20vw"
                             alt="Saree Collection"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            width="400"
+                            height="400">
                         <div
                             class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
                             <p class="text-gray-900 text-xs font-bold digital-font">₹74.99</p>
@@ -1246,11 +1116,17 @@
                         class="relative w-56 h-56 mx-auto transform -rotate-3 hover:rotate-0 transition-transform duration-500 cursor-pointer group z-[10]">
                         <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-pink-400/10 rounded-2xl">
                         </div>
-                        <img src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=600&q=80"
+                            srcset="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=400&q=80 400w,
+                                    {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=600&q=80 600w,
+                                    {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=800&q=80 800w"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 40vw, 30vw"
                             alt="Premium Lehenga"
                             class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            width="600"
+                            height="600">
                         <div
                             class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6 digital-font">
                             -25%
@@ -1261,11 +1137,17 @@
                         class="absolute bottom-8 left-4 w-40 h-40 transform -rotate-12 hover:rotate-3 transition-transform duration-500 cursor-pointer group z-10">
                         <div class="absolute inset-0 bg-gradient-to-tl from-secondary/10 to-pink-600/10 rounded-xl">
                         </div>
-                        <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=400&q=80"
+                            srcset="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=300&q=80 300w,
+                                    {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=400&q=80 400w,
+                                    {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=600&q=80 600w"
+                            sizes="(max-width: 640px) 35vw, (max-width: 1024px) 25vw, 20vw"
                             alt="Party Wear"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            width="400"
+                            height="400">
                         <div
                             class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg font-sans">
                             New
@@ -1275,11 +1157,17 @@
                     <div
                         class="absolute bottom-4 right-0 w-32 h-32 rounded-full overflow-hidden border-4 border-white hover:border-secondary transition-all duration-300 cursor-pointer group z-10 shadow-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-secondary/10 to-pink-600/10"></div>
-                        <img src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}"
+                        <img src="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=300&q=80"
+                            srcset="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=200&q=80 200w,
+                                    {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=300&q=80 300w,
+                                    {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=400&q=80 400w"
+                            sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
                             alt="Kurta Set"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            width="300"
+                            height="300">
                         <div
                             class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <span class="text-white text-sm font-bold font-sans">View</span>
@@ -1303,15 +1191,24 @@
                         <div class="flex -space-x-3">
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover" loading="lazy">
+                                    srcset="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80 50w,
+                                            https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80 100w"
+                                    sizes="32px"
+                                    alt="" class="w-full h-full object-cover" loading="lazy" decoding="async" width="32" height="32">
                             </div>
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover" loading="lazy">
+                                    srcset="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80 50w,
+                                            https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80 100w"
+                                    sizes="32px"
+                                    alt="" class="w-full h-full object-cover" loading="lazy" decoding="async" width="32" height="32">
                             </div>
                             <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden shadow-sm">
                                 <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    alt="" class="w-full h-full object-cover" loading="lazy">
+                                    srcset="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80 50w,
+                                            https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80 100w"
+                                    sizes="32px"
+                                    alt="" class="w-full h-full object-cover" loading="lazy" decoding="async" width="32" height="32">
                             </div>
                         </div>
                         <div class="text-left">
@@ -1356,77 +1253,81 @@
         <div id="uniq-ads-slider" class="owl-carousel owl-theme">
             @foreach ($mainBanners as $banner)
             @php
-                // Get the image path from database
-                $imagePath = $banner->image;
-                
-                // Check if it's a Cloudinary URL or path
-                $isCloudinary = str_contains($imagePath, 'cloudinary.com') || 
-                                str_contains($imagePath, 'res.cloudinary.com') ||
-                                str_contains($imagePath, 'aiman/banners/');
-                
-                // Default banner image
-                $bannerImg = '';
-                
-                if ($isCloudinary) {
-                    // Cloudinary image handling
-                    if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com')) {
-                        if (str_contains($imagePath, 'upload/')) {
-                            $parts = explode('upload/', $imagePath);
-                            $cloudinaryPath = $parts[1] ?? '';
-                            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $cloudinaryPath;
-                        } else {
-                            $bannerImg = $imagePath;
-                        }
-                    } elseif (str_contains($imagePath, 'aiman/banners/')) {
-                        $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
-                    } else {
-                        $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
-                    }
-                } else {
-                    // LOCAL IMAGE - Use the proxy URL
-                    // Check if file exists in storage
-                    $storagePath = 'uploads/banners/' . $imagePath;
-                    $publicPath = public_path('uploads/banners/' . $imagePath);
-                    $storageFullPath = storage_path('app/public/' . $storagePath);
-                    
-                    if (file_exists($storageFullPath) || file_exists($publicPath)) {
-                        // Use the image-proxy URL for optimization
-                        $bannerImg = url('/img/uploads/banners/' . $imagePath . '?w=600&q=80');
-                    } else {
-                        // Fallback to default image
-                        $bannerImg = asset('uploads/banners/default.jpg');
-                        \Log::warning('Banner image not found:', [
-                            'image' => $imagePath,
-                            'storage_path' => $storageFullPath,
-                            'public_path' => $publicPath
-                        ]);
-                    }
-                }
+            // Get the image path from database
+            $imagePath = $banner->image;
 
-                // Build the filter URL based on banner data
-                $filterUrl = '#';
-                if ($banner->filter) {
-                    if ($banner->filter_type === 'multiple' && $banner->filters) {
-                        $filterUrl = '/products?' . $banner->filters;
-                    } elseif ($banner->filter) {
-                        $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
-                    }
-                }
+            // Check if it's a Cloudinary URL or path
+            $isCloudinary = str_contains($imagePath, 'cloudinary.com') ||
+            str_contains($imagePath, 'res.cloudinary.com') ||
+            str_contains($imagePath, 'aiman/banners/');
+
+            // Default banner image
+            $bannerImg = '';
+
+            if ($isCloudinary) {
+            // Cloudinary image handling
+            if (filter_var($imagePath, FILTER_VALIDATE_URL) && str_contains($imagePath, 'cloudinary.com')) {
+            if (str_contains($imagePath, 'upload/')) {
+            $parts = explode('upload/', $imagePath);
+            $cloudinaryPath = $parts[1] ?? '';
+            $bannerImg = $parts[0] . 'upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $cloudinaryPath;
+            } else {
+            $bannerImg = $imagePath;
+            }
+            } elseif (str_contains($imagePath, 'aiman/banners/')) {
+            $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
+            } else {
+            $bannerImg = 'https://res.cloudinary.com/dwbseti83/image/upload/w_600,h_1000,c_fill,f_auto,q_auto/' . $imagePath;
+            }
+            } else {
+            // LOCAL IMAGE - Use the proxy URL
+            // Check if file exists in storage
+            $storagePath = 'uploads/banners/' . $imagePath;
+            $publicPath = public_path('uploads/banners/' . $imagePath);
+            $storageFullPath = storage_path('app/public/' . $storagePath);
+
+            if (file_exists($storageFullPath) || file_exists($publicPath)) {
+            // Use the image-proxy URL for optimization
+            $bannerImg = url('/img/uploads/banners/' . $imagePath . '?w=600&q=80');
+            } else {
+            // Fallback to default image
+            $bannerImg = asset('uploads/banners/default.jpg');
+            \Log::warning('Banner image not found:', [
+            'image' => $imagePath,
+            'storage_path' => $storageFullPath,
+            'public_path' => $publicPath
+            ]);
+            }
+            }
+
+            // Build the filter URL based on banner data
+            $filterUrl = '#';
+            if ($banner->filter) {
+            if ($banner->filter_type === 'multiple' && $banner->filters) {
+            $filterUrl = '/products?' . $banner->filters;
+            } elseif ($banner->filter) {
+            $filterUrl = '/products?' . ($banner->filter ?? ($banner->discount ?? ''));
+            }
+            }
             @endphp
             <div class="px-2">
                 <a href="{{ $filterUrl }}" class="block w-full">
                     <div class="relative overflow-hidden group bg-[#f8f6f4] rounded-[18px]"
                         style="aspect-ratio: 9/15; "
-                        @if ($banner->filter_type === 'multiple' && $banner->filters) 
-                            data-filter="{{ $banner->filters }}"
+                        @if ($banner->filter_type === 'multiple' && $banner->filters)
+                        data-filter="{{ $banner->filters }}"
                         @else
-                            data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}" 
+                        data-filter="{{ $banner->filter ?? ($banner->discount ?? '') }}"
                         @endif>
 
                         <!-- Image -->
                         <div class="absolute inset-0">
                             <img class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                                 src="{{ $bannerImg }}"
+                                srcset="{{ $bannerImg }}?w=400&q=80 400w,
+                                        {{ $bannerImg }}?w=600&q=80 600w,
+                                        {{ $bannerImg }}?w=800&q=80 800w"
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                 alt="{{ $banner->title }}"
                                 loading="lazy"
                                 decoding="async"
@@ -2003,17 +1904,17 @@
                 <div class="second-owl owl-carousel owl-theme relative w-full">
                     @foreach ($secondaryBanners as $banner)
                     @php
-                     $isCloudinary = str_contains($banner->image, 'cloudinary.com') || 
+                    $isCloudinary = str_contains($banner->image, 'cloudinary.com') ||
                     str_contains($banner->image, 'res.cloudinary.com') ||
                     str_contains($banner->image, 'aiman/banners/');
-    
-    // Set image URL based on type
-    if ($isCloudinary) {
-        $secBannerImg = $banner->image; // Use Cloudinary URL directly
-    } else {
-       // $secBannerImg = asset('uploads/banners/' . $banner->image);
-       $secBannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
-    }
+
+                    // Set image URL based on type
+                    if ($isCloudinary) {
+                    $secBannerImg = $banner->image; // Use Cloudinary URL directly
+                    } else {
+                    // $secBannerImg = asset('uploads/banners/' . $banner->image);
+                    $secBannerImg = url('/img/uploads/banners/' . $banner->image . '?w=600&q=80');
+                    }
 
 
                     $bannerFilterUrl = '#';
@@ -2026,7 +1927,7 @@
                     }
                     @endphp
                     <div class="item flex justify-center items-center px-2">
-                        
+
                         <div class="w-full bg-white shadow-lg hover:shadow-2xl transition-shadow duration-500 banner-card group relative"
                             @if($banner->filter_type === 'multiple' && $banner->filters)
                             data-filter="{{ $banner->filters }}"
@@ -2036,6 +1937,10 @@
                             <!-- Image Container with 2:3 Aspect Ratio -->
                             <div class="relative overflow-hidden" style="aspect-ratio: 2/3;">
                                 <img src="{{ $secBannerImg }}"
+                                    srcset="{{ $secBannerImg }}?w=400&q=80 400w,
+                                            {{ $secBannerImg }}?w=600&q=80 600w,
+                                            {{ $secBannerImg }}?w=800&q=80 800w"
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     alt="{{ $banner->title }}"
                                     class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                                     loading="lazy"
@@ -2074,8 +1979,8 @@
 
                                     <!-- CTA -->
                                     <div class="mt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
-                                         <a href="{{ $bannerFilterUrl }}"
-                                class="group/btn inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white bg-gradient-to-r from-primary to-secondary border border-transparent rounded-sm shadow-md transition-all duration-300 ease-out hover:from-secondary hover:to-primary hover:shadow-xl hover:-translate-y-0.5">
+                                        <a href="{{ $bannerFilterUrl }}"
+                                            class="group/btn inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white bg-gradient-to-r from-primary to-secondary border border-transparent rounded-sm shadow-md transition-all duration-300 ease-out hover:from-secondary hover:to-primary hover:shadow-xl hover:-translate-y-0.5">
 
                                             <span>Shop Now</span>
 
@@ -2115,7 +2020,11 @@
                 <img
                     src="{{ asset('web/images/icons/icon1.svg') }}"
                     alt="Premium Quality"
-                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100">
+                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100"
+                    loading="lazy"
+                    decoding="async"
+                    width="44"
+                    height="44">
 
                 <h3 class="mt-5 heading-font text-lg font-medium text-gray-900">
                     Premium Quality
@@ -2131,7 +2040,11 @@
                 <img
                     src="{{ asset('web/images/icons/icon2.svg') }}"
                     alt="Buyer Protection"
-                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100">
+                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100"
+                    loading="lazy"
+                    decoding="async"
+                    width="44"
+                    height="44">
 
                 <h3 class="mt-5 heading-font text-lg font-medium text-gray-900">
                     Buyer Protection
@@ -2147,7 +2060,11 @@
                 <img
                     src="{{ asset('web/images/icons/icon4.svg') }}"
                     alt="Free Shipping"
-                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100">
+                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100"
+                    loading="lazy"
+                    decoding="async"
+                    width="44"
+                    height="44">
 
                 <h3 class="mt-5 heading-font text-lg font-medium text-gray-900">
                     Free Shipping
@@ -2163,7 +2080,11 @@
                 <img
                     src="{{ asset('web/images/icons/icon3.svg') }}"
                     alt="24/7 Support"
-                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100">
+                    class="w-11 h-11 mx-auto opacity-80 transition duration-300 hover:opacity-100"
+                    loading="lazy"
+                    decoding="async"
+                    width="44"
+                    height="44">
 
                 <h3 class="mt-5 heading-font text-lg font-medium text-gray-900">
                     24 / 7 Support
@@ -3017,14 +2938,15 @@
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                         if (typeof fbq !== 'undefined') {
-                                fbq('track', 'AddToWishlist', {
-                                    content_name: @json($product->name ?? ''),
-                                    content_ids: [@json($product->id ?? '')],
-                                    content_type: 'product',
-                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
-                                    currency: 'INR'
-                                });
-                            }
+                            fbq('track', 'AddToWishlist', {
+                                content_name: @json($product->name ?? ''),
+                                content_ids: [@json($product->id ?? '')],
+                                content_type: 'product',
+                                value: {{
+                                        $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                currency: 'INR'
+                            });
+                        }
                     }
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
                         item.textContent = data.wishlist_count;

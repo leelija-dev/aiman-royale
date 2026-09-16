@@ -65,6 +65,10 @@
     </script>
     @endif
 
+    <!-- Preconnect to API/CDN origin for faster client-rendered content -->
+    <link rel="preconnect" href="https://aimanroyale.com">
+    <link rel="dns-prefetch" href="https://aimanroyale.com">
+
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 
@@ -77,10 +81,71 @@
 
     @yield('styles')
 
+    <!-- Critical CSS for above-the-fold content (header, hero, nav) -->
+    <style>
+        /* Critical above-the-fold styles */
+        body { margin: 0; padding: 0; }
+        .container { max-width: 100%; padding: 0 1rem; margin: 0 auto; }
+        @media (min-width: 768px) { .container { padding: 0 2rem; } }
+        .w-full { width: 100%; }
+        .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+        .from-pink-50\/30 { --tw-gradient-from: rgb(253 242 248 / 0.3); }
+        .via-white { --tw-gradient-via: rgb(255 255 255); }
+        .to-white { --tw-gradient-to: rgb(255 255 255); }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .text-center { text-align: center; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+        .duration-300 { transition-duration: 300ms; }
+        .hover\:scale-110:hover { transform: scale(1.1); }
+        .object-cover { object-fit: cover; }
+        .aspect-ratio { aspect-ratio: inherit; }
+        .aspect-\[2\/3\] { aspect-ratio: 2/3; }
+        .aspect-\[16\/6\] { aspect-ratio: 16/6; }
+        .aspect-\[9\/13\] { aspect-ratio: 9/13; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { inset: 0; }
+        .z-10 { z-index: 10; }
+        .bg-black\/40 { background-color: rgba(0, 0, 0, 0.4); }
+        .text-white { color: white; }
+        .font-bold { font-weight: 700; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .text-lg { font-size: 1.125rem; }
+        .group:hover .group-hover\:opacity-100 { opacity: 1; }
+        .opacity-0 { opacity: 0; }
+        .transition-opacity { transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+        .duration-500 { transition-duration: 500ms; }
+        .transform { transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+        .translate-y-4 { --tw-translate-y: 1rem; }
+        .group-hover\:translate-y-0:hover { --tw-translate-y: 0px; }
+        .loading { opacity: 0.6; }
+        .spinner { border: 3px solid rgba(0,0,0,0.1); border-top-color: #333; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+
     @stack('styles')
+    <!-- Font Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- <link
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" as="style">
+    
+    <!-- Main fonts with font-display: swap -->
+    <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link
@@ -89,7 +154,7 @@
 
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500&display=swap"
-        rel="stylesheet" /> -->
+        rel="stylesheet" />
     <!-- Font Awesome in  project -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
@@ -122,8 +187,9 @@
         <!-- end this -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
-    <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}">
-    <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}">
+    <!-- Defer non-critical CSS -->
+    <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" media="print" onload="this.media='all'">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -136,23 +202,8 @@
 
     <!-- <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}"> -->
 
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.defer = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
-    </script>
+    <!-- GTM: load async, don't block render -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-5MP8JR47"></script>
     <script>
         window.addEventListener('load', function() {
         ! function(f, b, e, v, n, t, s) {
