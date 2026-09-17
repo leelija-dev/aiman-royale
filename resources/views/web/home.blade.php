@@ -3,8 +3,8 @@
 @section('content')
 
 
-<style>
-    /* Fade out animation */
+{{-- <style>
+    Fade out anim ation
     .fade-out {
         animation: fadeOut 1.2s ease-in-out forwards;
     }
@@ -61,7 +61,26 @@
     #unique-scroll .owl-nav {
         display: none !important;
     }
-</style>
+
+    /* CLS Prevention: Force aspect ratio on all images with explicit dimensions */
+    img[width][height] {
+        aspect-ratio: attr(width) / attr(height);
+    }
+
+    /* Ensure images don't cause layout shifts during loading */
+    img {
+        background-color: #f3f4f6;
+    }
+
+    /* Reserve space for hero carousel images */
+    .hero-carousel .slide-item {
+        min-height: 0;
+    }
+
+    .hero-carousel img {
+        background-color: #f3f4f6;
+    }
+</style> --}}
 
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
@@ -129,36 +148,30 @@
                             width="200"
                             height="200">
                     </div> --}}
-                    <div
-    class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
     @php
-        $variantImage = $category->images->sortByDesc('id')->first()?->image;
-        $productImage = $category->product->images->sortByDesc('id')->first()?->image;
-        $catagoryImage = $category->product->category->image;
-        $catImage = $productImage ?: $catagoryImage;
+        $productImage  = $category->product->images->sortByDesc('id')->first()?->image;
+        $categoryImage = $category->product->category->image;
+        $catImage      = $productImage ?: $categoryImage;
 
-        $catImageUrl = null;
+        $catImageUrl    = null;
         $catImageSrcset = null;
 
         if ($catImage) {
-            $isCloudinary = strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false;
+            $isCloudinary = str_contains($catImage, 'cloudinary.com') && str_contains($catImage, 'upload/');
 
             if ($isCloudinary) {
-                // Old Cloudinary image -> real transformed URLs (actual resizing works here)
                 $parts = explode('upload/', $catImage, 2);
 
-                $cld = fn($w, $h) => $parts[0] . "upload/w_{$w},h_{$h},c_fill,f_auto,q_auto/" . $parts[1];
+                // Optimized Cloudinary transformations
+                $cld = fn($w, $h) => $parts[0] . "upload/w_{$w},h_{$h},c_fill,f_auto,q_auto,dpr_auto/" . $parts[1];
 
-                $catImageUrl    = $cld(400, 580);
-                $catImageSrcset = $cld(200, 290) . ' 200w, '
-                                . $cld(400, 580) . ' 400w, '
-                                . $cld(600, 870) . ' 600w';
+                $catImageUrl    = $cld(260, 380);          // Default size (smaller = faster)
+                $catImageSrcset = $cld(130, 190) . ' 130w, '
+                                . $cld(260, 380) . ' 260w, '
+                                . $cld(390, 570) . ' 390w';
             } else {
-                // Local system file -> no resizing available, just serve original as-is
-                $catImageUrl = str_starts_with($catImage, 'http')
-                    ? $catImage
-                    : asset('storage/' . $catImage);
-                // No srcset here (broken query-string resizing removed)
+                $catImageUrl = $catImage ?: asset('storage/' . $catImage);
             }
         }
     @endphp
@@ -168,16 +181,14 @@
             src="{{ $catImageUrl }}"
             @if($catImageSrcset)
                 srcset="{{ $catImageSrcset }}"
-                sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
+                sizes="(max-width: 640px) 130px, (max-width: 1024px) 180px, 220px"
             @endif
             alt="{{ $category->product->category->name }}"
-            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
+            class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
             width="200"
             height="200"
-            onload="this.classList.remove('opacity-0')"
+            loading="{{ $loop->index < 6 ? 'eager' : 'lazy' }}"
+            decoding="async"
         >
     @endif
 </div>
@@ -194,389 +205,9 @@
 
 
 
-<style>
-    /* ----- MODERN HERO SLIDER · redesigned ----- */
-    .hero-carousel .slide-item {
-        position: relative;
+{{-- <style>
 
-        /* more immersive */
-        /* min-height: 600px; */
-        /* max-height: 700px; */
-
-        border-radius: 0;
-        /* clean edge, no rounding */
-    }
-
-    .hero-carousel .owl-stage-outer {
-        border-radius: 34px;
-        overflow: hidden;
-        padding: 0 !important;
-        /* margin-top: 21px; */
-    }
-
-    /* image layer – subtle zoom + overlay for depth */
-    .hero-carousel .slide-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        transition: transform 6s ease-in-out;
-        transform: scale(1.05);
-        /* gentle zoom */
-    }
-
-    .hero-carousel .slide-item:hover .slide-bg {
-        transform: scale(1);
-        /* slow pull-back on hover */
-    }
-
-    /* dark overlay for better text readability */
-    /* .hero-carousel .slide-item::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 70%);
-        z-index: 1;
-        pointer-events: none;
-    } */
-
-    /* content – centered with modern left-aligned refinement */
-    .hero-carousel .slide-content {
-        position: absolute;
-        bottom: 15%;
-        left: 8%;
-        color: #fff;
-        max-width: 580px;
-        z-index: 2;
-        text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-        padding: 24px 32px 32px 32px;
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        border-radius: 12px;
-        border-left: 4px solid #e6c9a8;
-        transition: all 0.3s ease;
-    }
-
-    .hero-carousel .slide-content:hover {
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-    }
-
-    .hero-carousel .brand-name {
-        font-size: 36px;
-        font-weight: 400;
-        letter-spacing: 6px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-        font-family: 'Georgia', 'Times New Roman', serif;
-        color: #f5ede4;
-        line-height: 1.1;
-    }
-
-    .hero-carousel .brand-name span {
-        display: inline-block;
-        border-bottom: 2px solid #e6c9a8;
-        padding-bottom: 6px;
-    }
-
-    .hero-carousel .tagline {
-        font-size: 17px;
-        font-weight: 300;
-        letter-spacing: 3px;
-        margin-bottom: 24px;
-        opacity: 0.95;
-        color: #f0e7dc;
-        text-transform: uppercase;
-        font-family: 'Inter', 'Helvetica Neue', sans-serif;
-    }
-
-    .hero-carousel .shop-btn {
-        display: inline-block;
-        padding: 14px 40px;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        color: #fff;
-        text-decoration: none;
-        font-size: 12px;
-        letter-spacing: 4px;
-        transition: all 0.35s ease;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        border-radius: 40px;
-        font-weight: 500;
-        text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .hero-carousel .shop-btn:hover {
-        background: #fff;
-        color: #1a1a1a;
-        border-color: #fff;
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-        letter-spacing: 5px;
-    }
-
-    .hero-carousel .shop-btn i {
-        margin-left: 8px;
-        font-size: 11px;
-    }
-
-    /* ---------- Owl Carousel custom overrides ---------- */
-
-    /* dots – modern, minimal, placed at bottom-center */
-    .hero-carousel .owl-dots {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        /* display: flex; */
-        gap: 12px;
-        z-index: 5;
-        display: none !important;
-    }
-
-    .hero-carousel .owl-dots .owl-dot span {
-        background: rgba(255, 255, 255, 0.35);
-        width: 12px;
-        height: 12px;
-        margin: 0;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .hero-carousel .owl-dots .owl-dot.active span {
-        background: #f5ede4;
-        transform: scale(1.25);
-        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-    }
-
-    .hero-carousel .owl-dots .owl-dot:hover span {
-        background: rgba(255, 255, 255, 0.8);
-    }
-
-    /* navigation arrows – refined, circular, glass-morphism */
-    .hero-carousel .owl-nav {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        transform: translateY(-50%);
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        pointer-events: none;
-        z-index: 5;
-    }
-
-    .hero-carousel .owl-nav button {
-        pointer-events: auto;
-        background: rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        color: #fff !important;
-        width: 52px;
-        height: 52px;
-        border-radius: 50% !important;
-        font-size: 28px !important;
-        font-weight: 300;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .hero-carousel .owl-nav .owl-prev {
-        margin-left: 10px;
-    }
-
-    .hero-carousel .owl-nav .owl-next {
-        margin-right: 10px;
-    }
-
-    .hero-carousel .owl-nav button:hover {
-        background: rgba(255, 255, 255, 0.25) !important;
-        transform: scale(1.08);
-        border-color: rgba(255, 255, 255, 0.6) !important;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-    }
-
-    /* hide default owl nav text (‹ ›) – we use font-awesome in JS */
-    .hero-carousel .owl-nav button span {
-        display: none;
-    }
-
-    /* custom icon via pseudo – but we'll use data-* in JS, so clean */
-    .hero-carousel .owl-nav .owl-prev::before {
-        content: '\f104';
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 26px;
-        display: inline-block;
-    }
-
-    .hero-carousel .owl-nav .owl-next::before {
-        content: '\f105';
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 26px;
-        display: inline-block;
-    }
-
-    /* ensure no extra nav text */
-    .hero-carousel .owl-nav button span {
-        display: none !important;
-    }
-
-    /* make arrows visible on small screens */
-    @media (min-width: 768px) {
-        .hero-carousel .hero-carousel-desktop {
-            display: block !important;
-        }
-
-        .hero-carousel .hero-carousel-mobile {
-            display: none !important;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .hero-carousel .hero-carousel-mobile {
-            display: block !important;
-        }
-
-        .hero-carousel .hero-carousel-desktop {
-            display: none !important;
-        }
-
-        .hero-carousel .owl-nav {
-            padding: 0 8px;
-        }
-
-        .hero-carousel .owl-nav button {
-            width: 40px;
-            height: 40px;
-            font-size: 20px !important;
-        }
-
-        .hero-carousel .slide-content {
-            left: 5%;
-            bottom: 12%;
-            max-width: 85%;
-            padding: 18px 20px 24px 20px;
-        }
-
-        .hero-carousel .brand-name {
-            font-size: 26px;
-            letter-spacing: 4px;
-        }
-
-        .hero-carousel .tagline {
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .shop-btn {
-            padding: 10px 28px;
-            font-size: 11px;
-        }
-
-
-    }
-
-    @media (min-width: 576px) {
-        .hero-carousel .hero-carousel-desktop {
-            display: block !important;
-            aspect-ratio: 16/6;
-        }
-
-        .hero-carousel .hero-carousel-mobile {
-            display: none !important;
-
-        }
-
-        /* .hero-carousel .slide-item{
-            max-height:700px;
-        } */
-    }
-
-    @media (max-width: 576px) {
-        .hero-carousel .hero-carousel-mobile {
-            display: block !important;
-            aspect-ratio: 2/3 !important;
-        }
-
-        .hero-carousel .hero-carousel-desktop {
-            display: none !important;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .hero-carousel .slide-content {
-            left: 4%;
-            bottom: 10%;
-            max-width: 92%;
-            padding: 14px 16px 20px 16px;
-            border-left-width: 3px;
-        }
-
-        .hero-carousel .brand-name {
-            font-size: 20px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .tagline {
-            font-size: 12px;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .hero-carousel .shop-btn {
-            padding: 8px 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .owl-dots {
-            bottom: 18px;
-            gap: 8px;
-        }
-
-        .hero-carousel .owl-dots .owl-dot span {
-            width: 10px;
-            height: 10px;
-        }
-    }
-
-    /* optional: subtle animation for content */
-    .hero-carousel .slide-content {
-        animation: fadeUp 0.9s ease-out both;
-    }
-
-    @keyframes fadeUp {
-        0% {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* ensure owl container has no overflow issues */
-    .hero-carousel {
-        overflow: hidden;
-        border-radius: 0;
-    }
-</style>
+</style> --}}
 <!-- updated HTML block – slide structure with Font Awesome icons -->
 <section class="px-4 lgg:py-4 py-3 ">
     <div class="container mx-auto">
@@ -603,12 +234,14 @@
                     <source media="(min-width: 768px)"
                         srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
                     <img
-                        src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
+                       src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80"
+                        srcset="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80 400w, {{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=600&q=80 600w"
                         alt="{{ $banner->title ?? '' }}"
                         class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
-                        width="750"
-                        height="1000"
-                        @if($key==0) fetchpriority="high" @else loading="eager" @endif
+                       width="400"
+                        height="600"
+                        sizes="(max-width: 768px) 400px, 750px"
+                        @if($key==0)fetchpriority="high" loading="eager" @else loading="lazy" @endif
                         decoding="async">
                 </picture>
             </a>
@@ -725,7 +358,8 @@
                             width="450"
                             height="650"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            style="aspect-ratio: 450/650;">
 
                         <!-- Overlay -->
 
@@ -875,7 +509,8 @@
                                     decoding="async"
                                     width="400"
                                     height="520"
-                                    class="w-full h-full object-cover object-top transition duration-700 group-hover:scale-105">
+                                    class="w-full h-full object-cover object-top transition duration-700 group-hover:scale-105"
+                                    style="aspect-ratio: 400/520;">
 
                             </div>
 
@@ -1006,7 +641,8 @@
                             loading="lazy"
                             decoding="async"
                             width="600"
-                            height="900" />
+                            height="900"
+                            style="aspect-ratio: 600/900;" />
 
                         <!-- Quick View Overlay -->
                         <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
@@ -1157,7 +793,8 @@
                             loading="lazy"
                             decoding="async"
                             width="400"
-                            height="400">
+                            height="400"
+                            style="aspect-ratio: 400/400;">
                         <div
                             class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
                             <p class="text-gray-900 text-xs font-bold digital-font">₹74.99</p>
@@ -1178,7 +815,8 @@
                             loading="lazy"
                             decoding="async"
                             width="600"
-                            height="600">
+                            height="600"
+                            style="aspect-ratio: 600/600;">
                         <div
                             class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6 digital-font">
                             -25%
@@ -1199,7 +837,8 @@
                             loading="lazy"
                             decoding="async"
                             width="400"
-                            height="400">
+                            height="400"
+                            style="aspect-ratio: 400/400;">
                         <div
                             class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg font-sans">
                             New
@@ -1219,7 +858,8 @@
                             loading="lazy"
                             decoding="async"
                             width="300"
-                            height="300">
+                            height="300"
+                            style="aspect-ratio: 300/300;">
                         <div
                             class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <span class="text-white text-sm font-bold font-sans">View</span>
@@ -1384,7 +1024,8 @@
                                 loading="lazy"
                                 decoding="async"
                                 width="600"
-                                height="1000" />
+                                height="1000"
+                                style="aspect-ratio: 600/1000;" />
                         </div>
 
                         <!-- Subtle Gradient Overlay -->
@@ -1425,7 +1066,7 @@
         </div>
     </div>
 </section>
-<style>
+{{-- <style>
     /* Vertical Text Utility */
     .writing-vertical {
         writing-mode: vertical-rl;
@@ -1645,7 +1286,7 @@
             font-size: 26px;
         }
     }
-</style>
+</style> --}}
 
 <!-- Owl Carousel Initialization Script -->
 <script>
@@ -1998,7 +1639,8 @@
                                     loading="lazy"
                                     decoding="async"
                                     width="600"
-                                    height="800" />
+                                    height="800"
+                                    style="aspect-ratio: 600/800;" />
 
                                 <!-- Overlay -->
                                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
@@ -2196,7 +1838,8 @@
                                 loading="lazy"
                                 decoding="async"
                                 width="600"
-                                height="900" />
+                                height="900"
+                                style="aspect-ratio: 600/900;" />
                         </a>
 
                         <!-- Quick View Overlay -->
@@ -2681,7 +2324,20 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
+<script>
+  // Load confetti only when you actually need it
+  function loadConfetti(callback) {
+    if (window.confetti) {
+      callback();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+    script.onload = callback;
+    document.body.appendChild(script);
+  }
+</script>
 <!-- Cart Functionality -->
 <script>
     function toggleHomeWishlist(productId, event) {
@@ -2881,7 +2537,7 @@
     updateParallax();
 </script>
 
-<script>
+<script defer>
     const sliders = [{
             className: 'slide-left',
             linkId: 'leftSliderLink'
@@ -3075,7 +2731,7 @@
 </script>
 @endif
 
-<script>
+<script defer>
     document.addEventListener('DOMContentLoaded', function() {
         if ($('#categories-tag-carousel').length) {
             $('#categories-tag-carousel').owlCarousel({
