@@ -173,9 +173,9 @@
             @endif
             alt="{{ $category->product->category->name }}"
             class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
+            loading="eager"
             decoding="async"
-            fetchpriority="low"
+            {{-- fetchpriority="low" --}}
             width="200"
             height="200"
             onload="this.classList.remove('opacity-0')"
@@ -609,7 +609,7 @@
                         class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
                         width="750"
                         height="1000"
-                        @if($key==0) fetchpriority="high" @else loading="eager" @endif
+                        @if($key==0) fetchpriority="eager" @else loading="eager" @endif
                         decoding="async">
                 </picture>
             </a>
