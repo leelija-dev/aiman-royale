@@ -53,7 +53,6 @@ class ProductController extends Controller
                 // Already an array, use as-is
                 $product->occasions = $product->occasions;
             } else {
-                // It's a collection, pluck the IDs
                 $product->occasions = $product->occasions->pluck('id')->toArray();
             }
             return $product;
