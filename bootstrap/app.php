@@ -51,8 +51,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckSessionExpiry::class,
             \App\Http\Middleware\DynamicSeoMiddleware::class,
             \App\Http\Middleware\MetaTracking::class,
-
-
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

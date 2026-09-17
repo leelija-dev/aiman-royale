@@ -1987,7 +1987,7 @@
                                     ? ltrim($productImage->image, '/')
                                     : 'assets/images/placeholder.jpg';
                                 $imageUrl = $relatedProduct->featured_image
-                                    ? url('img/' . $relatedProduct->featured_image)
+                                    ? url('img/' . $relatedProduct->featured_image) . '?w=600&q=80'
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
@@ -2114,7 +2114,7 @@
                             @php
                                 $variant = $relatedProduct->variants->first();
                                 $imageUrl = $relatedProduct->featured_image
-                                    ? url('img/' . $relatedProduct->featured_image)
+                                    ? url('img/' . $relatedProduct->featured_image) . '?w=600&q=80'
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
@@ -2243,7 +2243,7 @@
                         @forelse($lastViewedProducts as $lastViewedProduct)
                             @php
                                 $imageUrl = $lastViewedProduct['featured_image']
-                                    ? url('img/' . $lastViewedProduct['featured_image'])
+                                    ? url('img/' . $lastViewedProduct['featured_image']) . '?w=600&q=80'
                                     : asset('assets/images/placeholder.jpg');
                                 if (
                                     strpos($imageUrl, 'cloudinary.com') !== false &&
