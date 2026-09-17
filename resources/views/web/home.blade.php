@@ -129,7 +129,7 @@
                             width="200"
                             height="200">
                     </div> --}}
-                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                    {{-- <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
     @php
         $productImage  = $category->product->images->sortByDesc('id')->first()?->image;
         $categoryImage = $category->product->category->image;
@@ -172,7 +172,7 @@
             decoding="async"
         >
     @endif
-</div>
+</div> --}}
                 </div>
                 <span
                     class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->product->category->name }}</span>
