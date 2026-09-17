@@ -187,7 +187,7 @@
             class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
             width="200"
             height="200"
-            loading="eager"
+            loading="{{ $loop->index < 6 ? 'eager' : 'lazy' }}"
             decoding="async"
         >
     @endif
