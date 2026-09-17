@@ -134,7 +134,9 @@
         $productImage = $category->product->images->sortByDesc('id')->first()?->image;
         $catagoryImage = $category->product->category->image;
         $catImage = $productImage ?: $catagoryImage;
-
+        // print_r($catImage);
+        // dd($catImage);
+        // die;
         $catImageUrl = null;
         $catImageSrcset = null;
 
@@ -157,7 +159,7 @@
                 // Local system file (storage/public)
                 $catImageUrl = str_starts_with($catImage, 'http')
                     ? $catImage
-                    : asset('storage/' . $catImage);
+                    :   $catImage;
                 // No real resizing available locally, so srcset just repeats same file
                 $catImageSrcset = null;
             }
