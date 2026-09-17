@@ -61,6 +61,25 @@
     #unique-scroll .owl-nav {
         display: none !important;
     }
+
+    /* CLS Prevention: Force aspect ratio on all images with explicit dimensions */
+    img[width][height] {
+        aspect-ratio: attr(width) / attr(height);
+    }
+
+    /* Ensure images don't cause layout shifts during loading */
+    img {
+        background-color: #f3f4f6;
+    }
+
+    /* Reserve space for hero carousel images */
+    .hero-carousel .slide-item {
+        min-height: 0;
+    }
+
+    .hero-carousel img {
+        background-color: #f3f4f6;
+    }
 </style>
 
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
@@ -725,7 +744,8 @@
                             width="450"
                             height="650"
                             loading="lazy"
-                            decoding="async">
+                            decoding="async"
+                            style="aspect-ratio: 450/650;">
 
                         <!-- Overlay -->
 
@@ -875,7 +895,8 @@
                                     decoding="async"
                                     width="400"
                                     height="520"
-                                    class="w-full h-full object-cover object-top transition duration-700 group-hover:scale-105">
+                                    class="w-full h-full object-cover object-top transition duration-700 group-hover:scale-105"
+                                    style="aspect-ratio: 400/520;">
 
                             </div>
 
@@ -1006,7 +1027,8 @@
                             loading="lazy"
                             decoding="async"
                             width="600"
-                            height="900" />
+                            height="900"
+                            style="aspect-ratio: 600/900;" />
 
                         <!-- Quick View Overlay -->
                         <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
@@ -1157,7 +1179,8 @@
                             loading="lazy"
                             decoding="async"
                             width="400"
-                            height="400">
+                            height="400"
+                            style="aspect-ratio: 400/400;">
                         <div
                             class="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-gray-200 shadow-sm">
                             <p class="text-gray-900 text-xs font-bold digital-font">₹74.99</p>
@@ -1178,7 +1201,8 @@
                             loading="lazy"
                             decoding="async"
                             width="600"
-                            height="600">
+                            height="600"
+                            style="aspect-ratio: 600/600;">
                         <div
                             class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6 digital-font">
                             -25%
@@ -1199,7 +1223,8 @@
                             loading="lazy"
                             decoding="async"
                             width="400"
-                            height="400">
+                            height="400"
+                            style="aspect-ratio: 400/400;">
                         <div
                             class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg font-sans">
                             New
@@ -1219,7 +1244,8 @@
                             loading="lazy"
                             decoding="async"
                             width="300"
-                            height="300">
+                            height="300"
+                            style="aspect-ratio: 300/300;">
                         <div
                             class="absolute inset-0 flex items-center justify-center bg-secondary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <span class="text-white text-sm font-bold font-sans">View</span>
@@ -1384,7 +1410,8 @@
                                 loading="lazy"
                                 decoding="async"
                                 width="600"
-                                height="1000" />
+                                height="1000"
+                                style="aspect-ratio: 600/1000;" />
                         </div>
 
                         <!-- Subtle Gradient Overlay -->
@@ -1998,7 +2025,8 @@
                                     loading="lazy"
                                     decoding="async"
                                     width="600"
-                                    height="800" />
+                                    height="800"
+                                    style="aspect-ratio: 600/800;" />
 
                                 <!-- Overlay -->
                                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
@@ -2196,7 +2224,8 @@
                                 loading="lazy"
                                 decoding="async"
                                 width="600"
-                                height="900" />
+                                height="900"
+                                style="aspect-ratio: 600/900;" />
                         </a>
 
                         <!-- Quick View Overlay -->
@@ -2681,7 +2710,7 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <!-- Cart Functionality -->
 <script>
     function toggleHomeWishlist(productId, event) {
@@ -2881,7 +2910,7 @@
     updateParallax();
 </script>
 
-<script>
+<script defer>
     const sliders = [{
             className: 'slide-left',
             linkId: 'leftSliderLink'
@@ -3075,7 +3104,7 @@
 </script>
 @endif
 
-<script>
+<script defer>
     document.addEventListener('DOMContentLoaded', function() {
         if ($('#categories-tag-carousel').length) {
             $('#categories-tag-carousel').owlCarousel({
