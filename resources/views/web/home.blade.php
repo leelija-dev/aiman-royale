@@ -595,11 +595,13 @@
                     <source media="(min-width: 768px)"
                         srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
                     <img
-                        src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
+                       src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80"
+                        srcset="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80 400w, {{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=600&q=80 600w"
                         alt="{{ $banner->title ?? '' }}"
                         class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
-                        width="750"
-                        height="1000"
+                       width="400"
+                        height="600"
+                        sizes="(max-width: 768px) 400px, 750px"
                         @if($key==0) fetchpriority="eager" @else loading="eager" @endif
                         decoding="async">
                 </picture>

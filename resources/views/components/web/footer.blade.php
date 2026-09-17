@@ -2481,7 +2481,7 @@ art from fake trails.
 </footer>
 <!-- WhatsApp Floating Button -->
 <!-- Fashion WhatsApp Floating Button -->
-<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
+{{-- <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
   class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] group">
 
 
@@ -2495,6 +2495,14 @@ art from fake trails.
     <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
   </div>
 
+</a> --}}
+<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
+   id="wa-btn"
+   class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] hidden">
+   
+  <div class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-lg">
+    <i class="fab fa-whatsapp text-white text-2xl md:text-3xl"></i>
+  </div>
 </a>
 
 
@@ -2571,9 +2579,16 @@ art from fake trails.
 
 
 
-
+<script>
+  // Lightweight - runs only once after 10 seconds
+  setTimeout(() => {
+    const btn = document.getElementById('wa-btn');
+    if (btn) btn.classList.remove('hidden');
+  }, 10000);
+</script>
 <!-- Add this script at the end of your HTML -->
 <script>
+  
   document.addEventListener('DOMContentLoaded', function() {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
 
