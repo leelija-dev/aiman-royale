@@ -3,8 +3,8 @@
 @section('content')
 
 
-<style>
-    /* Fade out animation */
+{{-- <style>
+    Fade out anim ation
     .fade-out {
         animation: fadeOut 1.2s ease-in-out forwards;
     }
@@ -80,7 +80,7 @@
     .hero-carousel img {
         background-color: #f3f4f6;
     }
-</style>
+</style> --}}
 
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
@@ -205,389 +205,9 @@
 
 
 
-<style>
-    /* ----- MODERN HERO SLIDER · redesigned ----- */
-    .hero-carousel .slide-item {
-        position: relative;
+{{-- <style>
 
-        /* more immersive */
-        /* min-height: 600px; */
-        /* max-height: 700px; */
-
-        border-radius: 0;
-        /* clean edge, no rounding */
-    }
-
-    .hero-carousel .owl-stage-outer {
-        border-radius: 34px;
-        overflow: hidden;
-        padding: 0 !important;
-        /* margin-top: 21px; */
-    }
-
-    /* image layer – subtle zoom + overlay for depth */
-    .hero-carousel .slide-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        transition: transform 6s ease-in-out;
-        transform: scale(1.05);
-        /* gentle zoom */
-    }
-
-    .hero-carousel .slide-item:hover .slide-bg {
-        transform: scale(1);
-        /* slow pull-back on hover */
-    }
-
-    /* dark overlay for better text readability */
-    /* .hero-carousel .slide-item::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 70%);
-        z-index: 1;
-        pointer-events: none;
-    } */
-
-    /* content – centered with modern left-aligned refinement */
-    .hero-carousel .slide-content {
-        position: absolute;
-        bottom: 15%;
-        left: 8%;
-        color: #fff;
-        max-width: 580px;
-        z-index: 2;
-        text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-        padding: 24px 32px 32px 32px;
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        border-radius: 12px;
-        border-left: 4px solid #e6c9a8;
-        transition: all 0.3s ease;
-    }
-
-    .hero-carousel .slide-content:hover {
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-    }
-
-    .hero-carousel .brand-name {
-        font-size: 36px;
-        font-weight: 400;
-        letter-spacing: 6px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-        font-family: 'Georgia', 'Times New Roman', serif;
-        color: #f5ede4;
-        line-height: 1.1;
-    }
-
-    .hero-carousel .brand-name span {
-        display: inline-block;
-        border-bottom: 2px solid #e6c9a8;
-        padding-bottom: 6px;
-    }
-
-    .hero-carousel .tagline {
-        font-size: 17px;
-        font-weight: 300;
-        letter-spacing: 3px;
-        margin-bottom: 24px;
-        opacity: 0.95;
-        color: #f0e7dc;
-        text-transform: uppercase;
-        font-family: 'Inter', 'Helvetica Neue', sans-serif;
-    }
-
-    .hero-carousel .shop-btn {
-        display: inline-block;
-        padding: 14px 40px;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        color: #fff;
-        text-decoration: none;
-        font-size: 12px;
-        letter-spacing: 4px;
-        transition: all 0.35s ease;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        border-radius: 40px;
-        font-weight: 500;
-        text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .hero-carousel .shop-btn:hover {
-        background: #fff;
-        color: #1a1a1a;
-        border-color: #fff;
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-        letter-spacing: 5px;
-    }
-
-    .hero-carousel .shop-btn i {
-        margin-left: 8px;
-        font-size: 11px;
-    }
-
-    /* ---------- Owl Carousel custom overrides ---------- */
-
-    /* dots – modern, minimal, placed at bottom-center */
-    .hero-carousel .owl-dots {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        /* display: flex; */
-        gap: 12px;
-        z-index: 5;
-        display: none !important;
-    }
-
-    .hero-carousel .owl-dots .owl-dot span {
-        background: rgba(255, 255, 255, 0.35);
-        width: 12px;
-        height: 12px;
-        margin: 0;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .hero-carousel .owl-dots .owl-dot.active span {
-        background: #f5ede4;
-        transform: scale(1.25);
-        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-    }
-
-    .hero-carousel .owl-dots .owl-dot:hover span {
-        background: rgba(255, 255, 255, 0.8);
-    }
-
-    /* navigation arrows – refined, circular, glass-morphism */
-    .hero-carousel .owl-nav {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        transform: translateY(-50%);
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        pointer-events: none;
-        z-index: 5;
-    }
-
-    .hero-carousel .owl-nav button {
-        pointer-events: auto;
-        background: rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        color: #fff !important;
-        width: 52px;
-        height: 52px;
-        border-radius: 50% !important;
-        font-size: 28px !important;
-        font-weight: 300;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .hero-carousel .owl-nav .owl-prev {
-        margin-left: 10px;
-    }
-
-    .hero-carousel .owl-nav .owl-next {
-        margin-right: 10px;
-    }
-
-    .hero-carousel .owl-nav button:hover {
-        background: rgba(255, 255, 255, 0.25) !important;
-        transform: scale(1.08);
-        border-color: rgba(255, 255, 255, 0.6) !important;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-    }
-
-    /* hide default owl nav text (‹ ›) – we use font-awesome in JS */
-    .hero-carousel .owl-nav button span {
-        display: none;
-    }
-
-    /* custom icon via pseudo – but we'll use data-* in JS, so clean */
-    .hero-carousel .owl-nav .owl-prev::before {
-        content: '\f104';
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 26px;
-        display: inline-block;
-    }
-
-    .hero-carousel .owl-nav .owl-next::before {
-        content: '\f105';
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 26px;
-        display: inline-block;
-    }
-
-    /* ensure no extra nav text */
-    .hero-carousel .owl-nav button span {
-        display: none !important;
-    }
-
-    /* make arrows visible on small screens */
-    @media (min-width: 768px) {
-        .hero-carousel .hero-carousel-desktop {
-            display: block !important;
-        }
-
-        .hero-carousel .hero-carousel-mobile {
-            display: none !important;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .hero-carousel .hero-carousel-mobile {
-            display: block !important;
-        }
-
-        .hero-carousel .hero-carousel-desktop {
-            display: none !important;
-        }
-
-        .hero-carousel .owl-nav {
-            padding: 0 8px;
-        }
-
-        .hero-carousel .owl-nav button {
-            width: 40px;
-            height: 40px;
-            font-size: 20px !important;
-        }
-
-        .hero-carousel .slide-content {
-            left: 5%;
-            bottom: 12%;
-            max-width: 85%;
-            padding: 18px 20px 24px 20px;
-        }
-
-        .hero-carousel .brand-name {
-            font-size: 26px;
-            letter-spacing: 4px;
-        }
-
-        .hero-carousel .tagline {
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .shop-btn {
-            padding: 10px 28px;
-            font-size: 11px;
-        }
-
-
-    }
-
-    @media (min-width: 576px) {
-        .hero-carousel .hero-carousel-desktop {
-            display: block !important;
-            aspect-ratio: 16/6;
-        }
-
-        .hero-carousel .hero-carousel-mobile {
-            display: none !important;
-
-        }
-
-        /* .hero-carousel .slide-item{
-            max-height:700px;
-        } */
-    }
-
-    @media (max-width: 576px) {
-        .hero-carousel .hero-carousel-mobile {
-            display: block !important;
-            aspect-ratio: 2/3 !important;
-        }
-
-        .hero-carousel .hero-carousel-desktop {
-            display: none !important;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .hero-carousel .slide-content {
-            left: 4%;
-            bottom: 10%;
-            max-width: 92%;
-            padding: 14px 16px 20px 16px;
-            border-left-width: 3px;
-        }
-
-        .hero-carousel .brand-name {
-            font-size: 20px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .tagline {
-            font-size: 12px;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .hero-carousel .shop-btn {
-            padding: 8px 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        .hero-carousel .owl-dots {
-            bottom: 18px;
-            gap: 8px;
-        }
-
-        .hero-carousel .owl-dots .owl-dot span {
-            width: 10px;
-            height: 10px;
-        }
-    }
-
-    /* optional: subtle animation for content */
-    .hero-carousel .slide-content {
-        animation: fadeUp 0.9s ease-out both;
-    }
-
-    @keyframes fadeUp {
-        0% {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* ensure owl container has no overflow issues */
-    .hero-carousel {
-        overflow: hidden;
-        border-radius: 0;
-    }
-</style>
+</style> --}}
 <!-- updated HTML block – slide structure with Font Awesome icons -->
 <section class="px-4 lgg:py-4 py-3 ">
     <div class="container mx-auto">
@@ -1446,7 +1066,7 @@
         </div>
     </div>
 </section>
-<style>
+{{-- <style>
     /* Vertical Text Utility */
     .writing-vertical {
         writing-mode: vertical-rl;
@@ -1666,7 +1286,7 @@
             font-size: 26px;
         }
     }
-</style>
+</style> --}}
 
 <!-- Owl Carousel Initialization Script -->
 <script>
