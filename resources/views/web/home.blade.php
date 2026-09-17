@@ -136,7 +136,8 @@
         $productImage = $category->product->images->sortByDesc('id')->first()?->image;
         $catagoryImage = $category->product->category->image;
         $catImage = $productImage ?: $catagoryImage;
-
+        
+        // dd($catImage);
         $catImageUrl = null;
         $catImageSrcset = null;
 
@@ -155,7 +156,7 @@
                                 . $cld(600, 870) . ' 600w';
             } else {
                 // Local system file -> no resizing available, just serve original as-is
-                $catImageUrl = str_starts_with($catImage, 'http')
+                $catImageUrl = $catImage
                     ? $catImage
                     : asset('storage/' . $catImage);
                 // No srcset here (broken query-string resizing removed)
