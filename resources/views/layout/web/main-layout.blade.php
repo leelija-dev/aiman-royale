@@ -203,7 +203,7 @@
     <!-- <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}"> -->
 
     <!-- GTM: load async, don't block render -->
-     <script>
+    <script>
         (function(w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
@@ -221,8 +221,8 @@
         })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
     </script>
      
-    <!-- <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-5MP8JR47"></script> -->
-    <script>
+    <!-- Facebook Pixel: defer non-critical tracking -->
+    <script defer>
         window.addEventListener('load', function() {
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
@@ -315,9 +315,9 @@
 
     @yield('scripts')
 
-    <!-- Owl Carousel JS -->
+    <!-- Owl Carousel JS - jQuery critical for functionality, Owl Carousel deferred -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
 
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
