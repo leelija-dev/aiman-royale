@@ -1785,7 +1785,19 @@
         </div>
     </div>
 </div>
-<script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script>
+function loadSweetAlert(callback) {
+  if (window.Swal) {
+    callback();
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

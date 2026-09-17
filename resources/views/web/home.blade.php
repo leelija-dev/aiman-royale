@@ -148,36 +148,30 @@
                             width="200"
                             height="200">
                     </div> --}}
-                    <div
-    class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                    <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
     @php
-        $variantImage = $category->images->sortByDesc('id')->first()?->image;
-        $productImage = $category->product->images->sortByDesc('id')->first()?->image;
-        $catagoryImage = $category->product->category->image;
-        $catImage = $productImage ?: $catagoryImage;
+        $productImage  = $category->product->images->sortByDesc('id')->first()?->image;
+        $categoryImage = $category->product->category->image;
+        $catImage      = $productImage ?: $categoryImage;
 
-        $catImageUrl = null;
+        $catImageUrl    = null;
         $catImageSrcset = null;
 
         if ($catImage) {
-            $isCloudinary = strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false;
+            $isCloudinary = str_contains($catImage, 'cloudinary.com') && str_contains($catImage, 'upload/');
 
             if ($isCloudinary) {
-                // Old Cloudinary image -> real transformed URLs (actual resizing works here)
                 $parts = explode('upload/', $catImage, 2);
 
-                $cld = fn($w, $h) => $parts[0] . "upload/w_{$w},h_{$h},c_fill,f_auto,q_auto/" . $parts[1];
+                // Optimized Cloudinary transformations
+                $cld = fn($w, $h) => $parts[0] . "upload/w_{$w},h_{$h},c_fill,f_auto,q_auto,dpr_auto/" . $parts[1];
 
-                $catImageUrl    = $cld(400, 580);
-                $catImageSrcset = $cld(200, 290) . ' 200w, '
-                                . $cld(400, 580) . ' 400w, '
-                                . $cld(600, 870) . ' 600w';
+                $catImageUrl    = $cld(260, 380);          // Default size (smaller = faster)
+                $catImageSrcset = $cld(130, 190) . ' 130w, '
+                                . $cld(260, 380) . ' 260w, '
+                                . $cld(390, 570) . ' 390w';
             } else {
-                // Local system file -> no resizing available, just serve original as-is
-                $catImageUrl = str_starts_with($catImage, 'http')
-                    ? $catImage
-                    : asset('storage/' . $catImage);
-                // No srcset here (broken query-string resizing removed)
+                $catImageUrl = $catImage ?: asset('storage/' . $catImage);
             }
         }
     @endphp
@@ -187,16 +181,14 @@
             src="{{ $catImageUrl }}"
             @if($catImageSrcset)
                 srcset="{{ $catImageSrcset }}"
-                sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
+                sizes="(max-width: 640px) 130px, (max-width: 1024px) 180px, 220px"
             @endif
             alt="{{ $category->product->category->name }}"
-            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
+            class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
             width="200"
             height="200"
-            onload="this.classList.remove('opacity-0')"
+            loading="eager"
+            decoding="async"
         >
     @endif
 </div>
@@ -622,12 +614,14 @@
                     <source media="(min-width: 768px)"
                         srcset="{{ asset('storage/uploads/banners/' . $banner->image) }}">
                     <img
-                        src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}"
+                       src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80"
+                        srcset="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=400&q=80 400w, {{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}?w=600&q=80 600w"
                         alt="{{ $banner->title ?? '' }}"
                         class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
-                        width="750"
-                        height="1000"
-                        @if($key==0) fetchpriority="high" @else loading="eager" @endif
+                       width="400"
+                        height="600"
+                        sizes="(max-width: 768px) 400px, 750px"
+                        @if($key==0) fetchpriority="eager" @else loading="eager" @endif
                         decoding="async">
                 </picture>
             </a>
@@ -2710,7 +2704,20 @@
 @endsection
 
 @section('scripts')
-<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
+<script>
+  // Load confetti only when you actually need it
+  function loadConfetti(callback) {
+    if (window.confetti) {
+      callback();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+    script.onload = callback;
+    document.body.appendChild(script);
+  }
+</script>
 <!-- Cart Functionality -->
 <script>
     function toggleHomeWishlist(productId, event) {
