@@ -20,6 +20,8 @@
         <img
             src="{{ $imageUrl }}"
             alt="{{ $product->name }}"
+            width="400"
+            height="578"
             class="product-img w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105" />
         @else
         <!-- Placeholder -->

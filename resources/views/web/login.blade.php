@@ -162,7 +162,7 @@
 
                 <!-- Divider -->
                 <div class="divider">
-                    <span class="divider-text">or continue with email</span>
+                    <span class="divider-text">or continue with email/phone</span>
                 </div>
 
                 <!-- Email/Password Login Form -->
@@ -174,11 +174,11 @@
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-envelope text-gray-400"></i>
+                                <i class="fas fa-user text-gray-400"></i>
                             </div>
-                            <input type="email" id="email" name="email" required
+                            <input type="text" id="email" name="email" required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition duration-200"
-                                placeholder="you@example.com" value="{{ old('email') }}">
+                                placeholder="Email or Phone" value="{{ old('email') }}">
                         </div>
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

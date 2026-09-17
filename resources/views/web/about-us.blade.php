@@ -11,7 +11,7 @@
         <!-- Background with overlay -->
         <div class="absolute inset-0">
             <div class="absolute inset-0 bg-gradient-to-r from-secondary/70 via-secondary/40 to-transparent z-10"></div>
-            <img src="{{ asset('web/images/about-us/About.png') }}" alt="Aiman Royale Fashion" class="w-full h-full object-cover object-right">
+            <img src="{{ asset('web/images/about-us/About.png') }}" width="400" height="578" alt="Aiman Royale Fashion" class="w-full h-full object-cover object-right">
         </div>
         
         <div class="container mx-auto px-6 md:px-10 lg:px-16 relative z-20 py-20 md:py-28">
@@ -122,6 +122,8 @@
                 src="{{ asset('images/about-us/DSC_1624.webp') }}"
                 alt="Fashion Design"
                 loading="lazy"
+                height="578"
+                width="400"
                 decoding="async"
                 class="w-full aspect-[4/5] object-cover object-top transition-transform duration-500 group-hover:scale-105">
         </div>
@@ -131,6 +133,8 @@
                 src="{{ asset('images/about-us/DSC_1682.webp') }}"
                 alt="Fabric Selection"
                 loading="lazy"
+                width="578"
+                height="400"
                 decoding="async"
                 class="w-full aspect-[4/3] object-cover object-top transition-transform duration-500 group-hover:scale-105">
         </div>
@@ -145,6 +149,8 @@
                 src="{{ asset('images/about-us/DSC_1779.webp') }}"
                 alt="Boutique"
                 loading="lazy"
+                height="578"
+                width="400"
                 decoding="async"
                 class="w-full aspect-[4/3] object-cover object-top transition-transform duration-500 group-hover:scale-105">
         </div>
@@ -154,6 +160,8 @@
                 src="{{ asset('images/about-us/DSC08165 copy.webp') }}"
                 alt="Design Process"
                 loading="lazy"
+                height="578"
+                width="400"
                 decoding="async"
                 class="w-full aspect-[4/5] object-cover object-top transition-transform duration-500 group-hover:scale-105">
         </div>
@@ -328,7 +336,7 @@
                 <!-- Team Member 1 -->
                 <div class="group">
                     <div class="relative rounded-2xl overflow-hidden mb-5">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600" alt="Creative Director" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600" alt="Creative Director"  width="400" height="578" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">Aiman Khan</h3>
@@ -339,7 +347,7 @@
                 <!-- Team Member 2 -->
                 <div class="group">
                     <div class="relative rounded-2xl overflow-hidden mb-5">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" alt="Master Craftsman" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" alt="Master Craftsman" width="400" height="578" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">Rajesh Sharma</h3>
@@ -350,7 +358,7 @@
                 <!-- Team Member 3 -->
                 <div class="group">
                     <div class="relative rounded-2xl overflow-hidden mb-5">
-                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600" alt="Head Stylist" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600" alt="Head Stylist" width="400" height="578" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">Priya Mehta</h3>

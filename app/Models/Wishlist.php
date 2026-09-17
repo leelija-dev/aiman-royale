@@ -15,6 +15,7 @@ class Wishlist extends Model
         'product_id',
         'variant_id',
         'session_id',
+        'guest_uuid'
     ];
 
     protected $casts = [

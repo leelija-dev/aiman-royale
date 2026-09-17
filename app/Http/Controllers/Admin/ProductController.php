@@ -53,7 +53,6 @@ class ProductController extends Controller
                 // Already an array, use as-is
                 $product->occasions = $product->occasions;
             } else {
-                // It's a collection, pluck the IDs
                 $product->occasions = $product->occasions->pluck('id')->toArray();
             }
             return $product;
@@ -255,7 +254,7 @@ class ProductController extends Controller
         Cache::forget('home.categories.with_products');
         Cache::forget('home.categories');
         Cache::forget('home.categories.grouped');
-        Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
+        // Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully with Cloudinary!');
     }
@@ -490,7 +489,7 @@ class ProductController extends Controller
             'home.categories.grouped',
             'product_categories',
         ]);
-        Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
+        // Cache::tags(['products', 'product_slug_' . $product->slug])->flush();
 
 
 

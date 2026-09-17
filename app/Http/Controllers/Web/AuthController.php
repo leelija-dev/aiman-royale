@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\EmailVerification;
@@ -17,14 +18,18 @@ use App\Services\MetaConversionsService;
 use App\Models\RegistrationOtpHistory;
 use App\Models\ProductVariant;
 use App\Rules\Turnstile;
-
+use App\Services\GuestIdentityService;
+use App\Services\CartMergeService;
 class AuthController extends Controller
 {
     protected MetaConversionsService $metaService;
-
-    public function __construct(MetaConversionsService $metaService)
+    protected GuestIdentityService $guestIdentity;
+    protected CartMergeService $cartMergeService;
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity,CartMergeService $cartMergeService)
     {
         $this->metaService = $metaService;
+        $this->guestIdentity = $guestIdentity;
+        $this->cartMergeService = $cartMergeService;
     }
 
     public function showLogin(Request $request)
@@ -655,12 +660,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
         $remember = $request->has('remember');
+        $login = trim($request->email);
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
 
+        // Login using email
+        $credentials = [
+            'email' => $login,
+            'password' => $request->password,
+        ];
+
+    } else {
+
+        // Login using mobile number
+        $credentials = [
+            'phone' => $login,
+            'password' => $request->password,
+        ];
+    }
         // Attempt login with JWT
         if (!$token = JWTAuth::attempt($credentials, $remember)) {
             return back()->withErrors([
@@ -704,16 +725,25 @@ class AuthController extends Controller
             'last_login_at' => $user->last_login_at
         ]);
 
-        if ($variantId = session('guest_variant_id')) {
-            session()->forget('guest_variant_id');
+        // if ($variantId = session('guest_variant_id')) {
+        //     session()->forget('guest_variant_id');
 
-            $variant = ProductVariant::find($variantId);
-            if ($variant) {
-                app(\App\Http\Controllers\Web\CartController::class)
-                    ->addVariantToUserCart($variant, $user->id, 1);
-            }
+        //     $variant = ProductVariant::find($variantId);
+        //     if ($variant) {
+        //         app(\App\Http\Controllers\Web\CartController::class)
+        //             ->addVariantToUserCart($variant, $user->id, 1);
+        //     }
+        // }
+        // Merge guest cart into logged-in user's cart
+        $guestUuid = $this->guestIdentity->get();
+
+        if ($guestUuid) {
+
+            $this->cartMergeService->merge(
+                $guestUuid,
+                $user->id
+            );
         }
-
         if ($variantId = session('guest_variant_id_for_wishlist')) {
             dd($variantId);
             session()->forget('guest_variant_id_for_wishlist');
@@ -807,15 +837,54 @@ class AuthController extends Controller
         $previousUrl = $request->input('redirect_url', url()->current());
         // dd($previousUrl);
         // Clear remember cookies
-        Cookie::queue(Cookie::forget('remember_token'));
-        Cookie::queue(Cookie::forget('user_id'));
+        // Cookie::queue(Cookie::forget('remember_token'));
+        // Cookie::queue(Cookie::forget('user_id'));
 
         // Clear remember token from database
         $user = auth()->user();
         if ($user) {
+            $guestUuid = $this->guestIdentity->getOrCreate();
+             $userCartItems = Cart::where('user_id', $user->id)->get();
+                
+             foreach ($userCartItems as $userCart) {
+
+            $guestCart = Cart::where('guest_uuid', $guestUuid)
+                ->where('variant_id', $userCart->variant_id)
+                ->where('user_id', null)
+                ->first();
+
+            if ($guestCart) {
+
+                $guestCart->update([
+                    'count' => $guestCart->count + $userCart->count,
+                    'price' => $userCart->price,
+                   
+                ]);
+
+                // Remove user cart row
+                // $userCart->delete();
+                $userCart->update([
+                    'guest_uuid' => $guestUuid,
+                   
+                ]);
+
+            } else {
+
+                $userCart->update([
+                    
+                    'guest_uuid' => $guestUuid,
+                    'session_id' => null,
+                    // 'last_activity_at' => now(),
+                    // 'expires_at' => null,
+                ]);
+            }
+        }
+        
             $user->remember_token = null;
             $user->save();
         }
+        Cookie::queue(Cookie::forget('remember_token'));
+    Cookie::queue(Cookie::forget('user_id'));
 
         Auth::logout();
         $request->session()->invalidate();

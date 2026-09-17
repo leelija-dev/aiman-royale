@@ -14,6 +14,7 @@ class Cart extends Model
         'variant_id',
         'user_id',
         'session_id',
+        'guest_uuid',
         'count',
         'price',
     ];

@@ -148,16 +148,26 @@ class WishlistController extends Controller
             ]);
 
             $userId = Auth::id();
-            $sessionId = $userId ? null : session()->getId();
+            // $sessionId = $userId ? null : session()->getId();
+            $guestUuid = app(\App\Services\GuestIdentityService::class)
+            ->getOrCreate();
+
 
             // Check if product already in wishlist
             $existingWishlist = Wishlist::where('product_id', $request->product_id)
-                ->where(function ($query) use ($userId, $sessionId) {
+                ->where(function ($query) use ($userId, $guestUuid) {
                     if ($userId) {
                         $query->where('user_id', $userId);
                     } else {
-                        $query->where('session_id', $sessionId);
+                        // $query->where('session_id', $sessionId);
+                         $query->where('guest_uuid', $guestUuid)
+                          ->whereNull('user_id');
                     }
+                })
+                ->when($request->filled('variant_id'), function ($query) use ($request) {
+
+                    $query->where('variant_id', $request->variant_id);
+
                 })
                 ->first();
 
@@ -173,10 +183,14 @@ class WishlistController extends Controller
                 'user_id' => $userId,
                 'product_id' => $request->product_id,
                 'variant_id' => $request->variant_id,
-                'session_id' => $sessionId,
+                'guest_uuid' => $guestUuid,
+                'session_id' => null,
             ]);
             Cache::forget('home.products.wishlisted');
-            Cache::forget("user:{$userId}:wishlists");
+            // Cache::forget("user:{$userId}:wishlists");
+            if ($userId) {
+                Cache::forget("user:{$userId}:wishlists");
+            }
             try {
             $product = Product::with('variants')->find($request->product_id);
 
