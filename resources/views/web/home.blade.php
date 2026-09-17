@@ -241,7 +241,7 @@
                        width="400"
                         height="600"
                         sizes="(max-width: 768px) 400px, 750px"
-                        @if($key==0) fetchpriority="eager" @else loading="lazy" @endif
+                        @if($key==0)fetchpriority="high" loading="eager" @else loading="lazy" @endif
                         decoding="async">
                 </picture>
             </a>
