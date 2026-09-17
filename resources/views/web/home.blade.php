@@ -93,7 +93,7 @@
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                     </div>
-                    <div
+                    {{-- <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
                         @php
                         $variantImage = $category->images->sortByDesc('id')->first()?->image;
@@ -110,10 +110,10 @@
                         if (strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false) {
                         $parts = explode('upload/', $catImage);
                         $catImage = $parts[0] . 'upload/w_550,h_800,c_fill,f_auto,q_auto/' . $parts[1];
-                        }
-                        else{
-                        $catImage = 'img/' . $catImage . '?w=600&q=80';
-                        }
+                        } 
+                       // else{
+                       //     $catImage = 'img/' . $catImage . '?w=600&q=80';
+                      //   }
                         @endphp
                         <img src="{{ $catImage }}"
                             srcset="{{ $catImage }}?w=200&q=80 200w,
@@ -128,7 +128,59 @@
                             decoding="async"
                             width="200"
                             height="200">
-                    </div>
+                    </div> --}}
+                    <div
+    class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+    @php
+        $variantImage = $category->images->sortByDesc('id')->first()?->image;
+        $productImage = $category->product->images->sortByDesc('id')->first()?->image;
+        $catagoryImage = $category->product->category->image;
+        $catImage = $productImage ?: $catagoryImage;
+
+        $catImageUrl = null;
+        $catImageSrcset = null;
+
+        if ($catImage) {
+            $isCloudinary = strpos($catImage, 'cloudinary.com') !== false && strpos($catImage, 'upload/') !== false;
+
+            if ($isCloudinary) {
+                // Old Cloudinary image -> real transformed URLs (actual resizing works here)
+                $parts = explode('upload/', $catImage, 2);
+
+                $cld = fn($w, $h) => $parts[0] . "upload/w_{$w},h_{$h},c_fill,f_auto,q_auto/" . $parts[1];
+
+                $catImageUrl    = $cld(400, 580);
+                $catImageSrcset = $cld(200, 290) . ' 200w, '
+                                . $cld(400, 580) . ' 400w, '
+                                . $cld(600, 870) . ' 600w';
+            } else {
+                // Local system file -> no resizing available, just serve original as-is
+                $catImageUrl = str_starts_with($catImage, 'http')
+                    ? $catImage
+                    : asset('storage/' . $catImage);
+                // No srcset here (broken query-string resizing removed)
+            }
+        }
+    @endphp
+
+    @if($catImageUrl)
+        <img
+            src="{{ $catImageUrl }}"
+            @if($catImageSrcset)
+                srcset="{{ $catImageSrcset }}"
+                sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
+            @endif
+            alt="{{ $category->product->category->name }}"
+            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+            width="200"
+            height="200"
+            onload="this.classList.remove('opacity-0')"
+        >
+    @endif
+</div>
                 </div>
                 <span
                     class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->product->category->name }}</span>

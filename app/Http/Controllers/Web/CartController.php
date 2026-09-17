@@ -14,14 +14,15 @@ use App\Models\Coupon;
 use Illuminate\Support\Facades\Validator;
 use App\Services\MetaConversionsService;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\GuestIdentityService;
 class CartController extends Controller
 {
     protected MetaConversionsService $metaService;
-
-    public function __construct(MetaConversionsService $metaService)
+    protected GuestIdentityService $guestIdentity;
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity)
     {
         $this->metaService = $metaService;
+        $this->guestIdentity = $guestIdentity;
     }
 
     public function index(): View
@@ -42,19 +43,39 @@ class CartController extends Controller
             session()->flash('info', 'Buy Now session cleared. Your cart items are shown below.');
         }
         $userId = Auth::id();
-        $sessionId = session()->getId();
+        // $sessionId = session()->getId();
+
+        // $cartItems = Cart::with(['product.images', 'variant'])
+        //     ->where(function ($query) use ($userId, $sessionId) {
+        //         if ($userId) {
+        //             $query->where('user_id', $userId);
+        //         } else {
+        //             $query->where('session_id', $sessionId);
+        //         }
+        //     })
+        //     ->get();
+
+        if ($userId) {
 
         $cartItems = Cart::with(['product.images', 'variant'])
-            ->where(function ($query) use ($userId, $sessionId) {
-                if ($userId) {
-                    $query->where('user_id', $userId);
-                } else {
-                    $query->where('session_id', $sessionId);
-                }
-            })
+            ->where('user_id', $userId)
             ->get();
 
+    } else {
 
+        $guestUuid = app(\App\Services\GuestIdentityService::class)->get();
+
+        if ($guestUuid) {
+
+            $cartItems = Cart::with(['product.images', 'variant'])
+                ->where('guest_uuid', $guestUuid)
+                ->get();
+
+        } else {
+
+            $cartItems = collect();
+        }
+    }
         $subtotal = $cartItems->sum(function ($item) {
             //  dd($item->variant->discount_price);
 
@@ -81,14 +102,14 @@ class CartController extends Controller
                 'count' => 'required|integer|min:1',
             ]);
 
-            if (!Auth::check()) {
-                session(['guest_variant_id' => $request->variant_id]);
+            // if (!Auth::check()) {
+            //     session(['guest_variant_id' => $request->variant_id]);
 
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Authentication required',
-                ], 401);
-            }
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Authentication required',
+            //     ], 401);
+            // }
 
             $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
             // Check if variant is in stock
@@ -101,19 +122,36 @@ class CartController extends Controller
 
             // Get user or session
             $userId = Auth::id();
-            $sessionId = $userId ? null : session()->getId();
-
+            $guestUuid = null;
+            // $sessionId = $userId ? null : session()->getId();
+             if (!$userId) {
+                $guestUuid = $this->guestIdentity->getOrCreate();
+            }
             // Check if item already exists in cart
-            $existingCart = Cart::where('variant_id', $request->variant_id)
-                ->where(function ($query) use ($userId, $sessionId) {
-                    if ($userId) {
+            // $existingCart = Cart::where('variant_id', $request->variant_id)
+            //     ->where(function ($query) use ($userId, $sessionId) {
+            //         if ($userId) {
+            //             $query->where('user_id', $userId);
+            //         } else {
+            //             $query->where('session_id', $sessionId);
+            //         }
+            //     })
+            //     ->first();
+             $existingCart = Cart::where('variant_id', $variant->id)
+                ->when(
+                    $userId,
+                    function ($query) use ($userId) {
                         $query->where('user_id', $userId);
-                    } else {
-                        $query->where('session_id', $sessionId);
                     }
-                })
+                )
+                ->when(
+                    !$userId,
+                    function ($query) use ($guestUuid) {
+                        $query->where('guest_uuid', $guestUuid);
+                    }
+                )
                 ->first();
-
+                $price = $variant->discount_price ?? $variant->price;
             if ($existingCart) {
                 // Update existing cart item
                 $newCount = $existingCart->count + $request->count;
@@ -127,7 +165,7 @@ class CartController extends Controller
 
                 $existingCart->update([
                     'count' => $newCount,
-                    'price' => $variant->discount_price ?? $variant->price
+                    'price' => $price,//$variant->discount_price ?? $variant->price
                 ]);
 
                 // Track AddToCart event
@@ -163,9 +201,10 @@ class CartController extends Controller
                     'product_id' => $variant->product_id,
                     'variant_id' => $request->variant_id,
                     'user_id' => $userId,
-                    'session_id' => $sessionId,
+                    'guest_uuid' => $guestUuid,
+                    'session_id' => null,
                     'count' => $request->count,
-                    'price' => $variant->discount_price ?? $variant->price
+                    'price' => $price,//$variant->discount_price ?? $variant->price
                 ]);
 
                 // Track AddToCart event

@@ -1031,32 +1031,43 @@
                 </a>
 
                 @php
-                // Get cart count for current user/guest
-                $cartCount = 0;
-                if (Auth::check()) {
-                $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
-                } else {
-                $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
-                }
-                @endphp
+    $cartCount = 0;
 
-                <button onclick="window.location.href='{{ route('cart.index') }}'"
-                    class="text-gray-700 hover:text-black group relative">
-                    <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
-                        <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
-                        @if($cartCount > 0)
-                        <span
-                            class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
-                            {{ $cartCount }}
-                        </span>
-                        @endif
-                    </div>
-                    <span
-                        class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                        Cart{{ $cartCount > 0 ? ' (' . $cartCount . ')' : '' }}
-                    </span>
-                </button>
+    if (Auth::check()) {
+
+        $cartCount = \App\Models\Cart::where('user_id', Auth::id())
+            ->sum('count');
+
+    } else {
+
+        $guestUuid = app(\App\Services\GuestIdentityService::class)
+            ->getOrCreate();
+
+        $cartCount = \App\Models\Cart::where('guest_uuid', $guestUuid)
+            ->sum('count');
+    }
+@endphp
+
+<button onclick="window.location.href='{{ route('cart.index') }}'"
+    class="text-gray-700 hover:text-black group relative">
+
+    <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
+
+        <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
+
+        @if($cartCount > 0)
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                {{ $cartCount }}
+            </span>
+        @endif
+
+    </div>
+
+    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+        Cart{{ $cartCount > 0 ? ' (' . $cartCount . ')' : '' }}
+    </span>
+
+</button>
 
                 <!-- Profile Section -->
                 @auth

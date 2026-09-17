@@ -158,9 +158,10 @@
                     <div id="emailField">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address / Phone Number</label>
                         <div class="relative">
-                            <input type="text" id="email" placeholder="example@gmail.com or +1234567890" name="email" required
+                            <input type="text" id="email" placeholder="example@gmail.com or 9568667890" name="email" required
                                 class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                             <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            {{-- <i class="fas fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i> --}}
                         </div>
                         <p class="error text-red-500 text-xs mt-1 hidden"></p>
                         @error('email')

@@ -375,7 +375,7 @@ function decreaseQuantity(cartId) {
     updateCheckoutButton(); // check stock and update button
 }
 
-function updateCartTotal() {
+function updateCartTotal(updateNavbar = false) {
 
     let currency = "{{config('app.currency')}}";
     let totalSubtotal = 0;
@@ -407,7 +407,10 @@ function updateCartTotal() {
     }
     
     // Update navbar cart count
-    updateNavbarCartCount(totalItems);
+    // updateNavbarCartCount(totalItems);
+    if (updateNavbar) {
+      updateNavbarCartCount(totalItems);
+  }
 }
 
 // Function to update navbar cart count
