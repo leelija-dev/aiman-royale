@@ -2675,7 +2675,20 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
+<script>
+  // Load confetti only when you actually need it
+  function loadConfetti(callback) {
+    if (window.confetti) {
+      callback();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+    script.onload = callback;
+    document.body.appendChild(script);
+  }
+</script>
 <!-- Cart Functionality -->
 <script>
     function toggleHomeWishlist(productId, event) {
