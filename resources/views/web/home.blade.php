@@ -2858,4 +2858,5 @@ function toggleHomeWishlist(productId, event) {
         initHeroCarousel();
     }
 </script>
+
 @endsection
