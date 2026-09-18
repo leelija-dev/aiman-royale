@@ -2334,13 +2334,26 @@ art from fake trails.
       <!-- Payment icons – now includes Cashfree, PhonePe, Google Pay -->
       <div class="grid grid-cols-3 gap-2.5 mb-4">
         <!-- Mastercard -->
-        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
-          <i class="fab fa-cc-mastercard text-2xl text-[#1a1f36]"></i>
-        </div>
+      
+      <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+        <svg viewBox="0 0 152 108" class="w-10 h-6" xmlns="http://www.w3.org/2000/svg">
+          <rect width="152" height="108" rx="8" fill="#fff"/>
+          <circle cx="60" cy="54" r="32" fill="#EB001B"/>
+          <circle cx="92" cy="54" r="32" fill="#F79E1B"/>
+          <path d="M76 30a32 32 0 010 48 32 32 0 010-48z" fill="#FF5F00"/>
+        </svg>
+      </div>
+
+      <!-- Visa -->
+      <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+        <svg viewBox="0 0 48 16" class="w-10 h-6" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="13" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#1A1F71">VISA</text>
+        </svg>
+      </div>
         <!-- Visa -->
-        <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
-          <i class="fab fa-cc-visa text-2xl text-[#1a1f71]"></i>
-        </div>
+        {{-- <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition">
+          <i class="fa fa-cc-visa"></i>
+        </div> --}}
         <!-- COD -->
         <div class="flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-lg py-1.5 px-1 border border-white/40 shadow-sm hover:bg-white/70 transition text-[11px] font-medium text-gray-700 gap-1">
           <i class="fas fa-truck text-gray-500 text-xs"></i> <span>COD</span>
@@ -2501,8 +2514,12 @@ art from fake trails.
    class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] hidden">
    
   <div class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-lg">
-    <i class="fab fa-whatsapp text-white text-2xl md:text-3xl"></i>
-  </div>
+  <svg viewBox="0 0 32 31" class="w-8 h-8 md:w-9 md:h-9" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#fff" d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.5.7 4.8 1.9 6.8L3 29l6.9-2.1c1.9 1 4 1.6 6.1 1.6 7 0 12.7-5.6 12.7-12.5S23 3 16 3z"/>
+    <path fill="#25D366" d="M15 5.1c-6.7 0-10.4 4.8-10.3 10.2 0 2.2.7 4.3 2 6l.3.5-1.3 4.7 4.9-1.3.5.3c1.7 1 3.6 1.5 5.6 1.5 5.7 0 10.3-4.6 10.3-10.2S21.6 5.3 16 5.3z"/>
+    <path fill="#fff" d="M21.7 18.9c-.3-.2-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 3.1 1.3 3.1.9 3.6.8.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.4z"/>
+  </svg>
+</div>
 </a>
 
 
