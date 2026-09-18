@@ -2,86 +2,6 @@
 
 @section('content')
 
-
-{{-- <style>
-    Fade out anim ation
-    .fade-out {
-        animation: fadeOut 1.2s ease-in-out forwards;
-    }
-
-    @keyframes fadeOut {
-        0% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0;
-        }
-    }
-
-    #unique-scroll
-
-    /* Fade in animation */
-    .fade-in {
-        animation: fadeIn 1.2s ease-in-out forwards;
-    }
-
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-
-    /* Base styles for slides */
-    .slide-left,
-    .slide-top,
-    .slide-center,
-    .slide-right,
-    .slide-bottom {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transition: none;
-    }
-
-    /* Ensure content transitions smoothly with the fade */
-    .fade-out .content,
-    .fade-in .content {
-        transition: opacity 0.3s ease;
-    }
-
-    #unique-scroll .custom-nav-tags,
-    #unique-scroll .owl-dots,
-    #unique-scroll .owl-nav {
-        display: none !important;
-    }
-
-    /* CLS Prevention: Force aspect ratio on all images with explicit dimensions */
-    img[width][height] {
-        aspect-ratio: attr(width) / attr(height);
-    }
-
-    /* Ensure images don't cause layout shifts during loading */
-    img {
-        background-color: #f3f4f6;
-    }
-
-    /* Reserve space for hero carousel images */
-    .hero-carousel .slide-item {
-        min-height: 0;
-    }
-
-    .hero-carousel img {
-        background-color: #f3f4f6;
-    }
-</style> --}}
-
 <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
     <!-- Animated Gradient Background Decoration -->
@@ -203,12 +123,39 @@
     </div>
 </div>
 
-
-
-{{-- <style>
-
-</style> --}}
 <!-- updated HTML block – slide structure with Font Awesome icons -->
+ @push('head-preload')
+    @if(isset($bannerHeroSection[0]))
+        @php $first = $bannerHeroSection[0]; @endphp
+
+        {{-- Mobile preload --}}
+        <link rel="preload"
+              as="image"
+              href="{{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75"
+              imagesrcset="
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=400&q=75 400w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=600&q=75 600w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=750&q=75 750w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75 828w
+              "
+              imagesizes="(max-width: 767px) 750px"
+              media="(max-width: 767px)"
+              fetchpriority="high">
+
+        {{-- Desktop preload --}}
+        <link rel="preload"
+              as="image"
+              href="{{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75"
+              imagesrcset="
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=960&q=75 960w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75 1280w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1600&q=75 1600w
+              "
+              imagesizes="(min-width: 768px) 1280px"
+              media="(min-width: 768px)"
+              fetchpriority="high">
+    @endif
+@endpush
 <section class="px-4 lgg:py-4 py-3 ">
     <div class="container mx-auto">
         <div class="hero-carousel owl-carousel owl-theme ">
@@ -227,6 +174,7 @@
             <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a>
 
         </div> --}}
+        {{--
         <div class="slide-item relative">
 
             <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
@@ -252,6 +200,63 @@
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                 </div> -->
         </div>
+        --}}
+
+         @php
+        $desktopImg = asset('storage/uploads/banners/' . $banner->image);
+        $mobileImg  = asset('storage/uploads/banners/' . $banner->mobile_screen_image);
+        $isFirst    = $key === 0;
+    @endphp
+
+    <div class="slide-item relative">
+        <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
+            <picture>
+                {{-- Desktop --}}
+                <source
+                    media="(min-width: 768px)"
+                    type="image/webp"
+                    srcset="
+                        {{ $desktopImg }}?w=960&q=75 960w,
+                        {{ $desktopImg }}?w=1280&q=75 1280w,
+                        {{ $desktopImg }}?w=1600&q=75 1600w
+                    "
+                    sizes="(min-width: 768px) 1280px"
+                    width="1280"
+                    height="480">
+
+                {{-- Mobile --}}
+                <source
+                    media="(max-width: 767px)"
+                    type="image/webp"
+                    srcset="
+                        {{ $mobileImg }}?w=400&q=75 400w,
+                        {{ $mobileImg }}?w=600&q=75 600w,
+                        {{ $mobileImg }}?w=750&q=75 750w,
+                        {{ $mobileImg }}?w=828&q=75 828w
+                    "
+                    sizes="(max-width: 767px) 750px"
+                    width="750"
+                    height="1125">
+
+                {{-- Fallback --}}
+                <img
+                    src="{{ $mobileImg }}?w=750&q=75"
+                    alt="{{ $banner->title ?? 'Hero banner' }}"
+                    class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
+                    width="750"
+                    height="1125"
+                    sizes="(max-width: 767px) 750px"
+                    @if($isFirst)
+                        fetchpriority="high"
+                        loading="eager"
+                    @else
+                        fetchpriority="low"
+                        loading="lazy"
+                    @endif
+                    decoding="async">
+            </picture>
+        </a>
+    </div>
         @endforeach
 
         <!-- Slide 2 -->
@@ -352,7 +357,7 @@
                             {{ $catImg }}?w=450&q=80 450w,
                             {{ $catImg }}?w=600&q=80 600w,
                             {{ $catImg }}?w=800&q=80 800w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 300px, 450px"
                             alt="{{ $category->name }}"
                             class="w-full aspect-[9/13] object-cover object-top transition duration-700 group-hover:scale-105"
                             width="450"
@@ -503,7 +508,7 @@
                                     srcset="{{ $tagImage }}?w=300&q=80 300w,
                                             {{ $tagImage }}?w=400&q=80 400w,
                                             {{ $tagImage }}?w=600&q=80 600w"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 15vw"
+                                    sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                                     alt="{{ $category->name }}"
                                     loading="lazy"
                                     decoding="async"
@@ -635,7 +640,7 @@
                             srcset="{{ $imageUrl }}?w=300&q=80 300w,
                                     {{ $imageUrl }}?w=450&q=80 450w,
                                     {{ $imageUrl }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 300px, 450px"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
                             loading="lazy"
@@ -787,7 +792,7 @@
                             srcset="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 20vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                             alt="Saree Collection"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
@@ -809,7 +814,7 @@
                             srcset="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=600&q=80 600w,
                                     {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=800&q=80 800w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 40vw, 30vw"
+                            sizes="(max-width: 640px) 225px, (max-width: 1024px) 300px, 400px"
                             alt="Premium Lehenga"
                             class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300"
                             loading="lazy"
@@ -831,7 +836,7 @@
                             srcset="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 35vw, (max-width: 1024px) 25vw, 20vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                             alt="Party Wear"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
@@ -852,7 +857,7 @@
                             srcset="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=200&q=80 200w,
                                     {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=400&q=80 400w"
-                            sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
+                            sizes="(max-width: 640px) 125px, (max-width: 1024px) 150px, 200px"
                             alt="Kurta Set"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
@@ -1019,7 +1024,7 @@
                                 srcset="{{ $bannerImg }}?w=400&q=80 400w,
                                         {{ $bannerImg }}?w=600&q=80 600w,
                                         {{ $bannerImg }}?w=800&q=80 800w"
-                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
                                 alt="{{ $banner->title }}"
                                 loading="lazy"
                                 decoding="async"
@@ -1066,228 +1071,6 @@
         </div>
     </div>
 </section>
-{{-- <style>
-    /* Vertical Text Utility */
-    .writing-vertical {
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        letter-spacing: 4px;
-    }
-
-    #uniq-ads-slider .owl-dots {
-        display: none !important;
-    }
-
-    /* Owl Carousel Custom Styles - With Backdrop Blur & Font Awesome */
-    #uniq-ads-slider .owl-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 100%;
-        pointer-events: none;
-        margin-top: 0;
-        z-index: 10;
-    }
-
-    #uniq-ads-slider .owl-nav button {
-        pointer-events: auto;
-        width: 50px;
-        height: 50px;
-        background: rgba(255, 255, 255, 0.85) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border-radius: 50% !important;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    #uniq-ads-slider .owl-nav button:hover {
-        background: rgba(212, 168, 139, 0.92) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        transform: translateY(-50%) scale(1.08);
-        box-shadow: 0 8px 30px rgba(212, 168, 139, 0.4);
-        border-color: rgba(212, 168, 139, 0.5);
-    }
-
-    #uniq-ads-slider .owl-nav button:active {
-        transform: translateY(-50%) scale(0.95);
-    }
-
-    #uniq-ads-slider .owl-nav button.owl-prev {
-        left: -12px;
-    }
-
-    #uniq-ads-slider .owl-nav button.owl-next {
-        right: -12px;
-    }
-
-    /* Font Awesome Icons */
-    #uniq-ads-slider .owl-nav button.owl-prev::before {
-        content: "\f104";
-        font-family: "Font Awesome 6 Free";
-        font-weight: 900;
-        font-size: 24px;
-        color: #2c1810;
-        transition: color 0.3s ease;
-        line-height: 1;
-    }
-
-    #uniq-ads-slider .owl-nav button.owl-next::before {
-        content: "\f105";
-        font-family: "Font Awesome 6 Free";
-        font-weight: 900;
-        font-size: 24px;
-        color: #2c1810;
-        transition: color 0.3s ease;
-        line-height: 1;
-    }
-
-    #uniq-ads-slider .owl-nav button:hover::before {
-        color: #ffffff;
-    }
-
-    /* Hide default nav text */
-    #uniq-ads-slider .owl-nav button span {
-        display: none !important;
-    }
-
-    /* Dots Styling */
-    #uniq-ads-slider .owl-dots {
-        position: absolute;
-        bottom: -35px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    #uniq-ads-slider .owl-dots .owl-dot {
-        width: 8px;
-        height: 8px;
-        background: #d4a88b !important;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        opacity: 0.5;
-    }
-
-    #uniq-ads-slider .owl-dots .owl-dot.active {
-        background: #2c1810 !important;
-        width: 28px;
-        border-radius: 20px;
-        opacity: 1;
-    }
-
-    #uniq-ads-slider .owl-dots .owl-dot:hover {
-        opacity: 1;
-    }
-
-    /* Banner Card Hover */
-    .banner-card {
-        transition: all 0.4s ease;
-    }
-
-    .banner-card:hover {
-        transform: translateY(-5px);
-    }
-
-    /* Line clamp */
-    .line-clamp-1 {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 640px) {
-        #uniq-ads-slider .owl-nav button {
-            width: 38px;
-            height: 38px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-prev {
-            left: -10px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-next {
-            right: -10px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-prev::before,
-        #uniq-ads-slider .owl-nav button.owl-next::before {
-            font-size: 18px;
-        }
-
-        #uniq-ads-slider .owl-dots {
-            bottom: -25px;
-            gap: 6px;
-        }
-
-        #uniq-ads-slider .owl-dots .owl-dot {
-            width: 6px;
-            height: 6px;
-        }
-
-        #uniq-ads-slider .owl-dots .owl-dot.active {
-            width: 20px;
-        }
-
-        #uniq-ads-slider .owl-nav {
-            top: 55%;
-        }
-    }
-
-    @media (min-width: 641px) and (max-width: 1024px) {
-        #uniq-ads-slider .owl-nav button.owl-prev {
-            left: -12px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-next {
-            right: -12px;
-        }
-
-        #uniq-ads-slider .owl-nav button {
-            width: 42px;
-            height: 42px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-prev::before,
-        #uniq-ads-slider .owl-nav button.owl-next::before {
-            font-size: 20px;
-        }
-    }
-
-    @media (min-width: 1025px) {
-        #uniq-ads-slider .owl-nav button.owl-prev {
-            left: -12px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-next {
-            right: -12px;
-        }
-
-        #uniq-ads-slider .owl-nav button {
-            width: 54px;
-            height: 54px;
-        }
-
-        #uniq-ads-slider .owl-nav button.owl-prev::before,
-        #uniq-ads-slider .owl-nav button.owl-next::before {
-            font-size: 26px;
-        }
-    }
-</style> --}}
-
 <!-- Owl Carousel Initialization Script -->
 <script>
     function initUniqAdsSlider() {
@@ -1633,7 +1416,7 @@
                                     srcset="{{ $secBannerImg }}?w=400&q=80 400w,
                                             {{ $secBannerImg }}?w=600&q=80 600w,
                                             {{ $secBannerImg }}?w=800&q=80 800w"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
                                     alt="{{ $banner->title }}"
                                     class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                                     loading="lazy"
