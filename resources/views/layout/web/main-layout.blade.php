@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        @stack('head-preload')
      <meta name="user-logged-in" content="{{ auth()->check() ? 'true' : 'false' }}">
 
     @if (in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com']))
