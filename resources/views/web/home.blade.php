@@ -209,6 +209,41 @@
 
 </style> --}}
 <!-- updated HTML block – slide structure with Font Awesome icons -->
+ @push('head-preload')
+    @if(isset($bannerHeroSection[0]))
+        @php $first = $bannerHeroSection[0]; @endphp
+
+        {{-- Mobile preload --}}
+        <link rel="preload"
+              as="image"
+              href="{{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75&fm=webp"
+              imagesrcset="
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=400&q=75&fm=webp 400w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=600&q=75&fm=webp 600w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=750&q=75&fm=webp 750w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75&fm=webp 828w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=1080&q=75&fm=webp 1080w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=1170&q=75&fm=webp 1170w
+              "
+              imagesizes="100vw"
+              media="(max-width: 767px)"
+              fetchpriority="high">
+
+        {{-- Desktop preload --}}
+        <link rel="preload"
+              as="image"
+              href="{{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75&fm=webp"
+              imagesrcset="
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=960&q=75&fm=webp 960w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75&fm=webp 1280w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1600&q=75&fm=webp 1600w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1920&q=75&fm=webp 1920w
+              "
+              imagesizes="100vw"
+              media="(min-width: 768px)"
+              fetchpriority="high">
+    @endif
+@endpush
 <section class="px-4 lgg:py-4 py-3 ">
     <div class="container mx-auto">
         <div class="hero-carousel owl-carousel owl-theme ">
@@ -227,6 +262,7 @@
             <a href="{{$banner->redirect_link}}"> <img class="hero-carousel-mobile" src="{{ asset('storage/uploads/banners/' . $banner->mobile_screen_image) }}" class="w-full h-full object-cover md:block  hidden" alt="" loading="lazy" decoading="async"></a>
 
         </div> --}}
+        {{--
         <div class="slide-item relative">
 
             <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
@@ -252,6 +288,66 @@
                     <a href="#" class="shop-btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                 </div> -->
         </div>
+        --}}
+
+         @php
+        $desktopImg = asset('storage/uploads/banners/' . $banner->image);
+        $mobileImg  = asset('storage/uploads/banners/' . $banner->mobile_screen_image);
+        $isFirst    = $key === 0;
+    @endphp
+
+    <div class="slide-item relative">
+        <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
+            <picture>
+                {{-- Desktop --}}
+                <source
+                    media="(min-width: 768px)"
+                    type="image/webp"
+                    srcset="
+                        {{ $desktopImg }}?w=960&q=75&fm=webp 960w,
+                        {{ $desktopImg }}?w=1280&q=75&fm=webp 1280w,
+                        {{ $desktopImg }}?w=1600&q=75&fm=webp 1600w,
+                        {{ $desktopImg }}?w=1920&q=75&fm=webp 1920w
+                    "
+                    sizes="100vw"
+                    width="1920"
+                    height="720">
+
+                {{-- Mobile --}}
+                <source
+                    media="(max-width: 767px)"
+                    type="image/webp"
+                    srcset="
+                        {{ $mobileImg }}?w=400&q=75&fm=webp 400w,
+                        {{ $mobileImg }}?w=600&q=75&fm=webp 600w,
+                        {{ $mobileImg }}?w=750&q=75&fm=webp 750w,
+                        {{ $mobileImg }}?w=828&q=75&fm=webp 828w,
+                        {{ $mobileImg }}?w=1080&q=75&fm=webp 1080w,
+                        {{ $mobileImg }}?w=1170&q=75&fm=webp 1170w
+                    "
+                    sizes="100vw"
+                    width="1170"
+                    height="1755">
+
+                {{-- Fallback --}}
+                <img
+                    src="{{ $mobileImg }}?w=750&q=75"
+                    alt="{{ $banner->title ?? 'Hero banner' }}"
+                    class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
+                    width="750"
+                    height="1125"
+                    sizes="100vw"
+                    @if($isFirst)
+                        fetchpriority="high"
+                        loading="eager"
+                    @else
+                        fetchpriority="low"
+                        loading="lazy"
+                    @endif
+                    decoding="async">
+            </picture>
+        </a>
+    </div>
         @endforeach
 
         <!-- Slide 2 -->
@@ -352,7 +448,7 @@
                             {{ $catImg }}?w=450&q=80 450w,
                             {{ $catImg }}?w=600&q=80 600w,
                             {{ $catImg }}?w=800&q=80 800w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 300px, 450px"
                             alt="{{ $category->name }}"
                             class="w-full aspect-[9/13] object-cover object-top transition duration-700 group-hover:scale-105"
                             width="450"
@@ -503,7 +599,7 @@
                                     srcset="{{ $tagImage }}?w=300&q=80 300w,
                                             {{ $tagImage }}?w=400&q=80 400w,
                                             {{ $tagImage }}?w=600&q=80 600w"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 15vw"
+                                    sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                                     alt="{{ $category->name }}"
                                     loading="lazy"
                                     decoding="async"
@@ -635,7 +731,7 @@
                             srcset="{{ $imageUrl }}?w=300&q=80 300w,
                                     {{ $imageUrl }}?w=450&q=80 450w,
                                     {{ $imageUrl }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 300px, 450px"
                             alt="{{ $product->name }}"
                             class="w-full h-auto aspect-[9/13] object-cover object-top object-center transition-transform duration-700 group-hover:scale-105"
                             loading="lazy"
@@ -787,7 +883,7 @@
                             srcset="{{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/light-red-plazo-4_73_11zon.webp') }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 20vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                             alt="Saree Collection"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
@@ -809,7 +905,7 @@
                             srcset="{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=600&q=80 600w,
                                     {{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}?w=800&q=80 800w"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 40vw, 30vw"
+                            sizes="(max-width: 640px) 225px, (max-width: 1024px) 300px, 400px"
                             alt="Premium Lehenga"
                             class="w-full h-full object-cover object-top rounded-2xl shadow-xl border-4 border-white group-hover:border-secondary transition-all duration-300"
                             loading="lazy"
@@ -831,7 +927,7 @@
                             srcset="{{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=400&q=80 400w,
                                     {{ asset('web/images/product-images/light-pink-m-4_51_11zon.webp') }}?w=600&q=80 600w"
-                            sizes="(max-width: 640px) 35vw, (max-width: 1024px) 25vw, 20vw"
+                            sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 300px"
                             alt="Party Wear"
                             class="w-full h-full object-cover object-top rounded-xl shadow-lg border-3 border-white group-hover:border-secondary-light transition-all duration-300"
                             loading="lazy"
@@ -852,7 +948,7 @@
                             srcset="{{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=200&q=80 200w,
                                     {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=300&q=80 300w,
                                     {{ asset('web/images/product-images/glow-orange-3_18_11zon.webp') }}?w=400&q=80 400w"
-                            sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
+                            sizes="(max-width: 640px) 125px, (max-width: 1024px) 150px, 200px"
                             alt="Kurta Set"
                             class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                             loading="lazy"
@@ -1019,7 +1115,7 @@
                                 srcset="{{ $bannerImg }}?w=400&q=80 400w,
                                         {{ $bannerImg }}?w=600&q=80 600w,
                                         {{ $bannerImg }}?w=800&q=80 800w"
-                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
                                 alt="{{ $banner->title }}"
                                 loading="lazy"
                                 decoding="async"
@@ -1633,7 +1729,7 @@
                                     srcset="{{ $secBannerImg }}?w=400&q=80 400w,
                                             {{ $secBannerImg }}?w=600&q=80 600w,
                                             {{ $secBannerImg }}?w=800&q=80 800w"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
                                     alt="{{ $banner->title }}"
                                     class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                                     loading="lazy"
