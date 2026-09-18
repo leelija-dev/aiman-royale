@@ -5,7 +5,8 @@
     // Track Purchase event with Facebook Pixel on order success
     @if(session('purchase_event_data'))
     if (typeof fbq !== 'undefined') {
-        const purchaseData = {{ session('purchase_event_data') }};
+        // const purchaseData = {!! session('purchase_event_data') !!};
+        const purchaseData = @json(session('purchase_event_data'));
         fbq('track', 'Purchase', purchaseData);
         // Clear session after firing event
         @php session()->forget('purchase_event_data'); @endphp

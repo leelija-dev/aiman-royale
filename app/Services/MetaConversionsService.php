@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Cookie;
 class MetaConversionsService
 {
     protected string $pixelId;
@@ -90,10 +90,17 @@ class MetaConversionsService
         ];
 
         // Very important for match quality
-        if ($fbc = request()->cookie('_fbc')) {
+        // if ($fbc = request()->cookie('_fbc')) {
+        //     $userData['fbc'] = $fbc;
+        // }
+        // if ($fbp = request()->cookie('_fbp')) {
+        //     $userData['fbp'] = $fbp;
+        // }
+        // Very important for match quality
+        if ($fbc = $this->resolveFbc()) {
             $userData['fbc'] = $fbc;
         }
-        if ($fbp = request()->cookie('_fbp')) {
+        if ($fbp = $this->resolveFbp()) {
             $userData['fbp'] = $fbp;
         }
 
@@ -120,7 +127,8 @@ class MetaConversionsService
             $userData['external_id'] = [$this->hashData((string) $user->id)];
         } else {
         // For guest users, hash IP as fallback to satisfy Meta's requirement
-        $userData['external_id'] = [$this->hashData(request()->ip())];
+        // $userData['external_id'] = [$this->hashData(request()->ip())];
+        $userData['external_id'] = [$this->hashData($this->guestId())];
     }
 
         // Merge extra data (guest users etc.)
@@ -154,7 +162,47 @@ class MetaConversionsService
 
         return hash('sha256', $phone);
     }
+        /** fbc from cookie, else rebuilt from ?fbclid= */
+    protected function resolveFbc(): ?string
+    {
+        if ($fbc = request()->cookie('_fbc')) {
+            return $fbc;
+        }
 
+        if ($fbclid = request()->query('fbclid')) {
+            $fbc = 'fb.1.' . (time() * 1000) . '.' . $fbclid;
+            Cookie::queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
+            return $fbc;
+        }
+
+        return null;
+    }
+
+    /** fbp from Pixel cookie, else generated server-side */
+    protected function resolveFbp(): ?string
+    {
+        if ($fbp = request()->cookie('_fbp')) {
+            return $fbp;
+        }
+
+        $fbp = 'fb.1.' . (time() * 1000) . '.' . random_int(1000000000, 9999999999);
+        Cookie::queue('_fbp', $fbp, 60 * 24 * 90);
+
+        return $fbp;
+    }
+
+    /** Stable guest identifier stored in a first-party cookie */
+    protected function guestId(): string
+    {
+        if ($id = request()->cookie('_meta_gid')) {
+            return $id;
+        }
+
+        $id = (string) Str::uuid();
+        Cookie::queue('_meta_gid', $id, 60 * 24 * 365);
+
+        return $id;
+    }
     // =====================================================
     // ALL STANDARD EVENTS
     // =====================================================
