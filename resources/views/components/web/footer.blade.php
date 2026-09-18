@@ -2042,7 +2042,7 @@ $isProductPage = !empty($productSlug);
         <div class="flex items-center gap-3 mb-4 md:justify-start justify-center">
           <a href="/">
             <img class="max-h-[100px] h-auto w-auto pointer-events-auto"
-              src="{{ asset('web/images/company-logo/aiman-footer.webp') }}" alt="">
+              src="{{ asset('web/images/company-logo/aiman-footer.webp') }}" style="background:transparent;" alt="">
           </a>
         </div>
         <p class="text-gray-700 max-w-xl text-base lg:text-lg leading-relaxed md:mx-0 mx-auto md:text-left text-center">
