@@ -216,30 +216,27 @@
         {{-- Mobile preload --}}
         <link rel="preload"
               as="image"
-              href="{{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75&fm=webp"
+              href="{{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75"
               imagesrcset="
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=400&q=75&fm=webp 400w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=600&q=75&fm=webp 600w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=750&q=75&fm=webp 750w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75&fm=webp 828w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=1080&q=75&fm=webp 1080w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=1170&q=75&fm=webp 1170w
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=400&q=75 400w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=600&q=75 600w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=750&q=75 750w,
+                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75 828w
               "
-              imagesizes="100vw"
+              imagesizes="(max-width: 767px) 750px"
               media="(max-width: 767px)"
               fetchpriority="high">
 
         {{-- Desktop preload --}}
         <link rel="preload"
               as="image"
-              href="{{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75&fm=webp"
+              href="{{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75"
               imagesrcset="
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=960&q=75&fm=webp 960w,
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75&fm=webp 1280w,
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1600&q=75&fm=webp 1600w,
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1920&q=75&fm=webp 1920w
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=960&q=75 960w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75 1280w,
+                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1600&q=75 1600w
               "
-              imagesizes="100vw"
+              imagesizes="(min-width: 768px) 1280px"
               media="(min-width: 768px)"
               fetchpriority="high">
     @endif
@@ -304,30 +301,27 @@
                     media="(min-width: 768px)"
                     type="image/webp"
                     srcset="
-                        {{ $desktopImg }}?w=960&q=75&fm=webp 960w,
-                        {{ $desktopImg }}?w=1280&q=75&fm=webp 1280w,
-                        {{ $desktopImg }}?w=1600&q=75&fm=webp 1600w,
-                        {{ $desktopImg }}?w=1920&q=75&fm=webp 1920w
+                        {{ $desktopImg }}?w=960&q=75 960w,
+                        {{ $desktopImg }}?w=1280&q=75 1280w,
+                        {{ $desktopImg }}?w=1600&q=75 1600w
                     "
-                    sizes="100vw"
-                    width="1920"
-                    height="720">
+                    sizes="(min-width: 768px) 1280px"
+                    width="1280"
+                    height="480">
 
                 {{-- Mobile --}}
                 <source
                     media="(max-width: 767px)"
                     type="image/webp"
                     srcset="
-                        {{ $mobileImg }}?w=400&q=75&fm=webp 400w,
-                        {{ $mobileImg }}?w=600&q=75&fm=webp 600w,
-                        {{ $mobileImg }}?w=750&q=75&fm=webp 750w,
-                        {{ $mobileImg }}?w=828&q=75&fm=webp 828w,
-                        {{ $mobileImg }}?w=1080&q=75&fm=webp 1080w,
-                        {{ $mobileImg }}?w=1170&q=75&fm=webp 1170w
+                        {{ $mobileImg }}?w=400&q=75 400w,
+                        {{ $mobileImg }}?w=600&q=75 600w,
+                        {{ $mobileImg }}?w=750&q=75 750w,
+                        {{ $mobileImg }}?w=828&q=75 828w
                     "
-                    sizes="100vw"
-                    width="1170"
-                    height="1755">
+                    sizes="(max-width: 767px) 750px"
+                    width="750"
+                    height="1125">
 
                 {{-- Fallback --}}
                 <img
@@ -336,7 +330,7 @@
                     class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
                     width="750"
                     height="1125"
-                    sizes="100vw"
+                    sizes="(max-width: 767px) 750px"
                     @if($isFirst)
                         fetchpriority="high"
                         loading="eager"
