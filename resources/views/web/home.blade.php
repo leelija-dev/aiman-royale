@@ -2597,5 +2597,4 @@
         initHeroCarousel();
     }
 </script>
-
 @endsection
