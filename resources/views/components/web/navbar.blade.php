@@ -954,7 +954,7 @@
             <div
                 class="xl:absolute xl:top-0 xl:left-0 xl:w-full xl:flex xl:justify-center xl:items-center xl:pointer-events-none">
                 <a href="/">
-                    <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto"
+                    <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto" style="background:transparent;"
                         src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
                 </a>
             </div>
@@ -992,10 +992,11 @@
                     <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
-                        <div
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
-                            <i class="fa-brands fa-whatsapp text-[18px]"></i>
-                        </div>
+                       <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors group">
+                    <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-gray-500 group-hover:fill-green-500 transition-colors" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.149-.15.297-.347.446-.52.148-.174.198-.298.298-.497.099-.198.05-.371-.05-.52-.099-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487 3.065 1.32 3.065.879 3.63.827.567-.05 1.758-.72 2.006-1.416.248-.694.248-1.29.173-1.415-.074-.124-.272-.198-.57-.347zM12.034 22a9.969 9.969 0 01-5.086-1.391l-5.62 1.4 1.44-5.474A9.99 9.99 0 010 12C0 5.373 5.373 0 12 0s12 5.373 12 12-5.373 10-11.966 10z"/>
+                    </svg>
+                    </div>
                     </a>
                 </div>
                 @php
@@ -1012,7 +1013,7 @@
                     <button class="relative text-gray-700 hover:text-black group">
 
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
-                            <i class="fa-regular fa-heart text-lg group-hover:text-red-600"></i>
+                            <i class="fa fa-heart text-lg group-hover:text-red-600"></i>
                         </div>
                         {{-- @if (Auth::check())
                         @if ($wishlistCount > 0)
