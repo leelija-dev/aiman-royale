@@ -135,11 +135,8 @@
     /* ----- MODERN HERO SLIDER · redesigned ----- */
     .hero-carousel .slide-item {
         position: relative;
-
-        /* more immersive */
-        /* min-height: 600px; */
-        /* max-height: 700px; */
-
+        min-height: 600px;
+        max-height: 700px;
         border-radius: 0;
         /* clean edge, no rounding */
     }
@@ -577,8 +574,8 @@
     }
     @media (min-width: 768px) {
     .hero-carousel .slide-item {
-        aspect-ratio: 16 / 6;
-        min-height: 360px;
+        aspect-ratio: 8 / 3;
+        min-height: 480px;
     }
 }
     .hero-carousel img {
