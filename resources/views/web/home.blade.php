@@ -223,27 +223,29 @@
             $firstMobileImg = asset('storage/uploads/banners/' . $first->mobile_screen_image);
         @endphp
 
-        {{-- First mobile hero preload --}}
-        <link rel="preload"
+        {{-- FIRST MOBILE HERO --}}
+        <link
+            rel="preload"
             as="image"
-            href="{{ $firstMobileImg }}?w=600&q=70"
+            href="{{ $firstMobileImg }}?w=600&q=75"
             imagesrcset="
-                {{ $firstMobileImg }}?w=400&q=70 400w,
-                {{ $firstMobileImg }}?w=600&q=70 600w,
-                {{ $firstMobileImg }}?w=750&q=70 750w
+                {{ $firstMobileImg }}?w=400&q=75 400w,
+                {{ $firstMobileImg }}?w=600&q=75 600w,
+                {{ $firstMobileImg }}?w=750&q=75 750w
             "
             imagesizes="100vw"
             media="(max-width: 767px)"
             fetchpriority="high">
 
-        {{-- First desktop hero preload --}}
-        <link rel="preload"
+        {{-- FIRST DESKTOP HERO --}}
+        <link
+            rel="preload"
             as="image"
-            href="{{ $firstDesktopImg }}?w=1280&q=70"
+            href="{{ $firstDesktopImg }}?w=1280&q=75"
             imagesrcset="
-                {{ $firstDesktopImg }}?w=960&q=70 960w,
-                {{ $firstDesktopImg }}?w=1280&q=70 1280w,
-                {{ $firstDesktopImg }}?w=1600&q=70 1600w
+                {{ $firstDesktopImg }}?w=960&q=75 960w,
+                {{ $firstDesktopImg }}?w=1280&q=75 1280w,
+                {{ $firstDesktopImg }}?w=1600&q=75 1600w
             "
             imagesizes="100vw"
             media="(min-width: 768px)"
