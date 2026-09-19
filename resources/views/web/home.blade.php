@@ -19,18 +19,17 @@
         <!-- Horizontal Scroll with Enhanced Styling -->
         <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2">
             <div class="flex gap-6 md:gap-8 pb-4 min-w-max px-4 pt-[10px]">
-                @if ($productCategory)
-                    @foreach ($productCategory->whereNull('parent_id') as $category)
+                {{-- @if ($productCategory) --}}
+                    {{-- @foreach ($productCategory->whereNull('parent_id') as $category) --}}
                         @php
                         @endphp
 
-
-                        <a href="{{ route('category.show', $category->product->category->slug) }}"
-                            class="group flex flex-col items-center snap-center">
+                        {{-- <a href="https://aimanroyale.com/collections/salwar-kameez" {{ route('category.show',$category->product->category->slug ) }}" --}}
+                            {{-- class="group flex flex-col items-center snap-center">
                             <div class="relative mb-2">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
-                                </div>
+                                </div> --}}
                                 {{-- <div
                         class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl group-hover:border-pink-100 transition-all duration-300">
                         @php
@@ -67,9 +66,9 @@
                             width="200"
                             height="200">
                     </div> --}}
-                                <div
-                                    class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
-                                    @php
+                                {{-- <div
+                                    class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300"> --}}
+                                    {{-- @php
                                         $productImage = $category->product->images->sortByDesc('id')->first()?->image;
                                         $categoryImage = $category->product->category->image;
                                         $catImage = $productImage ?: $categoryImage;
@@ -102,25 +101,114 @@
                                                 $catImageUrl = $catImage ?: asset('storage/' . $catImage);
                                             }
                                         }
-                                    @endphp
+                                    @endphp --}}
 
-                                    @if ($catImageUrl)
-                                        <img src="{{ $catImageUrl }}"
-                                            @if ($catImageSrcset) srcset="{{ $catImageSrcset }}"
-                sizes="(max-width: 640px) 130px, (max-width: 1024px) 180px, 220px" @endif
-                                            alt="{{ $category->product->category->name }}"
-                                            class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
-                                            width="200" height="200"
-                                            loading="{{ $loop->index < 6 ? 'eager' : 'lazy' }}" decoding="async">
-                                    @endif
-                                </div>
+                                    {{-- @if ($catImageUrl) --}}
+                                        {{-- <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}" {{ $catImageUrl }} --}}
+                                            {{-- @if ($catImageSrcset) srcset="{{ $catImageSrcset }}" --}}
+                {{-- sizes="(max-width: 640px) 130px, (max-width: 1024px) 180px, 220px" @endif  --}}
+                                            {{-- alt="Salwar Kameez"{{ $category->product->category->name }}" --}}
+                                            {{-- class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110" --}}
+                                            {{-- width="200" height="200" --}}
+                                            {{-- loading="eager" decoding="async" >  {{ $loop->index < 6 ? 'eager' : 'lazy' }} --}}
+                                {{-- </div>
                             </div>
-                            <span
-                                class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">{{ $category->product->category->name }}</span>
-                            <span class="text-xs text-gray-500 mt-1">Most Loved</span>
-                        </a>
-                    @endforeach
-                @endif
+                            <span --}}
+                                {{-- class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Salwar Kameez{{ $category->product->category->name }}</span> --}}
+                            {{-- <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+                        </a> --}}
+                        {{-- @foreach ($productCategory->whereNull('parent_id') as $category) --}}
+                        @php
+                        @endphp
+                         <a href="https://aimanroyale.com/collections/salwar-kameez" 
+   class="group flex flex-col items-center snap-center">
+    <div class="relative mb-2">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+        </div>
+
+        <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+            <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}" 
+                 sizes="(max-width: 640px) 80px, 104px"
+                 alt="Salwar Kameez"
+                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
+                 width="104" 
+                 height="104"
+                 loading="eager" 
+                 decoding="async"
+                 onload="this.classList.remove('opacity-0')">
+        </div>
+    </div>
+    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">
+       Salwar Kameez
+    </span>
+    <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+</a>
+
+                       <a href="https://aimanroyale.com/collections/salwar-kameez" 
+   class="group flex flex-col items-center snap-center">
+    <div class="relative mb-2">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+        </div>
+
+        <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+            <img src="{{ asset('web/images/category-image/most-loved-bridesmaid-lehenga.jpg') }}" 
+                 sizes="(max-width: 640px) 80px, 104px"
+                 alt="Bridesmaid Lehenga"
+                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
+                 width="104" 
+                 height="104"
+                 loading="eager" 
+                 decoding="async"
+                 onload="this.classList.remove('opacity-0')">
+        </div>
+    </div>
+    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">
+        Bridesmaid Lehenga
+    </span>
+    <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+</a>
+                       <a href="https://aimanroyale.com/collections/salwar-kameez" 
+   class="group flex flex-col items-center snap-center">
+    <div class="relative mb-2">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+        </div>
+
+        <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+            <img src="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }}" 
+                 srcset="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 2x"
+                 sizes="(max-width: 640px) 80px, 104px"
+                 alt="Palazzo Suits"
+                 class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                 width="104" height="104"
+                 loading="eager" decoding="async">
+        </div>
+    </div>
+    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Palazzo Suits</span>
+    <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+</a>
+
+<a href="https://aimanroyale.com/collections/salwar-kameez" 
+   class="group flex flex-col items-center snap-center">
+    <div class="relative mb-2">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
+        </div>
+
+        <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+            <img src="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }}" 
+                 srcset="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 2x"
+                 sizes="(max-width: 640px) 80px, 104px"
+                 alt="Anarkali Suits"
+                 class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                 width="104" height="104"
+                 loading="eager" decoding="async">
+        </div>
+    </div>
+    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Anarkali Suits</span>
+    <span class="text-xs text-gray-500 mt-1">Most Loved</span>
+</a>
+                    {{-- @endforeach --}}
+                    {{-- @endforeach --}}
+                {{-- @endif --}}
             </div>
         </div>
     </div>
@@ -2553,4 +2641,15 @@ if ($banner->filter) {
             initHeroCarousel();
         }
     </script>
+    <script>
+  document.querySelectorAll('.fade-in-img').forEach(img => {
+    if (img.complete) {
+      img.classList.remove('opacity-0');
+    } else {
+      img.addEventListener('load', () => {
+        img.classList.remove('opacity-0');
+      });
+    }
+  });
+</script>
 @endsection
