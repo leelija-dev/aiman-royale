@@ -3842,7 +3842,9 @@
                         ` : ''}
                         
                         <button onclick="toggleWishlist(${product.id}, this, event)" 
-                                class="wishlist-btn">
+                                class="wishlist-btn"
+                                data-product-name="${(product.title || product.name || '').replace(/"/g, '&quot;')}"
+                                 data-product-price="${discountPrice || price || 0}">
                             <i class="far fa-heart"></i>
                         </button>
                     </div>
@@ -4091,6 +4093,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+
                     if (isInWishlist) {
                         button.classList.remove('text-red-500');
                         button.innerHTML = '<i class="far fa-heart"></i>';
@@ -4098,7 +4101,15 @@
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
                     }
-
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'AddToWishlist', {
+                            content_name: button.getAttribute('data-product-name') || '',
+                            content_ids: [String(productId)],
+                            content_type: 'product',
+                            value: parseFloat(button.getAttribute('data-product-price')) || 0,
+                            currency: 'INR'
+                        });
+                    }
                     // Update wishlist count if exists
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
                         item.textContent = data.wishlist_count;

@@ -3756,6 +3756,16 @@
                 })
                 .then(data => {
                     if (data && data.success) {
+                         if (typeof fbq !== 'undefined') {
+                            fbq('track', 'InitiateCheckout', {
+                                content_name: @json($product->name ?? ''),
+                                content_ids: [@json($product->id ?? '')],
+                                content_type: 'product',
+                                value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                currency: 'INR',
+                                num_items: 1
+                            });
+                        }
                         window.location.href = data.redirect || checkoutUrl;
                     } else {
                         showNotification(data?.message || 'Unable to start checkout', 'error');
@@ -3846,6 +3856,15 @@
                     if (data && data.success) {
                         showNotificationWithCart('Product added to cart successfully!', 'success', true);
                         // showNotification('Product added to cart successfully!', 'success');
+                        if (typeof fbq !== 'undefined') {
+                            fbq('track', 'AddToCart', {
+                                content_name: @json($product->name ?? ''),
+                                content_ids: [@json($product->id ?? '')],
+                                content_type: 'product',
+                                value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                currency: 'INR'
+                            });
+                        }
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
