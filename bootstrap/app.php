@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     return route('login');
                 }
 
-                return route('login');
+                return route('page.login');
             });
           $middleware->trustProxies(at: '*');
 
