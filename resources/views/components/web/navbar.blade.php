@@ -1010,10 +1010,10 @@
                 @endphp
 
                 <a href="{{ route('wishlist.index') }}">
-                    <button class="relative text-gray-700 hover:text-black group">
+                    <button class="relative text-gray-700 hover:text-black group"  type="button" aria-label="View wishlist">
 
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
-                            <i class="fa fa-heart text-lg group-hover:text-red-600"></i>
+                            <i class="fa fa-heart text-lg group-hover:text-red-600"  aria-hidden="true"></i>
                         </div>
                         {{-- @if (Auth::check())
                         @if ($wishlistCount > 0)
@@ -1050,7 +1050,8 @@
 @endphp
 
 <button onclick="window.location.href='{{ route('cart.index') }}'"
-    class="text-gray-700 hover:text-black group relative">
+    class="text-gray-700 hover:text-black group relative" type="button"
+    aria-label="View cart{{ $cartCount > 0 ? ' (' . $cartCount . ' items)' : '' }}">
 
     <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
 
@@ -1290,8 +1291,8 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="lgg:hidden text-gray-700 hover:text-black">
-            <i class="fa-solid fa-bars text-2xl"></i>
+        <button id="mobile-menu-btn" class="lgg:hidden text-gray-700 hover:text-black" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-sidebar">
+            <i class="fa-solid fa-bars text-2xl" aria-hidden="true"></i>
         </button>
 
         <!-- Right Section -->
@@ -1299,8 +1300,8 @@
             <!-- Search Container -->
             <div class="relative block w-full" id="search-container">
                 <input type="text" placeholder="Search here" id="search-input"
-                    class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full"  aria-label="Search products"/>
-                <button class="close-search" id="close-search-btn" type="button">
+                    class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
+                <button class="close-search" id="close-search-btn" type="button" aria-label="Clear search">
                     <i class="fa-solid fa-times" aria-hidden="true"></i>
                 </button>
                 <input type="text" placeholder="Search here"
@@ -1357,7 +1358,7 @@
                 <!-- Mobile Search Suggestions (only shown on mobile) -->
                 <div class="mobile-search-suggestions" id="mobile-search-suggestions">
                     <div class="mobile-search-suggestions-header">
-                        <button id="mobile-suggestions-back" aria-label="Go back">
+                        <button id="mobile-suggestions-back" type="button" aria-label="Clear search">
                             <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </button>
                         <input type="text" placeholder="Search products..." id="mobile-suggestions-input"
@@ -1397,11 +1398,11 @@
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
     <div class="mobile-search-header flex flex-row">
-        <button id="mobile-search-back" aria-label="Go back">
+        <button id="mobile-search-back" type="button" aria-label="Close search">
             <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
         </button>
-        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" class="w-full rounded-full" aria-label="Search products"/>
-        <button id="mobile-search-clear" aria-label="Clear search">
+        <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" class="w-full rounded-full" />
+        <button id="mobile-search-clear" type="button" aria-label="Clear search">
             <i class="fa-solid fa-times" aria-hidden="true"></i>
         </button>
     </div>
@@ -1445,8 +1446,8 @@
             <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}"
                 alt="Aiman Royal">
         </a>
-        <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors" aria-label="Close menu" >
-            <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
+        <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors" type="button" aria-label="Close menu">
+            <i class="fa-solid fa-xmark text-xl"></i>
         </button>
     </div>
 
