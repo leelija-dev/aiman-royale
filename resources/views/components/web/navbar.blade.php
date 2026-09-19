@@ -1362,8 +1362,8 @@
                             <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </button>
                         <input type="text" placeholder="Search products..." id="mobile-suggestions-input"
-                            autocomplete="off" />
-                        <button id="mobile-suggestions-clear" type="button" aria-label="Clear search">
+                            autocomplete="off" aria-label="Search products" />
+                        <button id="mobile-suggestions-clear" aria-label="Clear search">
                             <i class="fa-solid fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -1455,9 +1455,9 @@
     <div class="p-4 border-b">
         <div class="relative">
             <input type="text" placeholder="Search products..." id="mobile-sidebar-search-input"
-                class="search-input w-full pl-4 pr-10 py-3 text-sm outline-none rounded-[60px]" />
+                class="search-input w-full pl-4 pr-10 py-3 text-sm outline-none rounded-[60px]" aria-label="Search products" />
             <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                id="mobile-sidebar-search-icon"></i>
+                id="mobile-sidebar-search-icon" aria-hidden="true"></i>
         </div>
     </div>
 

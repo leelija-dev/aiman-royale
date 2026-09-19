@@ -2108,7 +2108,8 @@
 
 @section('scripts')
 {{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
-<script>
+<script src="{{ asset('web/home.js') }}"></script>
+<!-- <script>
   // Load confetti only when you actually need it
   function loadConfetti(callback) {
     if (window.confetti) {
@@ -2120,9 +2121,9 @@
     script.onload = callback;
     document.body.appendChild(script);
   }
-</script>
+</script> -->
 <!-- Cart Functionality -->
-<script>
+<!-- <script>
     function toggleHomeWishlist(productId, event) {
         console.log('toggleHomeWishlist called with productId:', productId);
         if (event) {
@@ -2299,9 +2300,9 @@
             element.textContent = count;
         });
     }
-</script>
+</script> -->
 
-<script>
+<!-- <script>
     const bg = document.querySelector(".parallax-bg");
     const section = bg.closest("section");
 
@@ -2318,9 +2319,9 @@
     window.addEventListener("scroll", updateParallax);
     window.addEventListener("resize", updateParallax);
     updateParallax();
-</script>
+</script> -->
 
-<script defer>
+<!-- <script defer>
     const sliders = [{
             className: 'slide-left',
             linkId: 'leftSliderLink'
@@ -2468,7 +2469,7 @@
 
         updateWishlistCount(data.wishlist_count);
     }
-</script>
+</script> -->
 
 @if($isTimmer)
 <script>
@@ -2514,7 +2515,7 @@
 </script>
 @endif
 
-<script defer>
+<!-- <script defer>
     document.addEventListener('DOMContentLoaded', function() {
         if ($('#categories-tag-carousel').length) {
             $('#categories-tag-carousel').owlCarousel({
@@ -2555,7 +2556,7 @@
             });
         }
     });
-</script>
+</script> -->
 
 <script>
     // Wait for jQuery and OwlCarousel to load
