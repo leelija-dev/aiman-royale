@@ -30,7 +30,6 @@
                     } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
                        
                         $imageUrl = url('img/' . $firstImage['image']);
-                        dd($imageUrl);
                         $hasImage = true;
                     } elseif (is_string($firstImage)) {
                         $imageUrl = asset($firstImage);
