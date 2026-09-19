@@ -214,31 +214,42 @@
     </div>
 
     <!-- updated HTML block – slide structure with Font Awesome icons -->
-    @push('head-preload')
-        @if (isset($bannerHeroSection[0]))
-            @php $first = $bannerHeroSection[0]; @endphp
+   @push('head-preload')
+    @if (isset($bannerHeroSection[0]))
+        @php
+            $first = $bannerHeroSection[0];
 
-            {{-- Mobile preload --}}
-            <link rel="preload" as="image"
-                href="{{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75"
-                imagesrcset="
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=400&q=75 400w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=600&q=75 600w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=750&q=75 750w,
-                  {{ asset('storage/uploads/banners/' . $first->mobile_screen_image) }}?w=828&q=75 828w
-              "
-                imagesizes="(max-width: 767px) 750px" media="(max-width: 767px)" fetchpriority="high">
+            $firstDesktopImg = asset('storage/uploads/banners/' . $first->image);
+            $firstMobileImg = asset('storage/uploads/banners/' . $first->mobile_screen_image);
+        @endphp
 
-            {{-- Desktop preload --}}
-            <link rel="preload" as="image" href="{{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75"
-                imagesrcset="
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=960&q=75 960w,
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1280&q=75 1280w,
-                  {{ asset('storage/uploads/banners/' . $first->image) }}?w=1600&q=75 1600w
-              "
-                imagesizes="(min-width: 768px) 1280px" media="(min-width: 768px)" fetchpriority="high">
-        @endif
-    @endpush
+        {{-- First mobile hero preload --}}
+        <link rel="preload"
+            as="image"
+            href="{{ $firstMobileImg }}?w=600&q=70"
+            imagesrcset="
+                {{ $firstMobileImg }}?w=400&q=70 400w,
+                {{ $firstMobileImg }}?w=600&q=70 600w,
+                {{ $firstMobileImg }}?w=750&q=70 750w
+            "
+            imagesizes="100vw"
+            media="(max-width: 767px)"
+            fetchpriority="high">
+
+        {{-- First desktop hero preload --}}
+        <link rel="preload"
+            as="image"
+            href="{{ $firstDesktopImg }}?w=1280&q=70"
+            imagesrcset="
+                {{ $firstDesktopImg }}?w=960&q=70 960w,
+                {{ $firstDesktopImg }}?w=1280&q=70 1280w,
+                {{ $firstDesktopImg }}?w=1600&q=70 1600w
+            "
+            imagesizes="100vw"
+            media="(min-width: 768px)"
+            fetchpriority="high">
+    @endif
+@endpush
     <section class="px-4 lgg:py-4 py-3 ">
         <div class="container mx-auto">
             <div class="hero-carousel owl-carousel owl-theme ">
