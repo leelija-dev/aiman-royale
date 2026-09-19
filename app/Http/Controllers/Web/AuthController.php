@@ -97,7 +97,7 @@ class AuthController extends Controller
 
     public function registerWithoutOTP(Request $request)
     {
-        dd(session()->all());
+        // dd(session()->all());
         // 1. Validate basic fields first
         $request->validate([
             'name'     => 'required|string|max:255',
