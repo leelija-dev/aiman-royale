@@ -9,12 +9,12 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-body {
+/* body {
   font-family: "Plus Jakarta Sans", sans-serif !important;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-}
+} */
 
 html {
     scroll-behavior: smooth;
