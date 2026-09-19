@@ -156,6 +156,19 @@ class AuthController extends Controller
 
             // Store JWT token in session
             session(['jwt_token' => $token]);
+             if (session()->has('redirect_after_registration')) {
+
+                $redirectUrl = session('redirect_after_registration');
+
+                // Remove it from session so it doesn't persist forever
+                session()->forget('redirect_after_registration');
+
+                if ($redirectUrl) {
+                    return redirect($redirectUrl)
+                        ->with('success', 'Account created successfully!')
+                        ->with('jwt_token', $token);
+                }
+            }
 
             return redirect()
                 ->route('page.index')
