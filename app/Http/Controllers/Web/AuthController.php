@@ -97,7 +97,7 @@ class AuthController extends Controller
 
     public function registerWithoutOTP(Request $request)
     {
-        //  dd(session()->all());
+        dd(session()->all());
         // 1. Validate basic fields first
         $request->validate([
             'name'     => 'required|string|max:255',
@@ -164,6 +164,10 @@ class AuthController extends Controller
 
                 // Remove it from session so it doesn't persist forever
                 session()->forget('redirect_after_registration');
+
+                if (str_contains($redirectUrl, '#action-buttons-section')) {
+                    $redirectUrl = url('/checkout');
+                }
 
                 if ($redirectUrl) {
                     return redirect($redirectUrl)
