@@ -308,34 +308,43 @@
                         <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
                             <picture>
                                 {{-- Desktop --}}
-                                <source media="(min-width: 768px)" type="image/webp"
-                                    srcset="
-                        {{ $desktopImg }}?w=960&q=75 960w,
-                        {{ $desktopImg }}?w=1280&q=75 1280w,
-                        {{ $desktopImg }}?w=1600&q=75 1600w
-                    "
-                                    sizes="(min-width: 768px) 1280px" width="1280" height="480">
+                               
+<source
+    media="(min-width: 768px)"
+    type="image/webp"
+    srcset="
+        {{ $desktopImg }}?w=960&q=75 960w,
+        {{ $desktopImg }}?w=1280&q=75 1280w,
+        {{ $desktopImg }}?w=1600&q=75 1600w
+    "
+    sizes="100vw">
 
-                                {{-- Mobile --}}
-                                <source media="(max-width: 767px)" type="image/webp"
-                                    srcset="
-                        {{ $mobileImg }}?w=400&q=75 400w,
-                        {{ $mobileImg }}?w=600&q=75 600w,
-                        {{ $mobileImg }}?w=750&q=75 750w,
-                        {{ $mobileImg }}?w=828&q=75 828w
-                    "
-                                    sizes="(max-width: 767px) 750px" width="750" height="1125">
+{{-- Mobile --}}
+<source
+    media="(max-width: 767px)"
+    type="image/webp"
+    srcset="
+        {{ $mobileImg }}?w=400&q=75 400w,
+        {{ $mobileImg }}?w=600&q=75 600w,
+        {{ $mobileImg }}?w=750&q=75 750w
+    "
+    sizes="100vw">
 
-                                {{-- Fallback --}}
-                                <img src="{{ $mobileImg }}?w=750&q=75" alt="{{ $banner->title ?? 'Hero banner' }}"
-                                    class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]" width="750"
-                                    height="1125" sizes="(max-width: 767px) 750px"
-                                    @if ($isFirst) fetchpriority="high"
-                        loading="eager"
-                    @else
-                        fetchpriority="low"
-                        loading="lazy" @endif
-                                    decoding="async">
+{{-- Hero image --}}
+<img
+    src="{{ $mobileImg }}?w=600&q=75"
+    alt="{{ $banner->title ?? 'Hero banner' }}"
+    class="w-full h-full object-cover aspect-[2/3] md:aspect-[16/6]"
+    width="600"
+    height="900"
+    sizes="100vw"
+    @if ($isFirst)
+        fetchpriority="high"
+        loading="eager"
+    @else
+        loading="lazy"
+    @endif
+    decoding="async">
                             </picture>
                         </a>
                     </div>
