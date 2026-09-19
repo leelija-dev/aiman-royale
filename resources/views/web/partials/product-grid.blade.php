@@ -28,7 +28,7 @@
                         $imageUrl = asset($firstImage->image);
                         $hasImage = true;
                     } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
-                        $imageUrl = asset($firstImage['image']);
+                        
                         $imageUrl = url('img/' . $firstImage['image']);
                         $hasImage = true;
                     } elseif (is_string($firstImage)) {
