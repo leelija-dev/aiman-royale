@@ -65,7 +65,7 @@
                 $parts = explode('upload/', $imageUrl);
                 $imageUrl = $parts[0] . 'upload/w_600,h_900,c_fill,f_auto,q_auto,dpr_auto/' . $parts[1];
             }
-dd($imageUrl);
+
             // Get product data (works for both object and array)
             $isFeatured = is_object($product) ? ($product->is_featured ?? false) : ($product['is_featured'] ?? false);
             $price = is_object($product) ? ($product->price ?? 0) : ($product['price'] ?? 0);
@@ -99,6 +99,7 @@ dd($imageUrl);
             @endphp
 
             @if($hasImage && $imageUrl)
+            @dd($imageUrl)
             <!-- ===== OPTIMIZED IMAGE TAG ===== -->
             <!-- Same structure as first code with 9:13 ratio, lazy loading, and proper dimensions -->
             <img 
