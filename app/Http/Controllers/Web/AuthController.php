@@ -20,12 +20,13 @@ use App\Models\ProductVariant;
 use App\Rules\Turnstile;
 use App\Services\GuestIdentityService;
 use App\Services\CartMergeService;
+
 class AuthController extends Controller
 {
     protected MetaConversionsService $metaService;
     protected GuestIdentityService $guestIdentity;
     protected CartMergeService $cartMergeService;
-    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity,CartMergeService $cartMergeService)
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity, CartMergeService $cartMergeService)
     {
         $this->metaService = $metaService;
         $this->guestIdentity = $guestIdentity;
@@ -96,6 +97,7 @@ class AuthController extends Controller
 
     public function registerWithoutOTP(Request $request)
     {
+        //  dd(session()->all());
         // 1. Validate basic fields first
         $request->validate([
             'name'     => 'required|string|max:255',
@@ -118,7 +120,7 @@ class AuthController extends Controller
         // 3. Normalize values
         $email = $isEmail ? strtolower($input) : null;
         $phone = $isPhone ? preg_replace('/[\s\-\(\)]/', '', $input) : null;
-        
+
 
         // 4. Check uniqueness against the right column
         if ($email && User::where('email', $email)->exists()) {
@@ -142,11 +144,11 @@ class AuthController extends Controller
                 'phone'             => $phone,
                 'password'          => Hash::make($request->password),
                 'email_verified_at' => $email ? now() : null, // only mark verified if email
-                
+
                 // If you have a phone_verified_at column:
                 // 'phone_verified_at' => $phone ? now() : null,
             ]);
-            
+
 
             // Auto login with Laravel Auth
             Auth::login($user);
@@ -156,6 +158,19 @@ class AuthController extends Controller
 
             // Store JWT token in session
             session(['jwt_token' => $token]);
+            if (session()->has('redirect_after_registration')) {
+
+                $redirectUrl = session('redirect_after_registration');
+
+                // Remove it from session so it doesn't persist forever
+                session()->forget('redirect_after_registration');
+
+                if ($redirectUrl) {
+                    return redirect($redirectUrl)
+                        ->with('success', 'Account created successfully!')
+                        ->with('jwt_token', $token);
+                }
+            }
 
             return redirect()
                 ->route('page.index')
@@ -668,20 +683,19 @@ class AuthController extends Controller
         $login = trim($request->email);
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
 
-        // Login using email
-        $credentials = [
-            'email' => $login,
-            'password' => $request->password,
-        ];
+            // Login using email
+            $credentials = [
+                'email' => $login,
+                'password' => $request->password,
+            ];
+        } else {
 
-    } else {
-
-        // Login using mobile number
-        $credentials = [
-            'phone' => $login,
-            'password' => $request->password,
-        ];
-    }
+            // Login using mobile number
+            $credentials = [
+                'phone' => $login,
+                'password' => $request->password,
+            ];
+        }
         // Attempt login with JWT
         if (!$token = JWTAuth::attempt($credentials, $remember)) {
             return back()->withErrors([
@@ -844,47 +858,46 @@ class AuthController extends Controller
         $user = auth()->user();
         if ($user) {
             $guestUuid = $this->guestIdentity->getOrCreate();
-             $userCartItems = Cart::where('user_id', $user->id)->get();
-                
-             foreach ($userCartItems as $userCart) {
+            $userCartItems = Cart::where('user_id', $user->id)->get();
 
-            $guestCart = Cart::where('guest_uuid', $guestUuid)
-                ->where('variant_id', $userCart->variant_id)
-                ->where('user_id', null)
-                ->first();
+            foreach ($userCartItems as $userCart) {
 
-            if ($guestCart) {
+                $guestCart = Cart::where('guest_uuid', $guestUuid)
+                    ->where('variant_id', $userCart->variant_id)
+                    ->where('user_id', null)
+                    ->first();
 
-                $guestCart->update([
-                    'count' => $guestCart->count + $userCart->count,
-                    'price' => $userCart->price,
-                   
-                ]);
+                if ($guestCart) {
 
-                // Remove user cart row
-                // $userCart->delete();
-                $userCart->update([
-                    'guest_uuid' => $guestUuid,
-                   
-                ]);
+                    $guestCart->update([
+                        'count' => $guestCart->count + $userCart->count,
+                        'price' => $userCart->price,
 
-            } else {
+                    ]);
 
-                $userCart->update([
-                    
-                    'guest_uuid' => $guestUuid,
-                    'session_id' => null,
-                    // 'last_activity_at' => now(),
-                    // 'expires_at' => null,
-                ]);
+                    // Remove user cart row
+                    // $userCart->delete();
+                    $userCart->update([
+                        'guest_uuid' => $guestUuid,
+
+                    ]);
+                } else {
+
+                    $userCart->update([
+
+                        'guest_uuid' => $guestUuid,
+                        'session_id' => null,
+                        // 'last_activity_at' => now(),
+                        // 'expires_at' => null,
+                    ]);
+                }
             }
-        }
-        
+
             $user->remember_token = null;
             $user->save();
         }
         Cookie::queue(Cookie::forget('remember_token'));
-    Cookie::queue(Cookie::forget('user_id'));
+        Cookie::queue(Cookie::forget('user_id'));
 
         Auth::logout();
         $request->session()->invalidate();
