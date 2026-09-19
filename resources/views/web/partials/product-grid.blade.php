@@ -26,12 +26,18 @@
                     $firstImage = $images[0] ?? null;
                     if ($firstImage && is_object($firstImage) && !empty($firstImage->image)) {
                         $imageUrl = asset($firstImage->image);
+                         dd('2');
+                    dd($imageUrl);
                         $hasImage = true;
                     } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
                         $imageUrl = asset($firstImage['image']);
+                         dd('3');
+                    dd($imageUrl);
                         $hasImage = true;
                     } elseif (is_string($firstImage)) {
                         $imageUrl = asset($firstImage);
+                         dd('4');
+                    dd($imageUrl);
                         $hasImage = true;
                     }
                 } elseif (is_string($images)) {
@@ -41,9 +47,13 @@
                         $firstImage = $decodedImages[0];
                         if (is_array($firstImage) && !empty($firstImage['image'])) {
                             $imageUrl = asset($firstImage['image']);
+                             dd('5');
+                    dd($imageUrl);
                             $hasImage = true;
                         } elseif (is_string($firstImage)) {
                             $imageUrl = asset($firstImage);
+                             dd('6');
+                    dd($imageUrl);
                             $hasImage = true;
                         }
                     }
@@ -55,6 +65,8 @@
                 $productImage = is_object($product) ? ($product->image ?? null) : ($product['image'] ?? null);
                 if (!empty($productImage)) {
                     $imageUrl = $productImage;
+                    dd('1');
+                    dd($imageUrl);
                     $hasImage = true;
                 }
             }
@@ -99,7 +111,7 @@
             @endphp
 
             @if($hasImage && $imageUrl)
-            @dd($imageUrl)
+            
             <!-- ===== OPTIMIZED IMAGE TAG ===== -->
             <!-- Same structure as first code with 9:13 ratio, lazy loading, and proper dimensions -->
             <img 
