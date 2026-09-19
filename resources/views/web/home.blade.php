@@ -127,7 +127,7 @@
         </div>
 
         <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
-            <img src="{{ asset('web/images/category-image/most-loved-salware-kameez2.jpg') }}" 
+            <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}" 
                  sizes="(max-width: 640px) 80px, 104px"
                  alt="Salwar Kameez"
                  class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
