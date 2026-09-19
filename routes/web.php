@@ -115,6 +115,7 @@ Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.in
 Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('check.login');
 Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
 
+Route::middleware(['auth', 'session.expiry'])->group(function () {
 // Checkout route
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
@@ -127,7 +128,7 @@ Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name(
 
 // Cashfree Webhook Route
 Route::post('/checkout/webhook/cashfree', [CheckoutController::class, 'webhook'])->name('checkout.webhook');
-
+});
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
     // Profile Routes
@@ -181,25 +182,6 @@ Route::get('/{categorySlug}/{occasionSlug}/filter', [CategoryController::class, 
     ->name('category.occasion.filter')
     ->where('categorySlug', '[a-zA-Z0-9-]+');
 
-// Test WhatsApp route
-// Route::get('/test-whatsapp', function () {
-//     $whatsapp = new \App\Services\WhatsAppService();
-    
-//     \Illuminate\Support\Facades\Log::info('Testing WhatsApp send');
-    
-//     $result = $whatsapp->sendOrderConfirmation(
-//         '6295351230',
-//         'Pavan',
-//         'ORD-' . date('YmdHis')
-//     );
-    
-//     return [
-//         'success' => $result,
-//         'message_id' => $whatsapp->getLastMessageId(),
-//         'phone_number_id' => config('services.whatsapp.phone_number_id')
-//     ];
-// });
-
 // Order details route
 Route::get('/orders/{id}', function ($id) {
     $order = DB::table('orders')
@@ -236,29 +218,6 @@ Route::middleware(['auth', 'session.expiry'])->prefix('refunds')->group(function
     // Refund statistics
     Route::get('/statistics', [RefundController::class, 'statistics'])->name('refunds.statistics');
 });
-// Refund Routes
-// Route::post('/refund/{orderId}', [RefundController::class, 'refund'])->name('refund.process');
-// Route::post('/webhook/refund', [RefundController::class, 'handleWebhook'])->name('refund.webhook');
-
-// Route::get('/auth/google/redirect', function () {
-//     return Socialite::driver('google')->redirect();
-// });
-
-// Route::get('/auth/google/callback', function () {
-//     $googleUser = Socialite::driver('google')->user();
-
-//     $user = User::updateOrCreate([
-//         'email' => $googleUser->email,
-//     ], [
-//         'name' => $googleUser->name,
-//         'google_id' => $googleUser->id,
-//     ]);
-
-//     Auth::login($user);
-
-//     return redirect('/dashboard');
-// });
-
 // // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
@@ -291,10 +250,6 @@ Route::get('/robots.txt', function () {
         200
     )->header('Content-Type', 'text/plain');
 });
-// Route::get('/sitemap.xml', [RobotsController::class, 'generate'])
-//     ->name('sitemap');
-   
-
 Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
 
     $sitemapService->generate();

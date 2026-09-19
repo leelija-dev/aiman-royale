@@ -28,7 +28,8 @@
                         $imageUrl = asset($firstImage->image);
                         $hasImage = true;
                     } elseif ($firstImage && is_array($firstImage) && !empty($firstImage['image'])) {
-                        $imageUrl = asset($firstImage['image']);
+                       
+                        $imageUrl = url('img/' . $firstImage['image']);
                         $hasImage = true;
                     } elseif (is_string($firstImage)) {
                         $imageUrl = asset($firstImage);
@@ -99,6 +100,7 @@
             @endphp
 
             @if($hasImage && $imageUrl)
+            
             <!-- ===== OPTIMIZED IMAGE TAG ===== -->
             <!-- Same structure as first code with 9:13 ratio, lazy loading, and proper dimensions -->
             <img 
