@@ -127,7 +127,7 @@
         </div>
 
         <div class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
-            <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}" 
+            <img src="{{ asset('web/images/category-image/most-loved-salware-kameez2.jpg') }}" 
                  sizes="(max-width: 640px) 80px, 104px"
                  alt="Salwar Kameez"
                  class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
@@ -177,13 +177,13 @@
             <img src="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }}" 
                  srcset="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 2x"
                  sizes="(max-width: 640px) 80px, 104px"
-                 alt="Palazzo Suits"
+                 alt="Gown"
                  class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                  width="104" height="104"
                  loading="eager" decoding="async">
         </div>
     </div>
-    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Palazzo Suits</span>
+    <span class="text-sm sm:text-base font-bold text-gray-800 group-hover:text-pink-700 transition-colors duration-300">Gown</span>
     <span class="text-xs text-gray-500 mt-1">Most Loved</span>
 </a>
 
