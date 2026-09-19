@@ -21,7 +21,6 @@
             }
 
             if (!empty($images)) {
-                dd( $images);
                 if (is_array($images)) {
                     // If it's an array of objects/arrays
                     $firstImage = $images[0] ?? null;
