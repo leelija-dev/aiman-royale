@@ -23,7 +23,7 @@
         <!-- Horizontal Scroll with Enhanced Styling -->
         <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-0">
             {{-- <div class="flex gap-1 md:gap-8 pb-4 min-w-max px-2 pt-[10px]"> --}}
-            <div class="category-scroll flex pb-4 min-w-max px-2 pt-[10px]">
+            <div class="category-scroll flex pb-4 min-w-max px-4 pt-[10px]">
                 {{-- @if ($productCategory) --}}
                 {{-- @foreach ($productCategory->whereNull('parent_id') as $category) --}}
                 @php
