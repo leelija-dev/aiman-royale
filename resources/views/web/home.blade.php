@@ -16,14 +16,14 @@
 
         <!-- Enhanced Header with Animation -->
         <div class="relative text-center mb-0 px-2">
-            <div class="inline-block mb-3">
-                <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[2px]"></div>
+            <div class="inline-block mb-0">
+                <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[0px]"></div>
             </div>
         </div>
         <!-- Horizontal Scroll with Enhanced Styling -->
         <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-0">
             {{-- <div class="flex gap-1 md:gap-8 pb-4 min-w-max px-2 pt-[10px]"> --}}
-            <div class="category-scroll flex pb-4 min-w-max px-2 pt-[10px]">
+            <div class="category-scroll flex pb-4 min-w-max px-4 pt-[10px]">
                 {{-- @if ($productCategory) --}}
                 {{-- @foreach ($productCategory->whereNull('parent_id') as $category) --}}
                 @php
@@ -128,13 +128,13 @@
 
                 <a href="https://aimanroyale.com/collections/salwar-kameez"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Salwar Kameez"
                                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
@@ -159,13 +159,13 @@
 
                 <a href="https://aimanroyale.com/collections/bridesmaid-lehenga"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-bridesmaid-lehenga.jpg') }}"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Bridesmaid Lehenga"
                                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
@@ -186,13 +186,13 @@
                 </a>
                 <a href="https://aimanroyale.com/collections/gown"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }}"
                                 srcset="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 2x"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Gown"
@@ -214,13 +214,13 @@
 
                 <a href="https://aimanroyale.com/collections/anarkali-suits"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }}"
                                 srcset="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 2x"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Anarkali Suits"
@@ -264,7 +264,7 @@
                 {{ $firstMobileImg }}?w=600&q=75 600w,
                 {{ $firstMobileImg }}?w=750&q=75 750w
             "
-                imagesizes="100vw" media="(max-width: 767px)" fetchpriority="high">
+                imagesizes="100vw" media="(max-width: 767px)" type="image/webp" fetchpriority="high">
 
             {{-- FIRST DESKTOP HERO --}}
             <link rel="preload" as="image" href="{{ $firstDesktopImg }}?w=1280&q=75"
@@ -273,7 +273,7 @@
                 {{ $firstDesktopImg }}?w=1280&q=75 1280w,
                 {{ $firstDesktopImg }}?w=1600&q=75 1600w
             "
-                imagesizes="100vw" media="(min-width: 768px)" fetchpriority="high">
+                imagesizes="100vw" media="(min-width: 768px)" type="image/webp" fetchpriority="high">
         @endif
     @endpush
     <section class="px-4 lgg:py-4 py-3 ">
@@ -332,28 +332,11 @@
                         <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
                             <picture>
                                 {{-- Desktop --}}
-                               
-<source
-    media="(min-width: 768px)"
-    type="image/webp"
-    srcset="
-        {{ $desktopImg }}?w=960&q=75 960w,
-        {{ $desktopImg }}?w=1280&q=75 1280w,
-        {{ $desktopImg }}?w=1600&q=75 1600w
-    "
-    sizes="100vw">
+  
+<source media="(min-width: 768px)" type="image/webp" srcset="{{ $desktopImg }}?w=960&q=75 960w, {{ $desktopImg }}?w=1280&q=75 1280w, {{ $desktopImg }}?w=1600&q=75 1600w" sizes="100vw">
 
 {{-- Mobile --}}
-<source
-    media="(max-width: 767px)"
-    type="image/webp"
-    srcset="
-        {{ $mobileImg }}?w=400&q=75 400w,
-        {{ $mobileImg }}?w=600&q=75 600w,
-        {{ $mobileImg }}?w=750&q=75 750w
-    "
-    sizes="100vw">
-
+<source media="(max-width: 767px)" type="image/webp" srcset="{{ $mobileImg }}?w=400&q=75 400w, {{ $mobileImg }}?w=600&q=75 600w, {{ $mobileImg }}?w=750&q=75 750w" sizes="100vw">
 {{-- Hero image --}}
 <img
     src="{{ $mobileImg }}?w=600&q=75"
