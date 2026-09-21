@@ -103,7 +103,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|min:10|max:255', // "email" here = combined email/phone field
             'password' => 'required|min:6',
-            'cf-turnstile-response' => ['required', new Turnstile],
+            // 'cf-turnstile-response' => ['required', new Turnstile],
         ]);
 
         // 2. Detect if input is email or phone
@@ -159,15 +159,15 @@ class AuthController extends Controller
             // Store JWT token in session
             session(['jwt_token' => $token]);
             if (session()->has('redirect_after_registration')) {
-
                 $redirectUrl = session('redirect_after_registration');
 
                 // Remove it from session so it doesn't persist forever
                 session()->forget('redirect_after_registration');
 
-                if (str_contains($redirectUrl, '#action-buttons-section')) {
-                    $redirectUrl = url('/checkout');
-                }
+                // if (str_contains($redirectUrl, '#action-buttons-section')) {
+                //     $redirectUrl = url('/checkout');
+                //     // dd($redirectUrl);
+                // }
 
                 if ($redirectUrl) {
                     return redirect($redirectUrl)
