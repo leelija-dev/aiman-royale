@@ -16,8 +16,8 @@
 
         <!-- Enhanced Header with Animation -->
         <div class="relative text-center mb-0 px-2">
-            <div class="inline-block mb-3">
-                <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[2px]"></div>
+            <div class="inline-block mb-0">
+                <div class="h-1 w-16 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full mb-[0px]"></div>
             </div>
         </div>
         <!-- Horizontal Scroll with Enhanced Styling -->
