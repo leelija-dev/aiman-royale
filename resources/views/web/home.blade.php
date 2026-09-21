@@ -1,7 +1,11 @@
 @extends('layout.web.main-layout')
 
 @section('content')
-
+<style>
+    .category-scroll {
+        gap: clamp(8px, 3vw, 48px);
+    }
+</style>
     <div class="w-full bg-gradient-to-b from-pink-50/30 via-white to-white px-0 pt-[10px] md:pt-[10px] lgg:hidden block">
 
         <!-- Animated Gradient Background Decoration -->
@@ -19,7 +23,7 @@
         <!-- Horizontal Scroll with Enhanced Styling -->
         <div class="relative overflow-x-auto scrollbar-hide snap-x snap-mandatory px-0">
             {{-- <div class="flex gap-1 md:gap-8 pb-4 min-w-max px-2 pt-[10px]"> --}}
-            <div class="flex gap-[clamp(8px,3vw,48px)] pb-4 min-w-max px-2 pt-[10px]">
+            <div class="category-scroll flex pb-4 min-w-max px-2 pt-[10px]">
                 {{-- @if ($productCategory) --}}
                 {{-- @foreach ($productCategory->whereNull('parent_id') as $category) --}}
                 @php
