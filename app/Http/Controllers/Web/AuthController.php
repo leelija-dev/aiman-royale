@@ -103,7 +103,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|min:10|max:255', // "email" here = combined email/phone field
             'password' => 'required|min:6',
-            // 'cf-turnstile-response' => ['required', new Turnstile],
+            'cf-turnstile-response' => ['required', new Turnstile],
         ]);
 
         // 2. Detect if input is email or phone
