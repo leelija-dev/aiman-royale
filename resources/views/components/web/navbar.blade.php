@@ -1447,7 +1447,7 @@
                 alt="Aiman Royal">
         </a>
         <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors" type="button" aria-label="Close menu">
-            <i class="fa-solid fa-xmark text-xl"></i>
+            <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
         </button>
     </div>
 
@@ -1466,8 +1466,8 @@
         <div class="mega-menu px-2">
             <!-- Wedding -->
             <div class="menu-item has-submenu top-level-item" data-category="Wedding" data-occasion-endpoint="wedding">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Wedding</span>
@@ -1497,8 +1497,8 @@
             
             <!-- Bridal -->
             <div class="menu-item has-submenu top-level-item" data-category="Bridal" data-occasion-endpoint="bridal">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Bridal</span>
@@ -1529,8 +1529,8 @@
             @if (isset($categories) && count($categories) > 0)
             @foreach ($categories->where('parent_id', null) as $category)
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="{{ route('category.show', $category->slug) }}"
                     class="menu-link top-level-link group">
@@ -1609,8 +1609,8 @@
             </div>
             @endforeach
             <div id="dif-menu-item" class="dif-menu-item relative w-full ">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="https://aimanroyale.com/products/"
                     class="dif-menu-inner-item bg-white">
@@ -1624,8 +1624,8 @@
             @else
             <!-- Default menu items -->
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Lahenga</span>
@@ -1649,8 +1649,8 @@
                 </ul>
             </div>
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Salwar Kameez</span>
@@ -2385,7 +2385,7 @@ function loadSweetAlert(callback) {
                     
                     <!-- Wishlist Heart Icon (Top Right) -->
                     <button
-                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110" aria-label="Add ${product.name} to wishlist">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
                             <path stroke-linecap="round" stroke-linejoin="round"

@@ -792,17 +792,17 @@ if ($isCloudinary) {
                                     <!-- Wishlist Heart Icon -->
                                     @if (Auth::check())
                                         <button
-                                            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"
+                                            class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }} aria-label="{{ $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' }}"
                                             onclick="toggleWishlist({{ $product->id }}, this, event);">
 
-                                            <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm"></i>
+                                            <i class="{{ $isWishlisted ? 'fas' : 'far' }} fa-heart text-sm" aria-hidden="true"></i>
 
                                         </button>
                                     @else
                                         <a href="{{ route('page.login') }}">
                                             <button
-                                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500">
-                                                <i class="far fa-heart text-sm"></i>
+                                                class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-2.5 shadow-lg transition-all hover:scale-110 w-[38px] h-[38px] flex justify-center items-center text-gray-400 hover:text-red-500" aria-label="Login to add {{ $product->name }} to wishlist">
+                                                <i class="far fa-heart text-sm" aria-hidden="true"></i>
                                             </button>
                                         </a>
                                     @endif
@@ -1328,7 +1328,7 @@ if ($banner->filter) {
     hover:from-secondary hover:to-primary
     hover:text-white
     hover:shadow-xl hover:-translate-y-0.5
-    active:translate-y-0 active:scale-95">
+    active:translate-y-0 active:scale-95" aria-label="Shop Now">
 
                             <span>Shop Now</span>
 
@@ -1702,7 +1702,7 @@ if ($banner->filter) {
                                 <div
                                     class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                                     <button
-                                        class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                                        class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg" aria-label="Quick View — {{ $product->name }}>
                                         Quick View
                                     </button>
                                 </div>
@@ -2170,17 +2170,17 @@ if ($banner->filter) {
                     <div
                         class="flex md:justify-between justify-center md:absolute w-full md:left-0 md:bottom-[20%] px-[37px] md:z-[10] gap-4 mt-8 thoughts-nav">
                         <button
-                            class="custom-prev-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            class="custom-prev-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300" aria-label="Previous testimonial">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                                stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
                         <button
-                            class="custom-next-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            class="custom-next-btn bg-gradient-to-r from-secondary to-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300" aria-label="Next testimonial">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                                stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
@@ -2698,4 +2698,19 @@ if ($banner->filter) {
             }
         });
     </script>
+
+    <script>
+        document.querySelectorAll('.owl-carousel').forEach(function (carousel) {
+        carousel.addEventListener('initialized.owl.carousel', function () {
+        const prev = carousel.querySelector('.owl-prev');
+        const next = carousel.querySelector('.owl-next');
+        if (prev) { prev.removeAttribute('role'); prev.setAttribute('aria-label', 'Previous slide'); }
+        if (next) { next.removeAttribute('role'); next.setAttribute('aria-label', 'Next slide'); }
+        carousel.querySelectorAll('.owl-dot').forEach(function (dot, i) {
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                });
+            });
+     });
+    </script>
+
 @endsection
