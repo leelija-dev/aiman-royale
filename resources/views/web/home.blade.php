@@ -264,7 +264,7 @@
                 {{ $firstMobileImg }}?w=600&q=75 600w,
                 {{ $firstMobileImg }}?w=750&q=75 750w
             "
-                imagesizes="100vw" media="(max-width: 767px)" fetchpriority="high">
+                imagesizes="100vw" media="(max-width: 767px)" type="image/webp" fetchpriority="high">
 
             {{-- FIRST DESKTOP HERO --}}
             <link rel="preload" as="image" href="{{ $firstDesktopImg }}?w=1280&q=75"
@@ -273,7 +273,7 @@
                 {{ $firstDesktopImg }}?w=1280&q=75 1280w,
                 {{ $firstDesktopImg }}?w=1600&q=75 1600w
             "
-                imagesizes="100vw" media="(min-width: 768px)" fetchpriority="high">
+                imagesizes="100vw" media="(min-width: 768px)" type="image/webp" fetchpriority="high">
         @endif
     @endpush
     <section class="px-4 lgg:py-4 py-3 ">
@@ -332,28 +332,11 @@
                         <a href="{{ $banner->redirect_link }}" class="block w-full h-full">
                             <picture>
                                 {{-- Desktop --}}
-                               
-<source
-    media="(min-width: 768px)"
-    type="image/webp"
-    srcset="
-        {{ $desktopImg }}?w=960&q=75 960w,
-        {{ $desktopImg }}?w=1280&q=75 1280w,
-        {{ $desktopImg }}?w=1600&q=75 1600w
-    "
-    sizes="100vw">
+  
+<source media="(min-width: 768px)" type="image/webp" srcset="{{ $desktopImg }}?w=960&q=75 960w, {{ $desktopImg }}?w=1280&q=75 1280w, {{ $desktopImg }}?w=1600&q=75 1600w" sizes="100vw">
 
 {{-- Mobile --}}
-<source
-    media="(max-width: 767px)"
-    type="image/webp"
-    srcset="
-        {{ $mobileImg }}?w=400&q=75 400w,
-        {{ $mobileImg }}?w=600&q=75 600w,
-        {{ $mobileImg }}?w=750&q=75 750w
-    "
-    sizes="100vw">
-
+<source media="(max-width: 767px)" type="image/webp" srcset="{{ $mobileImg }}?w=400&q=75 400w, {{ $mobileImg }}?w=600&q=75 600w, {{ $mobileImg }}?w=750&q=75 750w" sizes="100vw">
 {{-- Hero image --}}
 <img
     src="{{ $mobileImg }}?w=600&q=75"
