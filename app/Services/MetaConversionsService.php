@@ -50,10 +50,18 @@ class MetaConversionsService
         $event = array_filter($event, fn($v) => $v !== null && $v !== []);
 
         try {
-            $response = Http::asJson()->post($url, [
-                'data'         => [$event],
-                'access_token' => $this->accessToken,
-                // 'test_event_code' => 'TEST12345', // Uncomment while testing
+            // $response = Http::asJson()->post($url, [
+            //     'data'         => [$event],
+            //     'access_token' => $this->accessToken,
+            //     // 'test_event_code' => 'TEST12345', // Uncomment while testing
+            // ]);
+            $response = Http::asJson()
+                ->timeout(4)
+                ->retry(1, 100)
+                ->post($url, [
+                    'data'         => [$event],
+                    'access_token' => $this->accessToken,
+                    // 'test_event_code' => 'TEST12345', // uncomment only for testing
             ]);
 
             $result = $response->json();
@@ -70,7 +78,8 @@ class MetaConversionsService
                 ]);
             }
 
-            return $result;
+            // return $result;
+            return $result ?? ['success' => false];
         } catch (\Exception $e) {
             Log::error('Meta CAPI Exception → ' . $eventName, [
                 'error' => $e->getMessage()
@@ -130,7 +139,7 @@ class MetaConversionsService
         // $userData['external_id'] = [$this->hashData(request()->ip())];
         $userData['external_id'] = [$this->hashData($this->guestId())];
     }
-
+         $userData['country'] = [$this->hashData('in')];
         // Merge extra data (guest users etc.)
         foreach ($additionalData as $key => $value) {
             if (in_array($key, ['em', 'ph', 'fn', 'ln', 'ct', 'st', 'zp', 'country', 'external_id'])) {

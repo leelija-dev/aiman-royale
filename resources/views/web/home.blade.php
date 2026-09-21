@@ -128,13 +128,13 @@
 
                 <a href="https://aimanroyale.com/collections/salwar-kameez"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-salware-kameez.jpg') }}"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Salwar Kameez"
                                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
@@ -159,13 +159,13 @@
 
                 <a href="https://aimanroyale.com/collections/bridesmaid-lehenga"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-bridesmaid-lehenga.jpg') }}"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Bridesmaid Lehenga"
                                 class="fade-in-img opacity-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-110"
@@ -186,13 +186,13 @@
                 </a>
                 <a href="https://aimanroyale.com/collections/gown"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }}"
                                 srcset="{{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-Palazzo-Suits.jpg') }} 2x"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Gown"
@@ -214,13 +214,13 @@
 
                 <a href="https://aimanroyale.com/collections/anarkali-suits"
                     class="group flex flex-col items-center snap-center w-[80px] sm:w-[90px] flex-shrink-0">
-                    <div class="relative mb-2">
+                    <div class="relative mb-0">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-md group-hover:blur-xl transition-all duration-500">
                         </div>
 
                         <div
-                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-3 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
+                            class="relative w-20 h-20 sm:w-26 sm:h-26 rounded-full overflow-hidden mb-2 shadow-xl bg-gray-100 group-hover:border-pink-100 transition-all duration-300">
                             <img src="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }}"
                                 srcset="{{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 1x, {{ asset('web/images/category-image/most-loved-anarkali-suits.jpg') }} 2x"
                                 sizes="(max-width: 640px) 80px, 104px" alt="Anarkali Suits"
