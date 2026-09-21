@@ -7,7 +7,7 @@
     if (typeof fbq !== 'undefined') {
         // const purchaseData = {!! session('purchase_event_data') !!};
         const purchaseData = @json(session('purchase_event_data'));
-        fbq('track', 'Purchase', purchaseData);
+        fbq('track', 'Purchase', purchaseData ,{ eventID: purchaseData.order_id });
         // Clear session after firing event
         @php session()->forget('purchase_event_data'); @endphp
     }

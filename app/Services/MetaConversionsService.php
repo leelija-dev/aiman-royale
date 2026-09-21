@@ -135,10 +135,24 @@ class MetaConversionsService
 
             $userData['external_id'] = [$this->hashData((string) $user->id)];
         } else {
-        // For guest users, hash IP as fallback to satisfy Meta's requirement
-        // $userData['external_id'] = [$this->hashData(request()->ip())];
-        $userData['external_id'] = [$this->hashData($this->guestId())];
-    }
+            $userData['external_id'] = [$this->hashData($this->guestId())];
+
+            // Pick up contact info this guest gave us earlier — checkout, popup,
+            // login attempt — even though they never created an account
+            if ($guestEmail = request()->cookie('_meta_guest_em')) {
+                $userData['em'] = [$this->hashData($guestEmail)];
+            }
+            if ($guestPhone = request()->cookie('_meta_guest_ph')) {
+                $userData['ph'] = [$this->hashPhone($guestPhone)];
+            }
+            if ($guestName = request()->cookie('_meta_guest_name')) {
+                $parts = explode(' ', trim($guestName), 2);
+                $userData['fn'] = [$this->hashData($parts[0] ?? '')];
+                if (isset($parts[1])) {
+                    $userData['ln'] = [$this->hashData($parts[1])];
+                }
+            }
+        }
          $userData['country'] = [$this->hashData('in')];
         // Merge extra data (guest users etc.)
         foreach ($additionalData as $key => $value) {
@@ -151,7 +165,19 @@ class MetaConversionsService
 
         return array_filter($userData, fn($v) => $v !== null && $v !== [] && $v !== '');
     }
-
+    /** Store guest-provided contact info the moment we get it — checkout form, popup, OTP attempt, etc. */
+public function rememberGuestContact(?string $email = null, ?string $phone = null, ?string $name = null): void
+{
+    if ($email) {
+        Cookie::queue('_meta_guest_em', $email, 60 * 24 * 90);
+    }
+    if ($phone) {
+        Cookie::queue('_meta_guest_ph', $phone, 60 * 24 * 90);
+    }
+    if ($name) {
+        Cookie::queue('_meta_guest_name', $name, 60 * 24 * 90);
+    }
+}
     protected function hashData(?string $data): ?string
     {
         if (empty($data)) return null;

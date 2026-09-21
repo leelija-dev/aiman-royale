@@ -3863,7 +3863,7 @@
                                 content_type: 'product',
                                 value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
                                 currency: 'INR'
-                            });
+                            },{ eventID: eventId });
                         }
                         setTimeout(() => {
                             location.reload();
@@ -4890,7 +4890,16 @@
             }
         });
     </script>
-
-
+    <script>
+        if(typeof fbq !== 'undefined') {
+            fbq('track', 'ViewContent', {
+                content_name: @json($product->name ?? ''),
+                content_ids: [@json($product->id ?? '')],
+                content_type: 'product',
+                value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                currency: 'INR'
+            });
+        }
+    </script>
 
 @endsection
