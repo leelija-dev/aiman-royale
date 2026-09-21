@@ -170,7 +170,6 @@ class AuthController extends Controller
                 }
 
                 if ($redirectUrl) {
-                    dd($redirectUrl);
                     return redirect($redirectUrl)
                         ->with('success', 'Account created successfully!')
                         ->with('jwt_token', $token);
