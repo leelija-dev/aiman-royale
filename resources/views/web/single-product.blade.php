@@ -3889,7 +3889,7 @@
                 })
                 .catch(error => {
                    
-                     if (error === 'Authentication required') {
+                    if (error === 'Authentication required') {
         // Already redirected, do nothing - NO ERROR MESSAGE
         return;
     }
