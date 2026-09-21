@@ -164,10 +164,10 @@ class AuthController extends Controller
                 // Remove it from session so it doesn't persist forever
                 session()->forget('redirect_after_registration');
 
-                if (str_contains($redirectUrl, '#action-buttons-section')) {
-                    $redirectUrl = url('/checkout');
-                    // dd($redirectUrl);
-                }
+                // if (str_contains($redirectUrl, '#action-buttons-section')) {
+                //     $redirectUrl = url('/checkout');
+                //     // dd($redirectUrl);
+                // }
 
                 if ($redirectUrl) {
                     return redirect($redirectUrl)
