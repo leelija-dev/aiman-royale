@@ -2181,8 +2181,8 @@ if ($banner->filter) {
 
 @section('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
-    <script src="{{ asset('web/home.js') }}" defer></script>
-    <!-- <script>
+    <!-- <script src="{{ asset('web/home.js') }}" defer></script> -->
+    <script>
         // Load confetti only when you actually need it
         function loadConfetti(callback) {
             if (window.confetti) {
@@ -2194,9 +2194,9 @@ if ($banner->filter) {
             script.onload = callback;
             document.body.appendChild(script);
         }
-    </script> -->
+    </script>
     <!-- Cart Functionality -->
-    <!-- <script>
+    <script>
         function toggleHomeWishlist(productId, event) {
             console.log('toggleHomeWishlist called with productId:', productId);
             if (event) {
@@ -2373,9 +2373,9 @@ if ($banner->filter) {
                 element.textContent = count;
             });
         }
-    </script> -->
+    </script>
 
-    <!-- <script>
+    <script>
         const bg = document.querySelector(".parallax-bg");
         const section = bg.closest("section");
 
@@ -2392,9 +2392,9 @@ if ($banner->filter) {
         window.addEventListener("scroll", updateParallax);
         window.addEventListener("resize", updateParallax);
         updateParallax();
-    </script> -->
+    </script>
 
-    <!-- <script defer>
+    <script defer>
         const sliders = [{
                 className: 'slide-left',
                 linkId: 'leftSliderLink'
@@ -2541,7 +2541,7 @@ if ($banner->filter) {
 
             updateWishlistCount(data.wishlist_count);
         }
-    </script> -->
+    </script>
 
     @if ($isTimmer)
         <script>
@@ -2587,7 +2587,7 @@ if ($banner->filter) {
         </script>
     @endif
 
-    <!-- <script defer>
+    <script defer>
         document.addEventListener('DOMContentLoaded', function() {
             if ($('#categories-tag-carousel').length) {
                 $('#categories-tag-carousel').owlCarousel({
@@ -2628,7 +2628,7 @@ if ($banner->filter) {
                 });
             }
         });
-    </script> -->
+    </script>
 
     <script>
         // Wait for jQuery and OwlCarousel to load
@@ -2674,6 +2674,7 @@ if ($banner->filter) {
             margin: 0,
             nav: false,
             dots: false,
+            navElement: 'button type="button"',
             autoplay: true,
             autoplayTimeout: 5500,
             autoplayHoverPause: true,
