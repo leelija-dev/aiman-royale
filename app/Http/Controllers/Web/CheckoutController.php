@@ -148,7 +148,10 @@ class CheckoutController extends Controller
         $this->metaService->rememberGuestContact(
             $request->email,
             $request->phone,
-            $request->firstName . ' ' . $request->lastName
+            $request->firstName . ' ' . $request->lastName,
+            $request->city,
+            $request->state,
+            $request->pinCode
         );
         // Track InitiateCheckout event when user starts checkout
         try {
@@ -801,9 +804,12 @@ try {
     ->first();
 
     $extraUserData = [
-        'em' => $customer->email ?? null,
-        'ph' => $customer->phone ?? $order->phone_no ?? null,
-    ];
+    'em' => $customer->email ?? null,
+    'ph' => $customer->phone ?? $order->phone_no ?? null,
+    'ct' => $order->city ?? null,
+    'st' => $order->state ?? null,
+    'zp' => $order->pincode ?? null,
+];
 
     if (!empty($customer->name)) {
         $nameParts = preg_split('/\s+/', trim($customer->name), 2);
@@ -1180,6 +1186,9 @@ $customer = DB::table('users')
 $extraUserData = [
     'em' => $customer->email ?? null,
     'ph' => $customer->phone ?? $order->phone_no ?? null,
+    'ct' => $order->city ?? null,
+    'st' => $order->state ?? null,
+    'zp' => $order->pincode ?? null,
 ];
 
 if (!empty($customer->name)) {

@@ -3797,123 +3797,131 @@
         }
 
         function addToCart() {
-            const eventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-   
-            if (!csrfToken) {
-                alert('Security token not found. Please refresh the page.');
-                return;
-            }
+    // 1. Generate unique event ID
+    const eventId = (crypto.randomUUID 
+        ? crypto.randomUUID() 
+        : Date.now() + '-' + Math.random().toString(36).slice(2));
 
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (!addToCartBtn) return;
-
-            const customDimensionsAttr = addToCartBtn.getAttribute('data-custom-dimensions');
-            let requestData = {};
-
-            if (customDimensionsAttr) {
-                const hasStock = productVariants && productVariants.some(variant => variant.stock > 0);
-                if (!hasStock) {
-                    alert('This product is currently out of stock. Please check back later.');
-                    return;
-                }
-
-                requestData = {
-                    product_id: {{ $product?->id }},
-                    custom_dimensions: JSON.parse(customDimensionsAttr),
-                    type: selectedType,
-                    count: 1,
-                    event_id: eventId
-                };
-            } else {
-                const variantId = addToCartBtn.getAttribute('data-variant-id');
-
-                if (!variantId && typeof selectedVariantId !== 'undefined') {
-                    variantId = selectedVariantId;
-                }
-                if (!variantId) {
-                    alert('Please select a size and color');
-                    return;
-                }
-
-                requestData = {
-                    variant_id: variantId,
-                    type: selectedType,
-                    count: 1,
-                    event_id: eventId
-                };
-            }
-
-            const originalText = addToCartBtn.innerHTML;
-            addToCartBtn.disabled = true;
-            addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
-
-            fetch('/cart/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify(requestData)
-                })
-                .then(response => {
-                    if (response.status === 401) {
-                        const currentUrl = window.location.href.split('#')[0];
-                        const redirectUrl = currentUrl + '#action-buttons-section';
-                        window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                        return Promise.reject('Authentication required');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && data.success) {
-                        showNotificationWithCart('Product added to cart successfully!', 'success', true);
-                        // showNotification('Product added to cart successfully!', 'success');
-                        if (typeof fbq !== 'undefined') {
-                            fbq('track', 'AddToCart', {
-                                content_name: @json($product->name ?? ''),
-                                content_ids: [@json($product->id ?? '')],
-                                content_type: 'product',
-                                value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
-                                currency: 'INR'
-                            },{ eventID: eventId });
-                        }
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                        if (data.cart_count !== undefined) {
-                            updateCartCount(data.cart_count);
-                        }
-
-                        if (customDimensionsAttr) {
-                            addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added`;
-                            addToCartBtn.classList.remove('bg-secondary');
-                            addToCartBtn.classList.add('bg-green-600');
-                            addToCartBtn.disabled = true;
-                        } else {
-                            const variantId = addToCartBtn.getAttribute('data-variant-id');
-                            checkVariantInCart(variantId);
-                        }
-                    } else {
-                        showNotification(data?.message || 'Failed to add product to cart', 'error');
-                        addToCartBtn.disabled = false;
-                        addToCartBtn.innerHTML = originalText;
-                    }
-                })
-                .catch(error => {
-                   
-                    if (error === 'Authentication required') {
-        // Already redirected, do nothing - NO ERROR MESSAGE
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) {
+        alert('Security token not found. Please refresh the page.');
         return;
     }
-     console.error('Error:', error);
-                    showNotification('An error occurred while adding to cart', 'error');
-                    addToCartBtn.disabled = false;
-                    addToCartBtn.innerHTML = originalText;
-                });
+
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (!addToCartBtn) return;
+
+    const customDimensionsAttr = addToCartBtn.getAttribute('data-custom-dimensions');
+    let requestData = {};
+    let contentIdForPixel = {{ $product->id ?? 0 }};
+    let priceForPixel = {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }};
+
+    if (customDimensionsAttr) {
+        const hasStock = productVariants && productVariants.some(variant => variant.stock > 0);
+        if (!hasStock) {
+            alert('This product is currently out of stock. Please check back later.');
+            return;
         }
 
+        requestData = {
+            product_id: {{ $product?->id }},
+            custom_dimensions: JSON.parse(customDimensionsAttr),
+            type: selectedType,
+            count: 1,
+            event_id: eventId
+        };
+    } else {
+        let variantId = addToCartBtn.getAttribute('data-variant-id');
+
+        if (!variantId && typeof selectedVariantId !== 'undefined') {
+            variantId = selectedVariantId;
+        }
+        if (!variantId) {
+            alert('Please select a size and color');
+            return;
+        }
+
+        // contentIdForPixel = variantId;
+        requestData = {
+            variant_id: variantId,
+            type: selectedType,
+            count: 1,
+            event_id: eventId
+        };
+    }
+
+   
+
+    // 3. Call server
+    const originalText = addToCartBtn.innerHTML;
+    addToCartBtn.disabled = true;
+    addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
+
+    fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (response.status === 401) {
+                const currentUrl = window.location.href.split('#')[0];
+                const redirectUrl = currentUrl + '#action-buttons-section';
+                window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+                return Promise.reject('Authentication required');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.success) {
+                showNotificationWithCart('Product added to cart successfully!', 'success', true);
+                 if (typeof fbq !== 'undefined') {
+                    fbq('track', 'AddToCart', {
+                        content_name: @json($product->name ?? ''),
+                        content_ids: [String(contentIdForPixel)],
+                        content_type: 'product',
+                        value: priceForPixel,
+                        currency: 'INR',
+                        num_items: 1
+                    }, { eventID: eventId });
+                }
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+
+                if (data.cart_count !== undefined) {
+                    updateCartCount(data.cart_count);
+                }
+
+                if (customDimensionsAttr) {
+                    addToCartBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Added`;
+                    addToCartBtn.classList.remove('bg-secondary');
+                    addToCartBtn.classList.add('bg-green-600');
+                    addToCartBtn.disabled = true;
+                } else {
+                    const variantId = addToCartBtn.getAttribute('data-variant-id');
+                    checkVariantInCart(variantId);
+                }
+            } else {
+                showNotification(data?.message || 'Failed to add product to cart', 'error');
+                addToCartBtn.disabled = false;
+                addToCartBtn.innerHTML = originalText;
+            }
+        })
+        .catch(error => {
+            if (error === 'Authentication required') {
+                return;
+            }
+            console.error('Error:', error);
+            showNotification('An error occurred while adding to cart', 'error');
+            addToCartBtn.disabled = false;
+            addToCartBtn.innerHTML = originalText;
+        });
+}
         function showNotification(message, type = 'success') {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
@@ -4904,14 +4912,16 @@
             }
         });
     </script>
-    <script>
-        if(typeof fbq !== 'undefined') {
+   <script>
+        if (typeof fbq !== 'undefined') {
             fbq('track', 'ViewContent', {
                 content_name: @json($product->name ?? ''),
                 content_ids: [@json($product->id ?? '')],
                 content_type: 'product',
                 value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
                 currency: 'INR'
+            }, {
+                eventID: '{{ $metaEventId ?? '' }}'
             });
         }
     </script>
