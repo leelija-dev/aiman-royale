@@ -953,9 +953,9 @@
 
             <div
                 class="xl:absolute xl:top-0 xl:left-0 xl:w-full xl:flex xl:justify-center xl:items-center xl:pointer-events-none">
-                <a href="/">
+                <a href="/" aria-label="Aiman Royale — Home">
                     <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto" style="background:transparent;"
-                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
+                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="Aiman Royale">
                 </a>
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
@@ -1075,7 +1075,7 @@
                 @auth
                 <!-- Profile with Dropdown (Logged In) -->
                 <div class="relative group">
-                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
+                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black" type="button" aria-label="Account options">
                         <!-- <div class="relative">
                              <img src="https://i.pravatar.cc/32" alt="User"
                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
@@ -1084,7 +1084,7 @@
                          </div> -->
                         <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
                         <i
-                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
                     </button>
 
                     <!-- Account Dropdown -->
@@ -1133,9 +1133,9 @@
                 @else
                 <!-- Login Button (Not Logged In) -->
 
-                <a href="{{ route('page.login', ['redirect' => url()->current()]) }}">
+                <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" aria-label="Login">
                     <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
-                        <i class="fa-solid fa-user text-xs text-[14px]"></i>
+                        <i class="fa-solid fa-user text-xs text-[14px]" aria-hidden="true"></i>
                     </div>
                 </a>
                 @endauth
@@ -1681,11 +1681,11 @@
     <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
         <div class="grid grid-cols-2 gap-2">
             <a href="{{ route('page.login') }}"
-                class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm">
+                class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm" aria-label="Login to your account">
                 <i class="fa-solid fa-user mr-2"></i> Login
             </a>
             <a href="{{ route('cart.index') }}"
-                class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm">
+                class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm" aria-label="View your shopping cart">
                 <i class="fa-solid fa-shopping-cart mr-2"></i> Cart
             </a>
         </div>
