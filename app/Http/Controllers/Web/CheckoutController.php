@@ -87,7 +87,7 @@ class CheckoutController extends Controller
                     : null,
             ];
         }
-        $initiateCheckoutEventId = (string) \Illuminate\Support\Str::uuid();
+        $initiateCheckoutEventId = session()->pull('meta_initiate_checkout_event_id') ?? (string) \Illuminate\Support\Str::uuid();
         $this->metaService->trackInitiateCheckout(
             [
                 'content_ids' => $contentIds,
@@ -145,7 +145,11 @@ class CheckoutController extends Controller
             'pinCode' => 'required|string|size:6',
             // 'grand_total' => 'required|numeric|min:1',
         ]);
-
+        $this->metaService->rememberGuestContact(
+            $request->email,
+            $request->phone,
+            $request->firstName . ' ' . $request->lastName
+        );
         // Track InitiateCheckout event when user starts checkout
         try {
             $user_id = auth()->id();
