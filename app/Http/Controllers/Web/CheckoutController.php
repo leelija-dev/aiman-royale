@@ -73,13 +73,31 @@ class CheckoutController extends Controller
             $numItems += $cart->count;
             $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
         }
+        $metaUserData = [];
 
-        $this->metaService->trackInitiateCheckout([
-            'content_ids' => $contentIds,
-            'value'       => $totalValue,
-            'num_items'   => $numItems,
-            'currency'    => 'INR',
-        ]);
+        if (auth()->check()) {
+            $user = auth()->user();
+
+            $metaUserData = [
+                'em' => $user->email ?? null,
+                'ph' => $user->phone ?? null,
+                'fn' => isset($user->name) ? explode(' ', trim($user->name))[0] : null,
+                'ln' => isset($user->name)
+                    ? implode(' ', array_slice(explode(' ', trim($user->name)), 1))
+                    : null,
+            ];
+        }
+        $initiateCheckoutEventId = (string) \Illuminate\Support\Str::uuid();
+        $this->metaService->trackInitiateCheckout(
+            [
+                'content_ids' => $contentIds,
+                'value'       => $totalValue,
+                'num_items'   => $numItems,
+                'currency'    => 'INR',
+            ],
+            $metaUserData,
+            $initiateCheckoutEventId
+        );
     } catch (\Exception $e) {
         Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
     }
@@ -95,7 +113,7 @@ class CheckoutController extends Controller
         
         $store = Store::where('is_active', true)->first();
         $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon'));
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon','initiateCheckoutEventId'));
     }
 
 
@@ -765,33 +783,51 @@ try {
     }
 
     $purchaseData = [
-        'order_id'    => $orderId,          // Important
+        'order_id'    => $orderId,
         'content_ids' => $contentIds,
-        'value'       => $order->total_amount,
+        'value'       => (float) $order->total_amount,
         'num_items'   => $numItems,
         'currency'    => 'INR',
     ];
 
-    // Extra user data (better matching)
-    $extraUserData = [];
-    if (!empty($order->phone_no)) {
-        $extraUserData['ph'] = [$this->metaService->hashPhone($order->phone_no)];
+    // Pass RAW customer data.
+    // MetaConversionsService will hash it.
+    $customer = DB::table('users')
+    ->where('id', $order->user_id)
+    ->first();
+
+    $extraUserData = [
+        'em' => $customer->email ?? null,
+        'ph' => $customer->phone ?? $order->phone_no ?? null,
+    ];
+
+    if (!empty($customer->name)) {
+        $nameParts = preg_split('/\s+/', trim($customer->name), 2);
+
+        $extraUserData['fn'] = $nameParts[0] ?? null;
+        $extraUserData['ln'] = $nameParts[1] ?? null;
     }
 
-    $this->metaService->trackPurchase($purchaseData, $extraUserData, (string) $orderId);
-
-    // For frontend Pixel (deduplication)
-    session(['purchase_event_data' => json_encode([
-        'content_ids'    => $contentIds,
-        'content_type'   => 'product',
-        'value'          => $order->total_amount,
-        'currency'       => 'INR',
-        'num_items'      => $numItems,
-        'order_id'       => $orderId,
-        'event_id'       => (string) $orderId,   // Same event_id for Pixel
-    ])]);
+    $this->metaService->trackPurchase(
+        $purchaseData,
+        $extraUserData,
+        (string) $orderId
+    );
+    // Browser Pixel deduplication
+    session([
+        'purchase_event_data' => json_encode([
+            'content_ids'  => $contentIds,
+            'content_type' => 'product',
+            'value'        => (float) $order->total_amount,
+            'currency'     => 'INR',
+            'num_items'    => $numItems,
+            'order_id'     => $orderId,
+            'event_id'     => (string) $orderId,
+        ])
+    ]);
 
     Log::info('Meta Purchase tracked for COD order: ' . $orderId);
+
 } catch (\Exception $e) {
     Log::error('Failed to track Meta Purchase (COD): ' . $e->getMessage());
 }
@@ -1126,20 +1162,33 @@ try {
     }
 
     $purchaseData = [
-        'order_id'    => $orderId,
-        'content_ids' => $contentIds,
-        'value'       => $order->total_amount,
-        'num_items'   => $numItems,
-        'currency'    => 'INR',
-    ];
+    'order_id'    => $orderId,
+    'content_ids' => $contentIds,
+    'value'       => (float) $order->total_amount,
+    'num_items'   => $numItems,
+    'currency'    => 'INR',
+];
 
-    // Better matching with phone
-    $extraUserData = [];
-    if (!empty($order->phone_no)) {
-        $extraUserData['ph'] = [$this->metaService->hashPhone($order->phone_no)];
-    }
+$customer = DB::table('users')
+    ->where('id', $order->user_id)
+    ->first();
 
-    $this->metaService->trackPurchase($purchaseData, $extraUserData, (string) $orderId);
+$extraUserData = [
+    'em' => $customer->email ?? null,
+    'ph' => $customer->phone ?? $order->phone_no ?? null,
+];
+
+if (!empty($customer->name)) {
+    $nameParts = preg_split('/\s+/', trim($customer->name), 2);
+
+    $extraUserData['fn'] = $nameParts[0] ?? null;
+    $extraUserData['ln'] = $nameParts[1] ?? null;
+}
+$this->metaService->trackPurchase(
+    $purchaseData,
+    $extraUserData,
+    (string) $orderId
+);
 
     // For frontend Pixel deduplication
     session(['purchase_event_data' => json_encode([
