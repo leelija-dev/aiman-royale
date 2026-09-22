@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 class MetaTracking
 {
     protected MetaConversionsService $meta;
@@ -29,6 +30,21 @@ class MetaTracking
         $request->attributes->set('meta_event_id', $eventId);
         view()->share('metaEventId', $eventId);
 
+         $advancedMatching = [];
+        if (Auth::check()) {
+            $user = Auth::user();
+            if (!empty($user->email)) $advancedMatching['em'] = $user->email;
+            if (!empty($user->phone)) $advancedMatching['ph'] = $user->phone;
+            if (!empty($user->name)) {
+                $parts = preg_split('/\s+/', trim($user->name), 2);
+                if (!empty($parts[0])) $advancedMatching['fn'] = $parts[0];
+                if (!empty($parts[1])) $advancedMatching['ln'] = $parts[1];
+            }
+            $advancedMatching['external_id'] = (string) $user->id;
+        } elseif ($guestId = $request->cookie('_meta_gid')) {
+            $advancedMatching['external_id'] = $guestId;
+        }
+        view()->share('metaAdvancedMatching', $advancedMatching);
         // First allow Laravel to process the request
         $response = $next($request);
         // Track normal successful GET page requests

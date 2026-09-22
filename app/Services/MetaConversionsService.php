@@ -217,6 +217,24 @@ class MetaConversionsService
                     ];
                 }
             }
+
+            if ($guestCity = request()->cookie('_meta_guest_ct')) {
+                $userData['ct'] = [
+                    $this->hashData($guestCity)
+                ];
+            }
+
+            if ($guestState = request()->cookie('_meta_guest_st')) {
+                $userData['st'] = [
+                    $this->hashData($guestState)
+                ];
+            }
+
+            if ($guestZip = request()->cookie('_meta_guest_zp')) {
+                $userData['zp'] = [
+                    $this->hashData($guestZip)
+                ];
+            }
         }
 
         /*
@@ -292,7 +310,14 @@ class MetaConversionsService
         );
     }
     /** Store guest-provided contact info the moment we get it — checkout form, popup, OTP attempt, etc. */
-public function rememberGuestContact(?string $email = null, ?string $phone = null, ?string $name = null): void
+public function rememberGuestContact(
+    ?string $email = null,
+    ?string $phone = null,
+    ?string $name = null,
+    ?string $city = null,
+    ?string $state = null,
+    ?string $zip = null
+): void
 {
     if ($email) {
         Cookie::queue('_meta_guest_em', $email, 60 * 24 * 90);
@@ -302,6 +327,15 @@ public function rememberGuestContact(?string $email = null, ?string $phone = nul
     }
     if ($name) {
         Cookie::queue('_meta_guest_name', $name, 60 * 24 * 90);
+    }
+    if ($city) {
+        Cookie::queue('_meta_guest_ct', $city, 60 * 24 * 90);
+    }
+    if ($state) {
+        Cookie::queue('_meta_guest_st', $state, 60 * 24 * 90);
+    }
+    if ($zip) {
+        Cookie::queue('_meta_guest_zp', $zip, 60 * 24 * 90);
     }
 }
     protected function hashData(?string $data): ?string

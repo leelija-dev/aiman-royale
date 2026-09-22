@@ -251,12 +251,17 @@
             s.parentNode.insertBefore(t, s)
         }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '3223171547852999');
+        fbq('init', '3223171547852999', @json($metaAdvancedMatching ?? (object)[]));
         // fbq('track', 'PageView');
         fbq('track', 'PageView', {}, {eventID: '{{ $metaEventId ?? '' }}'});
 
         @if (!empty(trim($__env->yieldContent('event'))))
-        fbq('track', @json($__env->yieldContent('event')));
+        fbq(
+            'track',
+            @json($__env->yieldContent('event')),
+            @json(json_decode($__env->yieldContent('eventParams', '{}'), true) ?: (object)[]),
+            {eventID: '{{ $metaEventId ?? '' }}'}
+        );
         @endif
 });
     </script>

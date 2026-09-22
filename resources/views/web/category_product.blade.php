@@ -4100,8 +4100,7 @@
                     } else {
                         button.classList.add('text-red-500');
                         button.innerHTML = '<i class="fas fa-heart"></i>';
-                    }
-                    if (typeof fbq !== 'undefined') {
+                        if (typeof fbq !== 'undefined') {
                         fbq('track', 'AddToWishlist', {
                             content_name: button.getAttribute('data-product-name') || '',
                             content_ids: [String(productId)],
@@ -4110,6 +4109,8 @@
                             currency: 'INR'
                         });
                     }
+                    }
+                    
                     // Update wishlist count if exists
                     document.querySelectorAll('.wishlist-count').forEach(function(item) {
                         item.textContent = data.wishlist_count;
