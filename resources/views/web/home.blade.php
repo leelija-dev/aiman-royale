@@ -2181,7 +2181,7 @@ if ($banner->filter) {
 
 @section('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> --}}
-    <script src="{{ asset('web/home.js') }}"></script>
+    <script src="{{ asset('web/home.js') }}" defer></script>
     <!-- <script>
         // Load confetti only when you actually need it
         function loadConfetti(callback) {
