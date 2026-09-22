@@ -522,14 +522,14 @@
                 <div
                     class="custom-nav hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between px-2 pointer-events-none z-[1]">
                     <button
-                        class="owl-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="owl-prev bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all" aria-label="Previous slide">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <button
-                        class="owl-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="owl-next bg-white hover:bg-gray-50 text-gray-800 w-12 h-12 rounded-full shadow-lg flex items-center justify-center pointer-events-auto hover:shadow-xl transition-all" aria-label="Next slide">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
@@ -667,7 +667,7 @@
                     <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
                 </div>
                 <a href="{{ route('page.multi-product') }}"
-                    class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                    class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary-dark hover:text-primary transition-all font-sans">
                     All Products
                     <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
                 </a>
@@ -799,7 +799,7 @@ if ($isCloudinary) {
                                             {{ $product->name }}
                                         </h3>
                                         <span
-                                            class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $product->brand }}</span>
+                                            class="text-[10px] font-sans uppercase text-gray-600 whitespace-nowrap">{{ $product->brand }}</span>
                                     </div>
 
                                     <!-- Rating -->
@@ -811,7 +811,7 @@ if ($isCloudinary) {
                                             <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                             <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                         </div>
-                                        <span class="text-xs font-sans text-gray-400">({{ rand(10, 200) }})</span>
+                                        <span class="text-xs font-sans text-gray-600">({{ rand(10, 200) }})</span>
                                     </div>
 
                                     <!-- Price -->
@@ -819,7 +819,7 @@ if ($isCloudinary) {
                                         <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
                                             {{ $product->price_after_discount }}</span>
                                         @if ($product->price_after_discount != $product->price)
-                                            <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                            <span class="text-xs text-gray-600 line-through font-sans">Rs.
                                                 {{ $product->price }}</span>
                                         @endif
                                     </div>
@@ -916,7 +916,7 @@ if ($isCloudinary) {
                                 loading="lazy" decoding="async" width="600" height="600"
                                 style="aspect-ratio: 600/600;">
                             <div
-                                class="absolute -top-3 -right-3 bg-secondary text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6 digital-font">
+                                class="absolute -top-3 -right-3 bg-secondary-dark text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-6 digital-font">
                                 -25%
                             </div>
                         </div>
@@ -934,7 +934,7 @@ if ($isCloudinary) {
                                 loading="lazy" decoding="async" width="400" height="400"
                                 style="aspect-ratio: 400/400;">
                             <div
-                                class="absolute -top-2 -right-2 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg font-sans">
+                                class="absolute -top-2 -right-2 bg-secondary-dark text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg font-sans">
                                 New
                             </div>
                         </div>
@@ -1679,7 +1679,7 @@ if ($banner->filter) {
                     <div class="w-12 h-0.5 bg-gradient-to-r from-secondary to-primary mt-2"></div>
                 </div>
                 <a href="{{ route('page.multi-product') }}"
-                    class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary hover:text-primary transition-all font-sans">
+                    class="group flex items-center gap-2 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-medium text-secondary-dark hover:text-primary transition-all font-sans">
                     View All
                     <span class="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
                 </a>
@@ -1714,7 +1714,7 @@ if ($banner->filter) {
                                 <div
                                     class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                                     <button
-                                        class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg" aria-label="Quick View — {{ $product->name }}>
+                                        class="bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-2.5 rounded-full font-sans text-sm font-medium tracking-wide hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg" aria-label="Quick View — {{ $product->name }}">
                                         Quick View
                                     </button>
                                 </div>
@@ -1749,7 +1749,7 @@ if ($banner->filter) {
                                         {{ $product->name ?? '' }}
                                     </h3>
                                     <span
-                                        class="text-[10px] font-sans uppercase text-gray-400 whitespace-nowrap">{{ $product->brand ?? '' }}</span>
+                                        class="text-[10px] font-sans uppercase text-gray-600 whitespace-nowrap">{{ $product->brand ?? '' }}</span>
                                 </div>
 
                                 <!-- Rating -->
@@ -1761,7 +1761,7 @@ if ($banner->filter) {
                                         <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                         <i class="fas fa-star text-yellow-400 text-[10px]"></i>
                                     </div>
-                                    <span class="text-xs font-sans text-gray-400">({{ rand(10, 200) }})</span>
+                                    <span class="text-xs font-sans text-gray-600">({{ rand(10, 200) }})</span>
                                 </div>
 
                                 <!-- Price -->
@@ -1769,7 +1769,7 @@ if ($banner->filter) {
                                     <span class="text-lg font-semibold text-gray-900 font-sans">Rs.
                                         {{ $variant->discount_price ?? $product->price }}</span>
                                     @if ($variant != null && ($variant->discount_price ?? $product->price) != ($variant->price ?? $product->price))
-                                        <span class="text-xs text-gray-400 line-through font-sans">Rs.
+                                        <span class="text-xs text-gray-600 line-through font-sans">Rs.
                                             {{ $variant->price ?? $product->price }}</span>
                                     @endif
                                 </div>

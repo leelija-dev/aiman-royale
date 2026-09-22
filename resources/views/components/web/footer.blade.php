@@ -1284,7 +1284,7 @@
    <!-- Expandable Details Section --> 
    <details class="mt-2 group">
       <summary class="cursor-pointer text-secondary font-medium text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2">
-         <!-- Show "Read more" when closed, "Show less" when open --> <span class="group-open:hidden">Read more</span> <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span> 
+         <!-- Show "Read more" when closed, "Show less" when open --> <span class="group-open:hidden text-gray-900">Read more</span> <span class="hidden absolute -bottom-9 sm:right-[31px] right-[19px] group-open:inline redi-sec-dyna" data-target="dynamic-content-sec-2">Show less</span> 
       </summary>
       <div class="mt-4 space-y-3">
          <!-- Continued Intro Content --> 
@@ -1322,7 +1322,7 @@ $category = \App\Models\Category::where('slug', $slug)->first();
 
     <details class="group" id="category-details">
       <!-- Summary (only visible when closed) -->
-      <summary class="cursor-pointer list-none group-open:hidden">
+      <summary class="cursor-pointer list-none group-open:hidden text-gray-900">
         <div id="category-preview" class="leading-relaxed text-base md:text-lg text-[#666]">
           {{ Str::limit(preg_replace('/\s+/', ' ', trim(strip_tags($category->description))), 200, '...') }}
         </div>
@@ -1380,7 +1380,7 @@ $categoryOccasionContent = \App\Models\CategoryOccasionContent::where('category_
     <!-- Category-Occasion Content with Preview -->
     <details class="group">
       <!-- Closed state: Preview + Read more -->
-      <summary class="cursor-pointer list-none group-open:hidden">
+      <summary class="cursor-pointer list-none group-open:hidden text-gray-900">
         <div id="category-occasion-preview" class="leading-relaxed text-base md:text-lg text-[#666] mb-2">
           {!! Str::limit(strip_tags($categoryOccasionContent->content), 200, '...') !!}
         </div>

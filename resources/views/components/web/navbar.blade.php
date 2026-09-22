@@ -953,9 +953,9 @@
 
             <div
                 class="xl:absolute xl:top-0 xl:left-0 xl:w-full xl:flex xl:justify-center xl:items-center xl:pointer-events-none">
-                <a href="/">
+                <a href="/" aria-label="Aiman Royale — Home">
                     <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto" style="background:transparent;"
-                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
+                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="Aiman Royale">
                 </a>
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
