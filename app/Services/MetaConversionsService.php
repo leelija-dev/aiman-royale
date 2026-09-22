@@ -45,7 +45,22 @@ class MetaConversionsService
             'user_data'        => $userData,
             'custom_data'      => empty($customData) ? (object)[] : $customData,
         ];
+        Log::info('META CAPI COVERAGE', [
+            'event' => $eventName,
+            'event_id' => $event['event_id'],
 
+            'has_em' => !empty($userData['em']),
+            'has_ph' => !empty($userData['ph']),
+            'has_fn' => !empty($userData['fn']),
+            'has_ln' => !empty($userData['ln']),
+
+            'has_fbc' => !empty($userData['fbc']),
+            'has_fbp' => !empty($userData['fbp']),
+
+            'has_external_id' => !empty($userData['external_id']),
+            'has_ip' => !empty($userData['client_ip_address']),
+            'has_user_agent' => !empty($userData['client_user_agent']),
+        ]);
         // Clean empty values
         $event = array_filter($event, fn($v) => $v !== null && $v !== []);
 
@@ -98,72 +113,183 @@ class MetaConversionsService
             'client_user_agent' => request()->userAgent(),
         ];
 
-        // Very important for match quality
-        // if ($fbc = request()->cookie('_fbc')) {
-        //     $userData['fbc'] = $fbc;
-        // }
-        // if ($fbp = request()->cookie('_fbp')) {
-        //     $userData['fbp'] = $fbp;
-        // }
-        // Very important for match quality
+        /*
+        |--------------------------------------------------------------------------
+        | Meta browser identifiers
+        |--------------------------------------------------------------------------
+        */
         if ($fbc = $this->resolveFbc()) {
             $userData['fbc'] = $fbc;
         }
+
         if ($fbp = $this->resolveFbp()) {
             $userData['fbp'] = $fbp;
         }
 
-        // Logged-in user
+        /*
+        |--------------------------------------------------------------------------
+        | Logged-in customer
+        |--------------------------------------------------------------------------
+        */
         if (Auth::check()) {
+
             $user = Auth::user();
 
             if (!empty($user->email)) {
-                $userData['em'] = [$this->hashData($user->email)];
+                $userData['em'] = [
+                    $this->hashData($user->email)
+                ];
             }
 
             if (!empty($user->phone)) {
-                $userData['ph'] = [$this->hashPhone($user->phone)];
+                $userData['ph'] = [
+                    $this->hashPhone($user->phone)
+                ];
             }
 
             if (!empty($user->name)) {
-                $parts = explode(' ', trim($user->name), 2);
-                $userData['fn'] = [$this->hashData($parts[0] ?? '')];
-                if (isset($parts[1])) {
-                    $userData['ln'] = [$this->hashData($parts[1])];
+
+                $parts = preg_split(
+                    '/\s+/',
+                    trim($user->name),
+                    2
+                );
+
+                if (!empty($parts[0])) {
+                    $userData['fn'] = [
+                        $this->hashData($parts[0])
+                    ];
+                }
+
+                if (!empty($parts[1])) {
+                    $userData['ln'] = [
+                        $this->hashData($parts[1])
+                    ];
                 }
             }
 
-            $userData['external_id'] = [$this->hashData((string) $user->id)];
+            if (!empty($user->id)) {
+                $userData['external_id'] = [
+                    $this->hashData((string) $user->id)
+                ];
+            }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Guest customer
+        |--------------------------------------------------------------------------
+        */
         } else {
-            $userData['external_id'] = [$this->hashData($this->guestId())];
 
-            // Pick up contact info this guest gave us earlier — checkout, popup,
-            // login attempt — even though they never created an account
+            $userData['external_id'] = [
+                $this->hashData($this->guestId())
+            ];
+
             if ($guestEmail = request()->cookie('_meta_guest_em')) {
-                $userData['em'] = [$this->hashData($guestEmail)];
+                $userData['em'] = [
+                    $this->hashData($guestEmail)
+                ];
             }
+
             if ($guestPhone = request()->cookie('_meta_guest_ph')) {
-                $userData['ph'] = [$this->hashPhone($guestPhone)];
+                $userData['ph'] = [
+                    $this->hashPhone($guestPhone)
+                ];
             }
+
             if ($guestName = request()->cookie('_meta_guest_name')) {
-                $parts = explode(' ', trim($guestName), 2);
-                $userData['fn'] = [$this->hashData($parts[0] ?? '')];
-                if (isset($parts[1])) {
-                    $userData['ln'] = [$this->hashData($parts[1])];
+
+                $parts = preg_split(
+                    '/\s+/',
+                    trim($guestName),
+                    2
+                );
+
+                if (!empty($parts[0])) {
+                    $userData['fn'] = [
+                        $this->hashData($parts[0])
+                    ];
+                }
+
+                if (!empty($parts[1])) {
+                    $userData['ln'] = [
+                        $this->hashData($parts[1])
+                    ];
                 }
             }
         }
-         $userData['country'] = [$this->hashData('in')];
-        // Merge extra data (guest users etc.)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Country
+        |--------------------------------------------------------------------------
+        */
+        $userData['country'] = [
+            $this->hashData('in')
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Additional RAW customer data
+        |
+        | Callers should pass RAW values.
+        | This method hashes them exactly once.
+        |--------------------------------------------------------------------------
+        */
         foreach ($additionalData as $key => $value) {
-            if (in_array($key, ['em', 'ph', 'fn', 'ln', 'ct', 'st', 'zp', 'country', 'external_id'])) {
-                $userData[$key] = is_array($value) ? $value : [$value];
-            } else {
-                $userData[$key] = $value;
+
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            $value = is_array($value) ? ($value[0] ?? null) : $value;
+
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            switch ($key) {
+
+                case 'em':
+                    $hashed = $this->hashData($value);
+
+                    if ($hashed) {
+                        $userData['em'] = [$hashed];
+                    }
+                    break;
+
+                case 'ph':
+                    $hashed = $this->hashPhone($value);
+
+                    if ($hashed) {
+                        $userData['ph'] = [$hashed];
+                    }
+                    break;
+
+                case 'fn':
+                case 'ln':
+                case 'ct':
+                case 'st':
+                case 'zp':
+                case 'country':
+                case 'external_id':
+                    $hashed = $this->hashData($value);
+
+                    if ($hashed) {
+                        $userData[$key] = [$hashed];
+                    }
+                    break;
+
+                default:
+                    $userData[$key] = $value;
+                    break;
             }
         }
 
-        return array_filter($userData, fn($v) => $v !== null && $v !== [] && $v !== '');
+        return array_filter(
+            $userData,
+            fn ($v) => $v !== null && $v !== [] && $v !== ''
+        );
     }
     /** Store guest-provided contact info the moment we get it — checkout form, popup, OTP attempt, etc. */
 public function rememberGuestContact(?string $email = null, ?string $phone = null, ?string $name = null): void
@@ -214,17 +340,21 @@ public function rememberGuestContact(?string $email = null, ?string $phone = nul
     }
 
     /** fbp from Pixel cookie, else generated server-side */
+    // protected function resolveFbp(): ?string
+    // {
+    //     if ($fbp = request()->cookie('_fbp')) {
+    //         return $fbp;
+    //     }
+
+    //     $fbp = 'fb.1.' . (time() * 1000) . '.' . random_int(1000000000, 9999999999);
+    //     Cookie::queue('_fbp', $fbp, 60 * 24 * 90);
+
+    //     return $fbp;
+    // }
     protected function resolveFbp(): ?string
-    {
-        if ($fbp = request()->cookie('_fbp')) {
-            return $fbp;
-        }
-
-        $fbp = 'fb.1.' . (time() * 1000) . '.' . random_int(1000000000, 9999999999);
-        Cookie::queue('_fbp', $fbp, 60 * 24 * 90);
-
-        return $fbp;
-    }
+{
+    return request()->cookie('_fbp') ?: null;
+}
 
     /** Stable guest identifier stored in a first-party cookie */
     protected function guestId(): string
@@ -325,22 +455,51 @@ public function rememberGuestContact(?string $email = null, ?string $phone = nul
     }
 
     /** Purchase */
-    public function trackPurchase(array $orderData, array $customUserData = [], ?string $eventId = null): array
-    {
-        $customData = array_filter([
-            'content_ids'  => $orderData['content_ids'] ?? null,
-            'content_type' => 'product',
-            'value'        => (float)($orderData['value'] ?? 0),
-            'currency'     => $orderData['currency'] ?? 'INR',
-            'num_items'    => (int)($orderData['num_items'] ?? 1),
-            'order_id'     => $orderData['order_id'] ?? $orderData['transaction_id'] ?? null,
-        ]);
+    // public function trackPurchase(array $orderData, array $customUserData = [], ?string $eventId = null): array
+    // {
+    //     $customData = array_filter([
+    //         'content_ids'  => $orderData['content_ids'] ?? null,
+    //         'content_type' => 'product',
+    //         'value'        => (float)($orderData['value'] ?? 0),
+    //         'currency'     => $orderData['currency'] ?? 'INR',
+    //         'num_items'    => (int)($orderData['num_items'] ?? 1),
+    //         'order_id'     => $orderData['order_id'] ?? $orderData['transaction_id'] ?? null,
+    //     ]);
 
-        // Best practice: use order_id as event_id
-        $eventId = $eventId ?? ($orderData['order_id'] ?? $orderData['transaction_id'] ?? null);
+    //     // Best practice: use order_id as event_id
+    //     $eventId = $eventId ?? ($orderData['order_id'] ?? $orderData['transaction_id'] ?? null);
 
-        return $this->sendEvent('Purchase', $this->createUserData($customUserData), $customData, $eventId);
-    }
+    //     return $this->sendEvent('Purchase', $this->createUserData($customUserData), $customData, $eventId);
+    // }
+    public function trackPurchase(
+    array $orderData,
+    array $customerData = [],
+    ?string $eventId = null
+): array {
+
+    $customData = array_filter([
+        'content_ids' => $orderData['content_ids'] ?? null,
+        'content_type' => $orderData['content_type'] ?? 'product',
+        'value' => (float) ($orderData['value'] ?? 0),
+        'currency' => $orderData['currency'] ?? 'INR',
+        'num_items' => (int) ($orderData['num_items'] ?? 1),
+        'order_id' => $orderData['order_id']
+            ?? $orderData['transaction_id']
+            ?? null,
+    ]);
+
+    $eventId = $eventId
+        ?? ($orderData['order_id']
+        ?? $orderData['transaction_id']
+        ?? null);
+
+    return $this->sendEvent(
+        'Purchase',
+        $this->createUserData($customerData),
+        $customData,
+        $eventId
+    );
+}
 
     /** CompleteRegistration */
     public function trackCompleteRegistration(array $customUserData = [], ?string $eventId = null): array

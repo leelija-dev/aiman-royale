@@ -155,7 +155,13 @@ class AuthController extends Controller
 
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
+            try {
+                $this->metaService->trackCompleteRegistration();
 
+                Log::info('Meta CompleteRegistration tracked for user: ' . $user->id);
+            } catch (\Exception $e) {
+                Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+            }
             // Store JWT token in session
             session(['jwt_token' => $token]);
             if (session()->has('redirect_after_registration')) {
@@ -1013,7 +1019,13 @@ class AuthController extends Controller
             Auth::login($user);
             // Track CompleteRegistration for Google signup
             try {
-                $this->metaService->trackCompleteRegistration();
+                // $this->metaService->trackCompleteRegistration();
+                $this->metaService->trackCompleteRegistration([
+                    'em' => $user->email,
+                    'ph' => $user->phone,
+                    'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+                    'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+                ]);
                 Log::info('Meta CompleteRegistration tracked for Google user: ' . $user->id);
             } catch (\Exception $e) {
                 Log::error('Meta CompleteRegistration (Google) failed: ' . $e->getMessage());

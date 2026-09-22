@@ -3757,15 +3757,25 @@
                 .then(data => {
                     if (data && data.success) {
                          if (typeof fbq !== 'undefined') {
-                            fbq('track', 'InitiateCheckout', {
-                                content_name: @json($product->name ?? ''),
-                                content_ids: [@json($product->id ?? '')],
-                                content_type: 'product',
-                                value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
-                                currency: 'INR',
-                                num_items: 1
-                            });
-                        }
+
+                            const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
+
+                            fbq(
+                                'track',
+                                'InitiateCheckout',
+                                {
+                                    content_name: @json($product->name ?? ''),
+                                    content_ids: [@json($product->id ?? '')],
+                                    content_type: 'product',
+                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                    currency: 'INR',
+                                    num_items: 1
+                                },
+                                {
+                                    eventID: initiateCheckoutEventId
+                                }
+                    );
+                }
                         window.location.href = data.redirect || checkoutUrl;
                     } else {
                         showNotification(data?.message || 'Unable to start checkout', 'error');

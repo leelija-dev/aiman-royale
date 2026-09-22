@@ -1045,6 +1045,8 @@ msg.innerHTML = "Something went wrong.";
                 value: totalValue,
                 currency: 'INR',
                 num_items: numItems
+            }, {
+                eventID: @json($initiateCheckoutEventId ?? '')
             });
         }
         @endif
