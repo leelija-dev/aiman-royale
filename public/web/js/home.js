@@ -25,9 +25,8 @@ function getCsrfToken() {
 
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    }`;
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        }`;
     notification.textContent = message;
     document.body.appendChild(notification);
 
@@ -311,32 +310,72 @@ function initCountdown() {
 }
 
 // -------------------- Owl Carousels --------------------
-function initHeroCarousel() {
-    if (typeof window.$ === 'undefined' || typeof window.$.fn.owlCarousel === 'undefined') {
-        return false;
-    }
-    const $el = window.$('.hero-carousel');
-    if (!$el.length) return true;
+// function initHeroCarousel() {
+//     if (typeof window.$ === 'undefined' || typeof window.$.fn.owlCarousel === 'undefined') {
+//         return false;
+//     }
+//     const $el = window.$('.hero-carousel');
+//     if (!$el.length) return true;
 
-    $el.owlCarousel({
-        items: 1,
-        loop: true,
-        margin: 0,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayTimeout: 5500,
-        autoplayHoverPause: true,
-        stopOnHover: true,
-        smartSpeed: 900,
-        navText: ['', ''],
-        responsive: {
-            0: { nav: true, dots: true },
-            768: { nav: true, dots: true },
-        },
-    });
-    return true;
+//     $el.owlCarousel({
+//         items: 1,
+//         loop: true,
+//         margin: 0,
+//         nav: true,
+//         dots: false,
+//         autoplay: true,
+//         autoplayTimeout: 5500,
+//         autoplayHoverPause: true,
+//         stopOnHover: true,
+//         smartSpeed: 900,
+//         navText: ['', ''],
+//         responsive: {
+//             0: { nav: true, dots: true },
+//             768: { nav: true, dots: true },
+//         },
+//     });
+//     return true;
+// }
+
+function initHeroCarousel() {
+    if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+
+        const $heroCarousel = $('.hero-carousel');
+
+        $heroCarousel.owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 0,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 5500,
+            autoplayHoverPause: true,
+            stopOnHover: true,
+            smartSpeed: 900,
+            responsive: {
+                0: { nav: false, dots: false },
+                768: { nav: false, dots: false }
+            }
+        });
+
+        // Wire up custom nav buttons
+        $heroCarousel
+            .closest('.hero-carousel-wrapper')       // <-- change to your actual wrapper selector
+            .find('.custom-nav .owl-prev')
+            .on('click', () => $heroCarousel.trigger('prev.owl.carousel'));
+
+        $heroCarousel
+            .closest('.hero-carousel-wrapper')
+            .find('.custom-nav .owl-next')
+            .on('click', () => $heroCarousel.trigger('next.owl.carousel'));
+
+    } else {
+        console.warn('Owl Carousel not loaded, retrying...');
+        setTimeout(initHeroCarousel, 500);
+    }
 }
+
 
 function initCategoriesTagCarousel() {
     if (typeof window.$ === 'undefined' || typeof window.$.fn.owlCarousel === 'undefined') {

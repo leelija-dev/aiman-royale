@@ -2632,43 +2632,89 @@ if ($banner->filter) {
 
     <script>
         // Wait for jQuery and OwlCarousel to load
-        function initHeroCarousel() {
-            if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
-                $('.hero-carousel').owlCarousel({
-                    items: 1,
-                    loop: true,
-                    margin: 0,
-                    nav: true,
-                    dots: false,
-                    autoplay: true,
-                    autoplayTimeout: 5500,
-                    autoplayHoverPause: true,
-                    stopOnHover: true, // Add this line
-                    smartSpeed: 900,
-                    navText: ['', ''],
-                    responsive: {
-                        0: {
-                            nav: true,
-                            dots: true
-                        },
-                        768: {
-                            nav: true,
-                            dots: true
-                        }
-                    }
-                });
-            } else {
-                console.warn('Owl Carousel not loaded, retrying...');
-                setTimeout(initHeroCarousel, 500);
-            }
-        }
+        // function initHeroCarousel() {
+        //     if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+        //         $('.hero-carousel').owlCarousel({
+        //             items: 1,
+        //             loop: true,
+        //             margin: 0,
+        //             nav: true,
+        //             dots: false,
+        //             autoplay: true,
+        //             autoplayTimeout: 5500,
+        //             autoplayHoverPause: true,
+        //             stopOnHover: true, // Add this line
+        //             smartSpeed: 900,
+        //             navText: ['', ''],
+        //             responsive: {
+        //                 0: {
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 768: {
+        //                     nav: true,
+        //                     dots: true
+        //                 }
+        //             }
+        //         });
+        //     } else {
+        //         console.warn('Owl Carousel not loaded, retrying...');
+        //         setTimeout(initHeroCarousel, 500);
+        //     }
+        // }
 
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initHeroCarousel);
-        } else {
-            initHeroCarousel();
-        }
+        function initHeroCarousel() {
+    if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+
+        const $heroCarousel = $('.hero-carousel');
+
+        $heroCarousel.owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 0,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 5500,
+            autoplayHoverPause: true,
+            stopOnHover: true,
+            smartSpeed: 900,
+            responsive: {
+                0: { nav: false, dots: false },
+                768: { nav: false, dots: false }
+            }
+        });
+
+        // Wire up custom nav buttons
+        $heroCarousel
+            .closest('.hero-carousel-wrapper')       // <-- change to your actual wrapper selector
+            .find('.custom-nav .owl-prev')
+            .on('click', () => $heroCarousel.trigger('prev.owl.carousel'));
+
+        $heroCarousel
+            .closest('.hero-carousel-wrapper')
+            .find('.custom-nav .owl-next')
+            .on('click', () => $heroCarousel.trigger('next.owl.carousel'));
+
+    } else {
+        console.warn('Owl Carousel not loaded, retrying...');
+        setTimeout(initHeroCarousel, 500);
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroCarousel);
+} else {
+    initHeroCarousel();
+}
+
+        // // Initialize when DOM is ready
+        // if (document.readyState === 'loading') {
+        //     document.addEventListener('DOMContentLoaded', initHeroCarousel);
+        // } else {
+        //     initHeroCarousel();
+        // }
     </script>
     <script>
         document.querySelectorAll('.fade-in-img').forEach(img => {
