@@ -3735,7 +3735,8 @@
             const originalText = buyNowBtn.innerHTML;
             buyNowBtn.disabled = true;
             buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
-
+            const initiateCheckoutEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+            requestData.event_id = initiateCheckoutEventId;
             fetch('/buy-now', {
                     method: 'POST',
                     headers: {
@@ -3758,7 +3759,7 @@
                     if (data && data.success) {
                          if (typeof fbq !== 'undefined') {
 
-                            const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
+                            // const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
 
                             fbq(
                                 'track',
@@ -3796,8 +3797,9 @@
         }
 
         function addToCart() {
+            const eventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
+   
             if (!csrfToken) {
                 alert('Security token not found. Please refresh the page.');
                 return;
@@ -3820,7 +3822,8 @@
                     product_id: {{ $product?->id }},
                     custom_dimensions: JSON.parse(customDimensionsAttr),
                     type: selectedType,
-                    count: 1
+                    count: 1,
+                    event_id: eventId
                 };
             } else {
                 const variantId = addToCartBtn.getAttribute('data-variant-id');
@@ -3836,7 +3839,8 @@
                 requestData = {
                     variant_id: variantId,
                     type: selectedType,
-                    count: 1
+                    count: 1,
+                    event_id: eventId
                 };
             }
 

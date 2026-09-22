@@ -53,7 +53,11 @@ class AuthController extends Controller
             'phone' => 'required',
             'password' => 'required|min:6',
         ]);
-
+        $this->metaService->rememberGuestContact(
+            $request->email,
+            $request->phone,
+            $request->firstName . ' ' . $request->lastName
+        );
         // Generate OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $token = Str::random(60);
@@ -134,7 +138,7 @@ class AuthController extends Controller
                 ->withErrors(['email' => 'This phone number is already registered.'])
                 ->withInput();
         }
-
+        $this->metaService->rememberGuestContact($email, $phone, $request->name);
         // 5. Create user account directly without OTP
         try {
             // dd($request->all());
@@ -259,7 +263,7 @@ class AuthController extends Controller
             'email' => 'nullable|required_without:phone|email|unique:users',
             'phone' => 'nullable|required_without:email|string|unique:users'
         ]);
-
+        $this->metaService->rememberGuestContact($request->email, $request->phone);
         // Generate OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $token = Str::random(60);
@@ -698,6 +702,7 @@ class AuthController extends Controller
                 'email' => $login,
                 'password' => $request->password,
             ];
+            $this->metaService->rememberGuestContact($login, null);
         } else {
 
             // Login using mobile number
@@ -705,6 +710,7 @@ class AuthController extends Controller
                 'phone' => $login,
                 'password' => $request->password,
             ];
+            $this->metaService->rememberGuestContact(null, $login);
         }
         // Attempt login with JWT
         if (!$token = JWTAuth::attempt($credentials, $remember)) {

@@ -232,7 +232,7 @@
      
     <!-- Facebook Pixel: defer non-critical tracking -->
     <script defer>
-        window.addEventListener('load', function() {
+       document.addEventListener('DOMContentLoaded', function() {
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function() {
