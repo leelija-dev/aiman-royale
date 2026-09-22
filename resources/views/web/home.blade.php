@@ -1169,69 +1169,98 @@ if ($banner->filter) {
     </section>
     <!-- Owl Carousel Initialization Script -->
     <script>
+        // function initUniqAdsSlider() {
+        //     if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+        //         $('#uniq-ads-slider').owlCarousel({
+        //             loop: true,
+        //             margin: 20,
+        //             nav: true,
+        //             dots: true,
+        //             autoplay: true,
+        //             autoplayTimeout: 5500,
+        //             autoplayHoverPause: true,
+        //             stopOnHover: true,
+        //             smartSpeed: 900,
+        //             navText: ['', ''], // Empty strings since we use Font Awesome
+        //             responsive: {
+        //                 0: {
+        //                     items: 1,
+        //                     margin: 10,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 480: {
+        //                     items: 2,
+        //                     margin: 10,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 640: {
+        //                     items: 2,
+        //                     margin: 10,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 768: {
+        //                     items: 3,
+        //                     margin: 15,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 1024: {
+        //                     items: 3,
+        //                     margin: 15,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 1280: {
+        //                     items: 3,
+        //                     margin: 20,
+        //                     nav: true,
+        //                     dots: true
+        //                 },
+        //                 1366: {
+        //                     items: 4,
+        //                     margin: 20,
+        //                     nav: true,
+        //                     dots: true
+        //                 }
+        //             }
+        //         });
+        //     } else {
+        //         console.warn('Owl Carousel not loaded, retrying...');
+        //         setTimeout(initUniqAdsSlider, 500);
+        //     }
+        // }
+
         function initUniqAdsSlider() {
-            if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
-                $('#uniq-ads-slider').owlCarousel({
-                    loop: true,
-                    margin: 20,
-                    nav: true,
-                    dots: true,
-                    autoplay: true,
-                    autoplayTimeout: 5500,
-                    autoplayHoverPause: true,
-                    stopOnHover: true,
-                    smartSpeed: 900,
-                    navText: ['', ''], // Empty strings since we use Font Awesome
-                    responsive: {
-                        0: {
-                            items: 1,
-                            margin: 10,
-                            nav: true,
-                            dots: true
-                        },
-                        480: {
-                            items: 2,
-                            margin: 10,
-                            nav: true,
-                            dots: true
-                        },
-                        640: {
-                            items: 2,
-                            margin: 10,
-                            nav: true,
-                            dots: true
-                        },
-                        768: {
-                            items: 3,
-                            margin: 15,
-                            nav: true,
-                            dots: true
-                        },
-                        1024: {
-                            items: 3,
-                            margin: 15,
-                            nav: true,
-                            dots: true
-                        },
-                        1280: {
-                            items: 3,
-                            margin: 20,
-                            nav: true,
-                            dots: true
-                        },
-                        1366: {
-                            items: 4,
-                            margin: 20,
-                            nav: true,
-                            dots: true
-                        }
-                    }
-                });
-            } else {
-                console.warn('Owl Carousel not loaded, retrying...');
-                setTimeout(initUniqAdsSlider, 500);
+    if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+        $('#uniq-ads-slider').owlCarousel({
+            loop: true,
+            margin: 20,
+            nav: false,          // <-- CHANGE from true
+            dots: true,
+            navElement: 'button type="button"',   // <-- ADD this
+            autoplay: true,
+            autoplayTimeout: 5500,
+            autoplayHoverPause: true,
+            stopOnHover: true,
+            smartSpeed: 900,
+            responsive: {
+                0:    { items: 1, margin: 10, nav: false, dots: true },   // <-- nav: false
+                480:  { items: 2, margin: 10, nav: false, dots: true },
+                640:  { items: 2, margin: 10, nav: false, dots: true },
+                768:  { items: 3, margin: 15, nav: false, dots: true },
+                1024: { items: 3, margin: 15, nav: false, dots: true },
+                1280: { items: 3, margin: 20, nav: false, dots: true },
+                1366: { items: 4, margin: 20, nav: false, dots: true }
             }
-        }
+        });
+    } else {
+        console.warn('Owl Carousel not loaded, retrying...');
+        setTimeout(initUniqAdsSlider, 500);
+    }
+}
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initUniqAdsSlider);
@@ -2729,7 +2758,7 @@ if (document.readyState === 'loading') {
         });
     </script>
 
-    <script>
+    <!-- <script>
         document.querySelectorAll('.owl-carousel').forEach(function (carousel) {
         carousel.addEventListener('initialized.owl.carousel', function () {
         const prev = carousel.querySelector('.owl-prev');
@@ -2741,6 +2770,56 @@ if (document.readyState === 'loading') {
                 });
             });
      });
-    </script>
+    </script> -->
+
+    <script>
+    (function () {
+        function cleanOwlA11y() {
+            // 1. Clean Owl's nav buttons (prev / next)
+            document.querySelectorAll('.owl-carousel .owl-nav button.owl-prev, .owl-carousel .owl-nav button.owl-next')
+                .forEach(function (btn) {
+                    // Remove the conflicting presentation role
+                    btn.removeAttribute('role');
+
+                    // Ensure the button has a proper accessible name
+                    if (!btn.getAttribute('aria-label')) {
+                        const isPrev = btn.classList.contains('owl-prev');
+                        btn.setAttribute('aria-label', isPrev ? 'Previous slide' : 'Next slide');
+                    }
+
+                    // Mark the inner icon as decorative
+                    btn.querySelectorAll('svg, i, span').forEach(function (icon) {
+                        icon.setAttribute('aria-hidden', 'true');
+                    });
+                });
+
+            // 2. Label the dots (pagination)
+            document.querySelectorAll('.owl-carousel').forEach(function (carousel) {
+                carousel.querySelectorAll('.owl-dot').forEach(function (dot, i) {
+                    if (!dot.getAttribute('aria-label')) {
+                        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                    }
+                });
+            });
+        }
+
+        // Run on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', cleanOwlA11y);
+        } else {
+            cleanOwlA11y();
+        }
+
+        // Run again after carousels finish initializing
+        window.addEventListener('load', cleanOwlA11y);
+        setTimeout(cleanOwlA11y, 500);
+        setTimeout(cleanOwlA11y, 2000);
+
+        // Hook into Owl's own events for any carousel initialized later
+        if (typeof jQuery !== 'undefined') {
+            jQuery(document).on('initialized.owl.carousel changed.owl.carousel', '.owl-carousel', cleanOwlA11y);
+        }
+    })();
+</script>
 
 @endsection
