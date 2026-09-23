@@ -360,21 +360,10 @@ class ReturnOrderController extends Controller
                 $returnAddress['pincode']
             );
 
-            Log::info('RETURN ORDER: Delhivery serviceability response', [
-                'order_id' => $order->id,
-                'pincode' => $returnAddress['pincode'],
-                'serviceability' => $serviceability,
-            ]);
-
             $pickupAvailable =
                 $serviceability['pickup_available']
                 ?? $serviceability['serviceable']
                 ?? false;
-
-            Log::info('RETURN ORDER: Pickup availability determined', [
-                'order_id' => $order->id,
-                'pickup_available' => $pickupAvailable,
-            ]);
 
             if (!$pickupAvailable) {
                 Log::warning('RETURN ORDER: Reverse pickup not available', [
@@ -390,16 +379,6 @@ class ReturnOrderController extends Controller
                     'data' => $serviceability
                 ], 422);
             }
-
-            /*
-        |--------------------------------------------------------------------------
-        | Check Existing Reverse Order
-        |--------------------------------------------------------------------------
-        */
-
-            Log::info('RETURN ORDER: Checking existing active reverse order', [
-                'order_id' => $order->id,
-            ]);
 
             $existingReverseOrder = ReverseOrder::where('order_id', $order->id)
                 ->whereIn('status', [
