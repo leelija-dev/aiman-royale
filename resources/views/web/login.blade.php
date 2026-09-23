@@ -168,6 +168,43 @@
                 <!-- Email/Password Login Form -->
                 <form action="{{ route('web.login') }}" method="post" class="space-y-5" id="loginForm" novalidate>
                     @csrf
+                    @if(request()->boolean('buy_now'))
+
+                        <input type="hidden"
+                            name="buy_now"
+                            value="1">
+
+                        <input type="hidden"
+                            name="variant_id"
+                            value="{{ request('variant_id') }}">
+
+                        <input type="hidden"
+                            name="count"
+                            value="{{ request('count', 1) }}">
+
+                        <input type="hidden"
+                            name="type"
+                            value="{{ request('type') }}">
+
+                        @if(request()->filled('product_id'))
+                            <input type="hidden"
+                                name="product_id"
+                                value="{{ request('product_id') }}">
+                        @endif
+
+                        @if(request()->filled('event_id'))
+                            <input type="hidden"
+                                name="event_id"
+                                value="{{ request('event_id') }}">
+                        @endif
+
+                        @if(request()->filled('custom_dimensions'))
+                            <input type="hidden"
+                                name="custom_dimensions"
+                                value="{{ request('custom_dimensions') }}">
+                        @endif
+
+                    @endif
                     <input type="hidden" name="redirect" value="{{ request('redirect') }}">
                     
                     <div>
@@ -226,8 +263,19 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Don't have an account?
-                        <a href="{{ route('page.register') }}"
+                        {{-- <a href="{{ route('page.register') }}"
                             class="text-purple-600 font-medium hover:text-purple-500">
+                            Create one
+                        </a> --}}
+                        <a href="{{ route('page.register', request()->boolean('buy_now') ? [
+                            'buy_now' => 1,
+                            'variant_id' => request('variant_id'),
+                            'count' => request('count', 1),
+                            'type' => request('type'),
+                            'product_id' => request('product_id'),
+                            'event_id' => request('event_id'),
+                            'custom_dimensions' => request('custom_dimensions'),
+                        ] : []) }}"  class="text-purple-600 font-medium hover:text-purple-500">
                             Create one
                         </a>
                     </p>

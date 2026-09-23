@@ -3749,8 +3749,27 @@
                 .then(response => {
                     if (response.status === 401) {
                         const currentUrl = window.location.href.split('#')[0];
-                        const redirectUrl = currentUrl + '#action-buttons-section';
-                        window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+                        // const redirectUrl = currentUrl + '#action-buttons-section';
+                        const loginParams = new URLSearchParams();
+
+                        loginParams.set('buy_now', '1');
+                        loginParams.set('variant_id', variantId);
+                        loginParams.set('count', '1');
+                        loginParams.set('type', selectedType || '');
+                        loginParams.set('event_id', initiateCheckoutEventId);
+
+                        @if($product?->id)
+                            loginParams.set('product_id', '{{ $product->id }}');
+                        @endif
+
+                        if (customDimensions) {
+                            loginParams.set(
+                                'custom_dimensions',
+                                JSON.stringify(customDimensions)
+                            );
+                        }
+                        // window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
+                        window.location.href =loginUrl + '?' + loginParams.toString();
                         return Promise.reject('Authentication required');;
                     }
                     return response.json();

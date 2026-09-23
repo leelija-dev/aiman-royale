@@ -168,6 +168,171 @@ class AuthController extends Controller
             }
             // Store JWT token in session
             session(['jwt_token' => $token]);
+            if (
+            $request->boolean('buy_now') &&
+            $request->filled('variant_id')
+        ) {
+
+            $variant = ProductVariant::with('product')
+                ->find($request->variant_id);
+
+            if (!$variant) {
+
+                Log::warning(
+                    'Buy Now variant not found after registration',
+                    [
+                        'variant_id' => $request->variant_id,
+                        'user_id'    => $user->id,
+                    ]
+                );
+
+                return redirect()
+                    ->route('page.index')
+                    ->with(
+                        'error',
+                        'The selected product variant is no longer available.'
+                    );
+            }
+
+            $count = (int) ($request->count ?? 1);
+
+            // Check stock again
+            if ($variant->stock < $count) {
+
+                Log::warning(
+                    'Buy Now insufficient stock after registration',
+                    [
+                        'variant_id' => $variant->id,
+                        'stock'      => $variant->stock,
+                        'count'      => $count,
+                        'user_id'    => $user->id,
+                    ]
+                );
+
+                return redirect()
+                    ->route('page.index')
+                    ->with(
+                        'error',
+                        'Not enough stock available.'
+                    );
+            }
+
+            /*
+             * Decode custom dimensions if they exist.
+             */
+            $customDimensions = null;
+
+            if ($request->filled('custom_dimensions')) {
+
+                $decoded = json_decode(
+                    $request->custom_dimensions,
+                    true
+                );
+
+                if (is_array($decoded)) {
+                    $customDimensions = $decoded;
+                }
+            }
+
+            /*
+             * Create EXACTLY the same checkout structure
+             * used by CartController::buyNow().
+             */
+            session()->put(
+                'checkout_source',
+                'buy_now'
+            );
+
+            session()->put(
+                'meta_initiate_checkout_event_id',
+                $request->input('event_id')
+            );
+
+            session()->put(
+                'checkout_payload',
+                [
+                    'items' => [
+                        [
+                            'cart_id' => 0,
+
+                            'product_id' => $variant->product_id,
+
+                            'variant_id' => $variant->id,
+
+                            'name' => $variant->product->name,
+
+                            'size' => $variant->size,
+
+                            'color' => $variant->color,
+
+                            'price' => $variant->price,
+
+                            'discount' => $variant->discount ?? 0,
+
+                            'discount_price' =>
+                                $variant->discount_price
+                                ?? $variant->price,
+
+                            'count' => $count,
+
+                            'type' =>
+                                $request->input(
+                                    'type',
+                                    'stitched'
+                                ),
+
+                            'custom_dimensions' =>
+                                $customDimensions,
+
+                            'image' =>
+                                optional(
+                                    $variant->product
+                                )->featured_image,
+                        ]
+                    ]
+                ]
+            );
+
+            Log::info(
+                'Buy Now checkout restored after registration',
+                [
+                    'user_id' => $user->id,
+
+                    'variant_id' => $variant->id,
+
+                    'product_id' => $variant->product_id,
+
+                    'count' => $count,
+
+                    'type' => $request->input(
+                        'type',
+                        'stitched'
+                    ),
+
+                    'checkout_source' =>
+                        session('checkout_source'),
+
+                    'checkout_payload' =>
+                        session('checkout_payload'),
+                ]
+            );
+
+            /*
+             * IMPORTANT:
+             * Go directly to checkout.
+             */
+            return redirect()
+                ->route('checkout.index')
+                ->with(
+                    'success',
+                    'Account created successfully!'
+                )
+                ->with(
+                    'jwt_token',
+                    $token
+                );
+        }
+
             if (session()->has('redirect_after_registration')) {
                 $redirectUrl = session('redirect_after_registration');
 
@@ -688,6 +853,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+     
         $credentials = $request->validate([
             'email' => 'required',
             'password' => 'required'
@@ -725,7 +891,7 @@ class AuthController extends Controller
         $user->last_login_at = now();
         $user->save();
 
-        // ✅ If "Remember Me" is checked, create remember token
+        //  If "Remember Me" is checked, create remember token
         if ($remember) {
             $this->setRememberToken($user);
         } else {
@@ -743,7 +909,7 @@ class AuthController extends Controller
         session()->put('session_expiry', $expiry);
         session()->put('last_login_update', now());
 
-        // ✅ Set remember cookie
+        //  Set remember cookie
         if ($remember) {
             $this->setRememberCookie($user);
         }
@@ -775,7 +941,7 @@ class AuthController extends Controller
             );
         }
         if ($variantId = session('guest_variant_id_for_wishlist')) {
-            dd($variantId);
+            // dd($variantId);
             session()->forget('guest_variant_id_for_wishlist');
 
             $variant = ProductVariant::find($variantId);
@@ -785,11 +951,109 @@ class AuthController extends Controller
             }
         }
 
+                 
+        // if ($request->has('redirect') && $request->redirect) {
+        //     return redirect()->to($request->redirect)->with('jwt_token', $token); 
+        // }
+        // $request->session()->regenerate();
+       if ($request->boolean('buy_now') && $request->filled('variant_id')) {
 
-        if ($request->has('redirect') && $request->redirect) {
-            return redirect()->to($request->redirect)->with('jwt_token', $token);
+    $variant = ProductVariant::with('product')
+        ->find($request->variant_id);
+
+    if (!$variant) {
+        Log::warning('Buy Now variant not found after login', [
+            'variant_id' => $request->variant_id,
+            'user_id'    => $user->id,
+        ]);
+
+        return redirect()->route('page.index')
+            ->withErrors(['product' => 'The selected product variant is no longer available.']);
+    }
+
+    $count = (int) ($request->count ?? 1);
+
+    if ($variant->stock < $count) {
+        Log::warning('Buy Now insufficient stock after login', [
+            'variant_id' => $variant->id,
+            'stock'      => $variant->stock,
+            'count'      => $count,
+            'user_id'    => $user->id,
+        ]);
+
+        return redirect()->route('page.index')
+            ->withErrors(['product' => 'Not enough stock available.']);
+    }
+
+    $customDimensions = null;
+
+    if ($request->filled('custom_dimensions')) {
+        $decoded = json_decode(
+            $request->custom_dimensions,
+            true
+        );
+
+        if (is_array($decoded)) {
+            $customDimensions = $decoded;
         }
+    }
 
+    session()->put('checkout_source', 'buy_now');
+
+    session()->put(
+        'meta_initiate_checkout_event_id',
+        $request->input('event_id')
+    );
+
+    session()->put('checkout_payload', [
+        'items' => [[
+            'cart_id' => 0,
+
+            'product_id' => $variant->product_id,
+
+            'variant_id' => $variant->id,
+
+            'name' => $variant->product->name,
+
+            'size' => $variant->size,
+
+            'color' => $variant->color,
+
+            'price' => $variant->price,
+
+            'discount' => $variant->discount ?? 0,
+
+            'discount_price' => $variant->discount_price ?? $variant->price,
+
+            'count' => $count,
+
+            'type' => $request->input('type', 'stitched'),
+
+            'custom_dimensions' => $customDimensions,
+
+            'image' => optional($variant->product)->featured_image,
+        ]]
+    ]);
+
+    Log::info('Buy Now checkout restored after login', [
+        'user_id'    => $user->id,
+        'variant_id' => $variant->id,
+        'product_id' => $variant->product_id,
+        'count'      => $count,
+        'type'       => $request->input('type', 'stitched'),
+        'checkout_source' => session('checkout_source'),
+    ]);
+
+    return redirect()
+        ->route('checkout.index')
+        ->with('jwt_token', $token);
+}
+            if ($request->filled('redirect')) {
+
+                return redirect()
+                    ->to($request->redirect)
+                    ->with('jwt_token', $token);
+            }
         return redirect()->intended(route('page.index'))->with('jwt_token', $token);
     }
 
