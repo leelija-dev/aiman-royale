@@ -132,8 +132,12 @@ class MetaConversionsService
         |--------------------------------------------------------------------------
         */
         if (Auth::check()) {
-
+        /** @var \App\Models\User $user */
             $user = Auth::user();
+
+            $address = $user->addresses()
+                ->where('is_default', 1)
+                ->first();
 
             if (!empty($user->email)) {
                 $userData['em'] = [
@@ -175,12 +179,22 @@ class MetaConversionsService
             }
             // Date of birth - send only when available
             if (!empty($user->date_of_birth)) {
-                $dob = date('Ymd', strtotime($user->date_of_birth));
-
                 $userData['db'] = [
-                    $this->hashData($dob)
+                    $this->hashData($user->date_of_birth->format('Ymd'))
                 ];
             }
+            if ($address && !empty($address->city)) {
+                $userData['ct'] = [$this->hashData($address->city)];
+            }
+             if ($address && !empty($address->state)) {
+                $userData['st'] = [$this->hashData($address->state)];
+            }
+             if ($address && !empty($address->pincode)) {
+                $userData['zp'] = [$this->hashData($address->pincode)];
+            }
+            if ($address && !empty($address->country )) {
+                $userData['country'] = [$this->hashData($address->country)];
+            }   
 
         /*
         |--------------------------------------------------------------------------
