@@ -1189,10 +1189,10 @@ class AuthController extends Controller
             str_contains($previousUrl, '/user/wishlist') ||
             str_contains($previousUrl, '/user/notifications') ||
             str_contains($previousUrl, '/user/change-password') ||
-            str_contains($previousUrl, '/custom-request') ||
-            str_contains($previousUrl, '/wishlist') ||
-            str_contains($previousUrl, '/wishlist') ||
-            str_contains($previousUrl, '/cart')
+            str_contains($previousUrl, '/custom-request') 
+            // str_contains($previousUrl, '/wishlist') ||
+            // str_contains($previousUrl, '/wishlist') ||
+            // str_contains($previousUrl, '/cart')
 
         ) {
             return redirect('/')
