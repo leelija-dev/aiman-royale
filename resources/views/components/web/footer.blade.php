@@ -2102,7 +2102,7 @@ art from fake trails.
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Salwar Kameez</span>
           </a>
-          <a href="{{ route('category.show', ['slug' => 'anarkali']) }}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
+          <a href="{{ route('category.show', ['slug' => 'anarkali-suits']) }}" class="flex items-center group/link text-gray-600 hover:text-[#A10000] transition-colors duration-300">
             <div class="w-1 h-1 rounded-full bg-[#EC4899] mr-3 group-hover/link:w-2 group-hover/link:h-2 transition-all duration-300"></div>
             <span class="font-medium">Anarkali</span>
           </a>
