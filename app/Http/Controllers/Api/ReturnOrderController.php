@@ -587,12 +587,12 @@ class ReturnOrderController extends Controller
 
                     // --- 2. Return Destination (YOUR WAREHOUSE Address) ---
                     // The parcel is delivered back to here after pickup.
-                    'return_name'   => config('delhivery.warehouse_name'),
-                    'return_phone'  => config('delhivery.warehouse_phone'),
-                    'return_add'    => config('delhivery.warehouse_address'),
-                    'return_pin'    => config('delhivery.warehouse_pincode'),
-                    'return_city'   => config('delhivery.warehouse_city'),
-                    'return_state'  => config('delhivery.warehouse_state'),
+                    'return_name'   => config('delhivery.pickup_location'),
+                    'return_phone'  => config('delhivery.return_phone'),
+                    'return_add'    => config('delhivery.return_add'),
+                    'return_pin'    => config('delhivery.return_pincode'),
+                    'return_city'   => config('delhivery.return_city'),
+                    'return_state'  => config('delhivery.return_state'),
 
                     // --- 3. Shipment Specifics ---
                     'order'         => $reverseOrder->reverse_order_number,
@@ -611,7 +611,7 @@ class ReturnOrderController extends Controller
                 $finalPayload = [
                     'pickup_location' => [
                         // Must match your registered Delhivery warehouse name exactly (case-sensitive) [citation:1]
-                        'name' => config('delhivery.warehouse_name'),
+                        'name' => config('delhivery.pickup_location'),
                     ],
                     'shipments' => [$shipmentPayload],
                 ];
