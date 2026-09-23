@@ -555,75 +555,75 @@ class ReturnOrderController extends Controller
             |--------------------------------------------------------------------------
             */
 
+                $shipmentPayload = [
+                    'reverse_order_number' => $reverseOrder->reverse_order_number,
+                    'return_contact_name' => $reverseOrder->return_contact_name,
+                    'return_phone_no' => $reverseOrder->return_phone_no,
+                    'return_address_1' => $reverseOrder->return_address_1,
+                    'return_address_2' => $reverseOrder->return_address_2,
+                    'return_city' => $reverseOrder->return_city,
+                    'return_state' => $reverseOrder->return_state,
+                    'return_pincode' => $reverseOrder->return_pincode,
+                    'total_amount' => $order->total_amount,
+                    'declared_value' => $order->total_amount,
+                ];
+
                 // $shipmentPayload = [
-                //     'reverse_order_number' => $reverseOrder->reverse_order_number,
-                //     'return_contact_name' => $reverseOrder->return_contact_name,
-                //     'return_phone_no' => $reverseOrder->return_phone_no,
-                //     'return_address_1' => $reverseOrder->return_address_1,
-                //     'return_address_2' => $reverseOrder->return_address_2,
-                //     'return_city' => $reverseOrder->return_city,
-                //     'return_state' => $reverseOrder->return_state,
-                //     'return_pincode' => $reverseOrder->return_pincode,
-                //     'total_amount' => $order->total_amount,
-                //     'declared_value' => $order->total_amount,
+                //     // --- 1. Pickup Location (CUSTOMER Address) ---
+                //     // The courier agent goes here to collect the parcel.
+                //     'name'          => $reverseOrder->return_contact_name, // Customer name
+                //     'phone'         => $reverseOrder->return_phone_no,
+                //     'add'           => trim(implode(', ', array_filter([
+                //         $reverseOrder->return_address_1,
+                //         $reverseOrder->return_address_2,
+                //         $reverseOrder->return_city,
+                //         $reverseOrder->return_state,
+                //         $reverseOrder->return_pincode,
+                //     ]))),
+                //     'pin'           => $reverseOrder->return_pincode,
+                //     'city'          => $reverseOrder->return_city,
+                //     'state'         => $reverseOrder->return_state,
+                //     'country'       => 'India',
+
+                //     // --- 2. Return Destination (YOUR WAREHOUSE Address) ---
+                //     // The parcel is delivered back to here after pickup.
+                //     'return_name'   => config('delhivery.pickup_location'),
+                //     'return_phone'  => config('delhivery.return_phone'),
+                //     'return_add'    => config('delhivery.return_add'),
+                //     'return_pin'    => config('delhivery.return_pincode'),
+                //     'return_city'   => config('delhivery.return_city'),
+                //     'return_state'  => config('delhivery.return_state'),
+
+                //     // --- 3. Shipment Specifics ---
+                //     'order'         => $reverseOrder->reverse_order_number,
+                //     'payment_mode'  => 'Pickup',          // Mandatory for RVP [citation:1]
+                //     'shipment_type' => 'Reverse',
+                //     'cod_amount'    => '0',               // No cash collection on reverse
+                //     'total_amount'  => '0',
+                //     'declared_value' => (string)$order->total_amount,
+                //     'quantity'      => (string)$reverseOrder->items->sum('quantity'),
+                //     'weight'        => '0.5',
+                //     'products_desc' => $reverseOrder->items->pluck('sku_name')->implode(', '),
+                //     'sku'           => $reverseOrder->items->pluck('sku_code')->implode(','),
                 // ];
 
-                $shipmentPayload = [
-                    // --- 1. Pickup Location (CUSTOMER Address) ---
-                    // The courier agent goes here to collect the parcel.
-                    'name'          => $reverseOrder->return_contact_name, // Customer name
-                    'phone'         => $reverseOrder->return_phone_no,
-                    'add'           => trim(implode(', ', array_filter([
-                        $reverseOrder->return_address_1,
-                        $reverseOrder->return_address_2,
-                        $reverseOrder->return_city,
-                        $reverseOrder->return_state,
-                        $reverseOrder->return_pincode,
-                    ]))),
-                    'pin'           => $reverseOrder->return_pincode,
-                    'city'          => $reverseOrder->return_city,
-                    'state'         => $reverseOrder->return_state,
-                    'country'       => 'India',
-
-                    // --- 2. Return Destination (YOUR WAREHOUSE Address) ---
-                    // The parcel is delivered back to here after pickup.
-                    'return_name'   => config('delhivery.pickup_location'),
-                    'return_phone'  => config('delhivery.return_phone'),
-                    'return_add'    => config('delhivery.return_add'),
-                    'return_pin'    => config('delhivery.return_pincode'),
-                    'return_city'   => config('delhivery.return_city'),
-                    'return_state'  => config('delhivery.return_state'),
-
-                    // --- 3. Shipment Specifics ---
-                    'order'         => $reverseOrder->reverse_order_number,
-                    'payment_mode'  => 'Pickup',          // Mandatory for RVP [citation:1]
-                    'shipment_type' => 'Reverse',
-                    'cod_amount'    => '0',               // No cash collection on reverse
-                    'total_amount'  => '0',
-                    'declared_value' => (string)$order->total_amount,
-                    'quantity'      => (string)$reverseOrder->items->sum('quantity'),
-                    'weight'        => '0.5',
-                    'products_desc' => $reverseOrder->items->pluck('sku_name')->implode(', '),
-                    'sku'           => $reverseOrder->items->pluck('sku_code')->implode(','),
-                ];
-
                 // --- TOP LEVEL WRAPPER ---
-                $finalPayload = [
-                    'pickup_location' => [
-                        // Must match your registered Delhivery warehouse name exactly (case-sensitive) [citation:1]
-                        'name' => config('delhivery.pickup_location'),
-                    ],
-                    'shipments' => [$shipmentPayload],
-                ];
+                // $finalPayload = [
+                //     'pickup_location' => [
+                //         // Must match your registered Delhivery warehouse name exactly (case-sensitive) [citation:1]
+                //         'name' => config('delhivery.pickup_location'),
+                //     ],
+                //     'shipments' => [$shipmentPayload],
+                // ];
 
                 Log::info('RETURN ORDER: Calling Delhivery createReverseShipment', [
                     'reverse_order_id' => $reverseOrder->id,
-                    'payload' => $finalPayload,
+                    'payload' => $shipmentPayload,
                     'items' => $reverseOrder->items->toArray(),
                 ]);
 
                 $shipmentResult = $delhiveryService->createReverseShipment(
-                    $finalPayload,
+                    $shipmentPayload,
                     $reverseOrder->items
                 );
 
