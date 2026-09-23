@@ -1386,7 +1386,9 @@
 
 
 
-<!-- ==================== BREADCRUMBS ==================== -->
+
+ @unless (request()->routeIs('page.index'))
+ <!-- ==================== BREADCRUMBS ==================== -->
 <div class="breadcrumbs-wrapper" id="breadcrumbs-container">
     <div class="container mx-auto px-4 py-3">
         <ol class="breadcrumbs__list" itemscope="" itemtype="https://schema.org/BreadcrumbList" id="breadcrumbs-list">
@@ -1394,6 +1396,7 @@
         </ol>
     </div>
 </div>
+@endunless
 
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
