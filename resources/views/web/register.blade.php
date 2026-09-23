@@ -153,7 +153,51 @@
 
                 <form action="{{ route('web.registerwithoutotp') }}" method="post" id="registerForm" class="space-y-5" novalidate>
                     @csrf
+                    @if(request()->boolean('buy_now'))
+                        <input type="hidden" name="buy_now" value="1">
 
+                        <input
+                            type="hidden"
+                            name="variant_id"
+                            value="{{ request('variant_id') }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="count"
+                            value="{{ request('count', 1) }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="type"
+                            value="{{ request('type') }}"
+                        >
+
+                        @if(request()->filled('product_id'))
+                            <input
+                                type="hidden"
+                                name="product_id"
+                                value="{{ request('product_id') }}"
+                            >
+                        @endif
+
+                        @if(request()->filled('event_id'))
+                            <input
+                                type="hidden"
+                                name="event_id"
+                                value="{{ request('event_id') }}"
+                            >
+                        @endif
+
+                        @if(request()->filled('custom_dimensions'))
+                            <input
+                                type="hidden"
+                                name="custom_dimensions"
+                                value="{{ request('custom_dimensions') }}"
+                            >
+                        @endif
+                    @endif
                     <!-- Email Field -->
                     <div id="emailField">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address / Phone Number</label>
@@ -233,8 +277,19 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Already have an account?
-                    <a href="{{ route('page.login') }}" class="text-purple-600 hover:text-purple-700 font-medium">
+                    {{-- <a href="{{ route('page.login') }}" class="text-purple-600 hover:text-purple-700 font-medium">
                         Sign In
+                    </a> --}}
+                    <a href="{{ route('page.login', request()->boolean('buy_now') ? [
+                        'buy_now' => 1,
+                        'variant_id' => request('variant_id'),
+                        'count' => request('count', 1),
+                        'type' => request('type'),
+                        'product_id' => request('product_id'),
+                        'event_id' => request('event_id'),
+                        'custom_dimensions' => request('custom_dimensions'),
+                    ] : []) }}" class="text-purple-600 hover:text-purple-700 font-medium">
+                        Login
                     </a>
                 </p>
             </div>
