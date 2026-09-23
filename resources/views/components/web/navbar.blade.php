@@ -1010,7 +1010,7 @@
                 @endphp
 
                 <a href="{{ route('wishlist.index') }}">
-                    <button class="relative text-gray-700 hover:text-black group"  type="button" aria-label="View wishlist">
+                    <button class="relative text-gray-700 hover:text-black group"  type="button" aria-label="View wishlist{{ $wishlistCount > 0 ? ' (' . $wishlistCount . ' items)' : '' }}">
 
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
                             <i class="fa fa-heart text-lg group-hover:text-red-600"  aria-hidden="true"></i>

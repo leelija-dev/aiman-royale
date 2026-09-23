@@ -173,6 +173,14 @@ class MetaConversionsService
                     $this->hashData((string) $user->id)
                 ];
             }
+            // Date of birth - send only when available
+            if (!empty($user->date_of_birth)) {
+                $dob = date('Ymd', strtotime($user->date_of_birth));
+
+                $userData['db'] = [
+                    $this->hashData($dob)
+                ];
+            }
 
         /*
         |--------------------------------------------------------------------------
@@ -235,6 +243,18 @@ class MetaConversionsService
                     $this->hashData($guestZip)
                 ];
             }
+            if ($guestDb = request()->cookie('_meta_guest_db')) {
+                $userData['db'] = [
+                    $this->hashData($guestDb)
+                ];
+            }
+            if ($guestFbc = request()->cookie('_meta_guest_fbc')) {
+                $userData['fbc'] = $guestFbc;
+            }
+            if ($guestFbp = request()->cookie('_meta_guest_fbp')) {
+                $userData['fbp'] = $guestFbp;
+            }
+          
         }
 
         /*
@@ -288,6 +308,7 @@ class MetaConversionsService
                 case 'ln':
                 case 'ct':
                 case 'st':
+                case 'db':
                 case 'zp':
                 case 'country':
                 case 'external_id':
@@ -316,7 +337,9 @@ public function rememberGuestContact(
     ?string $name = null,
     ?string $city = null,
     ?string $state = null,
-    ?string $zip = null
+    ?string $zip = null,
+    ?string $db = null,
+
 ): void
 {
     if ($email) {
@@ -337,6 +360,10 @@ public function rememberGuestContact(
     if ($zip) {
         Cookie::queue('_meta_guest_zp', $zip, 60 * 24 * 90);
     }
+    if ($db) {
+        Cookie::queue('_meta_guest_db', $db, 60 * 24 * 90);
+    }
+   
 }
     protected function hashData(?string $data): ?string
     {
