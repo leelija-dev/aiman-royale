@@ -44,7 +44,7 @@ class MetaConversionsService
             'event_time'       => time(),
             'action_source'    => 'website',
             'event_id'         => $eventId ?? (string) Str::uuid(),
-            'event_source_url' => $eventSourceUrl ?? request()->fullUrl(),
+            'event_source_url' => $eventSourceUrl ?? request()->url(),
             'user_data'        => $userData,
             'custom_data'      => empty($customData) ? (object)[] : $customData,
         ];
