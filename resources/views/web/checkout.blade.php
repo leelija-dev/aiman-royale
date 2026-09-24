@@ -311,10 +311,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             
                             <span class="text-gray-600">Subtotal</span>
                             {{-- <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span> --}}
-                            <span id="subtotal-original" class="text-gray-400 line-through mr-1 hidden">
+                            <span id="subtotal-original" class="text-gray-800 hidden" style="font-weight: bold;">
                                     {{ config('app.currency') }}<span id="subtotal-original-amount"></span>
                                 </span>
-                            <span>
+                            <span class="hidden">
                                 {{ config('app.currency') }}
                                 <span id="subtotal" data-original="{{ $total }}">
                                     {{ number_format($total, 2, '.', '') }}
@@ -1187,12 +1187,23 @@ function clearBuyNowAndRedirect() {
         console.log('Session cleared:', data);
         // Redirect to product page
         window.location.href = '{{ route("page.multi-product") }}';
+        goToPreviousPage();
     })
     .catch(error => {
         console.error('Error:', error);
         // Redirect anyway
         window.location.href = '{{ route("page.multi-product") }}';
+        goToPreviousPage();
     });
 }
+function goToPreviousPage() {
+        // Prefer the page the user actually came from (same-origin only, for safety)
+        if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+            window.location.href = document.referrer;
+        } else {
+            window.location.href = '{{ route("page.multi-product") }}';
+        }
+    }
 </script>
+
 @endsection
