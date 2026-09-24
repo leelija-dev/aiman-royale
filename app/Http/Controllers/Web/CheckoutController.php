@@ -59,48 +59,48 @@ class CheckoutController extends Controller
                 )
                 ->get();
         }
-    if (count($carts) == 0) {
+        if (count($carts) == 0) {
             session()->flash('force_cart_refresh', true);
             return redirect()->route('cart.index');
         }
- try {
-        $contentIds = [];
-        $numItems = 0;
-        $totalValue = 0;
+        try {
+            $contentIds = [];
+            $numItems = 0;
+            $totalValue = 0;
 
-        foreach ($carts as $cart) {
-            $contentIds[] = $cart->product_id;
-            $numItems += $cart->count;
-            $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
+            foreach ($carts as $cart) {
+                $contentIds[] = $cart->product_id;
+                $numItems += $cart->count;
+                $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
+            }
+            $metaUserData = [];
+
+            if (auth()->check()) {
+                $user = auth()->user();
+
+                $metaUserData = [
+                    'em' => $user->email ?? null,
+                    'ph' => $user->phone ?? null,
+                    'fn' => isset($user->name) ? explode(' ', trim($user->name))[0] : null,
+                    'ln' => isset($user->name)
+                        ? implode(' ', array_slice(explode(' ', trim($user->name)), 1))
+                        : null,
+                ];
+            }
+            $initiateCheckoutEventId = session()->pull('meta_initiate_checkout_event_id') ?? (string) \Illuminate\Support\Str::uuid();
+            $this->metaService->trackInitiateCheckout(
+                [
+                    'content_ids' => $contentIds,
+                    'value'       => $totalValue,
+                    'num_items'   => $numItems,
+                    'currency'    => 'INR',
+                ],
+                $metaUserData,
+                $initiateCheckoutEventId
+            );
+        } catch (\Exception $e) {
+            Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
         }
-        $metaUserData = [];
-
-        if (auth()->check()) {
-            $user = auth()->user();
-
-            $metaUserData = [
-                'em' => $user->email ?? null,
-                'ph' => $user->phone ?? null,
-                'fn' => isset($user->name) ? explode(' ', trim($user->name))[0] : null,
-                'ln' => isset($user->name)
-                    ? implode(' ', array_slice(explode(' ', trim($user->name)), 1))
-                    : null,
-            ];
-        }
-        $initiateCheckoutEventId = session()->pull('meta_initiate_checkout_event_id') ?? (string) \Illuminate\Support\Str::uuid();
-        $this->metaService->trackInitiateCheckout(
-            [
-                'content_ids' => $contentIds,
-                'value'       => $totalValue,
-                'num_items'   => $numItems,
-                'currency'    => 'INR',
-            ],
-            $metaUserData,
-            $initiateCheckoutEventId
-        );
-    } catch (\Exception $e) {
-        Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
-    }
         $occasions = \App\Models\Occasion::active()->get();
 
 
@@ -110,10 +110,10 @@ class CheckoutController extends Controller
             ->get();
 
 
-        
+
         $store = Store::where('is_active', true)->first();
         $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon','initiateCheckoutEventId'));
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon', 'initiateCheckoutEventId'));
     }
 
 
@@ -176,27 +176,10 @@ class CheckoutController extends Controller
                 $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
             }
 
-            // $checkoutData = [
-            //     'content_ids' => $contentIds,
-            //     'value' => $totalValue,
-            //     'num_items' => $numItems,
-            // ];
-
-            // $this->metaService->trackInitiateCheckout($checkoutData);
-
             // Log::info('Meta InitiateCheckout event tracked on placeOrder');
         } catch (\Exception $e) {
             Log::error('Failed to track Meta InitiateCheckout on placeOrder: ' . $e->getMessage());
         }
-
-        // Check pincode serviceability
-        // $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
-
-        // if (!$serviceability['serviceable']) {
-        //     return back()
-        //         ->withInput()
-        //         ->with('error', $serviceability['message'] . ' (Pincode: ' . $request->pinCode . ')');
-        // }
 
         // Check pincode serviceability
         $serviceability = $this->delhiveryService->isPincodeServiceable($request->pinCode);
@@ -240,7 +223,7 @@ class CheckoutController extends Controller
         }
         //Remove session 
         session()->forget('applied_coupons');
-        
+
         $checkoutSource = session('checkout_source', 'cart');
 
         if ($checkoutSource === 'buy_now') {
@@ -263,11 +246,6 @@ class CheckoutController extends Controller
         if ($carts->isEmpty()) {
             return back()->with('error', 'Your cart is empty');
         }
-
-        // Calculate total
-        // $subtotal = $carts->sum(function ($cart) {
-        //     return (($cart->variant_price - (($cart->variant_price * $cart->discount) / 100)) * $cart->count);
-        // });
 
         $shipping = 0;
         // $total = $request->grand_total;//$subtotal + $shipping;
@@ -357,7 +335,7 @@ class CheckoutController extends Controller
         }
 
         if ($checkoutSource === 'buy_now') {
-            session()->forget(['checkout_payload', 'checkout_source']);
+            session()->forget(['checkout_payload']); //, 'checkout_source'
         } else {
             session()->forget('applied_coupons');
             // DB::table('carts')->where('user_id', $user_id)->delete();
@@ -414,9 +392,9 @@ class CheckoutController extends Controller
         //                 'order_id' => $order_id
         //             ]);
         //         }
-//         Log::info([
-//     'grand_total' => $total,
-// ]);
+        //         Log::info([
+        //     'grand_total' => $total,
+        // ]);
         // Store order details in session
         session([
             'cashfree_order_id' => $order_id,
@@ -701,6 +679,7 @@ class CheckoutController extends Controller
             // Get ordered products for stock update
             $orderedProducts = DB::table('ordered_products')->where('order_id', $orderId)->get();
 
+
             $user = Auth::user();
             // Create Delhivery shipment if not already created
             if (!$order->waybill_number) {
@@ -773,76 +752,83 @@ class CheckoutController extends Controller
                 }
             }
 
-            if($comOrder){
-            // Clear cart
-            DB::table('carts')->where('user_id', auth()->id())->delete();
-            session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
+            if ($comOrder) {
+                // Clear cart
+                if (session('checkout_source') == 'buy_now') {
+                    $orderProduct = $orderedProducts->first();
+                    DB::table('carts')->where('user_id', auth()->id())
+                        ->where('variant_id', $orderProduct->variant_id)
+                        ->delete();
+                    session()->forget(['checkout_source']);
+                } else {
+                    DB::table('carts')->where('user_id', auth()->id())->delete();
+                }
+                session()->forget(['cashfree_order_id', 'cashfree_total', 'cashfree_currency', 'payment_method']);
             }
             // Track Purchase event for COD orders
-           // Track Purchase event for COD orders
-try {
-    $contentIds = [];
-    $numItems = 0;
+            // Track Purchase event for COD orders
+            try {
+                $contentIds = [];
+                $numItems = 0;
 
-    foreach ($orderedProducts as $item) {
-        $contentIds[] = $item->product_id;
-        $numItems += $item->quantity;
-    }
+                foreach ($orderedProducts as $item) {
+                    $contentIds[] = $item->product_id;
+                    $numItems += $item->quantity;
+                }
 
-    $purchaseData = [
-        'order_id'    => $orderId,
-        'content_ids' => $contentIds,
-        'value'       => (float) $order->total_amount,
-        'num_items'   => $numItems,
-        'currency'    => 'INR',
-    ];
+                $purchaseData = [
+                    'order_id'    => $orderId,
+                    'content_ids' => $contentIds,
+                    'value'       => (float) $order->total_amount,
+                    'num_items'   => $numItems,
+                    'currency'    => 'INR',
+                ];
 
-    // Pass RAW customer data.
-    // MetaConversionsService will hash it.
-    $customer = DB::table('users')
-    ->where('id', $order->user_id)
-    ->first();
+                // Pass RAW customer data.
+                // MetaConversionsService will hash it.
+                $customer = DB::table('users')
+                    ->where('id', $order->user_id)
+                    ->first();
 
-    $extraUserData = [
-    'em' => $customer->email ?? null,
-    'ph' => $customer->phone ?? $order->phone_no ?? null,
-    'ct' => $order->city ?? null,
-    'st' => $order->state ?? null,
-    'zp' => $order->pincode ?? null,
-];
+                $extraUserData = [
+                    'em' => $customer->email ?? null,
+                    'ph' => $customer->phone ?? $order->phone_no ?? null,
+                    'ct' => $order->city ?? null,
+                    'st' => $order->state ?? null,
+                    'zp' => $order->pincode ?? null,
+                ];
 
-    if (!empty($customer->name)) {
-        $nameParts = preg_split('/\s+/', trim($customer->name), 2);
+                if (!empty($customer->name)) {
+                    $nameParts = preg_split('/\s+/', trim($customer->name), 2);
 
-        $extraUserData['fn'] = $nameParts[0] ?? null;
-        $extraUserData['ln'] = $nameParts[1] ?? null;
-    }
+                    $extraUserData['fn'] = $nameParts[0] ?? null;
+                    $extraUserData['ln'] = $nameParts[1] ?? null;
+                }
 
-    $this->metaService->trackPurchase(
-        $purchaseData,
-        $extraUserData,
-        (string) $orderId
-    );
-    // Browser Pixel deduplication
-    session([
-        'purchase_event_data' => json_encode([
-            'content_ids'  => $contentIds,
-            'content_type' => 'product',
-            'value'        => (float) $order->total_amount,
-            'currency'     => 'INR',
-            'num_items'    => $numItems,
-            'order_id'     => $orderId,
-            'event_id'     => (string) $orderId,
-        ])
-    ]);
+                $this->metaService->trackPurchase(
+                    $purchaseData,
+                    $extraUserData,
+                    (string) $orderId
+                );
+                // Browser Pixel deduplication
+                session([
+                    'purchase_event_data' => json_encode([
+                        'content_ids'  => $contentIds,
+                        'content_type' => 'product',
+                        'value'        => (float) $order->total_amount,
+                        'currency'     => 'INR',
+                        'num_items'    => $numItems,
+                        'order_id'     => $orderId,
+                        'event_id'     => (string) $orderId,
+                    ])
+                ]);
 
-    Log::info('Meta Purchase tracked for COD order: ' . $orderId);
+                Log::info('Meta Purchase tracked for COD order: ' . $orderId);
+            } catch (\Exception $e) {
+                Log::error('Failed to track Meta Purchase (COD): ' . $e->getMessage());
+            }
 
-} catch (\Exception $e) {
-    Log::error('Failed to track Meta Purchase (COD): ' . $e->getMessage());
-}
-
-            return redirect()->route('user.order-history',base64_encode(Auth::user()->id))->with('success', 'Order placed successfully! You will pay cash on delivery.');
+            return redirect()->route('user.order-history', base64_encode(Auth::user()->id))->with('success', 'Order placed successfully! You will pay cash on delivery.');
         } catch (\Exception $e) {
             Log::error('COD processing error: ' . $e->getMessage());
             return redirect()->route('checkout.payment')->with('error', 'Failed to process COD order. Please try again.');
@@ -1038,7 +1024,7 @@ try {
             return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
                 ->with('error', 'Payment Cancelled');
         } //end cashfree cancel
-        
+
 
         // ✅ Get the actual transaction ID from session
         $transactionId = session('cashfree_transaction_id');
@@ -1147,7 +1133,16 @@ try {
         $this->sendOrderEmailConfirmation($orderId, $request->email ?? 'N/A', $customerName);
 
         // Clear cart and session
-        DB::table('carts')->where('user_id', auth()->id())->delete();
+        // DB::table('carts')->where('user_id', auth()->id())->delete();
+        if (session('checkout_source') == 'buy_now') {
+            $orderProduct = $orderItems->first();
+            DB::table('carts')->where('user_id', auth()->id())
+                ->where('variant_id', $orderProduct->variant_id)
+                ->delete();
+            session()->forget(['checkout_source']);
+        } else {
+            DB::table('carts')->where('user_id', auth()->id())->delete();
+        }
         session()->forget([
             'cashfree_order_id',
             'cashfree_total',
@@ -1157,67 +1152,67 @@ try {
             'cf_order_id'
         ]);
 
-       // Track Purchase event with Meta Conversions API
-try {
-    $orderItems = DB::table('ordered_products')
-        ->where('order_id', $orderId)
-        ->get();
+        // Track Purchase event with Meta Conversions API
+        try {
+            $orderItems = DB::table('ordered_products')
+                ->where('order_id', $orderId)
+                ->get();
 
-    $contentIds = [];
-    $numItems = 0;
+            $contentIds = [];
+            $numItems = 0;
 
-    foreach ($orderItems as $item) {
-        $contentIds[] = $item->product_id;
-        $numItems += $item->quantity;
-    }
+            foreach ($orderItems as $item) {
+                $contentIds[] = $item->product_id;
+                $numItems += $item->quantity;
+            }
 
-    $purchaseData = [
-    'order_id'    => $orderId,
-    'content_ids' => $contentIds,
-    'value'       => (float) $order->total_amount,
-    'num_items'   => $numItems,
-    'currency'    => 'INR',
-];
+            $purchaseData = [
+                'order_id'    => $orderId,
+                'content_ids' => $contentIds,
+                'value'       => (float) $order->total_amount,
+                'num_items'   => $numItems,
+                'currency'    => 'INR',
+            ];
 
-$customer = DB::table('users')
-    ->where('id', $order->user_id)
-    ->first();
+            $customer = DB::table('users')
+                ->where('id', $order->user_id)
+                ->first();
 
-$extraUserData = [
-    'em' => $customer->email ?? null,
-    'ph' => $customer->phone ?? $order->phone_no ?? null,
-    'ct' => $order->city ?? null,
-    'st' => $order->state ?? null,
-    'zp' => $order->pincode ?? null,
-];
+            $extraUserData = [
+                'em' => $customer->email ?? null,
+                'ph' => $customer->phone ?? $order->phone_no ?? null,
+                'ct' => $order->city ?? null,
+                'st' => $order->state ?? null,
+                'zp' => $order->pincode ?? null,
+            ];
 
-if (!empty($customer->name)) {
-    $nameParts = preg_split('/\s+/', trim($customer->name), 2);
+            if (!empty($customer->name)) {
+                $nameParts = preg_split('/\s+/', trim($customer->name), 2);
 
-    $extraUserData['fn'] = $nameParts[0] ?? null;
-    $extraUserData['ln'] = $nameParts[1] ?? null;
-}
-$this->metaService->trackPurchase(
-    $purchaseData,
-    $extraUserData,
-    (string) $orderId
-);
+                $extraUserData['fn'] = $nameParts[0] ?? null;
+                $extraUserData['ln'] = $nameParts[1] ?? null;
+            }
+            $this->metaService->trackPurchase(
+                $purchaseData,
+                $extraUserData,
+                (string) $orderId
+            );
 
-    // For frontend Pixel deduplication
-    session(['purchase_event_data' => json_encode([
-        'content_ids'  => $contentIds,
-        'content_type' => 'product',
-        'value'        => $order->total_amount,
-        'currency'     => 'INR',
-        'num_items'    => $numItems,
-        'order_id'     => $orderId,
-        'event_id'     => (string) $orderId,
-    ])]);
+            // For frontend Pixel deduplication
+            session(['purchase_event_data' => json_encode([
+                'content_ids'  => $contentIds,
+                'content_type' => 'product',
+                'value'        => $order->total_amount,
+                'currency'     => 'INR',
+                'num_items'    => $numItems,
+                'order_id'     => $orderId,
+                'event_id'     => (string) $orderId,
+            ])]);
 
-    Log::info('Meta Purchase tracked for order: ' . $orderId);
-} catch (\Exception $e) {
-    Log::error('Failed to track Meta Purchase: ' . $e->getMessage());
-}
+            Log::info('Meta Purchase tracked for order: ' . $orderId);
+        } catch (\Exception $e) {
+            Log::error('Failed to track Meta Purchase: ' . $e->getMessage());
+        }
 
         return redirect()->route('user.order-history', base64_encode(Auth::user()->id))
             ->with('success', 'Payment successful! Order placed.');
@@ -1436,71 +1431,70 @@ $this->metaService->trackPurchase(
     }
 
     private function sendOrderEmailConfirmation($orderId, $customerEmail, $customerName)
-{
-    try {
-        // Fetch order details
-        $order = \App\Models\Order::with(['items', 'user'])->find($orderId);
-        
-        if (!$order) {
-            Log::error('Order not found for email confirmation', ['order_id' => $orderId]);
+    {
+        try {
+            // Fetch order details
+            $order = \App\Models\Order::with(['items', 'user'])->find($orderId);
+
+            if (!$order) {
+                Log::error('Order not found for email confirmation', ['order_id' => $orderId]);
+                return false;
+            }
+
+            // Get admin email from configuration
+            $adminEmail = config('mail.admin_email') ?? 'aimanroyale9@gmail.com';
+
+            // Send email to customer
+            \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmation($order, $customerName));
+
+            // Send email to admin
+            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order, $customerName));
+
+            Log::info('Order email confirmation sent', [
+                'order_id' => $orderId,
+                'customer_email' => $customerEmail,
+                'admin_email' => $adminEmail
+            ]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Email send error: ' . $e->getMessage(), [
+                'order_id' => $orderId,
+                'customer_email' => $customerEmail ?? 'unknown'
+            ]);
             return false;
         }
-
-        // Get admin email from configuration
-        $adminEmail = config('mail.admin_email') ?? 'aimanroyale9@gmail.com';
-
-        // Send email to customer
-        \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmation($order, $customerName));
-
-        // Send email to admin
-        \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order, $customerName));
-
-        Log::info('Order email confirmation sent', [
-            'order_id' => $orderId,
-            'customer_email' => $customerEmail,
-            'admin_email' => $adminEmail
-        ]);
-
-        return true;
-
-    } catch (\Exception $e) {
-        Log::error('Email send error: ' . $e->getMessage(), [
-            'order_id' => $orderId,
-            'customer_email' => $customerEmail ?? 'unknown'
-        ]);
-        return false;
     }
-}
 
     public function clearBuyNowSession(Request $request)
-{
-    try {
-        // Clear all buy now related session data
-        session()->forget([
-            'checkout_source',
-            'checkout_payload',
-            'buy_now_active',
-            'buy_now_product_id'
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Buy now session cleared'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 500);
-    }
-}
+    {
+        try {
+            // Clear all buy now related session data
+            session()->forget([
+                'checkout_source',
+                'checkout_payload',
+                'buy_now_active',
+                'buy_now_product_id'
+            ]);
 
-public function checkBuyNowSession(Request $request)
-{
-    return response()->json([
-        'is_buy_now' => session()->has('checkout_source') && 
-                       session()->get('checkout_source') === 'buy_now',
-        'has_payload' => session()->has('checkout_payload')
-    ]);
-}
+            return response()->json([
+                'success' => true,
+                'message' => 'Buy now session cleared'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkBuyNowSession(Request $request)
+    {
+        return response()->json([
+            'is_buy_now' => session()->has('checkout_source') &&
+                session()->get('checkout_source') === 'buy_now',
+            'has_payload' => session()->has('checkout_payload')
+        ]);
+    }
 }
