@@ -51,7 +51,8 @@ class ProductController extends Controller
                         'offer_products.*',
                         'product_variants.discount'
                     )
-                    ->orderByDesc('product_variants.discount')
+                    // ->orderByDesc('product_variants.discount')
+                    ->orderBy('products.created_at', 'desc')
                     ->with([
                         'productVariant',
                         'product.category',
@@ -61,7 +62,8 @@ class ProductController extends Controller
                 
                 $query = Product::where('is_active', 1)
                     ->where('products.ready_to_ship', 1)
-                    ->with(['variants', 'category', 'occasion']);
+                    ->with(['variants', 'category', 'occasion'])
+                    ->orderBy('products.created_at', 'desc');
 
                 // Filter by search term
                 if ($request->filled('search') != 'offers' && $request->filled('search') != 'offer') {
