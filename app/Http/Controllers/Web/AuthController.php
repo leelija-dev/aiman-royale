@@ -159,13 +159,7 @@ class AuthController extends Controller
 
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
-            try {
-                $this->metaService->trackCompleteRegistration();
-
-                Log::info('Meta CompleteRegistration tracked for user: ' . $user->id);
-            } catch (\Exception $e) {
-                Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
-            }
+            $this->trackRegistration();
             // Store JWT token in session
             session(['jwt_token' => $token]);
             if (
@@ -407,12 +401,12 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-            try {
-                $this->metaService->trackCompleteRegistration();
-                Log::info('Meta CompleteRegistration tracked for user: ' . $user->id);
-            } catch (\Exception $e) {
-                Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
-            }
+           $this->trackRegistration([
+                'em' => $user->email,
+                'ph' => $user->phone,
+                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
@@ -565,14 +559,19 @@ class AuthController extends Controller
             Auth::login($user);
 
             // Track CompleteRegistration event for Meta Conversions API
-            try {
-                $this->metaService->trackCompleteRegistration();
+            // try {
+            //     $this->metaService->trackCompleteRegistration();
 
-                Log::info('Meta CompleteRegistration event tracked for user: ' . $user->id);
-            } catch (\Exception $e) {
-                Log::error('Failed to track Meta CompleteRegistration event: ' . $e->getMessage());
-            }
-
+            //     Log::info('Meta CompleteRegistration event tracked for user: ' . $user->id);
+            // } catch (\Exception $e) {
+            //     Log::error('Failed to track Meta CompleteRegistration event: ' . $e->getMessage());
+            // }
+            $this->trackRegistration([
+                'em' => $user->email,
+                'ph' => $user->phone,
+                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
             session(['registration_success' => true]);
@@ -1288,18 +1287,12 @@ class AuthController extends Controller
 
             Auth::login($user);
             // Track CompleteRegistration for Google signup
-            try {
-                // $this->metaService->trackCompleteRegistration();
-                $this->metaService->trackCompleteRegistration([
-                    'em' => $user->email,
-                    'ph' => $user->phone,
-                    'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
-                    'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
-                ]);
-                Log::info('Meta CompleteRegistration tracked for Google user: ' . $user->id);
-            } catch (\Exception $e) {
-                Log::error('Meta CompleteRegistration (Google) failed: ' . $e->getMessage());
-            }
+            $this->trackRegistration([
+                'em' => $user->email,
+                'ph' => $user->phone,
+                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            ]);
             // Generate JWT token (if using JWT)
             $token = auth()->login($user); // Or however you generate your JWT
 
@@ -1327,4 +1320,18 @@ class AuthController extends Controller
                 ->with('error', 'Failed to create account. Please try again.');
         }
     }
+    private function trackRegistration(array $userData = []): void
+{
+    $eventId = (string) Str::uuid();
+
+    // Browser fires the same event on the next page load (layout reads this)
+    session()->put('meta_registration_event_id', $eventId);
+
+    try {
+        $this->metaService->trackCompleteRegistration($userData, $eventId);
+        Log::info('Meta CompleteRegistration tracked', ['event_id' => $eventId]);
+    } catch (\Exception $e) {
+        Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+    }
+}
 }

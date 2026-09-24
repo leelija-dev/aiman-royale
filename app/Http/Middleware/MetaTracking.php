@@ -5,32 +5,31 @@ namespace App\Http\Middleware;
 use App\Services\MetaConversionsService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
+
 class MetaTracking
 {
-    protected MetaConversionsService $meta;
+    public function __construct(protected MetaConversionsService $meta) {}
 
-    public function __construct(MetaConversionsService $meta)
+    public function handle(Request $request, Closure $next): Response
     {
-        $this->meta = $meta;
-    }
-
-    public function handle(
-        Request $request,
-        Closure $next
-    ): Response {
-
-        // First allow Laravel to process the request
-        // $response = $next($request);
-        // One ID shared by the browser Pixel and this server event (deduplication)
+        // One ID per page load, shared by browser Pixel and server event
         $eventId = (string) Str::uuid();
         $request->attributes->set('meta_event_id', $eventId);
         view()->share('metaEventId', $eventId);
 
-         $advancedMatching = [];
+        // Guests: create the ID BEFORE the page renders so the browser can send it too
+        if (!Auth::check() && !$request->cookie('_meta_gid')) {
+            $gid = (string) Str::uuid();
+            Cookie::queue('_meta_gid', $gid, 60 * 24 * 365);
+            $request->cookies->set('_meta_gid', $gid);
+        }
+
+        $advancedMatching = [];
         if (Auth::check()) {
             $user = Auth::user();
             if (!empty($user->email)) $advancedMatching['em'] = $user->email;
@@ -45,56 +44,41 @@ class MetaTracking
             $advancedMatching['external_id'] = $guestId;
         }
         view()->share('metaAdvancedMatching', $advancedMatching);
-        // First allow Laravel to process the request
-        $response = $next($request);
-        // Track normal successful GET page requests
-        // if (
-        //     $request->isMethod('GET') &&
-        //     !$request->ajax() &&
-        //     $response->getStatusCode() === 200
-        // ) {
-        if (
-            $request->isMethod('GET') &&
-            !$request->ajax() &&
-            $response->getStatusCode() === 200 &&
-            str_contains((string) $response->headers->get('Content-Type'), 'text/html') &&
-            !preg_match('/bot|crawl|spider|slurp|facebookexternalhit|preview/i', (string) $request->userAgent())
-        ) {
-            try {
 
-                // $this->meta->sendEvent(
-                //     'PageView',
-                //     // [
-                //     //     'client_ip_address' => $request->ip(),
-                //     //     'client_user_agent' => $request->userAgent(),
-                //     // ],
-                //      $this->meta->createUserData(),
-                //     [
-                //         'currency' => 'INR',
-                //         'value' => 0,
-                //     ]
-                // );
-                $this->meta->sendEvent(
-                    'PageView',
-                    $this->meta->createUserData(),
-                    [],
-                    $request->attributes->get('meta_event_id')
-                );
+        return $next($request);
+    }
 
-                Log::info('Meta PageView sent automatically', [
-                    'url' => $request->fullUrl(),
-                ]);
-
-            } catch (\Throwable $e) {
-
-                // Meta failure should never break the website
-                Log::error('Meta PageView failed', [
-                    'url' => $request->fullUrl(),
-                    'error' => $e->getMessage(),
-                ]);
-            }
+    /** Runs after the response has been sent, so Meta latency never slows the page. */
+    public function terminate(Request $request, Response $response): void
+    {
+        if (!$this->shouldTrack($request, $response)) {
+            return;
         }
 
-        return $response;
+        try {
+            $this->meta->sendEvent(
+                'PageView',
+                $this->meta->createUserData(),
+                [],
+                $request->attributes->get('meta_event_id')
+            );
+        } catch (\Throwable $e) {
+            Log::error('Meta PageView failed', ['url' => $request->fullUrl(), 'error' => $e->getMessage()]);
+        }
+    }
+
+    protected function shouldTrack(Request $request, Response $response): bool
+    {
+        $ua = (string) $request->userAgent();
+
+        return $request->isMethod('GET')
+            && !$request->ajax()
+            && !$request->expectsJson()
+            && $response->getStatusCode() === 200
+            && str_contains((string) $response->headers->get('Content-Type'), 'text/html')
+            && $ua !== ''
+            && !preg_match('/bot|crawl|spider|slurp|facebookexternalhit|preview|lighthouse|headless|pingdom|uptime|monitor|curl|wget|python|go-http|axios|pagespeed|gtmetrix/i', $ua)
+            && !in_array($request->headers->get('Purpose'), ['prefetch', 'preview'], true)
+            && $request->headers->get('Sec-Purpose') === null;
     }
 }

@@ -29,6 +29,9 @@ class MetaConversionsService
         ?string $eventId = null,
         ?string $eventSourceUrl = null
     ): array {
+        if (!in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com'])) {
+            return ['success' => false, 'message' => 'Skipped: non-production host'];
+        }
         if (!$this->pixelId || !$this->accessToken) {
             Log::warning('Meta CAPI disabled: Missing credentials');
             return ['success' => false, 'message' => 'Meta credentials not configured'];
