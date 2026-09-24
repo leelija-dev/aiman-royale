@@ -3708,7 +3708,7 @@
             const buyNowBtn = document.getElementById('buy-now');
             if (!buyNowBtn) return;
 
-            const variantId = buyNowBtn.getAttribute('data-variant-id');
+            let variantId = buyNowBtn.getAttribute('data-variant-id');
 
             if (!variantId && typeof selectedVariantId !== 'undefined') {
                 variantId = selectedVariantId;
@@ -3869,7 +3869,12 @@
         };
     }
 
-   
+   const getCookie = n => {
+    const m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+    };
+    requestData.fbc = getCookie('_fbc');
+    requestData.fbp = getCookie('_fbp');
 
     // 3. Call server
     const originalText = addToCartBtn.innerHTML;
@@ -3922,7 +3927,7 @@
                     addToCartBtn.classList.add('bg-green-600');
                     addToCartBtn.disabled = true;
                 } else {
-                    const variantId = addToCartBtn.getAttribute('data-variant-id');
+                    let variantId = addToCartBtn.getAttribute('data-variant-id');
                     checkVariantInCart(variantId);
                 }
             } else {
