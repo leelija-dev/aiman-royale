@@ -306,13 +306,14 @@ class MetaConversionsService
             switch ($key) {
 
                 case 'em':
-                    $hashed = $this->hashData($value);
+                    $email = trim(strtolower($value));
 
-                    if ($hashed) {
-                        $userData['em'] = [$hashed];
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $userData['em'] = [
+                            hash('sha256', $email)
+                        ];
                     }
                     break;
-
                 case 'ph':
                     $hashed = $this->hashPhone($value);
 
@@ -388,19 +389,36 @@ public function rememberGuestContact(
         return hash('sha256', strtolower(trim($data)));
     }
 
-    public function hashPhone(?string $phone, string $countryCode = '91'): ?string
-    {
-        if (empty($phone)) return null;
-
-        $phone = preg_replace('/[^0-9]/', '', $phone);
-
-        // Add country code if 10 digit number (India)
-        if (strlen($phone) === 10) {
-            $phone = $countryCode . $phone;
-        }
-
-        return hash('sha256', $phone);
+   public function hashPhone(?string $phone, string $countryCode = '91'): ?string
+{
+    if (empty($phone)) {
+        return null;
     }
+
+    // Keep digits only
+    $phone = preg_replace('/\D+/', '', $phone);
+
+    if (empty($phone)) {
+        return null;
+    }
+
+    // 10-digit Indian number
+    if (strlen($phone) === 10) {
+        $phone = $countryCode . $phone;
+    }
+
+    // International phone number must be 8–15 digits
+    if (!preg_match('/^\d{8,15}$/', $phone)) {
+        return null;
+    }
+
+    // Reject obvious invalid/placeholder numbers
+    if (preg_match('/^(\d)\1+$/', $phone)) {
+        return null;
+    }
+
+    return hash('sha256', $phone);
+}
         /** fbc from cookie, else rebuilt from ?fbclid= */
     protected function resolveFbc(): ?string
     {
