@@ -917,7 +917,7 @@ class HomeController extends Controller
                     'product_variants.price',
                     'product_variants.discount_price',
                     'product_variants.stock'
-                )->orderByDesc('product_variants.discount');
+                );//->orderByDesc('product_variants.discount');
             // dd($query);
         } else {
             // dd('else');
