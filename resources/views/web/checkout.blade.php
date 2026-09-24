@@ -225,9 +225,19 @@
                             <p class="text-sm text-gray-500">Qty: {{ $cart->count }}</p>
                             <p class="font-small" style="font-size: 14px;">
 
-                            <span id="product-total-{{ $cart->cart_id }}">
+                            {{-- <span id="product-total-{{ $cart->cart_id }}">
+                                {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
+                            </span> --}}
+                            
+                            {{-- <span id="product-total-{{ $cart->cart_id }}"> --}}
+                            <span id="product-original-{{ $cart->cart_id }}"
+                                class="text-gray-400 line-through mr-1 hidden">
                                 {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
                             </span>
+                            <span id="product-total-{{ $cart->cart_id }}" class="font-semibold">
+                                {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
+                            </span>
+                            <span id="product-savings-{{ $cart->cart_id }}" class="text-green-600 text-xs ml-1 hidden"></span>
                         </p>
                             <div class="flex items-center gap-1 mt-2">
                                 {{-- <input type="text" id="coupon-{{ $cart->cart_id }}"
@@ -298,13 +308,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
+                            
                             <span class="text-gray-600">Subtotal</span>
                             {{-- <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span> --}}
+                            <span id="subtotal-original" class="text-gray-400 line-through mr-1 hidden">
+                                    {{ config('app.currency') }}<span id="subtotal-original-amount"></span>
+                                </span>
                             <span>
                                 {{ config('app.currency') }}
                                 <span id="subtotal" data-original="{{ $total }}">
                                     {{ number_format($total, 2, '.', '') }}
                                 </span>
+                            </span>
+                        </div>
+                        <div id="coupon-savings-row" class="flex justify-between hidden">
+                            <span class="text-green-600 text-sm">Coupon savings</span>
+                            <span class="text-green-600 text-sm font-medium">
+                                - {{ config('app.currency') }}<span id="coupon-savings-amount">0.00</span>
                             </span>
                         </div>
                         <div class="flex justify-between items-start">
@@ -879,7 +899,21 @@ msg.innerHTML = "Something went wrong.";
             .reduce((sum, value) => sum + value, 0);
 
         let subtotal = originalSubtotal - totalProductDiscount;
+               let currency = "{{ config('app.currency') }}";
+        const subtotalOriginalEl = document.getElementById("subtotal-original");
+        const subtotalOriginalAmt = document.getElementById("subtotal-original-amount");
+        const couponSavingsRow = document.getElementById("coupon-savings-row");
+        const couponSavingsAmt = document.getElementById("coupon-savings-amount");
 
+        if (totalProductDiscount > 0) {
+            if (subtotalOriginalAmt) subtotalOriginalAmt.innerHTML = originalSubtotal.toFixed(2);
+            if (subtotalOriginalEl) subtotalOriginalEl.classList.remove("hidden");
+            if (couponSavingsAmt) couponSavingsAmt.innerHTML = totalProductDiscount.toFixed(2);
+            if (couponSavingsRow) couponSavingsRow.classList.remove("hidden");
+        } else {
+            if (subtotalOriginalEl) subtotalOriginalEl.classList.add("hidden");
+            if (couponSavingsRow) couponSavingsRow.classList.add("hidden");
+        }
         // -----------------------------
         // Auto Special Discount
         // -----------------------------
@@ -980,8 +1014,25 @@ msg.innerHTML = "Something went wrong.";
             let discountAmount = productTotal * discount / 100;
             let newProductTotal = productTotal - discountAmount;
 
-            document.getElementById("product-total-" + cartId).innerHTML =
+            // document.getElementById("product-total-" + cartId).innerHTML =
+            //     newProductTotal.toFixed(2);
+                        let currency = "{{ config('app.currency') }}";
+
+            let originalEl = document.getElementById("product-original-" + cartId);
+            if (originalEl) {
+                originalEl.innerHTML = currency + productTotal.toFixed(2);
+                originalEl.classList.remove("hidden");
+            }
+
+             document.getElementById("product-total-" + cartId).innerHTML =
                 newProductTotal.toFixed(2);
+                currency + newProductTotal.toFixed(2);
+
+            let productSavingsEl = document.getElementById("product-savings-" + cartId);
+            if (productSavingsEl) {
+                productSavingsEl.innerHTML = "(" + discount + "% off, you saved " + currency + discountAmount.toFixed(2) + ")";
+                productSavingsEl.classList.remove("hidden");
+            }
 
             window.appliedCoupons[cartId] = {
                 coupon_id: res.coupon.id,
@@ -1015,13 +1066,13 @@ msg.innerHTML = "Something went wrong.";
     };
 
     window.customRound = function(value) {
-        const decimal = value - Math.floor(value);
+        // const decimal = value - Math.floor(value);
+         return Math.floor(value);
+        // if (decimal >= 0.5) {
+        //     return Math.ceil(value);
+        // }
 
-        if (decimal >= 0.5) {
-            return Math.ceil(value);
-        }
-
-        return Math.round(value * 10) / 10;
+        // return Math.round(value * 10) / 10;
     };
 
     // Auto calculate on page load
