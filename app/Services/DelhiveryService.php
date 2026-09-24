@@ -596,265 +596,158 @@ class DelhiveryService
     }
 
     
-// public function createReverseShipment(array $reverseOrderData, $orderItems)
-// {
-//     $products = [];
-//     foreach ($orderItems as $item) {
-//         $products[] = [
-//             'name' => $item->sku_name ?? $item->name ?? 'Product',
-//             'sku' => (string) ($item->sku_code ?? $item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
-//             'quantity' => (int) ($item->quantity ?? 1),
-//             'price' => (float) ($item->price ?? 0),
-//         ];
-//     }
-
-//     // Get warehouse/return address from config using the correct keys
-//     $warehouseAddress = [
-//         'name' => config('services.delhivery.return_name', 'Aiman Royale'),
-//         'add' => config('services.delhivery.return_add', '0, ISLAMPUR, KADAMBAGACHI, BARASAT, North 24 Parganas, West Bengal, 700125'),
-//         'city' => config('services.delhivery.return_city', 'Barasat'),
-//         'state' => config('services.delhivery.return_state', 'West Bengal'),
-//         'country' => config('services.delhivery.return_country', 'India'),
-//         'pin' => config('services.delhivery.return_pincode', '700125'),
-//         'phone' => config('services.delhivery.return_phone', '8240525716'),
-//     ];
-
-//     // Get customer address (this is where the package will be picked up from)
-//     $customerAddress = [
-//         'name' => $reverseOrderData['return_contact_name'] ?? 'Customer',
-//         'add' => trim(($reverseOrderData['return_address_1'] ?? '') . ' ' . ($reverseOrderData['return_address_2'] ?? '')),
-//         'city' => $reverseOrderData['return_city'] ?? '',
-//         'state' => $reverseOrderData['return_state'] ?? '',
-//         'country' => 'India',
-//         'pin' => $reverseOrderData['return_pincode'] ?? '',
-//         'phone' => $reverseOrderData['return_phone_no'] ?? '',
-//     ];
-
-//     // Build the correct payload for reverse flow
-//     // $shipmentData = [
-//     //     // This is where the pickup will happen (customer's address)
-//     //     'pickup_location' => [
-//     //         'name' => $customerAddress['name'],
-//     //         'add' => $customerAddress['add'],
-//     //         'city' => $customerAddress['city'],
-//     //         'country' => $customerAddress['country'],
-//     //         'phone' => $customerAddress['phone'],
-//     //         'pin' => $customerAddress['pin']
-//     //     ],
-//     //     'shipments' => [
-//     //         [
-//     //             // These are the customer details (same as pickup location for reverse)
-//     //             'name' => $customerAddress['name'],
-//     //             'add' => $customerAddress['add'],
-//     //             'city' => $customerAddress['city'],
-//     //             'state' => $customerAddress['state'],
-//     //             'country' => $customerAddress['country'],
-//     //             'pin' => $customerAddress['pin'],
-//     //             'phone' => $customerAddress['phone'],
-                
-//     //             // Order details
-//     //             'order' => (string) ($reverseOrderData['reverse_order_number'] ?? $reverseOrderData['order_id'] ?? ''),
-//     //             'order_date' => date('Y-m-d H:i:s'),
-                
-//     //             // CRITICAL: Must be 'Pickup' for reverse flow
-//     //             'payment_mode' => 'Pickup',
-                
-//     //             // Shipping details
-//     //             'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
-//     //             'weight' => isset($reverseOrderData['weight']) ? $reverseOrderData['weight'] . ' gm' : '500.0 gm',
-//     //             'quantity' => (int) ($reverseOrderData['total_quantity'] ?? 1),
-//     //             'products_desc' => $reverseOrderData['products_desc'] ?? 'Return products',
-                
-//     //             // Financial details
-//     //             'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
-//     //             'cod_amount' => 0, // Always 0 for reverse pickup
-                
-//     //             // DESTINATION: This is where the package will be delivered (your warehouse)
-//     //             // All these are MANDATORY for reverse flow
-//     //             'return_name' => 'Aiman Royale',
-//     //             'return_add' => $warehouseAddress['add'],
-//     //             'return_city' => $warehouseAddress['city'],
-//     //             'return_state' => $warehouseAddress['state'],
-//     //             'return_country' => $warehouseAddress['country'],
-//     //             'return_pin' => $warehouseAddress['pin'],
-//     //             'return_phone' => $warehouseAddress['phone'],
-                
-//     //             // GST details (if applicable)
-//     //             'seller_gst_tin' => config('services.delhivery.seller_gst_tin', null),
-//     //             'consignee_gst_tin' => $reverseOrderData['consignee_gst_tin'] ?? null,
-                
-//     //             // Optional fields
-//     //             'category_of_goods' => $reverseOrderData['category_of_goods'] ?? 'General',
-//     //             'invoice_reference' => $reverseOrderData['invoice_reference'] ?? '1',
-//     //             'extra_parameters' => [
-//     //                 'return_reason' => $reverseOrderData['return_reason'] ?? 'Customer Return'
-//     //             ]
-//     //         ]
-//     //     ]
-//     // ];
-
-//         $shipmentData = [
-//         // Root level pickup_location - just the warehouse name
-//         'pickup_location' => [
-//             'name' => 'Aiman Royale' // Your registered warehouse name
-//         ],
-//         'shipments' => [
-//             [
-//                 // Customer details (where pickup happens)
-//                 'name' => $customerAddress['name'],
-//                 'add' => $customerAddress['add'],
-//                 'city' => $customerAddress['city'],
-//                 'state' => $customerAddress['state'],
-//                 'country' => $customerAddress['country'],
-//                 'pin' => $customerAddress['pin'],
-//                 'phone' => $customerAddress['phone'],
-                
-//                 // Order details
-//                 'order' => (string) ($reverseOrderData['reverse_order_number'] ?? $reverseOrderData['order_id'] ?? ''),
-//                 'order_date' => date('Y-m-d H:i:s'),
-                
-//                 // CRITICAL: Must be 'Pickup' for reverse flow
-//                 'payment_mode' => 'Pickup',
-                
-//                 // Shipping details
-//                 'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
-//                 'weight' => isset($reverseOrderData['weight']) ? $reverseOrderData['weight'] : 500,
-//                 'quantity' => (int) ($reverseOrderData['total_quantity'] ?? 1),
-//                 'products_desc' => $reverseOrderData['products_desc'] ?? 'Return products',
-                
-//                 // Financial details
-//                 'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
-//                 'cod_amount' => 0,
-                
-//                 // DESTINATION: Where the package will be delivered (your warehouse)
-//                 'return_name' => 'Aiman Royale', // Your registered warehouse name
-//                 'return_add' => $warehouseAddress['add'],
-//                 'return_pin' => $warehouseAddress['pin'],
-//                 'return_phone' => $warehouseAddress['phone'],
-                
-//                 // Note: In the payload example, these fields are NOT in the shipment
-//                 // They are only in the root pickup_location
-                
-//                 // GST details (if applicable)
-//                 'seller_gst_tin' => config('services.delhivery.seller_gst_tin', null),
-//                 'consignee_gst_tin' => $reverseOrderData['consignee_gst_tin'] ?? null,
-                
-//                 // Optional fields
-//                 'category_of_goods' => $reverseOrderData['category_of_goods'] ?? 'General',
-//                 'invoice_reference' => $reverseOrderData['invoice_reference'] ?? '1',
-//                 'extra_parameters' => [
-//                     'return_reason' => $reverseOrderData['return_reason'] ?? 'Customer Return'
-//                 ]
-//             ]
-//         ]
-//     ];
-
-
-
-//     // Debugging line to inspect the payload
-//     try {
-//         Log::info('Delhivery reverse shipment payload', [
-//             'payload' => $shipmentData
-//         ]);
-
-//         $response = Http::withHeaders([
-//             'Authorization' => 'Token ' . $this->apiKey,
-//         ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
-//             'format' => 'json',
-//             'data' => json_encode($shipmentData)
-//         ]);
-
-//         $result = $response->json();
-
-//         Log::info('Delhivery reverse shipment response', [
-//             'status' => $response->status(),
-//             'result' => $result
-//         ]);
-
-//         if ($response->successful()) {
-//             if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
-//                 $package = $result['packages'][0];
-
-//                 if (isset($package['status']) && $package['status'] === 'Success') {
-//                     return [
-//                         'success' => true,
-//                         'waybill' => $package['waybill'] ?? null,
-//                         'shipment_id' => $package['shipment_id'] ?? null,
-//                         'message' => 'Reverse pickup created successfully'
-//                     ];
-//                 }
-
-//                 $errorMessage = 'Reverse shipment creation failed';
-//                 if (isset($package['remarks']) && is_array($package['remarks'])) {
-//                     foreach ($package['remarks'] as $remark) {
-//                         if (isset($remark['message'])) {
-//                             $errorMessage = $remark['message'];
-//                             break;
-//                         }
-//                     }
-//                 }
-
-//                 return [
-//                     'success' => false,
-//                     'message' => $errorMessage,
-//                     'waybill' => null
-//                 ];
-//             }
-
-//             if (isset($result['success']) && $result['success'] === true) {
-//                 return [
-//                     'success' => true,
-//                     'waybill' => $result['waybill'] ?? null,
-//                     'shipment_id' => $result['shipment_id'] ?? null,
-//                     'message' => 'Reverse pickup created successfully'
-//                 ];
-//             }
-//         }
-
-//         $errorMessage = 'Failed to create reverse shipment';
-//         if (isset($result['rmk'])) {
-//             $errorMessage = $result['rmk'];
-//         } elseif (isset($result['message'])) {
-//             $errorMessage = $result['message'];
-//         } elseif (isset($result['error'])) {
-//             $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
-//         }
-
-//         Log::error('Delhivery reverse shipment creation failed', [
-//             'response' => $response->body(),
-//             'payload' => $shipmentData
-//         ]);
-
-//         return [
-//             'success' => false,
-//             'message' => $errorMessage,
-//             'waybill' => null
-//         ];
-//     } catch (\Exception $e) {
-//         Log::error('Delhivery reverse shipment creation exception: ' . $e->getMessage(), [
-//             'trace' => $e->getTraceAsString()
-//         ]);
-
-//         return [
-//             'success' => false,
-//             'message' => $e->getMessage(),
-//             'waybill' => null
-//         ];
-//     }
-// }
-
-public function createReverseShipment(array $shipmentPayload, $orderItems = null)
+public function createReverseShipment(array $reverseOrderData, $orderItems)
 {
+    $products = [];
+    foreach ($orderItems as $item) {
+        $products[] = [
+            'name' => $item->sku_name ?? $item->name ?? 'Product',
+            'sku' => (string) ($item->sku_code ?? $item->variant_id ?? $item->product_id ?? 'SKU_' . uniqid()),
+            'quantity' => (int) ($item->quantity ?? 1),
+            'price' => (float) ($item->price ?? 0),
+        ];
+    }
+
+    // Get warehouse/return address from config using the correct keys
+    $warehouseAddress = [
+        'name' => config('services.delhivery.return_name', 'Aiman Royale'),
+        'add' => config('services.delhivery.return_add', '0, ISLAMPUR, KADAMBAGACHI, BARASAT, North 24 Parganas, West Bengal, 700125'),
+        'city' => config('services.delhivery.return_city', 'Barasat'),
+        'state' => config('services.delhivery.return_state', 'West Bengal'),
+        'country' => config('services.delhivery.return_country', 'India'),
+        'pin' => config('services.delhivery.return_pincode', '700125'),
+        'phone' => config('services.delhivery.return_phone', '8240525716'),
+    ];
+
+    // Get customer address (this is where the package will be picked up from)
+    $customerAddress = [
+        'name' => $reverseOrderData['return_contact_name'] ?? 'Customer',
+        'add' => trim(($reverseOrderData['return_address_1'] ?? '') . ' ' . ($reverseOrderData['return_address_2'] ?? '')),
+        'city' => $reverseOrderData['return_city'] ?? '',
+        'state' => $reverseOrderData['return_state'] ?? '',
+        'country' => 'India',
+        'pin' => $reverseOrderData['return_pincode'] ?? '',
+        'phone' => $reverseOrderData['return_phone_no'] ?? '',
+    ];
+
+    // Build the correct payload for reverse flow
+    // $shipmentData = [
+    //     // This is where the pickup will happen (customer's address)
+    //     'pickup_location' => [
+    //         'name' => $customerAddress['name'],
+    //         'add' => $customerAddress['add'],
+    //         'city' => $customerAddress['city'],
+    //         'country' => $customerAddress['country'],
+    //         'phone' => $customerAddress['phone'],
+    //         'pin' => $customerAddress['pin']
+    //     ],
+    //     'shipments' => [
+    //         [
+    //             // These are the customer details (same as pickup location for reverse)
+    //             'name' => $customerAddress['name'],
+    //             'add' => $customerAddress['add'],
+    //             'city' => $customerAddress['city'],
+    //             'state' => $customerAddress['state'],
+    //             'country' => $customerAddress['country'],
+    //             'pin' => $customerAddress['pin'],
+    //             'phone' => $customerAddress['phone'],
+                
+    //             // Order details
+    //             'order' => (string) ($reverseOrderData['reverse_order_number'] ?? $reverseOrderData['order_id'] ?? ''),
+    //             'order_date' => date('Y-m-d H:i:s'),
+                
+    //             // CRITICAL: Must be 'Pickup' for reverse flow
+    //             'payment_mode' => 'Pickup',
+                
+    //             // Shipping details
+    //             'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
+    //             'weight' => isset($reverseOrderData['weight']) ? $reverseOrderData['weight'] . ' gm' : '500.0 gm',
+    //             'quantity' => (int) ($reverseOrderData['total_quantity'] ?? 1),
+    //             'products_desc' => $reverseOrderData['products_desc'] ?? 'Return products',
+                
+    //             // Financial details
+    //             'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
+    //             'cod_amount' => 0, // Always 0 for reverse pickup
+                
+    //             // DESTINATION: This is where the package will be delivered (your warehouse)
+    //             // All these are MANDATORY for reverse flow
+    //             'return_name' => 'Aiman Royale',
+    //             'return_add' => $warehouseAddress['add'],
+    //             'return_city' => $warehouseAddress['city'],
+    //             'return_state' => $warehouseAddress['state'],
+    //             'return_country' => $warehouseAddress['country'],
+    //             'return_pin' => $warehouseAddress['pin'],
+    //             'return_phone' => $warehouseAddress['phone'],
+                
+    //             // GST details (if applicable)
+    //             'seller_gst_tin' => config('services.delhivery.seller_gst_tin', null),
+    //             'consignee_gst_tin' => $reverseOrderData['consignee_gst_tin'] ?? null,
+                
+    //             // Optional fields
+    //             'category_of_goods' => $reverseOrderData['category_of_goods'] ?? 'General',
+    //             'invoice_reference' => $reverseOrderData['invoice_reference'] ?? '1',
+    //             'extra_parameters' => [
+    //                 'return_reason' => $reverseOrderData['return_reason'] ?? 'Customer Return'
+    //             ]
+    //         ]
+    //     ]
+    // ];
+
+        $shipmentData = [
+        // Root level pickup_location - just the warehouse name
+        'pickup_location' => [
+            'name' => 'Aiman Royale' // Your registered warehouse name
+        ],
+        'shipments' => [
+            [
+                'name' => $customerAddress['name'],
+                'add' => $customerAddress['add'],
+                'city' => $customerAddress['city'],
+                'state' => $customerAddress['state'],
+                'country' => $customerAddress['country'],
+                'pin' => $customerAddress['pin'],
+                'phone' => $customerAddress['phone'],
+                'order' => (string) ($reverseOrderData['order_id'] ?? $reverseOrderData['reverse_order_number'] ?? ''),
+                'order_date' => date('Y-m-d H:i:s'),
+                'payment_mode' => 'Pickup',
+                'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
+                'weight' => isset($reverseOrderData['weight']) ? $reverseOrderData['weight'] : 500,
+                'quantity' => (int) ($reverseOrderData['total_quantity'] ?? 1),
+                'products_desc' => $reverseOrderData['products_desc'] ?? 'Return products',
+                'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
+                'cod_amount' => 0,
+
+                'return_name' => 'Aiman Royale', // Your registered warehouse name
+                'return_add' => $warehouseAddress['add'],
+                'return_pin' => $warehouseAddress['pin'],
+                'return_phone' => $warehouseAddress['phone'],
+               
+                'return_city' => config('delhivery.return_city'),
+                'return_state' => config('delhivery.return_state'),
+                'seller_gst_tin' => config('services.delhivery.seller_gst_tin', null),
+                'consignee_gst_tin' => $reverseOrderData['consignee_gst_tin'] ?? null,
+                'category_of_goods' => $reverseOrderData['category_of_goods'] ?? 'General',
+                'invoice_reference' => $reverseOrderData['invoice_reference'] ?? '1',
+                'extra_parameters' => [
+                    'return_reason' => $reverseOrderData['return_reason'] ?? 'Damaged Product'
+                ]
+            ]
+        ]
+    ];
+
+
+
+    // Debugging line to inspect the payload
     try {
         Log::info('Delhivery reverse shipment payload', [
-            'payload' => $shipmentPayload
+            'payload' => $shipmentData
         ]);
 
         $response = Http::withHeaders([
             'Authorization' => 'Token ' . $this->apiKey,
         ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
             'format' => 'json',
-            'data' => json_encode($shipmentPayload)
+            'data' => json_encode($shipmentData)
         ]);
 
         $result = $response->json();
@@ -864,18 +757,16 @@ public function createReverseShipment(array $shipmentPayload, $orderItems = null
             'result' => $result
         ]);
 
-        // --- Success Path 1: packages array returned ---
         if ($response->successful()) {
             if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
                 $package = $result['packages'][0];
 
                 if (isset($package['status']) && $package['status'] === 'Success') {
                     return [
-                        'success'     => true,
-                        'waybill'     => $package['waybill'] ?? null,
+                        'success' => true,
+                        'waybill' => $package['waybill'] ?? null,
                         'shipment_id' => $package['shipment_id'] ?? null,
-                        'message'     => 'Reverse pickup created successfully',
-                        'result'      => $result,
+                        'message' => 'Reverse pickup created successfully'
                     ];
                 }
 
@@ -889,33 +780,23 @@ public function createReverseShipment(array $shipmentPayload, $orderItems = null
                     }
                 }
 
-                Log::error('Delhivery reverse shipment creation failed', [
-                    'response' => $response->body(),
-                    'payload'  => $shipmentPayload,
-                    'remarks'  => $package['remarks'] ?? null,
-                ]);
-
                 return [
                     'success' => false,
                     'message' => $errorMessage,
-                    'waybill' => null,
-                    'result'  => $result,
+                    'waybill' => null
                 ];
             }
 
-            // --- Success Path 2: flat success response ---
             if (isset($result['success']) && $result['success'] === true) {
                 return [
-                    'success'     => true,
-                    'waybill'     => $result['waybill'] ?? null,
+                    'success' => true,
+                    'waybill' => $result['waybill'] ?? null,
                     'shipment_id' => $result['shipment_id'] ?? null,
-                    'message'     => 'Reverse pickup created successfully',
-                    'result'      => $result,
+                    'message' => 'Reverse pickup created successfully'
                 ];
             }
         }
 
-        // --- Failure: extract error message ---
         $errorMessage = 'Failed to create reverse shipment';
         if (isset($result['rmk'])) {
             $errorMessage = $result['rmk'];
@@ -927,29 +808,134 @@ public function createReverseShipment(array $shipmentPayload, $orderItems = null
 
         Log::error('Delhivery reverse shipment creation failed', [
             'response' => $response->body(),
-            'payload'  => $shipmentPayload,
+            'payload' => $shipmentData
         ]);
 
         return [
             'success' => false,
             'message' => $errorMessage,
-            'waybill' => null,
-            'result'  => $result,
+            'waybill' => null
         ];
     } catch (\Exception $e) {
         Log::error('Delhivery reverse shipment creation exception: ' . $e->getMessage(), [
-            'trace'   => $e->getTraceAsString(),
-            'payload' => $shipmentPayload,
+            'trace' => $e->getTraceAsString()
         ]);
 
         return [
             'success' => false,
             'message' => $e->getMessage(),
-            'waybill' => null,
-            'result'  => null,
+            'waybill' => null
         ];
     }
 }
+
+// public function createReverseShipment(array $shipmentPayload, $orderItems = null)
+// {
+//     try {
+//         Log::info('Delhivery reverse shipment payload', [
+//             'payload' => $shipmentPayload
+//         ]);
+
+//         $response = Http::withHeaders([
+//             'Authorization' => 'Token ' . $this->apiKey,
+//         ])->asForm()->post($this->baseUrl . '/api/cmu/create.json', [
+//             'format' => 'json',
+//             'data' => json_encode($shipmentPayload)
+//         ]);
+
+//         $result = $response->json();
+
+//         Log::info('Delhivery reverse shipment response', [
+//             'status' => $response->status(),
+//             'result' => $result
+//         ]);
+
+//         // --- Success Path 1: packages array returned ---
+//         if ($response->successful()) {
+//             if (isset($result['packages']) && is_array($result['packages']) && count($result['packages']) > 0) {
+//                 $package = $result['packages'][0];
+
+//                 if (isset($package['status']) && $package['status'] === 'Success') {
+//                     return [
+//                         'success'     => true,
+//                         'waybill'     => $package['waybill'] ?? null,
+//                         'shipment_id' => $package['shipment_id'] ?? null,
+//                         'message'     => 'Reverse pickup created successfully',
+//                         'result'      => $result,
+//                     ];
+//                 }
+
+//                 $errorMessage = 'Reverse shipment creation failed';
+//                 if (isset($package['remarks']) && is_array($package['remarks'])) {
+//                     foreach ($package['remarks'] as $remark) {
+//                         if (isset($remark['message'])) {
+//                             $errorMessage = $remark['message'];
+//                             break;
+//                         }
+//                     }
+//                 }
+
+//                 Log::error('Delhivery reverse shipment creation failed', [
+//                     'response' => $response->body(),
+//                     'payload'  => $shipmentPayload,
+//                     'remarks'  => $package['remarks'] ?? null,
+//                 ]);
+
+//                 return [
+//                     'success' => false,
+//                     'message' => $errorMessage,
+//                     'waybill' => null,
+//                     'result'  => $result,
+//                 ];
+//             }
+
+//             // --- Success Path 2: flat success response ---
+//             if (isset($result['success']) && $result['success'] === true) {
+//                 return [
+//                     'success'     => true,
+//                     'waybill'     => $result['waybill'] ?? null,
+//                     'shipment_id' => $result['shipment_id'] ?? null,
+//                     'message'     => 'Reverse pickup created successfully',
+//                     'result'      => $result,
+//                 ];
+//             }
+//         }
+
+//         // --- Failure: extract error message ---
+//         $errorMessage = 'Failed to create reverse shipment';
+//         if (isset($result['rmk'])) {
+//             $errorMessage = $result['rmk'];
+//         } elseif (isset($result['message'])) {
+//             $errorMessage = $result['message'];
+//         } elseif (isset($result['error'])) {
+//             $errorMessage = is_string($result['error']) ? $result['error'] : 'API Error';
+//         }
+
+//         Log::error('Delhivery reverse shipment creation failed', [
+//             'response' => $response->body(),
+//             'payload'  => $shipmentPayload,
+//         ]);
+
+//         return [
+//             'success' => false,
+//             'message' => $errorMessage,
+//             'waybill' => null,
+//             'result'  => $result,
+//         ];
+//     } catch (\Exception $e) {
+//         Log::error('Delhivery reverse shipment creation exception: ' . $e->getMessage(), [
+//             'trace'   => $e->getTraceAsString(),
+//             'payload' => $shipmentPayload,
+//         ]);
+
+//         return [
+//             'success' => false,
+//             'message' => $e->getMessage(),
+//             'waybill' => null,
+//             'result'  => null,
+//         ];
+//     }
+// }
 
     /**
      * Track shipment
