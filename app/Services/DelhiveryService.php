@@ -700,7 +700,6 @@ public function createReverseShipment(array $reverseOrderData, $orderItems)
         ],
         'shipments' => [
             [
-                // Customer details (where pickup happens)
                 'name' => $customerAddress['name'],
                 'add' => $customerAddress['add'],
                 'city' => $customerAddress['city'],
@@ -708,42 +707,29 @@ public function createReverseShipment(array $reverseOrderData, $orderItems)
                 'country' => $customerAddress['country'],
                 'pin' => $customerAddress['pin'],
                 'phone' => $customerAddress['phone'],
-                
-                // Order details
-                'order' => (string) ($reverseOrderData['reverse_order_number'] ?? $reverseOrderData['order_id'] ?? ''),
+                'order' => (string) ($reverseOrderData['order_id'] ?? $reverseOrderData['reverse_order_number'] ?? ''),
                 'order_date' => date('Y-m-d H:i:s'),
-                
-                // CRITICAL: Must be 'Pickup' for reverse flow
                 'payment_mode' => 'Pickup',
-                
-                // Shipping details
                 'shipping_mode' => config('services.delhivery.shipping_mode', 'Express'),
                 'weight' => isset($reverseOrderData['weight']) ? $reverseOrderData['weight'] : 500,
                 'quantity' => (int) ($reverseOrderData['total_quantity'] ?? 1),
                 'products_desc' => $reverseOrderData['products_desc'] ?? 'Return products',
-                
-                // Financial details
                 'total_amount' => (float) ($reverseOrderData['total_amount'] ?? 0),
                 'cod_amount' => 0,
-                
-                // DESTINATION: Where the package will be delivered (your warehouse)
+
                 'return_name' => 'Aiman Royale', // Your registered warehouse name
                 'return_add' => $warehouseAddress['add'],
                 'return_pin' => $warehouseAddress['pin'],
                 'return_phone' => $warehouseAddress['phone'],
-                
-                // Note: In the payload example, these fields are NOT in the shipment
-                // They are only in the root pickup_location
-                
-                // GST details (if applicable)
+               
+                'return_city' => config('delhivery.return_city'),
+                'return_state' => config('delhivery.return_state'),
                 'seller_gst_tin' => config('services.delhivery.seller_gst_tin', null),
                 'consignee_gst_tin' => $reverseOrderData['consignee_gst_tin'] ?? null,
-                
-                // Optional fields
                 'category_of_goods' => $reverseOrderData['category_of_goods'] ?? 'General',
                 'invoice_reference' => $reverseOrderData['invoice_reference'] ?? '1',
                 'extra_parameters' => [
-                    'return_reason' => $reverseOrderData['return_reason'] ?? 'Customer Return'
+                    'return_reason' => $reverseOrderData['return_reason'] ?? 'Damaged Product'
                 ]
             ]
         ]
