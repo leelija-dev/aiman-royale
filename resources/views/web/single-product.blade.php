@@ -3913,9 +3913,9 @@
                     }, { eventID: eventId });
                 }
 
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+                // setTimeout(() => {
+                //     location.reload();
+                // }, 1000);
 
                 if (data.cart_count !== undefined) {
                     updateCartCount(data.cart_count);
@@ -4256,7 +4256,32 @@
                     buyNow();
                 });
             }
+            // Reset Buy Now / Add to Cart buttons when page is restored from back-forward cache
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    const buyNowBtn = document.getElementById('buy-now');
+                    if (buyNowBtn) {
+                        buyNowBtn.disabled = false;
+                        buyNowBtn.innerHTML = '<i class="fas fa-bag-shopping"></i> <span>Buy <span class="lg:inline md:hidden smxl:inline hidden">Now</span></span>';
+                    }
 
+                    // const addToCartBtn = document.getElementById('add-to-cart');
+                    // if (addToCartBtn && !addToCartBtn.getAttribute('data-custom-dimensions')) {
+                    //     addToCartBtn.disabled = false;
+                    //     addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> <span><span class="lg:inline md:hidden smxl:inline hidden">Add to</span> Cart</span>';
+                    // }
+                    const addToCartBtn = document.getElementById('add-to-cart');
+                    if (addToCartBtn && !addToCartBtn.getAttribute('data-custom-dimensions')) {
+                        const variantId = addToCartBtn.getAttribute('data-variant-id');
+                        if (variantId) {
+                            checkVariantInCart(variantId); // asks the server for the real state
+                        } else {
+                            addToCartBtn.disabled = false;
+                            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> <span><span class="lg:inline md:hidden smxl:inline hidden">Add to</span> Cart</span>';
+                        }
+                    }
+                }
+            });
             // Wishlist button
             const wishlistBtn = document.getElementById('wishlist-btn');
             if (wishlistBtn) {

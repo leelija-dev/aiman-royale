@@ -1057,11 +1057,16 @@
 
         <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
 
-        @if($cartCount > 0)
+        {{-- @if($cartCount > 0)
             <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
                 {{ $cartCount }}
             </span>
-        @endif
+        @endif --}}
+        <span
+            id="cart-counter"
+            class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full items-center justify-center font-semibold {{ $cartCount > 0 ? 'flex' : 'hidden' }}">
+            {{ $cartCount }}
+        </span>
 
     </div>
 
@@ -1803,7 +1808,22 @@ function loadSweetAlert(callback) {
   document.body.appendChild(script);
 }
 </script>
+<script>
+function updateCartCount(count) {
+    const badge = document.getElementById('cart-counter');
+    if (!badge) return;
 
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+    } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+    }
+}
+window.updateCartCount = updateCartCount;
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // ==================== GLOBAL VARIABLES ====================

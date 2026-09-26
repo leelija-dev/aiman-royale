@@ -1398,8 +1398,8 @@ class HomeController extends Controller
             $defaultVariant = $product->variants->first();
 
             $productData = [
-                'id'       => $product->id,
-                'name'     => $product->name,
+                'id'       => $product->id ?? '',
+                'name'     => $product->name ?? '',
                 'price'    => $defaultVariant
                     ? ($defaultVariant->discount_price ?? $defaultVariant->price)
                     : $product->price,
@@ -1413,7 +1413,7 @@ class HomeController extends Controller
                 'product_id' => $product->id,
                 'result'     => $result,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Meta ViewContent failed: ' . $e->getMessage());
         }
 
