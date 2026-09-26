@@ -311,8 +311,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             
                             <span class="text-gray-600">Subtotal</span>
                             {{-- <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span> --}}
-                            <span id="subtotal-original" class="text-gray-800 hidden" style="font-weight: bold;">
-                                    {{ config('app.currency') }}<span id="subtotal-original-amount"></span>
+                            <span id="subtotal-original" class="text-gray-800 " style="font-weight: bold;">
+                                    {{ config('app.currency') }}<span id="subtotal-original-amount">{{ number_format($total, 2, '.', '') }}</span>
                                 </span>
                             <span class="hidden">
                                 {{ config('app.currency') }}
@@ -905,13 +905,13 @@ msg.innerHTML = "Something went wrong.";
         const couponSavingsRow = document.getElementById("coupon-savings-row");
         const couponSavingsAmt = document.getElementById("coupon-savings-amount");
 
+        if (subtotalOriginalAmt) subtotalOriginalAmt.innerHTML = originalSubtotal.toFixed(2);
         if (totalProductDiscount > 0) {
-            if (subtotalOriginalAmt) subtotalOriginalAmt.innerHTML = originalSubtotal.toFixed(2);
-            if (subtotalOriginalEl) subtotalOriginalEl.classList.remove("hidden");
+            // if (subtotalOriginalEl) subtotalOriginalEl.classList.remove("hidden");
             if (couponSavingsAmt) couponSavingsAmt.innerHTML = totalProductDiscount.toFixed(2);
             if (couponSavingsRow) couponSavingsRow.classList.remove("hidden");
         } else {
-            if (subtotalOriginalEl) subtotalOriginalEl.classList.add("hidden");
+            // if (subtotalOriginalEl) subtotalOriginalEl.classList.add("hidden");
             if (couponSavingsRow) couponSavingsRow.classList.add("hidden");
         }
         // -----------------------------
