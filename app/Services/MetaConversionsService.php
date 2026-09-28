@@ -109,7 +109,7 @@ class MetaConversionsService
     /**
      * Build user_data properly
      */
-    public function createUserData(array $additionalData = []): array
+    public function createUserData(array $additionalData = [], bool $includeContactInfo = true): array
     {
         $userData = [
             'client_ip_address' => request()->ip(),
@@ -142,13 +142,14 @@ class MetaConversionsService
                 ->where('is_default', 1)
                 ->first();
 
-            if (!empty($user->email)) {
-                $userData['em'] = [
-                    $this->hashData($user->email)
-                ];
+            if ($includeContactInfo && !empty($user->email)) {
+                $hashedEmail = $this->hashEmail($user->email);
+                if ($hashedEmail) {
+                    $userData['em'] = [$hashedEmail];
+                }
             }
 
-            if (!empty($user->phone)) {
+            if ($includeContactInfo && !empty($user->phone)) {
                 $userData['ph'] = [
                     $this->hashPhone($user->phone)
                 ];
@@ -210,13 +211,14 @@ class MetaConversionsService
                 $this->hashData($this->guestId())
             ];
 
-            if ($guestEmail = request()->cookie('_meta_guest_em')) {
-                $userData['em'] = [
-                    $this->hashData($guestEmail)
-                ];
+            if ($includeContactInfo && ($guestEmail = request()->cookie('_meta_guest_em'))) {
+                $hashedEmail = $this->hashEmail($guestEmail);
+                if ($hashedEmail) {
+                    $userData['em'] = [$hashedEmail];
+                }
             }
 
-            if ($guestPhone = request()->cookie('_meta_guest_ph')) {
+            if ($includeContactInfo && ($guestPhone = request()->cookie('_meta_guest_ph'))) {
                 $userData['ph'] = [
                     $this->hashPhone($guestPhone)
                 ];
@@ -306,12 +308,10 @@ class MetaConversionsService
             switch ($key) {
 
                 case 'em':
-                    $email = trim(strtolower($value));
+                    $hashedEmail = $this->hashEmail($value);
 
-                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $userData['em'] = [
-                            hash('sha256', $email)
-                        ];
+                    if ($hashedEmail) {
+                        $userData['em'] = [$hashedEmail];
                     }
                     break;
                 case 'ph':
@@ -387,6 +387,20 @@ public function rememberGuestContact(
     {
         if (empty($data)) return null;
         return hash('sha256', strtolower(trim($data)));
+    }
+
+    /** Validates the email before hashing - never send an invalid/placeholder address to Meta. */
+    protected function hashEmail(?string $email): ?string
+    {
+        if (empty($email)) return null;
+
+        $email = trim(strtolower($email));
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        return hash('sha256', $email);
     }
 
    public function hashPhone(?string $phone, string $countryCode = '91'): ?string
@@ -473,7 +487,10 @@ public function rememberGuestContact(
     {
         return $this->sendEvent(
             'PageView',
-            $this->createUserData($customUserData),
+            // PageView fires on every page load - don't attach em/ph here, or the
+            // same hashed email gets resent on dozens of low-intent events, which
+            // is exactly what triggers Meta's "duplicate client email" warning.
+            $this->createUserData($customUserData, includeContactInfo: false),
             [],
             $eventId
         );

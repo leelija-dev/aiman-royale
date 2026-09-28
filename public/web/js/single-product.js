@@ -233,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         i = t.querySelector(".accordion-content-block"),
         s = t.querySelector(".accordion-chevron"),
         r = t.querySelector(".line-border-block");
+          if (!n || !i || !s || !r) return;
       n.addEventListener("click", function () {
         const n = t.classList.contains("active");
         var l;
@@ -242,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
               const t = e.querySelector(".accordion-content-block"),
                 n = e.querySelector(".accordion-chevron"),
                 i = e.querySelector(".line-border-block");
+                if (!t || !n || !i) return;
               o(t, !1),
                 (t.style.opacity = "0"),
                 (i.style.width = "0"),
@@ -268,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.forEach((e, t) => {
       const n = e.querySelector(".accordion-content-block"),
         s = e.querySelector(".line-border-block");
+         if (!n || !s) return;
       (n.style.transition =
         "max-height 0.4s ease, opacity 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease"),
         (n.style.overflow = "hidden"),

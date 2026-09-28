@@ -58,7 +58,8 @@ class MetaTracking
         try {
             $this->meta->sendEvent(
                 'PageView',
-                $this->meta->createUserData(),
+                // Skip em/ph on PageView - see MetaConversionsService::trackPageView()
+                $this->meta->createUserData([], includeContactInfo: false),
                 [],
                 $request->attributes->get('meta_event_id')
             );

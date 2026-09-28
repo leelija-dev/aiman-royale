@@ -438,6 +438,7 @@
             src="https://www.facebook.com/tr?id=3223171547852999&ev=PageView&noscript=1" /></noscript> --}}
     <!-- Meta Pixel Code -->
     <!-- Meta Pixel Code -->
+@if (in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com']))
 <script>
     ! function(f, b, e, v, n, t, s) {
         if (f.fbq) return;
@@ -481,6 +482,7 @@
         }, {eventID: @json((string) ($purchase['event_id'] ?? $purchase['order_id']))});
     @endif
 </script>
+@endif
     <!-- End Meta Pixel Code -->
 
 </head>

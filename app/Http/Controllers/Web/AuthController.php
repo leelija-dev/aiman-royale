@@ -159,7 +159,9 @@ class AuthController extends Controller
 
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
+            if($user){
             $this->trackRegistration();
+            }
             // Store JWT token in session
             session(['jwt_token' => $token]);
             if (
@@ -401,12 +403,12 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-           $this->trackRegistration([
-                'em' => $user->email,
-                'ph' => $user->phone,
-                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
-                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
-            ]);
+        //    $this->trackRegistration([
+        //         'em' => $user->email,
+        //         'ph' => $user->phone,
+        //         'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+        //         'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+        //     ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
@@ -566,12 +568,12 @@ class AuthController extends Controller
             // } catch (\Exception $e) {
             //     Log::error('Failed to track Meta CompleteRegistration event: ' . $e->getMessage());
             // }
-            $this->trackRegistration([
-                'em' => $user->email,
-                'ph' => $user->phone,
-                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
-                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
-            ]);
+            // $this->trackRegistration([
+            //     'em' => $user->email,
+            //     'ph' => $user->phone,
+            //     'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+            //     'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            // ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
             session(['registration_success' => true]);
