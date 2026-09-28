@@ -73,6 +73,7 @@ Route::middleware(['auth', 'session.expiry'])->group(function () {
 
 // Authenticated routes (require login)
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
+// Route::view('/500', 'web.500');
 Route::view('/custome-design', 'web.custome-design')->name('page.custom-design');
 Route::view('/appointment', 'web.appointment')->name('page.appointment');
 
@@ -259,3 +260,6 @@ Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+Route::get('/force-500', function () {
+    throw new \Exception('Test 500 error');
+});
