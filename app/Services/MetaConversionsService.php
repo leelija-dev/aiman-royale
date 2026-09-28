@@ -504,7 +504,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
             'content_category' => $productData['category'] ?? null,
         ]);
 
@@ -519,7 +519,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
             'num_items'    => (int)($productData['quantity'] ?? 1),
         ]);
 
@@ -534,7 +534,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
         ]);
 
         return $this->sendEvent('AddToWishlist', $this->createUserData($customUserData), $customData, $eventId);
@@ -547,7 +547,7 @@ public function rememberGuestContact(
             'content_ids'  => $data['content_ids'] ?? null,
             'content_type' => 'product',
             'value'        => (float)($data['value'] ?? 0),
-            'currency'     => $data['currency'] ?? 'INR',
+            'currency'     => 'INR',//$data['currency'] ?? 'INR',
             'num_items'    => (int)($data['num_items'] ?? 1),
         ]);
 
@@ -561,7 +561,7 @@ public function rememberGuestContact(
             'content_ids'  => $data['content_ids'] ?? null,
             'content_type' => 'product',
             'value'        => (float)($data['value'] ?? 0),
-            'currency'     => $data['currency'] ?? 'INR',
+            'currency'     => 'INR',//$data['currency'] ?? 'INR',
         ]);
 
         return $this->sendEvent('AddPaymentInfo', $this->createUserData($customUserData), $customData, $eventId);
@@ -594,7 +594,7 @@ public function rememberGuestContact(
         'content_ids' => $orderData['content_ids'] ?? null,
         'content_type' => $orderData['content_type'] ?? 'product',
         'value' => (float) ($orderData['value'] ?? 0),
-        'currency' => $orderData['currency'] ?? 'INR',
+        'currency' => 'INR',//$orderData['currency'] ?? 'INR',
         'num_items' => (int) ($orderData['num_items'] ?? 1),
         'order_id' => $orderData['order_id']
             ?? $orderData['transaction_id']
@@ -659,7 +659,7 @@ public function rememberGuestContact(
     {
         $customData = array_filter([
             'value'    => (float)($data['value'] ?? 0),
-            'currency' => $data['currency'] ?? 'INR',
+            'currency' => 'INR',//$data['currency'] ?? 'INR',
             'predicted_ltv' => $data['predicted_ltv'] ?? null,
         ]);
 
