@@ -166,6 +166,7 @@ class GoogleAuthController extends Controller
     public function redirect(Request $request)
     {
         try {
+            dd($request);
             // ✅ Preserve buy_now / redirect params across OAuth flow
             if ($request->filled('buy_now') || $request->filled('redirect') || $request->filled('variant_id')) {
                 session()->put('oauth_intended_params', $request->only([
