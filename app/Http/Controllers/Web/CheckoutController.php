@@ -324,7 +324,7 @@ class CheckoutController extends Controller
                 'quantity' => $cart->count,
                 'price' => $cart->discount_price,
 
-                'coupon_id'    => $couponId,
+                'coupon_id'    => (int)$couponId ?? null,
                 'coupon_code'  => $couponCode,
                 'coupon_discount' => $couponDiscount,
                 'coupon_discount_amount' => $couponDiscountAmount,
