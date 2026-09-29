@@ -26,7 +26,51 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script>
+    (function () {
+      const origFetch = window.fetch.bind(window);
+      const metaEl = () => document.querySelector('meta[name="csrf-token"]');
+      const xsrf = () => {
+        const m = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+        return m ? decodeURIComponent(m[1]) : null;
+      };
 
+      window.fetch = function (input, init) {
+        init = init || {};
+        if (typeof input !== 'string') return origFetch(input, init);
+
+        const method = (init.method || 'GET').toUpperCase();
+        const sameOrigin = input.startsWith('/') || input.startsWith(location.origin);
+        if (!sameOrigin || method === 'GET' || method === 'HEAD') return origFetch(input, init);
+
+        const send = () => {
+          const headers = new Headers(init.headers || {});
+          const cookieToken = xsrf();
+          if (cookieToken) {
+            headers.delete('X-CSRF-TOKEN');
+            headers.set('X-XSRF-TOKEN', cookieToken);      // always the current session's token
+          } else if (metaEl()) {
+            headers.set('X-CSRF-TOKEN', metaEl().content); // fallback
+          }
+          headers.set('X-Requested-With', 'XMLHttpRequest');
+          return origFetch(input, Object.assign({}, init, { headers, credentials: 'same-origin' }));
+        };
+
+        return send().then(res => {
+          if (res.status !== 419) return res;
+          // last resort: get a fresh session/token, then retry once
+          return origFetch('/csrf-token', {
+            credentials: 'same-origin', cache: 'no-store',
+            headers: { Accept: 'application/json' }
+          })
+            .then(r => r.json())
+            .then(d => { if (metaEl()) metaEl().content = d.token; })
+            .catch(() => {})
+            .then(send);
+        });
+      };
+    })();
+    </script>
     <!-- Open Graph Meta Tags -->
     <meta property="og:title"
         content="{{ $ogMeta['title'] ?? ($pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection') }}">
