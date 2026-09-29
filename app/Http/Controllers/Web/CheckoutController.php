@@ -63,13 +63,15 @@ class CheckoutController extends Controller
             session()->flash('force_cart_refresh', true);
             return redirect()->route('cart.index');
         }
+        $initiateCheckoutEventId = null;
+        $initiateCheckoutData = null;
         try {
             $contentIds = [];
             $numItems = 0;
             $totalValue = 0;
 
             foreach ($carts as $cart) {
-                $contentIds[] = $cart->product_id;
+                $contentIds[] = (string)$cart->product_id;
                 $numItems += $cart->count;
                 $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
             }
@@ -96,8 +98,15 @@ class CheckoutController extends Controller
                     'currency'    => 'INR',
                 ],
                 $metaUserData,
-                $initiateCheckoutEventId
+                $initiateCheckoutEventId,
             );
+            $initiateCheckoutData = [
+                'content_ids'  => $contentIds,
+                'content_type' => 'product',
+                'value'        => (float) $totalValue,
+                'num_items'    => (int) $numItems,
+                'currency'     => 'INR',
+            ];
         } catch (\Exception $e) {
             Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
         }
@@ -113,7 +122,7 @@ class CheckoutController extends Controller
 
         $store = Store::where('is_active', true)->first();
         $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon', 'initiateCheckoutEventId'));
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon', 'initiateCheckoutEventId','initiateCheckoutData'));
     }
 
 

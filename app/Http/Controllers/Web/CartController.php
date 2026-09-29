@@ -101,8 +101,8 @@ class CartController extends Controller
                 'count' => 'required|integer|min:1',
                 // 'event_id' => 'nullable|string',
                 'event_id' => 'nullable|string',
-                'fbc' => ['nullable', 'string', 'max:255', 'regex:/^fb\.\d\.\d+\.[\w-]+$/'],
-                'fbp' => ['nullable', 'string', 'max:255', 'regex:/^fb\.\d\.\d+\.\d+$/'],
+                'fbc' => ['nullable', 'string', 'max:255'],
+                'fbp' => ['nullable', 'string', 'max:255'],
             ]);
             $eventId = $request->input('event_id');
             $metaUserData = array_filter([                          // <-- add these 4 lines

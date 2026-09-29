@@ -38,19 +38,30 @@ class MetaConversionsService
         }
 
         $url = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
-
+                if (!$eventId) {
+            $req = request();
+            if ($req->ajax() || $req->expectsJson()) {
+                $eventId = $req->input('event_id');
+            } else {
+                $eventId = $req->attributes->get('meta_event_id');
+            }
+        }
+        $eventId = $eventId ? substr((string) $eventId, 0, 100) : null;
+        if (!$eventId) {
+            Log::warning('Meta CAPI: ' . $eventName . ' sent WITHOUT event_id', ['url' => request()->fullUrl()]);
+        }
         $event = [
             'event_name'       => $eventName,
             'event_time'       => time(),
             'action_source'    => 'website',
-            'event_id'         => $eventId ?? (string) Str::uuid(),
+            'event_id'         => $eventId ,//?? (string) Str::uuid(),
             'event_source_url' => $eventSourceUrl ?? request()->url(),
             'user_data'        => $userData,
             'custom_data'      => empty($customData) ? (object)[] : $customData,
         ];
         Log::info('META CAPI COVERAGE', [
             'event' => $eventName,
-            'event_id' => $event['event_id'],
+            'event_id' => $event['event_id'] ?? null,
 
             'has_em' => !empty($userData['em']),
             'has_ph' => !empty($userData['ph']),
@@ -91,7 +102,7 @@ class MetaConversionsService
 
             if ($response->successful()) {
                 Log::info('Meta CAPI → ' . $eventName, [
-                    'event_id' => $event['event_id'],
+                    'event_id' => $event['event_id'] ?? null,
                     'response' => $result
                 ]);
             } else {

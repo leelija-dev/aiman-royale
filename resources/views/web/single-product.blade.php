@@ -3886,26 +3886,26 @@ function checkVariantInCart(variantId) {
                 })
                 .then(data => {
                     if (data && data.success) {
-                         if (typeof fbq !== 'undefined') {
+                //          if (typeof fbq !== 'undefined') {
 
-                            // const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
+                //             // const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
 
-                            fbq(
-                                'track',
-                                'InitiateCheckout',
-                                {
-                                    content_name: @json($product->name ?? ''),
-                                    content_ids: [@json($product->id ?? '')],
-                                    content_type: 'product',
-                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
-                                    currency: 'INR',
-                                    num_items: 1
-                                },
-                                {
-                                    eventID: initiateCheckoutEventId
-                                }
-                    );
-                }
+                //             fbq(
+                //                 'track',
+                //                 'InitiateCheckout',
+                //                 {
+                //                     content_name: @json($product->name ?? ''),
+                //                     content_ids: [@json($product->id ?? '')],
+                //                     content_type: 'product',
+                //                     value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                //                     currency: 'INR',
+                //                     num_items: 1
+                //                 },
+                //                 {
+                //                     eventID: initiateCheckoutEventId
+                //                 }
+                //     );
+                // }
                         window.location.href = data.redirect || checkoutUrl;
                     } else {
                         showNotification(data?.message || 'Unable to start checkout', 'error');
@@ -4484,7 +4484,7 @@ function checkVariantInCart(variantId) {
 
             const isInWishlist = button.classList.contains('text-red-500');
             const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
+            const wishEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
             const originalContent = button.innerHTML;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
@@ -4497,7 +4497,8 @@ function checkVariantInCart(variantId) {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        product_id: productId
+                        product_id: productId,
+                        event_id: wishEventId
                     })
                 })
                 .then(response => {
@@ -4522,6 +4523,15 @@ function checkVariantInCart(variantId) {
                         } else {
                             button.classList.add('text-red-500');
                             button.innerHTML = '<i class="fas fa-heart"></i>';
+                                                        if (typeof fbq !== 'undefined') {
+                                fbq('track', 'AddToWishlist', {
+                                    content_name: @json($product->name ?? ''),
+                                    content_ids: [String(productId)],
+                                    content_type: 'product',
+                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                    currency: 'INR'
+                                }, { eventID: wishEventId });
+                            }
                         }
 
                         // Update all wishlist badges

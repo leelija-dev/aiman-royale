@@ -1407,7 +1407,7 @@ class HomeController extends Controller
                 'category' => $product->category->name ?? null,
             ];
 
-            $result = $this->metaService->trackViewContent($productData);
+            $result = $this->metaService->trackViewContent($productData,[],request()->attributes->get('meta_event_id'));
 
             Log::info('Meta ViewContent tracked', [
                 'product_id' => $product->id,

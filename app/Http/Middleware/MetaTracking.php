@@ -92,6 +92,7 @@ class MetaTracking
         return $request->isMethod('GET')
             && !$request->ajax()
             && !$request->expectsJson()
+            && !$request->is('admin/*')
             && $response->getStatusCode() === 200
             && str_contains((string) $response->headers->get('Content-Type'), 'text/html')
             && $ua !== ''
