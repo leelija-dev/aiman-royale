@@ -157,9 +157,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Services\MetaConversionsService;
+use App\Models\RegistrationOtpHistory;
+// use App\Models\ProductVariant;
+use App\Rules\Turnstile;
+use App\Services\GuestIdentityService;
+use App\Services\CartMergeService;
 
 class GoogleAuthController extends Controller
 {
+     protected MetaConversionsService $metaService;
+    protected GuestIdentityService $guestIdentity;
+    protected CartMergeService $cartMergeService;
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity, CartMergeService $cartMergeService)
+    {
+        $this->metaService = $metaService;
+        $this->guestIdentity = $guestIdentity;
+        $this->cartMergeService = $cartMergeService;
+    }
     /**
      * Google OAuth Redirect
      */
