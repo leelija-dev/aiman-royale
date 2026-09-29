@@ -141,6 +141,7 @@ class MetaConversionsService
         */
         if (Auth::check()) {
         /** @var \App\Models\User $user */
+        
             $user = Auth::user();
 
             $address = $user->addresses()
