@@ -3863,7 +3863,7 @@
                             `}
                         </div>
                         
-                        ${product.variants && product.variants.length > 0 ? `
+                         <!-- ${product.variants && product.variants.length > 0 ? `
                             <div class="mt-2 flex flex-wrap gap-1">
                                 ${getUniqueVariants(product.variants, 'size').slice(0, 3).map(size => `
                                     <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${size}</span>
@@ -3872,7 +3872,7 @@
                                     <span class="text-xs text-gray-400">+${getUniqueVariants(product.variants, 'size').length - 3}</span>
                                 ` : ''}
                             </div>
-                        ` : ''}
+                        ` : ''} -->
                     </div>
                 </div>
             `;
