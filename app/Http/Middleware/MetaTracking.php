@@ -43,7 +43,7 @@ class MetaTracking
             $advancedMatching['external_id'] = (string) $user->id;
 
             $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
-            if ($address) {;
+           
             if ($address) {
                 if (!empty($address->city))    $advancedMatching['ct'] = $norm($address->city);
                 if (!empty($address->state))   $advancedMatching['st'] = $norm($address->state);
@@ -63,6 +63,7 @@ class MetaTracking
 
         return $next($request);
     }
+    
 
     /** Runs after the response has been sent, so Meta latency never slows the page. */
     public function terminate(Request $request, Response $response): void
