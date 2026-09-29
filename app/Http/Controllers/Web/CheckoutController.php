@@ -600,7 +600,8 @@ class CheckoutController extends Controller
             ]);
 
             $orderId = $request->order_id;
-            $total = $request->total;
+            // $total = $request->total;
+            $total = round((float) $request->total, 2);
             $currency = $request->currency;
 
             $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
