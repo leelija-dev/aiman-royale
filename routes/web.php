@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\File;
 // use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\DB;
  use App\Services\SitemapService;
+ Route::get('/csrf-token', fn () => response()->json(['token' => csrf_token()])
+    ->header('Cache-Control', 'no-store'));
 // Public routes (accessible without authentication)
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('page.login');

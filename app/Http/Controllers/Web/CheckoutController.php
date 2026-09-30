@@ -63,13 +63,15 @@ class CheckoutController extends Controller
             session()->flash('force_cart_refresh', true);
             return redirect()->route('cart.index');
         }
+        $initiateCheckoutEventId = null;
+        $initiateCheckoutData = null;
         try {
             $contentIds = [];
             $numItems = 0;
             $totalValue = 0;
 
             foreach ($carts as $cart) {
-                $contentIds[] = $cart->product_id;
+                $contentIds[] = (string)$cart->product_id;
                 $numItems += $cart->count;
                 $totalValue += ($cart->discount_price ?? $cart->price) * $cart->count;
             }
@@ -96,8 +98,15 @@ class CheckoutController extends Controller
                     'currency'    => 'INR',
                 ],
                 $metaUserData,
-                $initiateCheckoutEventId
+                $initiateCheckoutEventId,
             );
+            $initiateCheckoutData = [
+                'content_ids'  => $contentIds,
+                'content_type' => 'product',
+                'value'        => (float) $totalValue,
+                'num_items'    => (int) $numItems,
+                'currency'     => 'INR',
+            ];
         } catch (\Exception $e) {
             Log::error('Meta InitiateCheckout failed: ' . $e->getMessage());
         }
@@ -113,7 +122,7 @@ class CheckoutController extends Controller
 
         $store = Store::where('is_active', true)->first();
         $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
-        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon', 'initiateCheckoutEventId'));
+        return view('web.checkout', compact('carts', 'occasions', 'addresses', 'store', 'coupon', 'initiateCheckoutEventId','initiateCheckoutData'));
     }
 
 
@@ -315,7 +324,7 @@ class CheckoutController extends Controller
                 'quantity' => $cart->count,
                 'price' => $cart->discount_price,
 
-                'coupon_id'    => $couponId,
+                'coupon_id'    => (int)$couponId ?? null,
                 'coupon_code'  => $couponCode,
                 'coupon_discount' => $couponDiscount,
                 'coupon_discount_amount' => $couponDiscountAmount,
@@ -591,7 +600,8 @@ class CheckoutController extends Controller
             ]);
 
             $orderId = $request->order_id;
-            $total = $request->total;
+            // $total = $request->total;
+            $total = round((float) $request->total, 2);
             $currency = $request->currency;
 
             $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
@@ -604,6 +614,11 @@ class CheckoutController extends Controller
                 'customer_email' => $user->email ?? 'customer@example.com',
                 'customer_phone' => $user->phone ?? '9999999999',
             ];
+
+            Log::info('Cashfree payment amount', [
+    'total' => $total,
+    'type' => gettype($total),
+]);
 
             $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
             // Debugging line to check the response

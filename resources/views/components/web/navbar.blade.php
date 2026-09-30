@@ -1688,10 +1688,22 @@
     <!-- Quick Links Footer -->
     <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
         <div class="grid grid-cols-2 gap-2">
-            <a href="{{ route('page.login') }}"
-                class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm" aria-label="Login to your account">
-                <i class="fa-solid fa-user mr-2"></i> Login
-            </a>
+            @if(Auth::check())
+              <form method="POST" action="{{ route('web.logout') }}" class="contents">
+                    @csrf
+                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
+                    <button type="submit"
+                        class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm"
+                        aria-label="Logout of your account">
+                        <i class="fa-solid fa-user mr-2"></i> Logout
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('page.login', ['redirect' => url()->full()]) }}"
+                    class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm" aria-label="Login to your account">
+                    <i class="fa-solid fa-user mr-2"></i> Login
+                </a>
+            @endif
             <a href="{{ route('cart.index') }}"
                 class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm" aria-label="View your shopping cart">
                 <i class="fa-solid fa-shopping-cart mr-2"></i> Cart

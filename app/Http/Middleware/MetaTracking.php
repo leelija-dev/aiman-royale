@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-
+use App\Models\Address;
 class MetaTracking
 {
     public function __construct(protected MetaConversionsService $meta) {}
@@ -29,6 +29,7 @@ class MetaTracking
             $request->cookies->set('_meta_gid', $gid);
         }
 
+        $norm = fn($v) => preg_replace('/[^\p{L}\p{N}]/u', '', mb_strtolower(trim((string) $v)));
         $advancedMatching = [];
         if (Auth::check()) {
             $user = Auth::user();
@@ -40,13 +41,29 @@ class MetaTracking
                 if (!empty($parts[1])) $advancedMatching['ln'] = $parts[1];
             }
             $advancedMatching['external_id'] = (string) $user->id;
+
+            $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
+           
+            if ($address) {
+                if (!empty($address->city))    $advancedMatching['ct'] = $norm($address->city);
+                if (!empty($address->state))   $advancedMatching['st'] = $norm($address->state);
+                if (!empty($address->pincode)) $advancedMatching['zp'] = $norm($address->pincode);
+            }
+            if (!empty($user->date_of_birth)) {
+                $advancedMatching['db'] = \Carbon\Carbon::parse($user->date_of_birth)->format('Ymd');
+            }
+            $advancedMatching['country'] = 'in';
         } elseif ($guestId = $request->cookie('_meta_gid')) {
             $advancedMatching['external_id'] = $guestId;
+            if ($v = $request->cookie('_meta_guest_ct')) $advancedMatching['ct'] = $norm($v);
+            if ($v = $request->cookie('_meta_guest_st')) $advancedMatching['st'] = $norm($v);
+            if ($v = $request->cookie('_meta_guest_zp')) $advancedMatching['zp'] = $norm($v);
         }
         view()->share('metaAdvancedMatching', $advancedMatching);
 
         return $next($request);
     }
+    
 
     /** Runs after the response has been sent, so Meta latency never slows the page. */
     public function terminate(Request $request, Response $response): void
@@ -75,6 +92,7 @@ class MetaTracking
         return $request->isMethod('GET')
             && !$request->ajax()
             && !$request->expectsJson()
+            && !$request->is('admin/*')
             && $response->getStatusCode() === 200
             && str_contains((string) $response->headers->get('Content-Type'), 'text/html')
             && $ua !== ''

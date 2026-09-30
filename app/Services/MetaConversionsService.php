@@ -38,19 +38,30 @@ class MetaConversionsService
         }
 
         $url = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
-
+                if (!$eventId) {
+            $req = request();
+            if ($req->ajax() || $req->expectsJson()) {
+                $eventId = $req->input('event_id');
+            } else {
+                $eventId = $req->attributes->get('meta_event_id');
+            }
+        }
+        $eventId = $eventId ? substr((string) $eventId, 0, 100) : null;
+        if (!$eventId) {
+            Log::warning('Meta CAPI: ' . $eventName . ' sent WITHOUT event_id', ['url' => request()->fullUrl()]);
+        }
         $event = [
             'event_name'       => $eventName,
             'event_time'       => time(),
             'action_source'    => 'website',
-            'event_id'         => $eventId ?? (string) Str::uuid(),
+            'event_id'         => $eventId ,//?? (string) Str::uuid(),
             'event_source_url' => $eventSourceUrl ?? request()->url(),
             'user_data'        => $userData,
             'custom_data'      => empty($customData) ? (object)[] : $customData,
         ];
         Log::info('META CAPI COVERAGE', [
             'event' => $eventName,
-            'event_id' => $event['event_id'],
+            'event_id' => $event['event_id'] ?? null,
 
             'has_em' => !empty($userData['em']),
             'has_ph' => !empty($userData['ph']),
@@ -63,6 +74,11 @@ class MetaConversionsService
             'has_external_id' => !empty($userData['external_id']),
             'has_ip' => !empty($userData['client_ip_address']),
             'has_user_agent' => !empty($userData['client_user_agent']),
+            'has_ct' => !empty($userData['ct']),
+            'has_st' => !empty($userData['st']),
+            'has_zp' => !empty($userData['zp']),
+            'has_db' => !empty($userData['db']),
+            'has_country' => !empty($userData['country']),
         ]);
         // Clean empty values
         $event = array_filter($event, fn($v) => $v !== null && $v !== []);
@@ -86,7 +102,7 @@ class MetaConversionsService
 
             if ($response->successful()) {
                 Log::info('Meta CAPI → ' . $eventName, [
-                    'event_id' => $event['event_id'],
+                    'event_id' => $event['event_id'] ?? null,
                     'response' => $result
                 ]);
             } else {
@@ -136,6 +152,7 @@ class MetaConversionsService
         */
         if (Auth::check()) {
         /** @var \App\Models\User $user */
+        
             $user = Auth::user();
 
             $address = $user->addresses()
@@ -165,13 +182,13 @@ class MetaConversionsService
 
                 if (!empty($parts[0])) {
                     $userData['fn'] = [
-                        $this->hashData($parts[0])
+                        $this->hashName($parts[0])
                     ];
                 }
 
                 if (!empty($parts[1])) {
                     $userData['ln'] = [
-                        $this->hashData($parts[1])
+                        $this->hashName($parts[1])
                     ];
                 }
             }
@@ -182,19 +199,28 @@ class MetaConversionsService
                 ];
             }
             // Date of birth - send only when available
+            // if (!empty($user->date_of_birth)) {
+            //     $userData['db'] = [
+            //         $this->hashData($user->date_of_birth->format('Ymd'))
+            //     ];
+            // }
             if (!empty($user->date_of_birth)) {
-                $userData['db'] = [
-                    $this->hashData($user->date_of_birth->format('Ymd'))
-                ];
+                try {
+                    $userData['db'] = [
+                        $this->hashData(\Carbon\Carbon::parse($user->date_of_birth)->format('Ymd'))
+                    ];
+                } catch (\Throwable $e) {
+                    // invalid date - skip instead of breaking the request
+                }
             }
             if ($address && !empty($address->city)) {
-                $userData['ct'] = [$this->hashData($address->city)];
+                $userData['ct'] = $this->hashLocation($address->city); //[$this->hashData($address->city)];
             }
              if ($address && !empty($address->state)) {
-                $userData['st'] = [$this->hashData($address->state)];
+                $userData['st'] = $this->hashLocation($address->state); //[$this->hashData($address->state)];
             }
              if ($address && !empty($address->pincode)) {
-                $userData['zp'] = [$this->hashData($address->pincode)];
+                $userData['zp'] = $this->hashZip($address->pincode); //[$this->hashData($address->pincode)];
             }
             if ($address && !empty($address->country )) {
                 $userData['country'] = [$this->hashData($address->country)];
@@ -234,32 +260,35 @@ class MetaConversionsService
 
                 if (!empty($parts[0])) {
                     $userData['fn'] = [
-                        $this->hashData($parts[0])
+                        $this->hashName($parts[0])
                     ];
                 }
 
                 if (!empty($parts[1])) {
                     $userData['ln'] = [
-                        $this->hashData($parts[1])
+                        $this->hashName($parts[1])
                     ];
                 }
             }
 
             if ($guestCity = request()->cookie('_meta_guest_ct')) {
                 $userData['ct'] = [
-                    $this->hashData($guestCity)
+                    // $this->hashData($guestCity)
+                    $this->hashLocation($guestCity)
                 ];
             }
 
             if ($guestState = request()->cookie('_meta_guest_st')) {
                 $userData['st'] = [
-                    $this->hashData($guestState)
+                    // $this->hashData($guestState)
+                    $this->hashLocation($guestState)
                 ];
             }
 
             if ($guestZip = request()->cookie('_meta_guest_zp')) {
                 $userData['zp'] = [
-                    $this->hashData($guestZip)
+                    // $this->hashData($guestZip)
+                    $this->hashZip($guestZip)
                 ];
             }
             if ($guestDb = request()->cookie('_meta_guest_db')) {
@@ -324,17 +353,23 @@ class MetaConversionsService
 
                 case 'fn':
                 case 'ln':
+                    $hashed = $this->hashName($value);
+                    if ($hashed) $userData[$key] = [$hashed];
+                    break;
                 case 'ct':
                 case 'st':
+                    $hashed = $this->hashLocation($value);
+                    if ($hashed) $userData[$key] = [$hashed];
+                    break;
+                    case 'zp':
+                        $hashed = $this->hashZip($value);
+                        if ($hashed) $userData['zp'] = [$hashed];
+                        break;
                 case 'db':
-                case 'zp':
                 case 'country':
                 case 'external_id':
                     $hashed = $this->hashData($value);
-
-                    if ($hashed) {
-                        $userData[$key] = [$hashed];
-                    }
+                    if ($hashed) $userData[$key] = [$hashed];
                     break;
 
                 default:
@@ -348,6 +383,12 @@ class MetaConversionsService
             fn ($v) => $v !== null && $v !== [] && $v !== ''
         );
     }
+    protected function hashName(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[\p{P}\p{S}]/u', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
+}
     /** Store guest-provided contact info the moment we get it — checkout form, popup, OTP attempt, etc. */
 public function rememberGuestContact(
     ?string $email = null,
@@ -410,8 +451,11 @@ public function rememberGuestContact(
     }
 
     // Keep digits only
+    // $phone = preg_replace('/\D+/', '', $phone);
     $phone = preg_replace('/\D+/', '', $phone);
 
+    // Meta: remove leading zeros (09876543210 -> 9876543210)
+    $phone = ltrim($phone, '0');
     if (empty($phone)) {
         return null;
     }
@@ -432,6 +476,21 @@ public function rememberGuestContact(
     }
 
     return hash('sha256', $phone);
+}
+/** city / state: lowercase, letters+digits only (no spaces, no punctuation) */
+protected function hashLocation(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[^\p{L}\p{N}]/u', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
+}
+
+/** postcode: lowercase, no spaces or dashes */
+protected function hashZip(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[^a-z0-9]/', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
 }
         /** fbc from cookie, else rebuilt from ?fbclid= */
     protected function resolveFbc(): ?string
