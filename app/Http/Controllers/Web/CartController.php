@@ -99,9 +99,16 @@ class CartController extends Controller
             $request->validate([
                 'variant_id' => 'required|exists:product_variants,id',
                 'count' => 'required|integer|min:1',
+                // 'event_id' => 'nullable|string',
                 'event_id' => 'nullable|string',
+                'fbc' => ['nullable', 'string', 'max:255'],
+                'fbp' => ['nullable', 'string', 'max:255'],
             ]);
             $eventId = $request->input('event_id');
+            $metaUserData = array_filter([                          // <-- add these 4 lines
+                'fbc' => $request->input('fbc'),
+                'fbp' => $request->input('fbp'),
+            ]);
             // if (!Auth::check()) {
             //     session(['guest_variant_id' => $request->variant_id]);
 
@@ -178,7 +185,8 @@ class CartController extends Controller
                         'currency' => 'INR',
                     ];
 
-                    $this->metaService->trackAddToCart($productData, [], $eventId);
+                    // $this->metaService->trackAddToCart($productData, [], $eventId);
+                    $this->metaService->trackAddToCart($productData, $metaUserData, $eventId);
 
                     Log::info('Meta AddToCart tracked', [
                         'product_id' => $variant->product_id,
@@ -216,7 +224,8 @@ class CartController extends Controller
                         'quantity' => $request->count,
                     ];
 
-                    $this->metaService->trackAddToCart($productData, [], $eventId);
+                    // $this->metaService->trackAddToCart($productData, [], $eventId);
+                    $this->metaService->trackAddToCart($productData, $metaUserData, $eventId);
 
                     Log::info('Meta AddToCart event tracked for new product: ' . $variant->product_id);
                 } catch (\Exception $e) {
@@ -387,12 +396,14 @@ class CartController extends Controller
         try {
             $userId = Auth::id();
             $sessionId = $userId ? null : session()->getId();
-
+            $guestId = $this->guestIdentity->get();
             $cartItem = Cart::where('id', $id)
-                ->where(function ($query) use ($userId, $sessionId) {
+                ->where(function ($query) use ($userId, $sessionId, $guestId) {
                     if ($userId) {
                         $query->where('user_id', $userId);
-                    } else {
+                    } elseif($guestId) {
+                        $query->where('guest_uuid', $guestId);
+                    }else {
                         $query->where('session_id', $sessionId);
                     }
                 })
@@ -423,11 +434,15 @@ class CartController extends Controller
     {
         $userId = Auth::id();
         $sessionId = session()->getId();
-
-        return Cart::where(function ($query) use ($userId, $sessionId) {
+        $guestId = $this->guestIdentity->get();
+        return Cart::where(function ($query) use ($userId, $sessionId,$guestId) {
             if ($userId) {
                 $query->where('user_id', $userId);
-            } else {
+            }
+            elseif($guestId){
+                $query->where('guest_uuid', $guestId);
+                }
+            else {
                 $query->where('session_id', $sessionId);
             }
         })->sum('count');
@@ -438,12 +453,15 @@ class CartController extends Controller
         $variantId = $request->variant_id;
         $userId = Auth::id();
         $sessionId = session()->getId();
-
+        $guestId = $this->guestIdentity->get();
+        log::info('guest_id'.$guestId);
         $cartItem = Cart::where('variant_id', $variantId)
-            ->where(function ($query) use ($userId, $sessionId) {
+            ->where(function ($query) use ($userId, $sessionId, $guestId) {
                 if ($userId) {
                     $query->where('user_id', $userId);
-                } else {
+                }elseif($guestId) {
+                    $query->where('guest_uuid', $guestId);
+                }else {
                     $query->where('session_id', $sessionId);
                 }
             })

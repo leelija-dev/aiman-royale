@@ -1,5 +1,4 @@
 @extends('layout.web.main-layout')
-@section('event', 'ViewCart')
 @section('styles')
 <link rel="stylesheet" href="{{ asset('web/css/cart.css') }}">
 @endsection

@@ -145,6 +145,7 @@ class WishlistController extends Controller
             $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'variant_id' => 'nullable|exists:product_variants,id',
+                'event_id'   => 'nullable|string|max:100',
             ]);
 
             $userId = Auth::id();
@@ -204,7 +205,7 @@ class WishlistController extends Controller
                                     ? ($defaultVariant->discount_price ?? $defaultVariant->price)
                                     : ($product->discount_price ?? $product->price),
                     'currency' => 'INR',
-                ]);
+                ], [], $request->input('event_id'));
 
                 Log::info('Meta AddToWishlist tracked for product: ' . $product->id);
             }

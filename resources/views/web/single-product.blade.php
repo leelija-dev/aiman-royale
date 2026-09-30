@@ -842,7 +842,9 @@
                                     @endphp
                                     <div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 cursor-pointer {{ $index == 0 ? 'selected border-secondary' : 'border-transparent' }}"
                                         data-display="{{ $fullImagePath }}" data-large="{{ $fullImagePath }}"
-                                        onclick="updateMainImage('{{ $fullImagePath }}', '{{ $product->name }}', this)">
+                                        {{-- onclick="updateMainImage('{{ $fullImagePath }}', '{{ Js::from($product->name) }}', this)">
+                                         --}}
+                                         onclick="updateMainImage('{{ $fullImagePath }}', {{ \Illuminate\Support\Js::from($product->name) }}, this)">
                                         <img src="{{ $fullImagePath }}"
                                             
                                             class="w-full h-full object-cover object-center object-top"
@@ -852,7 +854,8 @@
                                     <div class="thumbnail lg:h-[25%] h-full w-full overflow-hidden rounded-lg border-2 border-secondary cursor-pointer selected"
                                         data-display="{{ asset('assets/images/placeholder.jpg') }}"
                                         data-large="{{ asset('assets/images/placeholder.jpg') }}"
-                                        onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ $product->name }}', this)">
+                                        {{-- onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', '{{ Js::from($product->name) }}', this)"> --}}
+                                        onclick="updateMainImage('{{ asset('assets/images/placeholder.jpg') }}', {{ \Illuminate\Support\Js::from($product->name) }}, this)">
                                         <img src="{{ asset('assets/images/placeholder.jpg') }}"
                                             class="w-full h-full object-cover object-center object-top"
                                             alt="{{ $product->name ?? 'Product' }}"  loading="lazy"   />
@@ -1246,7 +1249,10 @@
         <a href="https://wa.me/{{ config('app.wh_number') }}?text={{ urlencode('Hello! I am interested in this product: ' . $product->name . ' - ' . route('page.single-product', $product->slug) . ' Price: ₹' . $product->variants->first()->discount_price) }}"
             target="_blank" rel="noopener noreferrer"
             class="bg-[#25D366] text-white hover:bg-[#128C7E] transition flex items-center justify-center md:w-full md:h-14  md:gap-2 md:text-base md:px-4 md:py-3 w-11 h-11 rounded-full flex-shrink-0 text-decoration-none">
-            <i class="fab fa-whatsapp md:text-xl text-lg"></i>
+            {{-- <i class="fab fa-whatsapp md:text-xl text-lg"></i> --}}
+             <svg class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
             <span class="md:inline hidden">Order on WhatsApp</span>
         </a>
 
@@ -2715,8 +2721,9 @@
     </script>
 
 
-    <script src="{{ asset('web/js/single-product.js') }}"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="{{ asset('web/js/single-product.js') }}"></script> --}}
+    <script src="{{ asset('web/js/single-product.js') }}?v={{ filemtime(public_path('web/js/single-product.js')) }}"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // Fetch and display product reviews
@@ -2913,7 +2920,54 @@
     <script>
         const loginUrl = "{{ route('page.login') }}";
         const checkoutUrl = "{{ route('checkout.index') }}";
-
+        const PRODUCT_NAME = @json($product->name);
+        const ADD_TO_CART_HTML =
+    '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
+ 
+// fetch that can never hang forever (a hung request = button stuck disabled)
+function fetchWithTimeout(url, options, ms) {
+    if (typeof AbortController === 'undefined') {
+        return fetch(url, Object.assign({ credentials: 'same-origin' }, options));
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms || 15000);
+    return fetch(url, Object.assign({ credentials: 'same-origin' }, options, { signal: controller.signal }))
+        .finally(() => clearTimeout(timer));
+}
+ 
+/* ---------- 2. Delegated click handling ----------
+   Works the moment this script runs (no DOMContentLoaded needed) and
+   survives the button being re-rendered. Because of this you must DELETE:
+     - the `addToCartBtn.addEventListener('click', ...)` block and the
+       `buyNowBtn.addEventListener('click', ...)` block inside the big
+       DOMContentLoaded handler
+     - the `freshBtn.onclick = ...` lines in updateAddToCartButton (done below)
+     - the "Add to Cart" demo handler in single-product.js
+   otherwise a click would fire twice. */
+if (!window.__cartClicksBound) {
+    window.__cartClicksBound = true;
+ 
+    document.addEventListener('click', function (e) {
+        const addBtn = e.target.closest('#add-to-cart');
+        if (addBtn) {
+            e.preventDefault();
+            if (addBtn.disabled) return;
+            if (addBtn.dataset.inCart === '1') {
+                window.location.href = '/cart';
+                return;
+            }
+            if (typeof addToCart === 'function') addToCart();
+            return;
+        }
+ 
+        const buyBtn = e.target.closest('#buy-now');
+        if (buyBtn) {
+            e.preventDefault();
+            if (buyBtn.disabled) return;
+            if (typeof buyNow === 'function') buyNow();
+        }
+    });
+}
         // Store all product variants data
         const productVariants = @json($product->variants);
 
@@ -3498,7 +3552,7 @@
 
                         const selectedClass = index === 0 ? 'selected border-secondary' : 'border-transparent';
                         thumbnailsHtml +=
-                            `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', '{{ $product?->name }}', this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" loading="lazy" /></div>`;
+                            `<div class="thumbnail xll:min-h-[200px] lg:min-h-[170px] h-fit w-full lg:max-w-full min-w-[64px] max-w-[64px] overflow-hidden rounded-lg border-2 cursor-pointer ${selectedClass}" data-display="${imagePath}" data-large="${imagePath}" onclick="updateMainImage('${imagePath}', PRODUCT_NAME, this)"><img src="${imagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" loading="lazy" /></div>`;
                     });
                     thumbnailContainer.innerHTML = thumbnailsHtml;
                 }
@@ -3514,7 +3568,7 @@
 
                 if (thumbnailContainer) {
                     thumbnailContainer.innerHTML =
-                        `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', '{{ $product?->name }}', this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                        `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', PRODUCT_NAME, this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
                 }
             }
         }
@@ -3607,28 +3661,63 @@
             }
         }
 
-        function checkVariantInCart(variantId) {
-            if (!variantId) return;
+        // function checkVariantInCart(variantId) {
+        //     if (!variantId) return;
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) return;
+        //     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        //     if (!csrfToken) return;
 
-            fetch('/cart/check', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        variant_id: variantId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    updateAddToCartButton(data.in_cart, data.quantity);
-                })
-                .catch(error => console.error('Error checking cart:', error));
-        }
+        //     fetch('/cart/check', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-CSRF-TOKEN': csrfToken
+        //             },
+        //             body: JSON.stringify({
+        //                 variant_id: variantId
+        //             })
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             updateAddToCartButton(data.in_cart, data.quantity);
+        //         })
+        //         .catch(error => console.error('Error checking cart:', error));
+        // }
+        let cartCheckSeq = 0;
+ 
+function checkVariantInCart(variantId) {
+    if (!variantId) return;
+ 
+    const btn = document.getElementById('add-to-cart');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!csrfToken) {
+        if (btn && btn.disabled) btn.disabled = false;
+        return;
+    }
+ 
+    const seq = ++cartCheckSeq; // ignore out-of-order responses
+ 
+    fetchWithTimeout('/cart/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ variant_id: variantId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (seq !== cartCheckSeq) return;
+            updateAddToCartButton(!!data.in_cart, data.quantity);
+        })
+        .catch(error => {
+            console.error('Error checking cart:', error);
+            if (seq !== cartCheckSeq) return;
+            // fall back to a usable button instead of leaving it disabled
+            updateAddToCartButton(false);
+        });
+}
 
         // function updateAddToCartButton(inCart, quantity = 0) {
         //     const addToCartBtn = document.getElementById('add-to-cart');
@@ -3654,48 +3743,68 @@
         //     }
         // }
 
-        function updateAddToCartButton(inCart, quantity = 0) {
-            const addToCartBtn = document.getElementById('add-to-cart');
-            if (!addToCartBtn) return;
+        // function updateAddToCartButton(inCart, quantity = 0) {
+        //     const addToCartBtn = document.getElementById('add-to-cart');
+        //     if (!addToCartBtn) return;
 
-            // Remove all existing click listeners by cloning
-            const newBtn = addToCartBtn.cloneNode(true);
-            addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
-            const freshBtn = document.getElementById('add-to-cart');
+        //     // Remove all existing click listeners by cloning
+        //     const newBtn = addToCartBtn.cloneNode(true);
+        //     addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
+        //     const freshBtn = document.getElementById('add-to-cart');
 
-            if (inCart) {
-                // Go to Cart mode - NAVIGATE ONLY
-                freshBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
-                freshBtn.classList.remove('bg-secondary');
-                freshBtn.classList.add('bg-green-600');
-                freshBtn.disabled = false;
+        //     if (inCart) {
+        //         // Go to Cart mode - NAVIGATE ONLY
+        //         freshBtn.innerHTML = `<i class="fas fa-check mr-2"></i> Go to Cart (${quantity})`;
+        //         freshBtn.classList.remove('bg-secondary');
+        //         freshBtn.classList.add('bg-green-600');
+        //         freshBtn.disabled = false;
 
-                // ONLY redirect - NO add to cart logic
-                freshBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.location.href = '/cart';
-                };
+        //         // ONLY redirect - NO add to cart logic
+        //         freshBtn.onclick = function(e) {
+        //             e.preventDefault();
+        //             e.stopPropagation();
+        //             window.location.href = '/cart';
+        //         };
 
-            } else {
-                // Add to Cart mode
-                if (customDimensions) {
-                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
-                } else {
-                    freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
-                }
-                freshBtn.classList.remove('bg-green-600');
-                freshBtn.classList.add('bg-secondary');
-                freshBtn.disabled = false;
+        //     } else {
+        //         // Add to Cart mode
+        //         if (customDimensions) {
+        //             freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart';
+        //         } else {
+        //             freshBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i> <span class="lg:inline md:hidden smxl:inline hidden"> Add to</span> Cart';
+        //         }
+        //         freshBtn.classList.remove('bg-green-600');
+        //         freshBtn.classList.add('bg-secondary');
+        //         freshBtn.disabled = false;
 
-                // ONLY add to cart - NO redirect
-                freshBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    addToCart(); // Your existing addToCart function
-                };
-            }
-        }
+        //         // ONLY add to cart - NO redirect
+        //         freshBtn.onclick = function(e) {
+        //             e.preventDefault();
+        //             e.stopPropagation();
+        //             addToCart(); // Your existing addToCart function
+        //         };
+        //     }
+        // }
+        function updateAddToCartButton(inCart, quantity) {
+    const btn = document.getElementById('add-to-cart');
+    if (!btn) return;
+ 
+    btn.disabled = false;
+ 
+    if (inCart) {
+        btn.dataset.inCart = '1';
+        btn.innerHTML = '<i class="fas fa-check mr-2"></i> Go to Cart (' + (quantity || 1) + ')';
+        btn.classList.remove('bg-secondary');
+        btn.classList.add('bg-green-600');
+    } else {
+        delete btn.dataset.inCart;
+        btn.innerHTML = customDimensions
+            ? '<i class="fas fa-shopping-cart mr-2"></i> Add Custom Item to Cart'
+            : ADD_TO_CART_HTML;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add('bg-secondary');
+    }
+}
 
         function buyNow() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -3708,7 +3817,7 @@
             const buyNowBtn = document.getElementById('buy-now');
             if (!buyNowBtn) return;
 
-            const variantId = buyNowBtn.getAttribute('data-variant-id');
+            let variantId = buyNowBtn.getAttribute('data-variant-id');
 
             if (!variantId && typeof selectedVariantId !== 'undefined') {
                 variantId = selectedVariantId;
@@ -3737,7 +3846,8 @@
             buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
             const initiateCheckoutEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
             requestData.event_id = initiateCheckoutEventId;
-            fetch('/buy-now', {
+            // fetch('/buy-now', {
+            fetchWithTimeout('/buy-now', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3776,26 +3886,26 @@
                 })
                 .then(data => {
                     if (data && data.success) {
-                         if (typeof fbq !== 'undefined') {
+                //          if (typeof fbq !== 'undefined') {
 
-                            // const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
+                //             // const initiateCheckoutEventId = '{{ (string) Str::uuid() }}';
 
-                            fbq(
-                                'track',
-                                'InitiateCheckout',
-                                {
-                                    content_name: @json($product->name ?? ''),
-                                    content_ids: [@json($product->id ?? '')],
-                                    content_type: 'product',
-                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
-                                    currency: 'INR',
-                                    num_items: 1
-                                },
-                                {
-                                    eventID: initiateCheckoutEventId
-                                }
-                    );
-                }
+                //             fbq(
+                //                 'track',
+                //                 'InitiateCheckout',
+                //                 {
+                //                     content_name: @json($product->name ?? ''),
+                //                     content_ids: [@json($product->id ?? '')],
+                //                     content_type: 'product',
+                //                     value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                //                     currency: 'INR',
+                //                     num_items: 1
+                //                 },
+                //                 {
+                //                     eventID: initiateCheckoutEventId
+                //                 }
+                //     );
+                // }
                         window.location.href = data.redirect || checkoutUrl;
                     } else {
                         showNotification(data?.message || 'Unable to start checkout', 'error');
@@ -3869,14 +3979,20 @@
         };
     }
 
-   
+   const getCookie = n => {
+    const m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+    };
+    requestData.fbc = getCookie('_fbc');
+    requestData.fbp = getCookie('_fbp');
 
     // 3. Call server
     const originalText = addToCartBtn.innerHTML;
     addToCartBtn.disabled = true;
     addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Adding...';
 
-    fetch('/cart/add', {
+    // fetch('/cart/add', {
+    fetchWithTimeout('/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -3908,9 +4024,9 @@
                     }, { eventID: eventId });
                 }
 
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+                // setTimeout(() => {
+                //     location.reload();
+                // }, 1000);
 
                 if (data.cart_count !== undefined) {
                     updateCartCount(data.cart_count);
@@ -3922,7 +4038,8 @@
                     addToCartBtn.classList.add('bg-green-600');
                     addToCartBtn.disabled = true;
                 } else {
-                    const variantId = addToCartBtn.getAttribute('data-variant-id');
+                    let variantId = addToCartBtn.getAttribute('data-variant-id');
+                    updateAddToCartButton(true, data.quantity || 1);
                     checkVariantInCart(variantId);
                 }
             } else {
@@ -4222,36 +4339,66 @@
             });
 
             // Set initial type
-            selectType('stitched');
+            try{
+                selectType('stitched');
+                
 
-            // Set initial size and color
-            if (selectedSize) {
-                selectSize(selectedSize);
+                // Set initial size and color
+                if (selectedSize) {
+                    selectSize(selectedSize);
+                }
+            }catch(e){
+            console.error('Variant init failed', e);
             }
 
             // Add to cart button
             const addToCartBtn = document.getElementById('add-to-cart');
             if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    addToCart();
-                });
+                // addToCartBtn.addEventListener('click', function(event) {
+                //     event.preventDefault();
+                //     event.stopPropagation();
+                //     addToCart();
+                // });
 
                 if (selectedVariantId) {
                     checkVariantInCart(selectedVariantId);
                 }
             }
 
-            const buyNowBtn = document.getElementById('buy-now');
-            if (buyNowBtn) {
-                buyNowBtn.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    buyNow();
-                });
-            }
+            // const buyNowBtn = document.getElementById('buy-now');
+            // if (buyNowBtn) {
+            //     buyNowBtn.addEventListener('click', function(event) {
+            //         event.preventDefault();
+            //         event.stopPropagation();
+            //         buyNow();
+            //     });
+            // }
+            // Reset Buy Now / Add to Cart buttons when page is restored from back-forward cache
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    const buyNowBtn = document.getElementById('buy-now');
+                    if (buyNowBtn) {
+                        buyNowBtn.disabled = false;
+                        buyNowBtn.innerHTML = '<i class="fas fa-bag-shopping"></i> <span>Buy <span class="lg:inline md:hidden smxl:inline hidden">Now</span></span>';
+                    }
 
+                    // const addToCartBtn = document.getElementById('add-to-cart');
+                    // if (addToCartBtn && !addToCartBtn.getAttribute('data-custom-dimensions')) {
+                    //     addToCartBtn.disabled = false;
+                    //     addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> <span><span class="lg:inline md:hidden smxl:inline hidden">Add to</span> Cart</span>';
+                    // }
+                    const addToCartBtn = document.getElementById('add-to-cart');
+                    if (addToCartBtn && !addToCartBtn.getAttribute('data-custom-dimensions')) {
+                        const variantId = addToCartBtn.getAttribute('data-variant-id');
+                        if (variantId) {
+                            checkVariantInCart(variantId); // asks the server for the real state
+                        } else {
+                            addToCartBtn.disabled = false;
+                            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> <span><span class="lg:inline md:hidden smxl:inline hidden">Add to</span> Cart</span>';
+                        }
+                    }
+                }
+            });
             // Wishlist button
             const wishlistBtn = document.getElementById('wishlist-btn');
             if (wishlistBtn) {
@@ -4337,7 +4484,7 @@
 
             const isInWishlist = button.classList.contains('text-red-500');
             const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
-
+            const wishEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
             const originalContent = button.innerHTML;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
@@ -4350,7 +4497,8 @@
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        product_id: productId
+                        product_id: productId,
+                        event_id: wishEventId
                     })
                 })
                 .then(response => {
@@ -4375,6 +4523,15 @@
                         } else {
                             button.classList.add('text-red-500');
                             button.innerHTML = '<i class="fas fa-heart"></i>';
+                                                        if (typeof fbq !== 'undefined') {
+                                fbq('track', 'AddToWishlist', {
+                                    content_name: @json($product->name ?? ''),
+                                    content_ids: [String(productId)],
+                                    content_type: 'product',
+                                    value: {{ $product->variants->first()->discount_price ?? $product->variants->first()->price ?? 0 }},
+                                    currency: 'INR'
+                                }, { eventID: wishEventId });
+                            }
                         }
 
                         // Update all wishlist badges

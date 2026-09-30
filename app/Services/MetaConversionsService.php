@@ -29,25 +29,39 @@ class MetaConversionsService
         ?string $eventId = null,
         ?string $eventSourceUrl = null
     ): array {
+        if (!in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com'])) {
+            return ['success' => false, 'message' => 'Skipped: non-production host'];
+        }
         if (!$this->pixelId || !$this->accessToken) {
             Log::warning('Meta CAPI disabled: Missing credentials');
             return ['success' => false, 'message' => 'Meta credentials not configured'];
         }
 
         $url = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
-
+                if (!$eventId) {
+            $req = request();
+            if ($req->ajax() || $req->expectsJson()) {
+                $eventId = $req->input('event_id');
+            } else {
+                $eventId = $req->attributes->get('meta_event_id');
+            }
+        }
+        $eventId = $eventId ? substr((string) $eventId, 0, 100) : null;
+        if (!$eventId) {
+            Log::warning('Meta CAPI: ' . $eventName . ' sent WITHOUT event_id', ['url' => request()->fullUrl()]);
+        }
         $event = [
             'event_name'       => $eventName,
             'event_time'       => time(),
             'action_source'    => 'website',
-            'event_id'         => $eventId ?? (string) Str::uuid(),
-            'event_source_url' => $eventSourceUrl ?? request()->fullUrl(),
+            'event_id'         => $eventId ,//?? (string) Str::uuid(),
+            'event_source_url' => $eventSourceUrl ?? request()->url(),
             'user_data'        => $userData,
             'custom_data'      => empty($customData) ? (object)[] : $customData,
         ];
         Log::info('META CAPI COVERAGE', [
             'event' => $eventName,
-            'event_id' => $event['event_id'],
+            'event_id' => $event['event_id'] ?? null,
 
             'has_em' => !empty($userData['em']),
             'has_ph' => !empty($userData['ph']),
@@ -60,6 +74,11 @@ class MetaConversionsService
             'has_external_id' => !empty($userData['external_id']),
             'has_ip' => !empty($userData['client_ip_address']),
             'has_user_agent' => !empty($userData['client_user_agent']),
+            'has_ct' => !empty($userData['ct']),
+            'has_st' => !empty($userData['st']),
+            'has_zp' => !empty($userData['zp']),
+            'has_db' => !empty($userData['db']),
+            'has_country' => !empty($userData['country']),
         ]);
         // Clean empty values
         $event = array_filter($event, fn($v) => $v !== null && $v !== []);
@@ -83,7 +102,7 @@ class MetaConversionsService
 
             if ($response->successful()) {
                 Log::info('Meta CAPI → ' . $eventName, [
-                    'event_id' => $event['event_id'],
+                    'event_id' => $event['event_id'] ?? null,
                     'response' => $result
                 ]);
             } else {
@@ -106,7 +125,7 @@ class MetaConversionsService
     /**
      * Build user_data properly
      */
-    public function createUserData(array $additionalData = []): array
+    public function createUserData(array $additionalData = [], bool $includeContactInfo = true): array
     {
         $userData = [
             'client_ip_address' => request()->ip(),
@@ -133,19 +152,21 @@ class MetaConversionsService
         */
         if (Auth::check()) {
         /** @var \App\Models\User $user */
+        
             $user = Auth::user();
 
             $address = $user->addresses()
                 ->where('is_default', 1)
                 ->first();
 
-            if (!empty($user->email)) {
-                $userData['em'] = [
-                    $this->hashData($user->email)
-                ];
+            if ($includeContactInfo && !empty($user->email)) {
+                $hashedEmail = $this->hashEmail($user->email);
+                if ($hashedEmail) {
+                    $userData['em'] = [$hashedEmail];
+                }
             }
 
-            if (!empty($user->phone)) {
+            if ($includeContactInfo && !empty($user->phone)) {
                 $userData['ph'] = [
                     $this->hashPhone($user->phone)
                 ];
@@ -161,13 +182,13 @@ class MetaConversionsService
 
                 if (!empty($parts[0])) {
                     $userData['fn'] = [
-                        $this->hashData($parts[0])
+                        $this->hashName($parts[0])
                     ];
                 }
 
                 if (!empty($parts[1])) {
                     $userData['ln'] = [
-                        $this->hashData($parts[1])
+                        $this->hashName($parts[1])
                     ];
                 }
             }
@@ -178,19 +199,28 @@ class MetaConversionsService
                 ];
             }
             // Date of birth - send only when available
+            // if (!empty($user->date_of_birth)) {
+            //     $userData['db'] = [
+            //         $this->hashData($user->date_of_birth->format('Ymd'))
+            //     ];
+            // }
             if (!empty($user->date_of_birth)) {
-                $userData['db'] = [
-                    $this->hashData($user->date_of_birth->format('Ymd'))
-                ];
+                try {
+                    $userData['db'] = [
+                        $this->hashData(\Carbon\Carbon::parse($user->date_of_birth)->format('Ymd'))
+                    ];
+                } catch (\Throwable $e) {
+                    // invalid date - skip instead of breaking the request
+                }
             }
             if ($address && !empty($address->city)) {
-                $userData['ct'] = [$this->hashData($address->city)];
+                $userData['ct'] = $this->hashLocation($address->city); //[$this->hashData($address->city)];
             }
              if ($address && !empty($address->state)) {
-                $userData['st'] = [$this->hashData($address->state)];
+                $userData['st'] = $this->hashLocation($address->state); //[$this->hashData($address->state)];
             }
              if ($address && !empty($address->pincode)) {
-                $userData['zp'] = [$this->hashData($address->pincode)];
+                $userData['zp'] = $this->hashZip($address->pincode); //[$this->hashData($address->pincode)];
             }
             if ($address && !empty($address->country )) {
                 $userData['country'] = [$this->hashData($address->country)];
@@ -207,13 +237,14 @@ class MetaConversionsService
                 $this->hashData($this->guestId())
             ];
 
-            if ($guestEmail = request()->cookie('_meta_guest_em')) {
-                $userData['em'] = [
-                    $this->hashData($guestEmail)
-                ];
+            if ($includeContactInfo && ($guestEmail = request()->cookie('_meta_guest_em'))) {
+                $hashedEmail = $this->hashEmail($guestEmail);
+                if ($hashedEmail) {
+                    $userData['em'] = [$hashedEmail];
+                }
             }
 
-            if ($guestPhone = request()->cookie('_meta_guest_ph')) {
+            if ($includeContactInfo && ($guestPhone = request()->cookie('_meta_guest_ph'))) {
                 $userData['ph'] = [
                     $this->hashPhone($guestPhone)
                 ];
@@ -229,32 +260,35 @@ class MetaConversionsService
 
                 if (!empty($parts[0])) {
                     $userData['fn'] = [
-                        $this->hashData($parts[0])
+                        $this->hashName($parts[0])
                     ];
                 }
 
                 if (!empty($parts[1])) {
                     $userData['ln'] = [
-                        $this->hashData($parts[1])
+                        $this->hashName($parts[1])
                     ];
                 }
             }
 
             if ($guestCity = request()->cookie('_meta_guest_ct')) {
                 $userData['ct'] = [
-                    $this->hashData($guestCity)
+                    // $this->hashData($guestCity)
+                    $this->hashLocation($guestCity)
                 ];
             }
 
             if ($guestState = request()->cookie('_meta_guest_st')) {
                 $userData['st'] = [
-                    $this->hashData($guestState)
+                    // $this->hashData($guestState)
+                    $this->hashLocation($guestState)
                 ];
             }
 
             if ($guestZip = request()->cookie('_meta_guest_zp')) {
                 $userData['zp'] = [
-                    $this->hashData($guestZip)
+                    // $this->hashData($guestZip)
+                    $this->hashZip($guestZip)
                 ];
             }
             if ($guestDb = request()->cookie('_meta_guest_db')) {
@@ -303,13 +337,12 @@ class MetaConversionsService
             switch ($key) {
 
                 case 'em':
-                    $hashed = $this->hashData($value);
+                    $hashedEmail = $this->hashEmail($value);
 
-                    if ($hashed) {
-                        $userData['em'] = [$hashed];
+                    if ($hashedEmail) {
+                        $userData['em'] = [$hashedEmail];
                     }
                     break;
-
                 case 'ph':
                     $hashed = $this->hashPhone($value);
 
@@ -320,17 +353,23 @@ class MetaConversionsService
 
                 case 'fn':
                 case 'ln':
+                    $hashed = $this->hashName($value);
+                    if ($hashed) $userData[$key] = [$hashed];
+                    break;
                 case 'ct':
                 case 'st':
+                    $hashed = $this->hashLocation($value);
+                    if ($hashed) $userData[$key] = [$hashed];
+                    break;
+                    case 'zp':
+                        $hashed = $this->hashZip($value);
+                        if ($hashed) $userData['zp'] = [$hashed];
+                        break;
                 case 'db':
-                case 'zp':
                 case 'country':
                 case 'external_id':
                     $hashed = $this->hashData($value);
-
-                    if ($hashed) {
-                        $userData[$key] = [$hashed];
-                    }
+                    if ($hashed) $userData[$key] = [$hashed];
                     break;
 
                 default:
@@ -344,6 +383,12 @@ class MetaConversionsService
             fn ($v) => $v !== null && $v !== [] && $v !== ''
         );
     }
+    protected function hashName(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[\p{P}\p{S}]/u', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
+}
     /** Store guest-provided contact info the moment we get it — checkout form, popup, OTP attempt, etc. */
 public function rememberGuestContact(
     ?string $email = null,
@@ -385,19 +430,68 @@ public function rememberGuestContact(
         return hash('sha256', strtolower(trim($data)));
     }
 
-    public function hashPhone(?string $phone, string $countryCode = '91'): ?string
+    /** Validates the email before hashing - never send an invalid/placeholder address to Meta. */
+    protected function hashEmail(?string $email): ?string
     {
-        if (empty($phone)) return null;
+        if (empty($email)) return null;
 
-        $phone = preg_replace('/[^0-9]/', '', $phone);
+        $email = trim(strtolower($email));
 
-        // Add country code if 10 digit number (India)
-        if (strlen($phone) === 10) {
-            $phone = $countryCode . $phone;
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
         }
 
-        return hash('sha256', $phone);
+        return hash('sha256', $email);
     }
+
+   public function hashPhone(?string $phone, string $countryCode = '91'): ?string
+{
+    if (empty($phone)) {
+        return null;
+    }
+
+    // Keep digits only
+    // $phone = preg_replace('/\D+/', '', $phone);
+    $phone = preg_replace('/\D+/', '', $phone);
+
+    // Meta: remove leading zeros (09876543210 -> 9876543210)
+    $phone = ltrim($phone, '0');
+    if (empty($phone)) {
+        return null;
+    }
+
+    // 10-digit Indian number
+    if (strlen($phone) === 10) {
+        $phone = $countryCode . $phone;
+    }
+
+    // International phone number must be 8–15 digits
+    if (!preg_match('/^\d{8,15}$/', $phone)) {
+        return null;
+    }
+
+    // Reject obvious invalid/placeholder numbers
+    if (preg_match('/^(\d)\1+$/', $phone)) {
+        return null;
+    }
+
+    return hash('sha256', $phone);
+}
+/** city / state: lowercase, letters+digits only (no spaces, no punctuation) */
+protected function hashLocation(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[^\p{L}\p{N}]/u', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
+}
+
+/** postcode: lowercase, no spaces or dashes */
+protected function hashZip(?string $v): ?string
+{
+    if (empty($v)) return null;
+    $v = preg_replace('/[^a-z0-9]/', '', mb_strtolower(trim($v)));
+    return $v === '' ? null : hash('sha256', $v);
+}
         /** fbc from cookie, else rebuilt from ?fbclid= */
     protected function resolveFbc(): ?string
     {
@@ -452,7 +546,10 @@ public function rememberGuestContact(
     {
         return $this->sendEvent(
             'PageView',
-            $this->createUserData($customUserData),
+            // PageView fires on every page load - don't attach em/ph here, or the
+            // same hashed email gets resent on dozens of low-intent events, which
+            // is exactly what triggers Meta's "duplicate client email" warning.
+            $this->createUserData($customUserData, includeContactInfo: true),
             [],
             $eventId
         );
@@ -466,7 +563,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
             'content_category' => $productData['category'] ?? null,
         ]);
 
@@ -481,7 +578,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
             'num_items'    => (int)($productData['quantity'] ?? 1),
         ]);
 
@@ -496,7 +593,7 @@ public function rememberGuestContact(
             'content_ids'  => isset($productData['id']) ? [(string)$productData['id']] : null,
             'content_type' => 'product',
             'value'        => (float)($productData['price'] ?? 0),
-            'currency'     => $productData['currency'] ?? 'INR',
+            'currency'     => 'INR',//$productData['currency'] ?? 'INR',
         ]);
 
         return $this->sendEvent('AddToWishlist', $this->createUserData($customUserData), $customData, $eventId);
@@ -509,7 +606,7 @@ public function rememberGuestContact(
             'content_ids'  => $data['content_ids'] ?? null,
             'content_type' => 'product',
             'value'        => (float)($data['value'] ?? 0),
-            'currency'     => $data['currency'] ?? 'INR',
+            'currency'     => 'INR',//$data['currency'] ?? 'INR',
             'num_items'    => (int)($data['num_items'] ?? 1),
         ]);
 
@@ -523,7 +620,7 @@ public function rememberGuestContact(
             'content_ids'  => $data['content_ids'] ?? null,
             'content_type' => 'product',
             'value'        => (float)($data['value'] ?? 0),
-            'currency'     => $data['currency'] ?? 'INR',
+            'currency'     => 'INR',//$data['currency'] ?? 'INR',
         ]);
 
         return $this->sendEvent('AddPaymentInfo', $this->createUserData($customUserData), $customData, $eventId);
@@ -556,7 +653,7 @@ public function rememberGuestContact(
         'content_ids' => $orderData['content_ids'] ?? null,
         'content_type' => $orderData['content_type'] ?? 'product',
         'value' => (float) ($orderData['value'] ?? 0),
-        'currency' => $orderData['currency'] ?? 'INR',
+        'currency' => 'INR',//$orderData['currency'] ?? 'INR',
         'num_items' => (int) ($orderData['num_items'] ?? 1),
         'order_id' => $orderData['order_id']
             ?? $orderData['transaction_id']
@@ -621,7 +718,7 @@ public function rememberGuestContact(
     {
         $customData = array_filter([
             'value'    => (float)($data['value'] ?? 0),
-            'currency' => $data['currency'] ?? 'INR',
+            'currency' => 'INR',//$data['currency'] ?? 'INR',
             'predicted_ltv' => $data['predicted_ltv'] ?? null,
         ]);
 

@@ -311,8 +311,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             
                             <span class="text-gray-600">Subtotal</span>
                             {{-- <span>{{config('app.currency')}}{{ number_format($total, 2) }}</span> --}}
-                            <span id="subtotal-original" class="text-gray-800 hidden" style="font-weight: bold;">
-                                    {{ config('app.currency') }}<span id="subtotal-original-amount"></span>
+                            <span id="subtotal-original" class="text-gray-800 " style="font-weight: bold;">
+                                    {{ config('app.currency') }}<span id="subtotal-original-amount">{{ number_format($total, 2, '.', '') }}</span>
                                 </span>
                             <span class="hidden">
                                 {{ config('app.currency') }}
@@ -905,13 +905,13 @@ msg.innerHTML = "Something went wrong.";
         const couponSavingsRow = document.getElementById("coupon-savings-row");
         const couponSavingsAmt = document.getElementById("coupon-savings-amount");
 
+        if (subtotalOriginalAmt) subtotalOriginalAmt.innerHTML = originalSubtotal.toFixed(2);
         if (totalProductDiscount > 0) {
-            if (subtotalOriginalAmt) subtotalOriginalAmt.innerHTML = originalSubtotal.toFixed(2);
-            if (subtotalOriginalEl) subtotalOriginalEl.classList.remove("hidden");
+            // if (subtotalOriginalEl) subtotalOriginalEl.classList.remove("hidden");
             if (couponSavingsAmt) couponSavingsAmt.innerHTML = totalProductDiscount.toFixed(2);
             if (couponSavingsRow) couponSavingsRow.classList.remove("hidden");
         } else {
-            if (subtotalOriginalEl) subtotalOriginalEl.classList.add("hidden");
+            // if (subtotalOriginalEl) subtotalOriginalEl.classList.add("hidden");
             if (couponSavingsRow) couponSavingsRow.classList.add("hidden");
         }
         // -----------------------------
@@ -1084,22 +1084,29 @@ msg.innerHTML = "Something went wrong.";
     console.log('typeof applyCoupon:', typeof window.applyCoupon);
    document.addEventListener("DOMContentLoaded", function () {
         // Track InitiateCheckout event with Facebook Pixel
-        @if(isset($carts) && count($carts) > 0)
-        if (typeof fbq !== 'undefined') {
-            const totalValue = {{ $total ?? 0 }};
-            const contentIds = @js($carts->pluck('product_id')->toArray());
-            const numItems = {{ $carts->sum('count') ?? 0 }};
+        // @if(isset($carts) && count($carts) > 0)
+        // if (typeof fbq !== 'undefined') {
+        //     const totalValue = {{ $total ?? 0 }};
+        //     const contentIds = @js($carts->pluck('product_id')->toArray());
+        //     const numItems = {{ $carts->sum('count') ?? 0 }};
 
-            fbq('track', 'InitiateCheckout', {
-                content_ids: contentIds,
-                content_type: 'product',
-                value: totalValue,
-                currency: 'INR',
-                num_items: numItems
-            }, {
-                eventID: @json($initiateCheckoutEventId ?? '')
-            });
-        }
+        //     fbq('track', 'InitiateCheckout', {
+        //         content_ids: contentIds,
+        //         content_type: 'product',
+        //         value: totalValue,
+        //         currency: 'INR',
+        //         num_items: numItems
+        //     }, {
+        //         eventID: @json($initiateCheckoutEventId ?? '')
+        //     });
+        // }
+        // @endif
+        @if(!empty($initiateCheckoutEventId) && !empty($initiateCheckoutData))
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'InitiateCheckout', @json($initiateCheckoutData), {
+                    eventID: @json($initiateCheckoutEventId)
+                });
+            }
         @endif
 
     document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {

@@ -33,7 +33,7 @@ class CategoryController extends Controller
             // Handle occasion-based filtering
             return $this->handleOccasionProducts($occasion, $slug);
         }
-        $categoryExist = Category::where('slug', $slug)->first();
+        $categoryExist = Category::where('slug', $slug)->where('is_active', 1)->first();
 
         if ($categoryExist) {
 

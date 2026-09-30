@@ -155,10 +155,40 @@
                 @endif
 
                 <!-- Google Login Button -->
+                 {{--
                 <a href="{{ route('google.redirect') }}" class="google-btn">
                     <i class="fab fa-google" style="color: #ea4335;"></i>
                     <span>Continue with Google</span>
                 </a>
+                --}}
+
+                @php
+    // Prefer current request (buy_now clicked → login page),
+    // fall back to whatever was stashed earlier in the session.
+    $oauthParams = [
+        'buy_now'           => 1,
+        'variant_id'        => request('variant_id',        session('guest_variant_id')),
+        'product_id'        => request('product_id',        session('guest_product_id')),
+        'count'             => request('count', 1,          session('guest_count', 1)),
+        'type'              => request('type',              session('guest_type', 'stitched')),
+        'event_id'          => request('event_id',          session('guest_event_id')),
+        'custom_dimensions' => request('custom_dimensions', session('guest_custom_dimensions')),
+        'redirect'          => request('redirect',          session('guest_redirect')),
+    ];
+
+    // Only send buy_now=1 if we actually have the data
+    $hasBuyNow = request()->boolean('buy_now') || session()->has('guest_variant_id');
+
+    // Remove nulls/empties so the URL stays clean
+    $googleParams = $hasBuyNow
+        ? array_filter($oauthParams, fn ($v) => !is_null($v) && $v !== '')
+        : array_filter(['redirect' => request('redirect')]);
+@endphp
+
+<a href="{{ route('google.redirect', $googleParams) }}" class="google-btn">
+    <i class="fab fa-google" style="color: #ea4335;"></i>
+    <span>Continue with Google</span>
+</a>
 
                 <!-- Divider -->
                 <div class="divider">
@@ -215,7 +245,7 @@
                             </div>
                             <input type="text" id="email" name="email" required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition duration-200"
-                                placeholder="Email or Phone" value="{{ old('email') }}">
+                                placeholder="Phone or Email" value="{{ old('email') }}">
                         </div>
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

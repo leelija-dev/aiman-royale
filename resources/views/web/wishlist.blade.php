@@ -196,7 +196,7 @@
                     <div class="wishlist-item flex flex-col  product-card bg-white rounded-2xl shadow-sm overflow-hidden" data-product-id="{{ $product->id }}">
                         <div class="relative">
                             <a href="{{ route('page.single-product', $product->slug) }}">
-                                <div class="h-64 w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center ">
+                                <div class="h-58 w-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center ">
                                     @if($product->featured_image)
                                     <img src="{{ url('/img/' . $product->featured_image) }}"
                                         alt="{{ $product->name }}"

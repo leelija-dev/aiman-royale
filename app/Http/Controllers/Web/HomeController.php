@@ -1398,8 +1398,8 @@ class HomeController extends Controller
             $defaultVariant = $product->variants->first();
 
             $productData = [
-                'id'       => $product->id,
-                'name'     => $product->name,
+                'id'       => $product->id ?? '',
+                'name'     => $product->name ?? '',
                 'price'    => $defaultVariant
                     ? ($defaultVariant->discount_price ?? $defaultVariant->price)
                     : $product->price,
@@ -1407,13 +1407,13 @@ class HomeController extends Controller
                 'category' => $product->category->name ?? null,
             ];
 
-            $result = $this->metaService->trackViewContent($productData);
+            $result = $this->metaService->trackViewContent($productData,[],request()->attributes->get('meta_event_id'));
 
             Log::info('Meta ViewContent tracked', [
                 'product_id' => $product->id,
                 'result'     => $result,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Meta ViewContent failed: ' . $e->getMessage());
         }
 
