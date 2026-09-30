@@ -549,7 +549,7 @@ protected function hashZip(?string $v): ?string
             // PageView fires on every page load - don't attach em/ph here, or the
             // same hashed email gets resent on dozens of low-intent events, which
             // is exactly what triggers Meta's "duplicate client email" warning.
-            $this->createUserData($customUserData, includeContactInfo: false),
+            $this->createUserData($customUserData, includeContactInfo: true),
             [],
             $eventId
         );

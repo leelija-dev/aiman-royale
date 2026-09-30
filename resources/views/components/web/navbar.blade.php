@@ -1088,8 +1088,9 @@
                                 class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> 
                          </div> -->
                         <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
-                        <i
-                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform" aria-hidden="true"></i>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
+                            <i class="fa-solid fa-user text-xs text-[14px]" aria-hidden="true"></i>
+                        </div>
                     </button>
 
                     <!-- Account Dropdown -->
