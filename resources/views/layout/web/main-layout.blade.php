@@ -523,7 +523,8 @@
             content_type: 'product',
             value:        {{ (float) ($purchase['value'] ?? 0) }},
             currency:     'INR',
-            num_items:    {{ (int) ($purchase['num_items'] ?? 1) }}
+            num_items:    {{ (int) ($purchase['num_items'] ?? 1) }},
+            order_id:     @json((string) $purchase['order_id'])
         }, {eventID: @json((string) ($purchase['event_id'] ?? $purchase['order_id']))});
     @endif
 </script>
