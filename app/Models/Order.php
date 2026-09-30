@@ -36,6 +36,8 @@ class Order extends Model
         'special_discount_amount',
         'special_discount_id',
         'special_discount_name',
+        'pick_up_request_added',
+        'return_request_added'
     ];
 
 
