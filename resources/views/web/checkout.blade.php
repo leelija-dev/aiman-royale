@@ -1084,7 +1084,7 @@ msg.innerHTML = "Something went wrong.";
     console.log('typeof applyCoupon:', typeof window.applyCoupon);
    document.addEventListener("DOMContentLoaded", function () {
         // Track InitiateCheckout event with Facebook Pixel
-        // @if(isset($carts) && count($carts) > 0)
+        /* @if(isset($carts) && count($carts) > 0)
         // if (typeof fbq !== 'undefined') {
         //     const totalValue = {{ $total ?? 0 }};
         //     const contentIds = @js($carts->pluck('product_id')->toArray());
@@ -1100,7 +1100,7 @@ msg.innerHTML = "Something went wrong.";
         //         eventID: @json($initiateCheckoutEventId ?? '')
         //     });
         // }
-        // @endif
+        // @endif */
         @if(!empty($initiateCheckoutEventId) && !empty($initiateCheckoutData))
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'InitiateCheckout', @json($initiateCheckoutData), {
