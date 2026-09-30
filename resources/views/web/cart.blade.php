@@ -1,17 +1,17 @@
 @extends('layout.web.main-layout')
 @section('event', 'ViewCart')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('web/css/cart.css') }}">
+@endsection
 @section('content')
 
-
-
-
-<section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 ">
+<section class="cart-page px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 ">
   <div class="container mx-auto">
     <!-- Progress Bar and Banner -->
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <div class="cart-progress bg-white rounded-lg shadow-sm p-6 mb-6">
       <div class="flex items-center mb-4">
-        <div class="flex-1 bg-gray-200 rounded-full h-4 relative">
-          <div class="bg-black h-4 rounded-full w-1/5"></div>
+        <div class="cart-progress-bar flex-1 bg-gray-200 rounded-full h-4 relative">
+          <div class="cart-progress-fill bg-black h-4 rounded-full w-1/5"></div>
         </div>
       </div>
       <p class="text-sm text-gray-600">
@@ -26,11 +26,11 @@
           </div>
     </div>
    
-    <div class="flex flex-col lgg:flex-row gap-8">
+    <div class="cart-layout flex flex-col lgg:flex-row gap-8">
       <!-- Cart Items - Now using a table -->
-      <div class="flex-1 bg-white rounded-lg shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left">
+      <div class="cart-table-panel flex-1 bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="cart-table-scroll overflow-x-auto">
+          <table class="cart-table w-full text-sm text-left">
             <thead
               class="text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
@@ -53,13 +53,13 @@
                 $couponForThisVariant = $appliedCoupon !== null;
                 // dd($appliedCoupons);
               @endphp
-              <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <tr class="cart-item-row border-b border-gray-200 hover:bg-gray-50">
                 
-                <td class="px-6 py-6">
+                <td class="cart-cell-product px-6 py-6">
                    <a href="{{route("page.single-product", $item->product->slug)}}">
                   <div class="flex items-center gap-4">
                     <div
-                      class="w-24 h-32 bg-gray-200 border-2 border-dashed rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden">
+                      class="cart-product-img w-24 h-32 bg-gray-200 border-2 border-dashed rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden">
                       @if($item->product && $item->product->images->first())
                       <img
                         class="object-cover object-top object-center w-full h-full"
@@ -83,18 +83,19 @@
                   </a>
                 </td>
                  
-                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</td>
-                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
+                <td class="cart-cell-price px-6 py-6 text-center"><span class="cart-m-label">Price</span><span class="cart-price-value">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</span></td>
+                <td class="cart-cell-discount px-6 py-6 text-center"><span class="cart-m-label">After Discount</span>{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
                 @if($couponForThisVariant)
                 @php
                 $afterDiscount = $item->variant->price - (($item->variant->price * $item->variant->discount) / 100);
                 $afterApplyCoupon = $afterDiscount - (($afterDiscount * $appliedCoupon['discount']) / 100);
                 @endphp
-                <td class="px-6 py-6 text-center">{{config('app.currency')}}{{ number_format($afterApplyCoupon, 2) }}</td>
+                <td class="cart-cell-coupon px-6 py-6 text-center"><span class="cart-m-label">After Coupon</span>{{config('app.currency')}}{{ number_format($afterApplyCoupon, 2) }}</td>
                 @else
-                <td class="px-6 py-6 text-center"></td>
+                <td class="cart-cell-coupon px-6 py-6 text-center"></td>
                 @endif
-                <td class="px-6 py-6 text-center">
+                <td class="cart-cell-qty px-6 py-6 text-center">
+                  <span class="cart-m-label">Quantity</span>
                   <div
                     class="flex items-center justify-center border border-gray-300 rounded-md inline-flex">
                     {{-- <button
@@ -132,16 +133,16 @@
 
                   @endphp
                   
-                  <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$appliedCoupon['final_price']}}">
+                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$appliedCoupon['final_price']}}" data-label="Subtotal">
                     {{config('app.currency')}}{{ number_format($afterApplyCoupon * $item->count, 2) }}
                   </td>
                 @else
-                  <td class="px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}">
+                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}" data-label="Subtotal">
                     {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
                   </td>
                 @endif
 
-                <td class="px-6 py-6 text-center">
+                <td class="cart-cell-remove px-6 py-6 text-center">
                   <button
                     onclick="removeFromCart({{ $item->id }})"
                     class="text-gray-400 hover:text-red-600 transition-colors">
@@ -162,7 +163,7 @@
                
               </tr>
               @empty
-              <tr>
+              <tr class="cart-empty-row">
                 <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                   <div class="flex flex-col items-center gap-4">
                     <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,10 +205,11 @@
       </div>
 
       <!-- Cart Totals Sidebar -->
-      <div class="lg:w-80">
-        <div class="bg-white rounded-lg shadow-sm p-6">
-          <h2 class="text-lg font-medium text-gray-900 mb-6">
-            Cart Totals
+      <div class="cart-totals-wrap lg:w-80">
+        <div class="cart-totals-card bg-white rounded-lg shadow-sm p-6">
+          <h2 class="cart-totals-title text-lg font-medium text-gray-900 mb-6">
+            <span class="cart-totals-title-desktop">Cart Totals</span>
+            <span class="cart-totals-title-mobile">Price details</span>
           </h2>
 
           <div class="space-y-4">
