@@ -245,7 +245,7 @@
                             </div>
                             <input type="text" id="email" name="email" required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition duration-200"
-                                placeholder="Email or Phone" value="{{ old('email') }}">
+                                placeholder="Phone or Email" value="{{ old('email') }}">
                         </div>
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

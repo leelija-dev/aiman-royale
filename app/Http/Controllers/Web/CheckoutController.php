@@ -600,7 +600,8 @@ class CheckoutController extends Controller
             ]);
 
             $orderId = $request->order_id;
-            $total = $request->total;
+            // $total = $request->total;
+            $total = round((float) $request->total, 2);
             $currency = $request->currency;
 
             $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
@@ -613,6 +614,11 @@ class CheckoutController extends Controller
                 'customer_email' => $user->email ?? 'customer@example.com',
                 'customer_phone' => $user->phone ?? '9999999999',
             ];
+
+            Log::info('Cashfree payment amount', [
+    'total' => $total,
+    'type' => gettype($total),
+]);
 
             $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
             // Debugging line to check the response
