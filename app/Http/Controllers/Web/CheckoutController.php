@@ -603,6 +603,7 @@ class CheckoutController extends Controller
             // $total = $request->total;
             $total = round((float) $request->total, 2);
             $currency = $request->currency;
+            $orderData = Order::findOrFail($orderId);
 
             $cashfreeOrderId = 'CF_' . $orderId . '_' . time();
             $cashfreeService = new CashfreeService();
@@ -610,14 +611,15 @@ class CheckoutController extends Controller
             $user = Auth::user();
             $customerDetails = [
                 'customer_id' => (string) $user->id,
-                'customer_name' => $user->name,
+                'customer_name' => $orderData->customer_name ?? $user->name,
                 'customer_email' => $user->email ?? 'customer@example.com',
-                'customer_phone' => $user->phone ?? '9999999999',
+                'customer_phone' => $orderData->phone_no ?? $user->phone ?? '',
             ];
 
             Log::info('Cashfree payment amount', [
     'total' => $total,
     'type' => gettype($total),
+    'customer_details' => $customerDetails
 ]);
 
             $orderResponse = $cashfreeService->createOrder($cashfreeOrderId, $total, $customerDetails);
