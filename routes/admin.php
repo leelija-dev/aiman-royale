@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\CustomDimensionController;
 use App\Http\Controllers\Admin\BannerDetailsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\OfferController;
+use App\Http\Controllers\Admin\OrderCancelController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RegistrationOtpHistoryController;
 use App\Http\Controllers\Admin\RobotsController;
@@ -535,6 +536,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
 
         // Update return status (webhook)
         Route::post('/webhook', [ReturnOrder::class, 'webhook'])->name('return-orders.webhook');
+    });
+    Route::prefix('orders-cancel')->group(function () {
+        Route::get('/', [OrderCancelController::class, 'index'])->name('orders-cancel.index');
     });
     //Hero Section
     Route::prefix('hero-section')->group(function () {
