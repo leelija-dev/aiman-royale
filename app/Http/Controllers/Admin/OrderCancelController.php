@@ -25,4 +25,33 @@ class OrderCancelController extends Controller
         ->withQueryString();
     return view('Admin.cancel-order.index', compact('orders'));
 }
+
+    public function details(Request $request)
+    {
+        $orderId = $request->get('order_id');
+
+        $cancelOrder = Order::where('id', $orderId)->first();
+
+        if (!$cancelOrder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cancel order not found.',
+            ], 404);
+        }
+
+        $order = $cancelOrder;
+
+        return response()->json([
+            'success' => true,
+            'order' => [
+                'id' => $order?->id,
+                'order_id' => $order?->id,
+                'waybill_number' => $order->waybill_number,
+                'customer_name' => $order->customer_name,
+                'total_amount' => $order?->total_amount,
+                'refund_status' => $order?->refund_status,
+                'refunds' => $order?->refunds()->latest()->get(),
+            ]
+        ]);
+    }
 }

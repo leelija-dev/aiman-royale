@@ -539,6 +539,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
     });
     Route::prefix('orders-cancel')->group(function () {
         Route::get('/', [OrderCancelController::class, 'index'])->name('orders-cancel.index');
+        Route::get('/details', [OrderCancelController::class, 'details'])->name('orders-cancel.details');
     });
     //Hero Section
     Route::prefix('hero-section')->group(function () {
