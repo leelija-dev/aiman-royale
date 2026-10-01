@@ -342,21 +342,21 @@ if ($category) {
 
         // If this is a parent category,
         // also include its direct child categories.
-        if (is_null($category->parent_id)) {
+        // if (is_null($category->parent_id)) {
 
-            $childCategoryIds = Category::where(
-                    'parent_id',
-                    $category->id
-                )
-                ->where('is_active', 1)
-                ->pluck('id')
-                ->toArray();
+        //     $childCategoryIds = Category::where(
+        //             'parent_id',
+        //             $category->id
+        //         )
+        //         ->where('is_active', 1)
+        //         ->pluck('id')
+        //         ->toArray();
 
-            $categoryIds = array_merge(
-                $categoryIds,
-                $childCategoryIds
-            );
-        }
+        //     $categoryIds = array_merge(
+        //         $categoryIds,
+        //         $childCategoryIds
+        //     );
+        // }
 
 
         /*
@@ -374,9 +374,10 @@ if ($category) {
         //         'products.is_active',
         //         1
         //     )
-        $query = Product::query()
-    ->whereIn('products.category_id', $categoryIds)
-    ->where('products.is_active', 1)
+              $query = Product::query()
+            ->when($category, fn ($q) => $q->whereIn('products.category_id', $categoryIds))
+            ->when($pageOccasion, fn ($q) => $q->whereHas('occasions', fn ($o) => $o->whereKey($pageOccasion->id)))
+            ->where('products.is_active', 1)
 
             // Product must have at least one variant
             ->whereHas('variants')
