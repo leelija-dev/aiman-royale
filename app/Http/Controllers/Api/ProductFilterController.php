@@ -8,6 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Occasion;
+use Illuminate\Support\Str;
 
 class ProductFilterController extends Controller
 {
@@ -212,10 +214,10 @@ class ProductFilterController extends Controller
 
     //         // Apply size filter
     //         $this->applySizeFilter($query, $request);
-            
+
     //         // Apply color filter
     //         $this->applyColorFilter($query, $request);
-                  
+
     //         // Apply occasion filter
     //         $this->applyOccasionFilter($query, $request);
     //         //       return response()->json([
@@ -279,129 +281,144 @@ class ProductFilterController extends Controller
     //     }
     // }
     public function filter($slug, Request $request)
-{
-    try {
+    {
+        try {
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 1. Validate request
         |--------------------------------------------------------------------------
         */
 
-        $validator = \Validator::make($request->all(), [
-            'price_ranges'      => 'sometimes|json',
-            'custom_min_price'  => 'sometimes|numeric|min:0',
-            'custom_max_price'  => 'sometimes|numeric|min:0|gte:custom_min_price',
-            'sizes'             => 'sometimes|json',
-            'colors'            => 'sometimes|json',
-            'occasions'         => 'sometimes|json',
-            'filter'            => 'sometimes|in:best-seller,new-arrival,featured,top-rated',
-            'collection'        => 'sometimes|string',
-            'sort'              => 'sometimes|in:price-asc,price-desc,name-asc,name-desc,date-desc,date-asc',
-            'per_page'          => 'sometimes|integer|min:1|max:100',
-        ]);
+            $validator = \Validator::make($request->all(), [
+                'price_ranges'      => 'sometimes|json',
+                'custom_min_price'  => 'sometimes|numeric|min:0',
+                'custom_max_price'  => 'sometimes|numeric|min:0|gte:custom_min_price',
+                'sizes'             => 'sometimes|json',
+                'colors'            => 'sometimes|json',
+                'occasions'         => 'sometimes|json',
+                'filter'            => 'sometimes|in:best-seller,new-arrival,featured,top-rated',
+                'collection'        => 'sometimes|string',
+                'sort'              => 'sometimes|in:price-asc,price-desc,name-asc,name-desc,date-desc,date-asc',
+                'per_page'          => 'sometimes|integer|min:1|max:100',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors'  => $validator->errors(),
-            ], 422);
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | 2. Get category
-        |--------------------------------------------------------------------------
-        */
-
-        $category = Category::where('slug', $slug)
-            ->where('is_active', 1)
-            ->firstOrFail();
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors'  => $validator->errors(),
+                ], 422);
+            }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 3. Category IDs
-        |--------------------------------------------------------------------------
-        */
+            $category     = Category::where('slug', $slug)->where('is_active', 1)->first();
+            $pageOccasion = null;
+            $categoryIds  = [];
 
-        $categoryIds = [$category->id];
+            if ($category) {
+                $categoryIds = [$category->id];
 
-        // If this is a parent category,
-        // also include its direct child categories.
-        if (is_null($category->parent_id)) {
+                if (is_null($category->parent_id)) {
+                    $categoryIds = array_merge(
+                        $categoryIds,
+                        Category::where('parent_id', $category->id)
+                            ->where('is_active', 1)
+                            ->pluck('id')
+                            ->toArray()
+                    );
+                }
+            } else {
+                // Not a category, so check whether the slug is an occasion
+                $pageOccasion = Occasion::all()->first(function ($o) use ($slug) {
+                    return ($o->slug ?? null) === $slug || Str::slug($o->name) === $slug;
+                });
 
-            $childCategoryIds = Category::where(
-                    'parent_id',
-                    $category->id
-                )
-                ->where('is_active', 1)
-                ->pluck('id')
-                ->toArray();
+                if (!$pageOccasion) {
+                    return response()->json([
+                        'success' => false,
+                        'error'   => 'Category or occasion not found.',
+                    ], 404);
+                }
+            }
 
-            $categoryIds = array_merge(
-                $categoryIds,
-                $childCategoryIds
-            );
-        }
+            // If this is a parent category,
+            // also include its direct child categories.
+            // if (is_null($category->parent_id)) {
+
+            //     $childCategoryIds = Category::where(
+            //             'parent_id',
+            //             $category->id
+            //         )
+            //         ->where('is_active', 1)
+            //         ->pluck('id')
+            //         ->toArray();
+
+            //     $categoryIds = array_merge(
+            //         $categoryIds,
+            //         $childCategoryIds
+            //     );
+            // }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 4. Base Product Query
         |--------------------------------------------------------------------------
         */
 
-        $query = Product::query()
-            ->whereIn(
-                'products.category_id',
-                $categoryIds
-            )
-            ->where(
-                'products.is_active',
-                1
-            )
+            // $query = Product::query()
+            //     ->whereIn(
+            //         'products.category_id',
+            //         $categoryIds
+            //     )
+            //     ->where(
+            //         'products.is_active',
+            //         1
+            //     )
+            $query = Product::query()
+                ->when($category, fn($q) => $q->whereIn('products.category_id', $categoryIds))
+                ->when($pageOccasion, fn($q) => $q->whereHas('occasions', fn($o) => $o->whereKey($pageOccasion->id)))
+                ->where('products.is_active', 1)
 
-            // Product must have at least one variant
-            ->whereHas('variants')
+                // Product must have at least one variant
+                ->whereHas('variants')
 
-            ->with([
+                ->with([
 
-                /*
+                    /*
                 |--------------------------------------------------------------------------
                 | Images
                 |--------------------------------------------------------------------------
                 */
 
-                'images' => function ($q) {
-                    $q->select(
-                        'product_id',
-                        'image'
-                    );
-                },
+                    'images' => function ($q) {
+                        $q->select(
+                            'product_id',
+                            'image'
+                        );
+                    },
 
 
-                /*
+                    /*
                 |--------------------------------------------------------------------------
                 | Variants
                 |--------------------------------------------------------------------------
                 */
 
-                'variants' => function ($q) {
-                    $q->select(
-                        'id',
-                        'product_id',
-                        'size',
-                        'color',
-                        'price',
-                        'discount_price',
-                        'stock'
-                    );
-                },
+                    'variants' => function ($q) {
+                        $q->select(
+                            'id',
+                            'product_id',
+                            'size',
+                            'color',
+                            'price',
+                            'discount_price',
+                            'stock'
+                        );
+                    },
 
 
-                /*
+                    /*
                 |--------------------------------------------------------------------------
                 | Occasions
                 |--------------------------------------------------------------------------
@@ -415,11 +432,11 @@ class ProductFilterController extends Controller
                 |
                 */
 
-                'occasions:id,name',
-            ]);
+                    'occasions:id,name',
+                ]);
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 5. Occasion Filter
         |--------------------------------------------------------------------------
@@ -438,459 +455,455 @@ class ProductFilterController extends Controller
         |
         */
 
-        $occasions = json_decode(
-            $request->input('occasions', '[]'),
-            true
-        );
-
-        if (is_array($occasions) && !empty($occasions)) {
-
-            $occasions = array_values(
-                array_filter(
-                    array_map('intval', $occasions)
-                )
+            $occasions = json_decode(
+                $request->input('occasions', '[]'),
+                true
             );
 
-            if (!empty($occasions)) {
+            if (is_array($occasions) && !empty($occasions)) {
 
-                $query->whereHas(
-                    'occasions',
-                    function ($q) use ($occasions) {
+                $occasions = array_values(
+                    array_filter(
+                        array_map('intval', $occasions)
+                    )
+                );
 
-                        /*
+                if (!empty($occasions)) {
+
+                    $query->whereHas(
+                        'occasions',
+                        function ($q) use ($occasions) {
+
+                            /*
                         |------------------------------------------------------------------
                         | whereKey() uses the Occasion model's primary key.
                         | This avoids the occasions/ocassions table-name problem.
                         |------------------------------------------------------------------
                         */
 
-                        $q->whereKey($occasions);
-                    }
-                );
+                            $q->whereKey($occasions);
+                        }
+                    );
+                }
             }
-        }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 6. Size Filter
         |--------------------------------------------------------------------------
         */
 
-        $sizes = json_decode(
-            $request->input('sizes', '[]'),
-            true
-        );
-
-        if (is_array($sizes) && !empty($sizes)) {
-
-            $sizes = array_values(
-                array_filter(
-                    array_map(
-                        function ($size) {
-                            return strtoupper(
-                                trim($size)
-                            );
-                        },
-                        $sizes
-                    )
-                )
+            $sizes = json_decode(
+                $request->input('sizes', '[]'),
+                true
             );
 
-            if (!empty($sizes)) {
+            if (is_array($sizes) && !empty($sizes)) {
 
-                $query->whereHas(
-                    'variants',
-                    function ($q) use ($sizes) {
-
-                        $q->whereIn(
-                            'size',
+                $sizes = array_values(
+                    array_filter(
+                        array_map(
+                            function ($size) {
+                                return strtoupper(
+                                    trim($size)
+                                );
+                            },
                             $sizes
-                        );
-                    }
+                        )
+                    )
                 );
+
+                if (!empty($sizes)) {
+
+                    $query->whereHas(
+                        'variants',
+                        function ($q) use ($sizes) {
+
+                            $q->whereIn(
+                                'size',
+                                $sizes
+                            );
+                        }
+                    );
+                }
             }
-        }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 7. Color Filter
         |--------------------------------------------------------------------------
         */
 
-        $colors = json_decode(
-            $request->input('colors', '[]'),
-            true
-        );
-
-        if (is_array($colors) && !empty($colors)) {
-
-            $colors = array_values(
-                array_filter(
-                    array_map(
-                        'trim',
-                        $colors
-                    )
-                )
+            $colors = json_decode(
+                $request->input('colors', '[]'),
+                true
             );
 
-            if (!empty($colors)) {
+            if (is_array($colors) && !empty($colors)) {
 
-                $query->whereHas(
-                    'variants',
-                    function ($q) use ($colors) {
-
-                        $q->whereIn(
-                            'color',
+                $colors = array_values(
+                    array_filter(
+                        array_map(
+                            'trim',
                             $colors
-                        );
-                    }
+                        )
+                    )
                 );
+
+                if (!empty($colors)) {
+
+                    $query->whereHas(
+                        'variants',
+                        function ($q) use ($colors) {
+
+                            $q->whereIn(
+                                'color',
+                                $colors
+                            );
+                        }
+                    );
+                }
             }
-        }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 8. Predefined Price Range Filter
         |--------------------------------------------------------------------------
         */
 
-        $priceRanges = json_decode(
-            $request->input('price_ranges', '[]'),
-            true
-        );
+            $priceRanges = json_decode(
+                $request->input('price_ranges', '[]'),
+                true
+            );
 
-        if (is_array($priceRanges) && !empty($priceRanges)) {
+            if (is_array($priceRanges) && !empty($priceRanges)) {
 
-            $query->whereHas(
-                'variants',
-                function ($q) use ($priceRanges) {
+                $query->whereHas(
+                    'variants',
+                    function ($q) use ($priceRanges) {
 
-                    $q->where(
-                        function ($priceQuery) use ($priceRanges) {
+                        $q->where(
+                            function ($priceQuery) use ($priceRanges) {
 
-                            foreach ($priceRanges as $range) {
+                                foreach ($priceRanges as $range) {
 
-                                /*
+                                    /*
                                 |--------------------------------------------------------------------------
                                 | Normal range
                                 | Example: 500-1000
                                 |--------------------------------------------------------------------------
                                 */
 
-                                if (
-                                    is_string($range) &&
-                                    strpos($range, '-') !== false
-                                ) {
+                                    if (
+                                        is_string($range) &&
+                                        strpos($range, '-') !== false
+                                    ) {
 
-                                    [$min, $max] = explode(
-                                        '-',
-                                        $range,
-                                        2
-                                    );
+                                        [$min, $max] = explode(
+                                            '-',
+                                            $range,
+                                            2
+                                        );
 
-                                    $min = (float) $min;
-                                    $max = (float) $max;
+                                        $min = (float) $min;
+                                        $max = (float) $max;
 
-                                    $priceQuery->orWhere(
-                                        function ($q) use ($min, $max) {
+                                        $priceQuery->orWhere(
+                                            function ($q) use ($min, $max) {
 
-                                            // Discount price
-                                            $q->where(
-                                                function ($q) use ($min, $max) {
+                                                // Discount price
+                                                $q->where(
+                                                    function ($q) use ($min, $max) {
 
-                                                    $q->whereNotNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->whereBetween(
-                                                        'discount_price',
-                                                        [$min, $max]
+                                                        $q->whereNotNull(
+                                                            'discount_price'
+                                                        )
+                                                            ->whereBetween(
+                                                                'discount_price',
+                                                                [$min, $max]
+                                                            );
+                                                    }
+                                                )
+
+                                                    // OR regular price
+                                                    ->orWhere(
+                                                        function ($q) use ($min, $max) {
+
+                                                            $q->whereNull(
+                                                                'discount_price'
+                                                            )
+                                                                ->whereBetween(
+                                                                    'price',
+                                                                    [$min, $max]
+                                                                );
+                                                        }
                                                     );
-                                                }
-                                            )
-
-                                            // OR regular price
-                                            ->orWhere(
-                                                function ($q) use ($min, $max) {
-
-                                                    $q->whereNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->whereBetween(
-                                                        'price',
-                                                        [$min, $max]
-                                                    );
-                                                }
-                                            );
-                                        }
-                                    );
-                                }
+                                            }
+                                        );
+                                    }
 
 
-                                /*
+                                    /*
                                 |--------------------------------------------------------------------------
                                 | Under 500
                                 |--------------------------------------------------------------------------
-                                */
+                                */ elseif ($range === 'under-500') {
 
-                                elseif ($range === 'under-500') {
+                                        $priceQuery->orWhere(
+                                            function ($q) {
 
-                                    $priceQuery->orWhere(
-                                        function ($q) {
+                                                $q->where(
+                                                    function ($q) {
 
-                                            $q->where(
-                                                function ($q) {
+                                                        $q->whereNotNull(
+                                                            'discount_price'
+                                                        )
+                                                            ->where(
+                                                                'discount_price',
+                                                                '<',
+                                                                500
+                                                            );
+                                                    }
+                                                )
 
-                                                    $q->whereNotNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->where(
-                                                        'discount_price',
-                                                        '<',
-                                                        500
+                                                    ->orWhere(
+                                                        function ($q) {
+
+                                                            $q->whereNull(
+                                                                'discount_price'
+                                                            )
+                                                                ->where(
+                                                                    'price',
+                                                                    '<',
+                                                                    500
+                                                                );
+                                                        }
                                                     );
-                                                }
-                                            )
-
-                                            ->orWhere(
-                                                function ($q) {
-
-                                                    $q->whereNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->where(
-                                                        'price',
-                                                        '<',
-                                                        500
-                                                    );
-                                                }
-                                            );
-                                        }
-                                    );
-                                }
+                                            }
+                                        );
+                                    }
 
 
-                                /*
+                                    /*
                                 |--------------------------------------------------------------------------
                                 | Above 10000
                                 |--------------------------------------------------------------------------
-                                */
+                                */ elseif ($range === 'above-10000') {
 
-                                elseif ($range === 'above-10000') {
+                                        $priceQuery->orWhere(
+                                            function ($q) {
 
-                                    $priceQuery->orWhere(
-                                        function ($q) {
+                                                $q->where(
+                                                    function ($q) {
 
-                                            $q->where(
-                                                function ($q) {
+                                                        $q->whereNotNull(
+                                                            'discount_price'
+                                                        )
+                                                            ->where(
+                                                                'discount_price',
+                                                                '>',
+                                                                10000
+                                                            );
+                                                    }
+                                                )
 
-                                                    $q->whereNotNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->where(
-                                                        'discount_price',
-                                                        '>',
-                                                        10000
+                                                    ->orWhere(
+                                                        function ($q) {
+
+                                                            $q->whereNull(
+                                                                'discount_price'
+                                                            )
+                                                                ->where(
+                                                                    'price',
+                                                                    '>',
+                                                                    10000
+                                                                );
+                                                        }
                                                     );
-                                                }
-                                            )
-
-                                            ->orWhere(
-                                                function ($q) {
-
-                                                    $q->whereNull(
-                                                        'discount_price'
-                                                    )
-                                                    ->where(
-                                                        'price',
-                                                        '>',
-                                                        10000
-                                                    );
-                                                }
-                                            );
-                                        }
-                                    );
+                                            }
+                                        );
+                                    }
                                 }
                             }
-                        }
-                    );
-                }
-            );
-        }
+                        );
+                    }
+                );
+            }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 9. Custom Price Slider
         |--------------------------------------------------------------------------
         */
 
-        if (
-            $request->has('custom_min_price') &&
-            $request->has('custom_max_price')
-        ) {
+            if (
+                $request->has('custom_min_price') &&
+                $request->has('custom_max_price')
+            ) {
 
-            $minPrice = (float) $request->input(
-                'custom_min_price'
-            );
+                $minPrice = (float) $request->input(
+                    'custom_min_price'
+                );
 
-            $maxPrice = (float) $request->input(
-                'custom_max_price'
-            );
+                $maxPrice = (float) $request->input(
+                    'custom_max_price'
+                );
 
-            /*
+                /*
             | Only apply custom range when it is actually restricting
             | the default 0 - 10000 range.
             */
 
-            if (
-                $minPrice > 0 ||
-                $maxPrice < 10000
-            ) {
+                if (
+                    $minPrice > 0 ||
+                    $maxPrice < 10000
+                ) {
 
-                $query->whereHas(
-                    'variants',
-                    function ($q) use (
-                        $minPrice,
-                        $maxPrice
-                    ) {
+                    $query->whereHas(
+                        'variants',
+                        function ($q) use (
+                            $minPrice,
+                            $maxPrice
+                        ) {
 
-                        $q->where(
-                            function ($priceQuery) use (
-                                $minPrice,
-                                $maxPrice
-                            ) {
+                            $q->where(
+                                function ($priceQuery) use (
+                                    $minPrice,
+                                    $maxPrice
+                                ) {
 
-                                /*
+                                    /*
                                 | Discount price
                                 */
 
-                                $priceQuery->where(
-                                    function ($q) use (
-                                        $minPrice,
-                                        $maxPrice
-                                    ) {
+                                    $priceQuery->where(
+                                        function ($q) use (
+                                            $minPrice,
+                                            $maxPrice
+                                        ) {
 
-                                        $q->whereNotNull(
-                                            'discount_price'
-                                        )
-                                        ->whereBetween(
-                                            'discount_price',
-                                            [
-                                                $minPrice,
-                                                $maxPrice
-                                            ]
-                                        );
-                                    }
-                                )
+                                            $q->whereNotNull(
+                                                'discount_price'
+                                            )
+                                                ->whereBetween(
+                                                    'discount_price',
+                                                    [
+                                                        $minPrice,
+                                                        $maxPrice
+                                                    ]
+                                                );
+                                        }
+                                    )
 
-                                /*
+                                        /*
                                 | OR regular price
                                 */
 
-                                ->orWhere(
-                                    function ($q) use (
-                                        $minPrice,
-                                        $maxPrice
-                                    ) {
-
-                                        $q->whereNull(
-                                            'discount_price'
-                                        )
-                                        ->whereBetween(
-                                            'price',
-                                            [
+                                        ->orWhere(
+                                            function ($q) use (
                                                 $minPrice,
                                                 $maxPrice
-                                            ]
+                                            ) {
+
+                                                $q->whereNull(
+                                                    'discount_price'
+                                                )
+                                                    ->whereBetween(
+                                                        'price',
+                                                        [
+                                                            $minPrice,
+                                                            $maxPrice
+                                                        ]
+                                                    );
+                                            }
                                         );
-                                    }
-                                );
-                            }
-                        );
-                    }
-                );
+                                }
+                            );
+                        }
+                    );
+                }
             }
-        }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 10. Collection Filter
         |--------------------------------------------------------------------------
         */
 
-        if (
-            $request->filled('collection') &&
-            $request->input('collection') !== 'all'
-        ) {
-
-            $collection = $request->input(
-                'collection'
-            );
-
             if (
-                Schema::hasColumn(
-                    'products',
-                    'collection'
-                )
+                $request->filled('collection') &&
+                $request->input('collection') !== 'all'
             ) {
 
-                $query->where(
-                    'products.collection',
-                    $collection
+                $collection = $request->input(
+                    'collection'
                 );
+
+                if (
+                    Schema::hasColumn(
+                        'products',
+                        'collection'
+                    )
+                ) {
+
+                    $query->where(
+                        'products.collection',
+                        $collection
+                    );
+                }
             }
-        }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 11. Filter Type
         |--------------------------------------------------------------------------
         */
 
-        switch ($request->input('filter')) {
+            switch ($request->input('filter')) {
 
-            /*
+                /*
             |--------------------------------------------------------------------------
             | Featured
             |--------------------------------------------------------------------------
             */
 
-            case 'featured':
+                case 'featured':
 
-                $query->where(
-                    'products.is_featured',
-                    1
-                );
+                    $query->where(
+                        'products.is_featured',
+                        1
+                    );
 
-                break;
+                    break;
 
 
-            /*
+                /*
             |--------------------------------------------------------------------------
             | Best Seller
             |--------------------------------------------------------------------------
             */
 
-            case 'best-seller':
+                case 'best-seller':
 
-                $query->withCount([
-                    'orderProducts as total_sold' => function ($q) {
+                    $query->withCount([
+                        'orderProducts as total_sold' => function ($q) {
 
-                        $q->selectRaw(
-                            'COALESCE(SUM(quantity), 0)'
-                        );
-                    }
-                ]);
+                            $q->selectRaw(
+                                'COALESCE(SUM(quantity), 0)'
+                            );
+                        }
+                    ]);
 
-                break;
+                    break;
 
 
-            /*
+                /*
             |--------------------------------------------------------------------------
             | New Arrival
             |--------------------------------------------------------------------------
@@ -900,12 +913,12 @@ class ProductFilterController extends Controller
             |
             */
 
-            case 'new-arrival':
+                case 'new-arrival':
 
-                break;
+                    break;
 
 
-            /*
+                /*
             |--------------------------------------------------------------------------
             | Top Rated
             |--------------------------------------------------------------------------
@@ -914,13 +927,13 @@ class ProductFilterController extends Controller
             |
             */
 
-            case 'top-rated':
+                case 'top-rated':
 
-                break;
-        }
+                    break;
+            }
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | 12. Sorting
         |--------------------------------------------------------------------------
@@ -932,12 +945,12 @@ class ProductFilterController extends Controller
         |
         */
 
-        switch ($request->input('sort')) {
+            switch ($request->input('sort')) {
 
-            case 'price-asc':
+                case 'price-asc':
 
-                $query->orderByRaw(
-                    '(SELECT MIN(
+                    $query->orderByRaw(
+                        '(SELECT MIN(
                         COALESCE(
                             pv.discount_price,
                             pv.price
@@ -946,14 +959,14 @@ class ProductFilterController extends Controller
                     FROM product_variants pv
                     WHERE pv.product_id = products.id
                     ) ASC'
-                );
+                    );
 
-                break;
+                    break;
 
-            case 'price-desc':
+                case 'price-desc':
 
-                $query->orderByRaw(
-                    '(SELECT MIN(
+                    $query->orderByRaw(
+                        '(SELECT MIN(
                         COALESCE(
                             pv.discount_price,
                             pv.price
@@ -962,125 +975,124 @@ class ProductFilterController extends Controller
                     FROM product_variants pv
                     WHERE pv.product_id = products.id
                     ) DESC'
-                );
-
-                break;
-
-            case 'name-asc':
-
-                $query->orderBy(
-                    'products.name',
-                    'asc'
-                );
-
-                break;
-
-            case 'name-desc':
-
-                $query->orderBy(
-                    'products.name',
-                    'desc'
-                );
-
-                break;
-
-            case 'date-asc':
-
-                $query->orderBy(
-                    'products.created_at',
-                    'asc'
-                );
-
-                break;
-
-            case 'date-desc':
-
-                $query->orderBy(
-                    'products.created_at',
-                    'desc'
-                );
-
-                break;
-
-
-            default:
-
-                $query->orderBy(
-                    'products.created_at',
-                    'desc'
-                );
-
-                break;
-        }
-
-
-
-        $query->orderBy(
-            'products.id',
-            'desc'
-        );
-
-
-        $products = $query->get();
-
-
-        $latestProducts = Product::query()
-            ->where(
-                'is_active',
-                1
-            )
-            ->whereHas('variants')
-            ->with([
-                'images' => function ($q) {
-
-                    $q->select(
-                        'product_id',
-                        'image'
                     );
-                }
-            ])
-            ->latest()
-            ->take(5)
-            ->get();
 
-        return response()->json([
+                    break;
 
-            'success' => true,
+                case 'name-asc':
 
-            'data' => [
+                    $query->orderBy(
+                        'products.name',
+                        'asc'
+                    );
 
-                'products' => $this->transformProducts(
-                    $products
-                ),
+                    break;
 
-                'latest_products' => $this->transformProducts(
-                    $latestProducts
-                ),
+                case 'name-desc':
 
-                'total' => $products->count(),
-            ],
+                    $query->orderBy(
+                        'products.name',
+                        'desc'
+                    );
 
-        ]);
+                    break;
 
-    } catch (\Throwable $e) {
+                case 'date-asc':
 
-        \Log::error(
-            'Product filter error',
-            [
-                'message' => $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine(),
-                'request' => $request->all(),
-                'slug'    => $slug,
-            ]
-        );
+                    $query->orderBy(
+                        'products.created_at',
+                        'asc'
+                    );
 
-        return response()->json([
-            'success' => false,
-            'error'   => $e->getMessage(),
-        ], 500);
+                    break;
+
+                case 'date-desc':
+
+                    $query->orderBy(
+                        'products.created_at',
+                        'desc'
+                    );
+
+                    break;
+
+
+                default:
+
+                    $query->orderBy(
+                        'products.created_at',
+                        'desc'
+                    );
+
+                    break;
+            }
+
+
+
+            $query->orderBy(
+                'products.id',
+                'desc'
+            );
+
+
+            $products = $query->get();
+
+
+            $latestProducts = Product::query()
+                ->where(
+                    'is_active',
+                    1
+                )
+                ->whereHas('variants')
+                ->with([
+                    'images' => function ($q) {
+
+                        $q->select(
+                            'product_id',
+                            'image'
+                        );
+                    }
+                ])
+                ->latest()
+                ->take(5)
+                ->get();
+
+            return response()->json([
+
+                'success' => true,
+
+                'data' => [
+
+                    'products' => $this->transformProducts(
+                        $products
+                    ),
+
+                    'latest_products' => $this->transformProducts(
+                        $latestProducts
+                    ),
+
+                    'total' => $products->count(),
+                ],
+
+            ]);
+        } catch (\Throwable $e) {
+
+            \Log::error(
+                'Product filter error',
+                [
+                    'message' => $e->getMessage(),
+                    'file'    => $e->getFile(),
+                    'line'    => $e->getLine(),
+                    'request' => $request->all(),
+                    'slug'    => $slug,
+                ]
+            );
+
+            return response()->json([
+                'success' => false,
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
-}
     /**
      * Transform products for API response
      */
