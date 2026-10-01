@@ -70,13 +70,26 @@
                 <span class="fw-bold">₹{{ number_format($amount, 2) }}</span>
             </td>
             <td class="text-center">
-                <span class="co-pill {{ $order->status_color ?? 'danger' }}">
+                <span class="badge bg-{{ $order->status_color ?? 'danger' }}">
                     {{ ucfirst(str_replace('_', ' ', $order->order_status ?? 'cancelled')) }}
                 </span>
             </td>
             <td class="text-center">
-                <span class="co-pill {{ $refundColor }}">{{ ucfirst($refund) }}</span>
-            </td>
+                                    @php
+                                    $refundStatus = $order->refund_status ?? 'pending';
+                                    $badgeClass = [
+                                    'pending' => 'warning',
+                                    'processing' => 'info',
+                                    'completed' => 'success',
+                                    'refunded' => 'success',
+                                    'failed' => 'danger',
+                                    'cancelled' => 'secondary'
+                                    ][$refundStatus] ?? 'secondary';
+                                    @endphp
+                                    <span class="badge bg-{{ $badgeClass }}">
+                                        {{ ucfirst($refundStatus) }}
+                                    </span>
+                                </td>
             <td class="text-center">
                 <div class="d-flex justify-content-center gap-1">
                     <button type="button" class="btn btn-info co-action js-view" title="View details"
