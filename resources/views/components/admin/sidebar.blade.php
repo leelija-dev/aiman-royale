@@ -442,13 +442,14 @@ $isEmailActive = false;
 
     <!-- Delhivery Section -->
     @php
-    $isDelhiveryActive = request()->routeIs('pickup.*', 'delhivery.*', 'return-orders.index', 'shipping-label.index');
+    $isDelhiveryActive = request()->routeIs('pickup.*', 'delhivery.*', 'return-orders.index', 'shipping-label.index','orders-cancel.index');
     $isPickupActive = request()->routeIs('pickup.index');
     $isReturnOrdersActive = request()->routeIs('return-orders.index');
     $isShippingLabelActive = request()->routeIs('shipping-label.index');
     $isPickupHistoryActive = request()->routeIs('pickup.history');
     $isManifestActive = request()->routeIs('delhivery.manifest.*');
     $isTrackingActive = request()->routeIs('delhivery.tracking.*');
+    $isOrderCancelActive = request()->routeIs('orders-cancel.index');
     @endphp
 
     <li class="nav-item mt-3">
@@ -482,6 +483,12 @@ $isEmailActive = false;
                     <a class="submenu-link {{ $isReturnOrdersActive ? 'active' : '' }}"
                         href="{{ route('return-orders.index') }}">
                         <i class="fas fa-history me-1"></i> Return Request
+                    </a>
+                </li>
+                <li class="submenu-item">
+                    <a class="submenu-link {{ $isOrderCancelActive ? 'active' : '' }}"
+                        href="{{ route('orders-cancel.index') }}" >
+                        <i class="fa-regular fa-circle-xmark me-1" ></i> Order Cancel
                     </a>
                 </li>
 

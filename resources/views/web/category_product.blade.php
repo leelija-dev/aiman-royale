@@ -453,6 +453,7 @@
                                         <div class="px-4 py-2.5 text-sm text-gray-500">No collection available</div>
                                         @endif
                                     </div>
+
                                 </div>
                             </div>
 
@@ -487,11 +488,12 @@
                                         stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
+                                    
                                 </button>
 
                                 <div
                                     id="sort-menu"
-                                    class="absolute right-0 z-[201] mt-2 w-fit min-w-[164px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    class="absolute right-0 z-[201] mt-2 w-fit min-w-[230px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="sort-button">
@@ -534,7 +536,7 @@
                                                     d="M5 13l4 4L19 7" />
                                             </svg>
                                         </button>
-                                        <button
+                                        {{-- <button
                                             type="button"
                                             class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none active"
                                             data-value="date-desc"
@@ -571,7 +573,7 @@
                                                     stroke-width="3"
                                                     d="M5 13l4 4L19 7" />
                                             </svg>
-                                        </button>
+                                        </button> --}}
                                         <button
                                             type="button"
                                             class="sort-option w-full flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
