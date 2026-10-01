@@ -123,10 +123,19 @@ class Product extends Model
         return $this->belongsTo('App\\Models\\Occasion', 'ocassion_id');
     }
 
+    // public function occasions()
+    // {
+    //     return $this->belongsToMany(Occasion::class, 'product_occasions');
+    // }
     public function occasions()
-    {
-        return $this->belongsToMany(Occasion::class, 'product_occasions');
-    }
+{
+    return $this->belongsToMany(
+        Occasion::class,
+        'product_occasions',
+        'product_id',
+        'occasion_id'
+    );
+}
     /**
      * Get the parts for the product.
      */
