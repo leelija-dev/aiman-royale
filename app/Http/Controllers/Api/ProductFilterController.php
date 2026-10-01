@@ -8,7 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\Occasion;
+use Illuminate\Support\Str;
 class ProductFilterController extends Controller
 {
     /**
@@ -309,24 +310,35 @@ class ProductFilterController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | 2. Get category
-        |--------------------------------------------------------------------------
-        */
+      $category     = Category::where('slug', $slug)->where('is_active', 1)->first();
+$pageOccasion = null;
+$categoryIds  = [];
 
-        $category = Category::where('slug', $slug)
-            ->where('is_active', 1)
-            ->firstOrFail();
+if ($category) {
+    $categoryIds = [$category->id];
 
+    if (is_null($category->parent_id)) {
+        $categoryIds = array_merge(
+            $categoryIds,
+            Category::where('parent_id', $category->id)
+                ->where('is_active', 1)
+                ->pluck('id')
+                ->toArray()
+        );
+    }
+} else {
+    // Not a category, so check whether the slug is an occasion
+    $pageOccasion = Occasion::all()->first(function ($o) use ($slug) {
+        return ($o->slug ?? null) === $slug || Str::slug($o->name) === $slug;
+    });
 
-        /*
-        |--------------------------------------------------------------------------
-        | 3. Category IDs
-        |--------------------------------------------------------------------------
-        */
-
-        $categoryIds = [$category->id];
+    if (!$pageOccasion) {
+        return response()->json([
+            'success' => false,
+            'error'   => 'Category or occasion not found.',
+        ], 404);
+    }
+}
 
         // If this is a parent category,
         // also include its direct child categories.
@@ -353,15 +365,18 @@ class ProductFilterController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        // $query = Product::query()
+        //     ->whereIn(
+        //         'products.category_id',
+        //         $categoryIds
+        //     )
+        //     ->where(
+        //         'products.is_active',
+        //         1
+        //     )
         $query = Product::query()
-            ->whereIn(
-                'products.category_id',
-                $categoryIds
-            )
-            ->where(
-                'products.is_active',
-                1
-            )
+    ->whereIn('products.category_id', $categoryIds)
+    ->where('products.is_active', 1)
 
             // Product must have at least one variant
             ->whereHas('variants')
