@@ -2330,40 +2330,11 @@ window.updateCartCount = updateCartCount;
 
             if (products.length === 0) {
                 // Show default fallback products
-                const fallbackProducts = [{
-                        name: "Light Pink Salwar",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
-                        slug: "light-pink-salwar"
-                    },
-                    {
-                        name: "Gray Lahenga",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
-                        slug: "gray-lahenga"
-                    },
-                    {
-                        name: "Red Plazo",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
-                        slug: "red-plazo"
-                    },
-                    {
-                        name: "Short Plazo",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
-                        slug: "short-plazo"
-                    }
-                ];
-
-                fallbackProducts.forEach(product => {
-                    const productCard = createProductCard(product);
-                    collectionList.appendChild(productCard);
-                });
+                collectionList.innerHTML = `
+        <div class="col-span-full w-full text-center py-10 text-gray-500">
+            <i class="fas fa-box-open text-3xl mb-2"></i>
+            <p class="text-sm">No products available right now.</p>
+        </div>`;
             } else {
                 // Display products (limit to 4 for initial view)
                 products.slice(0, 4).forEach(product => {
