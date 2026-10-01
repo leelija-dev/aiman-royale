@@ -453,7 +453,7 @@
                                         <div class="px-4 py-2.5 text-sm text-gray-500">No collection available</div>
                                         @endif
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -492,7 +492,7 @@
 
                                 <div
                                     id="sort-menu"
-                                    class="absolute right-0 z-[201] mt-2 w-fit min-w-[180px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
+                                    class="absolute right-0 z-[201] mt-2 w-fit min-w-[230px] origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden focus:outline-none"
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="sort-button">
