@@ -1,27 +1,10 @@
     @extends('layout.web.main-layout')
 
+    @section('styles')
+    <link rel="stylesheet" href="{{ asset('web/css/profile.css') }}">
+    @endsection
+
     @section('content')
-
-    @if(session('success'))
-    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 flex items-center">
-        <i class="fas fa-check-circle mr-2"></i>
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
-        <div class="flex items-center mb-2">
-            <i class="fas fa-exclamation-circle mr-2"></i>
-            <strong>Please fix the following errors:</strong>
-        </div>
-        <ul class="list-disc list-inside space-y-1">
-            @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
 
     <style>
         .fashion-gradient {
@@ -88,11 +71,22 @@
         }
     </style>
 
-    <section class="w-full px-4 lgg:py-12 py-6">
+    <section class="profile-page w-full px-4 lgg:py-12 py-6">
+        <div class="profile-back-bar">
+            <a href="{{ url()->previous(route('page.index')) }}"
+               class="profile-back-btn"
+               aria-label="Go back"
+               onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </a>
+            <span class="profile-back-title">Profile</span>
+        </div>
         <div class="container mx-auto">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Sidebar Navigation -->
-                <div class="lg:w-1/4">
+                <div class="profile-sidebar lg:w-1/4">
                     @include('components.web.profile-sidebar', ['user' => auth()->user()])
                 </div>
                 {{--<div id="user-panel-sidebar" class="bg-white rounded-2xl shadow-sm p-6 sticky top-24 min-w-[300px] h-fit">
@@ -169,7 +163,27 @@
 
 
                 <!-- Main Content -->
-                <div class="w-full">
+                <div class="profile-main w-full">
+                    @if(session('success'))
+                    <div class="profile-alert bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        {{ session('success') }}
+                    </div>
+                    @endif
+
+                    @if($errors->any())
+                    <div class="profile-alert bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            <strong>Please fix the following errors:</strong>
+                        </div>
+                        <ul class="list-disc list-inside space-y-1">
+                            @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <!-- Welcome Header -->
                     <!-- <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
               <div
@@ -248,8 +262,23 @@
             </div> -->
 
                     <!-- Profile Information Section -->
-                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-                        <div class="flex justify-between items-center mb-6">
+                    <div class="profile-info-card bg-white rounded-2xl shadow-sm p-6 mb-6">
+                        <div class="profile-identity">
+                            @if($user && $user->profile_image && file_exists(public_path($user->profile_image)))
+                            <img src="{{ asset($user->profile_image) }}"
+                                alt="{{ $user->name }}"
+                                class="profile-identity-avatar">
+                            @else
+                            <div class="profile-identity-avatar fashion-gradient">
+                                {{ $user ? strtoupper(substr(trim($user->name), 0, 2)) : 'GU' }}
+                            </div>
+                            @endif
+                            <div>
+                                <p class="profile-identity-name">{{ $user ? $user->name : 'Guest User' }}</p>
+                                <p class="profile-identity-email">{{ $user ? $user->email : 'guest@example.com' }}</p>
+                            </div>
+                        </div>
+                        <div class="profile-info-head flex justify-between items-center mb-6">
                             <h2 class="text-xl font-bold text-gray-900">
                                 Profile Information
                             </h2>

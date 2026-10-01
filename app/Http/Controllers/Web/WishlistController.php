@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Wishlist;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -117,7 +118,16 @@ class WishlistController extends Controller
                 'validItems' => $validItems->count()
             ]);
 
-            return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName'));
+            $cartVariantIds = Cart::where('user_id', Auth::id())
+                ->pluck('variant_id')
+                ->filter()
+                ->map(function ($id) {
+                    return (int) $id;
+                })
+                ->values()
+                ->all();
+
+            return view('web.wishlist', compact('wishlistItems', 'totalItems', 'totalValue', 'onSaleItems', 'userInitials', 'userName', 'cartVariantIds'));
             
         } catch (\Exception $e) {
             Log::error('Error in wishlist index: ' . $e->getMessage(), [
@@ -131,7 +141,8 @@ class WishlistController extends Controller
                 'totalValue' => 0,
                 'onSaleItems' => 0,
                 'userInitials' => 'GU',
-                'userName' => 'Guest User'
+                'userName' => 'Guest User',
+                'cartVariantIds' => [],
             ]);
         }
     }

@@ -1,5 +1,9 @@
 @extends('layout.web.main-layout')
 
+@section('styles')
+<link rel="stylesheet" href="{{ asset('web/css/addresses.css') }}">
+@endsection
+
 @section('content')
 <style>
     body {
@@ -103,18 +107,29 @@
     }
 </style>
 
-<section class="w-full px-4 lgg:py-12 py-6">
+<section class="addresses-page w-full px-4 lgg:py-12 py-6">
+    <div class="addresses-back-bar">
+        <a href="{{ url()->previous(route('web.profile')) }}"
+           class="addresses-back-btn"
+           aria-label="Go back"
+           onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </a>
+        <span class="addresses-back-title">My Addresses</span>
+    </div>
     <div class="container mx-auto">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
-            <div class="lg:w-1/4">
+            <div class="addresses-sidebar lg:w-1/4">
                 @include('components.web.profile-sidebar')
             </div>
 
             <!-- Main Content -->
-            <div class="lg:w-3/4">
+            <div class="addresses-main lg:w-3/4">
                 <!-- Page Header -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                <div class="addresses-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div
                         class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                         <div>
@@ -133,7 +148,7 @@
                 </div>
 
                 <!-- Address Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="addresses-grid grid grid-cols-1 md:grid-cols-2 gap-6">
                     @forelse($addresses as $address)
                     <div class="address-card bg-white rounded-2xl shadow-sm p-6 relative {{ $address->is_default ? 'default' : '' }}">
                         <div class="absolute top-4 right-4">

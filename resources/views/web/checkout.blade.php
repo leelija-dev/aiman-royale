@@ -216,7 +216,7 @@
         </div>
 
         <!-- Right Column: Order Summary -->
-        <div class="xl:w-102 lgg:w-96 w-full">
+        <div class="checkout-sidebar xl:w-102 lgg:w-96 w-full">
             <div class="checkout-summary-card">
                 <h2 class="checkout-summary-title">Order Summary</h2>
 
@@ -615,17 +615,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p class="checkout-secure">Secure checkout · GST invoice available</p>
             </div>
         </div>
-    </div>
-            <p class="checkout-trust">
-                <span class="checkout-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3.2l7.2 3.1v5.4c0 4.5-2.9 7.6-7.2 9.1-4.3-1.5-7.2-4.6-7.2-9.1V6.3L12 3.2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-                        <path d="M8.8 12.1l2.1 2.1 4.4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-                Safe and secure payments. Easy return. 100% Authentic products.
-            </p>
         </div>
+        <p class="checkout-trust">
+            <span class="checkout-trust-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 3.2l7.2 3.1v5.4c0 4.5-2.9 7.6-7.2 9.1-4.3-1.5-7.2-4.6-7.2-9.1V6.3L12 3.2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                    <path d="M8.8 12.1l2.1 2.1 4.4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            Safe and secure payments. Easy return. 100% Authentic products.
+        </p>
     </div>
     <div class="checkout-address-sheet" id="checkout-address-sheet" aria-hidden="true">
         <div class="checkout-address-sheet-backdrop" id="checkout-address-sheet-backdrop"></div>

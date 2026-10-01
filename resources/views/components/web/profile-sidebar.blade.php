@@ -55,8 +55,8 @@ $currentRoute = request()->route()->getName();
                 <span>Custom Requests</span>
             </a>
             <a
-                href="#"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
+                href="{{ $user ? route('web.reviews') : route('page.login') }}"
+                class="sidebar-item {{ request()->routeIs('web.reviews') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
                 <i class="fas fa-star w-5 text-center"></i>
                 <span>Reviews</span>
             </a>

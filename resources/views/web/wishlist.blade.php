@@ -1,5 +1,8 @@
 @extends('layout.web.main-layout')
 {{-- @section('event', 'AddToWishlist') --}}
+@section('styles')
+<link rel="stylesheet" href="{{ asset('web/css/wishlist.css') }}">
+@endsection
 @section('content')
 @if(!auth()->check())
 <!-- Guest User Login Prompt -->
@@ -32,7 +35,7 @@
 
 <!-- Main Wishlist Content (only for authenticated users) -->
 @if(auth()->check())
-<section class="w-full px-4 lgg:py-12 py-6">
+<section class="wishlist-page w-full px-4 lgg:py-12 py-6">
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -145,17 +148,28 @@
         }
     </style>
 
+    <div class="wishlist-back-bar">
+        <a href="{{ url()->previous(route('web.profile')) }}"
+           class="wishlist-back-btn"
+           aria-label="Go back"
+           onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </a>
+        <span class="wishlist-back-title">My Wishlist</span>
+    </div>
     <div class="container mx-auto">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
-            <div class="lg:w-1/4">
+            <div class="wishlist-sidebar lg:w-1/4">
                 @include('components.web.profile-sidebar', ['user' => auth()->user()])
             </div>
 
             <!-- Main Content -->
-            <div class="lg:w-3/4">
+            <div class="wishlist-main lg:w-3/4">
                 <!-- Page Header -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                <div class="wishlist-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900">My Wishlist</h1>
@@ -192,6 +206,7 @@
                     $product = $wishlist->product;
                     $image = $product->images->first();
                     $variant = $product->variants->first();
+                    $isInCart = $variant && in_array((int) $variant->id, $cartVariantIds ?? [], true);
                     @endphp
                     <div class="wishlist-item flex flex-col  product-card bg-white rounded-2xl shadow-sm overflow-hidden" data-product-id="{{ $product->id }}">
                         <div class="relative">
@@ -271,10 +286,18 @@
                             <div class="flex gap-2 mb-3">
                                 <button
                                     onclick="addToCart({{ $variant?->id }}, this)"
-                                    class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium add-to-cart-btn"
-                                    {{ $product->stock < 1 ? 'disabled' : '' }}>
+                                    class="flex-1 py-2 rounded-xl transition text-sm font-medium add-to-cart-btn {{ $isInCart ? 'bg-green-500 text-white cursor-not-allowed' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                                    {{ ($product->stock < 1 || $isInCart) ? 'disabled' : '' }}>
+                                    @if($product->stock < 1)
                                     <i class="fas fa-shopping-cart mr-2"></i>
-                                    {{ $product->stock < 1 ? 'Out of Stock' : 'Add to Cart' }}
+                                    Out of Stock
+                                    @elseif($isInCart)
+                                    <i class="fas fa-check mr-2"></i>
+                                    Item in cart
+                                    @else
+                                    <i class="fas fa-shopping-cart mr-2"></i>
+                                    Add to Cart
+                                    @endif
                                 </button>
                             </div>
 
@@ -525,7 +548,7 @@
             .then(data => {
                 if (data.success) {
                     // Update button UI
-                    btn.innerHTML = '<i class="fas fa-check mr-2"></i> Added';
+                    btn.innerHTML = '<i class="fas fa-check mr-2"></i> Item in cart';
                     btn.disabled = true;
                     btn.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
                     btn.classList.add('bg-green-500', 'text-white', 'cursor-not-allowed');
@@ -584,9 +607,80 @@
     // Document ready
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Wishlist page loaded');
-        
-        // Initialize any additional functionality here if needed
+
+        if (window.matchMedia('(max-width: 990px)').matches) {
+            loadAllWishlistPagesOnMobile();
+        }
     });
+
+    function loadAllWishlistPagesOnMobile() {
+        const grid = document.querySelector('.wishlist-grid');
+        const pagination = document.querySelector('.pagination-container');
+        if (!grid || !pagination) {
+            return;
+        }
+
+        const currentPage = parseInt(new URLSearchParams(window.location.search).get('page') || '1', 10);
+        let lastPage = currentPage;
+        pagination.querySelectorAll('a.pagination-link[data-page]').forEach(function (link) {
+            const page = parseInt(link.getAttribute('data-page'), 10);
+            if (!isNaN(page) && page > lastPage) {
+                lastPage = page;
+            }
+        });
+        if (lastPage <= 1) {
+            return;
+        }
+
+        function pageUrl(page) {
+            const url = new URL(window.location.href);
+            if (page <= 1) {
+                url.searchParams.delete('page');
+            } else {
+                url.searchParams.set('page', String(page));
+            }
+            return url.toString();
+        }
+
+        function appendUniqueItems(items, beforeNode) {
+            items.forEach(function (item) {
+                const id = item.getAttribute('data-product-id');
+                if (id && grid.querySelector('.wishlist-item[data-product-id="' + id + '"]')) {
+                    return;
+                }
+                const node = document.importNode(item, true);
+                if (beforeNode) {
+                    grid.insertBefore(node, beforeNode);
+                } else {
+                    grid.appendChild(node);
+                }
+            });
+        }
+
+        (async function () {
+            const firstCard = grid.querySelector('.wishlist-item');
+            for (let page = 1; page <= lastPage; page++) {
+                if (page === currentPage) {
+                    continue;
+                }
+                try {
+                    const response = await fetch(pageUrl(page), {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const html = await response.text();
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const items = Array.from(doc.querySelectorAll('.wishlist-grid > .wishlist-item'));
+                    if (page < currentPage) {
+                        appendUniqueItems(items, firstCard);
+                    } else {
+                        appendUniqueItems(items, null);
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        })();
+    }
 
     console.log('Wishlist JavaScript loaded');
 </script>

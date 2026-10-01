@@ -1,5 +1,9 @@
 @extends('layout.web.main-layout')
 
+@section('styles')
+<link rel="stylesheet" href="{{ asset('web/css/custom-request.css') }}">
+@endsection
+
 @section('content')
 <style>
     .fashion-gradient {
@@ -75,26 +79,37 @@
     }
 </style>
 
-<section class="w-full px-4 lg:py-12 py-6">
+<section class="custom-request-page w-full px-4 lg:py-12 py-6">
+    <div class="custom-request-back-bar">
+        <a href="{{ url()->previous(route('web.profile')) }}"
+           class="custom-request-back-btn"
+           aria-label="Go back"
+           onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </a>
+        <span class="custom-request-back-title">Custom Requests</span>
+    </div>
     <div class="container mx-auto">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Navigation -->
-            <div class="lg:w-1/4">
+            <div class="custom-request-sidebar lg:w-1/4">
                 @include('components.web.profile-sidebar', ['user' => auth()->user()])
             </div>
             
             <!-- Main Content -->
-            <div class="lg:w-3/4">
+            <div class="custom-request-main lg:w-3/4">
                 <!-- Page Header -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                <div class="custom-request-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                        <!-- You can add header content here if needed -->
+                        <h1 class="text-2xl font-bold text-gray-900">Custom Requests</h1>
                     </div>
                 </div>
 
                 <!-- Custom Requests List -->
                 @if($customRequests->count() > 0)
-                    <div class="space-y-4">
+                    <div class="custom-request-list space-y-4">
                         @foreach($customRequests as $request)
                             <div class="bg-white rounded-2xl shadow-sm p-6 request-card">
                                 <div class="flex flex-col lg:flex-row gap-6">
@@ -233,7 +248,7 @@
                     </div>
                 @else
                     <!-- Empty State -->
-                    <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+                    <div class="custom-request-empty bg-white rounded-2xl shadow-sm p-12 text-center">
                         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <i class="fas fa-ruler-combined text-gray-400 text-3xl"></i>
                         </div>
@@ -248,7 +263,7 @@
 
                 <!-- Pagination -->
                 @if($customRequests->hasPages())
-                    <div class="mt-8">
+                    <div class="custom-request-pagination mt-8">
                         {{ $customRequests->links('pagination::bootstrap-4') }}
                     </div>
                 @endif
