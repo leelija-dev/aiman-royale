@@ -225,6 +225,7 @@
                     @if ($carts->count() > 0)
                     @php
                     $total = 0;
+                    $productDiscountTotal = 0;
                     // dd($carts);
                     @endphp
 
@@ -308,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     @php
                     $total +=
                     ($cart->price - ($cart->price * $cart->discount) / 100) * $cart->count;
+                    $productDiscountTotal += (($cart->price * ($cart->discount ?? 0)) / 100) * $cart->count;
                     $shippingCost = 0;
                     if ($total <= 400) {
                         $shippingCost=0;
@@ -591,6 +593,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
 
+                <div class="checkout-youll-save" id="checkout-youll-save" hidden
+                    data-product-savings="{{ number_format($productDiscountTotal ?? 0, 2, '.', '') }}">
+                    <span class="checkout-youll-save-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9a2 2 0 002.83 0l6.99-7a2 2 0 000-2.84zM6.5 8A1.5 1.5 0 118 6.5 1.5 1.5 0 016.5 8z"/>
+                        </svg>
+                    </span>
+                    <p>You'll Save {{ config('app.currency') }}<span id="checkout-youll-save-amount">0</span> on this order</p>
+                </div>
+
                 <button type="button" onclick="submitForm()"
                     class="checkout-place-btn w-full mt-6 py-4 bg-black text-white font-medium rounded-md hover:bg-gray-900 transition"
                     @if ($carts->count() == 0) disabled @endif>
@@ -604,7 +616,16 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
     </div>
-    </div>
+            <p class="checkout-trust">
+                <span class="checkout-trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3.2l7.2 3.1v5.4c0 4.5-2.9 7.6-7.2 9.1-4.3-1.5-7.2-4.6-7.2-9.1V6.3L12 3.2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                        <path d="M8.8 12.1l2.1 2.1 4.4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                Safe and secure payments. Easy return. 100% Authentic products.
+            </p>
+        </div>
     </div>
     <div class="checkout-address-sheet" id="checkout-address-sheet" aria-hidden="true">
         <div class="checkout-address-sheet-backdrop" id="checkout-address-sheet-backdrop"></div>
@@ -1230,6 +1251,21 @@ msg.innerHTML = "Something went wrong.";
             Number.isInteger(roundedGrandTotal) ? 0 : 1
         );
         document.getElementById("grand-total-hidden").value = roundedGrandTotal;
+
+        const youllSaveEl = document.getElementById("checkout-youll-save");
+        const youllSaveAmt = document.getElementById("checkout-youll-save-amount");
+        let productSavings = youllSaveEl ? (parseFloat(youllSaveEl.dataset.productSavings) || 0) : 0;
+        let totalSavings = productSavings + totalProductDiscount + specialDiscount;
+        if (youllSaveAmt) {
+            youllSaveAmt.textContent = window.customRound(totalSavings).toLocaleString("en-IN");
+        }
+        if (youllSaveEl) {
+            if (totalSavings > 0) {
+                youllSaveEl.removeAttribute("hidden");
+            } else {
+                youllSaveEl.setAttribute("hidden", "");
+            }
+        }
     };
 
     window.applyCoupon = function(cartId, productTotal, variantId) {
