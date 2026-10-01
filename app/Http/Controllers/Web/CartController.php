@@ -625,6 +625,30 @@ class CartController extends Controller
         ]);
     }
 
+    public function removeCoupon(Request $request)
+    {
+        $code = strtoupper(trim((string) $request->coupon_code));
+        if ($code === '') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please enter coupon code.',
+            ]);
+        }
+
+        $appliedCoupons = session('applied_coupons', []);
+        foreach ($appliedCoupons as $variantId => $data) {
+            if (strtoupper(trim((string) ($data['code'] ?? ''))) === $code) {
+                unset($appliedCoupons[$variantId]);
+            }
+        }
+        session(['applied_coupons' => $appliedCoupons]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon removed successfully.',
+        ]);
+    }
+
     // app/Http/Controllers/Web/CartController.php (or wherever)
 
     public function addVariantToUserCart(ProductVariant $variant, int $userId, int $count = 1): bool

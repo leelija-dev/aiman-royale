@@ -6,6 +6,10 @@
 
     ?>
 
+   @section('styles')
+   <link rel="stylesheet" href="{{ asset('web/css/order-history.css') }}">
+   @endsection
+
 
 
 
@@ -77,11 +81,21 @@
        }
    </style>
 
-   <section class="w-full px-4 lgg:py-12 py-6">
+   <section class="order-history-page w-full px-4 lgg:py-12 py-6">
+       <div class="order-history-back-bar">
+           <a href="{{ url()->previous(route('web.profile')) }}"
+              class="order-history-back-btn"
+              aria-label="Go back"
+              onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                   <path d="M15 18l-6-6 6-6"/>
+               </svg>
+           </a>
+       </div>
        <div class="container mx-auto">
            <div class="flex flex-col lg:flex-row gap-8">
                <!-- Sidebar Navigation -->
-               <div class="lg:w-1/4">
+               <div class="order-history-sidebar lg:w-1/4">
                    <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
                        <!-- User Profile Summary -->
                        {{-- <div class="text-center mb-8">
@@ -147,9 +161,9 @@
                </div>
 
                <!-- Main Content -->
-               <div class="lg:w-3/4">
+               <div class="order-history-main lg:w-3/4">
                    <!-- Page Header -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                   <div class="order-history-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                            <div>
                                <h1 class="text-2xl font-bold text-gray-900">Order History</h1>
@@ -167,7 +181,7 @@
                    </div>
 
                    <!-- Filters and Search -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                   <div class="order-history-filters bg-white rounded-2xl shadow-sm p-6 mb-6">
                        @php
                            $currentStatus = request('status', '');
                            $currentDate = request('date_filter', '');
@@ -204,7 +218,9 @@
                                        onchange="document.getElementById('orderFilterForm').submit()"
                                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                                        <option value="" {{ $currentStatus === '' ? 'selected' : '' }} >All Orders</option>
+                                       <option value="shipped" {{ $currentStatus === 'shipped' ? 'selected' : '' }}>To Ship</option>
                                        <option value="delivered" {{ in_array($currentStatus, ['delivered', 'delivered']) ? 'selected' : '' }}>Delivered</option>
+                                       <option value="paid" {{ $currentStatus === 'paid' ? 'selected' : '' }}>Order Completed</option>
                                        <option value="pending" {{ in_array($currentStatus, ['pending', 'pending']) ? 'selected' : '' }}>Pending</option>
                                        <option value="cancelled" {{ in_array($currentStatus, ['cancelled', 'cancelled']) ? 'selected' : '' }}>Cancelled</option>
                                        <option value="returned" {{ $currentStatus === 'returned' ? 'selected' : '' }}>Returned</option>
@@ -214,7 +230,7 @@
                        </form>
 
                        <!-- Quick Filter Tabs -->
-                       <div class="flex flex-wrap gap-2 mt-4">
+                       <div class="order-history-tabs flex flex-wrap gap-2 mt-4">
                            <a href="{{ $orderHistoryUrl }}{{ $currentSearch || $currentDate ? '?' . http_build_query(array_filter(['search' => $currentSearch, 'date_filter' => $currentDate])) : '' }}"
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === '' ? $activeTabClass : $inactiveTabClass }}">
                                All Orders
@@ -251,7 +267,7 @@
                    <div class="space-y-6">
                        <!-- Current/Processing Orders -->
                        <div>
-                           <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
+                           <h2 class="order-history-section-title text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
                            @if($orders->count() === 0)
                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center mb-6">
                                <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
@@ -641,7 +657,7 @@
 
        <!-- Pagination -->
        @if($orders->hasPages())
-       <div class="flex justify-center items-center gap-2 mt-8">
+       <div class="order-history-pagination flex justify-center items-center gap-2 mt-8">
            <!-- Previous Button -->
            @if($orders->onFirstPage())
            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed" disabled>

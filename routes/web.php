@@ -141,6 +141,8 @@ Route::middleware(['auth'])->group(function () {
     // Address Routes
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::post('/addresses/checkout', [AddressController::class, 'saveFromCheckout'])->name('addresses.checkout');
+    Route::post('/addresses/{id}/checkout-default', [AddressController::class, 'setDefaultFromCheckout'])->name('addresses.checkout-default');
     Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
     Route::post('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.default');
@@ -226,6 +228,7 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
+Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove.coupon');
 
 // web.php
 Route::post('/clear-buynow-session', [CheckoutController::class, 'clearBuyNowSession'])
