@@ -23,7 +23,6 @@ class OrderCancelController extends Controller
         ->latest()
         ->paginate(15)
         ->withQueryString();
-
     return view('Admin.cancel-order.index', compact('orders'));
 }
 }
