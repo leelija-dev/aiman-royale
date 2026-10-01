@@ -272,7 +272,7 @@
 @section('scripts')
     <script>
         const DETAILS_URL = @json(route('orders-cancel.details'));
-        const REFUND_URL = @json(url('/api/refunds'));
+        const REFUND_URL = @json(route('orders-cancel.refund'));
         {{-- ⚠ replace with your real refund route --}}
         const CSRF = document.querySelector('meta[name="csrf-token"]')?.content || @json(csrf_token());
 
