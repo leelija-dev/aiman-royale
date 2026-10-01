@@ -1,26 +1,76 @@
 @extends('layout.web.main-layout')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('web/css/checkout.css') }}">
+@endsection
 @section('content')
-<section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50">
+<section class="checkout-page px-4 lg:pb-12 pb-6 lg:pt-6 pt-4">
     <div class="container mx-auto">
-        <div class="flex flex-col lgg:flex-row gap-8">
+        <nav class="checkout-steps" aria-label="Checkout progress">
+            <a href="{{ route('cart.index') }}" class="checkout-step is-done">
+                <span class="checkout-step-dot" aria-hidden="true">✓</span>
+                <span class="checkout-step-label">Cart</span>
+            </a>
+            <span class="checkout-step-line is-done" aria-hidden="true"></span>
+            <span class="checkout-step is-current">
+                <span class="checkout-step-dot" aria-hidden="true">2</span>
+                <span class="checkout-step-label">Shipping</span>
+            </span>
+            <span class="checkout-step-line" aria-hidden="true"></span>
+            <span class="checkout-step">
+                <span class="checkout-step-dot" aria-hidden="true">3</span>
+                <span class="checkout-step-label">Payment</span>
+            </span>
+        </nav>
+        <div class="checkout-layout flex flex-col lgg:flex-row gap-8">
             <!-- Left Column: Shipping Form -->
-            <div class="flex-1 bg-white rounded-lg shadow-sm p-8">
-                <nav class="text-sm text-gray-500 mb-6">
-                    Cart > Shipping > Payment
-                </nav>
+            <div class="checkout-form-card flex-1">
                @php
     $isBuyNow = session()->has('checkout_source') && 
                 session()->get('checkout_source') === 'buy_now';
 @endphp
 
 @if($isBuyNow)
-    <button type="button" class="btn btn-primary" 
+    <button type="button" class="checkout-back-btn" 
         onclick="clearBuyNowAndRedirect()"
         id="back-to-product-btn">
         <i class="fas fa-arrow-left"></i> Back to product
     </button>
 @endif
-                <h1 class="text-2xl font-semibold mb-8">Shipping Address</h1>
+                @php
+                $defaultAddress = $addresses->firstWhere('is_default', true) ?? $addresses->first();
+                $fullName = optional($defaultAddress)->full_name ?? (auth()->user()->name ?? '');
+                $nameParts = preg_split('/\s+/', trim($fullName), 2);
+                $firstName = $nameParts[0] ?? '';
+                $lastName = $nameParts[1] ?? '';
+                if ($lastName === '' && $firstName !== '') {
+                    $lastName = $firstName;
+                }
+                $previewPhone = optional($defaultAddress)->phone ?? old('phone');
+                $previewEmail = auth()->user()->email ?? '';
+                $previewAddress1 = optional($defaultAddress)->address_1 ?? old('address1');
+                $previewAddress2 = optional($defaultAddress)->address_2 ?? old('address2');
+                $previewCity = optional($defaultAddress)->city ?? old('city');
+                $previewState = optional($defaultAddress)->state ?? old('state');
+                $previewPin = optional($defaultAddress)->pincode ?? old('pinCode');
+                $hasPreviewAddress = filled($previewAddress1);
+                @endphp
+                <div class="checkout-address-head">
+                    <div>
+                        <h1 class="checkout-title">Shipping Address</h1>
+                        <p class="checkout-subtitle">Enter your delivery details to place the order.</p>
+                    </div>
+                    <button type="button" class="checkout-address-change-btn" id="checkout-address-change-btn">Change</button>
+                </div>
+                <div class="checkout-address-preview" id="checkout-address-preview">
+                    <div id="checkout-preview-details" class="{{ $hasPreviewAddress ? '' : 'hidden' }}">
+                        <p class="checkout-address-name" id="checkout-preview-name">{{ trim($firstName . ' ' . $lastName) }}</p>
+                        <p class="checkout-address-meta" id="checkout-preview-phone">{{ $previewPhone }}</p>
+                        <p class="checkout-address-line" id="checkout-preview-street">{{ $previewAddress1 }}{{ $previewAddress2 ? ', ' . $previewAddress2 : '' }}</p>
+                        <p class="checkout-address-line" id="checkout-preview-city">{{ collect([$previewCity, $previewState])->filter()->implode(', ') }}{{ $previewPin ? ' ' . $previewPin : '' }}</p>
+                        <p class="checkout-address-meta" id="checkout-preview-email">{{ $previewEmail }}</p>
+                    </div>
+                    <p class="checkout-address-empty{{ $hasPreviewAddress ? ' hidden' : '' }}" id="checkout-preview-empty">Add your delivery address</p>
+                </div>
                 {{-- @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
                             <ul>
@@ -38,12 +88,6 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">First Name<sup
                                 class="text-danger" style="color: red">*</sup></label>
-                        @php
-                        $defaultAddress = $addresses->where('is_default', 1)->first();
-                        $fullName = $defaultAddress->full_name ?? (auth()->user()->name ?? '');
-                        $firstName = explode(' ', trim($fullName))[0] ?? '';
-                        $lastName = explode(' ', trim($fullName))[1] ?? '';
-                        @endphp
                         <input type="text" name="firstName" id="firstName" value="{{ $firstName }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                             required minlength="2" maxlength="50" />
@@ -88,7 +132,7 @@
                                 <input type="hidden" name="country_code_dummy" value="+91" disabled>
                             </div>
                             <input type="tel" name="phone" id="phone"
-                                value="{{ $addresses->where('is_default', 1)->first()->phone ?? old('phone') }}"
+                                value="{{ optional($defaultAddress)->phone ?? old('phone') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-black"
                                 placeholder="Enter 10 digit phone number" required maxlength="10"
                                 inputmode="numeric" />
@@ -103,7 +147,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Address 1<sup class="text-danger"
                             style="color: red">*</sup></label>
                     <input type="text" name="address1" id="address1"
-                        value="{{ $addresses->where('is_default', 1)->first()->address_1 ?? old('address1') }}"
+                        value="{{ optional($defaultAddress)->address_1 ?? old('address1') }}"
                         class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         placeholder="Street address" required minlength="5" />
                     <p id="address1-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid address
@@ -114,17 +158,17 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Address 2 (optional)</label>
                     <input type="text" name="address2" id="address2"
-                        value="{{ $addresses->where('is_default', 1)->first()->address_2 ?? old('address2') }}"
+                        value="{{ optional($defaultAddress)->address_2 ?? old('address2') }}"
                         class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         placeholder="Apartment, suite, etc." />
                 </div>
 
-                <div class="grid grid-cols-3 gap-6">
+                <div class="checkout-city-grid grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">City<sup class="text-danger"
                                 style="color: red">*</sup></label>
                         <input type="text" name="city" id="city"
-                            value="{{ $addresses->where('is_default', 1)->first()->city ?? old('city') }}"
+                            value="{{ optional($defaultAddress)->city ?? old('city') }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                             required minlength="2" />
                         <p id="city-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid city name
@@ -135,7 +179,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">State<sup class="text-danger"
                                 style="color: red">*</sup></label>
                         <input type="text" name="state" id="state"
-                            value="{{ $addresses->where('is_default', 1)->first()->state ?? old('state') }}"
+                            value="{{ optional($defaultAddress)->state ?? old('state') }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                             required minlength="2" />
                         <p id="state-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid state
@@ -146,7 +190,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code<sup
                                 class="text-danger" style="color: red">*</sup></label>
                         <input type="text" name="pinCode" id="pinCode"
-                            value="{{ $addresses->where('is_default', 1)->first()->pincode ?? old('pinCode') }}"
+                            value="{{ optional($defaultAddress)->pincode ?? old('pinCode') }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                             placeholder="Enter 6 digit pincode" required maxlength="6" inputmode="numeric" />
                         <p id="pincode-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid
@@ -173,8 +217,8 @@
 
         <!-- Right Column: Order Summary -->
         <div class="xl:w-102 lgg:w-96 w-full">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6 smxl:text-left text-center">Your Cart</h2>
+            <div class="checkout-summary-card">
+                <h2 class="checkout-summary-title">Order Summary</h2>
 
                 <div class="space-y-6 mb-6">
 
@@ -194,42 +238,29 @@
                         // dd($appliedCoupons);
                     @endphp
                   
-                    <div class="flex gap-4 border-b-[1px] border-[#dfdfdf] smxl:flex-row flex-col smxl:justify-start smxl:items-start items-center smxl:text-left text-center">
-                        <div
-                            class="smxl:w-auto h-auto aspect-[2/3] smxl:max-w-full max-w-[100px]  max-h-[120px] bg-gray-200 rounded-md flex-shrink-0 border border-gray-300 overflow-hidden">
-                            @if ($cart->image)
-                            <img src="{{ url('img/' . $cart->image) }}" alt="{{ $cart->name }}"
-                                class="w-full h-19 object-cover">
-                            @endif
-                        </div>
-                        @php
-                            // if ($couponForThisVariant) {
-                            //     // Session already contains the final unit price
-                            //     $unitPrice = (float) $appliedCoupon['final_price'];
-                            // } else {
-                            //     // Normal database/table price
-                            //     $unitPrice = (float) (
-                            //         $cart->price -
-                            //         (($cart->price * $cart->discount) / 100)
-                            //     );
-                            // }
-
-                            // $productTotal = $unitPrice * $cart->count;
+                    @php
                             $productTotal = ($cart->price - ($cart->price * $cart->discount) / 100) * $cart->count;
-                        @endphp
-                        <div class="flex-1">
-                            <p class="font-medium">{{ $cart->name }} </p>
-                            <p class="text-sm text-gray-500">{{ $cart->size ?? 'One Size' }},
-                                {{ $cart->color ?? 'Default' }}
-                            </p>
-                            <p class="text-sm text-gray-500">Qty: {{ $cart->count }}</p>
-                            <p class="font-small" style="font-size: 14px;">
+                    @endphp
+                    <div class="checkout-item-row">
+                        <div class="checkout-cell-product">
+                            <div class="checkout-product-img">
+                                @if ($cart->image)
+                                <img src="{{ url('img/' . $cart->image) }}" alt="{{ $cart->name }}">
+                                @endif
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-900">{{ $cart->name }}</h3>
+                                <p class="text-sm text-gray-500">
+                                    Size: {{ $cart->size ?? 'One Size' }}, Color: {{ $cart->color ?? 'Default' }}
+                                </p>
+                            </div>
+                        </div>
 
-                            {{-- <span id="product-total-{{ $cart->cart_id }}">
-                                {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
-                            </span> --}}
-                            
-                            {{-- <span id="product-total-{{ $cart->cart_id }}"> --}}
+                        <div class="checkout-cell-qty">
+                            Qty: {{ $cart->count }}
+                        </div>
+
+                        <div class="checkout-cell-amount">
                             <span id="product-original-{{ $cart->cart_id }}"
                                 class="text-gray-400 line-through mr-1 hidden">
                                 {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
@@ -238,12 +269,9 @@
                                 {{ config('app.currency') }}{{ number_format($productTotal, 2) }}
                             </span>
                             <span id="product-savings-{{ $cart->cart_id }}" class="text-green-600 text-xs ml-1 hidden"></span>
-                        </p>
-                            <div class="flex items-center gap-1 mt-2">
-                                {{-- <input type="text" id="coupon-{{ $cart->cart_id }}"
-                                    value="{{ $appliedCoupon['code'] ?? '' }}"
-                                    class="w-28 border border-gray-300 rounded-md px-2 py-1 text-xs"
-                                    placeholder="Coupon"> --}}
+                        </div>
+
+                        <div class="checkout-coupon">
                                     <input type="text"
                                         id="coupon-{{ $cart->cart_id }}"
                                         value="{{ $appliedCoupon['code'] ?? '' }}"
@@ -257,7 +285,7 @@
                                     class="px-3 py-1 bg-black text-white rounded-md text-xs">
                                     Apply
                                 </button>
-                            </div>
+                        </div>
                             {{-- @if($appliedCoupon && !empty($appliedCoupon['code']))
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -272,13 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endif --}}
-                            <p id="coupon-message-{{ $cart->cart_id }}" class="text-sm mt-2"></p>
-                        </div>
-
-                        {{-- <p class="font-medium">{{config('app.currency')}}{{ number_format(($cart->price - (($cart->price * $cart->discount) / 100)) * $cart->count), 2 }}</p> --}}
-
-
-                        
+                            <p id="coupon-message-{{ $cart->cart_id }}" class="text-sm mt-2 checkout-coupon-msg"></p>
                     </div>
 
 
@@ -296,8 +318,111 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p class="text-gray-500 text-center py-4">Your cart is empty</p>
                         @endif
                 </div>
+            </div>
 
-                <div class="border-t pt-4 space-y-3">
+            @php
+                $savingCoupons = \App\Models\Coupon::where('is_active', true)
+                    ->where(function ($query) {
+                        $query->whereNull('expiry_date')
+                            ->orWhere('expiry_date', '>=', now());
+                    })
+                    ->orderByRaw("CASE WHEN code_type = 'special-discount' THEN 0 ELSE 1 END")
+                    ->orderByDesc('discount')
+                    ->get();
+                $sessionAppliedCodes = collect(session('applied_coupons', []))
+                    ->pluck('code')
+                    ->filter()
+                    ->map(function ($code) {
+                        return strtoupper(trim($code));
+                    })
+                    ->unique();
+                $specialIsApplied = $coupon
+                    && ($coupon->minimum_amount ?? 0) <= ($total ?? 0);
+                $appliedSavingCoupons = $savingCoupons->filter(function ($savingCoupon) use ($sessionAppliedCodes, $specialIsApplied) {
+                    if ($savingCoupon->code_type === 'special-discount') {
+                        return $specialIsApplied;
+                    }
+                    return $sessionAppliedCodes->contains(strtoupper(trim($savingCoupon->code)));
+                });
+                $otherSavingCoupons = $savingCoupons->reject(function ($savingCoupon) use ($appliedSavingCoupons) {
+                    return $appliedSavingCoupons->contains('id', $savingCoupon->id);
+                });
+            @endphp
+            <div class="checkout-saving-card">
+                <h2 class="checkout-saving-title">
+                    <img src="{{ asset('web/images/icons/saving-zone-wow.png') }}" alt="" class="checkout-saving-icon">
+                    Saving zone
+                </h2>
+                <div class="checkout-saving-list">
+                    @forelse($appliedSavingCoupons as $savingCoupon)
+                    <div class="checkout-saving-item is-applied">
+                        <div class="checkout-saving-info">
+                            <p class="checkout-saving-code">{{ $savingCoupon->code }}</p>
+                            <p class="checkout-saving-desc">
+                                {{ rtrim(rtrim(number_format((float) $savingCoupon->discount, 2), '0'), '.') }}% off
+                                @if($savingCoupon->code_for)
+                                    · {{ $savingCoupon->code_for }}
+                                @elseif($savingCoupon->name)
+                                    · {{ $savingCoupon->name }}
+                                @endif
+                            </p>
+                            @if($savingCoupon->code_type !== 'special-discount')
+                            <p class="checkout-saving-note">Applied on item</p>
+                            @endif
+                        </div>
+                        @if($savingCoupon->code_type === 'special-discount')
+                        <span class="checkout-saving-applied">Applied</span>
+                        @else
+                        <button type="button" class="checkout-saving-unapply" data-code="{{ $savingCoupon->code }}">Remove</button>
+                        @endif
+                    </div>
+                    @empty
+                    @if($otherSavingCoupons->isEmpty())
+                    <p class="checkout-saving-empty">No coupon available right now</p>
+                    @endif
+                    @endforelse
+
+                    @if($otherSavingCoupons->isNotEmpty())
+                    <details class="checkout-saving-more">
+                        <summary class="checkout-saving-more-toggle">
+                            <span>View all coupons and offers</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <div class="checkout-saving-more-list">
+                            @foreach($otherSavingCoupons as $savingCoupon)
+                            <div class="checkout-saving-item">
+                                <div class="checkout-saving-info">
+                                    <p class="checkout-saving-code">{{ $savingCoupon->code }}</p>
+                                    <p class="checkout-saving-desc">
+                                        {{ rtrim(rtrim(number_format((float) $savingCoupon->discount, 2), '0'), '.') }}% off
+                                        @if($savingCoupon->code_for)
+                                            · {{ $savingCoupon->code_for }}
+                                        @elseif($savingCoupon->name)
+                                            · {{ $savingCoupon->name }}
+                                        @endif
+                                    </p>
+                                    @if($savingCoupon->code_type === 'special-discount')
+                                    <p class="checkout-saving-note">
+                                        Auto applied on orders above {{ config('app.currency') }}{{ number_format($savingCoupon->minimum_amount, 2) }}
+                                    </p>
+                                    @else
+                                    <p class="checkout-saving-note">Use this code in the item coupon box</p>
+                                    @endif
+                                </div>
+                                @if($savingCoupon->code_type !== 'special-discount')
+                                <button type="button" class="checkout-saving-apply" data-code="{{ $savingCoupon->code }}">Apply</button>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </details>
+                    @endif
+                </div>
+            </div>
+
+            <div class="checkout-price-card">
+                <h2 class="checkout-price-title">Price details</h2>
+                <div class="checkout-totals space-y-3">
                     {{-- <div class="flex items-center gap-3">
                                 <input type="text" placeholder="Discount code"
                                     class="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:outline-none w-full" />
@@ -467,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
 
                 <button type="button" onclick="submitForm()"
-                    class="w-full mt-6 py-4 bg-black text-white font-medium rounded-md hover:bg-gray-900 transition"
+                    class="checkout-place-btn w-full mt-6 py-4 bg-black text-white font-medium rounded-md hover:bg-gray-900 transition"
                     @if ($carts->count() == 0) disabled @endif>
                     @if ($carts->count() > 0)
                     Place Order
@@ -475,10 +600,87 @@ document.addEventListener('DOMContentLoaded', function () {
                     Cart is Empty
                     @endif
                 </button>
+                <p class="checkout-secure">Secure checkout · GST invoice available</p>
             </div>
         </div>
     </div>
     </div>
+    </div>
+    <div class="checkout-address-sheet" id="checkout-address-sheet" aria-hidden="true">
+        <div class="checkout-address-sheet-backdrop" id="checkout-address-sheet-backdrop"></div>
+        <div class="checkout-address-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="checkout-address-sheet-title">
+            <div class="checkout-address-sheet-handle"></div>
+            <div class="checkout-address-sheet-head">
+                <h2 id="checkout-address-sheet-title">Select address</h2>
+                <button type="button" class="checkout-address-sheet-close" id="checkout-address-sheet-close" aria-label="Close">&times;</button>
+            </div>
+
+            <div id="checkout-address-sheet-list">
+                @forelse($addresses as $address)
+                <div class="checkout-address-option{{ $address->is_default ? ' is-selected' : '' }}"
+                    data-id="{{ $address->id }}"
+                    data-full-name="{{ $address->full_name }}"
+                    data-phone="{{ $address->phone }}"
+                    data-address-1="{{ $address->address_1 }}"
+                    data-address-2="{{ $address->address_2 }}"
+                    data-city="{{ $address->city }}"
+                    data-state="{{ $address->state }}"
+                    data-pincode="{{ $address->pincode }}">
+                    <input type="radio"
+                        name="checkout_shipping_address"
+                        class="checkout-address-radio"
+                        value="{{ $address->id }}"
+                        {{ $address->is_default ? 'checked' : '' }}>
+                    <div class="checkout-address-option-body">
+                        <span class="checkout-address-option-name">
+                            <span>{{ $address->full_name }}</span>
+                            @if($address->is_default)
+                            <span class="checkout-address-option-badge">Default</span>
+                            @elseif($address->address_type)
+                            <span class="checkout-address-option-badge">{{ ucfirst($address->address_type) }}</span>
+                            @endif
+                        </span>
+                        @if($address->phone)
+                        <span>{{ $address->phone }}</span><br>
+                        @endif
+                        <span>{{ $address->address_1 }}{{ $address->address_2 ? ', ' . $address->address_2 : '' }}</span><br>
+                        <span>{{ collect([$address->city, $address->state])->filter()->implode(', ') }}{{ $address->pincode ? ' ' . $address->pincode : '' }}</span>
+                    </div>
+                    <button type="button" class="checkout-address-edit-btn" aria-label="Edit address">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                </div>
+                @empty
+                <p class="checkout-address-empty-list">No saved addresses yet.</p>
+                @endforelse
+                <button type="button" class="checkout-address-add-btn" id="checkout-address-add-btn">+ Add new address</button>
+            </div>
+
+            <div id="checkout-address-sheet-form" class="checkout-address-new-form hidden">
+                <input type="hidden" id="checkout-new-address-id" value="">
+                <p id="checkout-address-form-error" class="checkout-address-form-error hidden"></p>
+                <label for="checkout-new-firstName">First Name</label>
+                <input type="text" id="checkout-new-firstName" maxlength="50" autocomplete="given-name">
+                <label for="checkout-new-lastName">Last Name</label>
+                <input type="text" id="checkout-new-lastName" maxlength="50" autocomplete="family-name">
+                <label for="checkout-new-phone">Phone No</label>
+                <input type="tel" id="checkout-new-phone" maxlength="10" inputmode="numeric" autocomplete="tel">
+                <label for="checkout-new-address1">Address 1</label>
+                <input type="text" id="checkout-new-address1" autocomplete="address-line1">
+                <label for="checkout-new-address2">Address 2 (optional)</label>
+                <input type="text" id="checkout-new-address2" autocomplete="address-line2">
+                <label for="checkout-new-city">City</label>
+                <input type="text" id="checkout-new-city" autocomplete="address-level2">
+                <label for="checkout-new-state">State</label>
+                <input type="text" id="checkout-new-state" autocomplete="address-level1">
+                <label for="checkout-new-pinCode">Pin Code</label>
+                <input type="text" id="checkout-new-pinCode" maxlength="6" inputmode="numeric" autocomplete="postal-code">
+                <div class="checkout-address-new-actions">
+                    <button type="button" class="checkout-address-form-back" id="checkout-address-form-back">Back</button>
+                    <button type="button" class="checkout-address-form-save" id="checkout-address-form-save">Use this address</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -685,9 +887,37 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        function isMobileCheckoutForm() {
+            return form && window.getComputedStyle(form).display === 'none';
+        }
+
+        function hasChosenShippingAddress() {
+            return address1 && address1.value.trim().length > 0;
+        }
+
+        function submitCheckoutForm() {
+            const couponsField = document.getElementById('applied-coupons');
+            if (couponsField) {
+                couponsField.value = JSON.stringify(window.appliedCoupons || {});
+            }
+            console.log('appliedCoupons:', window.appliedCoupons);
+            form.submit();
+        }
+
         // Form submission
         window.submitForm = function() {
             const form = document.getElementById('checkout-form');
+
+            if (lastName && firstName && lastName.value.trim().length === 0 && firstName.value.trim().length > 0) {
+                lastName.value = firstName.value;
+            }
+
+            if (isMobileCheckoutForm() && !hasChosenShippingAddress()) {
+                if (typeof window.openCheckoutAddressSheet === 'function') {
+                    window.openCheckoutAddressSheet();
+                }
+                return;
+            }
 
             // Validate all fields
             const isFirstNameValid = validateField(firstName, firstNameError, firstNameSuccess, validateName);
@@ -702,54 +932,78 @@ document.addEventListener('DOMContentLoaded', function () {
             // Check if all fields are valid
             if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid &&
                 isAddress1Valid && isCityValid && isStateValid && isPincodeValid) {
-                document.getElementById('applied-coupons').value =
-                    JSON.stringify(window.appliedCoupons);
-                    console.log('appliedCoupons:', window.appliedCoupons);
-                form.submit();
-            } else {
-                // Scroll to the first invalid field
-                const firstInvalid = document.querySelector('.border-red-500');
-                if (firstInvalid) {
-                    firstInvalid.focus();
-                    firstInvalid.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                }
+                submitCheckoutForm();
+                return;
+            }
 
-                // Show all error messages for empty fields
-                if (firstName.value.trim().length === 0) {
-                    firstNameError.classList.remove('hidden');
-                    firstName.classList.add('border-red-500');
+            // Mobile hides the shipping form; if a complete address is chosen, go to payment.
+            if (isMobileCheckoutForm() && hasChosenShippingAddress()) {
+                const pinDigits = pincode ? String(pincode.value || '').replace(/\D/g, '') : '';
+                const hasRequiredValues = firstName.value.trim().length > 0 &&
+                    lastName.value.trim().length > 0 &&
+                    email.value.trim().length > 0 &&
+                    phone.value.trim().length > 0 &&
+                    city.value.trim().length > 0 &&
+                    state.value.trim().length > 0 &&
+                    pinDigits.length === 6;
+                if (hasRequiredValues) {
+                    pincode.value = pinDigits;
+                    submitCheckoutForm();
+                    return;
                 }
-                if (lastName.value.trim().length === 0) {
-                    lastNameError.classList.remove('hidden');
-                    lastName.classList.add('border-red-500');
+                if (typeof window.openCheckoutAddressSheet === 'function') {
+                    window.openCheckoutAddressSheet();
+                    return;
                 }
-                if (email.value.trim().length === 0) {
-                    emailError.classList.remove('hidden');
-                    email.classList.add('border-red-500');
-                }
-                if (phone.value.length === 0) {
-                    phoneError.classList.remove('hidden');
-                    phone.classList.add('border-red-500');
-                }
-                if (address1.value.trim().length === 0) {
-                    address1Error.classList.remove('hidden');
-                    address1.classList.add('border-red-500');
-                }
-                if (city.value.trim().length === 0) {
-                    cityError.classList.remove('hidden');
-                    city.classList.add('border-red-500');
-                }
-                if (state.value.trim().length === 0) {
-                    stateError.classList.remove('hidden');
-                    state.classList.add('border-red-500');
-                }
-                if (pincode.value.length === 0) {
-                    pincodeError.classList.remove('hidden');
-                    pincode.classList.add('border-red-500');
-                }
+            }
+
+            if (isMobileCheckoutForm() && typeof window.openCheckoutAddressSheet === 'function') {
+                window.openCheckoutAddressSheet();
+                return;
+            }
+
+            // Scroll to the first invalid field
+            const firstInvalid = document.querySelector('#checkout-form .border-red-500');
+            if (firstInvalid) {
+                firstInvalid.focus();
+                firstInvalid.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            // Show all error messages for empty fields
+            if (firstName.value.trim().length === 0) {
+                firstNameError.classList.remove('hidden');
+                firstName.classList.add('border-red-500');
+            }
+            if (lastName.value.trim().length === 0) {
+                lastNameError.classList.remove('hidden');
+                lastName.classList.add('border-red-500');
+            }
+            if (email.value.trim().length === 0) {
+                emailError.classList.remove('hidden');
+                email.classList.add('border-red-500');
+            }
+            if (phone.value.length === 0) {
+                phoneError.classList.remove('hidden');
+                phone.classList.add('border-red-500');
+            }
+            if (address1.value.trim().length === 0) {
+                address1Error.classList.remove('hidden');
+                address1.classList.add('border-red-500');
+            }
+            if (city.value.trim().length === 0) {
+                cityError.classList.remove('hidden');
+                city.classList.add('border-red-500');
+            }
+            if (state.value.trim().length === 0) {
+                stateError.classList.remove('hidden');
+                state.classList.add('border-red-500');
+            }
+            if (pincode.value.length === 0) {
+                pincodeError.classList.remove('hidden');
+                pincode.classList.add('border-red-500');
             }
         };
 
@@ -1211,6 +1465,556 @@ function goToPreviousPage() {
             window.location.href = '{{ route("page.multi-product") }}';
         }
     }
+</script>
+<script>
+(function () {
+    var sheet = document.getElementById('checkout-address-sheet');
+    var btn = document.getElementById('checkout-address-change-btn');
+    var details = document.getElementById('checkout-preview-details');
+    var emptyEl = document.getElementById('checkout-preview-empty');
+    var listView = document.getElementById('checkout-address-sheet-list');
+    var formView = document.getElementById('checkout-address-sheet-form');
+    var titleEl = document.getElementById('checkout-address-sheet-title');
+    if (!sheet || !btn) {
+        return;
+    }
+
+    function setText(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value || '';
+        }
+    }
+
+    function setValue(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.value = value || '';
+        }
+    }
+
+    function fillPreview() {
+        var firstName = (document.getElementById('firstName') || {}).value || '';
+        var lastName = (document.getElementById('lastName') || {}).value || '';
+        var phone = (document.getElementById('phone') || {}).value || '';
+        var email = (document.getElementById('email') || {}).value || '';
+        var address1 = (document.getElementById('address1') || {}).value || '';
+        var address2 = (document.getElementById('address2') || {}).value || '';
+        var city = (document.getElementById('city') || {}).value || '';
+        var state = (document.getElementById('state') || {}).value || '';
+        var pin = (document.getElementById('pinCode') || {}).value || '';
+        var street = [address1.trim(), address2.trim()].filter(Boolean).join(', ');
+        var cityLine = [city.trim(), state.trim()].filter(Boolean).join(', ');
+        if (pin.trim()) {
+            cityLine = (cityLine ? cityLine + ' ' : '') + pin.trim();
+        }
+
+        setText('checkout-preview-name', [firstName.trim(), lastName.trim()].filter(Boolean).join(' '));
+        setText('checkout-preview-phone', phone.trim());
+        setText('checkout-preview-street', street);
+        setText('checkout-preview-city', cityLine);
+        setText('checkout-preview-email', email.trim());
+
+        if (details) {
+            details.classList.toggle('hidden', !address1.trim());
+        }
+        if (emptyEl) {
+            emptyEl.classList.toggle('hidden', !!address1.trim());
+        }
+    }
+
+    function applyToCheckout(data) {
+        var parts = String(data.full_name || '').trim().split(/\s+/).filter(Boolean);
+        var firstName = data.firstName || parts[0] || '';
+        var lastName = data.lastName || parts.slice(1).join(' ') || firstName;
+        setValue('firstName', firstName);
+        setValue('lastName', lastName);
+        setValue('phone', data.phone || '');
+        setValue('address1', data.address_1 || '');
+        setValue('address2', data.address_2 || '');
+        setValue('city', data.city || '');
+        setValue('state', data.state || '');
+        setValue('pinCode', data.pincode || '');
+        fillPreview();
+    }
+
+    function showList() {
+        if (titleEl) {
+            titleEl.textContent = 'Select address';
+        }
+        if (listView) {
+            listView.classList.remove('hidden');
+        }
+        if (formView) {
+            formView.classList.add('hidden');
+        }
+    }
+
+    var isEditingAddress = false;
+
+    function showForm(option) {
+        var optionEl = (option && option.getAttribute) ? option : null;
+        isEditingAddress = !!optionEl;
+        if (titleEl) {
+            titleEl.textContent = optionEl ? 'Edit address' : 'Add new address';
+        }
+        if (listView) {
+            listView.classList.add('hidden');
+        }
+        if (formView) {
+            formView.classList.remove('hidden');
+        }
+        var formError = document.getElementById('checkout-address-form-error');
+        if (formError) {
+            formError.textContent = '';
+            formError.classList.add('hidden');
+        }
+        if (optionEl) {
+            setValue('checkout-new-address-id', optionEl.getAttribute('data-id') || '');
+            var parts = String(optionEl.getAttribute('data-full-name') || '').trim().split(/\s+/).filter(Boolean);
+            setValue('checkout-new-firstName', parts[0] || '');
+            setValue('checkout-new-lastName', parts.slice(1).join(' ') || parts[0] || '');
+            setValue('checkout-new-phone', optionEl.getAttribute('data-phone') || '');
+            setValue('checkout-new-address1', optionEl.getAttribute('data-address-1') || '');
+            setValue('checkout-new-address2', optionEl.getAttribute('data-address-2') || '');
+            setValue('checkout-new-city', optionEl.getAttribute('data-city') || '');
+            setValue('checkout-new-state', optionEl.getAttribute('data-state') || '');
+            setValue('checkout-new-pinCode', optionEl.getAttribute('data-pincode') || '');
+            return;
+        }
+        setValue('checkout-new-address-id', '');
+        setValue('checkout-new-firstName', '');
+        setValue('checkout-new-lastName', '');
+        setValue('checkout-new-phone', '');
+        setValue('checkout-new-address1', '');
+        setValue('checkout-new-address2', '');
+        setValue('checkout-new-city', '');
+        setValue('checkout-new-state', '');
+        setValue('checkout-new-pinCode', '');
+    }
+
+    function markDefaultBadge(option) {
+        if (!sheet || !option) {
+            return;
+        }
+        sheet.querySelectorAll('.checkout-address-option').forEach(function (item) {
+            var badge = item.querySelector('.checkout-address-option-badge');
+            if (badge && badge.textContent.trim() === 'Default') {
+                badge.remove();
+            }
+        });
+        var nameEl = option.querySelector('.checkout-address-option-name');
+        if (nameEl && !nameEl.querySelector('.checkout-address-option-badge')) {
+            var badge = document.createElement('span');
+            badge.className = 'checkout-address-option-badge';
+            badge.textContent = 'Default';
+            nameEl.appendChild(badge);
+        }
+    }
+
+    function setCheckoutDefaultAddress(addressId) {
+        if (!addressId) {
+            return;
+        }
+        fetch("{{ url('/addresses') }}/" + addressId + "/checkout-default", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        }).catch(function (err) {
+            console.error(err);
+        });
+    }
+
+    function selectAddressOption(option) {
+        if (!option) {
+            return;
+        }
+        var radio = option.querySelector('.checkout-address-radio');
+        if (radio) {
+            radio.checked = true;
+        }
+        applyToCheckout({
+            full_name: option.getAttribute('data-full-name') || '',
+            phone: option.getAttribute('data-phone') || '',
+            address_1: option.getAttribute('data-address-1') || '',
+            address_2: option.getAttribute('data-address-2') || '',
+            city: option.getAttribute('data-city') || '',
+            state: option.getAttribute('data-state') || '',
+            pincode: option.getAttribute('data-pincode') || ''
+        });
+        sheet.querySelectorAll('.checkout-address-option').forEach(function (item) {
+            item.classList.toggle('is-selected', item === option);
+        });
+        markDefaultBadge(option);
+        setCheckoutDefaultAddress(option.getAttribute('data-id'));
+    }
+
+    function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, function (char) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+        });
+    }
+
+    function upsertAddressOption(address) {
+        if (!listView || !address || !address.id) {
+            return;
+        }
+        var emptyEl = listView.querySelector('.checkout-address-empty-list');
+        if (emptyEl) {
+            emptyEl.remove();
+        }
+        var option = listView.querySelector('.checkout-address-option[data-id="' + address.id + '"]');
+        var street = [address.address_1, address.address_2].filter(Boolean).join(', ');
+        var cityLine = [address.city, address.state].filter(Boolean).join(', ');
+        if (address.pincode) {
+            cityLine = (cityLine ? cityLine + ' ' : '') + address.pincode;
+        }
+        if (!option) {
+            option = document.createElement('div');
+            option.className = 'checkout-address-option';
+            option.innerHTML =
+                '<input type="radio" name="checkout_shipping_address" class="checkout-address-radio" value="">' +
+                '<div class="checkout-address-option-body">' +
+                    '<span class="checkout-address-option-name"><span></span></span>' +
+                    '<span class="checkout-address-option-phone"></span><br>' +
+                    '<span class="checkout-address-option-street"></span><br>' +
+                    '<span class="checkout-address-option-city"></span>' +
+                '</div>' +
+                '<button type="button" class="checkout-address-edit-btn" aria-label="Edit address"><i class="fa-solid fa-pen"></i></button>';
+            var addBtnEl = document.getElementById('checkout-address-add-btn');
+            if (addBtnEl) {
+                listView.insertBefore(option, addBtnEl);
+            } else {
+                listView.appendChild(option);
+            }
+        }
+        option.setAttribute('data-id', address.id);
+        option.setAttribute('data-full-name', address.full_name || '');
+        option.setAttribute('data-phone', address.phone || '');
+        option.setAttribute('data-address-1', address.address_1 || '');
+        option.setAttribute('data-address-2', address.address_2 || '');
+        option.setAttribute('data-city', address.city || '');
+        option.setAttribute('data-state', address.state || '');
+        option.setAttribute('data-pincode', address.pincode || '');
+        var radio = option.querySelector('.checkout-address-radio');
+        if (radio) {
+            radio.value = address.id;
+        }
+        var body = option.querySelector('.checkout-address-option-body');
+        if (body) {
+            var badge = body.querySelector('.checkout-address-option-badge');
+            var badgeHtml = badge ? badge.outerHTML : '';
+            body.innerHTML =
+                '<span class="checkout-address-option-name"><span>' + escapeHtml(address.full_name || '') + '</span>' + badgeHtml + '</span>' +
+                (address.phone ? (escapeHtml(address.phone) + '<br>') : '') +
+                escapeHtml(street) + '<br>' +
+                escapeHtml(cityLine);
+        }
+        selectAddressOption(option);
+    }
+
+    function openSheet() {
+        showList();
+        sheet.classList.add('is-open');
+        sheet.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.openCheckoutAddressSheet = openSheet;
+
+    function closeSheet() {
+        sheet.classList.remove('is-open');
+        sheet.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        showList();
+    }
+
+    btn.addEventListener('click', openSheet);
+
+    var closeBtn = document.getElementById('checkout-address-sheet-close');
+    var backdrop = document.getElementById('checkout-address-sheet-backdrop');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeSheet);
+    }
+    if (backdrop) {
+        backdrop.addEventListener('click', closeSheet);
+    }
+
+    sheet.addEventListener('click', function (e) {
+        if (e.target.closest('.checkout-address-add-btn') || e.target.closest('#checkout-address-sheet-form')) {
+            return;
+        }
+        var editBtn = e.target.closest('.checkout-address-edit-btn');
+        if (editBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            showForm(editBtn.closest('.checkout-address-option'));
+            return;
+        }
+        var option = e.target.closest('.checkout-address-option');
+        if (!option) {
+            return;
+        }
+        selectAddressOption(option);
+    });
+
+    var addBtn = document.getElementById('checkout-address-add-btn');
+    if (addBtn) {
+        addBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showForm(null);
+        });
+    }
+
+    var backBtn = document.getElementById('checkout-address-form-back');
+    if (backBtn) {
+        backBtn.addEventListener('click', showList);
+    }
+
+    var saveBtn = document.getElementById('checkout-address-form-save');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function () {
+            var firstName = (document.getElementById('checkout-new-firstName') || {}).value || '';
+            var lastName = (document.getElementById('checkout-new-lastName') || {}).value || '';
+            var phone = (document.getElementById('checkout-new-phone') || {}).value || '';
+            var address1 = (document.getElementById('checkout-new-address1') || {}).value || '';
+            var address2 = (document.getElementById('checkout-new-address2') || {}).value || '';
+            var city = (document.getElementById('checkout-new-city') || {}).value || '';
+            var state = (document.getElementById('checkout-new-state') || {}).value || '';
+            var pin = (document.getElementById('checkout-new-pinCode') || {}).value || '';
+            var addressId = (document.getElementById('checkout-new-address-id') || {}).value || '';
+            var formError = document.getElementById('checkout-address-form-error');
+            var fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ');
+
+            if (formError) {
+                formError.textContent = '';
+                formError.classList.add('hidden');
+            }
+
+            fetch("{{ route('addresses.checkout') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    id: isEditingAddress ? (addressId || null) : null,
+                    create_new: !isEditingAddress,
+                    full_name: fullName,
+                    phone: phone.trim(),
+                    address_1: address1.trim(),
+                    address_2: address2.trim(),
+                    city: city.trim(),
+                    state: state.trim(),
+                    pincode: pin.trim()
+                })
+            })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (result) {
+                if (!result.ok || !result.data.status) {
+                    var message = (result.data && result.data.message) ? result.data.message : 'Please fill a valid address.';
+                    if (result.data && result.data.errors) {
+                        var firstError = Object.values(result.data.errors)[0];
+                        if (firstError && firstError[0]) {
+                            message = firstError[0];
+                        }
+                    }
+                    if (formError) {
+                        formError.textContent = message;
+                        formError.classList.remove('hidden');
+                    }
+                    return;
+                }
+                applyToCheckout({
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phone,
+                    address_1: address1,
+                    address_2: address2,
+                    city: city,
+                    state: state,
+                    pincode: pin
+                });
+                upsertAddressOption(result.data.address);
+                closeSheet();
+            })
+            .catch(function (err) {
+                console.error(err);
+                if (formError) {
+                    formError.textContent = 'Could not save address. Please try again.';
+                    formError.classList.remove('hidden');
+                }
+            });
+        });
+    }
+})();
+</script>
+<script>
+(function () {
+    var card = document.querySelector('.checkout-saving-card');
+    if (!card) {
+        return;
+    }
+    var currency = "{{ config('app.currency') }}";
+
+    function isManualCouponApplied() {
+        if (document.querySelector('.checkout-saving-unapply')) {
+            return true;
+        }
+        var locked = false;
+        document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {
+            if (input.disabled && input.value.trim() !== '') {
+                locked = true;
+            }
+        });
+        return locked;
+    }
+
+    function syncOtherApplyButtons() {
+        var locked = isManualCouponApplied();
+        document.querySelectorAll('.checkout-saving-apply').forEach(function (btn) {
+            btn.disabled = locked;
+        });
+    }
+
+    function setSavingButton(btn, mode, code) {
+        btn.classList.remove('checkout-saving-apply', 'checkout-saving-unapply');
+        btn.classList.add(mode === 'apply' ? 'checkout-saving-apply' : 'checkout-saving-unapply');
+        btn.setAttribute('data-code', code);
+        btn.textContent = mode === 'apply' ? 'Apply' : 'Remove';
+        btn.disabled = false;
+    }
+
+    function revertItemCoupon(input) {
+        var cartId = input.id.replace('coupon-', '');
+        var productTotal = parseFloat(input.getAttribute('data-product-total')) || 0;
+        input.disabled = false;
+        input.value = '';
+
+        var applyBtn = document.getElementById('apply-btn-' + cartId);
+        if (applyBtn) {
+            applyBtn.disabled = false;
+            applyBtn.innerHTML = 'Apply';
+            applyBtn.classList.remove('bg-green-600');
+            applyBtn.classList.add('bg-black');
+        }
+
+        var originalEl = document.getElementById('product-original-' + cartId);
+        var totalEl = document.getElementById('product-total-' + cartId);
+        var savingsEl = document.getElementById('product-savings-' + cartId);
+        var msg = document.getElementById('coupon-message-' + cartId);
+        if (originalEl) {
+            originalEl.classList.add('hidden');
+        }
+        if (totalEl) {
+            totalEl.innerHTML = currency + productTotal.toFixed(2);
+        }
+        if (savingsEl) {
+            savingsEl.innerHTML = '';
+            savingsEl.classList.add('hidden');
+        }
+        if (msg) {
+            msg.innerHTML = '';
+        }
+
+        if (window.appliedCoupons) {
+            delete window.appliedCoupons[cartId];
+        }
+        if (window.appliedDiscounts) {
+            delete window.appliedDiscounts[cartId];
+        }
+    }
+
+    card.addEventListener('click', function (e) {
+        var applyBtn = e.target.closest('.checkout-saving-apply');
+        var unapplyBtn = e.target.closest('.checkout-saving-unapply');
+
+        if (applyBtn) {
+            if (applyBtn.disabled) {
+                return;
+            }
+            var code = applyBtn.getAttribute('data-code') || '';
+            if (!code || typeof window.applyCoupon !== 'function') {
+                return;
+            }
+            var appliedAny = false;
+            document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {
+                if (input.disabled) {
+                    return;
+                }
+                var cartId = input.id.replace('coupon-', '');
+                var variantId = input.getAttribute('data-variant-id');
+                var productTotal = input.getAttribute('data-product-total');
+                input.value = code;
+                window.applyCoupon(cartId, parseFloat(productTotal), parseInt(variantId, 10));
+                appliedAny = true;
+            });
+            if (appliedAny) {
+                var item = applyBtn.closest('.checkout-saving-item');
+                if (item) {
+                    item.classList.add('is-applied');
+                }
+                setSavingButton(applyBtn, 'unapply', code);
+                syncOtherApplyButtons();
+            }
+            return;
+        }
+
+        if (unapplyBtn) {
+            var removeCode = unapplyBtn.getAttribute('data-code') || '';
+            if (!removeCode) {
+                return;
+            }
+            fetch("{{ route('remove.coupon') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ coupon_code: removeCode })
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (res) {
+                if (!res.status) {
+                    return;
+                }
+                document.querySelectorAll('input[id^="coupon-"]').forEach(function (input) {
+                    if (input.value.trim().toUpperCase() === removeCode.toUpperCase()) {
+                        revertItemCoupon(input);
+                    }
+                });
+                if (typeof window.calculateTotals === 'function') {
+                    window.calculateTotals();
+                }
+                var item = unapplyBtn.closest('.checkout-saving-item');
+                if (item) {
+                    item.classList.remove('is-applied');
+                    var note = item.querySelector('.checkout-saving-note');
+                    if (note) {
+                        note.textContent = 'Use this code in the item coupon box';
+                    }
+                }
+                setSavingButton(unapplyBtn, 'apply', removeCode);
+                syncOtherApplyButtons();
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+        }
+    });
+
+    syncOtherApplyButtons();
+    setTimeout(syncOtherApplyButtons, 800);
+    document.querySelectorAll('[id^="apply-btn-"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            setTimeout(syncOtherApplyButtons, 800);
+        });
+    });
+})();
 </script>
 
 @endsection

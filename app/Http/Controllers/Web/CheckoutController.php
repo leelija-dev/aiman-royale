@@ -515,8 +515,51 @@ class CheckoutController extends Controller
         $total = session('cashfree_total');
         $currency = session('cashfree_currency');
 
+        $couponDiscount = 0;
+        $discount = 0;
+        $gstAmount = 0;
+        $subtotal = $total;
+        $couponLabel = 'Coupon discount';
+        $discountLabel = 'Discount';
 
-        return view('web.payment', compact('orderId', 'total', 'currency'));
+        $order = Order::with('orderProducts')->find($orderId);
+        if ($order) {
+            $couponDiscount = (float) $order->orderProducts->sum(function ($item) {
+                return (float) ($item->coupon_discount_amount ?? 0);
+            });
+            $discount = is_numeric($order->special_discount_amount)
+                ? (float) $order->special_discount_amount
+                : 0;
+            $gstAmount = (float) ($order->gst_amount ?? 0);
+            $subtotal = (float) $total + $couponDiscount + $discount - $gstAmount;
+            if ($subtotal < 0) {
+                $subtotal = (float) $total;
+            }
+
+            $couponCodes = $order->orderProducts
+                ->pluck('coupon_code')
+                ->filter()
+                ->unique()
+                ->values();
+            if ($couponCodes->isNotEmpty()) {
+                $couponLabel = 'Coupon discount (' . $couponCodes->implode(', ') . ')';
+            }
+            if (!empty($order->special_discount_name)) {
+                $discountLabel = 'Discount (' . $order->special_discount_name . ')';
+            }
+        }
+
+        return view('web.payment', compact(
+            'orderId',
+            'total',
+            'currency',
+            'couponDiscount',
+            'discount',
+            'gstAmount',
+            'subtotal',
+            'couponLabel',
+            'discountLabel'
+        ));
     }
 
 
