@@ -453,6 +453,7 @@
                                         <div class="px-4 py-2.5 text-sm text-gray-500">No collection available</div>
                                         @endif
                                     </div>
+                                    
                                 </div>
                             </div>
 
