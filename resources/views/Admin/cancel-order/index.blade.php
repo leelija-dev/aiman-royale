@@ -110,7 +110,7 @@
                                         </td>
                                         <td class="text-center">
                                             <span
-                                                class="text-sm">{{ $order->cancelled_at ? $order->cancelled_at->format('d M Y, h:i A') : '-' }}</span>
+                                                class="text-sm">{{ $order->cancelled_at ? $order->cancelled_at : '-' }}</span>
                                         </td>
                                         <td class="text-center">
                                             <span class="text-sm">
@@ -271,8 +271,8 @@
 
 @section('scripts')
     <script>
-        const DETAILS_URL = @json(route('return-orders.details'));
-        const REFUND_URL = @json(url('/api/refunds'));
+        const DETAILS_URL = @json(route('orders-cancel.details'));
+        const REFUND_URL = @json(route('orders-cancel.refund'));
         {{-- ⚠ replace with your real refund route --}}
         const CSRF = document.querySelector('meta[name="csrf-token"]')?.content || @json(csrf_token());
 
@@ -353,52 +353,26 @@
 
             return `
     <div class="row g-2 mb-4">
-        <div class="col-6 col-md-3"><div class="co-stat"><small>Order Amount</small><strong>${money(order.total_amount)}</strong></div></div>
-        <div class="col-6 col-md-3"><div class="co-stat"><small>Return Status</small><div class="mt-1">${pill(rev.status || 'N/A', rev.status_color || statusColor(rev.status))}</div></div></div>
-        <div class="col-6 col-md-3"><div class="co-stat"><small>Refund</small><div class="mt-1">${pill(order.refund_status || 'Pending', statusColor(order.refund_status))}</div></div></div>
-        <div class="col-6 col-md-3"><div class="co-stat"><small>Created</small><strong class="text-sm">${fmtDate(rev.created_at)}</strong></div></div>
+        <div class="col-6 col-md-3"><div class="co-stat"><small>Order Amount: </small><strong>${money(order.total_amount)}</strong></div></div>
+        <div class="col-6 col-md-3"><div class="co-stat"><small>Return Status: </small><div class="mt-1">${pill(rev.status || 'N/A', rev.status_color || statusColor(rev.status))}</div></div></div>
+        <div class="col-6 col-md-3"><div class="co-stat"><small>Refund Status: </small><div class="mt-1">${pill(order.refund_status || 'Pending', statusColor(order.refund_status))}</div></div></div>
+        <div class="col-6 col-md-3"><div class="co-stat"><small>Created: </small><strong class="text-sm">${fmtDate(rev.created_at)}</strong></div></div>
     </div>
 
     <div class="row g-3">
         <div class="col-md-6">
             <div class="co-card">
                 <h6><i class="fas fa-box me-1"></i> Order Information</h6>
-                ${row('Order ID', '#' + esc(order.id))}
-                ${row('Customer', esc(order.customer_name))}
-                ${row('Waybill', esc(order.waybill_number))}
-                ${row('Total Amount', money(order.total_amount))}
+                ${row('Order ID: ', '#' + esc(order.id))}
+                ${row('Customer: ', esc(order.customer_name))}
+                ${row('Waybill: ', esc(order.waybill_number))}
+                ${row('Total Amount: ', money(order.total_amount))}
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="co-card">
-                <h6><i class="fas fa-rotate-left me-1"></i> Return Information</h6>
-                ${row('Reverse Order ID', esc(rev.reverse_order_id))}
-                ${row('Return Waybill', esc(rev.waybill))}
-                ${row('Reason', esc(rev.return_reason))}
-                ${row('Created', fmtDate(rev.created_at))}
-            </div>
-        </div>
+       
     </div>
 
-    <div class="co-card mt-3">
-        <h6><i class="fas fa-clock-rotate-left me-1"></i> Refund History</h6>
-        ${refunds.length ? `
-            <div class="table-responsive">
-                <table class="table table-sm align-middle mb-0">
-                    <thead><tr><th>Date</th><th>Reason</th><th class="text-end">Amount</th><th class="text-center">Status</th></tr></thead>
-                    <tbody>
-                    ${refunds.map(r => `
-                    <tr>
-                        <td>${fmtDate(r.created_at)}</td>
-                        <td>${esc(r.reason)}</td>
-                        <td class="text-end fw-bold">${money(r.amount)}</td>
-                        <td class="text-center">${pill(r.status, statusColor(r.status))}</td>
-                    </tr>`).join('')}
-                    </tbody>
-                </table>
-            </div>` : `<p class="text-muted text-sm mb-0">No refunds processed yet.</p>`}
-    </div>
-
+    
     ${rev.payload ? `
         <div class="accordion mt-3" id="payloadAcc">
             <div class="accordion-item border rounded-3">
