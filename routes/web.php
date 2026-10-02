@@ -16,6 +16,7 @@ use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
+use App\Http\Controllers\Web\CustomerReviewController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
 use App\Http\Controllers\Api\ReturnOrderController;
@@ -159,6 +160,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
     Route::get('/pay-custom-order/{id}', [CustomDimensionController::class, 'payment'])->name('custom-order.payment');
+
+    Route::get('/reviews', [CustomerReviewController::class, 'index'])->name('web.reviews');
 });
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
