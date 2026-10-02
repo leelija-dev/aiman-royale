@@ -284,20 +284,34 @@
                                    <div>
                                        <div class="flex items-center gap-3 mb-2">
                                            <h3 class="font-bold text-gray-900">Order #{{$ord->id ?? ''}}</h3>
-                                           @if(ucfirst($ord->order_status)=='Paid')
+                                           @if(ucfirst($ord->order_status)=='Paid' || ucfirst($ord->order_status)=='Delivered' || ucfirst($ord->order_status)=='Confirmed' || ucfirst($ord->order_status)=='Shipped')
                                            <span class="order-status-delivered px-3 py-1 rounded-full text-xs font-medium">
                                                {{ucfirst($ord->order_status ?? '')}}
                                            </span>
                                            @else
-                                           <span class="bg-red-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
-                                               {{ ucfirst($ord->order_status ?? 'Pending') }}
-                                           </span>
+                                          <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-medium">
+                                            {{ ucfirst($ord->order_status ?? 'Pending') }}
+                                        </span>
                                            @endif
                                        </div>
                                        <p class="text-gray-600 text-sm">Placed on {{$ord->created_at->format('M d, Y h:i A')}}</p>
                                        <p class="text-gray-600 text-bold">Total Price: <strong>{{config('app.currency')}}{{$ord->total_amount ?? '0'}}</strong> </p>
                                    </div>
-                                   <div class="mt-3 lg:mt-0">
+                                   <div class="flex flex-col items-end gap-2">
+                                        @if($ord->payment_method != null)
+                                            @if($ord->payment_method == 'cash_on_delivery')
+                                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-200 bg-green-50 text-green-700 text-xs font-medium">
+                                                    <i class="fas fa-credit-card"></i>
+                                                    Cash on Delivery
+                                                </span>
+                                            @elseif($ord->payment_method == 'razorpay' ||  $ord->payment_method == 'cashfree')
+                                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-200 bg-green-50 text-green-700 text-xs font-medium">
+                                                    <i class="fas fa-credit-card"></i>
+                                                    Online Payment
+                                                </span>
+                                            @endif
+                                        @endif
+
                                        <a href="{{ route('track.page') }}?order_id={{ $ord->id }}" class="inline-block px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
                                            Track Order
                                        </a>
@@ -485,7 +499,7 @@
                                      @endphp
                                    @if($ord->pick_up_request_added == 1 && !$hasActiveReturn)
                                     <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}', '{{ strtolower($ord->payment_method ?? '') }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @elseif($ord->order_status == 'delivered' && $hasActiveReturn)
@@ -499,7 +513,7 @@
                                    </button>
                                    @elseif(in_array($ord->order_status, ['delivered']) && !$hasActiveReturn)
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}', '{{ strtolower($ord->payment_method ?? '') }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @elseif(in_array($ord->order_status, ['delivered']) && $hasActiveReturn)
@@ -726,7 +740,7 @@
        </div>
        </div>
    </section>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script>
        // Star rating functionality
        function setRating(productId, rating) {
@@ -868,77 +882,196 @@
        }
 
        // Return Order Function
-       function returnOrder(event, orderId, currentStatus) {
-           // Use Swal or custom confirm dialog
-           if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
-               return;
-           }
+    //    function returnOrder(event, orderId, currentStatus) {
+    //        // Use Swal or custom confirm dialog
+    //        if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
+    //            return;
+    //        }
 
-           // Get the button element
-           const button = (event && (event.currentTarget || event.target)) || document.activeElement;
-           const originalText = button.innerHTML;
+    //        // Get the button element
+    //        const button = (event && (event.currentTarget || event.target)) || document.activeElement;
+    //        const originalText = button.innerHTML;
 
-           // Show loading state
-           button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
-           button.disabled = true;
+    //        // Show loading state
+    //        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+    //        button.disabled = true;
 
-           // Make AJAX request
-           fetch(`/refund/${orderId}`, {
-                   method: 'POST',
-                   headers: {
-                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                       'Content-Type': 'application/json',
-                       'Accept': 'application/json', // Important: Tell server we want JSON
-                   },
-                   body: JSON.stringify({
-                       return_reason: 'Customer requested return'
-                   })
-               })
-               .then(response => {
-                   // Check if response is OK
-                   if (!response.ok) {
-                       return response.json().then(data => {
-                           throw new Error(data.message || 'Request failed');
-                       });
-                   }
-                   return response.json();
-               })
-               .then(data => {
-                   console.log('Return response:', data);
+    //        // Make AJAX request
+    //        fetch(`/refund/${orderId}`, {
+    //                method: 'POST',
+    //                headers: {
+    //                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    //                    'Content-Type': 'application/json',
+    //                    'Accept': 'application/json', // Important: Tell server we want JSON
+    //                },
+    //                body: JSON.stringify({
+    //                    return_reason: 'Customer requested return'
+    //                })
+    //            })
+    //            .then(response => {
+    //                // Check if response is OK
+    //                if (!response.ok) {
+    //                    return response.json().then(data => {
+    //                        throw new Error(data.message || 'Request failed');
+    //                    });
+    //                }
+    //                return response.json();
+    //            })
+    //            .then(data => {
+    //                console.log('Return response:', data);
 
-                   if (data.success) {
-                       // Show success notification
-                       showNotification(data.message, 'success');
+    //                if (data.success) {
+    //                    // Show success notification
+    //                    showNotification(data.message, 'success');
 
-                       // Update button text to show success
-                       button.innerHTML = '<i class="fas fa-check mr-2"></i>Returned';
-                       button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium';
+    //                    // Update button text to show success
+    //                    button.innerHTML = '<i class="fas fa-check mr-2"></i>Returned';
+    //                    button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium';
 
-                       // Reload page after 2 seconds
-                       setTimeout(() => {
-                           window.location.reload();
-                       }, 2000);
-                   } else {
-                       // Show error
-                       showNotification(data.message || 'Failed to process return', 'error');
+    //                    // Reload page after 2 seconds
+    //                    setTimeout(() => {
+    //                        window.location.reload();
+    //                    }, 2000);
+    //                } else {
+    //                    // Show error
+    //                    showNotification(data.message || 'Failed to process return', 'error');
 
-                       // Restore button
-                       button.innerHTML = originalText;
-                       button.disabled = false;
-                   }
-               })
-               .catch(error => {
-                   console.error('Error:', error);
+    //                    // Restore button
+    //                    button.innerHTML = originalText;
+    //                    button.disabled = false;
+    //                }
+    //            })
+    //            .catch(error => {
+    //                console.error('Error:', error);
 
-                   // Show error notification
-                   showNotification(error.message || 'Error processing return request. Please try again.', 'error');
+    //                // Show error notification
+    //                showNotification(error.message || 'Error processing return request. Please try again.', 'error');
 
-                   // Restore button
-                   button.innerHTML = originalText;
-                   button.disabled = false;
-               });
-       }
+    //                // Restore button
+    //                button.innerHTML = originalText;
+    //                button.disabled = false;
+    //            });
+    //    }
+    function returnOrder(event, orderId, currentStatus, paymentMethod) {
+    const isCOD = (paymentMethod || '').toLowerCase().replace(/[\s_-]/g, '') === 'cash_on_delivery'
+               || (paymentMethod || '').toLowerCase().includes('cash_on_delivery');
+    console.log('Payment method:', paymentMethod, 'isCOD:', isCOD);
+    Swal.fire({
+        title: 'Return this order?',
+        text: 'This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, return it',
+        confirmButtonColor: '#7c3aed',
+        cancelButtonColor: '#6b7280',
+    }).then((result) => {
+        if (!result.isConfirmed) return;
 
+        // COD + delivered -> collect bank details first
+        if (isCOD && currentStatus === 'delivered') {
+            openBankForm(orderId);
+        } else {
+            submitReturn(orderId, {});
+        }
+    });
+}
+
+function openBankForm(orderId) {
+    const input = 'w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none';
+    const label = 'block text-left text-sm font-medium text-gray-700 mb-1';
+
+    Swal.fire({
+        title: 'Bank details for refund',
+        width: 460,
+        html: `
+            <p class="text-sm text-gray-500 mb-4">Since you paid by Cash on Delivery, we need your bank account to send the refund.</p>
+            <div class="space-y-3">
+                <div><label class="${label}">Account Holder Name</label>
+                    <input id="holder_name" class="${input}" placeholder="As per bank records"></div>
+                <div><label class="${label}">Bank Name</label>
+                    <input id="bank_name" class="${input}" placeholder="e.g. State Bank of India"></div>
+                <div><label class="${label}">Account Number</label>
+                    <input id="account_number" inputmode="numeric" maxlength="18" class="${input}" placeholder="Account number"></div>
+                <div><label class="${label}">IFSC Code</label>
+                    <input id="ifsc_code" maxlength="11" class="${input}" style="text-transform:uppercase" placeholder="e.g. SBIN0001234"></div>
+            </div>`,
+        showCancelButton: true,
+        confirmButtonText: 'Submit Return',
+        confirmButtonColor: '#7c3aed',
+        cancelButtonColor: '#6b7280',
+        focusConfirm: false,
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        didOpen: () => {
+            const acc = Swal.getPopup().querySelector('#account_number');
+            acc.addEventListener('input', () => acc.value = acc.value.replace(/\D/g, ''));
+        },
+        preConfirm: () => {
+            const p = Swal.getPopup();
+            const holder = p.querySelector('#holder_name').value.trim();
+            const bank   = p.querySelector('#bank_name').value.trim();
+            const acc    = p.querySelector('#account_number').value.trim();
+            const ifsc   = p.querySelector('#ifsc_code').value.trim().toUpperCase();
+
+            if (!holder || !bank || !acc || !ifsc) {
+                Swal.showValidationMessage('Please fill in all fields'); return false;
+            }
+            if (!/^\d{9,18}$/.test(acc)) {
+                Swal.showValidationMessage('Account number must be 9 to 18 digits'); return false;
+            }
+            if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
+                Swal.showValidationMessage('Enter a valid IFSC code (e.g. SBIN0001234)'); return false;
+            }
+
+            return sendReturnRequest(orderId, {
+                account_holder_name: holder,
+                bank_name: bank,
+                account_number: acc,
+                ifsc_code: ifsc,
+            }).catch(e => Swal.showValidationMessage(e.message));
+        },
+    }).then((result) => {
+        if (result.isConfirmed && result.value) showReturnSuccess(result.value);
+    });
+}
+
+// Non-COD: no bank details needed
+function submitReturn(orderId, extra) {
+    Swal.fire({
+        title: 'Submitting...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+    });
+
+    sendReturnRequest(orderId, extra)
+        .then(showReturnSuccess)
+        .catch(e => Swal.fire({ icon: 'error', title: 'Failed', text: e.message, confirmButtonColor: '#7c3aed' }));
+}
+
+function sendReturnRequest(orderId, extra) {
+    return fetch(`/refund/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ return_reason: 'Customer requested return', ...extra }),
+    }).then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok || data.success === false) throw new Error(data.message || 'Request failed');
+        return data;
+    });
+}
+function showReturnSuccess(data) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Return requested',
+        text: data.message || 'Your return request has been submitted.',
+        confirmButtonColor: '#7c3aed',
+        timer: 2500,
+    }).then(() => window.location.reload());
+}
        // Notification function (if you don't have one)
        function showNotification(message, type = 'success') {
            // Check if we have a notification container
