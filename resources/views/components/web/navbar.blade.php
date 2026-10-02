@@ -2329,6 +2329,7 @@ window.updateCartCount = updateCartCount;
             // console.log("Extracted products:", products);
 
             if (products.length === 0) {
+                // Show default fallback products
                 collectionList.innerHTML = `
         <div class="col-span-full w-full text-center py-10 text-gray-500">
             <i class="fas fa-box-open text-3xl mb-2"></i>

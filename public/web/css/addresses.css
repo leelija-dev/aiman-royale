@@ -1,0 +1,344 @@
+/* Addresses page UI — loaded only on /addresses */
+
+.addresses-page aside .mt-6 {
+  display: none !important;
+}
+
+.addresses-back-bar,
+.addresses-back-title {
+  display: none;
+}
+
+@media (max-width: 990px) {
+  .breadcrumbs-wrapper {
+    display: none !important;
+  }
+
+  #mobile-menu-btn,
+  #search-container,
+  #mobile-search-dropdown,
+  #nav-wrapper > .py-4 {
+    display: none !important;
+  }
+
+  .addresses-back-bar {
+    display: flex;
+    align-items: center;
+    order: 0;
+    margin: 0 0 4px;
+    padding: 0 2px;
+    min-height: 0;
+  }
+
+  .addresses-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: #212121;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .addresses-back-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .addresses-page {
+    background: #f1f3f6;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: 10px !important;
+    padding-bottom: 24px !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .addresses-page > .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    display: contents;
+  }
+
+  .addresses-page > .container > .flex {
+    display: contents;
+  }
+
+  .addresses-main {
+    order: 1;
+  }
+
+  .addresses-sidebar {
+    order: 2;
+    margin: 10px 0 0;
+  }
+
+  .addresses-sidebar aside > div {
+    position: static !important;
+    padding: 16px 0 8px !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .addresses-sidebar aside .text-center {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 12px;
+    margin: 0 16px 8px !important;
+    padding: 0 0 14px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .addresses-sidebar aside .relative.inline-block {
+    margin-bottom: 0 !important;
+  }
+
+  .addresses-sidebar aside .w-20 {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 14px !important;
+  }
+
+  .addresses-sidebar aside h2 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.3;
+    color: #111827 !important;
+  }
+
+  .addresses-sidebar aside .text-center > p {
+    display: none;
+  }
+
+  .addresses-sidebar aside nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+  }
+
+  .addresses-sidebar aside nav.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
+  }
+
+  .addresses-sidebar aside nav .sidebar-item {
+    width: 100%;
+    padding: 14px 16px !important;
+    border-radius: 0 !important;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    white-space: normal;
+    background: transparent;
+  }
+
+  .addresses-sidebar aside nav .sidebar-item i {
+    width: 20px;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  .addresses-sidebar aside nav .sidebar-item.active {
+    background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
+    border-right: 4px solid #a855f7;
+    color: #7c3aed;
+  }
+
+  .addresses-sidebar aside nav .sidebar-item.active i {
+    color: #7c3aed;
+  }
+
+  .addresses-sidebar aside .mt-8 {
+    display: none;
+  }
+
+  .addresses-header {
+    padding: 14px !important;
+    margin-bottom: 10px !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb;
+  }
+
+  .addresses-header h1 {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6b7280 !important;
+  }
+
+  .addresses-header p {
+    display: none;
+  }
+
+  .addresses-header button {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 14px;
+    border-radius: 10px !important;
+  }
+
+  .addresses-grid {
+    gap: 10px !important;
+  }
+
+  .addresses-page .address-card {
+    padding: 14px !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb;
+  }
+
+  .addresses-page .address-card:hover {
+    transform: none;
+    box-shadow: none !important;
+  }
+
+  .addresses-page .address-card.default {
+    border-color: #c4b5fd;
+  }
+
+  .addresses-page .address-card .absolute.top-4.right-4 {
+    top: 12px;
+    right: 12px;
+  }
+
+  .addresses-page .address-card .mb-4 {
+    margin-bottom: 8px !important;
+    padding-right: 72px;
+  }
+
+  .addresses-page .address-card .space-y-2 {
+    font-size: 13px;
+  }
+
+  .addresses-page .address-card .flex.gap-3.mt-6 {
+    flex-wrap: wrap;
+    gap: 8px !important;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+  }
+
+  .addresses-page .address-card .flex.gap-3.mt-6 > button {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    padding: 9px 8px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .addresses-page .col-span-full > div {
+    padding: 24px 16px !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb;
+  }
+
+  .addresses-page .col-span-full .w-24 {
+    width: 56px !important;
+    height: 56px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .addresses-page .col-span-full h3 {
+    font-size: 16px !important;
+  }
+
+  #addressModalContainer.container-model {
+    z-index: 20060 !important;
+  }
+
+  #addressModalContainer .overlay-modal {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #addressModalContainer .content-modal,
+  #addressModalContainer .content-modal.active {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  #addressModalContainer .content-modal > .p-6 {
+    flex-shrink: 0;
+    padding: 14px 16px !important;
+  }
+
+  #addressModalContainer #modalTitle {
+    font-size: 16px;
+  }
+
+  #addressModalContainer #addressForm {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px 24px !important;
+  }
+
+  #addressModalContainer #addressForm .grid {
+    gap: 10px !important;
+  }
+
+  #addressModalContainer #addressForm .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 12px !important;
+  }
+
+  #addressModalContainer #addressForm input,
+  #addressModalContainer #addressForm select {
+    height: 44px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 14px;
+  }
+
+  #addressModalContainer #addressForm .flex.gap-3.pt-4 {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: 16px !important;
+    padding: 12px 0 8px;
+    background: #fff;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  #addressModalContainer #addressForm .flex.gap-3.pt-4 button {
+    height: 44px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+body:has(#addressModalContainer.active) {
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .addresses-header,
+  .addresses-page .address-card {
+    padding: 12px !important;
+  }
+}

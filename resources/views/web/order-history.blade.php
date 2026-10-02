@@ -6,6 +6,10 @@
 
     ?>
 
+   @section('styles')
+   <link rel="stylesheet" href="{{ asset('web/css/order-history.css') }}">
+   @endsection
+
 
 
 
@@ -77,11 +81,21 @@
        }
    </style>
 
-   <section class="w-full px-4 lgg:py-12 py-6">
+   <section class="order-history-page w-full px-4 lgg:py-12 py-6">
+       <div class="order-history-back-bar">
+           <a href="{{ url()->previous(route('web.profile')) }}"
+               class="order-history-back-btn"
+               aria-label="Go back"
+               onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                   <path d="M15 18l-6-6 6-6" />
+               </svg>
+           </a>
+       </div>
        <div class="container mx-auto">
            <div class="flex flex-col lg:flex-row gap-8">
                <!-- Sidebar Navigation -->
-               <div class="lg:w-1/4">
+               <div class="order-history-sidebar lg:w-1/4">
                    <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
                        <!-- User Profile Summary -->
                        {{-- <div class="text-center mb-8">
@@ -124,12 +138,12 @@
                        <!-- Order Stats -->
                        <div class="mt-8 pt-6 border-t border-gray-200">
                            <h3 class="font-medium text-gray-900 mb-4">Order Summary</h3>
-                           <div class="space-y-3">
-                               <div class="flex justify-between text-sm">
+                           <div class="flex gap-2 md:block">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">Total Orders</span>
                                    <span class="font-medium">{{$totalOrders ?? 0}}</span>
                                </div>
-                               <div class="flex justify-between text-sm">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">This Month</span>
                                    <span class="font-medium">{{$thisMonthOrders ?? 0}}</span>
                                </div>
@@ -137,7 +151,7 @@
                                 <span class="text-gray-600">Pending</span>
                                 <span class="font-medium text-amber-600">2</span>
                             </div> --}}
-                               <div class="flex justify-between text-sm">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">Delivered</span>
                                    <span class="font-medium text-green-600">{{$deliveredOrders ?? 0}}</span>
                                </div>
@@ -147,9 +161,9 @@
                </div>
 
                <!-- Main Content -->
-               <div class="lg:w-3/4">
+               <div class="order-history-main lg:w-3/4">
                    <!-- Page Header -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                   <div class="order-history-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                            <div>
                                <h1 class="text-2xl font-bold text-gray-900">Order History</h1>
@@ -167,14 +181,14 @@
                    </div>
 
                    <!-- Filters and Search -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                   <div class="order-history-filters bg-white rounded-2xl shadow-sm p-6 mb-6">
                        @php
-                           $currentStatus = request('status', '');
-                           $currentDate = request('date_filter', '');
-                           $currentSearch = request('search', '');
-                           $orderHistoryUrl = route('user.order-history', base64_encode($user->id));
-                           $activeTabClass = 'bg-purple-100 text-purple-700';
-                           $inactiveTabClass = 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+                       $currentStatus = request('status', '');
+                       $currentDate = request('date_filter', '');
+                       $currentSearch = request('search', '');
+                       $orderHistoryUrl = route('user.order-history', base64_encode($user->id));
+                       $activeTabClass = 'bg-purple-100 text-purple-700';
+                       $inactiveTabClass = 'bg-gray-100 text-gray-700 hover:bg-gray-200';
                        @endphp
                        <form method="GET" action="{{ $orderHistoryUrl }}" id="orderFilterForm">
                            <div class="flex flex-col md:flex-row gap-4 justify-between">
@@ -195,7 +209,7 @@
                                        onchange="document.getElementById('orderFilterForm').submit()"
                                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                                        <option value="" {{ $currentDate === '' ? 'selected' : '' }}>All Time</option>
-                                        <option value="7" {{ $currentDate === '7' ? 'selected' : '' }}>Last 7 Days</option>
+                                       <option value="7" {{ $currentDate === '7' ? 'selected' : '' }}>Last 7 Days</option>
                                        <option value="30" {{ $currentDate === '30' ? 'selected' : '' }}>Last 30 Days</option>
                                        <option value="90" {{ $currentDate === '90' ? 'selected' : '' }}>Last 3 Months</option>
                                        <option value="365" {{ $currentDate === '365' ? 'selected' : '' }}>Last Year</option>
@@ -203,8 +217,10 @@
                                    <select name="status"
                                        onchange="document.getElementById('orderFilterForm').submit()"
                                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
-                                       <option value="" {{ $currentStatus === '' ? 'selected' : '' }} >All Orders</option>
+                                       <option value="" {{ $currentStatus === '' ? 'selected' : '' }}>All Orders</option>
+                                       <option value="shipped" {{ $currentStatus === 'shipped' ? 'selected' : '' }}>To Ship</option>
                                        <option value="delivered" {{ in_array($currentStatus, ['delivered', 'delivered']) ? 'selected' : '' }}>Delivered</option>
+                                       <option value="paid" {{ $currentStatus === 'paid' ? 'selected' : '' }}>Order Completed</option>
                                        <option value="pending" {{ in_array($currentStatus, ['pending', 'pending']) ? 'selected' : '' }}>Pending</option>
                                        <option value="cancelled" {{ in_array($currentStatus, ['cancelled', 'cancelled']) ? 'selected' : '' }}>Cancelled</option>
                                        <option value="returned" {{ $currentStatus === 'returned' ? 'selected' : '' }}>Returned</option>
@@ -214,7 +230,7 @@
                        </form>
 
                        <!-- Quick Filter Tabs -->
-                       <div class="flex flex-wrap gap-2 mt-4">
+                       <div class="order-history-tabs flex flex-wrap gap-2 mt-4">
                            <a href="{{ $orderHistoryUrl }}{{ $currentSearch || $currentDate ? '?' . http_build_query(array_filter(['search' => $currentSearch, 'date_filter' => $currentDate])) : '' }}"
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === '' ? $activeTabClass : $inactiveTabClass }}">
                                All Orders
@@ -235,7 +251,7 @@
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'pending' ? $activeTabClass : $inactiveTabClass }}">
                                Pending
                            </a>
-                            <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'cancelled', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'cancelled', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
                                class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'cancelled' ? $activeTabClass : $inactiveTabClass }}">
                                Cancelled
                            </a>
@@ -251,7 +267,7 @@
                    <div class="space-y-6">
                        <!-- Current/Processing Orders -->
                        <div>
-                           <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
+                           <h2 class="order-history-section-title text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
                            @if($orders->count() === 0)
                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center mb-6">
                                <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
@@ -268,12 +284,12 @@
                                    <div>
                                        <div class="flex items-center gap-3 mb-2">
                                            <h3 class="font-bold text-gray-900">Order #{{$ord->id ?? ''}}</h3>
-                                           @if(ucfirst($ord->order_status)=='Paid')
+                                           @if(ucfirst($ord->order_status)=='Paid' || ucfirst($ord->order_status)=='Delivered' || ucfirst($ord->order_status)=='Confirmed' || ucfirst($ord->order_status)=='Shipped')
                                            <span class="order-status-delivered px-3 py-1 rounded-full text-xs font-medium">
                                                {{ucfirst($ord->order_status ?? '')}}
                                            </span>
                                            @else
-                                           <span class="bg-red-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                                           <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-medium">
                                                {{ ucfirst($ord->order_status ?? 'Pending') }}
                                            </span>
                                            @endif
@@ -281,7 +297,21 @@
                                        <p class="text-gray-600 text-sm">Placed on {{$ord->created_at->format('M d, Y h:i A')}}</p>
                                        <p class="text-gray-600 text-bold">Total Price: <strong>{{config('app.currency')}}{{$ord->total_amount ?? '0'}}</strong> </p>
                                    </div>
-                                   <div class="mt-3 lg:mt-0">
+                                   <div class="flex flex-col items-end gap-2">
+                                       @if($ord->payment_method != null)
+                                       @if($ord->payment_method == 'cash_on_delivery')
+                                       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-200 bg-green-50 text-green-700 text-xs font-medium">
+                                           <i class="fas fa-credit-card"></i>
+                                           Cash on Delivery
+                                       </span>
+                                       @elseif($ord->payment_method == 'razorpay' || $ord->payment_method == 'cashfree')
+                                       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-200 bg-green-50 text-green-700 text-xs font-medium">
+                                           <i class="fas fa-credit-card"></i>
+                                           Online Payment
+                                       </span>
+                                       @endif
+                                       @endif
+
                                        <a href="{{ route('track.page') }}?order_id={{ $ord->id }}" class="inline-block px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
                                            Track Order
                                        </a>
@@ -304,17 +334,17 @@
                                <!-- Shipping Address -->
                                @if($ord->address_1 || $ord->city || $ord->pincode || $ord->phone_no)
                                @php
-                                   $addressParts = array_filter([
-                                       $ord->address_1,
-                                       $ord->address_2,
-                                       $ord->city,
-                                       $ord->state,
-                                       $ord->pincode,
-                                   ]);
-                                   $fullAddress = implode(', ', $addressParts);
-                                   if ($ord->phone_no) {
-                                       $fullAddress = $fullAddress !== '' ? $fullAddress . ' • ' . $ord->phone_no : $ord->phone_no;
-                                   }
+                               $addressParts = array_filter([
+                               $ord->address_1,
+                               $ord->address_2,
+                               $ord->city,
+                               $ord->state,
+                               $ord->pincode,
+                               ]);
+                               $fullAddress = implode(', ', $addressParts);
+                               if ($ord->phone_no) {
+                               $fullAddress = $fullAddress !== '' ? $fullAddress . ' • ' . $ord->phone_no : $ord->phone_no;
+                               }
                                @endphp
                                <div class="mb-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
                                    <div class="flex items-center gap-3">
@@ -333,157 +363,157 @@
 
                                <!-- Order Items -->
                                <div class="space-y-4">
-                               @foreach($ord->orderProducts as $itemIndex => $orderProduct)
+                                   @foreach($ord->orderProducts as $itemIndex => $orderProduct)
 
-                               <div class="order-product-card bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                                   <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                                       <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                                           Item {{ $itemIndex + 1 }} of {{ $ord->orderProducts->count() }}
-                                       </span>
-                                       <span class="text-xs text-gray-500">Order #{{ $ord->id }}</span>
-                                   </div>
-
-                                   <div class="flex items-center gap-4 p-4">
-                                       <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                                           {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
-                                           <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
-
-                                                   src="{{url('img/' . $orderProduct->product->featured_image ?? '')}}"
-                                                   class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
-                                                   alt="{{$orderProduct->product->name ?? ''}}" /></a>
+                                   <div class="order-product-card bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                                       <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                                           <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                               Item {{ $itemIndex + 1 }} of {{ $ord->orderProducts->count() }}
+                                           </span>
+                                           <span class="text-xs text-gray-500">Order #{{ $ord->id }}</span>
                                        </div>
 
-                                       <div class="flex-1 min-w-0">
-                                           <a href="{{route('page.single-product', $orderProduct->product->slug)}}">
-                                               <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
-                                               <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size ?? ''}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
-                                               <p class="text-gray-600 text-sm">Quantity: {{$orderProduct->quantity ?? ''}}</p>
-                                           </a>
-                                       </div>
+                                       <div class="flex items-center gap-4 p-4">
+                                           <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                                               {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
+                                               <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
 
-                                       <div class="text-right flex-shrink-0">
-                                           <p class="font-medium text-gray-900">{{config('app.currency')}}{{$orderProduct->total ?? ''}}</p>
-                                           <p class="text-green-600 text-sm">In Stock</p>
-                                       </div>
-                                   </div>
-
-                                   <!-- Review Section - Only show for delivered orders -->
-                                   @if($ord->order_status == 'delivered')
-                                   @php
-                                   $hasReviewed = \App\Models\FalseReview::where('user_id', $user->id)
-                                   ->where('product_id', $orderProduct->product->id)
-                                   ->where('order_id', $ord->id)
-                                   ->exists();
-
-                                   @endphp
-
-                                   @if($hasReviewed)
-                                   <div class="mx-4 mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
-                                       <div class="flex items-center gap-2">
-                                           <i class="fas fa-check-circle text-green-600"></i>
-                                           <span class="text-green-800 font-medium">You've reviewed this product</span>
-                                       </div>
-                                       <div class="mt-2">
-                                           <div class="flex items-center gap-1">
-                                               @for($i = 1; $i <= 5; $i++)
-                                                   <i class="fas fa-star text-yellow-400"></i>
-                                                   @endfor
+                                                       src="{{url('img/' . $orderProduct->product->featured_image ?? '')}}"
+                                                       class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                                                       alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                            </div>
-                                           <p class="text-sm text-gray-600 mt-1">Thank you for your feedback!</p>
-                                       </div>
-                                   </div>
-                                   @else
-                                   <div class="mx-4 mb-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
-                                       <h5 class="font-medium text-purple-900 mb-3">Rate this product</h5>
-                                       <form id="reviewForm-{{$orderProduct->product->id}}" class="space-y-3" onsubmit="submitReview(event, {{$orderProduct->product->id}})">
-                                           @csrf
-                                           <input type="hidden" name="product_id" value="{{$orderProduct->product->id}}">
-                                           <input type="hidden" name="order_id" value="{{$ord->id}}">
-                                           <input type="hidden" name="user_id" value="{{$user->id}}">
 
-                                           <!-- Star Rating -->
+                                           <div class="flex-1 min-w-0">
+                                               <a href="{{route('page.single-product', $orderProduct->product->slug)}}">
+                                                   <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
+                                                   <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size ?? ''}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
+                                                   <p class="text-gray-600 text-sm">Quantity: {{$orderProduct->quantity ?? ''}}</p>
+                                               </a>
+                                           </div>
+
+                                           <div class="text-right flex-shrink-0">
+                                               <p class="font-medium text-gray-900">{{config('app.currency')}}{{$orderProduct->total ?? ''}}</p>
+                                               <p class="text-green-600 text-sm">In Stock</p>
+                                           </div>
+                                       </div>
+
+                                       <!-- Review Section - Only show for delivered orders -->
+                                       @if($ord->order_status == 'delivered')
+                                       @php
+                                       $hasReviewed = \App\Models\FalseReview::where('user_id', $user->id)
+                                       ->where('product_id', $orderProduct->product->id)
+                                       ->where('order_id', $ord->id)
+                                       ->exists();
+
+                                       @endphp
+
+                                       @if($hasReviewed)
+                                       <div class="mx-4 mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
                                            <div class="flex items-center gap-2">
-                                               <label class="text-sm font-medium text-gray-700">Rating:</label>
-                                               <div class="flex gap-1" id="starRating-{{$orderProduct->product->id}}">
+                                               <i class="fas fa-check-circle text-green-600"></i>
+                                               <span class="text-green-800 font-medium">You've reviewed this product</span>
+                                           </div>
+                                           <div class="mt-2">
+                                               <div class="flex items-center gap-1">
                                                    @for($i = 1; $i <= 5; $i++)
-                                                       <button type="button"
-                                                       class="star-btn text-2xl text-gray-300 hover:text-yellow-400 transition-colors"
-                                                       data-rating="{{$i}}"
-                                                       data-product-id="{{$orderProduct->product->id}}"
-                                                       onclick="setRating({{$orderProduct->product->id}}, {{$i}})">
-                                                       <i class="fas fa-star"></i>
-                                                       </button>
+                                                       <i class="fas fa-star text-yellow-400"></i>
                                                        @endfor
                                                </div>
-                                               <input type="hidden" name="rating" id="rating-{{$orderProduct->product->id}}" value="0" required>
+                                               <p class="text-sm text-gray-600 mt-1">Thank you for your feedback!</p>
                                            </div>
+                                       </div>
+                                       @else
+                                       <div class="mx-4 mb-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                                           <h5 class="font-medium text-purple-900 mb-3">Rate this product</h5>
+                                           <form id="reviewForm-{{$orderProduct->product->id}}" class="space-y-3" onsubmit="submitReview(event, {{$orderProduct->product->id}})">
+                                               @csrf
+                                               <input type="hidden" name="product_id" value="{{$orderProduct->product->id}}">
+                                               <input type="hidden" name="order_id" value="{{$ord->id}}">
+                                               <input type="hidden" name="user_id" value="{{$user->id}}">
 
-                                           <!-- Review Text -->
-                                           <div>
-                                               <label class="text-sm font-medium text-gray-700">Your Review:</label>
-                                               <textarea name="review_text"
-                                                   rows="3"
-                                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                                   placeholder="Share your experience with this product..."
-                                                   required></textarea>
-                                           </div>
-
-                                           <!-- Reviewer Info -->
-                                           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                               <div>
-                                                   <label class="text-sm font-medium text-gray-700">Your Name:</label>
-                                                   <input type="text"
-                                                       name="reviewer_name"
-                                                       value="{{$user->name}}"
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                                       required>
+                                               <!-- Star Rating -->
+                                               <div class="flex items-center gap-2">
+                                                   <label class="text-sm font-medium text-gray-700">Rating:</label>
+                                                   <div class="flex gap-1" id="starRating-{{$orderProduct->product->id}}">
+                                                       @for($i = 1; $i <= 5; $i++)
+                                                           <button type="button"
+                                                           class="star-btn text-2xl text-gray-300 hover:text-yellow-400 transition-colors"
+                                                           data-rating="{{$i}}"
+                                                           data-product-id="{{$orderProduct->product->id}}"
+                                                           onclick="setRating({{$orderProduct->product->id}}, {{$i}})">
+                                                           <i class="fas fa-star"></i>
+                                                           </button>
+                                                           @endfor
+                                                   </div>
+                                                   <input type="hidden" name="rating" id="rating-{{$orderProduct->product->id}}" value="0" required>
                                                </div>
-                                               <div>
-                                                   <label class="text-sm font-medium text-gray-700">Email:</label>
-                                                   <input type="email"
-                                                       name="reviewer_email"
-                                                       value="{{$user->email}}"
-                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                                                       required>
-                                               </div>
-                                           </div>
 
-                                           <!-- Submit Button -->
-                                           <button type="submit"
-                                               class="w-full px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium">
-                                               <i class="fas fa-paper-plane mr-2"></i>Submit Review
-                                           </button>
-                                       </form>
+                                               <!-- Review Text -->
+                                               <div>
+                                                   <label class="text-sm font-medium text-gray-700">Your Review:</label>
+                                                   <textarea name="review_text"
+                                                       rows="3"
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                                       placeholder="Share your experience with this product..."
+                                                       required></textarea>
+                                               </div>
+
+                                               <!-- Reviewer Info -->
+                                               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                   <div>
+                                                       <label class="text-sm font-medium text-gray-700">Your Name:</label>
+                                                       <input type="text"
+                                                           name="reviewer_name"
+                                                           value="{{$user->name}}"
+                                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                                           required>
+                                                   </div>
+                                                   <div>
+                                                       <label class="text-sm font-medium text-gray-700">Email:</label>
+                                                       <input type="email"
+                                                           name="reviewer_email"
+                                                           value="{{$user->email}}"
+                                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                                           required>
+                                                   </div>
+                                               </div>
+
+                                               <!-- Submit Button -->
+                                               <button type="submit"
+                                                   class="w-full px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium">
+                                                   <i class="fas fa-paper-plane mr-2"></i>Submit Review
+                                               </button>
+                                           </form>
+                                       </div>
+                                       @endif
+                                       @endif
                                    </div>
-                                   @endif
-                                   @endif
-                               </div>
-                               @endforeach
+                                   @endforeach
                                </div>
 
                                <!-- Order Actions -->
 
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
                                    @php $hasActiveReturn = isset($ord->return_request_added) && $ord->return_request_added == 1;
-                                    $hasPickupRequest = isset($ord->pick_up_request_added) && $ord->pick_up_request_added == 1;
-                                     @endphp
+                                   $hasPickupRequest = isset($ord->pick_up_request_added) && $ord->pick_up_request_added == 1;
+                                   @endphp
                                    @if($ord->pick_up_request_added == 1 && !$hasActiveReturn)
-                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}', '{{ strtolower($ord->payment_method ?? '') }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @elseif($ord->order_status == 'delivered' && $hasActiveReturn)
                                    <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
                                        <i class="fas fa-undo mr-2"></i>Return Requested
                                    </button>
-                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid'])  && !$hasPickupRequest)
+                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']) && !$hasPickupRequest)
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
                                        onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
                                    </button>
                                    @elseif(in_array($ord->order_status, ['delivered']) && !$hasActiveReturn)
                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
-                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}', '{{ strtolower($ord->payment_method ?? '') }}')">
                                        <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
                                    @elseif(in_array($ord->order_status, ['delivered']) && $hasActiveReturn)
@@ -496,17 +526,18 @@
                                    </button>
                                    @endif
                                    <a href="{{route('page.contact-us')}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                       <i class="fas fa-question-circle mr-2"></i>Get Help
-                                   </button> </a>
-                                   <a href="{{ route('order.invoice', $ord->id) }}"  class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium"><button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                       <i class="fas fa-receipt mr-2"></i>View Invoice
-                                   </button>
+                                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                           <i class="fas fa-question-circle mr-2"></i>Get Help
+                                       </button> </a>
+                                   <a href="{{ route('order.invoice', $ord->id) }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium"><button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                           <i class="fas fa-receipt mr-2"></i>View Invoice
+                                       </button>
                                    </a>
                                </div>
 
 
                            </div>
+                           
                            @endforeach
 
                            {{-- @endif --}}
@@ -641,7 +672,7 @@
 
        <!-- Pagination -->
        @if($orders->hasPages())
-       <div class="flex justify-center items-center gap-2 mt-8">
+       <div class="order-history-pagination flex justify-center items-center gap-2 mt-8">
            <!-- Previous Button -->
            @if($orders->onFirstPage())
            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed" disabled>
@@ -710,7 +741,7 @@
        </div>
        </div>
    </section>
-
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script>
        // Star rating functionality
        function setRating(productId, rating) {
@@ -851,78 +882,162 @@
                });
        }
 
-       // Return Order Function
-       function returnOrder(event, orderId, currentStatus) {
-           // Use Swal or custom confirm dialog
-           if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
-               return;
-           }
 
-           // Get the button element
-           const button = (event && (event.currentTarget || event.target)) || document.activeElement;
-           const originalText = button.innerHTML;
+       //     function returnOrder(event, orderId, currentStatus, paymentMethod) {
+       //     const isCOD = (paymentMethod || '').toLowerCase().replace(/[\s_-]/g, '') === 'cash_on_delivery'
+       //                || (paymentMethod || '').toLowerCase().includes('cash_on_delivery');
+       //     console.log('Payment method:', paymentMethod, 'isCOD:', isCOD);
+       //     Swal.fire({
+       //         title: 'Return this order?',
+       //         text: 'This action cannot be undone.',
+       //         icon: 'warning',
+       //         showCancelButton: true,
+       //         confirmButtonText: 'Yes, return it',
+       //         confirmButtonColor: '#7c3aed',
+       //         cancelButtonColor: '#6b7280',
+       //     }).then((result) => {
+       //         if (!result.isConfirmed) return;
 
-           // Show loading state
-           button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
-           button.disabled = true;
+       //         // COD + delivered -> collect bank details first
+       //         if (isCOD && currentStatus === 'delivered') {
+       //             openBankForm(orderId);
+       //         } else {
+       //             submitReturn(orderId, {});
+       //         }
+       //     });
+       // }
 
-           // Make AJAX request
-           fetch(`/refund/${orderId}`, {
-                   method: 'POST',
-                   headers: {
-                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                       'Content-Type': 'application/json',
-                       'Accept': 'application/json', // Important: Tell server we want JSON
-                   },
-                   body: JSON.stringify({
-                       return_reason: 'Customer requested return'
-                   })
-               })
-               .then(response => {
-                   // Check if response is OK
-                   if (!response.ok) {
-                       return response.json().then(data => {
-                           throw new Error(data.message || 'Request failed');
-                       });
-                   }
-                   return response.json();
-               })
-               .then(data => {
-                   console.log('Return response:', data);
+       function returnOrder(event, orderId, currentStatus, paymentMethod) {
+           const normalized = (paymentMethod || '').toLowerCase().replace(/[\s_-]/g, '');
+           const isCOD = normalized === 'cashondelivery';
 
-                   if (data.success) {
-                       // Show success notification
-                       showNotification(data.message, 'success');
+           // COD + delivered -> collect bank details before submitting
+           const needsBankDetails = isCOD && currentStatus === 'delivered';
 
-                       // Update button text to show success
-                       button.innerHTML = '<i class="fas fa-check mr-2"></i>Returned';
-                       button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium';
-
-                       // Reload page after 2 seconds
-                       setTimeout(() => {
-                           window.location.reload();
-                       }, 2000);
-                   } else {
-                       // Show error
-                       showNotification(data.message || 'Failed to process return', 'error');
-
-                       // Restore button
-                       button.innerHTML = originalText;
-                       button.disabled = false;
-                   }
-               })
-               .catch(error => {
-                   console.error('Error:', error);
-
-                   // Show error notification
-                   showNotification(error.message || 'Error processing return request. Please try again.', 'error');
-
-                   // Restore button
-                   button.innerHTML = originalText;
-                   button.disabled = false;
-               });
+           Swal.fire({
+               title: 'Return this order?',
+               html: needsBankDetails ?
+                   'Since you paid by Cash on Delivery, we need your bank details for the refund.' :
+                   'This action cannot be undone.',
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonText: 'Yes, continue',
+               confirmButtonColor: '#7c3aed',
+               cancelButtonColor: '#6b7280',
+           }).then((result) => {
+               if (!result.isConfirmed) return;
+               needsBankDetails ? openBankForm(orderId) : submitReturn(orderId, {});
+           });
        }
 
+       function openBankForm(orderId) {
+           const input = 'w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none';
+           const label = 'block text-left text-sm font-medium text-gray-700 mb-1';
+
+           Swal.fire({
+               title: 'Bank details for refund',
+               width: 460,
+               html: `
+            <p class="text-sm text-gray-500 mb-4">Since you paid by Cash on Delivery, we need your bank account to send the refund.</p>
+            <div class="space-y-3">
+                <div><label class="${label}">Account Holder Name</label>
+                    <input id="holder_name" class="${input}" placeholder="As per bank records"></div>
+                <div><label class="${label}">Bank Name</label>
+                    <input id="bank_name" class="${input}" placeholder="e.g. State Bank of India"></div>
+                <div><label class="${label}">Account Number</label>
+                    <input id="account_number" inputmode="numeric" maxlength="18" class="${input}" placeholder="Account number"></div>
+                <div><label class="${label}">IFSC Code</label>
+                    <input id="ifsc_code" maxlength="11" class="${input}" style="text-transform:uppercase" placeholder="e.g. SBIN0001234"></div>
+            </div>`,
+               showCancelButton: true,
+               confirmButtonText: 'Submit Return',
+               confirmButtonColor: '#7c3aed',
+               cancelButtonColor: '#6b7280',
+               focusConfirm: false,
+               showLoaderOnConfirm: true,
+               allowOutsideClick: () => !Swal.isLoading(),
+               didOpen: () => {
+                   const acc = Swal.getPopup().querySelector('#account_number');
+                   acc.addEventListener('input', () => acc.value = acc.value.replace(/\D/g, ''));
+               },
+               preConfirm: () => {
+                   const p = Swal.getPopup();
+                   const holder = p.querySelector('#holder_name').value.trim();
+                   const bank = p.querySelector('#bank_name').value.trim();
+                   const acc = p.querySelector('#account_number').value.trim();
+                   const ifsc = p.querySelector('#ifsc_code').value.trim().toUpperCase();
+
+                   if (!holder || !bank || !acc || !ifsc) {
+                       Swal.showValidationMessage('Please fill in all fields');
+                       return false;
+                   }
+                   if (!/^\d{9,18}$/.test(acc)) {
+                       Swal.showValidationMessage('Account number must be 9 to 18 digits');
+                       return false;
+                   }
+                   if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
+                       Swal.showValidationMessage('Enter a valid IFSC code (e.g. SBIN0001234)');
+                       return false;
+                   }
+
+                   return sendReturnRequest(orderId, {
+                       account_holder_name: holder,
+                       bank_name: bank,
+                       account_number: acc,
+                       ifsc_code: ifsc,
+                   }).catch(e => Swal.showValidationMessage(e.message));
+               },
+           }).then((result) => {
+               if (result.isConfirmed && result.value) showReturnSuccess(result.value);
+           });
+       }
+
+       // Non-COD: no bank details needed
+       function submitReturn(orderId, extra) {
+           Swal.fire({
+               title: 'Submitting...',
+               allowOutsideClick: false,
+               didOpen: () => Swal.showLoading(),
+           });
+
+           sendReturnRequest(orderId, extra)
+               .then(showReturnSuccess)
+               .catch(e => Swal.fire({
+                   icon: 'error',
+                   title: 'Failed',
+                   text: e.message,
+                   confirmButtonColor: '#7c3aed'
+               }));
+       }
+
+       function sendReturnRequest(orderId, extra) {
+           return fetch(`/refund/${orderId}`, {
+               method: 'POST',
+               headers: {
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                   'Content-Type': 'application/json',
+                   'Accept': 'application/json',
+               },
+               body: JSON.stringify({
+                   return_reason: 'Customer requested return',
+                   ...extra
+               }),
+           }).then(async (r) => {
+               const data = await r.json().catch(() => ({}));
+               if (!r.ok || data.success === false) throw new Error(data.message || 'Request failed');
+               return data;
+           });
+       }
+
+       function showReturnSuccess(data) {
+           Swal.fire({
+               icon: 'success',
+               title: 'Return requested',
+               text: data.message || 'Your return request has been submitted.',
+               confirmButtonColor: '#7c3aed',
+               timer: 2500,
+           }).then(() => window.location.reload());
+       }
        // Notification function (if you don't have one)
        function showNotification(message, type = 'success') {
            // Check if we have a notification container
@@ -982,26 +1097,26 @@
        }
    </script>
    @if (session('purchase_event_data'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+   <script>
+       document.addEventListener('DOMContentLoaded', function() {
 
-            const purchaseData = @json(json_decode(session('purchase_event_data'), true));
+           const purchaseData = @json(json_decode(session('purchase_event_data'), true));
 
-            if (typeof fbq !== 'undefined') {
-                fbq('track', 'Purchase', {
-                    content_ids: purchaseData.content_ids,
-                    content_type: purchaseData.content_type,
-                    value: purchaseData.value,
-                    currency: purchaseData.currency,
-                    num_items: purchaseData.num_items,
-                    transaction_id: purchaseData.transaction_id
-                });
-            }
-        });
-    </script>
+           if (typeof fbq !== 'undefined') {
+               fbq('track', 'Purchase', {
+                   content_ids: purchaseData.content_ids,
+                   content_type: purchaseData.content_type,
+                   value: purchaseData.value,
+                   currency: purchaseData.currency,
+                   num_items: purchaseData.num_items,
+                   transaction_id: purchaseData.transaction_id
+               });
+           }
+       });
+   </script>
 
-    @php
-        session()->forget('purchase_event_data');
-    @endphp
-@endif
+   @php
+   session()->forget('purchase_event_data');
+   @endphp
+   @endif
    @endsection

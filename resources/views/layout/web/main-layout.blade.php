@@ -413,7 +413,9 @@
     <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" media="print" onload="this.media='all'">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
 
     @if (isset($ogMeta))
         <x-blog.og-tags :title="$ogMeta['title'] ?? ''" :description="$ogMeta['description'] ?? ''" :keywords="$ogMeta['keywords'] ?? []" :image="$ogMeta['image'] ?? null" :type="$ogMeta['type'] ?? 'website'"

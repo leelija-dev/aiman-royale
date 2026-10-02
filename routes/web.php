@@ -16,6 +16,7 @@ use App\Http\Controllers\Web\Profile;
 use App\Http\Controllers\Web\AddressController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Web\CustomDimensionController;
+use App\Http\Controllers\Web\CustomerReviewController;
 use App\Http\Controllers\Web\ContactUsController;
 use App\Models\NewsLetter;
 use App\Http\Controllers\Api\ReturnOrderController;
@@ -141,6 +142,8 @@ Route::middleware(['auth'])->group(function () {
     // Address Routes
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::post('/addresses/checkout', [AddressController::class, 'saveFromCheckout'])->name('addresses.checkout');
+    Route::post('/addresses/{id}/checkout-default', [AddressController::class, 'setDefaultFromCheckout'])->name('addresses.checkout-default');
     Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
     Route::post('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.default');
@@ -157,6 +160,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/custom-dimensions/{productId}', [CustomDimensionController::class, 'destroy'])->name('custom-dimensions.destroy');
     Route::post('/custom-dimensions/{id}/cancel', [CustomDimensionController::class, 'cancel'])->name('custom-dimensions.cancel');
     Route::get('/pay-custom-order/{id}', [CustomDimensionController::class, 'payment'])->name('custom-order.payment');
+
+    Route::get('/reviews', [CustomerReviewController::class, 'index'])->name('web.reviews');
 });
 
 Route::post('/newsletter', [NewsLetterController::class, 'store'])->name('newsletter.store');
@@ -226,6 +231,7 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/auth/google/complete', [AuthController::class, 'completeGoogleRegistration'])->name('google.complete');
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
+Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove.coupon');
 
 // web.php
 Route::post('/clear-buynow-session', [CheckoutController::class, 'clearBuyNowSession'])

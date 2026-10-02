@@ -27,37 +27,37 @@ $currentRoute = request()->route()->getName();
             <a
                 href="{{ $user ? route('web.profile') : route('page.login') }}"
                 class="sidebar-item {{ request()->routeIs('web.profile') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'profile' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
-                <i class="fas fa-user w-5 text-center"></i>
+                <i class="fas fa-user w-5 "></i>
                 <span>Profile Information</span>
             </a>
             <a
                 href="{{route('user.order-history', base64_encode($user->id))}}"
                 class="sidebar-item {{ request()->routeIs('user.order-history') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg text-gray-700">
-                <i class="fas fa-shopping-bag w-5 text-center"></i>
+                <i class="fas fa-shopping-bag w-5"></i>
                 <span>Order History</span>
             </a>
             <a
                 href="{{ route('addresses.index')}}"
                 class="sidebar-item {{ request()->routeIs('addresses.index') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
-                <i class="fas fa-map-marker-alt w-5 text-center"></i>
+                <i class="fas fa-map-marker-alt w-5"></i>
                 <span>My Addresses</span>
             </a>
             <a
                 href="{{route('wishlist.index')}}"
                 class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'wishlist.index' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
-                <i class="fas fa-heart w-5 text-center"></i>
+                <i class="fas fa-heart w-5"></i>
                 <span>My Wishlist</span>
             </a>
             <a
                 href="{{route('web.custom-request')}}"
                 class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $currentRoute === 'web.custom-request' ? 'bg-purple-50 text-purple-600 border-purple-200' : 'text-gray-700 hover:bg-gray-50' }}">
-                <i class="fas fa-ruler-combined w-5 text-center"></i>
+                <i class="fas fa-ruler-combined w-5 "></i>
                 <span>Custom Requests</span>
             </a>
             <a
-                href="#"
-                class="sidebar-item flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
-                <i class="fas fa-star w-5 text-center"></i>
+                href="{{ $user ? route('web.reviews') : route('page.login') }}"
+                class="sidebar-item {{ request()->routeIs('web.reviews') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-lg {{ $user ? 'text-gray-700 hover:bg-gray-50' : 'text-gray-400 cursor-not-allowed' }}">
+                <i class="fas fa-star w-5"></i>
                 <span>Reviews</span>
             </a>
         </nav>

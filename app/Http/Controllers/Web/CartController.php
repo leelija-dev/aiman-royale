@@ -80,9 +80,15 @@ class CartController extends Controller
 
             return (($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count);
         });
-
+        $totalDiscount = $cartItems->sum(function ($item) {
+            return (($item->variant->price * $item->variant->discount) / 100) * $item->count;
+        });
+        $totalWithOutDiscount = $cartItems->sum(function ($item) {
+            return ($item->variant->price * $item->count);
+        });
         $shipping = 0; //$subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
+
         $cartCount = $cartItems->sum('count');
 
         $occasions = \App\Models\Occasion::active()->get();
@@ -90,7 +96,7 @@ class CartController extends Controller
         // Check if we need to force refresh (coming from checkout)
         $forceRefresh = session()->pull('force_cart_refresh', false);
 
-        return view('web.cart', compact('cartItems', 'subtotal', 'shipping', 'total', 'cartCount', 'occasions', 'forceRefresh'));
+        return view('web.cart', compact('cartItems', 'totalDiscount','totalWithOutDiscount','subtotal', 'shipping', 'total', 'cartCount', 'occasions', 'forceRefresh'));
     }
 
     public function add(Request $request)
@@ -622,6 +628,30 @@ class CartController extends Controller
                 'discount_amount' => $discountAmount,
                 'final_price' => $newTotal,
             ]
+        ]);
+    }
+
+    public function removeCoupon(Request $request)
+    {
+        $code = strtoupper(trim((string) $request->coupon_code));
+        if ($code === '') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please enter coupon code.',
+            ]);
+        }
+
+        $appliedCoupons = session('applied_coupons', []);
+        foreach ($appliedCoupons as $variantId => $data) {
+            if (strtoupper(trim((string) ($data['code'] ?? ''))) === $code) {
+                unset($appliedCoupons[$variantId]);
+            }
+        }
+        session(['applied_coupons' => $appliedCoupons]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon removed successfully.',
         ]);
     }
 
