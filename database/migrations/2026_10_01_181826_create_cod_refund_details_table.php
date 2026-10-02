@@ -17,10 +17,14 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id');
             $table->string('account_holder_name');
             $table->string('bank_name');
-            $table->string('account_number');
-            $table->string('ifsc_code');
+            $table->text('account_number');        // 👈 change from string to text
+            $table->string('ifsc_code', 11);       // 👈 IFSC is always 11 chars
             $table->timestamps();
-            $table->deleted_at();
+            $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->index(['order_id', 'user_id']);
         });
     }
 
