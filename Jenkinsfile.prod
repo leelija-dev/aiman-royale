@@ -33,18 +33,32 @@ pipeline {
                             set -e
                             cd ${PROJECT_DIR}
 
-                            echo "[DEPLOY] Stopping containers..."
-                            docker compose down || true
+                            echo "[DEPLOY] Backing up frontend assets..."
+                            if [ -f public/build/manifest.json ]; then
+                                rm -rf public/build.bak-pre-deploy
+                                cp -a public/build public/build.bak-pre-deploy
+                            fi
 
                             echo "[DEPLOY] Updating code..."
                             git fetch origin
                             git reset --hard origin/main
 
-                            echo "[DEPLOY] Starting containers..."
-                            docker compose build --pull
-                            docker compose up -d
+                            echo "[DEPLOY] Starting runtime services..."
+                            docker compose build --pull app
+                            docker compose up -d app nginx redis elasticsearch kibana
+                            docker compose stop node || true
 
-                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache
+                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache || true
+
+                            echo "[DEPLOY] Building frontend assets..."
+                            docker compose --profile assets run --rm node
+                            docker compose stop node || true
+
+                            if [ ! -f public/build/manifest.json ] && [ -d public/build.bak-pre-deploy ]; then
+                                echo "[DEPLOY] Asset build missing manifest, restoring backup..."
+                                cp -a public/build.bak-pre-deploy public/build
+                            fi
+                            test -f public/build/manifest.json
 
                             echo "[DEPLOY] Waiting for services..."
                             sleep 30
