@@ -377,3 +377,17 @@
     padding: 12px;
   }
 }
+ .coupon-percent {
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        .coupon-amount {
+            display: none;
+        }
+
+        .coupon-percent {
+            display: inline;
+            font-weight: 600;
+        }
+    }
