@@ -138,12 +138,12 @@
                        <!-- Order Stats -->
                        <div class="mt-8 pt-6 border-t border-gray-200">
                            <h3 class="font-medium text-gray-900 mb-4">Order Summary</h3>
-                           <div class="space-y-3">
-                               <div class="flex justify-between text-sm">
+                           <div class="flex gap-2 md:block">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">Total Orders</span>
                                    <span class="font-medium">{{$totalOrders ?? 0}}</span>
                                </div>
-                               <div class="flex justify-between text-sm">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">This Month</span>
                                    <span class="font-medium">{{$thisMonthOrders ?? 0}}</span>
                                </div>
@@ -151,7 +151,7 @@
                                 <span class="text-gray-600">Pending</span>
                                 <span class="font-medium text-amber-600">2</span>
                             </div> --}}
-                               <div class="flex justify-between text-sm">
+                               <div class="flex-1 md:flex-none flex justify-between text-sm">
                                    <span class="text-gray-600">Delivered</span>
                                    <span class="font-medium text-green-600">{{$deliveredOrders ?? 0}}</span>
                                </div>

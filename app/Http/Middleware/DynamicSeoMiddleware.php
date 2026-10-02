@@ -20,8 +20,14 @@ class DynamicSeoMiddleware
             'schema_markup' => null
         ];
 
-        $routeName = $request->route()->getName();
+        $routeName = $request->route()?->getName();
         $currentUrl = $request->url();
+
+        if (!$routeName) {
+            View::share('pageMeta', $pageMeta);
+            View::share('ogMeta', []);
+            return $next($request);
+        }
 
         // Handle different page types
         switch ($routeName) {

@@ -53,14 +53,17 @@ services:
   node:
     image: node:22-alpine
     container_name: aiman-fashion-node
-    restart: unless-stopped
+    restart: "no"
+    profiles: ["assets"]
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
       - node_modules:/var/www/html/node_modules
     networks:
       - aiman-fashion-network
-    command: sh -c "npm install && if [ \"${APP_ENV}\" = \"production\" ]; then npm run build && rm -f /var/www/html/public/hot; else npm run dev -- --host 0.0.0.0; fi"
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+    command: sh -c "npm install && if [ \"$${APP_ENV}\" = \"production\" ]; then npm run build && rm -f /var/www/html/public/hot; else npm run dev -- --host 0.0.0.0; fi"
     ports:
       - "${VITE_PORT:-5173}:5173"
     depends_on:

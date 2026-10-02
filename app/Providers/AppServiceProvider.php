@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('superadmin') ? true : null;
+            return $user?->hasRole('superadmin') ? true : null;
         });
         View::composer('*', function ($view) {
             $notifications = Notification::where('viewed', 0)->latest()->get();
