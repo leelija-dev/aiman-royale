@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const fullscreenBtn = document.getElementById("fullscreen-btn");
   const closeZoom = document.getElementById("close-zoom");
   const wishlistBtn = document.getElementById("wishlist-btn");
-  const addToCartBtn = document.getElementById("add-to-cart");
+  // const addToCartBtn = document.getElementById("add-to-cart");
 
   let currentLargeSrc = "./assets/images/Home-image/pic-7.avif";
   let isWishlisted = false;
@@ -89,29 +89,29 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Wishlist toggle
-  wishlistBtn.addEventListener("click", () => {
-    const icon = wishlistBtn.querySelector("i");
-    if (isWishlisted) {
-      icon.classList.replace("fas", "far");
-      icon.classList.remove("text-red-500");
-    } else {
-      icon.classList.replace("far", "fas");
-      icon.classList.add("text-red-500");
-    }
-    isWishlisted = !isWishlisted;
-  });
+  // wishlistBtn.addEventListener("click", () => {
+  //   const icon = wishlistBtn.querySelector("i");
+  //   if (isWishlisted) {
+  //     icon.classList.replace("fas", "far");
+  //     icon.classList.remove("text-red-500");
+  //   } else {
+  //     icon.classList.replace("far", "fas");
+  //     icon.classList.add("text-red-500");
+  //   }
+  //   isWishlisted = !isWishlisted;
+  // });
 
   // Add to Cart
-  addToCartBtn.addEventListener("click", () => {
-    addToCartBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Added!';
-    addToCartBtn.classList.replace("bg-blue-900", "bg-green-600");
+  // addToCartBtn.addEventListener("click", () => {
+  //   addToCartBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Added!';
+  //   addToCartBtn.classList.replace("bg-blue-900", "bg-green-600");
 
-    setTimeout(() => {
-      addToCartBtn.innerHTML =
-        '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
-      addToCartBtn.classList.replace("bg-green-600", "bg-blue-900");
-    }, 2000);
-  });
+  //   setTimeout(() => {
+  //     addToCartBtn.innerHTML =
+  //       '<i class="fas fa-shopping-cart mr-2"></i> Add to Cart';
+  //     addToCartBtn.classList.replace("bg-green-600", "bg-blue-900");
+  //   }, 2000);
+  // });
 
   // === DYNAMIC ZOOM BEHAVIOR ===
 
@@ -233,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         i = t.querySelector(".accordion-content-block"),
         s = t.querySelector(".accordion-chevron"),
         r = t.querySelector(".line-border-block");
+          if (!n || !i || !s || !r) return;
       n.addEventListener("click", function () {
         const n = t.classList.contains("active");
         var l;
@@ -242,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
               const t = e.querySelector(".accordion-content-block"),
                 n = e.querySelector(".accordion-chevron"),
                 i = e.querySelector(".line-border-block");
+                if (!t || !n || !i) return;
               o(t, !1),
                 (t.style.opacity = "0"),
                 (i.style.width = "0"),
@@ -268,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.forEach((e, t) => {
       const n = e.querySelector(".accordion-content-block"),
         s = e.querySelector(".line-border-block");
+         if (!n || !s) return;
       (n.style.transition =
         "max-height 0.4s ease, opacity 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease"),
         (n.style.overflow = "hidden"),

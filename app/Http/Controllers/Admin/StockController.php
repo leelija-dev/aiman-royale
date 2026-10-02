@@ -386,16 +386,18 @@ class StockController extends Controller
      */
     public function updateVariantStock(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'variant_id' => 'required|exists:product_variants,id',
             'stock' => 'required|integer|min:0',
+            'current_stock' => 'required|integer|min:0',
             'notes' => 'nullable|string|max:255',
         ]);
 
         $variant = ProductVariant::findOrFail($request->variant_id);
         $product=Product::findOrFail($variant->product_id);
         // Calculate new total stock (current stock + added stock)
-        $currentStock = $variant->stock;
+        $currentStock = $request->current_stock;
         $addedStock = $request->stock;
         $newTotalStock = $currentStock + $addedStock;
         

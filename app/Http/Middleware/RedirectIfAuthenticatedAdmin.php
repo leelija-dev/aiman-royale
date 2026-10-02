@@ -10,7 +10,7 @@ class RedirectIfAuthenticatedAdmin
     public function handle(Request $request, Closure $next)
     {
         if (auth('admin')->check()) {
-            return redirect()->route('Admin.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         return $next($request);

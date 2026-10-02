@@ -6,15 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductVariant;
 use App\Models\Product;
 use App\Models\Color;
+use App\Models\Coupon;
 use App\Models\Size;
 use App\Models\StockIn;
 use Illuminate\Http\Request;
 use App\Models\ProductImage;
 use Illuminate\Support\Facades\File;
+use App\Traits\CloudinaryUploadTrait;  // ← Add this line
+use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Log;
+use App\Models\Unit;
+use Illuminate\Support\Facades\Cache;
 
 
 class ProductVariantController extends Controller
 {
+    use CloudinaryUploadTrait;
     /**
      * Display a listing of the resource.
      */
@@ -37,8 +44,9 @@ class ProductVariantController extends Controller
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->input('product_id'));
         }
-
+        // dd($request->input('color'));
         if ($request->filled('color')) {
+            // dd($request->input('color'));
             $query->where('color', $request->input('color'));
         }
 
@@ -49,11 +57,14 @@ class ProductVariantController extends Controller
         $data = $query->orderBy('product_id')->orderBy('color')->orderBy('size')->paginate(15);
 
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes'));
+        $units = Unit::all();
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type', '!=', 'special-discount')->get();
+        return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes', 'coupons', 'units'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -61,32 +72,109 @@ class ProductVariantController extends Controller
     public function create()
     {
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->get();
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes'));
+        $units = Unit::all();
+        $coupons = Coupon::where('expiry_date', '>=', now())->where('is_active', 1)->where('code_type', '!=', 'special-discount')->get();
+        return view('Admin.product-variant.create', compact('products', 'colors', 'sizes', 'coupons', 'units'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'product_id' => 'required|exists:products,id',
+    //         'size' => 'required|string|max:20',
+    //         'color' => 'required|string|max:50',
+    //         // 'sku' => 'required|string|max:100|unique:product_variants,sku',
+    //         'price' => 'required|numeric|min:0',
+    //         'discount' => 'nullable|numeric|min:0',
+    //         'stock' => 'required|integer|min:0',
+    //         'video_url' => 'nullable|url|max:500',
+    //         // 'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+    //     ], [
+    //         'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
+    //     ]);
+    //     $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
+    //     $data['discount_price'] = $discount_price;
+    //     // Custom validation for unique combination of product_id, size, and color
+    //     $existingVariant = ProductVariant::where('product_id', $data['product_id'])
+    //         ->where('size', $data['size'] ?? '')
+    //         ->where('color', $data['color'] ?? '')
+    //         ->first();
+
+    //     if ($existingVariant) {
+    //         return redirect()->back()
+    //             ->withInput()
+    //             ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
+    //     }
+
+    //     $variant = ProductVariant::create($data);
+    //     $product = Product::find($data['product_id']);
+    //     $product->update([
+    //         'stock' => $data['stock'],
+    //         'ready_to_ship' => 1,
+    //     ]);
+    //     if ($variant) {
+    //         if ($request->hasFile('images')) {
+
+    //             foreach ($request->file('images') as $image) {
+
+    //                 $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+    //                 $folder = 'uploads/variants';
+    //                 $image->move(public_path('uploads/variants'), $filename);
+    //                 $imagePath = $folder . '/' . $filename;
+    //                 // dd($variant->id);
+    //                 ProductImage::create([
+    //                     'product_id' => $variant->product_id,
+    //                     'variant_id' => $variant->id,
+    //                     'image' => $imagePath //$filename
+    //                 ]);
+    //             }
+    //         }
+    //     }
+    //     // Create stock entry for the new variant
+    //     StockIn::create([
+    //         'product_variant_id' => $variant->id,
+    //         'stock' => $data['stock'],
+    //     ]);
+
+    //     return redirect()->route('admin.product-variants')->with('success', 'Product variant created successfully!');
+    // }
+
     public function store(Request $request)
     {
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'size' => 'required|string|max:20',
-            'color' => 'required|string|max:50',
-            // 'sku' => 'required|string|max:100|unique:product_variants,sku',
+            'color' => 'required',
             'price' => 'required|numeric|min:0',
+            'coupon_id' => 'nullable|exists:coupon,id',
+            'fixed_price' => 'nullable|numeric',
+            'final_price'  => 'nullable|numeric',
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'video_url' => 'nullable|url|max:500',
-            // 'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'weight' => 'required|numeric|min:0',
+            'weight_unit_id' => 'required|exists:units,id',
+            'height' => 'required|numeric|min:0',
+            'height_unit_id' => 'required|exists:units,id',
+            'width' => 'required|numeric|min:0',
+            'width_unit_id' => 'required|exists:units,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
+
+        $data['color_code'] = Color::where('id', $data['color'])->value('code');
+        $data['color'] = Color::where('id', $data['color'])->value('name');
+
         $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
         $data['discount_price'] = $discount_price;
+
         // Custom validation for unique combination of product_id, size, and color
         $existingVariant = ProductVariant::where('product_id', $data['product_id'])
             ->where('size', $data['size'] ?? '')
@@ -98,38 +186,83 @@ class ProductVariantController extends Controller
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
         }
-
+        // dd($data);
         $variant = ProductVariant::create($data);
         $product = Product::find($data['product_id']);
         $product->update([
             'stock' => $data['stock'],
             'ready_to_ship' => 1,
         ]);
-        if ($variant) {
-            if ($request->hasFile('images')) {
 
-                foreach ($request->file('images') as $image) {
+        // Handle image uploads with Cloudinary
+        // if ($variant && $request->hasFile('images')) {
+        //     foreach ($request->file('images') as $image) {
+        //         // Upload to Cloudinary
+        //         $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$variant->id}", [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //             'transformation' => [
+        //                 'width' => 800,
+        //                 'height' => 800,
+        //                 'crop' => 'limit',
+        //             ],
+        //         ]);
 
-                    $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
-                    $folder = 'uploads/variants';
-                    $image->move(public_path('uploads/variants'), $filename);
-                    $imagePath = $folder . '/' . $filename;
-                    // dd($variant->id);
-                    ProductImage::create([
-                        'product_id' => $variant->product_id,
-                        'variant_id' => $variant->id,
-                        'image' => $imagePath //$filename
-                    ]);
-                }
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $variant->product_id,
+        //                 'variant_id' => $variant->id,
+        //                 'image' => $uploadResult['path'], // Cloudinary URL
+        //                 'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
+        //             ]);
+
+        //             \Log::info('Variant image uploaded to Cloudinary', [
+        //                 'variant_id' => $variant->id,
+        //                 'public_id' => $uploadResult['public_id']
+        //             ]);
+        //         } else {
+        //             // Fallback to local upload if Cloudinary fails
+        //             $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+        //             $folder = 'uploads/variants';
+        //             $image->move(public_path('uploads/variants'), $filename);
+        //             $imagePath = $folder . '/' . $filename;
+
+        //             ProductImage::create([
+        //                 'product_id' => $variant->product_id,
+        //                 'variant_id' => $variant->id,
+        //                 'image' => $imagePath,
+        //                 'public_id' => null, // No public_id for local files
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        if ($variant && $request->hasFile('images')) {
+
+            foreach ($request->file('images') as $image) {
+
+                $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+                $folder = 'uploads/variants';
+                $image->move(public_path('uploads/variants'), $filename);
+                $imagePath = $folder . '/' . $filename;
+                // dd($variant->id);
+                ProductImage::create([
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'image' => $imagePath //$filename
+                ]);
             }
         }
+
         // Create stock entry for the new variant
         StockIn::create([
             'product_variant_id' => $variant->id,
             'stock' => $data['stock'],
         ]);
 
-        return redirect()->route('admin.product-variants')->with('success', 'Product variant created successfully!');
+         Cache::forget('product_categories');
+
+        return redirect()->route('admin.product-variants')->with('success', 'Product variant created successfully with Cloudinary!');
     }
 
     /**
@@ -138,10 +271,10 @@ class ProductVariantController extends Controller
     public function edit(ProductVariant $productVariant)
     {
         $products = Product::select('id', 'name')->orderBy('name')->get();
-        $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
+        $colors = Color::select('id', 'name', 'code')->distinct()->orderBy('id')->pluck('name', 'code');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-
-        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes'));
+        $units = Unit::all();
+        return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes', 'units'));
     }
 
     /**
@@ -149,19 +282,36 @@ class ProductVariantController extends Controller
      */
     public function update(Request $request, ProductVariant $productVariant)
     {
+        // dd($request->all());
+
+        // dd($productVariant->id);
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'size' => 'nullable|string|max:20',
-            'color' => 'nullable|string|max:50',
-            // 'sku' => 'required|string|max:100|unique:product_variants,sku,' . $productVariant->id,
+            'size' => 'required|string|max:20',
+            'color_code' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
+            'coupon_id' => 'nullable|exists:coupon,id',
+            'fixed_price' => 'nullable|numeric',
+            'final_price'  => 'nullable|numeric',
             'discount' => 'nullable|numeric|min:0',
             'video_url' => 'nullable|url|max:500',
+            'weight' => 'required|numeric|min:0',
+            'weight_unit_id' => 'required|exists:units,id',
+            'height' => 'required|numeric|min:0',
+            'height_unit_id' => 'required|exists:units,id',
+            'width' => 'required|numeric|min:0',
+            'width_unit_id' => 'required|exists:units,id',
             'images' => 'nullable|array',
-            'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:5120',
+            'images.*' => 'mimes:jpeg,png,jpg,gif,webp,avif|max:10240',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
+
+        $color = Color::Where('code', $data['color_code'])->select('name')->first();
+        if ($color) {
+            $data['color'] = $color->name;
+        }
+
         $discount_price = ($data['price'] - (($data['price'] * $data['discount']) / 100));
         $data['discount_price'] = $discount_price;
 
@@ -172,29 +322,115 @@ class ProductVariantController extends Controller
             ->where('id', '!=', $productVariant->id)
             ->first();
 
+
+
         if ($existingVariant) {
+            // dd($existingVariant);
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
         }
 
-        // $productVariant->update($data);
+        // Update variant details
         $productVariant->update([
             'product_id'      => $request->product_id,
-            // 'sku'             => $request->sku,
             'price'           => $request->price,
+            'final_price'     => $request->final_price,
+            'fixed_price'     => $request->fixed_price,
+            'coupon_id'       => $request->coupon_id,
             'discount_price'  => $discount_price,
             'discount'        => $request->discount,
-            'color'           => $request->color,
+            'color'           => $color ? $color->name : null,
+            'color_code'      => $data['color_code'],
             'size'            => $request->size,
             'video_url'       => $request->video_url,
+            'weight'          => $request->weight,
+            'weight_unit_id'  => $request->weight_unit_id,
+            'height'          => $request->height,
+            'height_unit_id'  => $request->height_unit_id,
+            'width'           => $request->width,
+            'width_unit_id'   => $request->width_unit_id,
+
         ]);
 
         $product = Product::find($data['product_id']);
         $product->update([
             'ready_to_ship' => 1,
         ]);
-        //if removed images
+
+        // Handle removed images from Cloudinary
+        // if ($request->removed_images) {
+        //     $removedIds = explode(',', $request->removed_images);
+
+        //     foreach ($removedIds as $id) {
+        //         $image = ProductImage::find($id);
+
+        //         if ($image) {
+        //             // Delete from Cloudinary if public_id exists
+        //             if ($image->public_id) {
+        //                 try {
+        //                     $this->deleteFromCloudinary($image->public_id);
+        //                     Log::info('Deleted variant image from Cloudinary', [
+        //                         'image_id' => $id,
+        //                         'public_id' => $image->public_id
+        //                     ]);
+        //                 } catch (\Exception $e) {
+        //                     Log::warning('Failed to delete image from Cloudinary: ' . $e->getMessage());
+        //                 }
+        //             } elseif ($image->image && File::exists(public_path($image->image))) {
+        //                 // Fallback for local files
+        //                 File::delete(public_path($image->image));
+        //             }
+
+        //             $image->delete();
+        //         }
+        //     }
+        // }
+
+        // Store new images to Cloudinary
+        // if ($request->hasFile('images')) {
+        //     //    dd($request->file('images'));
+        //     foreach ($request->file('images') as $image) {
+        //         // Upload to Cloudinary
+        //         $uploadResult = $this->uploadToCloudinary($image, "products/variants/{$productVariant->id}", [
+        //             'quality' => 'auto:good',
+        //             'fetch_format' => 'auto',
+        //             'transformation' => [
+        //                 'width' => 800,
+        //                 'height' => 800,
+        //                 'crop' => 'limit',
+        //             ],
+        //         ]);
+
+        //         if ($uploadResult) {
+        //             ProductImage::create([
+        //                 'product_id' => $request->product_id,
+        //                 'variant_id' => $productVariant->id,
+        //                 'image' => $uploadResult['path'], // Cloudinary URL
+        //                 'public_id' => $uploadResult['public_id'], // Store public_id for future deletion
+        //             ]);
+
+        //             Log::info('Variant image uploaded to Cloudinary', [
+        //                 'variant_id' => $productVariant->id,
+        //                 'public_id' => $uploadResult['public_id']
+        //             ]);
+        //         } else {
+        //             // Fallback to local upload if Cloudinary fails
+        //             $folder = 'uploads/variants';
+        //             $filename = time() . rand(100, 999) . '.' . $image->getClientOriginalExtension();
+        //             $imagePath = $folder . '/' . $filename;
+        //             $image->move(public_path('uploads/variants'), $filename);
+
+        //             ProductImage::create([
+        //                 'product_id' => $request->product_id,
+        //                 'variant_id' => $productVariant->id,
+        //                 'image' => $imagePath,
+        //                 'public_id' => null, // No public_id for local files
+        //             ]);
+        //         }
+        //     }
+        // }
+
         if ($request->removed_images) {
 
             $removedIds = explode(',', $request->removed_images);
@@ -232,11 +468,8 @@ class ProductVariantController extends Controller
             }
         }
 
-
-        // Note: Stock is managed separately through Stock Management
-        // Stock entry is not updated here since stock field is readonly in edit form
-
-        return redirect()->route('admin.product-variants')->with('success', 'Product variant updated successfully!');
+        Cache::forget('product_categories');
+        return redirect()->back()->with('success', 'Product variant updated successfully with Cloudinary!');
     }
 
     /**
@@ -248,6 +481,7 @@ class ProductVariantController extends Controller
         StockIn::where('product_variant_id', $productVariant->id)->delete();
 
         $productVariant->delete();
+        Cache::forget('product_categories');
 
         return redirect()->route('admin.product-variants')->with('success', 'Product variant deleted successfully!');
     }

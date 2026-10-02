@@ -7,11 +7,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "cashfree/cashfree-pg": "^5.0",
+        "cloudinary-labs/cloudinary-laravel": "^3.0",
         "doctrine/dbal": "^4.2",
         "laravel/framework": "^12.0",
+        "laravel/socialite": "^5.28",
         "laravel/tinker": "^2.10.1",
-        "predis/predis": "^3.4",
+        "predis/predis": "^3.6",
+        "rafoabbas/laravel-image-proxy": "^0.6.0",
         "spatie/laravel-backup": "^9.3",
         "spatie/laravel-permission": "^6.20",
         "tymon/jwt-auth": "^2.3"

@@ -6,11 +6,15 @@
 
     ?>
 
+   @section('styles')
+   <link rel="stylesheet" href="{{ asset('web/css/order-history.css') }}">
+   @endsection
+
 
 
 
    @section('content')
-<meta name="csrf-token" content="{{ csrf_token() }}">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
 
    <style>
        .fashion-gradient {
@@ -77,11 +81,21 @@
        }
    </style>
 
-   <section class="w-full px-4 lgg:py-12 py-6">
+   <section class="order-history-page w-full px-4 lgg:py-12 py-6">
+       <div class="order-history-back-bar">
+           <a href="{{ url()->previous(route('web.profile')) }}"
+              class="order-history-back-btn"
+              aria-label="Go back"
+              onclick="if (document.referrer) { event.preventDefault(); history.back(); }">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                   <path d="M15 18l-6-6 6-6"/>
+               </svg>
+           </a>
+       </div>
        <div class="container mx-auto">
            <div class="flex flex-col lg:flex-row gap-8">
                <!-- Sidebar Navigation -->
-               <div class="lg:w-1/4">
+               <div class="order-history-sidebar lg:w-1/4">
                    <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
                        <!-- User Profile Summary -->
                        {{-- <div class="text-center mb-8">
@@ -127,11 +141,11 @@
                            <div class="space-y-3">
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">Total Orders</span>
-                                   <span class="font-medium">{{count($orders)}}</span>
+                                   <span class="font-medium">{{$totalOrders ?? 0}}</span>
                                </div>
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">This Month</span>
-                                   <span class="font-medium">{{count($orders)}}</span>
+                                   <span class="font-medium">{{$thisMonthOrders ?? 0}}</span>
                                </div>
                                {{-- <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Pending</span>
@@ -139,7 +153,7 @@
                             </div> --}}
                                <div class="flex justify-between text-sm">
                                    <span class="text-gray-600">Delivered</span>
-                                   <span class="font-medium text-green-600">{{count($orders)}}</span>
+                                   <span class="font-medium text-green-600">{{$deliveredOrders ?? 0}}</span>
                                </div>
                            </div>
                        </div>
@@ -147,64 +161,104 @@
                </div>
 
                <!-- Main Content -->
-               <div class="lg:w-3/4">
+               <div class="order-history-main lg:w-3/4">
                    <!-- Page Header -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                   <div class="order-history-header bg-white rounded-2xl shadow-sm p-6 mb-6">
                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                            <div>
                                <h1 class="text-2xl font-bold text-gray-900">Order History</h1>
                                <p class="text-gray-600 mt-1">Track and manage all your StyleHub orders in one place</p>
                            </div>
                            <div class="mt-4 sm:mt-0 flex gap-3">
-                               <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
+                               {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition duration-200 text-sm font-medium">
                                    <i class="fas fa-download mr-2"></i>Export Orders
                                </button>
                                <button class="px-4 py-2 fashion-gradient text-white rounded-xl hover:shadow-lg transition duration-200 text-sm font-medium">
                                    <i class="fas fa-plus mr-2"></i>Start Return
-                               </button>
+                               </button> --}}
                            </div>
                        </div>
                    </div>
 
                    <!-- Filters and Search -->
-                   <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-                       <div class="flex flex-col md:flex-row gap-4 justify-between">
-                           <form method="GET" action="{{ route('user.order-history', base64_encode($user->id)) }}">
+                   <div class="order-history-filters bg-white rounded-2xl shadow-sm p-6 mb-6">
+                       @php
+                           $currentStatus = request('status', '');
+                           $currentDate = request('date_filter', '');
+                           $currentSearch = request('search', '');
+                           $orderHistoryUrl = route('user.order-history', base64_encode($user->id));
+                           $activeTabClass = 'bg-purple-100 text-purple-700';
+                           $inactiveTabClass = 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+                       @endphp
+                       <form method="GET" action="{{ $orderHistoryUrl }}" id="orderFilterForm">
+                           <div class="flex flex-col md:flex-row gap-4 justify-between">
                                <div class="flex-1">
                                    <div class="relative">
                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                            <i class="fas fa-search text-gray-400"></i>
                                        </div>
-
-                                       <input type="text" placeholder="Search orders by product or order ID..." name="search" value="{{ request('search') }}"
+                                       <input type="text"
+                                           placeholder="Search orders by product or order ID..."
+                                           name="search"
+                                           value="{{ $currentSearch }}"
                                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
                                    </div>
                                </div>
-                           </form>
-                           <div class="flex gap-2">
-                               <select class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
-                                   <option>All Time</option>
-                                   <option>Last 30 Days</option>
-                                   <option>Last 3 Months</option>
-                                   <option>Last Year</option>
-                               </select>
-                               <select class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
-                                   <option>All Status</option>
-                                   <option>Processing</option>
-                                   <option>Shipped</option>
-                                   <option>Delivered</option>
-                                   <option>Cancelled</option>
-                               </select>
+                               <div class="flex gap-2">
+                                   <select name="date_filter"
+                                       onchange="document.getElementById('orderFilterForm').submit()"
+                                       class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                                       <option value="" {{ $currentDate === '' ? 'selected' : '' }}>All Time</option>
+                                        <option value="7" {{ $currentDate === '7' ? 'selected' : '' }}>Last 7 Days</option>
+                                       <option value="30" {{ $currentDate === '30' ? 'selected' : '' }}>Last 30 Days</option>
+                                       <option value="90" {{ $currentDate === '90' ? 'selected' : '' }}>Last 3 Months</option>
+                                       <option value="365" {{ $currentDate === '365' ? 'selected' : '' }}>Last Year</option>
+                                   </select>
+                                   <select name="status"
+                                       onchange="document.getElementById('orderFilterForm').submit()"
+                                       class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                                       <option value="" {{ $currentStatus === '' ? 'selected' : '' }} >All Orders</option>
+                                       <option value="shipped" {{ $currentStatus === 'shipped' ? 'selected' : '' }}>To Ship</option>
+                                       <option value="delivered" {{ in_array($currentStatus, ['delivered', 'delivered']) ? 'selected' : '' }}>Delivered</option>
+                                       <option value="paid" {{ $currentStatus === 'paid' ? 'selected' : '' }}>Order Completed</option>
+                                       <option value="pending" {{ in_array($currentStatus, ['pending', 'pending']) ? 'selected' : '' }}>Pending</option>
+                                       <option value="cancelled" {{ in_array($currentStatus, ['cancelled', 'cancelled']) ? 'selected' : '' }}>Cancelled</option>
+                                       <option value="returned" {{ $currentStatus === 'returned' ? 'selected' : '' }}>Returned</option>
+                                   </select>
+                               </div>
                            </div>
-                       </div>
+                       </form>
 
                        <!-- Quick Filter Tabs -->
-                       <div class="flex flex-wrap gap-2 mt-4">
-                           <a href="{{route('user.order-history', base64_encode($user->id))}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition"><button class="filter-active px-4 py-2 rounded-xl text-sm font-medium transition">All Orders</button> </a>
-                           <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">To Ship</button>
-                           <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">To Receive</button>
-                           <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">Completed</button>
-                           <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition">Cancelled</button>
+                       <div class="order-history-tabs flex flex-wrap gap-2 mt-4">
+                           <a href="{{ $orderHistoryUrl }}{{ $currentSearch || $currentDate ? '?' . http_build_query(array_filter(['search' => $currentSearch, 'date_filter' => $currentDate])) : '' }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === '' ? $activeTabClass : $inactiveTabClass }}">
+                               All Orders
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'shipped', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['shipped', 'shipped']) ? $activeTabClass : $inactiveTabClass }}">
+                               To Ship
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'delivered', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['delivered', 'delivered']) ? $activeTabClass : $inactiveTabClass }}">
+                               To Receive
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'paid', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ in_array($currentStatus, ['paid', 'paid']) ? $activeTabClass : $inactiveTabClass }}">
+                               Order Completed
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'pending', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'pending' ? $activeTabClass : $inactiveTabClass }}">
+                               Pending
+                           </a>
+                            <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'cancelled', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'cancelled' ? $activeTabClass : $inactiveTabClass }}">
+                               Cancelled
+                           </a>
+                           <a href="{{ $orderHistoryUrl }}?{{ http_build_query(array_filter(['status' => 'returned', 'search' => $currentSearch, 'date_filter' => $currentDate])) }}"
+                               class="px-4 py-2 rounded-xl text-sm font-medium transition {{ $currentStatus === 'returned' ? $activeTabClass : $inactiveTabClass }}">
+                               Returned
+                           </a>
                        </div>
                    </div>
 
@@ -213,12 +267,19 @@
                    <div class="space-y-6">
                        <!-- Current/Processing Orders -->
                        <div>
-                           <h2 class="text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
+                           <h2 class="order-history-section-title text-lg font-bold text-gray-900 mb-4">Current Orders</h2>
+                           @if($orders->count() === 0)
+                           <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center mb-6">
+                               <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
+                               <p class="text-gray-600 font-medium">No orders found</p>
+                               <p class="text-gray-400 text-sm mt-1">Try adjusting your search or filters</p>
+                           </div>
+                           @endif
                            {{-- @if($orders->count() > 0) --}}
                            @foreach($orders as $ord)
-                          
+
                            {{-- @dd($ord->product); --}}
-                           <div class="order-card bg-white rounded-2xl shadow-sm p-6 mb-4">
+                           <div class="order-card bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
                                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
                                    <div>
                                        <div class="flex items-center gap-3 mb-2">
@@ -237,9 +298,9 @@
                                        <p class="text-gray-600 text-bold">Total Price: <strong>{{config('app.currency')}}{{$ord->total_amount ?? '0'}}</strong> </p>
                                    </div>
                                    <div class="mt-3 lg:mt-0">
-                                       <button class="px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
+                                       <a href="{{ route('track.page') }}?order_id={{ $ord->id }}" class="inline-block px-4 py-2 border border-purple-600 text-purple-600 rounded-xl hover:bg-purple-50 transition text-sm font-medium">
                                            Track Order
-                                       </button>
+                                       </a>
                                    </div>
                                </div>
 
@@ -256,23 +317,59 @@
                                    </div>
                                </div>
 
-                               <!-- Order Items -->
-                               
-                               @foreach($ord->orderProducts as $orderProduct)
-                              
-                               <div class="space-y-4 mt-2">
-                                   <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
+                               <!-- Shipping Address -->
+                               @if($ord->address_1 || $ord->city || $ord->pincode || $ord->phone_no)
+                               @php
+                                   $addressParts = array_filter([
+                                       $ord->address_1,
+                                       $ord->address_2,
+                                       $ord->city,
+                                       $ord->state,
+                                       $ord->pincode,
+                                   ]);
+                                   $fullAddress = implode(', ', $addressParts);
+                                   if ($ord->phone_no) {
+                                       $fullAddress = $fullAddress !== '' ? $fullAddress . ' • ' . $ord->phone_no : $ord->phone_no;
+                                   }
+                               @endphp
+                               <div class="mb-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
+                                   <div class="flex items-center gap-3">
+                                       <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                                           <i class="fas fa-map-marker-alt"></i>
+                                       </div>
+                                       <div class="flex-1 min-w-0">
+                                           <h4 class="font-medium text-gray-900 mb-1">Delivery Address</h4>
+                                           <p class="text-gray-700 text-sm truncate" title="{{ $fullAddress }}">
+                                               {{ $fullAddress }}
+                                           </p>
+                                       </div>
+                                   </div>
+                               </div>
+                               @endif
 
-                                       <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden">
+                               <!-- Order Items -->
+                               <div class="space-y-4">
+                               @foreach($ord->orderProducts as $itemIndex => $orderProduct)
+
+                               <div class="order-product-card bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                                   <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                                       <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                           Item {{ $itemIndex + 1 }} of {{ $ord->orderProducts->count() }}
+                                       </span>
+                                       <span class="text-xs text-gray-500">Order #{{ $ord->id }}</span>
+                                   </div>
+
+                                   <div class="flex items-center gap-4 p-4">
+                                       <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                                            {{-- <i class="fas fa-tshirt text-purple-600"></i> --}}
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}"> <img
-                                                  
-                                                  src="{{asset($orderProduct->product->featured_image ?? '')}}"
+
+                                                   src="{{url('img/' . $orderProduct->product->featured_image ?? '')}}"
                                                    class="w-full h-18 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                                                    alt="{{$orderProduct->product->name ?? ''}}" /></a>
                                        </div>
 
-                                       <div class="flex-1">
+                                       <div class="flex-1 min-w-0">
                                            <a href="{{route('page.single-product', $orderProduct->product->slug)}}">
                                                <h4 class="font-medium text-gray-900">{{$orderProduct->product->name ?? ''}}</h4>
                                                <p class="text-gray-600 text-sm">Size: {{$orderProduct->variant->size ?? ''}} • Color: {{ucfirst($orderProduct->variant->color ?? '')}}</p>
@@ -280,7 +377,7 @@
                                            </a>
                                        </div>
 
-                                       <div class="text-right">
+                                       <div class="text-right flex-shrink-0">
                                            <p class="font-medium text-gray-900">{{config('app.currency')}}{{$orderProduct->total ?? ''}}</p>
                                            <p class="text-green-600 text-sm">In Stock</p>
                                        </div>
@@ -293,11 +390,11 @@
                                    ->where('product_id', $orderProduct->product->id)
                                    ->where('order_id', $ord->id)
                                    ->exists();
-                                  
+
                                    @endphp
 
                                    @if($hasReviewed)
-                                   <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+                                   <div class="mx-4 mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
                                        <div class="flex items-center gap-2">
                                            <i class="fas fa-check-circle text-green-600"></i>
                                            <span class="text-green-800 font-medium">You've reviewed this product</span>
@@ -312,7 +409,7 @@
                                        </div>
                                    </div>
                                    @else
-                                   <div class="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                                   <div class="mx-4 mb-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
                                        <h5 class="font-medium text-purple-900 mb-3">Rate this product</h5>
                                        <form id="reviewForm-{{$orderProduct->product->id}}" class="space-y-3" onsubmit="submitReview(event, {{$orderProduct->product->id}})">
                                            @csrf
@@ -376,53 +473,58 @@
                                    </div>
                                    @endif
                                    @endif
-
-                                   {{-- <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-teal-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-shoe-prints text-blue-600"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h4 class="font-medium text-gray-900">Urban Sneakers</h4>
-                                        <p class="text-gray-600 text-sm">Size: 10 • Color: White</p>
-                                        <p class="text-gray-600 text-sm">Quantity: 1</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="font-medium text-gray-900">$89.50</p>
-                                        <p class="text-green-600 text-sm">In Stock</p>
-                                    </div>
-                                </div> --}}
                                </div>
                                @endforeach
-                              
+                               </div>
+
                                <!-- Order Actions -->
-                               
+
                                <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                                   @if($ord->order_status == 'delivered')
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
-                                       <i class="fas fa-times mr-2"></i>Return Product
+                                   @php $hasActiveReturn = isset($ord->return_request_added) && $ord->return_request_added == 1;
+                                    $hasPickupRequest = isset($ord->pick_up_request_added) && $ord->pick_up_request_added == 1;
+                                     @endphp
+                                   @if($ord->pick_up_request_added == 1 && !$hasActiveReturn)
+                                    <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       <i class="fas fa-undo mr-2"></i>Return Order
                                    </button>
-                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid']))
-                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium" 
-                                           onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
+                                   @elseif($ord->order_status == 'delivered' && $hasActiveReturn)
+                                   <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
+                                       <i class="fas fa-undo mr-2"></i>Return Requested
+                                   </button>
+                                   @elseif(in_array($ord->order_status, ['pending', 'confirmed', 'paid'])  && !$hasPickupRequest)
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="cancelOrder({{ $ord->id }}, '{{ $ord->order_status }}')">
                                        <i class="fas fa-times mr-2"></i>Cancel Order
+                                   </button>
+                                   @elseif(in_array($ord->order_status, ['delivered']) && !$hasActiveReturn)
+                                   <button class="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition text-sm font-medium"
+                                       onclick="returnOrder(event, {{ $ord->id }}, '{{ $ord->order_status }}')">
+                                       <i class="fas fa-undo mr-2"></i>Return Order
+                                   </button>
+                                   @elseif(in_array($ord->order_status, ['delivered']) && $hasActiveReturn)
+                                   <button class="px-4 py-2 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
+                                       <i class="fas fa-undo mr-2"></i>Return Requested
                                    </button>
                                    @else
                                    <button class="px-4 py-2 bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed text-sm font-medium" disabled>
                                        <i class="fas fa-times mr-2"></i>Cannot Cancel
                                    </button>
                                    @endif
+                                   <a href="{{route('page.contact-us')}}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-question-circle mr-2"></i>Get Help
-                                   </button>
-                                   <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                                   </button> </a>
+                                   <a href="{{ route('order.invoice', $ord->id) }}"  class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium"><button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                                        <i class="fas fa-receipt mr-2"></i>View Invoice
                                    </button>
+                                   </a>
                                </div>
-                               
+
 
                            </div>
                            @endforeach
-                          
+
                            {{-- @endif --}}
                        </div>
 
@@ -518,12 +620,12 @@
 
                    <!-- Order Actions -->
                    <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                       {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-star mr-2"></i>Rate Products
-                       </button>
-                       <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
+                       </button> --}}
+                       {{-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition text-sm font-medium">
                            <i class="fas fa-receipt mr-2"></i>View Invoice
-                       </button>
+                       </button> --}}
                    </div>
                </div>
            </div>
@@ -555,7 +657,7 @@
 
        <!-- Pagination -->
        @if($orders->hasPages())
-       <div class="flex justify-center items-center gap-2 mt-8">
+       <div class="order-history-pagination flex justify-center items-center gap-2 mt-8">
            <!-- Previous Button -->
            @if($orders->onFirstPage())
            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed" disabled>
@@ -730,39 +832,148 @@
 
            // Make AJAX request
            fetch(`/cancel-order/${orderId}`, {
-               method: 'POST',
-               headers: {
-                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                   reason: 'Customer requested cancellation'
+                   method: 'POST',
+                   headers: {
+                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                       'Content-Type': 'application/json',
+                   },
+                   body: JSON.stringify({
+                       reason: 'Customer requested cancellation'
+                   })
                })
-           })
-           .then(response => response.json())
-           .then(data => {
-               if (data.success) {
-                   // Show success message
-                   showNotification(data.message, 'success');
-                   // Reload page after 2 seconds to show updated status
-                   setTimeout(() => {
-                       window.location.reload();
-                   }, 2000);
-               } else {
-                   // Show error message
-                   showNotification(data.message, 'error');
+               .then(response => response.json())
+               .then(data => {
+                   if (data.success) {
+                       // Show success message
+                       showNotification(data.message, 'success');
+                       // Reload page after 2 seconds to show updated status
+                       setTimeout(() => {
+                           window.location.reload();
+                       }, 2000);
+                   } else {
+                       // Show error message
+                       showNotification(data.message, 'error');
+                       // Restore button
+                       button.innerHTML = originalText;
+                       button.disabled = false;
+                   }
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+                   showNotification('Error cancelling order. Please try again.', 'error');
                    // Restore button
                    button.innerHTML = originalText;
                    button.disabled = false;
-               }
-           })
-           .catch(error => {
-               console.error('Error:', error);
-               showNotification('Error cancelling order. Please try again.', 'error');
-               // Restore button
-               button.innerHTML = originalText;
-               button.disabled = false;
-           });
+               });
+       }
+
+       // Return Order Function
+       function returnOrder(event, orderId, currentStatus) {
+           // Use Swal or custom confirm dialog
+           if (!confirm('Are you sure you want to return this order? This action cannot be undone.')) {
+               return;
+           }
+
+           // Get the button element
+           const button = (event && (event.currentTarget || event.target)) || document.activeElement;
+           const originalText = button.innerHTML;
+
+           // Show loading state
+           button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+           button.disabled = true;
+
+           // Make AJAX request
+           fetch(`/refund/${orderId}`, {
+                   method: 'POST',
+                   headers: {
+                       'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                       'Content-Type': 'application/json',
+                       'Accept': 'application/json', // Important: Tell server we want JSON
+                   },
+                   body: JSON.stringify({
+                       return_reason: 'Customer requested return'
+                   })
+               })
+               .then(response => {
+                   // Check if response is OK
+                   if (!response.ok) {
+                       return response.json().then(data => {
+                           throw new Error(data.message || 'Request failed');
+                       });
+                   }
+                   return response.json();
+               })
+               .then(data => {
+                   console.log('Return response:', data);
+
+                   if (data.success) {
+                       // Show success notification
+                       showNotification(data.message, 'success');
+
+                       // Update button text to show success
+                       button.innerHTML = '<i class="fas fa-check mr-2"></i>Returned';
+                       button.className = 'px-4 py-2 bg-green-100 text-green-700 rounded-xl text-sm font-medium';
+
+                       // Reload page after 2 seconds
+                       setTimeout(() => {
+                           window.location.reload();
+                       }, 2000);
+                   } else {
+                       // Show error
+                       showNotification(data.message || 'Failed to process return', 'error');
+
+                       // Restore button
+                       button.innerHTML = originalText;
+                       button.disabled = false;
+                   }
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+
+                   // Show error notification
+                   showNotification(error.message || 'Error processing return request. Please try again.', 'error');
+
+                   // Restore button
+                   button.innerHTML = originalText;
+                   button.disabled = false;
+               });
+       }
+
+       // Notification function (if you don't have one)
+       function showNotification(message, type = 'success') {
+           // Check if we have a notification container
+           let container = document.getElementById('notification-container');
+           if (!container) {
+               container = document.createElement('div');
+               container.id = 'notification-container';
+               container.className = 'fixed top-4 right-4 z-50 space-y-2';
+               document.body.appendChild(container);
+           }
+
+           // Create notification element
+           const notification = document.createElement('div');
+           notification.className = `px-6 py-4 rounded-lg shadow-lg text-white transition-all duration-500 ${
+        type === 'success' ? 'bg-green-500' : 
+        type === 'error' ? 'bg-red-500' : 
+        'bg-blue-500'
+    }`;
+           notification.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+           container.appendChild(notification);
+
+           // Auto remove after 5 seconds
+           setTimeout(() => {
+               notification.style.opacity = '0';
+               notification.style.transform = 'translateX(100px)';
+               setTimeout(() => {
+                   notification.remove();
+               }, 500);
+           }, 5000);
        }
 
        // Show notification helper
@@ -776,9 +987,9 @@
                    <span>${message}</span>
                </div>
            `;
-           
+
            document.body.appendChild(notification);
-           
+
            setTimeout(() => {
                if (notification.parentNode) {
                    notification.parentNode.removeChild(notification);
@@ -786,4 +997,27 @@
            }, 5000);
        }
    </script>
+   @if (session('purchase_event_data'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const purchaseData = @json(json_decode(session('purchase_event_data'), true));
+
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    content_ids: purchaseData.content_ids,
+                    content_type: purchaseData.content_type,
+                    value: purchaseData.value,
+                    currency: purchaseData.currency,
+                    num_items: purchaseData.num_items,
+                    transaction_id: purchaseData.transaction_id
+                });
+            }
+        });
+    </script>
+
+    @php
+        session()->forget('purchase_event_data');
+    @endphp
+@endif
    @endsection

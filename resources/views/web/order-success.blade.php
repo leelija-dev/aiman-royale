@@ -1,6 +1,30 @@
 @extends('layout.web.main-layout')
 
 @section('content')
+{{-- @php
+    $purchase = session()->pull('purchase_event_data');
+    if (is_string($purchase)) {
+        $purchase = json_decode($purchase, true);
+    }
+@endphp
+
+@if (!empty($purchase['order_id']))
+<script>
+    (function () {
+        var d = @json($purchase);
+        if (typeof fbq === 'undefined') return;
+
+        fbq('track', 'Purchase', {
+            content_ids:  d.content_ids,
+            content_type: d.content_type || 'product',
+            value:        Number(d.value),
+            currency:     d.currency || 'INR',
+            num_items:    d.num_items
+        }, { eventID: String(d.event_id || d.order_id) });
+    })();
+</script>
+@endif --}}
+
 <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 min-h-screen">
     <div class="container mx-auto max-w-2xl">
         <div class="bg-white rounded-lg shadow-sm p-8 text-center">

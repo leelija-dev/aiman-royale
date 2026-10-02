@@ -16,12 +16,13 @@ class CategoryRequest extends FormRequest
         $id = $this->route('category')?->id ?? null;
         return [
             'name' => ['required', 'string', 'max:100','unique:categories,name,' . $id],
-            'slug' => ['required', 'string', 'max:120', 'unique:categories,slug,' . $id],
+            // 'title' => ['required', 'string', 'max:100','unique:categories,title,' . $id],
+            // 'slug' => ['required', 'string', 'max:120', 'unique:categories,slug,' . $id],
             'description' => ['nullable', 'string'],
             'parent_id' => ['nullable', 'exists:categories,id'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:1024'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:10240'],
             'is_active' => ['boolean'],
-            'is_home' => ['boolean'],
+            'is_home' => ['boolean','default:0'],
             //'home_position' => ['nullable', 'string'],
              'home_position' => ['required_if:is_home,1', 'nullable', 'string'],
             'meta_title'=>['required','string'],

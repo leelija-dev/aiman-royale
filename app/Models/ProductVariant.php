@@ -28,14 +28,24 @@ class ProductVariant extends Model
         'product_id',
         'size',
         'color',
+        'color_code',
         'sku',
         'price',
+        'coupon_id',
+        'fixed_price',
+        'final_price',
         'discount',
         'discount_price',
         'stock',
         'video_url',
-    ];
+        'weight',
+        'weight_unit_id',
+        'height',
+        'height_unit_id',
+        'width',
+        'width_unit_id',
 
+    ];
     /**
      * The attributes that should be cast.
      *

@@ -25,7 +25,7 @@ class Service
             ],
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'Leelija',//$data['publisher']['name'] ?? config('app.name'),
+                'name' => 'Aiman Royale',//$data['publisher']['name'] ?? config('app.name'),
                 'logo' => [
                     '@type' => 'ImageObject',
                     'url' => $data['publisher']['logo']['url'] ?? ''

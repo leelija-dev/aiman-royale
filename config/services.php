@@ -29,6 +29,20 @@ return [
         'webhook_url' => env('CASHFREE_WEBHOOK_URL'),
     ],
 
+    'delhivery' => [
+        'api_key' => env('DELHIVERY_API_KEY'),
+        'sandbox' => env('DELHIVERY_SANDBOX', false),
+        'pickup_location' => env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale'),
+        'pickup_pincode' => env('DELHIVERY_PICKUP_PINCODE', '110001'),
+        'return_name' => env('DELHIVERY_RETURN_NAME', env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale')),
+        'return_add' => env('DELHIVERY_RETURN_ADDRESS', env('DELHIVERY_PICKUP_LOCATION', 'Aiman Royale')),
+        'return_city' => env('DELHIVERY_RETURN_CITY', 'Default City'),
+        'return_state' => env('DELHIVERY_RETURN_STATE', 'Default State'),
+        'return_pin' => env('DELHIVERY_RETURN_PINCODE', env('DELHIVERY_PICKUP_PINCODE', '110001')),
+        'return_phone' => env('DELHIVERY_RETURN_PHONE', '0000000000'),
+        'shipping_mode' => env('DELHIVERY_SHIPPING_MODE', 'Express'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
@@ -53,5 +67,27 @@ return [
         'twitter' => env('X_LINK'),
         'linkedin' => env('LINKEDIN_LINK'),
     ],
+    'whatsapp' => [
+        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
+        'api_version' => env('WHATSAPP_API_VERSION', 'v18.0'),
+        'verify_token' => env('WHATSAPP_VERIFY_TOKEN'), // For webhook verification
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+    ],
+    'meta' => [
+    'pixel_id' => env('META_PIXEL_ID'),
+    'access_token' => env('META_CONVERSIONS_API_ACCESS_TOKEN'),
+],
+
+'turnstile' => [
+    'site_key'   => env('TURNSTILE_SITE_KEY'),
+    'secret_key' => env('TURNSTILE_SECRET_KEY'),
+],
 
 ];

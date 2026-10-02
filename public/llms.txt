@@ -1,0 +1,80 @@
+# Aiman Royale
+
+> Premium ethnic designer wear for women in India. Specialising in sarees, lehengas, anarkali suits, palazzo sets, salwar suits, Indo-westerns, co-ords, gowns, and bridal wear.
+
+## Core Pages
+
+- [Home](https://aimanroyale.com/): Main storefront with featured collections and new arrivals
+- [All Products](https://aimanroyale.com/products): Complete product catalogue
+- [All Collections](https://aimanroyale.com/collections): Browse by collection
+- [Book Appointment](https://aimanroyale.com/appointment): Schedule a personal styling appointment
+- [About Us](https://aimanroyale.com/about-us): Brand story and values
+- [Contact](https://aimanroyale.com/contact-us): Get in touch
+
+## Collections
+
+- [Wedding](https://aimanroyale.com/collections/wedding): Wedding wear collection
+- [Bridal](https://aimanroyale.com/collections/bridal): Bridal collection
+- [Anarkali Suits](https://aimanroyale.com/collections/anarkali-suits): Anarkali suit styles
+- [Salwar Kameez](https://aimanroyale.com/collections/salwar-kameez): Salwar kameez styles
+- [Gown](https://aimanroyale.com/collections/gown): Gown collection
+- [Co-ord Sets](https://aimanroyale.com/collections/co-ord-sets): Co-ordinated sets
+- [Indo Western](https://aimanroyale.com/collections/indo-western): Indo-western fusion wear
+- [Palazzo Suits](https://aimanroyale.com/collections/palazzo-suits): Palazzo suit styles
+- [Sharara Suits](https://aimanroyale.com/collections/sharara-suits): Sharara suit styles
+- [Patiala Suits](https://aimanroyale.com/collections/patiala-suits): Patiala suit styles
+- [Kurta Sets](https://aimanroyale.com/collections/kurta-sets): Kurta set styles
+- [Kaftan](https://aimanroyale.com/collections/kaftan): Kaftan collection
+- [Jump Suits](https://aimanroyale.com/collections/jump-suits): Jump suit styles
+- [Crop Top Styles](https://aimanroyale.com/collections/crop-top-styles): Crop top styles
+
+## Gown by Occasion
+
+- [Wedding Gowns](https://aimanroyale.com/gown/wedding)
+- [Party Gowns](https://aimanroyale.com/gown/party)
+- [Festival Gowns](https://aimanroyale.com/gown/festival)
+- [Casual Gowns](https://aimanroyale.com/gown/casual)
+
+## Salwar Kameez by Occasion
+
+- [Wedding Salwar Kameez](https://aimanroyale.com/salwar-kameez/wedding)
+- [Party Salwar Kameez](https://aimanroyale.com/salwar-kameez/party)
+- [Festival Salwar Kameez](https://aimanroyale.com/salwar-kameez/festival)
+- [Casual Salwar Kameez](https://aimanroyale.com/salwar-kameez/casual)
+
+## Products
+
+- [Straight Suit with Sharara](https://aimanroyale.com/products/straight-suit-with-sharara)
+- [Green Straight Suit with Palazzo Pant](https://aimanroyale.com/products/green-straight-suit-with-palazzo-pant)
+- [Purple Straight Suit with Garara](https://aimanroyale.com/products/purple-straight-suit-with-garara)
+- [White Anarkoli](https://aimanroyale.com/products/white-anarkoli)
+- [Maroon Long Straight Suit with Pant](https://aimanroyale.com/products/maroon-long-straight-suit-with-pant)
+- [Beige Long Straight Suit with Pants](https://aimanroyale.com/products/beige-long-straight-suit-with-pants)
+- [Mustard Long Straight Suit with Pant](https://aimanroyale.com/products/mustard-long-straight-suit-with-pant)
+- [Pink Straight Suit with Palazzo Pant](https://aimanroyale.com/products/pink-straight-suit-with-palazzo-pant)
+- [Red Paplom Suit with Palazzo Pant](https://aimanroyale.com/products/red-paplom-suit-with-palazzo-pant)
+- [Rani Pink Long Anarkoli Middle Cut Suit with Skirt](https://aimanroyale.com/products/rani-pink-long-anarkolimiddle-cut-suit-with-skirt)
+- [Red Straight Suit with Sarara](https://aimanroyale.com/products/red-straight-suit-with-sarara)
+- [Maroon Straight Suit with Palazzo Pant](https://aimanroyale.com/products/maroon-straight-suit-with-palazzo-pant)
+- [Red Paplom Suit with Sarara](https://aimanroyale.com/products/red-paplom-suit-with-sarara)
+- [Mauve Paplom Suit with Gharara](https://aimanroyale.com/products/Mauve%20Paplom%20Suit%20With%20Gharara)
+- [Navy Paplom Suit with Skirt](https://aimanroyale.com/products/Navy%20Paplom%20Suit%20With%20Skirt)
+- [Maroon Paplom Suit with Garara](https://aimanroyale.com/products/maroon-paplom-suit-with-garara)
+- [Rose Gold Short Paplom Middle Cut with Gharara](https://aimanroyale.com/products/rgold-short-paplom-middle-cut-with-gharara)
+- [Purple Paplom Suit with Skirt](https://aimanroyale.com/products/purple-paplom-suit-with-skirt)
+- [Wine Anarkali](https://aimanroyale.com/products/wine-anarkali)
+- [Rose Gold Straight Suit with Gharara](https://aimanroyale.com/products/rose-gold-straight-suit-with-gharara)
+- [Copper Straight Suit Middle Cut with Pant](https://aimanroyale.com/products/copper-straight-suitmiddle-cut-with-pant)
+- [Copper Straight Suit with Sharara](https://aimanroyale.com/products/copper-straight-suit-with-sharara)
+- [Rani Straight Suit with Sharara](https://aimanroyale.com/products/rani-straight-suit-with-sharara)
+- [Mouse Straight Suit with Gharara](https://aimanroyale.com/products/Mouse%20straight-suit-with-gharara)
+- [Maroon Long Anarkoli Middle Cut Suit with Pant](https://aimanroyale.com/products/maroon-long-anarkolimiddle-cut-suit-with-pant)
+- [Maroon Straight Suit with Gharara](https://aimanroyale.com/products/maroon-straight-suit-with-gharara)
+- [Rani Paplom Suit with Skirt](https://aimanroyale.com/products/rani-paplom-suit-with-skirt)
+- [Maroon Anarkoli](https://aimanroyale.com/products/maroon-anarkoli)
+
+## Policies
+
+- [Privacy Policy](https://aimanroyale.com/privacy-policy)
+- [Return & Refund Policy](https://aimanroyale.com/return-refund-policy)
+- [Terms & Conditions](https://aimanroyale.com/terms-condition)

@@ -4,82 +4,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @stack('head-preload')
+    <meta name="user-logged-in" content="{{ auth()->check() ? 'true' : 'false' }}">
 
-    @if(in_array(request()->getHost(), ['aimanroyale.com','www.aimanroyale.com']))
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="googlebot" content="noindex, nofollow">
-    <meta name="googlebot-news" content="noindex, nofollow">
-    <meta name="googlebot-image" content="noindex, nofollow">
-    <meta name="googlebot-video" content="noindex, nofollow">
+    @if (in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com']))
+        <meta name="robots" content="index, follow">
+        <meta name="googlebot" content="index, follow">
+        <meta name="googlebot-news" content="index, follow">
+        <meta name="googlebot-image" content="index, follow">
+        <meta name="googlebot-video" content="index, follow">
+        <meta name="google-site-verification" content="x0lp9usDncN6FhmKBxRaE0b2ALbm_xq3P-X9wTGxj9g" />
     @endif
 
     <title>{{ $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}</title>
-    <meta name="description" content="{{ $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
-    <meta name="keywords" content="{{ $pageMeta->meta_keyword ?? 'fashion, designer wear, traditional clothing, premium fashion, aiman royale' }}">
-    <meta name="tags" content="{{ $pageMeta->meta_tags ?? 'fashion, clothing, designer, premium, traditional, contemporary' }}">
+    <meta name="description"
+        content="{{ $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta name="keywords"
+        content="{{ $pageMeta->meta_keyword ?? 'fashion, designer wear, traditional clothing, premium fashion, aiman royale' }}">
+    <meta name="tags"
+        content="{{ $pageMeta->meta_tags ?? 'fashion, clothing, designer, premium, traditional, contemporary' }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+        <script>
+    (function () {
+      const origFetch = window.fetch.bind(window);
+      const metaEl = () => document.querySelector('meta[name="csrf-token"]');
+      const xsrf = () => {
+        const m = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+        return m ? decodeURIComponent(m[1]) : null;
+      };
 
+      window.fetch = function (input, init) {
+        init = init || {};
+        if (typeof input !== 'string') return origFetch(input, init);
+
+        const method = (init.method || 'GET').toUpperCase();
+        const sameOrigin = input.startsWith('/') || input.startsWith(location.origin);
+        if (!sameOrigin || method === 'GET' || method === 'HEAD') return origFetch(input, init);
+
+        const send = () => {
+          const headers = new Headers(init.headers || {});
+          const cookieToken = xsrf();
+          if (cookieToken) {
+            headers.delete('X-CSRF-TOKEN');
+            headers.set('X-XSRF-TOKEN', cookieToken);      // always the current session's token
+          } else if (metaEl()) {
+            headers.set('X-CSRF-TOKEN', metaEl().content); // fallback
+          }
+          headers.set('X-Requested-With', 'XMLHttpRequest');
+          return origFetch(input, Object.assign({}, init, { headers, credentials: 'same-origin' }));
+        };
+
+        return send().then(res => {
+          if (res.status !== 419) return res;
+          // last resort: get a fresh session/token, then retry once
+          return origFetch('/csrf-token', {
+            credentials: 'same-origin', cache: 'no-store',
+            headers: { Accept: 'application/json' }
+          })
+            .then(r => r.json())
+            .then(d => { if (metaEl()) metaEl().content = d.token; })
+            .catch(() => {})
+            .then(send);
+        });
+      };
+    })();
+    </script>
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
-    <meta property="og:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.' }}">
+    <meta property="og:title"
+        content="{{ $ogMeta['title'] ?? ($pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection') }}">
+    <meta property="og:description"
+        content="{{ $ogMeta['description'] ?? ($pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale. Shop our exclusive range of designer wear, traditional outfits, and contemporary styles.') }}">
     <meta property="og:type" content="{{ $ogMeta['type'] ?? 'website' }}">
     <meta property="og:url" content="{{ $ogMeta['url'] ?? url()->current() }}">
     <meta property="og:site_name" content="{{ $ogMeta['site_name'] ?? 'Aiman Royale' }}">
-    <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    <meta property="og:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-logo.png') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    @if(isset($ogMeta['locale']))
-    <meta property="og:locale" content="{{ $ogMeta['locale'] }}">
+    @if (isset($ogMeta['locale']))
+        <meta property="og:locale" content="{{ $ogMeta['locale'] }}">
     @endif
-    @if(isset($ogMeta['publisher']))
-    <meta property="article:publisher" content="{{ $ogMeta['publisher'] }}">
+    @if (isset($ogMeta['publisher']))
+        <meta property="article:publisher" content="{{ $ogMeta['publisher'] }}">
     @endif
-    @if(isset($ogMeta['section']))
-    <meta property="article:section" content="{{ $ogMeta['section'] }}">
+    @if (isset($ogMeta['section']))
+        <meta property="article:section" content="{{ $ogMeta['section'] }}">
     @endif
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $ogMeta['title'] ?? $pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection' }}">
-    <meta name="twitter:description" content="{{ $ogMeta['description'] ?? $pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.' }}">
-    <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-royal-logo.png') }}">
+    <meta name="twitter:title"
+        content="{{ $ogMeta['title'] ?? ($pageMeta->meta_title ?? 'Aiman Royale - Premium Fashion Collection') }}">
+    <meta name="twitter:description"
+        content="{{ $ogMeta['description'] ?? ($pageMeta->meta_description ?? 'Discover premium fashion collections at Aiman Royale.') }}">
+    <meta name="twitter:image" content="{{ $ogMeta['image'] ?? asset('web/images/company-logo/aiman-logo.png') }}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Dynamic Schema Markup -->
-    @if(isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
-    <script type="application/ld+json">
-        {
-            !!$pageMeta - > schema_markup!!
-        }
+    @if (isset($pageMeta->schema_markup) && !empty($pageMeta->schema_markup))
+        <script type="application/ld+json">
+       {!! $pageMeta->schema_markup !!}
     </script>
     @endif
+
+    <!-- Preconnect to API/CDN origin for faster client-rendered content -->
+    <link rel="preconnect" href="https://aimanroyale.com">
+    <link rel="dns-prefetch" href="https://aimanroyale.com">
 
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />
 
-    <link rel="icon" type="image/png" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
-    <link rel="shortcut icon" href="{{asset('web/images/company-logo/aiman-royal-logo.png')}}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
+    <link rel="icon" type="image/png" href="{{ asset('web/images/company-logo/aiman-logo.png') }}"
+        sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('web/images/company-logo/aiman-logo.png') }}" />
 
 
     @yield('styles')
 
+    <!-- Critical CSS for above-the-fold content (header, hero, nav) -->
+    <style>
+        /* Critical above-the-fold styles */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 1rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .bg-gradient-to-b {
+            background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+        }
+
+        .from-pink-50\/30 {
+            --tw-gradient-from: rgb(253 242 248 / 0.3);
+        }
+
+        .via-white {
+            --tw-gradient-via: rgb(255 255 255);
+        }
+
+        .to-white {
+            --tw-gradient-to: rgb(255 255 255);
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+
+        .hover\:scale-110:hover {
+            transform: scale(1.1);
+        }
+
+        .object-cover {
+            object-fit: cover;
+        }
+
+        .aspect-ratio {
+            aspect-ratio: inherit;
+        }
+
+        .aspect-\[2\/3\] {
+            aspect-ratio: 2/3;
+        }
+
+        .aspect-\[16\/6\] {
+            aspect-ratio: 16/6;
+        }
+
+        .aspect-\[9\/13\] {
+            aspect-ratio: 9/13;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .h-full {
+            height: 100%;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .inset-0 {
+            inset: 0;
+        }
+
+        .z-10 {
+            z-index: 10;
+        }
+
+        .bg-black\/40 {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .text-white {
+            color: white;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .rounded-xl {
+            border-radius: 0.75rem;
+        }
+
+        .px-8 {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+        }
+
+        .group:hover .group-hover\:opacity-100 {
+            opacity: 1;
+        }
+
+        .opacity-0 {
+            opacity: 0;
+        }
+
+        .transition-opacity {
+            transition-property: opacity;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .duration-500 {
+            transition-duration: 500ms;
+        }
+
+        .transform {
+            transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        }
+
+        .translate-y-4 {
+            --tw-translate-y: 1rem;
+        }
+
+        .group-hover\:translate-y-0:hover {
+            --tw-translate-y: 0px;
+        }
+
+        .loading {
+            opacity: 0.6;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #333;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
     @stack('styles')
+    <!-- Font Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Preload critical fonts -->
+    {{-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" as="style"> --}}
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    {{-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"> --}}
+
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap">
+        {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"> --}}
+    </noscript>
+    <!-- Main fonts with font-display: swap -->
+    {{-- <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap"
         rel="stylesheet" />
 
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500&display=swap"
-        rel="stylesheet" />
+        rel="stylesheet" /> --}}
     <!-- Font Awesome in  project -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
@@ -88,53 +387,167 @@
     <!-- <link rel="stylesheet" href="web/css/staging.css"> -->
 
     <!-- Owl Carousel CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    {{-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" /> --}}
+    {{-- this to --}}
+    <link rel="preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+
+    <link rel="preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+
+    <noscript>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    </noscript>
+    <!-- end this -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> -->
 
-    <link rel="stylesheet" href="{{asset('web/css/home-page.css')}}">
-    <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
+    <!-- Defer non-critical CSS -->
+    <link rel="stylesheet" href="{{ asset('web/css/home-page.css') }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" media="print" onload="this.media='all'">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @if(isset($ogMeta))
-    <x-blog.og-tags
-        :title="$ogMeta['title'] ?? ''"
-        :description="$ogMeta['description'] ?? ''"
-        :keywords="$ogMeta['keywords'] ?? []"
-        :image="$ogMeta['image'] ?? null"
-        :type="$ogMeta['type'] ?? 'website'"
-        :url="$ogMeta['url'] ?? url()->current()"
-        :locale="$ogMeta['locale'] ?? 'en_US'"
-        :siteName="$ogMeta['site_name'] ?? config('app.name')"
-        :publisher="$ogMeta['publisher'] ?? config('app.name')"
-        :publishedTime="$ogMeta['published_time'] ?? null"
-        :modifiedTime="$ogMeta['modified_time'] ?? null"
-        :section="$ogMeta['section'] ?? 'Blog'"
-        :tags="$ogMeta['tags'] ?? []"
-        :author="$ogMeta['author'] ?? 'Admin'"
-        :readingTime="$ogMeta['reading_time'] ?? null"
-        :imageWidth="$ogMeta['image_width'] ?? 1200"
-        :imageHeight="$ogMeta['image_height'] ?? 630"
-        :imageType="$ogMeta['image_type'] ?? 'image/jpeg'"
-        :schema="$ogMeta['schema'] ?? null" />
+    @if (isset($ogMeta))
+        <x-blog.og-tags :title="$ogMeta['title'] ?? ''" :description="$ogMeta['description'] ?? ''" :keywords="$ogMeta['keywords'] ?? []" :image="$ogMeta['image'] ?? null" :type="$ogMeta['type'] ?? 'website'"
+            :url="$ogMeta['url'] ?? url()->current()" :locale="$ogMeta['locale'] ?? 'en_US'" :siteName="$ogMeta['site_name'] ?? config('app.name')" :publisher="$ogMeta['publisher'] ?? config('app.name')" :publishedTime="$ogMeta['published_time'] ?? null" :modifiedTime="$ogMeta['modified_time'] ?? null"
+            :section="$ogMeta['section'] ?? 'Blog'" :tags="$ogMeta['tags'] ?? []" :author="$ogMeta['author'] ?? 'Admin'" :readingTime="$ogMeta['reading_time'] ?? null" :imageWidth="$ogMeta['image_width'] ?? 1200"
+            :imageHeight="$ogMeta['image_height'] ?? 630" :imageType="$ogMeta['image_type'] ?? 'image/jpeg'" :schema="$ogMeta['schema'] ?? null" />
     @endif
 
-    <link rel="stylesheet" href="{{asset('web/css/app-popup.css')}}">
+    <!-- <link rel="stylesheet" href="{{ asset('web/css/app-popup.css') }}"> -->
+
+    <!-- GTM: load async, don't block render -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.defer = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-5MP8JR47');
+    </script>
+
+    <!-- Facebook Pixel: defer non-critical tracking -->
+    {{-- <script defer>
+       document.addEventListener('DOMContentLoaded', function() {
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '3223171547852999', @json($metaAdvancedMatching ?? (object)[]));
+        // fbq('track', 'PageView');
+        fbq('track', 'PageView', {}, {eventID: '{{ $metaEventId ?? '' }}'});
+
+        @if (!empty(trim($__env->yieldContent('event'))))
+        fbq(
+            'track',
+            @json($__env->yieldContent('event')),
+            @json(json_decode($__env->yieldContent('eventParams', '{}'), true) ?: (object)[]),
+            {eventID: '{{ $metaEventId ?? '' }}'}
+        );
+        @endif
+}); --}}
+
+    {{-- </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=3223171547852999&ev=PageView&noscript=1" /></noscript> --}}
+    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code -->
+@if (in_array(request()->getHost(), ['aimanroyale.com', 'www.aimanroyale.com']))
+<script>
+    ! function(f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function() {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+        t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '3223171547852999', @json($metaAdvancedMatching ?? (object) []));
+    fbq('track', 'PageView', {}, {eventID: @json($metaEventId ?? '')});
+
+    @if (!empty(trim($__env->yieldContent('event'))))
+        fbq('track',
+            @json(trim($__env->yieldContent('event'))),
+            @json(json_decode($__env->yieldContent('eventParams', '{}'), true) ?: (object) []),
+            {eventID: @json($metaEventId ?? '')}
+        );
+    @endif
+    @php $regEventId = session()->pull('meta_registration_event_id'); @endphp
+    @if ($regEventId)
+        fbq('track', 'CompleteRegistration', {status: 'completed'}, {eventID: @json($regEventId)});
+    @endif
+     @php
+        $purchase = session()->pull('purchase_event_data');
+        if (is_string($purchase)) {
+            $purchase = json_decode($purchase, true);
+        }
+    @endphp
+    @if (!empty($purchase['order_id']))
+        fbq('track', 'Purchase', {
+            content_ids:  @json($purchase['content_ids'] ?? []),
+            content_type: 'product',
+            value:        {{ (float) ($purchase['value'] ?? 0) }},
+            currency:     'INR',
+            num_items:    {{ (int) ($purchase['num_items'] ?? 1) }},
+            order_id:     @json((string) $purchase['order_id'])
+        }, {eventID: @json((string) ($purchase['event_id'] ?? $purchase['order_id']))});
+    @endif
+</script>
+@endif
+    <!-- End Meta Pixel Code -->
+
 </head>
 
-<body class="overflow-x-hidden ">
+<body class="overflow-x-hidden px-0">
 
-    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
-    <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MP8JR47" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+
+    @if (!request()->is('login') && !request()->is('register') && !request()->is('404'))
+        <x-web.navbar :occasions="$occasions ?? null" :categories="$categories ?? null" :product-category="$productCategory ?? null" />
     @endif
 
 
     <main class="">
         @yield('content')
     </main>
-    @if(!request()->is('login') && !request()->is('register') && !request()->is('404'))
-    <x-web.footer />
+    @if (!request()->is('login') && !request()->is('register') && !request()->is('404'))
+        <x-web.footer />
     @endif
     <!-- Add this temporarily for testing -->
     <!-- <button onclick="localStorage.clear(); location.reload();"
@@ -180,17 +593,18 @@
 
     @yield('scripts')
 
-    <!-- Owl Carousel JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Owl Carousel JS - jQuery critical for functionality, Owl Carousel deferred -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
 
     <!-- PWA Installation Popup Script - IMPROVED INSTALLATION -->
-    <!-- <script src="{{asset('web/js/pwa-installation.js')}}"></script> -->
+    <!-- <script src="{{ asset('web/js/pwa-installation.js') }}"></script> -->
 
 
     <!-- common js  -->
-    <script src="{{asset('web/js/main.js')}}"></script>
+    <script defer src="{{ asset('web/js/main.js') }}"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

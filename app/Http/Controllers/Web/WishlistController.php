@@ -10,21 +10,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\MetaConversionsService;
+use Illuminate\Support\Facades\Cache;
 class WishlistController extends Controller
 {
     /**
      * Display wishlist page
      */
+
+    protected MetaConversionsService $metaService;
+
+    public function __construct(MetaConversionsService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
     public function index()
     {
         try {
             Log::info('Wishlist index method started');
             
             $wishlistItems = Wishlist::with(['product.images', 'product.variants'])
-                ->forCurrentUser()
+                // ->forCurrentUser()
+                ->where('user_id', Auth::id())
                 ->paginate(9);
-            
+            // $wishCount = Wishlist::where('user_id', Auth::id())->get();
             Log::info('Wishlist items loaded:', ['count' => $wishlistItems->count()]);
 
             // Filter out items with null products and load stock data
@@ -136,19 +145,30 @@ class WishlistController extends Controller
             $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'variant_id' => 'nullable|exists:product_variants,id',
+                'event_id'   => 'nullable|string|max:100',
             ]);
 
             $userId = Auth::id();
-            $sessionId = $userId ? null : session()->getId();
+            // $sessionId = $userId ? null : session()->getId();
+            $guestUuid = app(\App\Services\GuestIdentityService::class)
+            ->getOrCreate();
+
 
             // Check if product already in wishlist
             $existingWishlist = Wishlist::where('product_id', $request->product_id)
-                ->where(function ($query) use ($userId, $sessionId) {
+                ->where(function ($query) use ($userId, $guestUuid) {
                     if ($userId) {
                         $query->where('user_id', $userId);
                     } else {
-                        $query->where('session_id', $sessionId);
+                        // $query->where('session_id', $sessionId);
+                         $query->where('guest_uuid', $guestUuid)
+                          ->whereNull('user_id');
                     }
+                })
+                ->when($request->filled('variant_id'), function ($query) use ($request) {
+
+                    $query->where('variant_id', $request->variant_id);
+
                 })
                 ->first();
 
@@ -164,9 +184,34 @@ class WishlistController extends Controller
                 'user_id' => $userId,
                 'product_id' => $request->product_id,
                 'variant_id' => $request->variant_id,
-                'session_id' => $sessionId,
+                'guest_uuid' => $guestUuid,
+                'session_id' => null,
             ]);
+            Cache::forget('home.products.wishlisted');
+            // Cache::forget("user:{$userId}:wishlists");
+            if ($userId) {
+                Cache::forget("user:{$userId}:wishlists");
+            }
+            try {
+            $product = Product::with('variants')->find($request->product_id);
 
+            if ($product) {
+                $defaultVariant = $product->variants->first();
+
+                $this->metaService->trackAddToWishlist([
+                    'id'       => $product->id,
+                    'name'     => $product->name,
+                    'price'    => $defaultVariant
+                                    ? ($defaultVariant->discount_price ?? $defaultVariant->price)
+                                    : ($product->discount_price ?? $product->price),
+                    'currency' => 'INR',
+                ], [], $request->input('event_id'));
+
+                Log::info('Meta AddToWishlist tracked for product: ' . $product->id);
+            }
+        } catch (\Exception $e) {
+            Log::error('Meta AddToWishlist failed: ' . $e->getMessage());
+        }
             $wishlistCount = $this->getWishlistCount();
 
             return response()->json([
@@ -213,6 +258,8 @@ class WishlistController extends Controller
             }
 
             $wishlistItem->delete();
+            Cache::forget('home.products.wishlisted');
+            Cache::forget("user:{$userId}:wishlists");
 
             $wishlistCount = $this->getWishlistCount();
 

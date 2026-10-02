@@ -7,20 +7,18 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\ReturnOrderController;
+use App\Http\Controllers\Api\WebhookController;
+use App\Http\Controllers\Api\ProductFilterController;
 
-Route::prefix('blog')->group(function () {
-    Route::get('/posts', [BlogApiController::class, 'posts']);
-    Route::get('/posts/{slug}', [BlogApiController::class, 'post']);
-    Route::get('/categories', [BlogApiController::class, 'categories']);
-    Route::get('/tags', [BlogApiController::class, 'tags']);
-});
 
 // Brand related API routes
-Route::post('/generate-slug', [BrandController::class, 'generateSlug'])->name('api.generate-slug');
+// Route::post('/generate-slug', [BrandController::class, 'generateSlug'])->name('api.generate-slug');
 
 // Category related API routes
 Route::prefix('categories')->group(function () {
     Route::get('/{categoryId}', [CategoryController::class, 'getChildCategories'])->name('api.categories.children');
+    Route::get('/occasion/{slug}', [CategoryController::class, 'getCategoryProductUsingOccasionSlug']);
     Route::get('/{categoryId}/occasions', [CategoryController::class, 'getOccassionByCategoryId'])->name('api.categories.occasions');
     Route::get('/all-with-children', [CategoryController::class, 'getAllCategoriesWithChildren'])->name('api.categories.all-with-children');
     Route::get('/{categoryId}/with-children', [CategoryController::class, 'getCategoryWithChildren'])->name('api.categories.with-children');
@@ -36,6 +34,7 @@ Route::prefix('products')->group(function () {
     Route::get('/shipped', [ProductController::class, 'getShippedProducts']);
     Route::get('/delivered', [ProductController::class, 'getDeliveredProducts']);
     Route::get('/cancelled', [ProductController::class, 'getCancelledProducts']);
+    Route::get('/category/{slug}/filter', [ProductFilterController::class, 'filter']);
 });
 
 Route::prefix('faqs')->group(function () {
@@ -45,8 +44,23 @@ Route::prefix('faqs')->group(function () {
     Route::get('/products/{productSlug}', [FaqController::class, 'getFaqsUsingproductId']);
 });
 
+Route::prefix('returns')->group(function () {
+    Route::post('/', [ReturnOrderController::class, 'store'])->name('api.returns.store');
+    Route::get('/{reverseOrder}', [ReturnOrderController::class, 'show'])->name('api.returns.show');
+});
+// Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails'])->name('return-orders.details');
+
+Route::get('/return-orders/details', [ReturnOrderController::class, 'getDetails']);
+Route::post('/return-orders/refund', [ReturnOrderController::class, 'processRefund']);
+Route::post('/return-orders/bulk-refund', [ReturnOrderController::class, 'bulkRefund']);
+
 // Review related API routes
 Route::prefix('reviews')->group(function () {
     Route::post('/', [ReviewController::class, 'store'])->name('api.reviews.store');
     Route::get('/products/{productSlug}', [ReviewController::class, 'getProductReviews'])->name('api.reviewsRoutr.product');
 });
+
+Route::get('/category/filter-options/{slug}', [CategoryController::class, 'getFilterOptions'])->name('category.filter.options');
+
+// Route::get('', [WebhookController::class, 'handle'])->name('webhook');
+Route::post('/delhivery/webhook', [WebhookController::class, 'handle']);

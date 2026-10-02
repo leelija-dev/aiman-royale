@@ -53,6 +53,11 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Set permissions
 # RUN chown -R www-data:www-data /var/www/html
 
+# Allow PHP-FPM (www-data) to write to host-mounted Laravel directories.
+# Match the container group to the host deploy group (GID 1001).
+RUN groupadd -g 1001 deployhost 2>/dev/null || true \
+    && usermod -aG deployhost www-data
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 

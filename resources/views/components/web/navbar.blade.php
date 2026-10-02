@@ -75,7 +75,7 @@
         transition: max-height 0.3s ease;
     }
 
-    .menu-link {
+    .menu-link, .dif-menu-inner-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -148,7 +148,7 @@
         background: linear-gradient(135deg, #fff9f5 0%, #fef6f0 100%);
     }
 
-    .menu-link {
+    .menu-link,.dif-menu-inner-item {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-left: 3px solid transparent;
         margin: 4px 12px;
@@ -156,18 +156,18 @@
         overflow: hidden;
     }
 
-    .menu-link:hover {
+    .menu-link:hover,.dif-menu-inner-item:hover {
         background: white;
         transform: translateX(5px);
         border-left-color: #d4a574;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .menu-link i {
+    .menu-link i,.dif-menu-inner-item i {
         transition: transform 0.3s ease;
     }
 
-    .menu-link:hover i {
+    .menu-link:hover i,.dif-menu-inner-item:hover i {
         transform: translateX(3px);
         color: #d4a574;
     }
@@ -272,6 +272,23 @@
     }
 
     .menu-item.has-submenu .menu-link:hover::after {
+        background: #d4a574;
+        transform: translateY(-50%) scale(1.2);
+    }
+    .dif-menu-item .dif-menu-inner-item::after {
+        content: '';
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background: rgba(212, 165, 116, 0.3);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .dif-menu-item .dif-menu-inner-item:hover::after {
         background: #d4a574;
         transform: translateY(-50%) scale(1.2);
     }
@@ -921,13 +938,13 @@
             text-primary px-4 py-2 rounded-full shadow-sm border border-primary/20">
 
                     <span class="animate-pulse text-secondary">🔥</span>
-                    <span>New Arrivals!</span>
+                    <span>New Arrivals Just In</span>
 
                     <span class="text-gray-400">|</span>
 
                     <span>
-                        Get up to
-                        <span class="font-semibold text-secondary">20% OFF</span>
+                         Enjoy Up to 
+                        <span class="font-semibold text-secondary">70% OFF</span>
 
                     </span>
 
@@ -936,14 +953,14 @@
 
             <div
                 class="xl:absolute xl:top-0 xl:left-0 xl:w-full xl:flex xl:justify-center xl:items-center xl:pointer-events-none">
-                <a href="/">
-                    <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto"
-                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="">
+                <a href="/" aria-label="Aiman Royale — Home">
+                    <img class="xxs:h-[39px] xxs:max-h-max max-h-[37px] h-auto w-auto pointer-events-auto" style="background:transparent;"
+                        src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}" alt="Aiman Royale">
                 </a>
             </div>
             <div class="flex flex-row gap-3 items-center justify-end">
                 <!-- Book Appointment Button -->
-                <a href="{{ route('page.appointment') }}"
+                <a href="{{ route('page.appointment') }}#appoint-book-section"
                     class="hidden md:flex items-center gap-2 px-3 py-2 
           bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm 
           rounded-full shadow-md
@@ -972,63 +989,98 @@
                 <!-- Social Media Icons (Desktop only) -->
                 <div class="hidden md:flex items-center gap-3">
 
-                    <a href="https://wa.me/1234567890" target="_blank"
+                    <a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
                         class="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110"
                         title="WhatsApp">
-                        <div
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
-                        </div>
+                       <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-50 transition-colors group">
+                    <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-gray-500 group-hover:fill-green-500 transition-colors" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.149-.15.297-.347.446-.52.148-.174.198-.298.298-.497.099-.198.05-.371-.05-.52-.099-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487 3.065 1.32 3.065.879 3.63.827.567-.05 1.758-.72 2.006-1.416.248-.694.248-1.29.173-1.415-.074-.124-.272-.198-.57-.347zM12.034 22a9.969 9.969 0 01-5.086-1.391l-5.62 1.4 1.44-5.474A9.99 9.99 0 010 12C0 5.373 5.373 0 12 0s12 5.373 12 12-5.373 10-11.966 10z"/>
+                    </svg>
+                    </div>
                     </a>
                 </div>
+                @php
+                // dd(Auth::id());
+                if (Auth::check()) {
+                $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                } else {
+                $wishlistCount = 0;
+                }
 
-                <!-- Icons -->
+                @endphp
+
                 <a href="{{ route('wishlist.index') }}">
-                    <button class="text-gray-700 hover:text-black group relative">
-                        <div
-                            class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 bg-gray-100 transition-colors">
-                            <i class="fa-regular fa-heart text-lg group-hover:text-red-500"></i>
+                    <button class="relative text-gray-700 hover:text-black group"  type="button" aria-label="View wishlist{{ $wishlistCount > 0 ? ' (' . $wishlistCount . ' items)' : '' }}">
+
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-red-50 transition-colors">
+                            <i class="fa fa-heart text-lg group-hover:text-red-600"  aria-hidden="true"></i>
                         </div>
+                        {{-- @if (Auth::check())
+                        @if ($wishlistCount > 0)
+                        <span class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center">
+                            {{ $wishlistCount ?? 0 }}
+                        </span>
+                        @endif
+
+                        @endif --}}
                         <span
-                            class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                            Wishlist
+                            id="wishlist-counter"
+                            class="wishlist-count absolute -top-1 -right-1 w-5 h-5 bg-red-700 text-white text-xs rounded-full items-center justify-center {{ $wishlistCount > 0 ? 'flex' : 'hidden' }}">
+                            {{ $wishlistCount }}
                         </span>
                     </button>
                 </a>
 
                 @php
-                // Get cart count for current user/guest
-                $cartCount = 0;
-                if (Auth::check()) {
-                $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('count');
-                } else {
-                $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('count');
-                }
-                @endphp
+    $cartCount = 0;
 
-                <button onclick="window.location.href='{{ route('cart.index') }}'"
-                    class="text-gray-700 hover:text-black group relative">
-                    <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
-                        <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
-                        @if($cartCount > 0)
-                        <span
-                            class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
-                            {{ $cartCount }}
-                        </span>
-                        @endif
-                    </div>
-                    <span
-                        class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
-                        Cart{{ $cartCount > 0 ? ' (' . $cartCount . ')' : '' }}
-                    </span>
-                </button>
+    if (Auth::check()) {
+
+        $cartCount = \App\Models\Cart::where('user_id', Auth::id())
+            ->sum('count');
+
+    } else {
+
+        $guestUuid = app(\App\Services\GuestIdentityService::class)
+            ->getOrCreate();
+
+        $cartCount = \App\Models\Cart::where('guest_uuid', $guestUuid)
+            ->sum('count');
+    }
+@endphp
+
+<button onclick="window.location.href='{{ route('cart.index') }}'"
+    class="text-gray-700 hover:text-black group relative" type="button"
+    aria-label="View cart{{ $cartCount > 0 ? ' (' . $cartCount . ' items)' : '' }}">
+
+    <div class="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-50 transition-colors relative">
+
+        <i class="fa-solid fa-bag-shopping text-lg group-hover:text-blue-600"></i>
+
+        {{-- @if($cartCount > 0)
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                {{ $cartCount }}
+            </span>
+        @endif --}}
+        <span
+            id="cart-counter"
+            class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full items-center justify-center font-semibold {{ $cartCount > 0 ? 'flex' : 'hidden' }}">
+            {{ $cartCount }}
+        </span>
+
+    </div>
+
+    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+        Cart{{ $cartCount > 0 ? ' (' . $cartCount . ')' : '' }}
+    </span>
+
+</button>
 
                 <!-- Profile Section -->
                 @auth
                 <!-- Profile with Dropdown (Logged In) -->
                 <div class="relative group">
-                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black">
+                    <button id="profile-btn" class="flex items-center gap-2 text-gray-700 hover:text-black" type="button" aria-label="Account options">
                         <!-- <div class="relative">
                              <img src="https://i.pravatar.cc/32" alt="User"
                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-primary transition-colors" />
@@ -1036,16 +1088,17 @@
                                 class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span> 
                          </div> -->
                         <span class="hidden sm:block text-sm font-medium">{{ Str::of(Auth::user()->name)->trim()->explode(' ')[0] }}</span>
-                        <i
-                            class="fa-solid fa-chevron-down text-xs hidden sm:block group-hover:rotate-180 transition-transform"></i>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
+                            <i class="fa-solid fa-user text-xs text-[14px]" aria-hidden="true"></i>
+                        </div>
                     </button>
 
                     <!-- Account Dropdown -->
                     <div id="account-dropdown"
                         class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 hidden group-hover:block hover:block">
                         <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                            <p class="text-sm font-semibold text-gray-800 break-words">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 break-words">{{ Auth::user()->email }}</p>
                         </div>
 
                         <a href="{{route('web.profile')}}"
@@ -1063,13 +1116,18 @@
                             class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <i class="fa-regular fa-heart text-gray-500 w-4"></i>
                             <span>Wishlist</span>
-                            <span class="ml-auto text-primary text-xs">12</span>
+                            <span class="wishlist-count ml-auto bg-primary text-white text-xs px-3 py-1 rounded-full">
+                                {{ $wishlistCount ?? 0 }}
+                            </span>
                         </a>
 
                         <hr class="my-2 border-gray-100" />
 
                         <form method="POST" action="{{ route('web.logout') }}">
                             @csrf
+                               <input type="hidden"
+                                name="redirect_url"
+                                value="{{ url()->current() }}">
                             <button type="submit"
                                 class="flex items-center gap-2 w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                 <i class="fa-solid fa-right-from-bracket w-4"></i>
@@ -1081,9 +1139,9 @@
                 @else
                 <!-- Login Button (Not Logged In) -->
 
-                <a href="{{ route('page.login', ['redirect' => url()->current()]) }}">
+                <a href="{{ route('page.login', ['redirect' => url()->current()]) }}" aria-label="Login">
                     <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-secondary-light transition-colors">
-                        <i class="fa-solid fa-user text-xs text-[14px]"></i>
+                        <i class="fa-solid fa-user text-xs text-[14px]" aria-hidden="true"></i>
                     </div>
                 </a>
                 @endauth
@@ -1095,16 +1153,56 @@
     <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
 
     <!-- Main Header -->
-    <div class="py-4 flex items-center justify-between gap-6 xl:container mx-auto px-3">
+    <div class="py-4 flex items-center justify-between gap-[5px] xl:container mx-auto px-3">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Desktop Navigation with Enhanced Hover Effects -->
-            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium">
+            <nav class="hidden lgg:flex items-center gap-2 text-gray-700 font-medium xl:text-[15px] text-[13px]">
                 @if (isset($categories) && count($categories) > 0)
+                <a href="{{ route('category.show', 'wedding') }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="Wedding" data-category-id="" data-occasion-endpoint="wedding">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Wedding
+                        </span>
+
+                       
+                    </a>
+                    <a href="{{ route('category.show', 'bridal') }}"
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        data-category="Bridal" data-category-id="" data-occasion-endpoint="bridal">
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Bridal
+                        </span>
+
+                       
+                    </a>
+                
+
                 @foreach ($categories->where('parent_id', null) as $category)
                 <div class="relative group">
                     <a href="{{ route('category.show', $category->slug) }}"
-                        class="hover:text-black desktop-nav-link flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 
+                        class="hover:text-black desktop-nav-link flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
                        relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
                        group-hover:shadow-md transform group-hover:scale-105"
                         data-category="{{ $category->name }}" data-category-id="{{ $category->id }}">
@@ -1120,15 +1218,31 @@
                             {{ $category->name }}
                         </span>
 
-                        <!-- Animated arrow icon (optional) -->
-                        <svg class="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 
-                            transition-all duration-300 text-purple-600"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
+                       
                     </a>
                 </div>
                 @endforeach
+                <div class="relative group">
+                    <a href="{{ route('page.multi-product') }}"
+                        class="hover:text-black  flex items-center gap-1 xl:px-3 px-[6px] py-2 rounded-lg transition-all duration-300 
+                       relative overflow-hidden group-hover:bg-gradient-to-r group-hover:from-secondary/10 group-hover:to-primary/10
+                       group-hover:shadow-md transform group-hover:scale-105"
+                        >
+
+                        <!-- Animated underline effect -->
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary to-primary 
+                             group-hover:w-full transition-all duration-300"></span>
+
+                        <!-- Category name with subtle animation -->
+                        <span class="relative group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-primary
+                             transition-all duration-300 uppercase">
+                            Collections
+                        </span>
+
+                       
+                    </a>
+                </div>
                 @else
                 <!-- Enhanced fallback navigation items -->
                 <a href="#"
@@ -1183,8 +1297,8 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="lgg:hidden text-gray-700 hover:text-black">
-            <i class="fa-solid fa-bars text-2xl"></i>
+        <button id="mobile-menu-btn" class="lgg:hidden text-gray-700 hover:text-black" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-sidebar">
+            <i class="fa-solid fa-bars text-2xl" aria-hidden="true"></i>
         </button>
 
         <!-- Right Section -->
@@ -1193,8 +1307,8 @@
             <div class="relative block w-full" id="search-container">
                 <input type="text" placeholder="Search here" id="search-input"
                     class="search-input pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
-                <button class="close-search" id="close-search-btn" type="button">
-                    <i class="fa-solid fa-times"></i>
+                <button class="close-search" id="close-search-btn" type="button" aria-label="Clear search">
+                    <i class="fa-solid fa-times" aria-hidden="true"></i>
                 </button>
                 <input type="text" placeholder="Search here"
                     class="lgg:hidden block pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56 xl:min-w-[400px] lg:min-w-[300px] min-w-full" />
@@ -1250,13 +1364,13 @@
                 <!-- Mobile Search Suggestions (only shown on mobile) -->
                 <div class="mobile-search-suggestions" id="mobile-search-suggestions">
                     <div class="mobile-search-suggestions-header">
-                        <button id="mobile-suggestions-back">
-                            <i class="fa-solid fa-arrow-left"></i>
+                        <button id="mobile-suggestions-back" type="button" aria-label="Clear search">
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </button>
                         <input type="text" placeholder="Search products..." id="mobile-suggestions-input"
-                            autocomplete="off" />
-                        <button id="mobile-suggestions-clear">
-                            <i class="fa-solid fa-times"></i>
+                            autocomplete="off" aria-label="Search products" />
+                        <button id="mobile-suggestions-clear" aria-label="Clear search">
+                            <i class="fa-solid fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="mobile-search-suggestions-content" id="mobile-suggestions-content">
@@ -1278,7 +1392,9 @@
 
 
 
-<!-- ==================== BREADCRUMBS ==================== -->
+
+ @unless (request()->routeIs('page.index'))
+ <!-- ==================== BREADCRUMBS ==================== -->
 <div class="breadcrumbs-wrapper" id="breadcrumbs-container">
     <div class="container mx-auto px-4 py-3">
         <ol class="breadcrumbs__list" itemscope="" itemtype="https://schema.org/BreadcrumbList" id="breadcrumbs-list">
@@ -1286,16 +1402,17 @@
         </ol>
     </div>
 </div>
+@endunless
 
 <!-- Mobile Search Dropdown (Full Screen) -->
 <div id="mobile-search-dropdown">
     <div class="mobile-search-header flex flex-row">
-        <button id="mobile-search-back">
-            <i class="fa-solid fa-arrow-left"></i>
+        <button id="mobile-search-back" type="button" aria-label="Close search">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
         </button>
         <input type="text" placeholder="Search products..." id="mobile-search-input" autocomplete="off" class="w-full rounded-full" />
-        <button id="mobile-search-clear">
-            <i class="fa-solid fa-times"></i>
+        <button id="mobile-search-clear" type="button" aria-label="Clear search">
+            <i class="fa-solid fa-times" aria-hidden="true"></i>
         </button>
     </div>
 
@@ -1334,12 +1451,12 @@
     class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px]">
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b">
-        <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-3">
             <img class="h-[40px] w-auto" src="{{ asset('web/images/company-logo/aiman-navbar-logo.png') }}"
                 alt="Aiman Royal">
-        </div>
-        <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors">
-            <i class="fa-solid fa-xmark text-xl"></i>
+        </a>
+        <button id="close-sidebar-btn" class="text-gray-600 hover:text-primary transition-colors" type="button" aria-label="Close menu">
+            <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
         </button>
     </div>
 
@@ -1347,20 +1464,82 @@
     <div class="p-4 border-b">
         <div class="relative">
             <input type="text" placeholder="Search products..." id="mobile-sidebar-search-input"
-                class="search-input w-full pl-4 pr-10 py-3 text-sm outline-none rounded-[60px]" />
+                class="search-input w-full pl-4 pr-10 py-3 text-sm outline-none rounded-[60px]" aria-label="Search products" />
             <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                id="mobile-sidebar-search-icon"></i>
+                id="mobile-sidebar-search-icon" aria-hidden="true"></i>
         </div>
     </div>
 
     <!-- Mobile Navigation -->
     <nav class="py-4 h-[calc(100vh-160px)] overflow-y-auto">
         <div class="mega-menu px-2">
+            <!-- Wedding -->
+            <div class="menu-item has-submenu top-level-item" data-category="Wedding" data-occasion-endpoint="wedding">
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Wedding</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu style-submenu">
+                            <!-- Dynamic content will be loaded here -->
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu collection-submenu">
+                            <!-- Dynamic content will be loaded here -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Bridal -->
+            <div class="menu-item has-submenu top-level-item" data-category="Bridal" data-occasion-endpoint="bridal">
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
+                </button>
+                <a href="#" class="menu-link top-level-link group">
+                    <span class="flex-1">Bridal</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+                <ul class="submenu">
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Style</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu style-submenu">
+                            <!-- Dynamic content will be loaded here -->
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <div class="menu-link submenu-toggle group">
+                            <span class="flex-1">Collection</span>
+                            <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                        <ul class="submenu collection-submenu">
+                            <!-- Dynamic content will be loaded here -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
             @if (isset($categories) && count($categories) > 0)
             @foreach ($categories->where('parent_id', null) as $category)
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="{{ route('category.show', $category->slug) }}"
                     class="menu-link top-level-link group">
@@ -1438,11 +1617,24 @@
                 </ul>
             </div>
             @endforeach
+            <div id="dif-menu-item" class="dif-menu-item relative w-full ">
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
+                </button>
+                <a href="https://aimanroyale.com/products/"
+                    class="dif-menu-inner-item bg-white">
+                    <span class="flex-1">Collections</span>
+                    <i class="fa-solid fa-angle-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+
+             
+</div>
+
             @else
             <!-- Default menu items -->
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Lahenga</span>
@@ -1466,8 +1658,8 @@
                 </ul>
             </div>
             <div class="menu-item has-submenu top-level-item">
-                <button class="back-button">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                <button class="back-button" aria-label="Back">
+                    <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Back
                 </button>
                 <a href="#" class="menu-link top-level-link group">
                     <span class="flex-1">Salwar Kameez</span>
@@ -1497,12 +1689,24 @@
     <!-- Quick Links Footer -->
     <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
         <div class="grid grid-cols-2 gap-2">
-            <a href="{{ route('page.login') }}"
-                class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm">
-                <i class="fa-solid fa-user mr-2"></i> Login
-            </a>
+            @if(Auth::check())
+              <form method="POST" action="{{ route('web.logout') }}" class="contents">
+                    @csrf
+                    <input type="hidden" name="redirect_url" value="{{ url()->current() }}">
+                    <button type="submit"
+                        class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm"
+                        aria-label="Logout of your account">
+                        <i class="fa-solid fa-user mr-2"></i> Logout
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('page.login', ['redirect' => url()->full()]) }}"
+                    class="text-center py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm" aria-label="Login to your account">
+                    <i class="fa-solid fa-user mr-2"></i> Login
+                </a>
+            @endif
             <a href="{{ route('cart.index') }}"
-                class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm">
+                class="text-center py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors text-sm" aria-label="View your shopping cart">
                 <i class="fa-solid fa-shopping-cart mr-2"></i> Cart
             </a>
         </div>
@@ -1604,8 +1808,35 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script>
+function loadSweetAlert(callback) {
+  if (window.Swal) {
+    callback();
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+</script>
+<script>
+function updateCartCount(count) {
+    const badge = document.getElementById('cart-counter');
+    if (!badge) return;
 
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+    } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+    }
+}
+window.updateCartCount = updateCartCount;
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // ==================== GLOBAL VARIABLES ====================
@@ -1704,11 +1935,61 @@
             }
         }
 
+        // Fetch occasion data from API (for Wedding/Bridal)
+        async function fetchOccasionData(occasionSlug) {
+            // Check cache first
+            if (categoryCache[`occasion_${occasionSlug}`]) {
+                return categoryCache[`occasion_${occasionSlug}`];
+            }
+
+            const loadingElement = document.getElementById('category-menu-loading');
+            if (loadingElement) {
+                loadingElement.classList.add('active');
+            }
+
+            try {
+                const baseUrl = getBaseUrl();
+                const response = await fetch(`${baseUrl}/api/categories/occasion/${occasionSlug}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                if (data.success) {
+                    // Cache the response
+                    categoryCache[`occasion_${occasionSlug}`] = data.data;
+                    return data.data;
+                } else {
+                    throw new Error(data.message || 'Failed to fetch occasion data');
+                }
+            } catch (error) {
+                console.error('Error fetching occasion data:', error);
+                // Return fallback data structure
+                return {
+                    parent_category: {
+                        id: null,
+                        name: occasionSlug.charAt(0).toUpperCase() + occasionSlug.slice(1),
+                        slug: occasionSlug
+                    },
+                    style: [],
+                    ocassions: [],
+                    collection: [],
+                    products_by_category: {},
+                    parent_category_products: []
+                };
+            } finally {
+                if (loadingElement) {
+                    loadingElement.classList.remove('active');
+                }
+            }
+        }
+
         function renderCategoryMenuData(categoryData) {
             if (!categoryData) return;
 
             currentCategoryData = categoryData;
-            const parentCategory = categoryData.parent_category;
+            // Handle both category API and occasion API response structures
+            const parentCategory = categoryData.parent_category || categoryData.occasion;
 
             // Update category banner
             const bannerTitle = document.getElementById('category-banner-title');
@@ -1887,7 +2168,9 @@
             occasionList.innerHTML = '';
 
             const occasions = categoryData.ocassions || [];
-            const parentCategory = categoryData.parent_category;
+            // console.log(occasions)
+            // Handle both category API and occasion API response structures
+            const parentCategory = categoryData.parent_category || categoryData.occasion;
 
             if (!parentCategory) return;
 
@@ -1953,7 +2236,7 @@
 
                     const img = document.createElement('img');
                     img.className = 'w-full h-full object-cover aspect-auto';
-                    img.src = occasion.image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    img.src = '/img/' + occasion.latest_product_image || "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
                     img.alt = occasion.name;
 
                     link.appendChild(img);
@@ -2024,18 +2307,22 @@
 
             collectionList.innerHTML = '';
 
-            // Extract products from the complex data structure
+            // Extract products from the data structure
+            // Handle both category API (products_by_category) and occasion API (direct collection array)
             let products = [];
 
-            if (categoryData && categoryData.collection && categoryData.collection.products_by_category) {
-                // Get all products from all categories in products_by_category
-                const productsByCategory = categoryData.collection.products_by_category;
-
-                // Iterate through each category's product array
-                for (const categoryId in productsByCategory) {
-                    if (Array.isArray(productsByCategory[categoryId])) {
-                        products = products.concat(productsByCategory[categoryId]);
+            if (categoryData && categoryData.collection) {
+                // Check if collection has products_by_category (category API structure)
+                if (categoryData.collection.products_by_category) {
+                    const productsByCategory = categoryData.collection.products_by_category;
+                    for (const categoryId in productsByCategory) {
+                        if (Array.isArray(productsByCategory[categoryId])) {
+                            products = products.concat(productsByCategory[categoryId]);
+                        }
                     }
+                } else if (Array.isArray(categoryData.collection)) {
+                    // Occasion API structure: products directly in collection array
+                    products = categoryData.collection;
                 }
             }
 
@@ -2043,40 +2330,11 @@
 
             if (products.length === 0) {
                 // Show default fallback products
-                const fallbackProducts = [{
-                        name: "Light Pink Salwar",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/light-pink-m-2_49_11zon.webp') }}",
-                        slug: "light-pink-salwar"
-                    },
-                    {
-                        name: "Gray Lahenga",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/gray-lahenga-3_40_11zon.webp') }}",
-                        slug: "gray-lahenga"
-                    },
-                    {
-                        name: "Red Plazo",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/red-plazo-3_89_11zon.webp') }}",
-                        slug: "red-plazo"
-                    },
-                    {
-                        name: "Short Plazo",
-                        price: "Rs. 700",
-                        originalPrice: "Rs. 1000",
-                        image: "{{ asset('web/images/product-images/short-plazo-1_99_11zon.webp') }}",
-                        slug: "short-plazo"
-                    }
-                ];
-
-                fallbackProducts.forEach(product => {
-                    const productCard = createProductCard(product);
-                    collectionList.appendChild(productCard);
-                });
+                collectionList.innerHTML = `
+        <div class="col-span-full w-full text-center py-10 text-gray-500">
+            <i class="fas fa-box-open text-3xl mb-2"></i>
+            <p class="text-sm">No products available right now.</p>
+        </div>`;
             } else {
                 // Display products (limit to 4 for initial view)
                 products.slice(0, 4).forEach(product => {
@@ -2085,7 +2343,13 @@
                         price: product.discount_price ? `Rs. ${product.discount_price}` : `Rs. ${product.price}`,
                         originalPrice: product.price && product.discount_price ? `Rs. ${product.price}` : null,
                         // image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
-                        image: product.featured_image ? (product.featured_image.startsWith('http') ? product.featured_image : getBaseUrl() + '/' + product.featured_image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        // image: product.featured_image ? (product.featured_image.startsWith('http') ? product.featured_image : getBaseUrl() + '/' + product.featured_image) : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                         image: product.featured_image ? 
+        (product.featured_image.startsWith('http') ? 
+            product.featured_image : 
+            getBaseUrl() + '/img/' + product.featured_image + '?w=600&q=80'
+        ) : 
+        "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
                         slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-')
                     });
                     collectionList.appendChild(productCard);
@@ -2128,7 +2392,7 @@
                     
                     <!-- Wishlist Heart Icon (Top Right) -->
                     <button
-                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                        class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110" aria-label="Add ${product.name} to wishlist">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2" class="w-5 h-5 text-red-500">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -2237,6 +2501,60 @@
         }
 
         // Process API response to match our expected format
+        // function processSearchResponse(data, searchTerm) {
+        //     const term = searchTerm.toLowerCase().trim();
+        //     const results = {
+        //         categories: [],
+        //         products: [],
+        //         hasResults: false
+        //     };
+
+        //     if (data.success && data.data) {
+        //         console.log('Processing search response for term:', term, 'Data:', data.data);
+        //         // Extract unique categories from products
+        //         const categoryMap = new Map();
+
+        //         data.data.forEach(product => {
+        //             // Add product
+        //             results.products.push({
+        //                 id: product.id,
+        //                 title: product.name,
+        //                 price: product.discount_price ? `MRP ₹${product.discount_price}` : `MRP ₹${product.price}`,
+        //                 image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+        //                 slug: product.slug,
+        //                 tags: [product.category?.name?.toLowerCase() || '', product.subcategory?.name?.toLowerCase() || ''].filter(Boolean)
+        //             });
+
+        //             // Add category if not already added
+        //             if (product.category && !categoryMap.has(product.category.id)) {
+        //                 categoryMap.set(product.category.id, {
+        //                     id: product.category.id,
+        //                     name: product.category.name,
+        //                     slug: product.category.slug
+        //                 });
+        //             }
+
+        //             // Add subcategory if exists and not already added
+        //             if (product.subcategory && !categoryMap.has(`sub_${product.subcategory.id}`)) {
+        //                 categoryMap.set(`sub_${product.subcategory.id}`, {
+        //                     id: product.subcategory.id,
+        //                     name: product.subcategory.name,
+        //                     slug: product.subcategory.slug,
+        //                     is_subcategory: true
+        //                 });
+        //             }
+        //         });
+
+        //         // Convert categories map to array and limit to 3
+        //         results.categories = Array.from(categoryMap.values()).slice(0, 3);
+        //         results.hasResults = results.products.length > 0 || results.categories.length > 0;
+        //     }
+
+        //     return results;
+        // }
+
+        // Process API response to match our expected format - FIXED FOR CLOUDINARY
+       
         function processSearchResponse(data, searchTerm) {
             const term = searchTerm.toLowerCase().trim();
             const results = {
@@ -2245,19 +2563,77 @@
                 hasResults: false
             };
 
+            console.log('Processing search response for term:', term, 'Data:', data.data);
+
             if (data.success && data.data) {
                 // Extract unique categories from products
                 const categoryMap = new Map();
 
-                data.data.forEach(product => {
+                // Check if data.data is an array
+                const productsArray = Array.isArray(data.data) ? data.data : [data.data];
+
+                productsArray.forEach(product => {
+                    // FIX: Get the correct product image URL based on your API structure
+                    let productImage = '';
+
+                    // Your API has 'image' directly at root level (could be Cloudinary URL)
+                    if (product.image) {
+                        productImage = product.image;
+                    }
+                    // Fallback: check if there's a featured_image
+                    else if (product.featured_image) {
+                        productImage = product.featured_image;
+                    }
+                    // Fallback: check if there's an images array
+                    else if (product.images && product.images.length > 0) {
+                        const firstImage = product.images[0];
+                        if (firstImage) {
+                            if (firstImage.image) {
+                                productImage = firstImage.image;
+                            } else if (typeof firstImage === 'string') {
+                                productImage = firstImage;
+                            } else if (firstImage.url) {
+                                productImage = firstImage.url;
+                            } else if (firstImage.path) {
+                                productImage = firstImage.path;
+                            }
+                        }
+                    }
+
+                    // If still no image, use placeholder
+                    if (!productImage) {
+                        productImage = "{{ asset('web/images/banner-images/red-plazo-6.webp') }}";
+                    }
+
+                    // ONLY add base URL if it's a relative path (starts with / or doesn't have http)
+                    // Cloudinary URLs already have https:// and should NOT be modified
+                    if (productImage && !productImage.startsWith('http://') && !productImage.startsWith('https://') && !productImage.startsWith('//')) {
+                        // It's a relative path, so add base URL
+                        if (productImage.startsWith('/')) {
+                            productImage = getBaseUrl() + productImage;
+                        } else {
+                            productImage = getBaseUrl() + '/img/' + productImage;
+                        }
+                    }
+
+                    // Debug: Log the image URL
+                    console.log('Product image for', product.name, ':', productImage);
+
+                    // Determine price
+                    let price = product.discount_price || product.price || '0';
+
                     // Add product
                     results.products.push({
                         id: product.id,
-                        title: product.name,
-                        price: product.discount_price ? `MRP ₹${product.discount_price}` : `MRP ₹${product.price}`,
-                        image: product.images && product.images[0] ? product.images[0].image : "{{ asset('web/images/banner-images/red-plazo-6.webp') }}",
+                        title: product.name || product.title || 'Product',
+                        price: price ? `MRP ₹${price}` : 'MRP ₹0',
+                        image: productImage,
                         slug: product.slug,
-                        tags: [product.category?.name?.toLowerCase() || '', product.subcategory?.name?.toLowerCase() || ''].filter(Boolean)
+                        tags: [
+                            product.category?.name?.toLowerCase() || '',
+                            product.subcategory?.name?.toLowerCase() || '',
+                            product.occasion?.name?.toLowerCase() || ''
+                        ].filter(Boolean)
                     });
 
                     // Add category if not already added
@@ -2278,11 +2654,23 @@
                             is_subcategory: true
                         });
                     }
+
+                    // Add occasion if exists and not already added
+                    if (product.occasion && !categoryMap.has(`occasion_${product.occasion.id}`)) {
+                        categoryMap.set(`occasion_${product.occasion.id}`, {
+                            id: product.occasion.id,
+                            name: product.occasion.name,
+                            slug: product.occasion.slug,
+                            is_occasion: true
+                        });
+                    }
                 });
 
                 // Convert categories map to array and limit to 3
                 results.categories = Array.from(categoryMap.values()).slice(0, 3);
                 results.hasResults = results.products.length > 0 || results.categories.length > 0;
+
+                console.log('Processed results:', results);
             }
 
             return results;
@@ -3073,7 +3461,7 @@
 
                     // Try to get product name from page content (more reliable than title)
                     let productName = '';
-                    
+
                     // Try to find product name from various sources
                     // 1. Check if there's a global product name variable (from single-product page)
                     if (typeof window.productName !== 'undefined' && window.productName) {
@@ -3086,7 +3474,7 @@
                             productName = productTitleElement.textContent.trim();
                         }
                     }
-                    
+
                     // Fallback to page title if no product name found
                     if (!productName) {
                         const pageTitle = document.title;
@@ -3094,7 +3482,7 @@
                             productName = pageTitle.replace(' - Aiman', '');
                         }
                     }
-                    
+
                     if (productName) {
                         breadcrumbs.push({
                             name: productName,
@@ -3177,7 +3565,24 @@
                     isOverNav = true;
 
                     const categoryId = this.getAttribute('data-category-id');
-                    if (categoryId) {
+                    const categoryName = this.getAttribute('data-category');
+                    const occasionEndpoint = this.getAttribute('data-occasion-endpoint');
+                    const linkText = this.textContent.toLowerCase();
+
+                    // Hide/Show Occasion button based on category
+                    const occasionBtn = document.querySelector('[data-target="occation-products"]');
+                    if (occasionBtn) {
+                        if (linkText.includes('wedding') || linkText.includes('bridal')) {
+                            occasionBtn.style.display = 'none';
+                        } else {
+                            occasionBtn.style.display = 'block';
+                        }
+                    }
+
+                    // Use occasion endpoint if available (for Wedding/Bridal)
+                    if (occasionEndpoint) {
+                        loadOccasionData(occasionEndpoint);
+                    } else if (categoryId) {
                         currentCategoryId = categoryId;
                         loadCategoryData(categoryId);
                     }
@@ -3215,6 +3620,50 @@
         async function loadCategoryData(categoryId) {
             const categoryData = await fetchCategoryData(categoryId);
             renderCategoryMenuData(categoryData);
+        }
+
+        // Load occasion data from API (for Wedding/Bridal)
+        async function loadOccasionData(occasionSlug) {
+            const occasionData = await fetchOccasionData(occasionSlug);
+            renderCategoryMenuData(occasionData);
+            return occasionData;
+        }
+
+        // Populate mobile sidebar submenus with occasion data
+        function populateMobileOccasionSubmenus(parentItem, data) {
+            if (!data) return;
+
+            // Populate Style submenu
+            const styleSubmenu = parentItem.querySelector('.style-submenu');
+            if (styleSubmenu && data.style && data.style.length > 0) {
+                styleSubmenu.innerHTML = '';
+                data.style.forEach(style => {
+                    const li = document.createElement('li');
+                    li.className = 'menu-item';
+                    const a = document.createElement('a');
+                    a.href = `/collections/${style.slug}`;
+                    a.className = 'menu-link hover:pl-6 transition-all';
+                    a.textContent = style.name;
+                    li.appendChild(a);
+                    styleSubmenu.appendChild(li);
+                });
+            }
+
+            // Populate Collection submenu
+            const collectionSubmenu = parentItem.querySelector('.collection-submenu');
+            if (collectionSubmenu && data.collection && data.collection.length > 0) {
+                collectionSubmenu.innerHTML = '';
+                data.collection.forEach(product => {
+                    const li = document.createElement('li');
+                    li.className = 'menu-item';
+                    const a = document.createElement('a');
+                    a.href = `/products/${product.slug}`;
+                    a.className = 'menu-link hover:pl-6 transition-all';
+                    a.textContent = product.name;
+                    li.appendChild(a);
+                    collectionSubmenu.appendChild(li);
+                });
+            }
         }
 
         // Category sidebar button functionality
@@ -3262,127 +3711,234 @@
 
         // ==================== MOBILE MEGA MENU ====================
         const megaMenu = document.querySelector('.mega-menu');
-        const backButtons = document.querySelectorAll('.back-button');
-        const topLevelLinks = document.querySelectorAll('.top-level-link');
-        const submenuToggles = document.querySelectorAll('.submenu-toggle');
+const backButtons = document.querySelectorAll('.back-button');
+const topLevelLinks = document.querySelectorAll('.top-level-link');
+const submenuToggles = document.querySelectorAll('.submenu-toggle');
+const uniqueMennuItems= document.getElementById('dif-menu-item');
 
-        if (megaMenu && backButtons.length > 0) {
-            // Reset function for mobile mega menu
-            function resetMobileMenu() {
-                // Remove active classes
-                document.querySelectorAll('.top-level-active, .active').forEach(el => {
-                    el.classList.remove('top-level-active', 'active');
-                });
+if (megaMenu && backButtons.length > 0) {
+    // Reset function for mobile mega menu
+    function resetMobileMenu() {
+        // Remove active classes
+        document.querySelectorAll('.top-level-active, .active').forEach(el => {
+            el.classList.remove('top-level-active', 'active');
+        });
 
-                // Hide all back buttons
-                backButtons.forEach(btn => {
-                    btn.style.display = 'none';
-                });
+        // Hide all back buttons
+        backButtons.forEach(btn => {
+            btn.style.display = 'none';
+        });
 
-                // Show all top level items
+        // Show all top level items
+        document.querySelectorAll('.top-level-item').forEach(item => {
+            item.style.display = 'block';
+            uniqueMennuItems.style.display = 'block';
+            
+        });
+
+        // Reset all submenus
+        document.querySelectorAll('.submenu').forEach(submenu => {
+            submenu.style.maxHeight = '0';
+            submenu.classList.remove('active');
+        });
+
+        // Remove top-level-open class
+        megaMenu.classList.remove('top-level-open');
+        
+        // Remove any coming soon messages
+        document.querySelectorAll('.coming-soon-message').forEach(el => el.remove());
+    }
+
+    // Back button functionality
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', resetMobileMenu);
+    });
+
+    // Top level link clicks
+    topLevelLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const parentItem = this.closest('.top-level-item');
+            const isActive = parentItem.classList.contains('top-level-active');
+            const submenu = this.nextElementSibling;
+            const categoryName = parentItem.getAttribute('data-category');
+            const occasionEndpoint = parentItem.getAttribute('data-occasion-endpoint');
+
+            // Check if submenu has children
+            const hasChildren = submenu && submenu.querySelector('.menu-item:not(.coming-soon-message)');
+
+            if (isActive) {
+                resetMobileMenu();
+            } else {
+                // Close any open menu first
+                resetMobileMenu();
+
+                // Open this menu
+                parentItem.classList.add('top-level-active');
+                megaMenu.classList.add('top-level-open');
+
+                // Show back button
+                const backBtn = parentItem.querySelector('.back-button');
+                if (backBtn) {
+                    backBtn.style.display = 'block';
+                }
+
+                // Hide other top level items
                 document.querySelectorAll('.top-level-item').forEach(item => {
-                    item.style.display = 'block';
-                });
-
-                // Reset all submenus
-                document.querySelectorAll('.submenu').forEach(submenu => {
-                    submenu.style.maxHeight = '0';
-                    submenu.classList.remove('active');
-                });
-
-                // Remove top-level-open class
-                megaMenu.classList.remove('top-level-open');
-            }
-
-            // Back button functionality
-            backButtons.forEach(btn => {
-                btn.addEventListener('click', resetMobileMenu);
-            });
-
-            // Top level link clicks
-            topLevelLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const parentItem = this.closest('.top-level-item');
-                    const isActive = parentItem.classList.contains('top-level-active');
-                    const submenu = this.nextElementSibling;
-
-                    if (isActive) {
-                        resetMobileMenu();
-                    } else {
-                        // Close any open menu first
-                        resetMobileMenu();
-
-                        // Open this menu
-                        parentItem.classList.add('top-level-active');
-                        megaMenu.classList.add('top-level-open');
-
-                        // Show back button
-                        const backBtn = parentItem.querySelector('.back-button');
-                        if (backBtn) {
-                            backBtn.style.display = 'block';
-                        }
-
-                        // Hide other top level items
-                        document.querySelectorAll('.top-level-item').forEach(item => {
-                            if (!item.classList.contains('top-level-active')) {
-                                item.style.display = 'none';
-                            }
-                        });
-
-                        // Open submenu with animation
-                        if (submenu) {
-                            setTimeout(() => {
-                                submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                                submenu.classList.add('active');
-                            }, 10);
-                        }
+                    if (!item.classList.contains('top-level-active')) {
+                        item.style.display = 'none';
+                        uniqueMennuItems.style.display = 'none';
                     }
                 });
-            });
 
-            // Submenu toggle clicks
-            submenuToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                // Load data based on endpoint type
+                if (occasionEndpoint) {
+                    loadOccasionData(occasionEndpoint).then(data => {
+                        populateMobileOccasionSubmenus(parentItem, data);
+                    });
+                }
 
-                    const submenu = this.nextElementSibling;
-                    const isActive = this.classList.contains('active');
-
-                    // Close other submenus at same level
-                    const parentSubmenu = this.closest('.submenu');
-                    if (parentSubmenu) {
-                        parentSubmenu.querySelectorAll('.submenu-toggle.active').forEach(
-                            activeToggle => {
-                                if (activeToggle !== this) {
-                                    activeToggle.classList.remove('active');
-                                    const activeSubmenu = activeToggle.nextElementSibling;
-                                    if (activeSubmenu) {
-                                        activeSubmenu.style.maxHeight = '0';
-                                        activeSubmenu.classList.remove('active');
-                                    }
-                                }
-                            });
-                    }
-
-                    // Toggle current submenu
-                    if (isActive) {
-                        this.classList.remove('active');
-                        if (submenu) {
-                            submenu.style.maxHeight = '0';
-                            submenu.classList.remove('active');
-                        }
-                    } else {
-                        this.classList.add('active');
-                        if (submenu) {
+                // Open submenu with animation or show coming soon
+                if (submenu) {
+                    setTimeout(() => {
+                        // Check if submenu has actual children
+                        const hasMenuItems = submenu.querySelector('.menu-item:not(.coming-soon-message)');
+                        
+                        if (!hasMenuItems) {
+                            // Show coming soon message
+                            const comingSoon = document.createElement('div');
+                            comingSoon.className = 'coming-soon-message';
+                            comingSoon.style.cssText = `
+                                padding: 20px;
+                                text-align: center;
+                                color: #999;
+                                font-size: 16px;
+                                font-weight: 500;
+                                letter-spacing: 1px;
+                            `;
+                            comingSoon.textContent = 'Coming Soon';
+                            
+                            // Clear submenu and add coming soon
+                            submenu.innerHTML = '';
+                            submenu.appendChild(comingSoon);
+                            
+                            // Open submenu
+                            submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                            submenu.classList.add('active');
+                        } else {
+                            // Normal submenu with children
                             submenu.style.maxHeight = submenu.scrollHeight + 'px';
                             submenu.classList.add('active');
                         }
-                    }
-                });
-            });
-        }
+
+                        // Hide Occasion submenu for Wedding and Bridal
+                        if (categoryName && (categoryName.toLowerCase() === 'wedding' || categoryName.toLowerCase() === 'bridal')) {
+                            const occasionToggle = submenu.querySelector('.submenu-toggle');
+                            if (occasionToggle) {
+                                const occasionText = occasionToggle.textContent.toLowerCase();
+                                if (occasionText.includes('occasion')) {
+                                    occasionToggle.closest('.menu-item').style.display = 'none';
+                                }
+                            }
+                        }
+                    }, 10);
+                } else {
+                    // If no submenu exists, create one with coming soon
+                    const newSubmenu = document.createElement('div');
+                    newSubmenu.className = 'submenu';
+                    newSubmenu.style.cssText = `
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height 0.3s ease;
+                    `;
+                    
+                    const comingSoon = document.createElement('div');
+                    comingSoon.className = 'coming-soon-message';
+                    comingSoon.style.cssText = `
+                        padding: 20px;
+                        text-align: center;
+                        color: #999;
+                        font-size: 16px;
+                        font-weight: 500;
+                        letter-spacing: 1px;
+                    `;
+                    comingSoon.textContent = '🚧 Coming Soon';
+                    
+                    newSubmenu.appendChild(comingSoon);
+                    parentItem.appendChild(newSubmenu);
+                    
+                    // Open the submenu
+                    setTimeout(() => {
+                        newSubmenu.style.maxHeight = newSubmenu.scrollHeight + 'px';
+                        newSubmenu.classList.add('active');
+                    }, 10);
+                }
+            }
+        });
+    });
+
+    // Submenu toggle clicks
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            const submenu = this.nextElementSibling;
+            const isActive = this.classList.contains('active');
+
+            // Check if submenu has children or coming soon message
+            const hasContent = submenu && (submenu.querySelector('.menu-item') || submenu.querySelector('.coming-soon-message'));
+
+            if (!hasContent) {
+                // Show coming soon for empty submenus
+                if (submenu) {
+                    const comingSoon = document.createElement('div');
+                    comingSoon.className = 'coming-soon-message';
+                    comingSoon.style.cssText = `
+                        padding: 15px;
+                        text-align: center;
+                        color: #999;
+                        font-size: 14px;
+                        font-weight: 500;
+                    `;
+                    comingSoon.textContent = 'Coming Soon';
+                    submenu.appendChild(comingSoon);
+                }
+            }
+
+            // Close other submenus at same level
+            const parentSubmenu = this.closest('.submenu');
+            if (parentSubmenu) {
+                parentSubmenu.querySelectorAll('.submenu-toggle.active').forEach(
+                    activeToggle => {
+                        if (activeToggle !== this) {
+                            activeToggle.classList.remove('active');
+                            const activeSubmenu = activeToggle.nextElementSibling;
+                            if (activeSubmenu) {
+                                activeSubmenu.style.maxHeight = '0';
+                                activeSubmenu.classList.remove('active');
+                            }
+                        }
+                    });
+            }
+
+            // Toggle current submenu
+            if (isActive) {
+                this.classList.remove('active');
+                if (submenu) {
+                    submenu.style.maxHeight = '0';
+                    submenu.classList.remove('active');
+                }
+            } else {
+                this.classList.add('active');
+                if (submenu) {
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    submenu.classList.add('active');
+                }
+            }
+        });
+    });
+}
 
         // ==================== MOBILE SIDEBAR ====================
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');

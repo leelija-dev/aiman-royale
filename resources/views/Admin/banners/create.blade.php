@@ -1,7 +1,10 @@
 @extends('Admin.layouts.master')
 
+@section('title', 'Create Banner')
+@section('page-title', 'Create Banner')
+@section('source', 'Banners')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4 mb-4">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -11,7 +14,7 @@
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
                 </div>
-                <div class="card-body">
+                <div class="card px-4 py-4">
                     <form action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -86,17 +89,17 @@
                                     </div>
 
                                     <div class="form-group">
-                                            <label for="type">Position <span class="text-danger">*</span></label>
-                                            <select class="form-control @error('type') is-invalid" id="type" name="type" required>
-                                                <option value="">Select position</option>
-                                                <option value="main" {{ old('type') == 'main' ? 'selected' : '' }}>Main</option>
-                                                <option value="secondary" {{ old('type') == 'secondary' ? 'selected' : '' }}>Secondary</option>
-                                                <option value="editor" {{ old('type') == 'editor' ? 'selected' : '' }}>Editor's Pick</option>
-                                            </select>
-                                            @error('type')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                        <label for="type">Position <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('type') is-invalid @enderror" id="type" name="type" required>
+                                            <option value="">Select position</option>
+                                            <option value="main" {{ old('type') == 'main' ? 'selected' : '' }}>Main</option>
+                                            <option value="secondary" {{ old('type') == 'secondary' ? 'selected' : '' }}>Secondary</option>
+                                            <option value="editor" {{ old('type') == 'editor' ? 'selected' : '' }}>Editor's Pick</option>
+                                        </select>
+                                        @error('type')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -179,7 +182,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Create Banner
                             </button>
-                            <a href="{{ route('banners.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('banners.index') }}" class="btn btn-danger ms-2">
                                 <i class="fas fa-times"></i> Cancel
                             </a>
                         </div>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
+use App\Models\Address;
 class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -42,9 +42,12 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'google_id',
         'phone',
         'date_of_birth',
         'profile_image',
+        'last_login_at',
+        'remember_token'
     ];
 
     /**
@@ -66,6 +69,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
             'date_of_birth' => 'date',
         ];
@@ -101,5 +105,10 @@ class User extends Authenticatable implements JWTSubject
     public function emailVerifications()
     {
         return $this->hasMany(EmailVerification::class);
+    }
+
+    public function hasGoogleAccount()
+    {
+        return !is_null($this->google_id);
     }
 }

@@ -3,21 +3,21 @@
 @section('title', 'Create Review')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Create New Review</h3>
                     <div class="card-tools">
-                        <a href="{{ route('reviews.index') }}" class="btn btn-sm btn-default">
+                        <a href="{{ route('reviews.index') }}" class="btn btn-sm btn-secondary">
                             <i class="fas fa-arrow-left"></i> Back to Reviews
                         </a>
                     </div>
                 </div>
                 <form action="{{ route('reviews.store') }}" method="POST" novalidate>
                     @csrf
-                    <div class="card-body">
+                    <div class="card px-4 py-4">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -108,7 +108,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Create Review
                         </button>
-                        <a href="{{ route('reviews.index') }}" class="btn btn-default ml-2">
+                        <a href="{{ route('reviews.index') }}" class="btn btn-danger ms-3">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>

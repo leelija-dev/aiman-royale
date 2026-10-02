@@ -3,16 +3,33 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\RefreshJWTToken;
+use App\Http\Middleware\CheckSessionExpiry;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web:[ __DIR__.'/../routes/admin.php',
-        __DIR__.'/../routes/web.php'], 
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: [
+            __DIR__ . '/../routes/admin.php',
+            __DIR__ . '/../routes/web.php'
+        ],
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        //   $middleware->redirectGuestsTo('/login');
+        $middleware->redirectGuestsTo(function ($request) {
+                if ($request->is('admin/*')) {
+                    return route('login');
+                }
+
+                return route('page.login');
+            });
+          $middleware->trustProxies(at: '*');
+
+    //         $middleware->validateCsrfTokens(except: [
+    //     'refund/*',
+    // ]);
         //
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
@@ -20,25 +37,30 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'prevent.back.history' => \App\Http\Middleware\PreventBackHistory::class,
             'guest.admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
-           'check.login' => \App\Http\Middleware\CheckUserLogin::class,
+            'check.login' => \App\Http\Middleware\CheckUserLogin::class,
+            'refresh.jwt' => RefreshJWTToken::class,
+            'auto.login' => \App\Http\Middleware\AutoLoginMiddleware::class,
+            'session.expiry' => CheckSessionExpiry::class, // ✅ Added here
+
         ]);
 
         // Ensure index.php paths are redirected to clean URLs in all environments
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\RedirectIndexPhp::class,
+             \App\Http\Middleware\AutoLoginMiddleware::class,
+            \App\Http\Middleware\CheckSessionExpiry::class,
             \App\Http\Middleware\DynamicSeoMiddleware::class,
-             
+            \App\Http\Middleware\MetaTracking::class,
         ]);
-
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-         // Handle 404 errors and redirect to custom 404 page
+        // Handle 404 errors and redirect to custom 404 page
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, \Illuminate\Http\Request $request) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Page not found'], 404);
             }
-            
+
             return response()->view('web.404', [], 404);
         });
     })->create();

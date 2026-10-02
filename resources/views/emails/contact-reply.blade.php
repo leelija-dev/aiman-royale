@@ -8,6 +8,6 @@
 
     <p>{!! nl2br(e($messageContent)) !!}</p>
 
-    <p>Regards,<br>Team Leelija</p>
+    <p>Regards,<br>Team Ayman Royale</p>
 </body>
 </html>

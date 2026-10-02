@@ -19,14 +19,14 @@ class FaqController extends Controller
             ->latest()
             ->paginate(10);
 
-            // dd($faqs);
+        // dd($faqs);
 
         // Get categories and products for filters
         $categoriess = Category::where('is_active', true)->pluck('name', 'id');
         $products = Product::where('status', 'active')->pluck('name', 'id');
-        
-        
-        
+
+
+
         return view('Admin.faqs.index', compact('faqs', 'categoriess', 'products'));
     }
 
@@ -39,26 +39,41 @@ class FaqController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             // 'product_id' => 'required',
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string',
-            // 'category_id' => 'required|exists:faq_category,id',
+            // 'question' => 'required|string|max:255',
+            // 'answer' => 'required|string',
+            'faqs' => 'required|array',
+            'faqs.*.question' => 'required|string|max:255',
+            'faqs.*.answer' => 'required|string',
             'category_id' => 'nullable|exists:categories,id',
             'product_id' => 'nullable|exists:products,id',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0'
         ]);
-// dd($request);
-        $faq = Faq::create([
-            'question' => $request->question,
-            'answer' => $request->answer,
-            'category_id' => $request->category_id,
-            'product_id' => $request->product_id,
-            'is_active' => $request->has('is_active'),
-            'sort_order' => $request->sort_order ?? 0,
-            'heading' => $request->heading ?? '',
-        ]);
+        // dd($request);
+        // $faq = Faq::create([
+        //     'question' => $request->question,
+        //     'answer' => $request->answer,
+        //     'category_id' => $request->category_id,
+        //     'product_id' => $request->product_id,
+        //     'is_active' => $request->has('is_active'),
+        //     'sort_order' => $request->sort_order ?? 0,
+        //     'heading' => $request->heading ?? '',
+        // ]);
+
+        foreach ($request->faqs as $faqData) {
+            FAQ::create([
+                'heading' => $request->heading,
+                'product_id' => $request->product_id,
+                'category_id' => $request->category_id,
+                'question' => $faqData['question'],
+                'answer' => $faqData['answer'],
+                'sort_order' => $request->sort_order ?? 0,
+                'is_active' => $request->has('is_active'),
+            ]);
+        }
 
         return redirect()->route('faqs.index')->with('success', 'FAQ created successfully!');
     }
@@ -68,7 +83,7 @@ class FaqController extends Controller
         $faq = Faq::findOrFail($id);
         $categoriess = Category::where('is_active', true)->pluck('name', 'id');
         $products = Product::where('status', 'active')->pluck('name', 'id');
-        
+
         return view('Admin.faqs.edit', compact('faq', 'categoriess', 'products'));
     }
 

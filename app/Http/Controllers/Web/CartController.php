@@ -9,35 +9,82 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Carbon\Carbon;
+use App\Models\Coupon;
+use Illuminate\Support\Facades\Validator;
+use App\Services\MetaConversionsService;
+use Illuminate\Support\Facades\Log;
+use App\Services\GuestIdentityService;
 
 class CartController extends Controller
 {
+    protected MetaConversionsService $metaService;
+    protected GuestIdentityService $guestIdentity;
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity)
+    {
+        $this->metaService = $metaService;
+        $this->guestIdentity = $guestIdentity;
+    }
+
     public function index(): View
     {
+        if (session()->has('checkout_source') && session()->get('checkout_source') === 'buy_now') {
+            session()->forget([
+                'checkout_source',
+                'checkout_payload',
+                'buy_now_active',
+                'buy_now_product_id',
+                'buy_now_product_url',
+                'checkout_started_at',
+                'last_checkout_url',
+                'buy_now_items'
+            ]);
+
+            // Optional: Flash a message to inform the user
+            session()->flash('info', 'Buy Now session cleared. Your cart items are shown below.');
+        }
         $userId = Auth::id();
-        $sessionId = session()->getId();
+        // $sessionId = session()->getId();
 
-        $cartItems = Cart::with(['product.images', 'variant'])
-            ->where(function ($query) use ($userId, $sessionId) {
-                if ($userId) {
-                    $query->where('user_id', $userId);
-                } else {
-                    $query->where('session_id', $sessionId);
-                }
-            })
-            ->get();
-       
+        // $cartItems = Cart::with(['product.images', 'variant'])
+        //     ->where(function ($query) use ($userId, $sessionId) {
+        //         if ($userId) {
+        //             $query->where('user_id', $userId);
+        //         } else {
+        //             $query->where('session_id', $sessionId);
+        //         }
+        //     })
+        //     ->get();
 
+        if ($userId) {
+
+            $cartItems = Cart::with(['product.images', 'variant'])
+                ->where('user_id', $userId)
+                ->get();
+        } else {
+
+            $guestUuid = app(\App\Services\GuestIdentityService::class)->get();
+
+            if ($guestUuid) {
+
+                $cartItems = Cart::with(['product.images', 'variant'])
+                    ->where('guest_uuid', $guestUuid)
+                    ->get();
+            } else {
+
+                $cartItems = collect();
+            }
+        }
         $subtotal = $cartItems->sum(function ($item) {
-                //  dd($item->variant->discount_price);
+            //  dd($item->variant->discount_price);
 
             return (($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count);
         });
-        
-        $shipping = $subtotal > 400 ? 0 : 50; // Free shipping over $400
+
+        $shipping = 0; //$subtotal > 400 ? 0 : 50; // Free shipping over $400
         $total = $subtotal + $shipping;
         $cartCount = $cartItems->sum('count');
-        
+
         $occasions = \App\Models\Occasion::active()->get();
 
         // Check if we need to force refresh (coming from checkout)
@@ -52,10 +99,26 @@ class CartController extends Controller
             $request->validate([
                 'variant_id' => 'required|exists:product_variants,id',
                 'count' => 'required|integer|min:1',
+                // 'event_id' => 'nullable|string',
+                'event_id' => 'nullable|string',
+                'fbc' => ['nullable', 'string', 'max:255'],
+                'fbp' => ['nullable', 'string', 'max:255'],
             ]);
+            $eventId = $request->input('event_id');
+            $metaUserData = array_filter([                          // <-- add these 4 lines
+                'fbc' => $request->input('fbc'),
+                'fbp' => $request->input('fbp'),
+            ]);
+            // if (!Auth::check()) {
+            //     session(['guest_variant_id' => $request->variant_id]);
+
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Authentication required',
+            //     ], 401);
+            // }
 
             $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
-            // dd($variant);
             // Check if variant is in stock
             if ($variant->stock < $request->count) {
                 return response()->json([
@@ -66,23 +129,40 @@ class CartController extends Controller
 
             // Get user or session
             $userId = Auth::id();
-            $sessionId = $userId ? null : session()->getId();
-
+            $guestUuid = null;
+            // $sessionId = $userId ? null : session()->getId();
+            if (!$userId) {
+                $guestUuid = $this->guestIdentity->getOrCreate();
+            }
             // Check if item already exists in cart
-            $existingCart = Cart::where('variant_id', $request->variant_id)
-                ->where(function ($query) use ($userId, $sessionId) {
-                    if ($userId) {
+            // $existingCart = Cart::where('variant_id', $request->variant_id)
+            //     ->where(function ($query) use ($userId, $sessionId) {
+            //         if ($userId) {
+            //             $query->where('user_id', $userId);
+            //         } else {
+            //             $query->where('session_id', $sessionId);
+            //         }
+            //     })
+            //     ->first();
+            $existingCart = Cart::where('variant_id', $variant->id)
+                ->when(
+                    $userId,
+                    function ($query) use ($userId) {
                         $query->where('user_id', $userId);
-                    } else {
-                        $query->where('session_id', $sessionId);
                     }
-                })
+                )
+                ->when(
+                    !$userId,
+                    function ($query) use ($guestUuid) {
+                        $query->where('guest_uuid', $guestUuid);
+                    }
+                )
                 ->first();
-
+            $price = $variant->discount_price ?? $variant->price;
             if ($existingCart) {
                 // Update existing cart item
                 $newCount = $existingCart->count + $request->count;
-                
+
                 if ($variant->stock < $newCount) {
                     return response()->json([
                         'success' => false,
@@ -92,11 +172,32 @@ class CartController extends Controller
 
                 $existingCart->update([
                     'count' => $newCount,
-                    'price' => $variant->discount_price ?? $variant->price
+                    'price' => $price, //$variant->discount_price ?? $variant->price
                 ]);
 
+                // Track AddToCart event
+                try {
+                    $productData = [
+                        'id'       => $variant->product_id,
+                        'name'     => $variant->product->name ?? 'Product',
+                        'price'    => $variant->discount_price ?? $variant->price,
+                        'quantity' => $request->count,
+                        'currency' => 'INR',
+                    ];
+
+                    // $this->metaService->trackAddToCart($productData, [], $eventId);
+                    $this->metaService->trackAddToCart($productData, $metaUserData, $eventId);
+
+                    Log::info('Meta AddToCart tracked', [
+                        'product_id' => $variant->product_id,
+                        'quantity'   => $request->count
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Meta AddToCart failed: ' . $e->getMessage());
+                }
+
                 $cartCount = $this->getCartCount();
-                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Cart updated successfully!',
@@ -108,10 +209,28 @@ class CartController extends Controller
                     'product_id' => $variant->product_id,
                     'variant_id' => $request->variant_id,
                     'user_id' => $userId,
-                    'session_id' => $sessionId,
+                    'guest_uuid' => $guestUuid,
+                    'session_id' => null,
                     'count' => $request->count,
-                    'price' => $variant->discount_price ?? $variant->price
+                    'price' => $price, //$variant->discount_price ?? $variant->price
                 ]);
+
+                // Track AddToCart event
+                try {
+                    $productData = [
+                        'id' => $variant->product_id,
+                        'name' => $variant->product->name ?? 'Product',
+                        'price' => $variant->discount_price ?? $variant->price,
+                        'quantity' => $request->count,
+                    ];
+
+                    // $this->metaService->trackAddToCart($productData, [], $eventId);
+                    $this->metaService->trackAddToCart($productData, $metaUserData, $eventId);
+
+                    Log::info('Meta AddToCart event tracked for new product: ' . $variant->product_id);
+                } catch (\Exception $e) {
+                    Log::error('Failed to track Meta AddToCart event for new item: ' . $e->getMessage());
+                }
 
                 $cartCount = $this->getCartCount();
 
@@ -126,6 +245,98 @@ class CartController extends Controller
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()
             ]);
+        }
+    }
+
+    public function buyNow(Request $request)
+    {
+        try {
+            $request->validate([
+                'variant_id' => 'nullable|exists:product_variants,id',
+                'product_id' => 'nullable|exists:products,id',
+                'count' => 'required|integer|min:1',
+                'type' => 'nullable|string',
+                'custom_dimensions' => 'nullable|array',
+                'event_id' => 'nullable|string',
+            ]);
+
+            $variant = null;
+            $product_id = $request->input('product_id') ?? null;
+            if ($request->filled('variant_id')) {
+                $variant = ProductVariant::with('product')->findOrFail($request->variant_id);
+            } elseif ($request->filled('product_id')) {
+                $variant = ProductVariant::with('product')->where('product_id', $request->product_id)->first();
+            }
+
+            if (!$variant) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please select a valid variant first.'
+                ], 422);
+            } else {
+
+                $userId    = Auth::id();               // null if guest
+                $sessionId = session()->getId();       // works for guests
+
+                // Check if this variant is already in the cart for this user/session
+                $existingCart = \App\Models\Cart::where('variant_id', $variant->id)
+                    ->when($userId, function ($q) use ($userId) {
+                        $q->where('user_id', $userId);
+                    }, function ($q) use ($sessionId) {
+                        $q->whereNull('user_id')->where('session_id', $sessionId);
+                    })
+                    ->first();
+
+                if (!$existingCart) {
+                    \App\Models\Cart::create([
+                        'user_id'            => $userId,          // null for guests
+                        'session_id'         => $userId ? null : $sessionId,
+                        'product_id'         => $variant->product_id ?? $request->product_id,
+                        'variant_id' => $variant->id,
+                        'quantity'           => $request->input('quantity', 1),
+                        'price'              => $variant->discount_price ?? $variant->price,
+                        'count'              => 1
+                    ]);
+                }
+            }
+
+
+            if ($variant->stock < $request->count) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Not enough stock available. Only ' . $variant->stock . ' items left.'
+                ], 422);
+            }
+
+            session()->put('checkout_source', 'buy_now');
+            session()->put('meta_initiate_checkout_event_id', $request->input('event_id'));
+            session()->put('checkout_payload', [
+                'items' => [[
+                    'cart_id' => 0,
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'name' => $variant->product->name,
+                    'size' => $variant->size,
+                    'color' => $variant->color,
+                    'price' => $variant->price ?? $variant->price,
+                    'discount' => $variant->discount ?? 0,
+                    'discount_price' => $variant->discount_price ?? $variant->price,
+                    'count' => $request->count,
+                    'type' => $request->input('type', 'stitched'),
+                    'custom_dimensions' => $request->input('custom_dimensions'),
+                    'image' => optional($variant->product)->featured_image,
+                ]]
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'redirect' => route('checkout.index')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -181,16 +392,18 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        
+
         try {
             $userId = Auth::id();
             $sessionId = $userId ? null : session()->getId();
-
+            $guestId = $this->guestIdentity->get();
             $cartItem = Cart::where('id', $id)
-                ->where(function ($query) use ($userId, $sessionId) {
+                ->where(function ($query) use ($userId, $sessionId, $guestId) {
                     if ($userId) {
                         $query->where('user_id', $userId);
-                    } else {
+                    } elseif($guestId) {
+                        $query->where('guest_uuid', $guestId);
+                    }else {
                         $query->where('session_id', $sessionId);
                     }
                 })
@@ -221,11 +434,15 @@ class CartController extends Controller
     {
         $userId = Auth::id();
         $sessionId = session()->getId();
-
-        return Cart::where(function ($query) use ($userId, $sessionId) {
+        $guestId = $this->guestIdentity->get();
+        return Cart::where(function ($query) use ($userId, $sessionId,$guestId) {
             if ($userId) {
                 $query->where('user_id', $userId);
-            } else {
+            }
+            elseif($guestId){
+                $query->where('guest_uuid', $guestId);
+                }
+            else {
                 $query->where('session_id', $sessionId);
             }
         })->sum('count');
@@ -236,12 +453,15 @@ class CartController extends Controller
         $variantId = $request->variant_id;
         $userId = Auth::id();
         $sessionId = session()->getId();
-
+        $guestId = $this->guestIdentity->get();
+        log::info('guest_id'.$guestId);
         $cartItem = Cart::where('variant_id', $variantId)
-            ->where(function ($query) use ($userId, $sessionId) {
+            ->where(function ($query) use ($userId, $sessionId, $guestId) {
                 if ($userId) {
                     $query->where('user_id', $userId);
-                } else {
+                }elseif($guestId) {
+                    $query->where('guest_uuid', $guestId);
+                }else {
                     $query->where('session_id', $sessionId);
                 }
             })
@@ -253,25 +473,214 @@ class CartController extends Controller
         ]);
     }
     public function update(Request $request)
-{
-    $data=$request->validate([
-        'cart_id' => 'required|array',
-        'cart_id.*' => 'integer|exists:carts,id',
-        'quantity' => 'required|array',
-        'quantity.*' => 'integer|min:1',
-    ]);
-    // dd($data);
-    foreach ($request->cart_id as $index => $cartId) {
+    {
+        $data = $request->validate([
+            'cart_id' => 'required|array',
+            'cart_id.*' => 'integer|exists:carts,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1',
+        ]);
+        // dd($data);
+        foreach ($request->cart_id as $index => $cartId) {
 
-        $cart = Cart::findorFail($cartId);
+            $cart = Cart::findorFail($cartId);
 
-        if ($cart) {
-            $cart->count = $request->quantity[$index];
-            $cart->save();
+            if ($cart) {
+                $cart->count = $request->quantity[$index];
+                $cart->save();
+            }
         }
+
+        return redirect()->route('checkout.index');
     }
 
-    return redirect()->route('checkout.index');
-}
 
+
+    public function applyCoupon(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'coupon_code' => 'required',
+            'total' => 'required|numeric',
+            'variant_id'  => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+
+        $variantId = (int) $request->variant_id;
+
+        // Get existing coupons from session
+        $appliedCoupons = session('applied_coupons', []);
+
+        // If this variant already has a coupon, don't add it again
+        if (isset($appliedCoupons[$variantId])) {
+
+            $sessionCoupon = $appliedCoupons[$variantId];
+
+            return response()->json([
+                'status' => true,
+                'already_applied' => true,
+                'message' => 'Coupon already applied for this product.',
+
+                'coupon' => [
+                    'id' => $sessionCoupon['coupon_id'] ?? null,
+                    'code' => $sessionCoupon['code'] ?? '',
+                    'discount' => $sessionCoupon['discount'] ?? 0,
+                    'discount_amount' => $sessionCoupon['discount_amount'] ?? 0,
+                    'final_price' => $sessionCoupon['final_price'] ?? 0,
+                ],
+            ]);
+        }
+
+        $coupon = Coupon::where('code', $request->coupon_code)->where('code_type', '!=', 'special-discount')
+            // ->where('expiry_date', '>=', Carbon::now())
+            ->where('is_active', 1)->select('id', 'code', 'discount', 'expiry_date')
+            ->first();
+
+        if (!$coupon) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid coupon code.'
+            ]);
+        }
+
+        if (Carbon::now()->gt($coupon->expiry_date)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Coupon has expired.'
+            ]);
+        }
+        // Current variant price
+        $currentPrice = (float) $request->total;
+
+        // Coupon discount %
+        $couponDiscount = (float) $coupon->discount;
+
+        // Calculate coupon amount
+        $discountAmount = ($currentPrice * $couponDiscount) / 100;
+
+        // Final price
+        $newTotal = $currentPrice - $discountAmount;
+
+        // Store coupon in session
+        // session([
+        //     'applied_coupon' => [
+        //         'coupon_id'       => $coupon->id,
+        //         'code'            => $coupon->code,
+        //         'discount'        => $couponDiscount,
+        //         'type'            => 'percentage',
+        //         'variant_id'      => (int) $request->variant_id,
+        //         'current_price'   => $currentPrice,
+        //         'discount_amount' => $discountAmount,
+        //         'final_price'     => $newTotal,
+        //     ]
+        // ]);
+        $variantId = (int) $request->variant_id;
+
+        // Get all previously applied coupons
+        $appliedCoupons = session('applied_coupons', []);
+
+        // Store/update coupon for this specific variant
+        $appliedCoupons[$variantId] = [
+            'coupon_id'       => $coupon->id,
+            'code'            => $coupon->code,
+            'discount'        => $couponDiscount,
+            'type'            => 'percentage',
+            'variant_id'      => $variantId,
+            'current_price'   => $currentPrice,
+            'discount_amount' => $discountAmount,
+            'final_price'     => $newTotal,
+        ];
+
+        // Save all coupons back to session
+        session([
+            'applied_coupons' => $appliedCoupons
+        ]);
+
+        // if ($coupon->code_type == 'special' && $request->total < $coupon->minimum_amount) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Minimum order amount is ₹'.$coupon->minimum_amount
+        //     ]);
+        // }
+
+        // $discount = ($request->total * $coupon->discount) / 100;
+        // $grandTotal = $request->total - $discount;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon applied successfully.',
+            // 'coupon' => $coupon
+            'coupon' => [
+                'id' => $coupon->id,
+                'code' => $coupon->code,
+                'discount' => $couponDiscount,
+                'discount_amount' => $discountAmount,
+                'final_price' => $newTotal,
+            ]
+        ]);
+    }
+
+    public function removeCoupon(Request $request)
+    {
+        $code = strtoupper(trim((string) $request->coupon_code));
+        if ($code === '') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please enter coupon code.',
+            ]);
+        }
+
+        $appliedCoupons = session('applied_coupons', []);
+        foreach ($appliedCoupons as $variantId => $data) {
+            if (strtoupper(trim((string) ($data['code'] ?? ''))) === $code) {
+                unset($appliedCoupons[$variantId]);
+            }
+        }
+        session(['applied_coupons' => $appliedCoupons]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon removed successfully.',
+        ]);
+    }
+
+    // app/Http/Controllers/Web/CartController.php (or wherever)
+
+    public function addVariantToUserCart(ProductVariant $variant, int $userId, int $count = 1): bool
+    {
+        if ($variant->stock < $count) {
+            return false;
+        }
+
+        $existing = Cart::where('variant_id', $variant->id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existing) {
+            $newCount = $existing->count + $count;
+            if ($variant->stock < $newCount) {
+                return false;
+            }
+            $existing->update([
+                'count' => $newCount,
+                'price' => $variant->discount_price ?? $variant->price,
+            ]);
+        } else {
+            Cart::create([
+                'product_id' => $variant->product_id,
+                'variant_id' => $variant->id,
+                'user_id'    => $userId,
+                'session_id' => null,
+                'count'      => $count,
+                'price'      => $variant->discount_price ?? $variant->price,
+            ]);
+        }
+
+        return true;
+    }
 }

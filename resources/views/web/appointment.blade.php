@@ -349,10 +349,10 @@
             <!-- Left Content -->
             <div class="text-center lg:text-left">
                 <!-- Badge -->
-                <div class="inline-flex items-center bg-pink-100/95 backdrop-blur-sm text-pink-700 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
+                <a href="#appoint-book-section" class="inline-flex items-center bg-pink-100/95 backdrop-blur-sm text-pink-700 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Book Your Session
-                </div>
+                </a>
 
                 <!-- Main Heading -->
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
@@ -367,11 +367,11 @@
                 </p>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <button class="bg-pink-500 text-white px-8 py-4 rounded-full font-medium hover:bg-pink-600 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#appoint-book-section" class="bg-pink-500 text-white px-8 py-4 rounded-full font-medium hover:bg-pink-600 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center backdrop-blur-sm">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Book Free Consultation
-                    </button>
+                    </a>
                     <button class="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium border border-white/30 hover:border-white hover:bg-white/30 transition-all inline-flex items-center justify-center shadow-lg">
                         <i class="fas fa-play-circle mr-3"></i>
                         See How It Works
@@ -404,22 +404,22 @@
             </div>
 
             <!-- Right Content - Simple Calendar Preview -->
-            <a href="#appoint-book-section" class="hidden lg:block">
+            <a href="#appoint-book-section" class="hidden lg:block" id="calendarWrapper">
                 <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 transform rotate-1 hover:rotate-0 transition-transform">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-semibold text-gray-900">March 2024</h3>
+                        <h3 class="font-semibold text-gray-900" id="monthYearDisplay">March 2024</h3>
                         <div class="flex gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="prevMonthBtn">
                                 <i class="fas fa-chevron-left text-sm text-gray-600"></i>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-pink-100" id="nextMonthBtn">
                                 <i class="fas fa-chevron-right text-sm text-gray-600"></i>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Simple Calendar Grid -->
-                    <div class="grid grid-cols-7 gap-1 mb-4">
+                    <!-- Day Names -->
+                    <div class="grid grid-cols-7 gap-1 mb-4" id="dayNames">
                         <div class="text-xs text-gray-400 text-center">S</div>
                         <div class="text-xs text-gray-400 text-center">M</div>
                         <div class="text-xs text-gray-400 text-center">T</div>
@@ -429,37 +429,18 @@
                         <div class="text-xs text-gray-400 text-center">S</div>
                     </div>
 
-                    <div class="grid grid-cols-7 gap-1">
-                        <div class="text-xs text-gray-300 text-center py-2">25</div>
-                        <div class="text-xs text-gray-300 text-center py-2">26</div>
-                        <div class="text-xs text-gray-300 text-center py-2">27</div>
-                        <div class="text-xs text-gray-300 text-center py-2">28</div>
-                        <div class="text-xs text-gray-300 text-center py-2">29</div>
-                        <div class="text-xs text-gray-300 text-center py-2">1</div>
-                        <div class="text-xs text-gray-300 text-center py-2">2</div>
-                        <div class="text-xs text-gray-600 text-center py-2">3</div>
-                        <div class="text-xs text-gray-600 text-center py-2">4</div>
-                        <div class="text-xs text-gray-600 text-center py-2">5</div>
-                        <div class="text-xs text-gray-600 text-center py-2">6</div>
-                        <div class="text-xs text-gray-600 text-center py-2">7</div>
-                        <div class="text-xs text-gray-600 text-center py-2">8</div>
-                        <div class="text-xs text-gray-600 text-center py-2">9</div>
-                        <div class="text-xs bg-pink-100 text-pink-700 rounded-full py-2 text-center font-medium">10</div>
-                        <div class="text-xs text-gray-600 text-center py-2">11</div>
-                        <div class="text-xs text-gray-600 text-center py-2">12</div>
-                        <div class="text-xs text-gray-600 text-center py-2">13</div>
-                        <div class="text-xs text-gray-600 text-center py-2">14</div>
-                        <div class="text-xs text-gray-600 text-center py-2">15</div>
-                        <div class="text-xs text-gray-600 text-center py-2">16</div>
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1" id="calendarGrid">
+                        <!-- JS will populate this -->
                     </div>
 
                     <!-- Available Slots -->
                     <div class="mt-6 pt-6 border-t border-gray-100">
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Available tomorrow</span>
-                            <span class="text-sm font-medium text-pink-600">9:00 AM - 4:00 PM</span>
+                            <span class="text-sm text-gray-600" id="availabilityLabel">Available tomorrow</span>
+                            <span class="text-sm font-medium text-pink-600" id="availabilityTime">9:00 AM - 4:00 PM</span>
                         </div>
-                        <div class="mt-3 flex gap-2">
+                        <div class="mt-3 flex gap-2" id="slotContainer">
                             <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">10:30 AM</span>
                             <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">1:00 PM</span>
                             <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full">3:30 PM</span>
@@ -626,9 +607,9 @@
 
         <!-- CTA Button -->
         <div class="mt-12 md:mt-16 text-center fade-up">
-            <button class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-8 md:px-10 rounded-full text-base md:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
+            <a href="#appoint-book-section" class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-8 md:px-10 rounded-full text-base md:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
                 <i class="fas fa-calendar-alt mr-2 md:mr-3"></i> Book Your Appointment Now
-            </button>
+            </a>
             <p class="text-xs md:text-sm text-gray-500 mt-4 md:mt-6">Flexible scheduling • Virtual or in-person • No commitment required</p>
         </div>
     </div>
@@ -783,12 +764,32 @@
         </div>
 
         <!-- Calendly Widget Container -->
+        {{--
         <div class="">
             <div class="calendly-inline-widget"
                 data-url="https://calendly.com/susmitaghosh-leelija/30min?primary_color={{ config('colors.primary', 'A10000') }}&text_color={{ config('colors.secondary', 'EC4899') }}&background_color={{ config('colors.secondary-light', 'FCE7F3') }}&hide_gdpr_banner=1"
-                style="min-width:320px;height:700px;">
-            </div>
+        style="min-width:320px;height:700px;">
+    </div>
+    </div>
+    --}}
+
+
+    <!-- Calendly Widget Container -->
+
+    <div class="">
+        @php
+        $calendlyUrl = env('CALENDLY_URL') ?: 'https://calendly.com/aiman-royale/30min';
+        $primaryColor = env('CALENDLY_PRIMARY_COLOR', '#0066FF');
+        $textColor = env('CALENDLY_TEXT_COLOR', '#FFFFFF');
+        $backgroundColor = env('CALENDLY_BACKGROUND_COLOR', '#FFFFFF');
+        @endphp
+
+        <div class="calendly-inline-widget"
+            data-url="{{ $calendlyUrl }}?primary_color={{ $primaryColor }}&text_color={{ $textColor }}&background_color={{ $backgroundColor }}&hide_gdpr_banner=1"
+            style="min-width:320px;height:700px;">
         </div>
+    </div>
+
     </div>
 </section>
 
@@ -1141,9 +1142,9 @@
                             </div>
                             <h4 class="font-semibold text-gray-900 mb-2 text-base md:text-lg">Special Bonus</h4>
                             <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">Book first appointment & receive style starter kit.</p>
-                            <button class="bg-[#EC4899] text-white font-medium py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-sm w-full hover:bg-pink-600 transition duration-300">
+                            <a href="#appoint-book-section" class="bg-[#EC4899] text-white font-medium py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-sm w-full hover:bg-pink-600 transition duration-300">
                                 <i class="fas fa-calendar-plus mr-2"></i> Book Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1258,12 +1259,7 @@
                     </div>
                 </div>
 
-                <!-- Button -->
-                <div class="mb-10 md:mb-12">
-                    <button class="profile-btn font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg shadow-lg inline-flex items-center">
-                        <i class="fas fa-user-circle mr-2 md:mr-3"></i> View Designer Profile
-                    </button>
-                </div>
+                
 
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-3 md:gap-4 lg:gap-6">
@@ -1326,28 +1322,27 @@
     </div>
 </section>
 
-<!-- Testimonials Section -->
+<!-- Testimonials Section - Indian Women's Fashion -->
 <section class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center mb-12 md:mb-16 fade-up">
             <div class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-pink-50 text-pink-700 text-xs sm:text-sm font-medium mb-4 md:mb-6">
                 <i class="fas fa-heart mr-1.5 sm:mr-2"></i>
-                Loved by Clients
+                Loved by Indian Women
             </div>
-
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-4 md:mb-6">
                 Client <span class="text-[#EC4899]">Testimonials</span>
             </h2>
             <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4 leading-relaxed">
-                Hear from women who transformed their style through our personal styling appointments.
+                Hear from women across India who transformed their ethnic style through our personal styling appointments.
             </p>
             <div class="w-20 md:w-24 h-1 bg-pink-400 mx-auto mt-6 md:mt-8"></div>
         </div>
 
-        <!-- Testimonial Cards Grid -->
+        <!-- Testimonial Cards Grid - Indian Clients -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12 mb-12 md:mb-16">
-            <!-- Testimonial 1 -->
+            <!-- Testimonial 1 - Hindu / Diwali -->
             <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
                 <div class="flex justify-end mb-4 md:mb-6">
                     <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
@@ -1360,24 +1355,22 @@
                     <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
                 </div>
                 <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
-                    "Sophia completely transformed my wardrobe for my promotion. I went from feeling insecure to confident in every meeting."
+                    "I booked a bridal consultation for my sister's wedding during Diwali. The lehenga edit was stunning — I received so many compliments at every function!"
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80"
-                            alt="Alexandra Chen"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <!-- Text Avatar: first letter -->
+                        <div class="text-avatar" aria-label="Priya Sharma">P</div>
                     </div>
                     <div class="min-w-0">
-                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Alexandra Chen</h4>
-                        <p class="text-gray-500 text-xs md:text-sm">Marketing Director</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Style Consultation</p>
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Priya Sharma</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Software Engineer, Bengaluru</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Bridal Consultation · Diwali 2025</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Testimonial 2 -->
+            <!-- Testimonial 2 - Muslim / Eid -->
             <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
                 <div class="flex justify-end mb-4 md:mb-6">
                     <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
@@ -1390,25 +1383,22 @@
                     <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
                 </div>
                 <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
-                    "After having my second child, I felt lost with my style. The custom fit guidance was a game-changer. I finally have clothes that fit perfectly."
+                    "The premium salwar suit I purchased for Eid was absolutely gorgeous. The fabric quality and fit were perfect — I felt like royalty during our family gathering."
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
-                            alt="Maya Rodriguez"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Zara Khan">Z</div>
                     </div>
                     <div class="min-w-0">
-                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Maya Rodriguez</h4>
-                        <p class="text-gray-500 text-xs md:text-sm">Graphic Designer</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Custom Fit</p>
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Zara Khan</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Content Creator, Lucknow</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Premium Salwar Suit · Eid-ul-Fitr 2025</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl md:col-span-2 lg:col-span-1">
+            <!-- Testimonial 3 - Sikh / Vaisakhi -->
+            <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
                 <div class="flex justify-end mb-4 md:mb-6">
                     <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
                 </div>
@@ -1420,19 +1410,97 @@
                     <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
                 </div>
                 <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
-                    "The fabric and color selection session opened my eyes to colors I never thought would work for me. My wardrobe is now cohesive and truly reflects me."
+                    "For Vaisakhi celebrations, I wanted something traditional yet modern. The designer ensemble I bought was perfect — elegant, comfortable, and truly special."
                 </p>
                 <div class="flex items-center">
                     <div class="mr-3 md:mr-4 flex-shrink-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=776&q=80"
-                            alt="Isabella Thompson"
-                            class="client-photo w-12 md:w-16 h-12 md:h-16 rounded-full object-cover">
+                        <div class="text-avatar" aria-label="Gurpreet Kaur">G</div>
                     </div>
                     <div class="min-w-0">
-                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Isabella Thompson</h4>
-                        <p class="text-gray-500 text-xs md:text-sm">Lawyer</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Color Analysis</p>
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Gurpreet Kaur</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Teacher, Amritsar</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Designer Ensemble · Vaisakhi 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 4 - Christian / Christmas & New Year -->
+            <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
+                <div class="flex justify-end mb-4 md:mb-6">
+                    <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
+                </div>
+                <div class="flex mb-4 md:mb-6">
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                </div>
+                <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
+                    "The Christmas and New Year party collection was exactly what I needed. The fusion gown was a showstopper — I felt confident and glamorous all night!"
+                </p>
+                <div class="flex items-center">
+                    <div class="mr-3 md:mr-4 flex-shrink-0">
+                        <div class="text-avatar" aria-label="Anjali D'Souza">A</div>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Anjali D'Souza</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Event Planner, Mumbai</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Festive Gown · Christmas 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 5 - Hindu / Durga Puja / Navratri -->
+            <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
+                <div class="flex justify-end mb-4 md:mb-6">
+                    <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
+                </div>
+                <div class="flex mb-4 md:mb-6">
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                </div>
+                <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
+                    "For Navratri Garba nights, the designer lehenga I picked was an absolute dream. The mirror work and draping were flawless — I danced all night in style!"
+                </p>
+                <div class="flex items-center">
+                    <div class="mr-3 md:mr-4 flex-shrink-0">
+                        <div class="text-avatar" aria-label="Riddhi Patel">R</div>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Riddhi Patel</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Dancer, Ahmedabad</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Navratri Lehenga · Sep 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 6 - Muslim / Ramadan & Eid Special -->
+            <div class="testimonial-card bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl">
+                <div class="flex justify-end mb-4 md:mb-6">
+                    <i class="fas fa-quote-right text-pink-500 text-2xl md:text-3xl"></i>
+                </div>
+                <div class="flex mb-4 md:mb-6">
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                    <i class="fas fa-star text-yellow-400 text-sm md:text-base ml-1"></i>
+                </div>
+                <p class="text-sm md:text-base text-gray-700 leading-relaxed italic mb-6 md:mb-8">
+                    "The Ramadan edit was so thoughtfully curated. I bought the most elegant abaya and matching hijab for Eid prayers — the quality is unmatched."
+                </p>
+                <div class="flex items-center">
+                    <div class="mr-3 md:mr-4 flex-shrink-0">
+                        <div class="text-avatar" aria-label="Fatima Ansari">F</div>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Fatima Ansari</h4>
+                        <p class="text-gray-500 text-xs md:text-sm">Doctor, Hyderabad</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Ramadan Edit · Mar 2025</p>
                     </div>
                 </div>
             </div>
@@ -1447,45 +1515,54 @@
                         <div class="text-xs md:text-sm text-gray-600">Average Rating</div>
                     </div>
                     <div>
-                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">1,200+</div>
+                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">3,200+</div>
                         <div class="text-xs md:text-sm text-gray-600">Styling Sessions</div>
                     </div>
                     <div>
-                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">98%</div>
+                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">99%</div>
                         <div class="text-xs md:text-sm text-gray-600">Would Recommend</div>
                     </div>
                     <div>
-                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">50+</div>
+                        <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-2">180+</div>
                         <div class="text-xs md:text-sm text-gray-600">Repeat Clients</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CTA Section -->
-        <div class="text-center fade-up px-4">
-            <div class="inline-block bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl p-0.5 shadow-xl mb-6 md:mb-8 w-full sm:w-auto">
-                <div class="bg-white rounded-xl p-6 md:p-8 lg:p-10">
-                    <h3 class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-4 md:mb-6">Ready to Transform Your Style?</h3>
-                    <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8 px-4">
-                        Join hundreds of satisfied clients who have discovered their perfect style through our personal consultations.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-                        <button class="bg-[#EC4899] text-white font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-pink-600 transition duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-calendar-check mr-2 md:mr-3"></i> Book Your Appointment
-                        </button>
-                        <button class="bg-white border border-gray-300 text-gray-700 font-medium py-3 md:py-4 px-6 md:px-8 lg:px-10 rounded-full text-sm md:text-base lg:text-lg hover:bg-gray-50 transition duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-play-circle mr-2 md:mr-3"></i> Watch Client Stories
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <p class="text-xs md:text-sm text-gray-500">
-                All client photos are used with permission. Real names may be changed for privacy.
-            </p>
-        </div>
+     
     </div>
 </section>
+
+<style>
+    /* Text avatar style — inline so it works standalone */
+    .text-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+        color: #831843;
+        font-weight: 600;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        flex-shrink: 0;
+        box-shadow: 0 4px 8px rgba(236, 72, 153, 0.15);
+        transition: transform 0.2s;
+    }
+    .text-avatar:hover {
+        transform: scale(1.02);
+    }
+    @media (min-width: 768px) {
+        .text-avatar {
+            width: 4rem;
+            height: 4rem;
+            font-size: 1.5rem;
+        }
+    }
+</style>
 
 <!-- Call-to-Action Section -->
 <section class="bg-gray-50 py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -1515,9 +1592,9 @@
 
             <!-- Button -->
             <div>
-                <button class="cta-button font-semibold py-4 md:py-5 px-8 md:px-10 lg:px-12 rounded-full text-base md:text-lg lg:text-xl shadow-xl inline-flex items-center justify-center">
+                <a href="#appoint-book-section" class="hover:bg-pink-600 bg-[#EC4899] text-white font-semibold py-4 md:py-5 px-8 md:px-10 lg:px-12 rounded-full text-base md:text-lg lg:text-xl shadow-xl inline-flex items-center justify-center">
                     <i class="fas fa-calendar-alt mr-2 md:mr-3 lg:mr-4"></i> Book Your Appointment Now
-                </button>
+                </a>
             </div>
 
             <!-- Subtext under button -->
@@ -1582,7 +1659,7 @@
         </div>
 
         <!-- FAQ Preview -->
-        <div class="mt-12 md:mt-16 text-center fade-up px-4">
+        <!-- <div class="mt-12 md:mt-16 text-center fade-up px-4">
             <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
                 <i class="fas fa-question-circle text-pink-400 mr-1 md:mr-2"></i>
                 Have questions about the appointment process?
@@ -1591,7 +1668,7 @@
                 <span>View Frequently Asked Questions</span>
                 <i class="fas fa-arrow-right ml-1 md:ml-2 text-xs md:text-sm"></i>
             </a>
-        </div>
+        </div> -->
     </div>
 
     <!-- Bottom decorative border -->
@@ -1935,6 +2012,242 @@
         }
     });
 </script>
+<script>
+    (function() {
+        // Get DOM elements
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const prevBtn = document.getElementById('prevMonthBtn');
+        const nextBtn = document.getElementById('nextMonthBtn');
+        const availabilityLabel = document.getElementById('availabilityLabel');
+        const availabilityTime = document.getElementById('availabilityTime');
+        const slotContainer = document.getElementById('slotContainer');
+
+        // Current date state
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        // Track selected date (initially today)
+        let selectedDate = new Date();
+        let selectedDay = selectedDate.getDate();
+        let selectedMonth = selectedDate.getMonth();
+        let selectedYear = selectedDate.getFullYear();
+
+        // Sample slots data
+        const sampleSlots = ['10:30 AM', '1:00 PM', '3:30 PM'];
+
+        // Render calendar
+        function renderCalendar(month, year) {
+            // Update month/year display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Get today's date
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
+
+            // Build calendar grid
+            let gridHTML = '';
+
+            // Previous month days
+            const prevMonthStart = daysInPrevMonth - firstDay + 1;
+            for (let i = prevMonthStart; i <= daysInPrevMonth; i++) {
+                gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month-1}" data-year="${year}">${i}</div>`;
+            }
+
+            // Current month days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isToday = (i === todayDate && month === todayMonth && year === todayYear);
+                const isSelected = (i === selectedDay && month === selectedMonth && year === selectedYear);
+
+                let classes = 'text-xs text-center py-2 day-cell cursor-pointer hover:bg-pink-500 transition rounded-[100px] hover:text-white';
+
+                if (isSelected) {
+                    classes += ' bg-pink-600 text-white rounded-full font-semibold';
+                } else if (isToday) {
+                    classes += ' bg-pink-100 text-pink-700 rounded-full font-medium';
+                } else {
+                    classes += ' text-gray-600';
+                }
+
+                gridHTML += `<div class="${classes}" data-day="${i}" data-month="${month}" data-year="${year}">${i}</div>`;
+            }
+
+            // Next month days (to fill remaining grid)
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = (7 - (totalCells % 7)) % 7;
+            for (let i = 1; i <= remainingCells; i++) {
+                gridHTML += `<div class="text-xs text-gray-300 text-center py-2 day-cell other-month" data-day="${i}" data-month="${month+1}" data-year="${year}">${i}</div>`;
+            }
+
+            calendarGrid.innerHTML = gridHTML;
+
+            // Add click listeners to all day cells
+            document.querySelectorAll('.day-cell').forEach(cell => {
+                cell.addEventListener('click', function(e) {
+                    const day = parseInt(this.dataset.day);
+                    const month = parseInt(this.dataset.month);
+                    const year = parseInt(this.dataset.year);
+
+                    // Update selected date
+                    selectedDay = day;
+                    selectedMonth = month;
+                    selectedYear = year;
+
+                    // If clicked on different month, navigate there
+                    if (month !== currentMonth || year !== currentYear) {
+                        currentMonth = month;
+                        currentYear = year;
+                        renderCalendar(currentMonth, currentYear);
+                    } else {
+                        // Just re-render to update selection
+                        renderCalendar(currentMonth, currentYear);
+                    }
+
+                    // Update availability for selected date
+                    updateAvailabilityForDate(month, year, day);
+                });
+            });
+
+            // Update availability based on current view
+            updateAvailability(month, year);
+        }
+
+        // Update availability for a specific date
+        function updateAvailabilityForDate(month, year, day) {
+            const selectedDateObj = new Date(year, month, day);
+            const today = new Date();
+            const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Check if selected date is today
+            const isToday = selectedDateObj.getTime() === todayDate.getTime();
+
+            if (isToday) {
+                availabilityLabel.textContent = 'Available Today';
+                availabilityTime.textContent = 'Limited slots available';
+                slotContainer.innerHTML = `
+                <span class="text-xs bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-full slot-badge">12:00 PM</span>
+                <span class="text-xs bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-full slot-badge">2:30 PM</span>
+                <span class="text-xs bg-gray-100 text-gray-400 px-3 py-1.5 rounded-full">4:00 PM (Booked)</span>
+            `;
+            } else if (selectedDateObj > todayDate) {
+                // Future date
+                const dayOfWeek = selectedDateObj.getDay();
+                const dateStr = selectedDateObj.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                availabilityLabel.textContent = `Available ${dateStr}`;
+
+                let slots = [];
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    slots = ['11:00 AM', '2:00 PM'];
+                } else {
+                    slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
+                }
+
+                slotContainer.innerHTML = slots.map(slot =>
+                    `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
+                ).join('');
+
+                availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
+            } else {
+                // Past date
+                availabilityLabel.textContent = '📅 Past Date';
+                availabilityTime.textContent = 'No availability';
+                slotContainer.innerHTML = `
+                <span class="text-xs bg-gray-100 text-gray-400 px-3 py-1.5 rounded-full">Unavailable</span>
+            `;
+            }
+        }
+
+        // Update availability section
+        function updateAvailability(month, year) {
+            const today = new Date();
+            const currentDateObj = new Date(year, month, 1);
+
+            // Check if we're viewing current month
+            const isCurrentMonth = (month === today.getMonth() && year === today.getFullYear());
+
+            if (isCurrentMonth) {
+                // If viewing current month, show tomorrow by default
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                const tomorrowStr = tomorrow.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                availabilityLabel.textContent = `Available ${tomorrowStr}`;
+
+                const dayOfWeek = tomorrow.getDay();
+                let slots = [];
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    slots = ['11:00 AM', '2:00 PM'];
+                } else {
+                    slots = ['9:00 AM', '10:30 AM', '1:00 PM', '3:30 PM', '5:00 PM'];
+                }
+
+                slotContainer.innerHTML = slots.map(slot =>
+                    `<span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full slot-badge">${slot}</span>`
+                ).join('');
+
+                availabilityTime.textContent = `${slots[0]} - ${slots[slots.length-1]}`;
+            } else {
+                // Not current month
+                const monthName = new Date(year, month).toLocaleDateString('en-US', {
+                    month: 'long'
+                });
+                availabilityLabel.textContent = `Available in ${monthName}`;
+                availabilityTime.textContent = 'Check back soon';
+
+                slotContainer.innerHTML = `
+                <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Coming soon</span>
+            `;
+            }
+        }
+
+        // Navigate months
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentMonth, currentYear);
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            changeMonth(-1);
+        });
+
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            changeMonth(1);
+        });
+
+        // Initial render
+        renderCalendar(currentMonth, currentYear);
+
+    })();
+</script>
+
 <!-- Add Calendly script at the end of the section or in your scripts section -->
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 @endsection

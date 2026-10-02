@@ -155,4 +155,72 @@ class AddressController extends Controller
         return redirect()->route('addresses.index')
             ->with('success', 'Address set as default successfully!');
     }
+
+    public function saveFromCheckout(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'nullable|integer',
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address_1' => 'required|string|max:255',
+            'address_2' => 'nullable|string|max:255',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'pincode' => 'nullable|string|max:10',
+            'create_new' => 'nullable|boolean',
+        ]);
+
+        $userId = Auth::id();
+        $payload = [
+            'full_name' => $validated['full_name'],
+            'phone' => $validated['phone'],
+            'address_1' => $validated['address_1'],
+            'address_2' => $validated['address_2'] ?? '',
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'country' => 'India',
+            'pincode' => $validated['pincode'] ?? '',
+        ];
+
+        if (!empty($validated['id']) && !$request->boolean('create_new')) {
+            $address = Address::where('user_id', $userId)->findOrFail($validated['id']);
+            $address->update($payload);
+        } else {
+            $payload['user_id'] = $userId;
+            $payload['is_default'] = 0;
+            $address = Address::create($payload);
+        }
+
+        Address::where('user_id', $userId)->update(['is_default' => false]);
+        $address->update(['is_default' => true]);
+        $address->is_default = true;
+
+        return response()->json([
+            'status' => true,
+            'address' => [
+                'id' => $address->id,
+                'full_name' => $address->full_name,
+                'phone' => $address->phone,
+                'address_1' => $address->address_1,
+                'address_2' => $address->address_2,
+                'city' => $address->city,
+                'state' => $address->state,
+                'pincode' => $address->pincode,
+                'is_default' => (bool) $address->is_default,
+            ],
+        ]);
+    }
+
+    public function setDefaultFromCheckout($id)
+    {
+        $address = Address::where('user_id', Auth::id())->findOrFail($id);
+
+        Address::where('user_id', Auth::id())->update(['is_default' => false]);
+        $address->update(['is_default' => true]);
+
+        return response()->json([
+            'status' => true,
+            'id' => $address->id,
+        ]);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\EmailVerification;
@@ -11,23 +12,40 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cookie;
+use App\Services\MetaConversionsService;
+use App\Models\RegistrationOtpHistory;
+use App\Models\ProductVariant;
+use App\Rules\Turnstile;
+use App\Services\GuestIdentityService;
+use App\Services\CartMergeService;
 
 class AuthController extends Controller
 {
-    //
+    protected MetaConversionsService $metaService;
+    protected GuestIdentityService $guestIdentity;
+    protected CartMergeService $cartMergeService;
+    public function __construct(MetaConversionsService $metaService, GuestIdentityService $guestIdentity, CartMergeService $cartMergeService)
+    {
+        $this->metaService = $metaService;
+        $this->guestIdentity = $guestIdentity;
+        $this->cartMergeService = $cartMergeService;
+    }
+
     public function showLogin(Request $request)
     {
         // Store redirect URL in session if present (for registration flow)
         if ($request->has('redirect') && $request->redirect) {
             session(['redirect_after_registration' => $request->redirect]);
         }
-        
+
         return view('web.login');
     }
 
     public function register(Request $request)
     {
-       
+
         $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -35,7 +53,11 @@ class AuthController extends Controller
             'phone' => 'required',
             'password' => 'required|min:6',
         ]);
-
+        $this->metaService->rememberGuestContact(
+            $request->email,
+            $request->phone,
+            $request->firstName . ' ' . $request->lastName
+        );
         // Generate OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $token = Str::random(60);
@@ -74,6 +96,267 @@ class AuthController extends Controller
             return redirect()->route('page.verify-email')->with('success', 'OTP sent to your email. Please verify to complete registration.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send OTP. Please try again.');
+        }
+    }
+
+    public function registerWithoutOTP(Request $request)
+    {
+        // dd(session()->all());
+        // 1. Validate basic fields first
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|min:10|max:255', // "email" here = combined email/phone field
+            'password' => 'required|min:6',
+            'cf-turnstile-response' => ['required', new Turnstile],
+        ]);
+
+        // 2. Detect if input is email or phone
+        $input   = trim($request->input('email'));
+        $isEmail = filter_var($input, FILTER_VALIDATE_EMAIL) !== false;
+        $isPhone = !$isEmail && preg_match('/^\+?[0-9\s\-\(\)]{7,20}$/', $input);
+
+        if (!$isEmail && !$isPhone) {
+            return back()
+                ->withErrors(['email' => 'Please enter a valid email address or phone number.'])
+                ->withInput();
+        }
+
+        // 3. Normalize values
+        $email = $isEmail ? strtolower($input) : null;
+        $phone = $isPhone ? preg_replace('/[\s\-\(\)]/', '', $input) : null;
+
+
+        // 4. Check uniqueness against the right column
+        if ($email && User::where('email', $email)->exists()) {
+            return back()
+                ->withErrors(['email' => 'This email is already registered.'])
+                ->withInput();
+        }
+
+        if ($phone && User::where('phone', $phone)->exists()) {
+            return back()
+                ->withErrors(['email' => 'This phone number is already registered.'])
+                ->withInput();
+        }
+        $this->metaService->rememberGuestContact($email, $phone, $request->name);
+        // 5. Create user account directly without OTP
+        try {
+            // dd($request->all());
+            $user = User::create([
+                'name'              => $request->name,
+                'email'             => $email,
+                'phone'             => $phone,
+                'password'          => Hash::make($request->password),
+                'email_verified_at' => $email ? now() : null, // only mark verified if email
+
+                // If you have a phone_verified_at column:
+                // 'phone_verified_at' => $phone ? now() : null,
+            ]);
+
+
+            // Auto login with Laravel Auth
+            Auth::login($user);
+
+            // Generate JWT token
+            $token = JWTAuth::fromUser($user);
+            if($user){
+            $this->trackRegistration();
+            }
+            // Store JWT token in session
+            session(['jwt_token' => $token]);
+            if (
+                $request->boolean('buy_now') &&
+                $request->filled('variant_id')
+            ) {
+
+                $variant = ProductVariant::with('product')
+                    ->find($request->variant_id);
+
+                if (!$variant) {
+
+                    Log::warning(
+                        'Buy Now variant not found after registration',
+                        [
+                            'variant_id' => $request->variant_id,
+                            'user_id'    => $user->id,
+                        ]
+                    );
+
+                    return redirect()
+                        ->route('page.index')
+                        ->with(
+                            'error',
+                            'The selected product variant is no longer available.'
+                        );
+                }
+
+                $count = (int) ($request->count ?? 1);
+
+                // Check stock again
+                if ($variant->stock < $count) {
+
+                    Log::warning(
+                        'Buy Now insufficient stock after registration',
+                        [
+                            'variant_id' => $variant->id,
+                            'stock'      => $variant->stock,
+                            'count'      => $count,
+                            'user_id'    => $user->id,
+                        ]
+                    );
+
+                    return redirect()
+                        ->route('page.index')
+                        ->with(
+                            'error',
+                            'Not enough stock available.'
+                        );
+                }
+
+                /*
+             * Decode custom dimensions if they exist.
+             */
+                $customDimensions = null;
+
+                if ($request->filled('custom_dimensions')) {
+
+                    $decoded = json_decode(
+                        $request->custom_dimensions,
+                        true
+                    );
+
+                    if (is_array($decoded)) {
+                        $customDimensions = $decoded;
+                    }
+                }
+
+                /*
+             * Create EXACTLY the same checkout structure
+             * used by CartController::buyNow().
+             */
+                session()->put(
+                    'checkout_source',
+                    'buy_now'
+                );
+
+                session()->put(
+                    'meta_initiate_checkout_event_id',
+                    $request->input('event_id')
+                );
+
+                session()->put(
+                    'checkout_payload',
+                    [
+                        'items' => [
+                            [
+                                'cart_id' => 0,
+
+                                'product_id' => $variant->product_id,
+
+                                'variant_id' => $variant->id,
+
+                                'name' => $variant->product->name,
+
+                                'size' => $variant->size,
+
+                                'color' => $variant->color,
+
+                                'price' => $variant->price,
+
+                                'discount' => $variant->discount ?? 0,
+
+                                'discount_price' =>
+                                $variant->discount_price
+                                    ?? $variant->price,
+
+                                'count' => $count,
+
+                                'type' =>
+                                $request->input(
+                                    'type',
+                                    'stitched'
+                                ),
+
+                                'custom_dimensions' =>
+                                $customDimensions,
+
+                                'image' =>
+                                optional(
+                                    $variant->product
+                                )->featured_image,
+                            ]
+                        ]
+                    ]
+                );
+
+                Log::info(
+                    'Buy Now checkout restored after registration',
+                    [
+                        'user_id' => $user->id,
+
+                        'variant_id' => $variant->id,
+
+                        'product_id' => $variant->product_id,
+
+                        'count' => $count,
+
+                        'type' => $request->input(
+                            'type',
+                            'stitched'
+                        ),
+
+                        'checkout_source' =>
+                        session('checkout_source'),
+
+                        'checkout_payload' =>
+                        session('checkout_payload'),
+                    ]
+                );
+
+                /*
+             * IMPORTANT:
+             * Go directly to checkout.
+             */
+                return redirect()
+                    ->route('checkout.index')
+                    ->with(
+                        'success',
+                        'Account created successfully!'
+                    )
+                    ->with(
+                        'jwt_token',
+                        $token
+                    );
+            }
+
+            if (session()->has('redirect_after_registration')) {
+                $redirectUrl = session('redirect_after_registration');
+
+                // Remove it from session so it doesn't persist forever
+                session()->forget('redirect_after_registration');
+
+                // if (str_contains($redirectUrl, '#action-buttons-section')) {
+                //     $redirectUrl = url('/checkout');
+                //     // dd($redirectUrl);
+                // }
+
+                if ($redirectUrl) {
+                    return redirect($redirectUrl)
+                        ->with('success', 'Account created successfully!')
+                        ->with('jwt_token', $token);
+                }
+            }
+
+            return redirect()
+                ->route('page.index')
+                ->with('success', 'Account created successfully!')
+                ->with('jwt_token', $token);
+        } catch (\Exception $e) {
+            \Log::error('Registration failed: ' . $e->getMessage());
+
+            return back()
+                ->with('error', 'Failed to create account. Please try again.')
+                ->withInput();
         }
     }
 
@@ -120,7 +403,12 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-
+        //    $this->trackRegistration([
+        //         'em' => $user->email,
+        //         'ph' => $user->phone,
+        //         'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+        //         'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+        //     ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
@@ -132,12 +420,11 @@ class AuthController extends Controller
 
     public function sendOTP(Request $request)
     {
-
         $request->validate([
             'email' => 'nullable|required_without:phone|email|unique:users',
             'phone' => 'nullable|required_without:email|string|unique:users'
         ]);
-
+        $this->metaService->rememberGuestContact($request->email, $request->phone);
         // Generate OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $token = Str::random(60);
@@ -155,10 +442,28 @@ class AuthController extends Controller
         try {
             if ($request->email) {
                 // Send OTP email
-                Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
-                    $message->to($request->email)
-                        ->subject('Email Verification OTP - Aiman Royale');
-                });
+                try {
+                    Mail::raw("Your OTP for email verification is: {$otp}", function ($message) use ($request) {
+                        $message->to($request->email)
+                            ->subject('Email Verification OTP - Aiman Royale');
+                    });
+                    RegistrationOtpHistory::create([
+                        'otp_send_to' => $request->email,
+                        'otp' => $otp,
+                        'status' => 'sent',
+                        'message' => 'OTP sent successfully to ' . $request->email,
+                        'failed_reason' => ''
+                    ]);
+                } catch (\Exception $e) {
+                    RegistrationOtpHistory::create([
+                        'otp_send_to' => $request->email,
+                        'otp' => $otp,
+                        'status' => 'failed',
+                        'message' => 'Failed to send OTP to ' . $request->email,
+                        'failed_reason' => $e->getMessage()
+                    ]);
+                    return back()->with('error', 'Failed to send OTP. Please try again.');
+                }
 
                 // Store OTP in database
                 EmailVerification::updateOrCreate(
@@ -255,12 +560,27 @@ class AuthController extends Controller
             // Auto login with Laravel Auth
             Auth::login($user);
 
+            // Track CompleteRegistration event for Meta Conversions API
+            // try {
+            //     $this->metaService->trackCompleteRegistration();
+
+            //     Log::info('Meta CompleteRegistration event tracked for user: ' . $user->id);
+            // } catch (\Exception $e) {
+            //     Log::error('Failed to track Meta CompleteRegistration event: ' . $e->getMessage());
+            // }
+            // $this->trackRegistration([
+            //     'em' => $user->email,
+            //     'ph' => $user->phone,
+            //     'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+            //     'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            // ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
+            session(['registration_success' => true]);
 
             // Check for redirect URL from registration session
             $redirectUrl = session('redirect_after_registration');
-            
+
             // Clean up redirect session
             session()->forget('redirect_after_registration');
 
@@ -491,57 +811,390 @@ class AuthController extends Controller
         }
     }
 
+
+
     public function login(Request $request)
     {
 
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
+        $remember = $request->has('remember');
+        $login = trim($request->email);
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+
+            // Login using email
+            $credentials = [
+                'email' => $login,
+                'password' => $request->password,
+            ];
+            $this->metaService->rememberGuestContact($login, null);
+        } else {
+
+            // Login using mobile number
+            $credentials = [
+                'phone' => $login,
+                'password' => $request->password,
+            ];
+            $this->metaService->rememberGuestContact(null, $login);
+        }
         // Attempt login with JWT
-        if (!$token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials, $remember)) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
 
-        // Get authenticated user from JWT
         $user = JWTAuth::user();
-        // dd($user);
-        // Also login with Laravel's Auth for web routes
-        Auth::login($user);
 
-        // Regenerate session
-        $request->session()->regenerate();
+        // ✅ Update last login
+        $user->last_login_at = now();
+        $user->save();
 
-        // Check if there's a redirect URL
-        if ($request->has('redirect') && $request->redirect) {
-            return redirect()->to($request->redirect)->with('jwt_token', $token);
+        //  If "Remember Me" is checked, create remember token
+        if ($remember) {
+            $this->setRememberToken($user);
+        } else {
+            // Remove any existing remember token
+            $user->remember_token = null;
+            $user->save();
         }
 
-        // Default redirect if no redirect URL provided
+        // Login with Laravel Auth
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+
+        // Set session expiry
+        $expiry = now()->addDays(15);
+        session()->put('session_expiry', $expiry);
+        session()->put('last_login_update', now());
+
+        //  Set remember cookie
+        if ($remember) {
+            $this->setRememberCookie($user);
+        }
+
+        Log::info('User logged in', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'remember' => $remember,
+            'last_login_at' => $user->last_login_at
+        ]);
+
+        // if ($variantId = session('guest_variant_id')) {
+        //     session()->forget('guest_variant_id');
+
+        //     $variant = ProductVariant::find($variantId);
+        //     if ($variant) {
+        //         app(\App\Http\Controllers\Web\CartController::class)
+        //             ->addVariantToUserCart($variant, $user->id, 1);
+        //     }
+        // }
+        // Merge guest cart into logged-in user's cart
+        $guestUuid = $this->guestIdentity->get();
+
+        if ($guestUuid) {
+
+            $this->cartMergeService->merge(
+                $guestUuid,
+                $user->id
+            );
+        }
+        if ($variantId = session('guest_variant_id_for_wishlist')) {
+            // dd($variantId);
+            session()->forget('guest_variant_id_for_wishlist');
+
+            $variant = ProductVariant::find($variantId);
+            if ($variant) {
+                app(\App\Http\Controllers\Web\WishlistController::class)
+                    ->addVariantToUserWishlist($variant, $user->id);
+            }
+        }
+
+
+        // if ($request->has('redirect') && $request->redirect) {
+        //     return redirect()->to($request->redirect)->with('jwt_token', $token); 
+        // }
+        // $request->session()->regenerate();
+        if ($request->boolean('buy_now') && $request->filled('variant_id')) {
+
+            $variant = ProductVariant::with('product')
+                ->find($request->variant_id);
+
+            if (!$variant) {
+                Log::warning('Buy Now variant not found after login', [
+                    'variant_id' => $request->variant_id,
+                    'user_id'    => $user->id,
+                ]);
+
+                return redirect()->route('page.index')
+                    ->withErrors(['product' => 'The selected product variant is no longer available.']);
+            }
+
+            $count = (int) ($request->count ?? 1);
+
+            if ($variant->stock < $count) {
+                Log::warning('Buy Now insufficient stock after login', [
+                    'variant_id' => $variant->id,
+                    'stock'      => $variant->stock,
+                    'count'      => $count,
+                    'user_id'    => $user->id,
+                ]);
+
+                return redirect()->route('page.index')
+                    ->withErrors(['product' => 'Not enough stock available.']);
+            }
+
+            $customDimensions = null;
+
+            if ($request->filled('custom_dimensions')) {
+                $decoded = json_decode(
+                    $request->custom_dimensions,
+                    true
+                );
+
+                if (is_array($decoded)) {
+                    $customDimensions = $decoded;
+                }
+            }
+
+            session()->put('checkout_source', 'buy_now');
+
+            session()->put(
+                'meta_initiate_checkout_event_id',
+                $request->input('event_id')
+            );
+
+            session()->put('checkout_payload', [
+                'items' => [[
+                    'cart_id' => 0,
+
+                    'product_id' => $variant->product_id,
+
+                    'variant_id' => $variant->id,
+
+                    'name' => $variant->product->name,
+
+                    'size' => $variant->size,
+
+                    'color' => $variant->color,
+
+                    'price' => $variant->price,
+
+                    'discount' => $variant->discount ?? 0,
+
+                    'discount_price' => $variant->discount_price ?? $variant->price,
+
+                    'count' => $count,
+
+                    'type' => $request->input('type', 'stitched'),
+
+                    'custom_dimensions' => $customDimensions,
+
+                    'image' => optional($variant->product)->featured_image,
+                ]]
+            ]);
+
+            $userId    = Auth::id();            // null if guest
+            $sessionId = session()->getId();    // works for guests
+
+            // Check if this variant is already in the cart for this user/session
+            $existingCart = \App\Models\Cart::where('variant_id', $variant->id)
+                ->when($userId, function ($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                }, function ($q) use ($sessionId) {
+                    $q->whereNull('user_id')->where('session_id', $sessionId);
+                })
+                ->first();
+
+            if (!$existingCart) {
+                \App\Models\Cart::create([
+                    'user_id'    => $userId,          // null for guests
+                    'session_id' => $userId ? null : $sessionId,
+                    'product_id' => $variant->product_id ?? $request->product_id,
+                    'variant_id' => $variant->id,
+                    'quantity'   => $request->input('quantity', 1),
+                    'price'      => $variant->discount_price ?? $variant->price,
+                    'count'      => 1,
+                ]);
+
+                Log::info('Buy Now cart entry created after login', [
+                    'user_id'    => $userId,
+                    'variant_id' => $variant->id,
+                    'product_id' => $variant->product_id,
+                    'quantity'   => $request->input('quantity', 1),
+                    'session_id' => $sessionId,
+                ]);
+            }
+
+            Log::info('Buy Now checkout restored after login', [
+                'user_id'    => $user->id,
+                'variant_id' => $variant->id,
+                'product_id' => $variant->product_id,
+                'count'      => $count,
+                'type'       => $request->input('type', 'stitched'),
+                'checkout_source' => session('checkout_source'),
+            ]);
+
+            return redirect()
+                ->route('checkout.index')
+                ->with('jwt_token', $token);
+        }
+        if ($request->filled('redirect')) {
+
+            return redirect()
+                ->to($request->redirect)
+                ->with('jwt_token', $token);
+        }
         return redirect()->intended(route('page.index'))->with('jwt_token', $token);
     }
 
-    public function logout(Request $request)
+    /**
+     * Set remember token in database
+     */
+    protected function setRememberToken($user)
     {
-        // Invalidate JWT token if it exists
-        try {
-            if ($token = JWTAuth::getToken()) {
-                JWTAuth::invalidate($token);
+        // Generate a secure token
+        $rememberToken = Str::random(60);
+        $user->remember_token = hash('sha256', $rememberToken);
+        $user->save();
+
+        return $rememberToken;
+    }
+
+    /**
+     * Set remember cookie
+     */
+    protected function setRememberCookie($user)
+    {
+        // Create a cookie with the remember token
+        $token = Str::random(60);
+        $encryptedToken = hash('sha256', $token);
+
+        // Store in database
+        $user->remember_token = $encryptedToken;
+        $user->save();
+
+        // Set cookie for 15 days (1440 minutes * 15)
+        Cookie::queue('remember_token', $token, 60 * 24 * 15);
+        Cookie::queue('user_id', $user->id, 60 * 24 * 15);
+    }
+
+    private function getSessionExpiry($user)
+    {
+        // If user has logged in before, extend from last login
+        if ($user->last_login_at) {
+            $expiryDate = $user->last_login_at->addDays(15);
+
+            // If expiry is in the past (shouldn't happen with our logic)
+            if ($expiryDate->isPast()) {
+                $expiryDate = now()->addDays(15);
             }
-        } catch (\Exception $e) {
-            // Token might be invalid or expired, continue with logout
+
+            return $expiryDate;
         }
 
-        // Use web guard specifically
-        Auth::guard('web')->logout();
+        // First time login
+        return now()->addDays(15);
+    }
 
+    // public function logout(Request $request)
+    // {
+    //     // Invalidate JWT token if it exists
+    //     try {
+    //         if ($token = JWTAuth::getToken()) {
+    //             JWTAuth::invalidate($token);
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Token might be invalid or expired, continue with logout
+    //     }
+
+    //     // Use web guard specifically
+    //     Auth::guard('web')->logout();
+
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
+
+    //     return redirect('/login')->with('success', 'You have been logged out successfully!');
+    // }
+
+    public function logout(Request $request)
+    {
+        $previousUrl = $request->input('redirect_url', url()->current());
+        // dd($previousUrl);
+        // Clear remember cookies
+        // Cookie::queue(Cookie::forget('remember_token'));
+        // Cookie::queue(Cookie::forget('user_id'));
+
+        // Clear remember token from database
+        $user = auth()->user();
+        if ($user) {
+            $guestUuid = $this->guestIdentity->getOrCreate();
+            $userCartItems = Cart::where('user_id', $user->id)->get();
+
+            foreach ($userCartItems as $userCart) {
+
+                $guestCart = Cart::where('guest_uuid', $guestUuid)
+                    ->where('variant_id', $userCart->variant_id)
+                    ->where('user_id', null)
+                    ->first();
+
+                if ($guestCart) {
+
+                    $guestCart->update([
+                        'count' => $guestCart->count + $userCart->count,
+                        'price' => $userCart->price,
+
+                    ]);
+
+                    // Remove user cart row
+                    // $userCart->delete();
+                    $userCart->update([
+                        'guest_uuid' => $guestUuid,
+
+                    ]);
+                } else {
+
+                    $userCart->update([
+
+                        'guest_uuid' => $guestUuid,
+                        'session_id' => null,
+                        // 'last_activity_at' => now(),
+                        // 'expires_at' => null,
+                    ]);
+                }
+            }
+
+            $user->remember_token = null;
+            $user->save();
+        }
+        Cookie::queue(Cookie::forget('remember_token'));
+        Cookie::queue(Cookie::forget('user_id'));
+
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        if (
+            str_contains($previousUrl, '/profile') ||
+            str_contains($previousUrl, '/user/order-history') ||
+            str_contains($previousUrl, '/addresses') ||
+            str_contains($previousUrl, '/user/wishlist') ||
+            str_contains($previousUrl, '/user/notifications') ||
+            str_contains($previousUrl, '/user/change-password') ||
+            str_contains($previousUrl, '/custom-request')
+            // str_contains($previousUrl, '/wishlist') ||
+            // str_contains($previousUrl, '/wishlist') ||
+            // str_contains($previousUrl, '/cart')
 
-        return redirect('/login')->with('success', 'You have been logged out successfully!');
+        ) {
+            return redirect('/')
+                ->with('success', 'You have been logged out successfully!');
+        }
+        // return redirect('/login')->with('success', 'You have been logged out successfully!');
+        return redirect()->to($previousUrl)
+            ->with('success', 'You have been logged out successfully!');
     }
 
     /**
@@ -575,4 +1228,105 @@ class AuthController extends Controller
             'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
+
+
+    // public function completeGoogleRegistration(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'name' => 'required|string|max:255',
+    //             'email' => 'required|email|unique:users,email',
+    //             'google_id' => 'required|string|unique:users,google_id',
+    //         ]);
+
+    //         // Create user with Google data
+    //         $user = User::create([
+    //             'name' => $request->name,
+    //             'email' => $request->email,
+    //             'google_id' => $request->google_id,
+    //             'password' => Hash::make(Str::random(24)),
+    //             'email_verified_at' => now(),
+    //         ]);
+
+    //         Auth::login($user);
+
+    //         // Clear Google session data
+    //         session()->forget('google_data');
+
+
+    //         return redirect()->route('home')->with('success', 'Account created successfully with Google!');
+    //     } catch (\Exception $e) {
+    //         Log::error('Google registration error: ' . $e->getMessage());
+    //         return redirect()->route('page.register')
+    //             ->with('error', 'Failed to create account. Please try again.');
+    //     }
+    // }
+
+    public function completeGoogleRegistration(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'google_id' => 'required|string|unique:users,google_id',
+            ]);
+
+            // Create user with Google data
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'google_id' => $request->google_id,
+                'password' => Hash::make(Str::random(24)),
+                'email_verified_at' => now(),
+            ]);
+
+            Auth::login($user);
+            // Track CompleteRegistration for Google signup
+            $this->trackRegistration([
+                'em' => $user->email,
+                'ph' => $user->phone,
+                'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+                'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            ]);
+            // Generate JWT token (if using JWT)
+            $token = auth()->login($user); // Or however you generate your JWT
+
+            // Clear Google session data
+            session()->forget('google_data');
+
+            // Check for redirect URL from session or request
+            if ($request->has('redirect') && $request->redirect) {
+                session(['google_redirect_url' => $request->redirect]);
+            }
+            $redirectUrl = session()->pull('google_redirect_url') ?? $request->redirect ?? null;
+
+
+            if ($redirectUrl) {
+                // Validate the redirect URL to prevent open redirect vulnerabilities
+                if (filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+                    return redirect()->to($redirectUrl)->with('jwt_token', $token);
+                }
+            }
+
+            return redirect()->route('home')->with('success', 'Account created successfully with Google!');
+        } catch (\Exception $e) {
+            Log::error('Google registration error: ' . $e->getMessage());
+            return redirect()->route('page.register')
+                ->with('error', 'Failed to create account. Please try again.');
+        }
+    }
+    private function trackRegistration(array $userData = []): void
+{
+    $eventId = (string) Str::uuid();
+
+    // Browser fires the same event on the next page load (layout reads this)
+    session()->put('meta_registration_event_id', $eventId);
+
+    try {
+        $this->metaService->trackCompleteRegistration($userData, $eventId);
+        Log::info('Meta CompleteRegistration tracked', ['event_id' => $eventId]);
+    } catch (\Exception $e) {
+        Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+    }
+}
 }
