@@ -669,6 +669,26 @@ p[id^="coupon-message-"].text-green-600 {
     line-height: 1.5;
   }
 
+  .checkout-mobile-error {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .checkout-mobile-error.hidden {
+    display: none;
+  }
+
+  .checkout-mobile-error:not(.hidden) {
+    display: block;
+  }
+
   .checkout-address-preview p:empty {
     display: none;
   }
@@ -877,12 +897,47 @@ p[id^="coupon-message-"].text-green-600 {
     color: #dc2626;
     font-size: 13px;
     margin-bottom: 10px;
+    display: block;
+    font-weight: 500;
+    padding: 10px 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
   }
+
+  .checkout-address-form-error.hidden {
+    display: none;
+  }
+
+  .checkout-address-new-form label {
     display: block;
     font-size: 13px;
     font-weight: 500;
     color: #374151;
     margin-bottom: 6px;
+  }
+
+  .checkout-address-new-form p[id$="-error"] {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    display: none;
+    padding: 4px 0;
+  }
+
+  .checkout-address-new-form p[id$="-error"]:not(.hidden) {
+    display: block;
+  }
+
+  .checkout-address-new-form input.border-red-500 {
+    border-color: #dc2626 !important;
+    background: #fef2f2;
+  }
+
+  .checkout-address-new-form input.border-green-500 {
+    border-color: #16a34a !important;
+    background: #f0fdf4;
   }
 
   .checkout-address-new-form input {
