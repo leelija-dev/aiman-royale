@@ -52,6 +52,7 @@
                 $couponForThisVariant = $appliedCoupon !== null;
                 // dd($appliedCoupons);
               @endphp
+              
               <tr class="cart-item-row border-b border-gray-200 hover:bg-gray-50">
                 
                 <td class="cart-cell-product px-6 py-6">
@@ -81,15 +82,31 @@
                   </div>
                   </a>
                 </td>
-                 
-                <td class="cart-cell-price px-6 py-6 text-center"><span class="cart-m-label">Price</span><span class="cart-price-value">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</span></td>
+                {{-- <td class="cart-cell-price px-5 py-6 ">↓ {{number_format($item->variant->discount, 2)}} %<span class="cart-m-label">Price</span><span class="cart-price-value">{{config('app.currency')}}{{ number_format($item->variant->price, 2) }}</span></td> --}}
+                <td class="cart-cell-price px-5 py-6">
+                  <div class="flex items-center justify-center gap-1 whitespace-nowrap">
+                      @if($item->variant->discount > 0)
+                        <span class="text-green-600">
+                            ↓ {{ number_format($item->variant->discount, 2) }}%
+                        </span>
+                        
+                        <span class="cart-price-value">
+                            {{ config('app.currency') }}{{ number_format($item->variant->price, 2)  }}
+                        </span>
+                      @else
+                        <span>
+                            {{ config('app.currency') }}{{ number_format($item->variant->price, 2) }}
+                        </span>
+                      @endif
+                  </div> 
+              </td>
                 <td class="cart-cell-discount px-6 py-6 text-center"><span class="cart-m-label">After Discount</span>{{config('app.currency')}}{{ number_format($item->variant->price - (($item->variant->price * $item->variant->discount) / 100) , 2) }}</td>
                 @if($couponForThisVariant)
                 @php
                 $afterDiscount = $item->variant->price - (($item->variant->price * $item->variant->discount) / 100);
                 $afterApplyCoupon = $afterDiscount - (($afterDiscount * $appliedCoupon['discount']) / 100);
                 @endphp
-                <td class="cart-cell-coupon px-6 py-6 text-center"><span class="cart-m-label">After Coupon</span>{{config('app.currency')}}{{ number_format($afterApplyCoupon, 2) }}</td>
+                <td class="cart-cell-coupon px-6 py-6 text-center"><span class="cart-m-label">After Coupon</span><span class="coupon-amount">{{config('app.currency')}}{{ number_format($afterApplyCoupon, 2) }}</span><span class="coupon-percent">↓ {{ number_format($appliedCoupon['discount'], 2) }}%</span></td>
                 @else
                 <td class="cart-cell-coupon px-6 py-6 text-center"></td>
                 @endif
@@ -129,14 +146,14 @@
                   @php
                   $afterDiscount = $item->variant->price - (($item->variant->price * $item->variant->discount) / 100);
                   $afterApplyCoupon = $afterDiscount - (($afterDiscount * $appliedCoupon['discount']) / 100);
-
+                  
                   @endphp
                   
-                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$appliedCoupon['final_price']}}" data-label="Subtotal">
+                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$appliedCoupon['final_price']}}" data-original-price="{{$item->variant->price}}" data-coupon-discount="{{ ($afterDiscount * $appliedCoupon['discount']) / 100 }}" data-discount="{{$item->variant->discount}}"data-label="Subtotal">
                     {{config('app.currency')}}{{ number_format($afterApplyCoupon * $item->count, 2) }}
                   </td>
                 @else
-                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}" data-label="Subtotal">
+                  <td class="cart-cell-subtotal px-6 py-6 text-center font-medium" id="subtotal-{{ $item->id }}" data-price="{{$item->variant->discount_price}}" data-original-price="{{$item->variant->price}}"  data-discount="{{$item->variant->discount}}" data-label="Subtotal">
                     {{config('app.currency')}}{{ number_format(($item->variant->price - (($item->variant->price * $item->variant->discount) / 100)) * $item->count, 2) }}
                   </td>
                 @endif
@@ -210,12 +227,42 @@
             <span class="cart-totals-title-desktop">Cart Totals</span>
             <span class="cart-totals-title-mobile">Price details</span>
           </h2>
+          @php
+    $appliedCoupons = session('applied_coupons', []);
+    $totalCouponDiscount = 0;
 
+    foreach ($cartItems as $item) {
+        $appliedCoupon = $appliedCoupons[$item->variant_id] ?? null;
+
+        if ($appliedCoupon) {
+            $afterDiscount = $item->variant->price
+                - (($item->variant->price * $item->variant->discount) / 100);
+
+            $couponDiscountAmount = ($afterDiscount * $appliedCoupon['discount']) / 100;
+
+            $totalCouponDiscount += $couponDiscountAmount * $item->count;
+        }
+    }
+@endphp
           <div class="space-y-4">
             <div class="flex justify-between text-gray-700">
-              <span>Subtotal</span>
-              <span id="total_subtotal">{{config('app.currency')}}{{ number_format($subtotal, 2) }}</span>
+              <span>Price</span>
+              <span id="total_subtotal">{{config('app.currency')}}{{ number_format($totalWithOutDiscount, 2) }}</span>
+              
             </div>
+            <div class="flex justify-between text-green-700">
+              <span>Discount MRP</span>
+              <span id="discount_total">- {{config('app.currency')}}{{ number_format($totalDiscount, 2) }}</span>
+              
+            </div>
+            @if($totalCouponDiscount > 0)
+              <div class="flex justify-between text-green-700">
+                <span>Coupon for you</span>
+                <span id="coupon_discount_total">
+                    - {{config('app.currency')}}{{ number_format($totalCouponDiscount, 2) }}
+                </span>
+            </div>
+            @endif
 
             <div class="flex justify-between text-gray-700">
               <span>Shipping</span>
@@ -381,28 +428,44 @@ function updateCartTotal(updateNavbar = false) {
     let currency = "{{config('app.currency')}}";
     let totalSubtotal = 0;
     let totalItems = 0;
-
+    let orginalTotalPrice = 0;
+    let totalDiscount = 0;
+    let totalCouponDiscount = 0;
     document.querySelectorAll('[id^="subtotal-"]').forEach(function (item) {
 
         let price = parseFloat(item.getAttribute('data-price'));
+        let totalOrginalPrice = parseFloat(item.getAttribute('data-original-price'));
+        let discount = parseFloat(item.getAttribute('data-discount')) || 0;
+        let couponDiscount = parseFloat(item.getAttribute('data-coupon-discount')) || 0;
         let cartId = item.id.replace('subtotal-', '');
         let qty = parseInt(document.getElementById('quantity-' + cartId).value);
 
         let rowTotal = price * qty;
-
+        let orginalTotal = totalOrginalPrice * qty;
+        let discountAmount = orginalTotal * discount / 100;
+        let couponDiscountAmount = couponDiscount * qty;
+        console.log('discount amount:', discountAmount);
         item.textContent = currency + rowTotal.toFixed(2);
 
         totalSubtotal += rowTotal;
+        orginalTotalPrice += orginalTotal;
         totalItems += qty;
+        totalDiscount += discountAmount;
+        totalCouponDiscount += couponDiscountAmount;
     });
 
     let totalSubtotalElement = document.getElementById('total_subtotal');
     let totalPriceElement = document.getElementById('total_price');
-
+    let discountTotalElement  = document.getElementById('discount_total');
+    let couponDiscountTotalElement = document.getElementById('coupon_discount_total');
     let shippingCost = parseFloat(totalPriceElement?.getAttribute('data-shipping')) || 0;
 
-    totalSubtotalElement.textContent = currency + totalSubtotal.toFixed(2);
-
+    totalSubtotalElement.textContent = currency + orginalTotalPrice.toFixed(2);
+    discountTotalElement.textContent = '- ' + currency + totalDiscount.toFixed(2);
+    if (couponDiscountTotalElement) {
+        couponDiscountTotalElement.textContent =
+            '- ' + currency + totalCouponDiscount.toFixed(2);
+    }
     if (totalPriceElement) {
         totalPriceElement.textContent = currency + (totalSubtotal + shippingCost).toFixed(2);
     }
