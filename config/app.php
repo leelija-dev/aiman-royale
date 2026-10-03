@@ -160,7 +160,7 @@ return [
     'business_contact' => env('BUSINESS_CONTACT', '91-123-456-7890'),
     'business_website' => env('BUSINESS_WEBSITE', 'www.businessname.com'),
     'currency' => env('CURRENCY', '₹'),
-
+    'WH_WHATSAPP_NUMBER' => env('WH_WHATSAPP_NUMBER', '7003184741'),
     
 
 
