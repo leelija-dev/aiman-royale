@@ -16,6 +16,7 @@ use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -41,12 +42,26 @@ class AppServiceProvider extends ServiceProvider
             $notifications = Notification::where('viewed', 0)->latest()->get();
             // $categories = Category::where('is_active', 1)->with('products')->orderBy('name')->get();
 
+            // $categories = Cache::remember('categories_active', 3600, function () {
+            //     return Category::where('is_active', 1)
+            //         ->with('products')
+            //         ->orderBy('name')
+            //         ->get();
+            // });
             $categories = Cache::remember('categories_active', 3600, function () {
                 return Category::where('is_active', 1)
-                    ->with('products')
+                    ->whereHas('products') // only categories with products
+                    ->with(['products' => function ($query) {
+                        $query->where('is_active', 1); // optional: only active products
+                    }])
                     ->orderBy('name')
                     ->get();
             });
+
+            // dd($categories);
+
+
+
             // $productCategory = ProductVariant::with(['product.category', 'product.images', 'images'])
             //     ->get()
             //     ->unique(function ($variant) {
