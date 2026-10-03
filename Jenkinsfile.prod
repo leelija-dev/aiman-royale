@@ -39,16 +39,20 @@ pipeline {
                                 cp -a public/build public/build.bak-pre-deploy
                             fi
 
+                            echo "[DEPLOY] Preparing file ownership for git update..."
+                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache public/uploads
+
                             echo "[DEPLOY] Updating code..."
                             git fetch origin
                             git reset --hard origin/main
+
+                            echo "[DEPLOY] Restoring web write access..."
+                            docker compose exec -T app chown -R www-data:www-data storage bootstrap/cache public/uploads
 
                             echo "[DEPLOY] Starting runtime services..."
                             docker compose build --pull app
                             docker compose up -d app nginx redis elasticsearch kibana
                             docker compose stop node || true
-
-                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache || true
 
                             echo "[DEPLOY] Building frontend assets..."
                             docker compose --profile assets run --rm node
