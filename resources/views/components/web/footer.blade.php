@@ -2255,7 +2255,7 @@ art from fake trails.
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <a href="tel:+{{config('app.WH_WHATSAPP_NUMBER')}}" class="text-sm text-gray-600 mt-1">+{{config('app.WH_WHATSAPP_NUMBER')}}</a>
+              <a href="tel:+{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}" class="text-sm text-gray-600 mt-1">+{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
