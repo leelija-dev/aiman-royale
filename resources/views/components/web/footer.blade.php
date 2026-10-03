@@ -2509,7 +2509,7 @@ art from fake trails.
   </div>
 
 </a> --}}
-<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
+<a href="https://wa.me/{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}" target="_blank"
    id="wa-btn" aria-label="Chat with us on WhatsApp (opens in new tab)"
    class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] hidden">
    
