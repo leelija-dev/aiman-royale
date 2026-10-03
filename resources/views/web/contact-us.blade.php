@@ -63,7 +63,7 @@
                             <p class="text-stone-600 text-sm mt-1"><span class="font-medium">WhatsApp:</span> <a href="https://wa.me/{{config('app.WH_WHATSAPP_NUMBER')}}" class="hover:text-primary transition-colors">+{{config('app.WH_WHATSAPP_NUMBER')}}</a></p>
                             <div class="flex items-center gap-1.5 mt-4 text-stone-500 text-xs">
                                 <i class="far fa-clock"></i>
-                                <span>Monday – Saturday, 10:00 AM – 7:00 PM IST</span>
+                                <span>Monday – Saturday, 10:00 AM – 7:00 PM IST 0</span>
                             </div>
                         </div>
                     </div>
