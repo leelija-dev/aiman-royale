@@ -86,13 +86,17 @@ pipeline {
 
         stage('Health Check') {
             steps {
-                sleep 20
-                sh """
-                    if ! curl -sSf http://${VPS_HOST}/health > /dev/null; then
-                        echo "Health check failed"
-                        exit 1
-                    fi
-                """
+                sshagent(credentials: ['aiman-royale-vps-cred']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -e
+                            cd ${PROJECT_DIR}
+                            test -f public/build/manifest.json
+                            docker compose ps --status running app nginx redis
+                            curl -fsS -H "Host: aimanroyale.com" http://127.0.0.1:8080/up
+                        '
+                    """
+                }
                 echo "Deployment completed successfully!"
             }
         }
