@@ -28,7 +28,14 @@ class MetaTracking
             Cookie::queue('_meta_gid', $gid, 60 * 24 * 365);
             $request->cookies->set('_meta_gid', $gid);
         }
-
+                // Make sure _fbp exists before the page renders, so the server event has it too
+        $fbp = $request->cookie('_fbp') ?: ($_COOKIE['_fbp'] ?? null);
+        if (!is_string($fbp) || !preg_match('/^fb\.[0-2]\.\d{10,13}\.\d+$/', $fbp)) {
+            $fbp = 'fb.1.' . (int) (microtime(true) * 1000) . '.' . random_int(1000000000, 9999999999);
+            $domain = str_ends_with($request->getHost(), 'aimanroyale.com') ? '.aimanroyale.com' : null;
+            Cookie::queue('_fbp', $fbp, 60 * 24 * 90, '/', $domain, null, false);
+            $request->cookies->set('_fbp', $fbp);
+        }
         $norm = fn($v) => preg_replace('/[^\p{L}\p{N}]/u', '', mb_strtolower(trim((string) $v)));
         $advancedMatching = [];
         if (Auth::check()) {

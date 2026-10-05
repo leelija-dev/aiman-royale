@@ -296,12 +296,12 @@ class MetaConversionsService
                     $this->hashData($guestDb)
                 ];
             }
-            if ($guestFbc = request()->cookie('_meta_guest_fbc')) {
-                $userData['fbc'] = $guestFbc;
-            }
-            if ($guestFbp = request()->cookie('_meta_guest_fbp')) {
-                $userData['fbp'] = $guestFbp;
-            }
+            // if ($guestFbc = request()->cookie('_meta_guest_fbc')) {
+            //     $userData['fbc'] = $guestFbc;
+            // }
+            // if ($guestFbp = request()->cookie('_meta_guest_fbp')) {
+            //     $userData['fbp'] = $guestFbp;
+            // }
           
         }
 
