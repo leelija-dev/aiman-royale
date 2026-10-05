@@ -329,7 +329,7 @@
         <!-- Status badge — feels like network hint -->
         <div class="status-badge" aria-hidden="true">⚠️ Network hiccup</div>
         <!-- start lakshman -->
-        @if(config('app.debug') && isset($exception))
+        {{-- @if(config('app.debug') && isset($exception)) --}}
     <div style="margin-top: 2rem; text-align: left; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 1rem; padding: 1.25rem;">
         <div style="font-size: 0.85rem; font-weight: 700; color: #be123c; margin-bottom: 0.75rem;">
             DEBUG INFORMATION
@@ -364,7 +364,7 @@
             </details>
         @endif
     </div>
-@endif
+{{-- @endif --}}
 <!-- end lakshman -->
         <!-- Main heading — no error mention -->
         <h1 id="network-title">Connection lost</h1>
