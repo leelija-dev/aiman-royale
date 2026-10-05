@@ -328,7 +328,44 @@
 
         <!-- Status badge — feels like network hint -->
         <div class="status-badge" aria-hidden="true">⚠️ Network hiccup</div>
+        <!-- start lakshman -->
+        @if(config('app.debug') && isset($exception))
+    <div style="margin-top: 2rem; text-align: left; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 1rem; padding: 1.25rem;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: #be123c; margin-bottom: 0.75rem;">
+            DEBUG INFORMATION
+        </div>
 
+        <div style="font-size: 0.9rem; color: #334155; margin-bottom: 0.75rem;">
+            <strong>Error:</strong>
+            {{ $exception->getMessage() ?: 'No error message available.' }}
+        </div>
+
+        @if($exception->getFile())
+            <div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem; word-break: break-all;">
+                <strong>File:</strong>
+                {{ $exception->getFile() }}
+            </div>
+        @endif
+
+        @if($exception->getLine())
+            <div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.75rem;">
+                <strong>Line:</strong>
+                {{ $exception->getLine() }}
+            </div>
+        @endif
+
+        @if($exception->getTraceAsString())
+            <details style="margin-top: 1rem;">
+                <summary style="cursor: pointer; font-weight: 600; color: #334155;">
+                    Show stack trace
+                </summary>
+
+                <pre style="margin-top: 0.75rem; padding: 1rem; background: #0f172a; color: #e2e8f0; border-radius: 0.75rem; overflow-x: auto; white-space: pre-wrap; word-break: break-word; font-size: 0.75rem; line-height: 1.5;">{{ $exception->getTraceAsString() }}</pre>
+            </details>
+        @endif
+    </div>
+@endif
+<!-- end lakshman -->
         <!-- Main heading — no error mention -->
         <h1 id="network-title">Connection lost</h1>
         <p class="subhead">
