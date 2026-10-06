@@ -1610,7 +1610,7 @@ $isProductPage = !empty($productSlug);
         }
 
         // Use latest products API for same category
-        const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`;
+        const apiUrl = `{{ env('APP_URL', 'https://aimanroyale.com') }}/api/products/latest/${productSlug}`;
         const container = document.getElementById('footer-latest-products-container');
 
         fetch(apiUrl)
@@ -1681,7 +1681,7 @@ $isProductPage = !empty($productSlug);
     }
 
     const slug = getProductSlugFromUrl();
-    const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/faqs/products/${slug}`;
+    const apiUrl = `{{ env('APP_URL', 'https://aimanroyale.com') }}/api/faqs/products/${slug}`;
     const container = document.getElementById('faq-dynamic-container');
     const errorDiv = document.getElementById('faq-error-msg');
 
