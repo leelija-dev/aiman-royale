@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\PickupRequestController;
 use App\Http\Controllers\Admin\DelhiveryController;
 use App\Http\Controllers\Admin\ShippingLabelController;
 use App\Http\Controllers\Admin\ReturnOrder;
+use App\Http\Controllers\Admin\CodRefundController;
 // use App\Http\Controllers\Admin\OrderController;
 
 
@@ -74,8 +75,6 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:admin');
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('Admin.showform');
     Route::post('/register', [AuthController::class, 'register'])->name('admin.register');
-
-
 
     Route::get('/dashboard', [HomeController::class, 'home'])->name('admin.dashboard')->middleware('auth:admin');
     Route::get('/dashboard/data', [HomeController::class, 'getDashboardData'])->name('admin.dashboard.data')->middleware('auth:admin');
@@ -560,7 +559,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
         Route::post('/update/{id}', [StoreController::class, 'update'])->name('store.update');
         Route::delete('/delete/{id}', [StoreController::class, 'delete'])->name('store.delete');
     });
-    Route::prefix('coupon')->group(function (){
+    Route::prefix('coupon')->group(function () {
         Route::get('/', [CouponController::class, 'index'])->name('coupon.index');
         Route::get('/create', [CouponController::class, 'create'])->name('coupon.create');
         Route::post('/store', [CouponController::class, 'store'])->name('coupon.store');
@@ -569,21 +568,30 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
         Route::delete('/delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
     });
 
-    Route::prefix('offer')->group(function (){
-        Route::get('/',[OfferController::class,'index'])->name('offer.index');
+    Route::prefix('offer')->group(function () {
+        Route::get('/', [OfferController::class, 'index'])->name('offer.index');
         Route::get('/create', [OfferController::class, 'create'])->name('offer.create');
         Route::post('/store', [OfferController::class, 'store'])->name('offer.store');
         Route::get('/edit/{id}', [OfferController::class, 'edit'])->name('offer.edit');
         Route::post('/update/{id}', [OfferController::class, 'update'])->name('offer.update');
         Route::delete('/delete/{id}', [OfferController::class, 'delete'])->name('offer.delete');
     });
-    Route::prefix('registration-otp-history')->group(function(){
-        Route::get('/',[RegistrationOtpHistoryController::class,'index'])->name('registration-otp-history.index');
+    Route::prefix('registration-otp-history')->group(function () {
+        Route::get('/', [RegistrationOtpHistoryController::class, 'index'])->name('registration-otp-history.index');
     });
-   // Invoice Routes
-Route::get('/orders/{order}/invoice', [OrderManagementController::class, 'viewInvoice'])->name('admin.orders.invoice');
-Route::get('/orders/{order}/invoice/download', [OrderManagementController::class, 'downloadInvoice'])->name('admin.orders.invoice.download');
+    // Invoice Routes
+    Route::get('/orders/{order}/invoice', [OrderManagementController::class, 'viewInvoice'])->name('admin.orders.invoice');
+    Route::get('/orders/{order}/invoice/download', [OrderManagementController::class, 'downloadInvoice'])->name('admin.orders.invoice.download');
 
-Route::get('/robots',[RobotsController::class,'index'])->name('robots.index');
-Route::post('/robots/store',[RobotsController::class,'store'])->name('robots.store');
+    Route::get('/robots', [RobotsController::class, 'index'])->name('robots.index');
+    Route::post('/robots/store', [RobotsController::class, 'store'])->name('robots.store');
+
+    Route::post(
+        '/admin/return-orders/cod-payout',
+        [ReturnOrder::class, 'codPayoutRefund']
+    )->name('return-orders.cod-payout');
+
+
+     Route::get('/api/cod-refund-details', [CodRefundController::class, 'details'])
+            ->name('api.cod-refund-details');
 });

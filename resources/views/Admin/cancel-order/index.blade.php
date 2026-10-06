@@ -41,6 +41,11 @@
                                         Amount</th>
                                     <th
                                         class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Payment Method</th>
+
+                                    
+                                    <th
+                                        class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">
                                         Status</th>
                                     <th
                                         class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">

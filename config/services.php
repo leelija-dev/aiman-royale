@@ -27,6 +27,22 @@ return [
         'environment' => env('CASHFREE_ENVIRONMENT', 'sandbox'),
         'return_url' => env('CASHFREE_RETURN_URL'),
         'webhook_url' => env('CASHFREE_WEBHOOK_URL'),
+
+        'payout' => [
+            'client_id'     => env('CASHFREE_PAYOUT_CLIENT_ID'),
+            'client_secret' => env('CASHFREE_PAYOUT_CLIENT_SECRET'),
+            'mode'          => env('CASHFREE_PAYOUT_MODE', 'sandbox'),
+            'api_version'   => env('CASHFREE_PAYOUT_API_VERSION', '2024-01-01'),
+
+            // 👇 NO `/payout` suffix — just the domain
+            'base_url' => env('CASHFREE_PAYOUT_MODE', 'sandbox') === 'production'
+                ? 'https://api.cashfree.com'
+                : 'https://sandbox.cashfree.com',
+            'auth_url'      => env('CASHFREE_PAYOUT_MODE', 'sandbox') === 'production'
+                ? 'https://api.cashfree.com/payout/v1/authorize'
+                : 'https://sandbox.cashfree.com/payout/v1/authorize',
+
+        ],
     ],
 
     'delhivery' => [
@@ -81,13 +97,13 @@ return [
         'redirect' => env('GOOGLE_REDIRECT'),
     ],
     'meta' => [
-    'pixel_id' => env('META_PIXEL_ID'),
-    'access_token' => env('META_CONVERSIONS_API_ACCESS_TOKEN'),
-],
+        'pixel_id' => env('META_PIXEL_ID'),
+        'access_token' => env('META_CONVERSIONS_API_ACCESS_TOKEN'),
+    ],
 
-'turnstile' => [
-    'site_key'   => env('TURNSTILE_SITE_KEY'),
-    'secret_key' => env('TURNSTILE_SECRET_KEY'),
-],
+    'turnstile' => [
+        'site_key'   => env('TURNSTILE_SITE_KEY'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+    ],
 
 ];
