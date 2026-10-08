@@ -1,3 +1,6 @@
+@php
+    $latestProducts = $latestProducts ?? collect();
+@endphp
 @if($products->count() > 0)
 @foreach($products as $product)
 <div class="product-card group w-full bg-white rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 hover:border-gray-200" data-product-slug="{{ $product->slug }}">

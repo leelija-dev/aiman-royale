@@ -889,7 +889,10 @@
 
     <!-- Products Container -->
     <div id="products-container" class="products-container">
-        @include('web.partials.category-grid', ['products' => $products])
+        @include('web.partials.category-grid', [
+         'products' => $products,
+         'latestProducts' => $latestProducts ?? collect(),
+        ])
     </div>
 
 
