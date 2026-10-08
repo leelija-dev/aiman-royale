@@ -23,6 +23,7 @@ class OrderCancelController extends Controller
 
         $orders = Order::with('user')
             ->where('order_status', 'cancelled')
+            ->where('payment_method', 'cashfree')
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('id', $search)                              // exact order ID

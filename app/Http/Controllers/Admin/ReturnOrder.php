@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Refund;
 use App\Models\ReverseOrder;
+use App\Models\CodRefundDetail;
 use App\Services\CashfreeRefundService;
+use App\Services\CashfreePayoutService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -304,5 +306,44 @@ class ReturnOrder extends Controller
                 'payload' => $returnOrder->delhivery_response,
             ],
         ]);
+    }
+
+    public function codPayoutRefund(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'cod_refund_detail_id' => 'required|integer|exists:cod_refund_details,id',
+            'transfer_mode'        => 'required|string|in:imps,neft,rtgs,upi',
+        ]);
+
+        $detail = CodRefundDetail::with('order')->findOrFail($validated['cod_refund_detail_id']);
+
+        if ($detail->status === 'completed') {
+            return response()->json([
+                'success' => false,
+                'message' => 'This refund has already been processed.',
+            ], 409);
+        }
+
+        try {
+            $service = new CashfreePayoutService();
+            $result  = $service->refundCodOrder($detail, $validated['transfer_mode']);
+
+            return response()->json([
+                'success'    => true,
+                'message'    => $result['status'] === 'completed'
+                    ? 'COD refund completed successfully.'
+                    : 'COD refund initiated — awaiting confirmation from Cashfree.',
+                'utr_number' => $result['utr'],
+                'status'     => $result['status'],
+                'amount'     => $result['amount'],
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 }

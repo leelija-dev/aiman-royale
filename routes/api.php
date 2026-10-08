@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ReturnOrderController;
 use App\Http\Controllers\Api\WebhookController;
 use App\Http\Controllers\Api\ProductFilterController;
+use App\Http\Controllers\Webhooks\CashfreeWebhookController;
 
 
 // Brand related API routes
@@ -64,3 +65,5 @@ Route::get('/category/filter-options/{slug}', [CategoryController::class, 'getFi
 
 // Route::get('', [WebhookController::class, 'handle'])->name('webhook');
 Route::post('/delhivery/webhook', [WebhookController::class, 'handle']);
+
+Route::post('/webhooks/cashfree/payout', [CashfreeWebhookController::class, 'payout']);

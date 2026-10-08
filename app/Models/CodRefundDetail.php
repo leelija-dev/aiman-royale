@@ -30,6 +30,15 @@ class CodRefundDetail extends Model
         'bank_name',
         'account_number',
         'ifsc_code',
+        'status', 
+        'bene_id', 
+        'transfer_id', 
+        'utr_number',
+        'payment_mode', 
+        'refund_amount', 
+        'cashfree_response',
+        'failure_reason', 
+        'processed_at',
     ];
 
     /**
