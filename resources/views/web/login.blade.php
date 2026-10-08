@@ -121,8 +121,8 @@
     }
 </style>
 
-<section class="px-4 lgg:py-12 py-6">
-    <div class="container mx-auto">
+<section class="px-4 lgg:py-12 py-6 ">
+    <div class="container mx-auto px-0">
 
         <!-- Login Form -->
         <div class="w-full max-w-md mx-auto">

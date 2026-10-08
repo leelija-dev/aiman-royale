@@ -26,7 +26,7 @@ class ReturnOrder extends Controller
     {
         $orders = ReverseOrder::with('order', 'items', 'requestedBy')->where('refund_request_added', false)->get();
         // dd($orders);
-        return view('admin.return-order.index', compact('orders'));
+        return view('Admin.return-order.index', compact('orders'));
     }
 
     // public function refund(Request $request): JsonResponse

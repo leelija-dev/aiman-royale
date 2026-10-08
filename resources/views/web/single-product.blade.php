@@ -2739,7 +2739,7 @@
                 return;
             }
 
-            const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/reviews/products/${productSlug}`;
+            const apiUrl = `{{ env('APP_URL', 'https://aimanroyale.com') }}/api/reviews/products/${productSlug}`;
 
             fetch(apiUrl)
                 .then(response => response.json())

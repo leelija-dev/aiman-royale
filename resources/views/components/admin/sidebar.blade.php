@@ -481,7 +481,7 @@ $isEmailActive = false;
 
                 <li class="submenu-item">
                     <a class="submenu-link {{ $isReturnOrdersActive ? 'active' : '' }}"
-                        href="{{ route('return-orders.index') }}">
+                        href="{{ route('return-orders.index') }}"> 
                         <i class="fas fa-history me-1"></i> Return Request
                     </a>
                 </li>

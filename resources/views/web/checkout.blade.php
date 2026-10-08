@@ -71,6 +71,7 @@
                     </div>
                     <p class="checkout-address-empty{{ $hasPreviewAddress ? ' hidden' : '' }}" id="checkout-preview-empty">Add your delivery address</p>
                 </div>
+                <div id="checkout-mobile-error" class="checkout-mobile-error hidden"></div>
                 {{-- @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
                             <ul>
@@ -679,22 +680,32 @@ document.addEventListener('DOMContentLoaded', function () {
             <div id="checkout-address-sheet-form" class="checkout-address-new-form hidden">
                 <input type="hidden" id="checkout-new-address-id" value="">
                 <p id="checkout-address-form-error" class="checkout-address-form-error hidden"></p>
-                <label for="checkout-new-firstName">First Name</label>
-                <input type="text" id="checkout-new-firstName" maxlength="50" autocomplete="given-name">
-                <label for="checkout-new-lastName">Last Name</label>
-                <input type="text" id="checkout-new-lastName" maxlength="50" autocomplete="family-name">
-                <label for="checkout-new-phone">Phone No</label>
-                <input type="tel" id="checkout-new-phone" maxlength="10" inputmode="numeric" autocomplete="tel">
-                <label for="checkout-new-address1">Address 1</label>
-                <input type="text" id="checkout-new-address1" autocomplete="address-line1">
+                <label for="checkout-new-firstName">First Name<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-firstName" maxlength="50" autocomplete="given-name" required>
+                <p id="checkout-new-firstName-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid first name (minimum 2 characters)</p>
+                <label for="checkout-new-lastName">Last Name<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-lastName" maxlength="50" autocomplete="family-name" required>
+                <p id="checkout-new-lastName-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid last name (minimum 2 characters)</p>
+                <label for="checkout-new-phone">Phone No<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="tel" id="checkout-new-phone" maxlength="10" inputmode="numeric" autocomplete="tel" required>
+                <p id="checkout-new-phone-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid 10-digit phone number</p>
+                <label for="checkout-new-email">Email<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="email" id="checkout-new-email" autocomplete="email" required>
+                <p id="checkout-new-email-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email address</p>
+                <label for="checkout-new-address1">Address 1<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-address1" autocomplete="address-line1" required>
+                <p id="checkout-new-address1-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid address (minimum 5 characters)</p>
                 <label for="checkout-new-address2">Address 2 (optional)</label>
                 <input type="text" id="checkout-new-address2" autocomplete="address-line2">
-                <label for="checkout-new-city">City</label>
-                <input type="text" id="checkout-new-city" autocomplete="address-level2">
-                <label for="checkout-new-state">State</label>
-                <input type="text" id="checkout-new-state" autocomplete="address-level1">
-                <label for="checkout-new-pinCode">Pin Code</label>
-                <input type="text" id="checkout-new-pinCode" maxlength="6" inputmode="numeric" autocomplete="postal-code">
+                <label for="checkout-new-city">City<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-city" autocomplete="address-level2" required>
+                <p id="checkout-new-city-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid city name</p>
+                <label for="checkout-new-state">State<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-state" autocomplete="address-level1" required>
+                <p id="checkout-new-state-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid state name</p>
+                <label for="checkout-new-pinCode">Pin Code<sup class="text-danger" style="color: red">*</sup></label>
+                <input type="text" id="checkout-new-pinCode" maxlength="6" inputmode="numeric" autocomplete="postal-code" required>
+                <p id="checkout-new-pinCode-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid 6-digit pincode</p>
                 <div class="checkout-address-new-actions">
                     <button type="button" class="checkout-address-form-back" id="checkout-address-form-back">Back</button>
                     <button type="button" class="checkout-address-form-save" id="checkout-address-form-save">Use this address</button>
@@ -744,7 +755,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function validateEmail(value) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            const trimmed = value.trim();
+            return trimmed.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
         }
 
         function validatePhone(value) {
@@ -928,6 +940,13 @@ document.addEventListener('DOMContentLoaded', function () {
         window.submitForm = function() {
             const form = document.getElementById('checkout-form');
 
+            // Clear mobile error on new submission attempt
+            const mobileError = document.getElementById('checkout-mobile-error');
+            if (mobileError) {
+                mobileError.classList.add('hidden');
+                mobileError.textContent = '';
+            }
+
             if (lastName && firstName && lastName.value.trim().length === 0 && firstName.value.trim().length > 0) {
                 lastName.value = firstName.value;
             }
@@ -952,6 +971,73 @@ document.addEventListener('DOMContentLoaded', function () {
             // Check if all fields are valid
             if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid &&
                 isAddress1Valid && isCityValid && isStateValid && isPincodeValid) {
+
+                // Check pincode serviceability before submission
+                const pincodeValue = pincode ? String(pincode.value || '').replace(/\D/g, '') : '';
+                if (pincodeValue.length === 6) {
+                    // Show loading state
+                    const placeOrderBtn = document.querySelector('.checkout-place-btn');
+                    if (placeOrderBtn) {
+                        placeOrderBtn.disabled = true;
+                        placeOrderBtn.textContent = 'Checking delivery...';
+                    }
+
+                    fetch("{{ route('check.pincode') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            pincode: pincodeValue
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Restore button state
+                        if (placeOrderBtn) {
+                            placeOrderBtn.disabled = false;
+                            placeOrderBtn.textContent = placeOrderBtn.getAttribute('data-original-text') || 'Place Order';
+                        }
+
+                        if (data && data.serviceable === false) {
+                            // Show pincode error
+                            pincodeError.textContent = 'Oops! We don’t deliver to this pincode yet. Please try another pincode.';
+                            pincodeError.classList.remove('hidden');
+                            pincode.classList.add('border-red-500');
+                            pincode.classList.remove('border-green-500');
+
+                            // On mobile, also show error in the shipping address section
+                            const checkoutForm = document.getElementById('checkout-form');
+                            if (checkoutForm && window.getComputedStyle(checkoutForm).display === 'none') {
+                                const mobileError = document.getElementById('checkout-mobile-error');
+                                if (mobileError) {
+                                    mobileError.textContent = 'Oops! We don’t deliver to this pincode yet. Please try another pincode.';
+                                    mobileError.classList.remove('hidden');
+                                    mobileError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            } else {
+                                pincodeError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                            return;
+                        }
+
+                        // Pincode is serviceable, submit the form
+                        submitCheckoutForm();
+                    })
+                    .catch(err => {
+                        console.error('Pincode check error:', err);
+                        // Restore button state
+                        if (placeOrderBtn) {
+                            placeOrderBtn.disabled = false;
+                            placeOrderBtn.textContent = placeOrderBtn.getAttribute('data-original-text') || 'Place Order';
+                        }
+                        // On error, still allow submission (backend will validate)
+                        submitCheckoutForm();
+                    });
+                    return;
+                }
+
                 submitCheckoutForm();
                 return;
             }
@@ -959,16 +1045,69 @@ document.addEventListener('DOMContentLoaded', function () {
             // Mobile hides the shipping form; if a complete address is chosen, go to payment.
             if (isMobileCheckoutForm() && hasChosenShippingAddress()) {
                 const pinDigits = pincode ? String(pincode.value || '').replace(/\D/g, '') : '';
+                const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
                 const hasRequiredValues = firstName.value.trim().length > 0 &&
                     lastName.value.trim().length > 0 &&
                     email.value.trim().length > 0 &&
+                    isValidEmail &&
                     phone.value.trim().length > 0 &&
+                    address1.value.trim().length > 0 &&
                     city.value.trim().length > 0 &&
                     state.value.trim().length > 0 &&
                     pinDigits.length === 6;
                 if (hasRequiredValues) {
                     pincode.value = pinDigits;
-                    submitCheckoutForm();
+
+                    // Check pincode serviceability before submission
+                    const placeOrderBtn = document.querySelector('.checkout-place-btn');
+                    if (placeOrderBtn) {
+                        placeOrderBtn.disabled = true;
+                        placeOrderBtn.setAttribute('data-original-text', placeOrderBtn.textContent);
+                        placeOrderBtn.textContent = 'Checking delivery...';
+                    }
+
+                    fetch("{{ route('check.pincode') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            pincode: pinDigits
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Restore button state
+                        if (placeOrderBtn) {
+                            placeOrderBtn.disabled = false;
+                            placeOrderBtn.textContent = placeOrderBtn.getAttribute('data-original-text') || 'Place Order';
+                        }
+
+                        if (data && data.serviceable === false) {
+                            // Show error in mobile shipping address section
+                            const mobileError = document.getElementById('checkout-mobile-error');
+                            if (mobileError) {
+                                mobileError.textContent = 'Oops! We don’t deliver to this pincode yet. Please try another pincode.';
+                                mobileError.classList.remove('hidden');
+                                mobileError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                            return;
+                        }
+
+                        // Pincode is serviceable, submit the form
+                        submitCheckoutForm();
+                    })
+                    .catch(err => {
+                        console.error('Pincode check error:', err);
+                        // Restore button state
+                        if (placeOrderBtn) {
+                            placeOrderBtn.disabled = false;
+                            placeOrderBtn.textContent = placeOrderBtn.getAttribute('data-original-text') || 'Place Order';
+                        }
+                        // On error, still allow submission (backend will validate)
+                        submitCheckoutForm();
+                    });
                     return;
                 }
                 if (typeof window.openCheckoutAddressSheet === 'function') {
@@ -1565,6 +1704,10 @@ function goToPreviousPage() {
         setValue('firstName', firstName);
         setValue('lastName', lastName);
         setValue('phone', data.phone || '');
+        // Email should come from the data passed (mobile form) or keep existing value
+        if (data.email !== undefined) {
+            setValue('email', data.email);
+        }
         setValue('address1', data.address_1 || '');
         setValue('address2', data.address_2 || '');
         setValue('city', data.city || '');
@@ -1604,12 +1747,30 @@ function goToPreviousPage() {
             formError.textContent = '';
             formError.classList.add('hidden');
         }
+
+        // Clear all field-specific errors
+        var errorIds = ['checkout-new-firstName-error', 'checkout-new-lastName-error', 'checkout-new-phone-error', 'checkout-new-email-error', 'checkout-new-address1-error', 'checkout-new-city-error', 'checkout-new-state-error', 'checkout-new-pinCode-error'];
+        errorIds.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+
+        // Remove error styling from all inputs
+        var inputIds = ['checkout-new-firstName', 'checkout-new-lastName', 'checkout-new-phone', 'checkout-new-email', 'checkout-new-address1', 'checkout-new-city', 'checkout-new-state', 'checkout-new-pinCode'];
+        inputIds.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.classList.remove('border-red-500', 'border-green-500');
+        });
+
         if (optionEl) {
             setValue('checkout-new-address-id', optionEl.getAttribute('data-id') || '');
             var parts = String(optionEl.getAttribute('data-full-name') || '').trim().split(/\s+/).filter(Boolean);
             setValue('checkout-new-firstName', parts[0] || '');
             setValue('checkout-new-lastName', parts.slice(1).join(' ') || parts[0] || '');
             setValue('checkout-new-phone', optionEl.getAttribute('data-phone') || '');
+            // When editing, get email from main checkout form (user's email)
+            var mainEmail = (document.getElementById('email') || {}).value || '';
+            setValue('checkout-new-email', mainEmail);
             setValue('checkout-new-address1', optionEl.getAttribute('data-address-1') || '');
             setValue('checkout-new-address2', optionEl.getAttribute('data-address-2') || '');
             setValue('checkout-new-city', optionEl.getAttribute('data-city') || '');
@@ -1621,6 +1782,9 @@ function goToPreviousPage() {
         setValue('checkout-new-firstName', '');
         setValue('checkout-new-lastName', '');
         setValue('checkout-new-phone', '');
+        // When adding new, get email from main checkout form (user's email)
+        var mainEmail = (document.getElementById('email') || {}).value || '';
+        setValue('checkout-new-email', mainEmail);
         setValue('checkout-new-address1', '');
         setValue('checkout-new-address2', '');
         setValue('checkout-new-city', '');
@@ -1670,9 +1834,12 @@ function goToPreviousPage() {
         if (radio) {
             radio.checked = true;
         }
+        // Get email from the main checkout form (already has user's email)
+        var mainEmail = (document.getElementById('email') || {}).value || '';
         applyToCheckout({
             full_name: option.getAttribute('data-full-name') || '',
             phone: option.getAttribute('data-phone') || '',
+            email: mainEmail,
             address_1: option.getAttribute('data-address-1') || '',
             address_2: option.getAttribute('data-address-2') || '',
             city: option.getAttribute('data-city') || '',
@@ -1751,6 +1918,12 @@ function goToPreviousPage() {
     }
 
     function openSheet() {
+        // Clear mobile error when opening sheet
+        const mobileError = document.getElementById('checkout-mobile-error');
+        if (mobileError) {
+            mobileError.classList.add('hidden');
+            mobileError.textContent = '';
+        }
         showList();
         sheet.classList.add('is-open');
         sheet.setAttribute('aria-hidden', 'false');
@@ -1811,10 +1984,171 @@ function goToPreviousPage() {
 
     var saveBtn = document.getElementById('checkout-address-form-save');
     if (saveBtn) {
+        // Real-time validation for mobile address form
+        var newFirstName = document.getElementById('checkout-new-firstName');
+        var newLastName = document.getElementById('checkout-new-lastName');
+        var newPhone = document.getElementById('checkout-new-phone');
+        var newEmail = document.getElementById('checkout-new-email');
+        var newAddress1 = document.getElementById('checkout-new-address1');
+        var newCity = document.getElementById('checkout-new-city');
+        var newState = document.getElementById('checkout-new-state');
+        var newPinCode = document.getElementById('checkout-new-pinCode');
+
+        function validateMobileField(input, errorEl, validationFn) {
+            var value = input.value;
+
+            if (value.trim().length === 0) {
+                errorEl.classList.add('hidden');
+                input.classList.remove('border-red-500', 'border-green-500');
+                return false;
+            }
+
+            var isValid = validationFn(value);
+
+            if (isValid) {
+                errorEl.classList.add('hidden');
+                input.classList.remove('border-red-500');
+                input.classList.add('border-green-500');
+                return true;
+            } else {
+                errorEl.classList.remove('hidden');
+                input.classList.remove('border-green-500');
+                input.classList.add('border-red-500');
+                return false;
+            }
+        }
+
+        function validateMobileName(value) {
+            var trimmed = value.trim();
+            return trimmed.length >= 2 && /^[a-zA-Z\s]+$/.test(trimmed);
+        }
+
+        function validateMobileEmail(value) {
+            var trimmed = value.trim();
+            return trimmed.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+        }
+
+        function validateMobilePhone(value) {
+            var numericValue = value.replace(/\D/g, '');
+            return /^[0-9]{10}$/.test(numericValue);
+        }
+
+        function validateMobileAddress(value) {
+            return value.trim().length >= 5;
+        }
+
+        function validateMobileCityState(value) {
+            var trimmed = value.trim();
+            return trimmed.length >= 2 && /^[a-zA-Z\s]+$/.test(trimmed);
+        }
+
+        function validateMobilePincode(value) {
+            var numericValue = value.replace(/\D/g, '');
+            return /^[0-9]{6}$/.test(numericValue);
+        }
+
+        // Add input event listeners for real-time validation
+        if (newFirstName) {
+            newFirstName.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-firstName-error'), validateMobileName);
+            });
+            newFirstName.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-firstName-error'), validateMobileName);
+                }
+            });
+        }
+
+        if (newLastName) {
+            newLastName.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-lastName-error'), validateMobileName);
+            });
+            newLastName.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-lastName-error'), validateMobileName);
+                }
+            });
+        }
+
+        if (newPhone) {
+            newPhone.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+                validateMobileField(this, document.getElementById('checkout-new-phone-error'), validateMobilePhone);
+            });
+            newPhone.addEventListener('blur', function() {
+                if (this.value.length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-phone-error'), validateMobilePhone);
+                }
+            });
+        }
+
+        if (newEmail) {
+            newEmail.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-email-error'), validateMobileEmail);
+            });
+            newEmail.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-email-error'), validateMobileEmail);
+                }
+            });
+        }
+
+        if (newAddress1) {
+            newAddress1.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-address1-error'), validateMobileAddress);
+            });
+            newAddress1.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-address1-error'), validateMobileAddress);
+                }
+            });
+        }
+
+        if (newCity) {
+            newCity.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-city-error'), validateMobileCityState);
+            });
+            newCity.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-city-error'), validateMobileCityState);
+                }
+            });
+        }
+
+        if (newState) {
+            newState.addEventListener('input', function() {
+                validateMobileField(this, document.getElementById('checkout-new-state-error'), validateMobileCityState);
+            });
+            newState.addEventListener('blur', function() {
+                if (this.value.trim().length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-state-error'), validateMobileCityState);
+                }
+            });
+        }
+
+        if (newPinCode) {
+            newPinCode.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length > 6) {
+                    this.value = this.value.slice(0, 6);
+                }
+                validateMobileField(this, document.getElementById('checkout-new-pinCode-error'), validateMobilePincode);
+            });
+            newPinCode.addEventListener('blur', function() {
+                if (this.value.length > 0) {
+                    validateMobileField(this, document.getElementById('checkout-new-pinCode-error'), validateMobilePincode);
+                }
+            });
+        }
+
         saveBtn.addEventListener('click', function () {
             var firstName = (document.getElementById('checkout-new-firstName') || {}).value || '';
             var lastName = (document.getElementById('checkout-new-lastName') || {}).value || '';
             var phone = (document.getElementById('checkout-new-phone') || {}).value || '';
+            var email = (document.getElementById('checkout-new-email') || {}).value || '';
             var address1 = (document.getElementById('checkout-new-address1') || {}).value || '';
             var address2 = (document.getElementById('checkout-new-address2') || {}).value || '';
             var city = (document.getElementById('checkout-new-city') || {}).value || '';
@@ -1824,66 +2158,216 @@ function goToPreviousPage() {
             var formError = document.getElementById('checkout-address-form-error');
             var fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ');
 
+            // Hide all field-specific errors
+            var errorIds = ['checkout-new-firstName-error', 'checkout-new-lastName-error', 'checkout-new-phone-error', 'checkout-new-email-error', 'checkout-new-address1-error', 'checkout-new-city-error', 'checkout-new-state-error', 'checkout-new-pinCode-error'];
+            errorIds.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Remove error styling from all inputs
+            var inputIds = ['checkout-new-firstName', 'checkout-new-lastName', 'checkout-new-phone', 'checkout-new-email', 'checkout-new-address1', 'checkout-new-city', 'checkout-new-state', 'checkout-new-pinCode'];
+            inputIds.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.classList.remove('border-red-500');
+            });
+
             if (formError) {
                 formError.textContent = '';
                 formError.classList.add('hidden');
             }
 
-            fetch("{{ route('addresses.checkout') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    id: isEditingAddress ? (addressId || null) : null,
-                    create_new: !isEditingAddress,
-                    full_name: fullName,
-                    phone: phone.trim(),
-                    address_1: address1.trim(),
-                    address_2: address2.trim(),
-                    city: city.trim(),
-                    state: state.trim(),
-                    pincode: pin.trim()
+            var hasError = false;
+
+            // Validate required fields
+            if (!firstName.trim() || firstName.trim().length < 2) {
+                var firstNameError = document.getElementById('checkout-new-firstName-error');
+                var firstNameInput = document.getElementById('checkout-new-firstName');
+                if (firstNameError) firstNameError.classList.remove('hidden');
+                if (firstNameInput) firstNameInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!lastName.trim() || lastName.trim().length < 2) {
+                var lastNameError = document.getElementById('checkout-new-lastName-error');
+                var lastNameInput = document.getElementById('checkout-new-lastName');
+                if (lastNameError) lastNameError.classList.remove('hidden');
+                if (lastNameInput) lastNameInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!phone.trim() || !/^[0-9]{10}$/.test(phone.trim())) {
+                var phoneError = document.getElementById('checkout-new-phone-error');
+                var phoneInput = document.getElementById('checkout-new-phone');
+                if (phoneError) phoneError.classList.remove('hidden');
+                if (phoneInput) phoneInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+                var emailError = document.getElementById('checkout-new-email-error');
+                var emailInput = document.getElementById('checkout-new-email');
+                if (emailError) emailError.classList.remove('hidden');
+                if (emailInput) emailInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!address1.trim() || address1.trim().length < 5) {
+                var address1Error = document.getElementById('checkout-new-address1-error');
+                var address1Input = document.getElementById('checkout-new-address1');
+                if (address1Error) address1Error.classList.remove('hidden');
+                if (address1Input) address1Input.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!city.trim() || city.trim().length < 2) {
+                var cityError = document.getElementById('checkout-new-city-error');
+                var cityInput = document.getElementById('checkout-new-city');
+                if (cityError) cityError.classList.remove('hidden');
+                if (cityInput) cityInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!state.trim() || state.trim().length < 2) {
+                var stateError = document.getElementById('checkout-new-state-error');
+                var stateInput = document.getElementById('checkout-new-state');
+                if (stateError) stateError.classList.remove('hidden');
+                if (stateInput) stateInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (!pin.trim() || !/^[0-9]{6}$/.test(pin.trim())) {
+                var pinError = document.getElementById('checkout-new-pinCode-error');
+                var pinInput = document.getElementById('checkout-new-pinCode');
+                if (pinError) pinError.classList.remove('hidden');
+                if (pinInput) pinInput.classList.add('border-red-500');
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // Check pincode serviceability before saving address
+            if (pin.trim().length === 6) {
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Checking delivery...';
+
+                fetch("{{ route('check.pincode') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        pincode: pin.trim()
+                    })
                 })
-            })
-            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
-            .then(function (result) {
-                if (!result.ok || !result.data.status) {
-                    var message = (result.data && result.data.message) ? result.data.message : 'Please fill a valid address.';
-                    if (result.data && result.data.errors) {
-                        var firstError = Object.values(result.data.errors)[0];
-                        if (firstError && firstError[0]) {
-                            message = firstError[0];
+                .then(res => res.json())
+                .then(data => {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Use this address';
+
+                    if (data && data.serviceable === false) {
+                        var pinError = document.getElementById('checkout-new-pinCode-error');
+                        var pinInput = document.getElementById('checkout-new-pinCode');
+                        if (pinError) {
+                            pinError.textContent = 'Oops! We don’t deliver to this pincode yet. Please try another pincode.';
+                            pinError.classList.remove('hidden');
                         }
+                        if (pinInput) {
+                            pinInput.classList.add('border-red-500');
+                        }
+                        return;
                     }
+
+                    // Pincode is serviceable, proceed to save address
+                    saveAddress();
+                })
+                .catch(err => {
+                    console.error('Pincode check error:', err);
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Use this address';
+                    // On error, still allow saving (backend will validate)
+                    saveAddress();
+                });
+                return;
+            }
+
+            function saveAddress() {
+                fetch("{{ route('addresses.checkout') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        id: isEditingAddress ? (addressId || null) : null,
+                        create_new: !isEditingAddress,
+                        full_name: fullName,
+                        phone: phone.trim(),
+                        address_1: address1.trim(),
+                        address_2: address2.trim(),
+                        city: city.trim(),
+                        state: state.trim(),
+                        pincode: pin.trim()
+                    })
+                })
+                .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+                .then(function (result) {
+                    if (!result.ok || !result.data.status) {
+                        var message = (result.data && result.data.message) ? result.data.message : 'Please fill a valid address.';
+                        if (result.data && result.data.errors) {
+                            var firstError = Object.values(result.data.errors)[0];
+                            if (firstError && firstError[0]) {
+                                message = firstError[0];
+                            }
+                        }
+                        if (formError) {
+                            formError.textContent = message;
+                            formError.classList.remove('hidden');
+                            // Scroll to show the error on mobile
+                            formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return;
+                    }
+                    applyToCheckout({
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: phone,
+                        email: email,
+                        address_1: address1,
+                        address_2: address2,
+                        city: city,
+                        state: state,
+                        pincode: pin
+                    });
+                    upsertAddressOption(result.data.address);
+                    closeSheet();
+
+                    // Automatically submit the form after saving address on mobile
+                    var checkoutForm = document.getElementById('checkout-form');
+                    if (checkoutForm && window.getComputedStyle(checkoutForm).display === 'none') {
+                        // Small delay to ensure form is updated
+                        setTimeout(function() {
+                            if (typeof window.submitForm === 'function') {
+                                window.submitForm();
+                            }
+                        }, 100);
+                    }
+                })
+                .catch(function (err) {
+                    console.error(err);
                     if (formError) {
-                        formError.textContent = message;
+                        formError.textContent = 'Could not save address. Please try again.';
                         formError.classList.remove('hidden');
                     }
-                    return;
-                }
-                applyToCheckout({
-                    firstName: firstName,
-                    lastName: lastName,
-                    phone: phone,
-                    address_1: address1,
-                    address_2: address2,
-                    city: city,
-                    state: state,
-                    pincode: pin
                 });
-                upsertAddressOption(result.data.address);
-                closeSheet();
-            })
-            .catch(function (err) {
-                console.error(err);
-                if (formError) {
-                    formError.textContent = 'Could not save address. Please try again.';
-                    formError.classList.remove('hidden');
-                }
-            });
+            }
+
+            // If pincode is not 6 digits, proceed without pincode check
+            saveAddress();
         });
     }
 })();

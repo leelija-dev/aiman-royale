@@ -89,7 +89,7 @@
 </style>
 
 <main class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="container mx-auto flex justify-center items-center">
+    <div class="container mx-auto flex justify-center items-center px-0">
 
         <!-- Registration Form -->
         <div class="max-w-md w-full">

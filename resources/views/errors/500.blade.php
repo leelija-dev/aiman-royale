@@ -328,7 +328,8 @@
 
         <!-- Status badge — feels like network hint -->
         <div class="status-badge" aria-hidden="true">⚠️ Network hiccup</div>
-
+       
+<!-- end lakshman -->
         <!-- Main heading — no error mention -->
         <h1 id="network-title">Connection lost</h1>
         <p class="subhead">

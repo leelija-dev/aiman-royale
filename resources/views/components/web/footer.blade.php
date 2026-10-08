@@ -1610,7 +1610,7 @@ $isProductPage = !empty($productSlug);
         }
 
         // Use latest products API for same category
-        const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/products/latest/${productSlug}`;
+        const apiUrl = `{{ env('APP_URL', 'https://aimanroyale.com') }}/api/products/latest/${productSlug}`;
         const container = document.getElementById('footer-latest-products-container');
 
         fetch(apiUrl)
@@ -1681,7 +1681,7 @@ $isProductPage = !empty($productSlug);
     }
 
     const slug = getProductSlugFromUrl();
-    const apiUrl = `{{ env('APP_URL', 'http://localhost') }}/api/faqs/products/${slug}`;
+    const apiUrl = `{{ env('APP_URL', 'https://aimanroyale.com') }}/api/faqs/products/${slug}`;
     const container = document.getElementById('faq-dynamic-container');
     const errorDiv = document.getElementById('faq-error-msg');
 
@@ -2255,7 +2255,7 @@ art from fake trails.
             </div>
             <div>
               <p class="font-medium text-gray-900">Call Us</p>
-              <a href="tel:+{{env('WH_WHATSAPP_NUMBER')}}" class="text-sm text-gray-600 mt-1">+{{env('WH_WHATSAPP_NUMBER')}}</a>
+              <a href="tel:+{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}" class="text-sm text-gray-600 mt-1">+{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -2509,7 +2509,7 @@ art from fake trails.
   </div>
 
 </a> --}}
-<a href="https://wa.me/{{ env('WH_WHATSAPP_NUMBER') }}" target="_blank"
+<a href="https://wa.me/{{ config('app.WH_WHATSAPP_NUMBER') ?: '+917003184741' }}" target="_blank"
    id="wa-btn" aria-label="Chat with us on WhatsApp (opens in new tab)"
    class="fixed {{ $isProductPage ? 'bottom-[7.5rem]' : 'bottom-32' }} right-4 md:bottom-6 md:right-6 z-[60] hidden">
    

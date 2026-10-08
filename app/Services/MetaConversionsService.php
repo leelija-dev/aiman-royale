@@ -296,12 +296,12 @@ class MetaConversionsService
                     $this->hashData($guestDb)
                 ];
             }
-            if ($guestFbc = request()->cookie('_meta_guest_fbc')) {
-                $userData['fbc'] = $guestFbc;
-            }
-            if ($guestFbp = request()->cookie('_meta_guest_fbp')) {
-                $userData['fbp'] = $guestFbp;
-            }
+            // if ($guestFbc = request()->cookie('_meta_guest_fbc')) {
+            //     $userData['fbc'] = $guestFbc;
+            // }
+            // if ($guestFbp = request()->cookie('_meta_guest_fbp')) {
+            //     $userData['fbp'] = $guestFbp;
+            // }
           
         }
 
@@ -493,20 +493,47 @@ protected function hashZip(?string $v): ?string
     return $v === '' ? null : hash('sha256', $v);
 }
         /** fbc from cookie, else rebuilt from ?fbclid= */
+    // protected function resolveFbc(): ?string
+    // {
+    //     if ($fbc = request()->cookie('_fbc')) {
+    //         return $fbc;
+    //     }
+
+    //     if ($fbclid = request()->query('fbclid')) {
+    //         $fbc = 'fb.1.' . (time() * 1000) . '.' . $fbclid;
+    //         Cookie::queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
+    //         return $fbc;
+    //     }
+
+    //     return null;
+    // }
     protected function resolveFbc(): ?string
-    {
-        if ($fbc = request()->cookie('_fbc')) {
-            return $fbc;
-        }
+{
+    $req = request();
+    $existing = $this->validFbCookie($req->cookie('_fbc') ?: ($_COOKIE['_fbc'] ?? null));
 
-        if ($fbclid = request()->query('fbclid')) {
-            $fbc = 'fb.1.' . (time() * 1000) . '.' . $fbclid;
-            Cookie::queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
-            return $fbc;
+    if ($fbclid = $req->query('fbclid')) {
+        if ($existing && str_ends_with($existing, '.' . $fbclid)) {
+            return $existing;
         }
-
-        return null;
+        $fbc = 'fb.1.' . (int) (microtime(true) * 1000) . '.' . $fbclid;
+        Cookie::queue('_fbc', $fbc, 60 * 24 * 90, '/', null, null, false);
+        return $fbc;
     }
+
+    return $existing;
+}
+
+protected function resolveFbp(): ?string
+{
+    return $this->validFbCookie(request()->cookie('_fbp') ?: ($_COOKIE['_fbp'] ?? null));
+}
+
+/** Accept only real Meta format: fb.<0-2>.<timestamp>.<id> (rejects old encrypted values) */
+protected function validFbCookie($v): ?string
+{
+    return (is_string($v) && preg_match('/^fb\.[0-2]\.\d{10,13}\.[A-Za-z0-9_\-]+$/', $v)) ? $v : null;
+}
 
     /** fbp from Pixel cookie, else generated server-side */
     // protected function resolveFbp(): ?string
@@ -520,10 +547,10 @@ protected function hashZip(?string $v): ?string
 
     //     return $fbp;
     // }
-    protected function resolveFbp(): ?string
-{
-    return request()->cookie('_fbp') ?: null;
-}
+//     protected function resolveFbp(): ?string
+// {
+//     return request()->cookie('_fbp') ?: null;
+// }
 
     /** Stable guest identifier stored in a first-party cookie */
     protected function guestId(): string

@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return route('page.login');
             });
           $middleware->trustProxies(at: '*');
+          $middleware->encryptCookies(except: ['_fbc', '_fbp']);
 
     //         $middleware->validateCsrfTokens(except: [
     //     'refund/*',
