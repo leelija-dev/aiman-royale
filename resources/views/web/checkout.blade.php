@@ -175,6 +175,11 @@
                         <p id="city-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid city name
                         </p>
                         <p id="city-success" class="text-green-500 text-sm mt-1 hidden">✓ Valid city</p>
+                         @error('city')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">State<sup class="text-danger"
@@ -186,6 +191,11 @@
                         <p id="state-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid state
                             name</p>
                         <p id="state-success" class="text-green-500 text-sm mt-1 hidden">✓ Valid state</p>
+                        @error('state')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code<sup
@@ -698,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <label for="checkout-new-address2">Address 2 (optional)</label>
                 <input type="text" id="checkout-new-address2" autocomplete="address-line2">
                 <label for="checkout-new-city">City<sup class="text-danger" style="color: red">*</sup></label>
-                <input type="text" id="checkout-new-city" autocomplete="address-level2" required>
+                <input type="text" id="checkout-new-city"  maxlength="25" autocomplete="address-level2" required>
                 <p id="checkout-new-city-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid city name</p>
                 <label for="checkout-new-state">State<sup class="text-danger" style="color: red">*</sup></label>
                 <input type="text" id="checkout-new-state" autocomplete="address-level1" required>
@@ -768,9 +778,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return value.trim().length >= 5;
         }
 
+        // function validateCityState(value) {
+        //     const trimmed = value.trim();
+        //     return trimmed.length >= 2 && /^[a-zA-Z\s]+$/.test(trimmed);
+        // }
         function validateCityState(value) {
             const trimmed = value.trim();
-            return trimmed.length >= 2 && /^[a-zA-Z\s]+$/.test(trimmed);
+            return trimmed.length >= 2 &&
+                trimmed.length <= 25 &&
+                /^[a-zA-Z\s]+$/.test(trimmed);
         }
 
         function validatePincode(value) {
@@ -2039,7 +2055,7 @@ function goToPreviousPage() {
 
         function validateMobileCityState(value) {
             var trimmed = value.trim();
-            return trimmed.length >= 2 && /^[a-zA-Z\s]+$/.test(trimmed);
+            return trimmed.length >= 2 && trimmed.length <= 25 && /^[a-zA-Z\s]+$/.test(trimmed);
         }
 
         function validateMobilePincode(value) {
