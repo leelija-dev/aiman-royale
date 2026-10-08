@@ -149,7 +149,7 @@ class CheckoutController extends Controller
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
             'address1' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'city' => 'required|string|max:25',
             'state' => 'required|string|max:255',
             'pinCode' => 'required|string|size:6',
             // 'grand_total' => 'required|numeric|min:1',
