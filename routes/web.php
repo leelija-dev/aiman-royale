@@ -268,6 +268,6 @@ Route::get('/generate-sitemap', function (SitemapService $sitemapService) {
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-Route::get('/force-500', function () {
-    throw new \Exception('Test 500 error');
-});
+// Route::get('/force-500', function () {
+//     throw new \Exception('Test 500 error');
+// });
