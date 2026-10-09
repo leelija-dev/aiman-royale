@@ -235,7 +235,26 @@ class ProductController extends Controller
                     $query->orderBy('created_at', 'desc');
                 }
             }
+            $sortMap = [
+                'name-asc'  => ['products.name', 'asc'],
+                'name-desc' => ['products.name', 'desc'],
+                'date-asc'  => ['products.created_at', 'asc'],
+                'date-desc' => ['products.created_at', 'desc'],
+            ];
+            $sort = $request->input('sort');
 
+            if (in_array($sort, ['price-asc', 'price-desc'])) {
+                $dir = $sort === 'price-asc' ? 'asc' : 'desc';
+
+                $query->reorder()->orderByRaw("(
+                    SELECT MIN(COALESCE(pv.discount_price, pv.price))
+                    FROM product_variants pv
+                    WHERE pv.product_id = products.id
+                ) $dir");
+            } elseif (isset($sortMap[$sort])) {
+                [$col, $dir] = $sortMap[$sort];
+                $query->reorder($col, $dir);
+            }
             $products = $query->paginate(5)->WithQueryString();
 
             $processedProducts = $products->map(function ($product) {

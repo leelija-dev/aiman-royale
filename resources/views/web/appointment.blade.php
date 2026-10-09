@@ -651,7 +651,7 @@
                             <button id="prev-month" class="w-10 md:w-12 h-10 md:h-12 rounded-full border border-gray-200 hover:bg-pink-100 transition flex items-center justify-center bg-white shadow-sm">
                                 <i class="fas fa-chevron-left text-pink-600 text-sm md:text-base"></i>
                             </button>
-                            <span id="current-month" class="text-sm md:text-lg font-medium text-gray-800 py-2 px-3 md:py-3 md:px-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-full shadow-sm">February 2025</span>
+                            <span id="current-month" class="text-sm md:text-lg font-medium text-gray-800 py-2 px-3 md:py-3 md:px-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-full shadow-sm">February 2026</span>
                             <button id="next-month" class="w-10 md:w-12 h-10 md:h-12 rounded-full border border-gray-200 hover:bg-pink-100 transition flex items-center justify-center bg-white shadow-sm">
                                 <i class="fas fa-chevron-right text-pink-600 text-sm md:text-base"></i>
                             </button>
@@ -1174,7 +1174,7 @@
                 <div class="designer-image-container shadow-2xl rounded-2xl">
                     <img
                         src="{{asset('web/images/appointment/DSC_2148 (1).webp')}}"
-                        alt="Sophia Laurent - Fashion Designer"
+                        alt="Aiman Khan - Fashion Designer"
                         class="w-full h-auto object-cover rounded-2xl">
 
                     <!-- Badge on Image -->
@@ -1199,7 +1199,7 @@
                     </div>
                 </div>
                 <p class="text-center text-gray-500 text-xs sm:text-sm mt-3 sm:mt-4 italic">
-                    Sophia in her design studio, working on a custom evening gown
+                    Aiman in her design studio, working on a custom evening gown
                 </p>
             </div>
 
@@ -1212,7 +1212,7 @@
                     </div>
 
                     <h3 class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 mb-2 md:mb-4">
-                        Sophia Laurent
+                        Aiman Khan
                     </h3>
 
                     <p class="text-base md:text-lg text-gray-500 mb-4 md:mb-6">
@@ -1225,12 +1225,12 @@
                 <!-- About Text -->
                 <div class="mb-8 md:mb-10">
                     <p class="text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 md:mb-6">
-                        With over a decade of experience in haute couture and bespoke fashion, Sophia brings a
+                        With over a decade of experience in haute couture and bespoke fashion, Aiman brings a
                         <span class="font-medium text-[#EC4899]">passionate, detail-oriented approach</span> to every styling session.
                     </p>
 
                     <p class="text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed">
-                        Sophia specializes in creating
+                        Aiman specializes in creating
                         <span class="font-medium text-[#EC4899]">custom, personalized looks</span> that reflect her clients' personalities,
                         lifestyles, and unique beauty.
                     </p>
@@ -1300,7 +1300,7 @@
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div>
-                                <p class="font-medium text-gray-900">Sophia Laurent</p>
+                                <p class="font-medium text-gray-900">Aiman Khan</p>
                                 <p class="text-xs md:text-sm text-gray-500">Lead Designer, Élégance Boutique</p>
                             </div>
                             <div class="flex space-x-2">
@@ -1365,7 +1365,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Priya Sharma</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Software Engineer, Bengaluru</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Bridal Consultation · Diwali 2025</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Bridal Consultation · Diwali 2026</p>
                     </div>
                 </div>
             </div>
@@ -1392,7 +1392,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Zara Khan</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Content Creator, Lucknow</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Premium Salwar Suit · Eid-ul-Fitr 2025</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Premium Salwar Suit · Eid-ul-Fitr 2026</p>
                     </div>
                 </div>
             </div>
@@ -1419,7 +1419,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Gurpreet Kaur</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Teacher, Amritsar</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Designer Ensemble · Vaisakhi 2025</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Designer Ensemble · Vaisakhi 2026</p>
                     </div>
                 </div>
             </div>
@@ -1446,7 +1446,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Anjali D'Souza</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Event Planner, Mumbai</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Festive Gown · Christmas 2024</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Festive Gown · Christmas 2026</p>
                     </div>
                 </div>
             </div>
@@ -1473,7 +1473,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Riddhi Patel</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Dancer, Ahmedabad</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Navratri Lehenga · Sep 2025</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Navratri Lehenga · Sep 2026</p>
                     </div>
                 </div>
             </div>
@@ -1500,7 +1500,7 @@
                     <div class="min-w-0">
                         <h4 class="text-[#EC4899] font-semibold text-sm md:text-lg truncate">Fatima Ansari</h4>
                         <p class="text-gray-500 text-xs md:text-sm">Doctor, Hyderabad</p>
-                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Ramadan Edit · Mar 2025</p>
+                        <p class="text-gray-400 text-xs mt-0.5 md:mt-1 truncate">Ramadan Edit · Mar 2026</p>
                     </div>
                 </div>
             </div>
@@ -1652,7 +1652,7 @@
                             <i class="fas fa-star text-yellow-400 text-sm md:text-base lg:text-xl ml-1"></i>
                             <span class="ml-2 md:ml-3 font-bold text-gray-900 text-base md:text-lg">4.9/5</span>
                         </div>
-                        <p class="text-xs md:text-sm text-gray-500">Based on 1,200+ client reviews</p>
+                        <p class="text-xs md:text-sm text-gray-500">Based on 850+ client reviews</p>
                     </div>
                 </div>
             </div>
@@ -1959,7 +1959,7 @@
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const message = this.classList.contains('profile-btn') ?
-                    "Opening Sophia Laurent's full profile..." :
+                    "Opening Aiman Khan's full profile..." :
                     "Thank you for your interest! Our booking system is ready to help you schedule your appointment.";
 
                 alert(message);
@@ -1985,7 +1985,7 @@
                 e.preventDefault();
                 const platform = this.querySelector('i')?.className.includes('instagram') ? 'Instagram' :
                     this.querySelector('i')?.className.includes('pinterest') ? 'Pinterest' : 'LinkedIn';
-                alert(`Redirecting to Sophia's ${platform} profile...`);
+                alert(`Redirecting to Aiman's ${platform} profile...`);
             });
         });
     }
