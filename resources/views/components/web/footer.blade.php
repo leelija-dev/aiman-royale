@@ -1324,7 +1324,7 @@ $category = \App\Models\Category::where('slug', $slug)->first();
       <!-- Summary (only visible when closed) -->
       <summary class="cursor-pointer list-none group-open:hidden text-gray-900">
         <div id="category-preview" class="leading-relaxed text-base md:text-lg text-[#666]">
-          {{ Str::limit(preg_replace('/\s+/', ' ', trim(strip_tags($category->description))), 200, '...') }}
+          {!! Str::limit(preg_replace('/\s+/', ' ', trim(strip_tags($category->description))), 200, '...') !!}
         </div>
         @if(strlen($category->description) > 200)
         <span class="inline-block mt-3 text-[#F21D92] font-semibold hover:text-[#B50965] transition-colors">
