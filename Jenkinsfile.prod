@@ -1,11 +1,14 @@
 pipeline {
     agent any
 
+    options {
+        disableConcurrentBuilds()
+    }
+
     environment {
         PROJECT_DIR = '/var/www/aiman-royale'
         DEPLOY_USER = 'deploy'
         VPS_HOST = '82.25.104.117'
-        BUILD_NUMBER = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -14,11 +17,49 @@ pipeline {
             steps {
                 sshagent(credentials: ['aiman-royale-vps-cred']) {
                     sh """
+                        set -e
+
                         ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                            set -e
-                            echo "Verifying deployment environment..."
-                            [ -d "${PROJECT_DIR}" ]
+                            set -eu
+
+                            echo "[VERIFY] Checking production directory..."
+                            test -d "${PROJECT_DIR}"
+                            cd "${PROJECT_DIR}"
+
+                            current_root=\$(git rev-parse --show-toplevel)
+                            if [ "\$current_root" != "${PROJECT_DIR}" ]; then
+                                echo "[VERIFY] ERROR: Unexpected repository root"
+                                exit 1
+                            fi
+
+                            branch=\$(git branch --show-current)
+                            if [ "\$branch" != "main" ]; then
+                                echo "[VERIFY] ERROR: Expected main branch"
+                                exit 1
+                            fi
+
+                            echo "[VERIFY] Checking Docker Compose configuration..."
                             docker compose version >/dev/null
+                            docker compose config -q
+
+                            echo "[VERIFY] Checking currently running services..."
+                            for service in app nginx redis; do
+                                service_id=\$(docker compose ps -q "\$service")
+
+                                if [ -z "\$service_id" ]; then
+                                    echo "[VERIFY] ERROR: No container found for \$service"
+                                    exit 1
+                                fi
+
+                                state=\$(docker inspect --format="{{.State.Status}}" "\$service_id")
+
+                                if [ "\$state" != "running" ]; then
+                                    echo "[VERIFY] ERROR: \$service is not running"
+                                    exit 1
+                                fi
+                            done
+
+                            echo "[VERIFY] Production environment checks passed."
                         '
                     """
                 }
@@ -29,75 +70,208 @@ pipeline {
             steps {
                 sshagent(credentials: ['aiman-royale-vps-cred']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                            set -e
-                            cd ${PROJECT_DIR}
+                        set -e
 
-                            echo "[DEPLOY] Backing up frontend assets..."
-                            if [ -f public/build/manifest.json ]; then
-                                rm -rf public/build.bak-pre-deploy
-                                cp -a public/build public/build.bak-pre-deploy
+                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
+                            set -eu
+                            umask 077
+
+                            cd "${PROJECT_DIR}"
+
+                            echo "[DEPLOY] Verifying repository..."
+                            current_root=\$(git rev-parse --show-toplevel)
+                            test "\$current_root" = "${PROJECT_DIR}"
+
+                            branch=\$(git branch --show-current)
+                            test "\$branch" = "main"
+
+                            old_commit=\$(git rev-parse HEAD)
+
+                            echo "[DEPLOY] Saving current tracked changes..."
+                            patch_file="\$HOME/aiman-royale-predeploy-${env.BUILD_NUMBER}.patch"
+                            status_file="\$HOME/aiman-royale-predeploy-${env.BUILD_NUMBER}.status"
+
+                            git diff HEAD --binary > "\$patch_file"
+                            git status --short --untracked-files=all > "\$status_file"
+
+                            chmod 600 "\$patch_file" "\$status_file"
+
+                            echo "[DEPLOY] Checking current application container..."
+                            app_id=\$(docker compose ps -q app)
+
+                            if [ -z "\$app_id" ]; then
+                                echo "[DEPLOY] ERROR: Application container is missing"
+                                exit 1
                             fi
 
-                            echo "[DEPLOY] Preparing file ownership for git update..."
-                            docker compose exec -T app chown -R "\$(id -u):\$(id -g)" storage bootstrap/cache public/uploads
+                            old_image_id=\$(docker inspect --format="{{.Image}}" "\$app_id")
+                            old_image_ref=\$(docker inspect --format="{{.Config.Image}}" "\$app_id")
 
-                            echo "[DEPLOY] Updating code..."
+                            if [ -z "\$old_image_id" ] || [ -z "\$old_image_ref" ]; then
+                                echo "[DEPLOY] ERROR: Cannot identify the current application image"
+                                exit 1
+                            fi
+
+                            echo "[DEPLOY] Fetching production branch..."
                             git fetch origin
-                            git reset --hard origin/main
 
-                            echo "[DEPLOY] Restoring web write access..."
-                            docker compose exec -T app chown -R www-data:www-data storage bootstrap/cache public/uploads
+                            target_commit=\$(git rev-parse origin/main)
 
-                            echo "[DEPLOY] Starting runtime services..."
-                            docker compose build --pull app
-                            docker compose up -d app nginx redis elasticsearch kibana
-                            docker compose stop node || true
+                            echo "[DEPLOY] Current commit: \$old_commit"
+                            echo "[DEPLOY] Target commit:  \$target_commit"
 
-                            echo "[DEPLOY] Building frontend assets..."
-                            docker compose --profile assets run --rm node
-                            docker compose stop node || true
-
-                            if [ ! -f public/build/manifest.json ] && [ -d public/build.bak-pre-deploy ]; then
-                                echo "[DEPLOY] Asset build missing manifest, restoring backup..."
-                                cp -a public/build.bak-pre-deploy public/build
+                            if ! git merge-base --is-ancestor "\$old_commit" "\$target_commit"; then
+                                echo "[DEPLOY] ERROR: Target is not a forward update."
+                                echo "[DEPLOY] Aborting for manual review."
+                                exit 1
                             fi
-                            test -f public/build/manifest.json
 
-                            echo "[DEPLOY] Waiting for services..."
-                            sleep 30
+                            echo "[DEPLOY] Checking for untracked-file conflicts..."
+                            target_list=\$(mktemp)
+                            untracked_list=\$(mktemp)
 
-                            echo "[DEPLOY] Running migrations..."
-                            docker compose exec -T app php artisan migrate --force
+                            git ls-tree -r --name-only "\$target_commit" > "\$target_list"
+                            git ls-files --others --exclude-standard > "\$untracked_list"
 
-                            echo "[DEPLOY] Optimizing application..."
-                            docker compose exec -T app php artisan optimize:clear
-                            # docker compose exec -T app php artisan optimize
-                            docker compose exec -T app php artisan view:cache
-                            # docker compose exec -T app php artisan route:cache
-                            docker compose exec -T app php artisan config:cache
+                            conflict=0
 
-                            echo "${BUILD_NUMBER}" > .deployed-version
+                            while IFS= read -r untracked_path; do
+                                [ -n "\$untracked_path" ] || continue
+
+                                while IFS= read -r tracked_path; do
+                                    case "\$tracked_path" in
+                                        "\$untracked_path"|"\$untracked_path"/*)
+                                            echo "[DEPLOY] ERROR: Target would overwrite:"
+                                            echo "  \$untracked_path"
+                                            conflict=1
+                                            break
+                                            ;;
+                                    esac
+
+                                    case "\$untracked_path" in
+                                        "\$tracked_path"/*)
+                                            echo "[DEPLOY] ERROR: Target conflicts with:"
+                                            echo "  \$untracked_path"
+                                            echo "  \$tracked_path"
+                                            conflict=1
+                                            break
+                                            ;;
+                                    esac
+                                done < "\$target_list"
+                            done < "\$untracked_list"
+
+                            rm -f "\$target_list" "\$untracked_list"
+
+                            if [ "\$conflict" -ne 0 ]; then
+                                echo "[DEPLOY] Aborting without resetting production."
+                                exit 1
+                            fi
+
+                            echo "[DEPLOY] Preserving current application image..."
+                            rollback_tag="aiman-royale-rollback:prod-${env.BUILD_NUMBER}"
+
+                            docker image tag "\$old_image_id" "\$rollback_tag"
+
+                            rollback_record="\$HOME/aiman-royale-rollback-${env.BUILD_NUMBER}.txt"
+
+                            {
+                                echo "predeploy_commit=\$old_commit"
+                                echo "target_commit=\$target_commit"
+                                echo "old_image_ref=\$old_image_ref"
+                                echo "old_image_id=\$old_image_id"
+                                echo "rollback_tag=\$rollback_tag"
+                                echo "tracked_patch=\$patch_file"
+                                echo "status_snapshot=\$status_file"
+                            } > "\$rollback_record"
+
+                            chmod 600 "\$rollback_record"
+
+                            echo "[DEPLOY] Rollback record: \$rollback_record"
+
+                            deployment_started=0
+
+                            rollback_on_failure() {
+                                rc=\$?
+                                trap - EXIT
+
+                                if [ "\$rc" -ne 0 ] && [ "\$deployment_started" -eq 1 ]; then
+                                    echo "[ROLLBACK] Deployment failed. Restoring prior application..."
+
+                                    if git reset --hard "\$old_commit"; then
+                                        if [ -s "\$patch_file" ]; then
+                                            git apply --binary "\$patch_file" ||
+                                                echo "[ROLLBACK] WARNING: Could not reapply the saved tracked changes."
+                                        fi
+                                    else
+                                        echo "[ROLLBACK] ERROR: Could not restore the previous Git revision."
+                                    fi
+
+                                    if docker image tag "\$rollback_tag" "\$old_image_ref"; then
+                                        docker compose up -d --no-deps --no-build app ||
+                                            echo "[ROLLBACK] ERROR: Could not recreate the previous app container."
+                                    else
+                                        echo "[ROLLBACK] ERROR: Could not restore the previous application image tag."
+                                    fi
+
+                                    if curl -fsS \
+                                        -H "Host: aimanroyale.com" \
+                                        http://127.0.0.1:8080/up >/dev/null 2>&1; then
+                                        echo "[ROLLBACK] Previous application health check passed."
+                                    else
+                                        echo "[ROLLBACK] WARNING: Health check failed after rollback."
+                                        docker compose logs --tail=100 app || true
+                                    fi
+                                fi
+
+                                exit "\$rc"
+                            }
+
+                            trap rollback_on_failure EXIT
+
+                            echo "[DEPLOY] Updating tracked code..."
+                            deployment_started=1
+                            git reset --hard "\$target_commit"
+
+                            echo "[DEPLOY] Building only the app image..."
+                            docker compose build app
+
+                            echo "[DEPLOY] Recreating only the app service..."
+                            docker compose up -d --no-deps app
+
+                            echo "[DEPLOY] Checking application health..."
+                            attempt=0
+                            healthy=0
+
+                            while [ "\$attempt" -lt 12 ]; do
+                                if curl -fsS \
+                                    -H "Host: aimanroyale.com" \
+                                    http://127.0.0.1:8080/up >/dev/null 2>&1; then
+                                    healthy=1
+                                    break
+                                fi
+
+                                attempt=\$((attempt + 1))
+                                sleep 5
+                            done
+
+                            if [ "\$healthy" -ne 1 ]; then
+                                echo "[DEPLOY] ERROR: Application health check failed."
+                                docker compose logs --tail=100 app || true
+                                exit 1
+                            fi
+
+                            echo "[DEPLOY] Verifying service status..."
+                            docker compose ps app nginx redis
+
+                            printf "%s\\\\n" "${env.BUILD_NUMBER}" > .deployed-version
+
+                            deployment_started=0
+                            trap - EXIT
+
+                            echo "[DEPLOY] Deployment completed successfully."
                         '
                     """
                 }
-            }
-        }
-
-        stage('Health Check') {
-            steps {
-                sshagent(credentials: ['aiman-royale-vps-cred']) {
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${VPS_HOST} '
-                            set -e
-                            cd ${PROJECT_DIR}
-                            test -f public/build/manifest.json
-                            docker compose ps --status running app nginx redis
-                            curl -fsS -H "Host: aimanroyale.com" http://127.0.0.1:8080/up
-                        '
-                    """
-                }
-                echo "Deployment completed successfully!"
             }
         }
     }
@@ -105,11 +279,12 @@ pipeline {
     post {
         always {
             cleanWs()
+
             script {
                 if (currentBuild.currentResult == 'SUCCESS') {
-                    echo "✅ Deployment #${BUILD_NUMBER} successful"
+                    echo "Deployment #${env.BUILD_NUMBER} successful"
                 } else {
-                    echo "❌ Deployment #${BUILD_NUMBER} failed"
+                    echo "Deployment #${env.BUILD_NUMBER} failed"
                 }
             }
         }
