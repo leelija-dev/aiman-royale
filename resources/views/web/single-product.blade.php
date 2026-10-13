@@ -877,6 +877,12 @@
 
                             <!-- Mobile Image Slider (Only visible on small screens) -->
                             <div id="mobile-image-slider" class="lg:hidden w-full order-1 relative overflow-hidden">
+                                <!-- Fixed Wishlist Button (Outside slider track) -->
+                                <button id="wishlist-btn-mobile"
+                                    class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[10] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
+                                    <i class="far fa-heart text-[20px]"></i>
+                                </button>
+
                                 <div id="mobile-slider-track" class="flex transition-transform duration-300 ease-out">
                                     @forelse($variantImages as $index => $image)
                                         @php
@@ -886,20 +892,12 @@
                                             <img src="{{ $fullImagePath }}"
                                                 class="w-full h-auto object-cover object-center object-top"
                                                 alt="{{ $product->name }}" loading="lazy" />
-                                            <button id="wishlist-btn-mobile"
-                                                class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
-                                                <i class="far fa-heart text-[20px]"></i>
-                                            </button>
                                         </div>
                                     @empty
                                         <div class="mobile-slide w-full flex-shrink-0 relative">
                                             <img src="{{ asset('assets/images/placeholder.jpg') }}"
                                                 class="w-full h-auto object-cover object-center object-top"
                                                 alt="{{ $product->name ?? 'Product' }}" loading="lazy" />
-                                            <button id="wishlist-btn-mobile"
-                                                class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
-                                                <i class="far fa-heart text-[20px]"></i>
-                                            </button>
                                         </div>
                                     @endforelse
                                 </div>
@@ -3696,10 +3694,6 @@ if (!window.__cartClicksBound) {
                                 <img src="${imagePath}"
                                     class="w-full h-auto object-cover object-center object-top"
                                     alt="{{ $product->name }}" loading="lazy" />
-                                <button id="wishlist-btn-mobile"
-                                    class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
-                                    <i class="far fa-heart text-[20px]"></i>
-                                </button>
                             </div>
                         `;
 
@@ -3715,14 +3709,9 @@ if (!window.__cartClicksBound) {
                         window.reinitializeMobileSlider();
                     }
 
-                    // Re-attach mobile wishlist button
-                    const mobileWishlistBtn = document.getElementById('wishlist-btn-mobile');
-                    if (mobileWishlistBtn) {
-                        mobileWishlistBtn.addEventListener('click', function(event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            toggleWishlist({{ $product?->id }}, this);
-                        });
+                    // Re-initialize zoom functionality
+                    if (typeof initMobileZoom === 'function') {
+                        initMobileZoom();
                     }
                 }
             } else if (variant.image) {
@@ -3747,10 +3736,6 @@ if (!window.__cartClicksBound) {
                             <img src="${fullImagePath}"
                                 class="w-full h-auto object-cover object-center object-top"
                                 alt="{{ $product->name }}" loading="lazy" />
-                            <button id="wishlist-btn-mobile"
-                                class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
-                                <i class="far fa-heart text-[20px]"></i>
-                            </button>
                         </div>
                     `;
                     mobileSliderDots.innerHTML = `<button class="slider-dot w-2 h-2 rounded-full bg-secondary transition-colors" data-slide="0"></button>`;
@@ -3760,14 +3745,9 @@ if (!window.__cartClicksBound) {
                         window.reinitializeMobileSlider();
                     }
 
-                    // Re-attach mobile wishlist button
-                    const mobileWishlistBtn = document.getElementById('wishlist-btn-mobile');
-                    if (mobileWishlistBtn) {
-                        mobileWishlistBtn.addEventListener('click', function(event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            toggleWishlist({{ $product?->id }}, this);
-                        });
+                    // Re-initialize zoom functionality
+                    if (typeof initMobileZoom === 'function') {
+                        initMobileZoom();
                     }
                 }
             }
@@ -4609,7 +4589,7 @@ function checkVariantInCart(variantId) {
                 });
             }
 
-            // Mobile wishlist button
+            // Mobile wishlist button (static, outside slider)
             const mobileWishlistBtn = document.getElementById('wishlist-btn-mobile');
             if (mobileWishlistBtn) {
                 mobileWishlistBtn.addEventListener('click', function(event) {
@@ -4630,19 +4610,6 @@ function checkVariantInCart(variantId) {
             });
 
             checkProductInWishlist({{ $product?->id }});
-
-            // Sync mobile wishlist button state after checking wishlist
-            setTimeout(() => {
-                const desktopWishlistBtn = document.getElementById('wishlist-btn');
-                const mobileWishlistBtnSync = document.getElementById('wishlist-btn-mobile');
-                if (desktopWishlistBtn && mobileWishlistBtnSync) {
-                    if (desktopWishlistBtn.classList.contains('text-red-500')) {
-                        mobileWishlistBtnSync.classList.add('text-red-500');
-                        mobileWishlistBtnSync.classList.remove('text-gray-700');
-                        mobileWishlistBtnSync.innerHTML = '<i class="fas fa-heart"></i>';
-                    }
-                }
-            }, 500);
         });
 
         function selectType(type) {
@@ -4703,18 +4670,29 @@ function checkVariantInCart(variantId) {
             }
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) return;
+            if (!csrfToken) {
+                alert('Security token not found. Please refresh the page.');
+                return;
+            }
 
-            const isInWishlist = button.classList.contains('text-red-500');
+            // Check if product is in wishlist based on button state
+            // Check for both possible indicators of wishlist state
+            const isInWishlist = button.classList.contains('text-red-500') ||
+                                 button.classList.contains('border-red-500') ||
+                                 button.innerHTML.includes('fas fa-heart');
             const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
             const wishEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+
+            // Store original content for both buttons
             const originalContent = button.innerHTML;
+            const otherButtonId = button.id === 'wishlist-btn' ? 'wishlist-btn-mobile' : 'wishlist-btn';
+            const otherButton = document.getElementById(otherButtonId);
+            const otherOriginalContent = otherButton ? otherButton.innerHTML : null;
+
+            // Show loading state on both buttons
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
 
-            // Also update the other button (desktop/mobile)
-            const otherButtonId = button.id === 'wishlist-btn' ? 'wishlist-btn-mobile' : 'wishlist-btn';
-            const otherButton = document.getElementById(otherButtonId);
             if (otherButton) {
                 otherButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
                 otherButton.disabled = true;
@@ -4738,37 +4716,35 @@ function checkVariantInCart(variantId) {
                         const currentUrl = window.location.href.split('#')[0];
                         const redirectUrl = currentUrl + '#action-buttons-section';
                         window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                        return;
+                        return Promise.reject('Authentication required');
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-
-                    if (!data) return;
+                    if (!data) {
+                        throw new Error('No data received from server');
+                    }
 
                     if (data.success) {
+                        // Update both buttons based on new state
+                        const newState = !isInWishlist;
 
-                        if (isInWishlist) {
-                            button.classList.remove('text-red-500');
-                            button.innerHTML = '<i class="far fa-heart"></i>';
-                            // Also update mobile button
-                            const mobileBtn = document.getElementById('wishlist-btn-mobile');
-                            if (mobileBtn) {
-                                mobileBtn.classList.remove('text-red-500');
-                                mobileBtn.classList.add('text-gray-700');
-                                mobileBtn.innerHTML = '<i class="far fa-heart"></i>';
-                            }
-                        } else {
+                        // Update clicked button
+                        if (newState) {
                             button.classList.add('text-red-500');
-                            button.innerHTML = '<i class="fas fa-heart"></i>';
-                            // Also update mobile button
-                            const mobileBtn = document.getElementById('wishlist-btn-mobile');
-                            if (mobileBtn) {
-                                mobileBtn.classList.add('text-red-500');
-                                mobileBtn.classList.remove('text-gray-700');
-                                mobileBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                            if (button.id === 'wishlist-btn') {
+                                button.classList.add('border-red-500');
+                                button.classList.remove('border-gray-300');
+                            } else {
+                                button.classList.remove('text-gray-700');
                             }
-                                                        if (typeof fbq !== 'undefined') {
+                            button.innerHTML = '<i class="fas fa-heart"></i>';
+
+                            // Track Facebook Pixel event
+                            if (typeof fbq !== 'undefined') {
                                 fbq('track', 'AddToWishlist', {
                                     content_name: @json($product->name ?? ''),
                                     content_ids: [String(productId)],
@@ -4777,35 +4753,80 @@ function checkVariantInCart(variantId) {
                                     currency: 'INR'
                                 }, { eventID: wishEventId });
                             }
+                        } else {
+                            button.classList.remove('text-red-500');
+                            if (button.id === 'wishlist-btn') {
+                                button.classList.remove('border-red-500');
+                                button.classList.add('border-gray-300');
+                            } else {
+                                button.classList.add('text-gray-700');
+                            }
+                            button.innerHTML = '<i class="far fa-heart"></i>';
                         }
 
-                        // Update all wishlist badges
-                        // document.querySelectorAll('.wishlist-count').forEach(function(item) {
-                        //     item.textContent = data.wishlist_count;
-                        // });
-                        updateWishlistCount(data.wishlist_count);
+                        // Update other button to match
+                        if (otherButton) {
+                            if (newState) {
+                                otherButton.classList.add('text-red-500');
+                                if (otherButton.id === 'wishlist-btn') {
+                                    otherButton.classList.add('border-red-500');
+                                    otherButton.classList.remove('border-gray-300');
+                                } else {
+                                    otherButton.classList.remove('text-gray-700');
+                                }
+                                otherButton.innerHTML = '<i class="fas fa-heart"></i>';
+                            } else {
+                                otherButton.classList.remove('text-red-500');
+                                if (otherButton.id === 'wishlist-btn') {
+                                    otherButton.classList.remove('border-red-500');
+                                    otherButton.classList.add('border-gray-300');
+                                } else {
+                                    otherButton.classList.add('text-gray-700');
+                                }
+                                otherButton.innerHTML = '<i class="far fa-heart"></i>';
+                            }
+                        }
+
+                        // Update wishlist count
+                        if (data.wishlist_count !== undefined) {
+                            updateWishlistCount(data.wishlist_count);
+                        }
+
+                        // Show success notification
+                        const message = newState ? 'Added to wishlist!' : 'Removed from wishlist!';
+                        showNotification(message, 'success');
 
                     } else {
+                        // Restore original state on failure
+                        button.innerHTML = originalContent;
+                        if (otherButton && otherOriginalContent) {
+                            otherButton.innerHTML = otherOriginalContent;
+                        }
 
                         Swal.fire({
                             icon: 'info',
                             title: 'Wishlist',
-                            text: data.message,
+                            text: data.message || 'Unable to update wishlist',
                             timer: 1800,
                             showConfirmButton: false
                         });
-
                     }
-
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error('Wishlist error:', error);
+
+                    // Restore original state on error
+                    button.innerHTML = originalContent;
+                    if (otherButton && otherOriginalContent) {
+                        otherButton.innerHTML = otherOriginalContent;
+                    }
+
+                    if (error !== 'Authentication required') {
+                        showNotification('An error occurred. Please try again.', 'error');
+                    }
                 })
                 .finally(() => {
                     button.disabled = false;
-                    // Also restore the other button
-                    const otherButtonId = button.id === 'wishlist-btn' ? 'wishlist-btn-mobile' : 'wishlist-btn';
-                    const otherButton = document.getElementById(otherButtonId);
                     if (otherButton) {
                         otherButton.disabled = false;
                     }
@@ -4844,23 +4865,37 @@ function checkVariantInCart(variantId) {
             if (!productId) return;
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) return;
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
 
             fetch('/wishlist/check', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         product_id: productId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    updateWishlistButton(data.in_wishlist);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                .catch(error => console.error('Error checking wishlist:', error));
+                .then(data => {
+                    if (data && typeof data.in_wishlist !== 'undefined') {
+                        updateWishlistButton(data.in_wishlist);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking wishlist:', error);
+                    // Don't show alert on check error, just log it
+                });
         }
 
         function updateWishlistButton(inWishlist) {
@@ -5370,6 +5405,124 @@ function checkVariantInCart(variantId) {
     <!-- Mobile Image Slider JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Image Zoom Functionality
+            window.initMobileZoom = function() {
+                const mobileSlider = document.getElementById('mobile-image-slider');
+                if (!mobileSlider) return;
+
+                const slides = mobileSlider.querySelectorAll('.mobile-slide');
+                slides.forEach(slide => {
+                    const img = slide.querySelector('img');
+                    if (!img) return;
+
+                    let scale = 1;
+                    let pannedX = 0;
+                    let pannedY = 0;
+                    let startX = 0;
+                    let startY = 0;
+                    let isZooming = false;
+                    let isPanning = false;
+
+                    // Touch event variables
+                    let initialDistance = 0;
+                    let initialScale = 1;
+
+                    // Set up image container for zoom
+                    img.style.transition = 'transform 0.3s ease-out';
+                    img.style.transformOrigin = 'center center';
+
+                    // Double tap to zoom
+                    let lastTap = 0;
+                    img.addEventListener('touchend', function(e) {
+                        const currentTime = new Date().getTime();
+                        const tapLength = currentTime - lastTap;
+                        if (tapLength < 300 && tapLength > 0) {
+                            // Double tap detected
+                            if (scale === 1) {
+                                scale = 2;
+                                pannedX = 0;
+                                pannedY = 0;
+                            } else {
+                                scale = 1;
+                                pannedX = 0;
+                                pannedY = 0;
+                            }
+                            updateTransform();
+                        }
+                        lastTap = currentTime;
+                    });
+
+                    // Pinch to zoom
+                    img.addEventListener('touchstart', function(e) {
+                        if (e.touches.length === 2) {
+                            isZooming = true;
+                            initialDistance = getDistance(e.touches[0], e.touches[1]);
+                            initialScale = scale;
+                            e.preventDefault();
+                        }
+                    });
+
+                    img.addEventListener('touchmove', function(e) {
+                        if (isZooming && e.touches.length === 2) {
+                            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                            const scaleChange = currentDistance / initialDistance;
+                            scale = Math.min(Math.max(initialScale * scaleChange, 1), 4); // Limit zoom between 1x and 4x
+                            updateTransform();
+                            e.preventDefault();
+                        } else if (scale > 1 && e.touches.length === 1) {
+                            // Pan when zoomed
+                            if (!isPanning) {
+                                isPanning = true;
+                                startX = e.touches[0].clientX - pannedX;
+                                startY = e.touches[0].clientY - pannedY;
+                            }
+                            pannedX = e.touches[0].clientX - startX;
+                            pannedY = e.touches[0].clientY - startY;
+                            updateTransform();
+                            e.preventDefault();
+                        }
+                    });
+
+                    img.addEventListener('touchend', function(e) {
+                        if (e.touches.length < 2) {
+                            isZooming = false;
+                        }
+                        if (e.touches.length === 0) {
+                            isPanning = false;
+                        }
+                    });
+
+                    // Mouse events for desktop testing
+                    img.addEventListener('wheel', function(e) {
+                        e.preventDefault();
+                        const delta = e.deltaY * -0.001;
+                        scale = Math.min(Math.max(scale + delta, 1), 4);
+                        updateTransform();
+                    });
+
+                    img.addEventListener('dblclick', function() {
+                        if (scale === 1) {
+                            scale = 2;
+                        } else {
+                            scale = 1;
+                            pannedX = 0;
+                            pannedY = 0;
+                        }
+                        updateTransform();
+                    });
+
+                    function getDistance(touch1, touch2) {
+                        const dx = touch1.clientX - touch2.clientX;
+                        const dy = touch1.clientY - touch2.clientY;
+                        return Math.sqrt(dx * dx + dy * dy);
+                    }
+
+                    function updateTransform() {
+                        img.style.transform = `translate(${pannedX}px, ${pannedY}px) scale(${scale})`;
+                    }
+                });
+            };
+
             // Global function to reinitialize mobile slider
             window.reinitializeMobileSlider = function() {
                 const mobileSlider = document.getElementById('mobile-image-slider');
@@ -5507,11 +5660,13 @@ function checkVariantInCart(variantId) {
 
                 // Initialize first slide
                 snapToSlide();
+
+                // Initialize zoom functionality for mobile slider images
+                window.initMobileZoom();
             };
 
             // Initial initialization
             window.reinitializeMobileSlider();
         });
-    </script>
 
 @endsection
