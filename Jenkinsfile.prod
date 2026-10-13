@@ -197,7 +197,7 @@ pipeline {
                                 if [ "\$rc" -ne 0 ] && [ "\$deployment_started" -eq 1 ]; then
                                     echo "[ROLLBACK] Deployment failed. Restoring prior application..."
 
-                                    if git reset --hard "\$old_commit"; then
+                                    if ( umask 022; git reset --hard "\$old_commit" ); then
                                         if [ -s "\$patch_file" ]; then
                                             git apply --binary "\$patch_file" ||
                                                 echo "[ROLLBACK] WARNING: Could not reapply the saved tracked changes."
@@ -230,7 +230,7 @@ pipeline {
 
                             echo "[DEPLOY] Updating tracked code..."
                             deployment_started=1
-                            git reset --hard "\$target_commit"
+                            ( umask 022; git reset --hard "\$target_commit" )
 
                             echo "[DEPLOY] Building only the app image..."
                             docker compose build app
