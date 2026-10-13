@@ -5706,5 +5706,6 @@ function checkVariantInCart(variantId) {
             // Initialize zoom
             window.initMobileZoom();
         });
+    </script>
 
 @endsection
