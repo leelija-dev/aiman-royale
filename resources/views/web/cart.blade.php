@@ -691,7 +691,7 @@ function checkAllItemsStock() {
             stockStatus.innerHTML = `<span class="text-orange-600">Only ${stock} left</span>`;
             row.classList.add('bg-orange-50');
         } else {
-            stockStatus.innerHTML = `<span class="text-green-600">✓ In Stock (${stock})</span>`;
+            stockStatus.innerHTML = `<span class="text-green-600">✓ In Stock</span>`;
             row.classList.remove('bg-red-50', 'bg-orange-50');
         }
         
