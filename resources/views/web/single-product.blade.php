@@ -876,14 +876,14 @@
                             @endphp
 
                             <!-- Mobile Image Slider (Only visible on small screens) -->
-                            <div id="mobile-image-slider" class="lg:hidden w-full order-1 relative overflow-hidden">
+                            <div id="mobile-image-slider" class="lg:hidden w-full order-1 relative overflow-hidden" style="touch-action: pan-y;">
                                 <!-- Fixed Wishlist Button (Outside slider track) -->
                                 <button id="wishlist-btn-mobile"
-                                    class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[10] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
+                                    class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[10] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105 pointer-events-auto">
                                     <i class="far fa-heart text-[20px]"></i>
                                 </button>
 
-                                <div id="mobile-slider-track" class="flex transition-transform duration-300 ease-out">
+                                <div id="mobile-slider-track" class="flex transition-transform duration-300 ease-out" style="will-change: transform;">
                                     @forelse($variantImages as $index => $image)
                                         @php
                                             $fullImagePath = $image->image_url;
@@ -5405,6 +5405,186 @@ function checkVariantInCart(variantId) {
     <!-- Mobile Image Slider JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile slider state variables (outside function to persist)
+            let mobileSliderState = {
+                currentSlide: 0,
+                totalSlides: 0,
+                startX: 0,
+                currentTranslate: 0,
+                prevTranslate: 0,
+                isDragging: false
+            };
+
+            // Global function to reinitialize mobile slider
+            window.reinitializeMobileSlider = function() {
+                const mobileSlider = document.getElementById('mobile-image-slider');
+                const sliderTrack = document.getElementById('mobile-slider-track');
+                const sliderDots = document.getElementById('mobile-slider-dots');
+
+                if (!mobileSlider || !sliderTrack || !sliderDots) return;
+
+                const dots = document.querySelectorAll('.slider-dot');
+                if (dots.length === 0) return;
+
+                // Update total slides
+                mobileSliderState.totalSlides = dots.length;
+
+                // Helper functions
+                function touchStart(event) {
+                    mobileSliderState.isDragging = true;
+                    if (event.touches && event.touches.length > 0) {
+                        mobileSliderState.startX = event.touches[0].clientX;
+                        mobileSliderState.startY = event.touches[0].clientY;
+                    } else {
+                        mobileSliderState.startX = event.pageX;
+                        mobileSliderState.startY = event.pageY;
+                    }
+                    mobileSliderState.prevTranslate = mobileSliderState.currentTranslate;
+                    sliderTrack.style.transition = 'none';
+                }
+
+                function touchMove(event) {
+                    if (!mobileSliderState.isDragging) return;
+
+                    let currentPositionX, currentPositionY;
+                    if (event.touches && event.touches.length > 0) {
+                        currentPositionX = event.touches[0].clientX;
+                        currentPositionY = event.touches[0].clientY;
+                    } else {
+                        currentPositionX = event.pageX;
+                        currentPositionY = event.pageY;
+                    }
+
+                    const diffX = currentPositionX - mobileSliderState.startX;
+                    const diffY = currentPositionY - mobileSliderState.startY;
+
+                    // Only handle horizontal swipes, allow vertical scrolling
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        // Horizontal movement - prevent default to stop page scroll
+                        event.preventDefault();
+                        mobileSliderState.currentTranslate = mobileSliderState.prevTranslate + diffX;
+                        sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    }
+                }
+
+                function touchEnd() {
+                    if (!mobileSliderState.isDragging) return;
+
+                    mobileSliderState.isDragging = false;
+                    const movedBy = mobileSliderState.currentTranslate - mobileSliderState.prevTranslate;
+                    const threshold = 30; // Reduced threshold for easier swiping
+
+                    if (movedBy < -threshold && mobileSliderState.currentSlide < mobileSliderState.totalSlides - 1) {
+                        mobileSliderState.currentSlide += 1;
+                    } else if (movedBy > threshold && mobileSliderState.currentSlide > 0) {
+                        mobileSliderState.currentSlide -= 1;
+                    }
+
+                    snapToSlide();
+                }
+
+                function getPositionX(event) {
+                    if (event.touches && event.touches.length > 0) {
+                        return event.touches[0].clientX;
+                    }
+                    return event.pageX;
+                }
+
+                function snapToSlide() {
+                    const slideWidth = sliderTrack.offsetWidth;
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * slideWidth;
+                    sliderTrack.style.transition = 'transform 300ms ease-out';
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    updateDots();
+                    updateDesktopMainImage();
+                }
+
+                function goToSlide(index) {
+                    mobileSliderState.currentSlide = index;
+                    const slideWidth = sliderTrack.offsetWidth;
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * slideWidth;
+                    sliderTrack.style.transition = 'transform 300ms ease-out';
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    updateDots();
+                    updateDesktopMainImage();
+                }
+
+                function updateDesktopMainImage() {
+                    // Update the desktop main image to match the mobile slide
+                    const currentSlideImg = sliderTrack.children[mobileSliderState.currentSlide].querySelector('img');
+                    const desktopMainImage = document.getElementById('main-image');
+                    if (currentSlideImg && desktopMainImage) {
+                        desktopMainImage.src = currentSlideImg.src;
+                    }
+
+                    // Update desktop thumbnails to match mobile slide
+                    const thumbnailContainer = document.getElementById('thumbnail-container');
+                    if (thumbnailContainer) {
+                        const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
+                        thumbnails.forEach((thumb, index) => {
+                            const thumbImg = thumb.querySelector('img');
+                            if (thumbImg && thumbImg.src === currentSlideImg.src) {
+                                thumb.classList.add('selected', 'border-secondary');
+                                thumb.classList.remove('border-transparent');
+                            } else {
+                                thumb.classList.remove('selected', 'border-secondary');
+                                thumb.classList.add('border-transparent');
+                            }
+                        });
+                    }
+                }
+
+                function updateDots() {
+                    dots.forEach((dot, index) => {
+                        if (index === mobileSliderState.currentSlide) {
+                            dot.classList.remove('bg-gray-300');
+                            dot.classList.add('bg-secondary');
+                        } else {
+                            dot.classList.remove('bg-secondary');
+                            dot.classList.add('bg-gray-300');
+                        }
+                    });
+                }
+
+                // Initialize dots click handlers
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => goToSlide(index));
+                });
+
+                // Touch events for mobile slider - attach to track for better capture
+                sliderTrack.addEventListener('touchstart', touchStart, { passive: false });
+                sliderTrack.addEventListener('touchmove', touchMove, { passive: false });
+                sliderTrack.addEventListener('touchend', touchEnd);
+                sliderTrack.addEventListener('touchcancel', touchEnd);
+
+                // Mouse events for desktop testing
+                sliderTrack.addEventListener('mousedown', touchStart);
+                sliderTrack.addEventListener('mousemove', touchMove);
+                sliderTrack.addEventListener('mouseup', touchEnd);
+                sliderTrack.addEventListener('mouseleave', () => {
+                    if (mobileSliderState.isDragging) {
+                        mobileSliderState.isDragging = false;
+                        snapToSlide();
+                    }
+                });
+
+                // Handle window resize
+                window.removeEventListener('resize', function() {
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                });
+                window.addEventListener('resize', () => {
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                });
+
+                // Initialize first slide
+                snapToSlide();
+            };
+
+            // Initial initialization
+            window.reinitializeMobileSlider();
+
             // Mobile Image Zoom Functionality
             window.initMobileZoom = function() {
                 const mobileSlider = document.getElementById('mobile-image-slider');
@@ -5523,150 +5703,8 @@ function checkVariantInCart(variantId) {
                 });
             };
 
-            // Global function to reinitialize mobile slider
-            window.reinitializeMobileSlider = function() {
-                const mobileSlider = document.getElementById('mobile-image-slider');
-                const sliderTrack = document.getElementById('mobile-slider-track');
-                const sliderDots = document.getElementById('mobile-slider-dots');
-
-                if (!mobileSlider || !sliderTrack || !sliderDots) return;
-
-                const dots = document.querySelectorAll('.slider-dot');
-                if (dots.length === 0) return;
-
-                let currentSlide = 0;
-                const totalSlides = dots.length;
-                let startX = 0;
-                let currentTranslate = 0;
-                let prevTranslate = 0;
-                let isDragging = false;
-
-                // Helper functions
-                function touchStart(event) {
-                    isDragging = true;
-                    startX = getPositionX(event);
-                    prevTranslate = currentTranslate;
-                    sliderTrack.style.transition = 'none';
-                }
-
-                function touchMove(event) {
-                    if (!isDragging) return;
-                    const currentPosition = getPositionX(event);
-                    const diff = currentPosition - startX;
-                    currentTranslate = prevTranslate + diff;
-                    sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-                }
-
-                function touchEnd() {
-                    isDragging = false;
-                    const movedBy = currentTranslate - prevTranslate;
-                    const threshold = 50; // Minimum swipe distance
-
-                    if (movedBy < -threshold && currentSlide < totalSlides - 1) {
-                        currentSlide += 1;
-                    } else if (movedBy > threshold && currentSlide > 0) {
-                        currentSlide -= 1;
-                    }
-
-                    snapToSlide();
-                }
-
-                function getPositionX(event) {
-                    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-                }
-
-                function snapToSlide() {
-                    currentTranslate = -currentSlide * mobileSlider.offsetWidth;
-                    sliderTrack.style.transition = 'transform 300ms ease-out';
-                    sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-                    updateDots();
-                    updateDesktopMainImage();
-                }
-
-                function goToSlide(index) {
-                    currentSlide = index;
-                    currentTranslate = -currentSlide * mobileSlider.offsetWidth;
-                    sliderTrack.style.transition = 'transform 300ms ease-out';
-                    sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-                    updateDots();
-                    updateDesktopMainImage();
-                }
-
-                function updateDesktopMainImage() {
-                    // Update the desktop main image to match the mobile slide
-                    const currentSlideImg = sliderTrack.children[currentSlide].querySelector('img');
-                    const desktopMainImage = document.getElementById('main-image');
-                    if (currentSlideImg && desktopMainImage) {
-                        desktopMainImage.src = currentSlideImg.src;
-                    }
-
-                    // Update desktop thumbnails to match mobile slide
-                    const thumbnailContainer = document.getElementById('thumbnail-container');
-                    if (thumbnailContainer) {
-                        const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
-                        thumbnails.forEach((thumb, index) => {
-                            const thumbImg = thumb.querySelector('img');
-                            if (thumbImg && thumbImg.src === currentSlideImg.src) {
-                                thumb.classList.add('selected', 'border-secondary');
-                                thumb.classList.remove('border-transparent');
-                            } else {
-                                thumb.classList.remove('selected', 'border-secondary');
-                                thumb.classList.add('border-transparent');
-                            }
-                        });
-                    }
-                }
-
-                function updateDots() {
-                    dots.forEach((dot, index) => {
-                        if (index === currentSlide) {
-                            dot.classList.remove('bg-gray-300');
-                            dot.classList.add('bg-secondary');
-                        } else {
-                            dot.classList.remove('bg-secondary');
-                            dot.classList.add('bg-gray-300');
-                        }
-                    });
-                }
-
-                // Initialize dots click handlers
-                dots.forEach((dot, index) => {
-                    dot.addEventListener('click', () => {
-                        goToSlide(index);
-                    });
-                });
-
-                // Touch events for mobile slider
-                mobileSlider.addEventListener('touchstart', touchStart);
-                mobileSlider.addEventListener('touchmove', touchMove);
-                mobileSlider.addEventListener('touchend', touchEnd);
-
-                // Mouse events for desktop testing
-                mobileSlider.addEventListener('mousedown', touchStart);
-                mobileSlider.addEventListener('mousemove', touchMove);
-                mobileSlider.addEventListener('mouseup', touchEnd);
-                mobileSlider.addEventListener('mouseleave', () => {
-                    if (isDragging) {
-                        isDragging = false;
-                        snapToSlide();
-                    }
-                });
-
-                // Handle window resize
-                window.addEventListener('resize', () => {
-                    currentTranslate = -currentSlide * mobileSlider.offsetWidth;
-                    sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-                });
-
-                // Initialize first slide
-                snapToSlide();
-
-                // Initialize zoom functionality for mobile slider images
-                window.initMobileZoom();
-            };
-
-            // Initial initialization
-            window.reinitializeMobileSlider();
+            // Initialize zoom
+            window.initMobileZoom();
         });
 
 @endsection
