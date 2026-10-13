@@ -421,9 +421,13 @@ class CartController extends Controller
                     'message' => 'Cart item not found'
                 ]);
             }
-
+            $variantId = $cartItem->variant_id;
             $cartItem->delete();
-
+            $appliedCoupons = session('applied_coupons', []);
+            if (isset($appliedCoupons[$variantId])) {
+                unset($appliedCoupons[$variantId]);
+                session(['applied_coupons' => $appliedCoupons]);
+            }
             return response()->json([
                 'success' => true,
                 'message' => 'Item removed from cart successfully!'
