@@ -311,6 +311,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {  //middleware([
         Route::prefix('customers')->group(function () {
 
             Route::get('/', [UserController::class, 'customer'])->name('admin.customers.show');
+            Route::delete('/delete/{id}',[UserController::class,'deleteCustomer'])->name('admin.customer.delete');
         });
 
 

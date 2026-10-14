@@ -100,7 +100,7 @@
                                         </td>
                                         
                                       
-                                        <td class="align-middle text-center">
+                                        {{-- <td class="align-middle text-center">
 
                                             <form id="delete-form-{{ $customer->id }}"
                                                 action="#" method="POST"
@@ -108,10 +108,27 @@
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
-                                            <a href="#" >{{-- onclick="confirmDelete({{ $customer->id }})"> --}}
+                                            <a href="#" >onclick="confirmDelete({{ $customer->id }})">
                                                 <i class="fa-solid fa-trash text-danger font-weight-bold text-xs"></i>
                                             </a>
-                                        </td>
+                                        </td> --}}
+                                        
+                                <td class="align-middle text-center">
+                                    <form id="delete-form-{{ $customer->id }}"
+                                        action="{{ route('admin.customer.delete', $customer->id) }}"
+                                        method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+
+                                    <a href="javascript:void(0);"
+                                    onclick="confirmDelete({{ $customer->id }})"
+                                    title="Delete Customer">
+                                        <i class="fa-solid fa-trash text-danger font-weight-bold text-xs"></i>
+                                    </a>
+                                </td>
+
                                     </tr>
 
 
@@ -141,7 +158,7 @@
         </div>
     </div>
 @endsection
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @section('scripts')
     <script>
         function confirmDelete(productId) {
@@ -206,5 +223,29 @@
                 });
             });
         });
+
+        
     </script>
+    
+
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This customer will be deleted permanently!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
+
 @endsection

@@ -879,4 +879,14 @@ class UserController extends Controller implements HasMiddleware
         $data = User::orderBy('created_at', 'desc')->paginate(15);
         return view('Admin.customer.index', compact('data'));
     }
+    public function deleteCustomer($id){
+        try{
+        $customer = User::findOrFail($id);
+        $customer->delete();
+
+        return redirect()->back()->with('success','Customer delete successfully');
+        } catch (\Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
+    }
 }
