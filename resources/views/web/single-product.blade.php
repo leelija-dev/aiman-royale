@@ -5584,15 +5584,22 @@ function checkVariantInCart(variantId) {
                 });
 
                 // Handle window resize
-                window.removeEventListener('resize', function() {
+                // window.removeEventListener('resize', function() {
+                //     mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                //     sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                // });
+                // window.addEventListener('resize', () => {
+                //     mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                //     sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                // });
+                                // Handle window resize (one listener only)
+                if (window.__sliderResize) window.removeEventListener('resize', window.__sliderResize);
+                window.__sliderResize = function () {
                     mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                    sliderTrack.style.transition = 'none';
                     sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
-                });
-                window.addEventListener('resize', () => {
-                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
-                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
-                });
-
+                };
+                window.addEventListener('resize', window.__sliderResize);
                 // Initialize first slide
                 snapToSlide();
             };
@@ -5601,120 +5608,212 @@ function checkVariantInCart(variantId) {
             window.reinitializeMobileSlider();
 
             // Mobile Image Zoom Functionality
+            // window.initMobileZoom = function() {
+            //     const mobileSlider = document.getElementById('mobile-image-slider');
+            //     if (!mobileSlider) return;
+
+            //     const slides = mobileSlider.querySelectorAll('.mobile-slide');
+            //     slides.forEach(slide => {
+            //         const img = slide.querySelector('img');
+            //         if (!img) return;
+
+            //         let scale = 1;
+            //         let pannedX = 0;
+            //         let pannedY = 0;
+            //         let startX = 0;
+            //         let startY = 0;
+            //         let isZooming = false;
+            //         let isPanning = false;
+
+            //         // Touch event variables
+            //         let initialDistance = 0;
+            //         let initialScale = 1;
+
+            //         // Set up image container for zoom
+            //         img.style.transition = 'transform 0.3s ease-out';
+            //         img.style.transformOrigin = 'center center';
+
+            //         // Double tap to zoom
+            //         let lastTap = 0;
+            //         img.addEventListener('touchend', function(e) {
+            //             const currentTime = new Date().getTime();
+            //             const tapLength = currentTime - lastTap;
+            //             if (tapLength < 300 && tapLength > 0) {
+            //                 // Double tap detected
+            //                 if (scale === 1) {
+            //                     scale = 2;
+            //                     pannedX = 0;
+            //                     pannedY = 0;
+            //                 } else {
+            //                     scale = 1;
+            //                     pannedX = 0;
+            //                     pannedY = 0;
+            //                 }
+            //                 updateTransform();
+            //             }
+            //             lastTap = currentTime;
+            //         });
+
+            //         // Pinch to zoom
+            //         img.addEventListener('touchstart', function(e) {
+            //             if (e.touches.length === 2) {
+            //                 isZooming = true;
+            //                 initialDistance = getDistance(e.touches[0], e.touches[1]);
+            //                 initialScale = scale;
+            //                 e.preventDefault();
+            //             }
+            //         });
+
+            //         img.addEventListener('touchmove', function(e) {
+            //             if (isZooming && e.touches.length === 2) {
+            //                 const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            //                 const scaleChange = currentDistance / initialDistance;
+            //                 scale = Math.min(Math.max(initialScale * scaleChange, 1), 4); // Limit zoom between 1x and 4x
+            //                 updateTransform();
+            //                 e.preventDefault();
+            //             } else if (scale > 1 && e.touches.length === 1) {
+            //                 // Pan when zoomed
+            //                 if (!isPanning) {
+            //                     isPanning = true;
+            //                     startX = e.touches[0].clientX - pannedX;
+            //                     startY = e.touches[0].clientY - pannedY;
+            //                 }
+            //                 pannedX = e.touches[0].clientX - startX;
+            //                 pannedY = e.touches[0].clientY - startY;
+            //                 updateTransform();
+            //                 e.preventDefault();
+            //             }
+            //         });
+
+            //         img.addEventListener('touchend', function(e) {
+            //             if (e.touches.length < 2) {
+            //                 isZooming = false;
+            //             }
+            //             if (e.touches.length === 0) {
+            //                 isPanning = false;
+            //             }
+            //         });
+
+            //         // Mouse events for desktop testing
+            //         img.addEventListener('wheel', function(e) {
+            //             e.preventDefault();
+            //             const delta = e.deltaY * -0.001;
+            //             scale = Math.min(Math.max(scale + delta, 1), 4);
+            //             updateTransform();
+            //         });
+
+            //         img.addEventListener('dblclick', function() {
+            //             if (scale === 1) {
+            //                 scale = 2;
+            //             } else {
+            //                 scale = 1;
+            //                 pannedX = 0;
+            //                 pannedY = 0;
+            //             }
+            //             updateTransform();
+            //         });
+
+            //         function getDistance(touch1, touch2) {
+            //             const dx = touch1.clientX - touch2.clientX;
+            //             const dy = touch1.clientY - touch2.clientY;
+            //             return Math.sqrt(dx * dx + dy * dy);
+            //         }
+
+            //         function updateTransform() {
+            //             img.style.transform = `translate(${pannedX}px, ${pannedY}px) scale(${scale})`;
+            //         }
+            //     });
+            // };
+                        // Mobile Image Zoom: pinch in/out, pan while zoomed, double-tap
             window.initMobileZoom = function() {
-                const mobileSlider = document.getElementById('mobile-image-slider');
-                if (!mobileSlider) return;
+                const slider = document.getElementById('mobile-image-slider');
+                if (!slider) return;
+                window.__imgZoomed = false;
 
-                const slides = mobileSlider.querySelectorAll('.mobile-slide');
-                slides.forEach(slide => {
+                slider.querySelectorAll('.mobile-slide').forEach(function(slide) {
                     const img = slide.querySelector('img');
-                    if (!img) return;
+                    if (!img || img._zoomBound) return;
+                    img._zoomBound = true;
 
-                    let scale = 1;
-                    let pannedX = 0;
-                    let pannedY = 0;
-                    let startX = 0;
-                    let startY = 0;
-                    let isZooming = false;
-                    let isPanning = false;
+                    let scale = 1, x = 0, y = 0;
+                    let startDist = 0, startScale = 1, startX = 0, startY = 0;
+                    let panning = false, moved = false, multi = false, lastTap = 0;
 
-                    // Touch event variables
-                    let initialDistance = 0;
-                    let initialScale = 1;
-
-                    // Set up image container for zoom
-                    img.style.transition = 'transform 0.3s ease-out';
                     img.style.transformOrigin = 'center center';
+                    img.style.willChange = 'transform';
 
-                    // Double tap to zoom
-                    let lastTap = 0;
-                    img.addEventListener('touchend', function(e) {
-                        const currentTime = new Date().getTime();
-                        const tapLength = currentTime - lastTap;
-                        if (tapLength < 300 && tapLength > 0) {
-                            // Double tap detected
-                            if (scale === 1) {
-                                scale = 2;
-                                pannedX = 0;
-                                pannedY = 0;
-                            } else {
-                                scale = 1;
-                                pannedX = 0;
-                                pannedY = 0;
-                            }
-                            updateTransform();
-                        }
-                        lastTap = currentTime;
-                    });
+                    const dist = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
 
-                    // Pinch to zoom
+                    function apply(animate) {
+                        if (scale < 1.02) { scale = 1; x = 0; y = 0; }
+                        const maxX = img.offsetWidth * (scale - 1) / 2;
+                        const maxY = img.offsetHeight * (scale - 1) / 2;
+                        x = Math.min(maxX, Math.max(-maxX, x));
+                        y = Math.min(maxY, Math.max(-maxY, y));
+                        img.style.transition = animate ? 'transform .25s ease-out' : 'none';
+                        img.style.transform = scale === 1 ? '' : `translate(${x}px, ${y}px) scale(${scale})`;
+                        img.style.touchAction = scale > 1 ? 'none' : '';
+                        window.__imgZoomed = scale > 1;
+                    }
+
                     img.addEventListener('touchstart', function(e) {
-                        if (e.touches.length === 2) {
-                            isZooming = true;
-                            initialDistance = getDistance(e.touches[0], e.touches[1]);
-                            initialScale = scale;
+                        if (e.touches.length >= 2) {
+                            multi = true;
+                            startDist = dist(e.touches[0], e.touches[1]);
+                            startScale = scale;
+                            panning = false;
                             e.preventDefault();
+                        } else if (e.touches.length === 1 && scale > 1) {
+                            startX = e.touches[0].clientX - x;
+                            startY = e.touches[0].clientY - y;
+                            panning = true;
                         }
-                    });
+                    }, { passive: false });
 
                     img.addEventListener('touchmove', function(e) {
-                        if (isZooming && e.touches.length === 2) {
-                            const currentDistance = getDistance(e.touches[0], e.touches[1]);
-                            const scaleChange = currentDistance / initialDistance;
-                            scale = Math.min(Math.max(initialScale * scaleChange, 1), 4); // Limit zoom between 1x and 4x
-                            updateTransform();
+                        if (e.touches.length === 2 && startDist) {
+                            scale = Math.min(Math.max(startScale * dist(e.touches[0], e.touches[1]) / startDist, 0.8), 4);
+                            moved = true;
+                            apply(false);
                             e.preventDefault();
-                        } else if (scale > 1 && e.touches.length === 1) {
-                            // Pan when zoomed
-                            if (!isPanning) {
-                                isPanning = true;
-                                startX = e.touches[0].clientX - pannedX;
-                                startY = e.touches[0].clientY - pannedY;
-                            }
-                            pannedX = e.touches[0].clientX - startX;
-                            pannedY = e.touches[0].clientY - startY;
-                            updateTransform();
+                        } else if (e.touches.length === 1 && panning && scale > 1) {
+                            x = e.touches[0].clientX - startX;
+                            y = e.touches[0].clientY - startY;
+                            moved = true;
+                            apply(false);
                             e.preventDefault();
                         }
-                    });
+                    }, { passive: false });
 
                     img.addEventListener('touchend', function(e) {
-                        if (e.touches.length < 2) {
-                            isZooming = false;
+                        if (e.touches.length < 2) startDist = 0;
+                        if (e.touches.length === 1 && scale > 1) {
+                            startX = e.touches[0].clientX - x;
+                            startY = e.touches[0].clientY - y;
+                            panning = true;
+                            return;
                         }
-                        if (e.touches.length === 0) {
-                            isPanning = false;
+                        if (e.touches.length > 0) return;
+                        panning = false;
+                        if (multi || moved) {
+                            multi = false; moved = false; lastTap = 0;
+                            apply(scale < 1.05);
+                            return;
                         }
-                    });
-
-                    // Mouse events for desktop testing
-                    img.addEventListener('wheel', function(e) {
-                        e.preventDefault();
-                        const delta = e.deltaY * -0.001;
-                        scale = Math.min(Math.max(scale + delta, 1), 4);
-                        updateTransform();
-                    });
-
-                    img.addEventListener('dblclick', function() {
-                        if (scale === 1) {
-                            scale = 2;
+                        const now = Date.now();
+                        if (now - lastTap < 300) {
+                            scale = scale > 1 ? 1 : 2.5; x = 0; y = 0;
+                            apply(true);
+                            lastTap = 0;
                         } else {
-                            scale = 1;
-                            pannedX = 0;
-                            pannedY = 0;
+                            lastTap = now;
                         }
-                        updateTransform();
                     });
 
-                    function getDistance(touch1, touch2) {
-                        const dx = touch1.clientX - touch2.clientX;
-                        const dy = touch1.clientY - touch2.clientY;
-                        return Math.sqrt(dx * dx + dy * dy);
-                    }
-
-                    function updateTransform() {
-                        img.style.transform = `translate(${pannedX}px, ${pannedY}px) scale(${scale})`;
-                    }
+                    img.addEventListener('touchcancel', function() {
+                        startDist = 0; panning = false; moved = false; multi = false;
+                        apply(true);
+                    });
                 });
             };
 
