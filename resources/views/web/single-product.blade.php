@@ -5431,6 +5431,11 @@ function checkVariantInCart(variantId) {
 
                 // Helper functions
                 function touchStart(event) {
+                     if ((event.touches && event.touches.length > 1) || window.__imgZoomed) {
+                        mobileSliderState.isDragging = false;
+                        return;
+                    }
+                
                     mobileSliderState.isDragging = true;
                     if (event.touches && event.touches.length > 0) {
                         mobileSliderState.startX = event.touches[0].clientX;
@@ -5444,6 +5449,10 @@ function checkVariantInCart(variantId) {
                 }
 
                 function touchMove(event) {
+                    if ((event.touches && event.touches.length > 1) || window.__imgZoomed) {
+                        mobileSliderState.isDragging = false;
+                        return;
+                    }
                     if (!mobileSliderState.isDragging) return;
 
                     let currentPositionX, currentPositionY;
@@ -5550,7 +5559,13 @@ function checkVariantInCart(variantId) {
                 dots.forEach((dot, index) => {
                     dot.addEventListener('click', () => goToSlide(index));
                 });
-
+                if (sliderTrack._h) {
+                    sliderTrack.removeEventListener('touchstart', sliderTrack._h.s);
+                    sliderTrack.removeEventListener('touchmove', sliderTrack._h.m);
+                    sliderTrack.removeEventListener('touchend', sliderTrack._h.e);
+                    sliderTrack.removeEventListener('touchcancel', sliderTrack._h.e);
+                }
+                sliderTrack._h = { s: touchStart, m: touchMove, e: touchEnd };
                 // Touch events for mobile slider - attach to track for better capture
                 sliderTrack.addEventListener('touchstart', touchStart, { passive: false });
                 sliderTrack.addEventListener('touchmove', touchMove, { passive: false });
