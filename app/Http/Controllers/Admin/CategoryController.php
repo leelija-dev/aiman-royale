@@ -236,11 +236,11 @@ class CategoryController extends Controller
             $categories = Category::where('id', '!=', $category->id)->latest()->get();
 
             // Debug: Log categories data
-            Log::info('Categories for edit dropdown', [
-                'current_category_id' => $category->id,
-                'categories_count' => $categories->count(),
-                'categories' => $categories->toArray()
-            ]);
+            // Log::info('Categories for edit dropdown', [
+            //     'current_category_id' => $category->id,
+            //     'categories_count' => $categories->count(),
+            //     'categories' => $categories->toArray()
+            // ]);
 
             return view('Admin.categories.edit', compact('category', 'categories'));
         } catch (\Exception $e) {
