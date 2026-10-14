@@ -611,6 +611,49 @@
                 transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
+            /* ========== MOBILE IMAGE SLIDER ========== */
+
+            #mobile-image-slider {
+                touch-action: pan-y;
+                user-select: none;
+                -webkit-user-select: none;
+                cursor: grab;
+            }
+
+            #mobile-image-slider:active {
+                cursor: grabbing;
+            }
+
+            #mobile-slider-track {
+                width: 100%;
+                will-change: transform;
+            }
+
+            .mobile-slide {
+                aspect-ratio: 9/13;
+                overflow: hidden;
+            }
+
+            .mobile-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center top;
+            }
+
+            .slider-dot {
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .slider-dot:hover {
+                transform: scale(1.2);
+            }
+
+            .slider-dot:active {
+                transform: scale(0.9);
+            }
+
             /* Loading skeleton animation (for dynamic content) */
             @keyframes shimmer {
                 0% {
@@ -808,32 +851,71 @@
                     <div class="flex md:flex-nowrap flex-wrap gap-6">
                         <!-- LEFT IMAGE SECTION -->
                         <div class="flex flex-col lg:flex-row gap-2 min-w-[59%]">
-                            <!-- Thumbnails Container -->
-                            <div id="thumbnail-container"
-                                class="flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
-                                @php
-                                    // Get images of the currently selected variant
-                                    $currentVariant = $product->variants->first();
-                                    
-                                   
-                                    $variantImages = collect();
 
-                                    if ($currentVariant) {
-                                        if ($currentVariant->images && $currentVariant->images->isNotEmpty()) {
-                                            $variantImages = $currentVariant->images;
-                                            
-                                        } elseif ($currentVariant->image) {
-                                            // Create a collection with single image
-                                            $stdClass = new \stdClass();
-                                            $stdClass->image = $currentVariant->image;
-                                            $variantImages = collect([$stdClass]);
-                                        }
+                            @php
+                                // Get images of the currently selected variant
+                                $currentVariant = $product->variants->first();
+
+                                $variantImages = collect();
+
+                                if ($currentVariant) {
+                                    if ($currentVariant->images && $currentVariant->images->isNotEmpty()) {
+                                        $variantImages = $currentVariant->images;
+
+                                    } elseif ($currentVariant->image) {
+                                        // Create a collection with single image
+                                        $stdClass = new \stdClass();
+                                        $stdClass->image = $currentVariant->image;
+                                        $variantImages = collect([$stdClass]);
                                     }
-                                    // Fallback to product images if no variant images
-                                    if ($variantImages->isEmpty()) {
-                                        $variantImages = $product->images;
-                                    }
-                                @endphp
+                                }
+                                // Fallback to product images if no variant images
+                                if ($variantImages->isEmpty()) {
+                                    $variantImages = $product->images;
+                                }
+                            @endphp
+
+                            <!-- Mobile Image Slider (Only visible on small screens) -->
+                            <div id="mobile-image-slider" class="lg:hidden w-full order-1 relative overflow-hidden" style="touch-action: pan-y;">
+                                <!-- Fixed Wishlist Button (Outside slider track) -->
+                                <button id="wishlist-btn-mobile"
+                                    class="lg:hidden absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[10] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105 pointer-events-auto">
+                                    <i class="far fa-heart text-[20px]"></i>
+                                </button>
+
+                                <div id="mobile-slider-track" class="flex transition-transform duration-300 ease-out" style="will-change: transform;">
+                                    @forelse($variantImages as $index => $image)
+                                        @php
+                                            $fullImagePath = $image->image_url;
+                                        @endphp
+                                        <div class="mobile-slide w-full flex-shrink-0 relative">
+                                            <img src="{{ $fullImagePath }}"
+                                                class="w-full h-auto object-cover object-center object-top"
+                                                alt="{{ $product->name }}" loading="lazy" />
+                                        </div>
+                                    @empty
+                                        <div class="mobile-slide w-full flex-shrink-0 relative">
+                                            <img src="{{ asset('assets/images/placeholder.jpg') }}"
+                                                class="w-full h-auto object-cover object-center object-top"
+                                                alt="{{ $product->name ?? 'Product' }}" loading="lazy" />
+                                        </div>
+                                    @endforelse
+                                </div>
+                                <!-- Slider Dots -->
+                                <div id="mobile-slider-dots" class="flex justify-center gap-2 mt-3 pb-2">
+                                    @forelse($variantImages as $index => $image)
+                                        <button class="slider-dot w-2 h-2 rounded-full {{ $index == 0 ? 'bg-secondary' : 'bg-gray-300' }} transition-colors"
+                                            data-slide="{{ $index }}"></button>
+                                    @empty
+                                        <button class="slider-dot w-2 h-2 rounded-full bg-secondary transition-colors"
+                                            data-slide="0"></button>
+                                    @endforelse
+                                </div>
+                            </div>
+
+                            <!-- Thumbnails Container (Hidden on mobile) -->
+                            <div id="thumbnail-container"
+                                class="hidden lg:flex xll:min-w-40 xll:max-w-40 min-w-24 lg:max-w-24 lg:py-0 py-2 items-center lg:overflow-visible overflow-auto lg:flex-col gap-4 order-2 lg:order-1 px-2">
 
                                 @forelse($variantImages as $index => $image)
                                     @php
@@ -863,10 +945,10 @@
                                 @endforelse
                             </div>
 
-                            <!-- Main Image with Hover Pan Zoom -->
+                            <!-- Main Image with Hover Pan Zoom (Hidden on mobile) -->
                             {{--
                 <div id="get-zoom-container" class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2  aspect-[9/13] h-fit">
-                   
+
                     @php
                     $firstImage = $variantImages->first();
                     $mainImagePath = $firstImage ? ltrim($firstImage->image, '/') : 'assets/images/placeholder.jpg';
@@ -883,9 +965,9 @@
                 </div>
                 --}}
                             <div id="get-zoom-container"
-                                class="zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
+                                class="hidden lg:block zoom-container w-auto max-h-[1044px] relative group order-1 lg:order-2 aspect-[9/13] h-fit">
                                 <button id="wishlist-btn"
-                                    class="absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] flex items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
+                                    class="hidden lg:flex absolute text-[20px] w-[42px] h-[42px] top-3 right-[10px] z-[1] items-center justify-center rounded-full bg-white/70 backdrop-blur-lg border border-white/50 shadow-md text-gray-700 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105">
                                     <i class="far fa-heart text-[20px]"></i>
                                 </button>
                                 @php
@@ -3035,6 +3117,35 @@ if (!window.__cartClicksBound) {
                 thumbnailElement.classList.add('selected', 'border-secondary');
                 thumbnailElement.classList.remove('border-transparent');
             }
+
+            // Sync with mobile slider
+            const mobileSliderTrack = document.getElementById('mobile-slider-track');
+            const mobileSlides = mobileSliderTrack ? mobileSliderTrack.children : [];
+            for (let i = 0; i < mobileSlides.length; i++) {
+                const slideImg = mobileSlides[i].querySelector('img');
+                if (slideImg && slideImg.src === imageSrc) {
+                    // Update mobile slider to this slide
+                    const mobileSlider = document.getElementById('mobile-image-slider');
+                    if (mobileSlider) {
+                        const currentTranslate = -i * mobileSlider.offsetWidth;
+                        mobileSliderTrack.style.transition = 'transform 300ms ease-out';
+                        mobileSliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+
+                        // Update dots
+                        const dots = document.querySelectorAll('.slider-dot');
+                        dots.forEach((dot, index) => {
+                            if (index === i) {
+                                dot.classList.remove('bg-gray-300');
+                                dot.classList.add('bg-secondary');
+                            } else {
+                                dot.classList.remove('bg-secondary');
+                                dot.classList.add('bg-gray-300');
+                            }
+                        });
+                    }
+                    break;
+                }
+            }
         }
 
         // Store current color's images to prevent image changes on size selection
@@ -3506,6 +3617,8 @@ if (!window.__cartClicksBound) {
         function updateVariantImages(variant) {
             const mainImage = document.getElementById('main-image');
             const thumbnailContainer = document.getElementById('thumbnail-container');
+            const mobileSliderTrack = document.getElementById('mobile-slider-track');
+            const mobileSliderDots = document.getElementById('mobile-slider-dots');
 
             if (!variant) return;
 
@@ -3556,6 +3669,51 @@ if (!window.__cartClicksBound) {
                     });
                     thumbnailContainer.innerHTML = thumbnailsHtml;
                 }
+
+                // Update mobile slider
+                if (mobileSliderTrack && mobileSliderDots) {
+                    let mobileSlidesHtml = '';
+                    let mobileDotsHtml = '';
+                    variant.images.forEach((image, index) => {
+                        let imagePath = '{{ asset('assets/images/placeholder.jpg') }}';
+
+                        if (typeof image === 'object' && image.image_url) {
+                            imagePath = image.image_url;
+                        } else if (typeof image === 'object' && image.image) {
+                            let path = image.image;
+                            imagePath = path.startsWith('http') ? path : '{{ url('') }}/' + path.replace(
+                                /^\/+/, '');
+                        } else if (typeof image === 'string') {
+                            let path = image;
+                            imagePath = path.startsWith('http') ? path : '{{ url('') }}/' + path.replace(
+                                /^\/+/, '');
+                        }
+
+                        mobileSlidesHtml += `
+                            <div class="mobile-slide w-full flex-shrink-0 relative">
+                                <img src="${imagePath}"
+                                    class="w-full h-auto object-cover object-center object-top"
+                                    alt="{{ $product->name }}" loading="lazy" />
+                            </div>
+                        `;
+
+                        const dotClass = index === 0 ? 'bg-secondary' : 'bg-gray-300';
+                        mobileDotsHtml += `<button class="slider-dot w-2 h-2 rounded-full ${dotClass} transition-colors" data-slide="${index}"></button>`;
+                    });
+
+                    mobileSliderTrack.innerHTML = mobileSlidesHtml;
+                    mobileSliderDots.innerHTML = mobileDotsHtml;
+
+                    // Re-initialize mobile slider
+                    if (typeof window.reinitializeMobileSlider === 'function') {
+                        window.reinitializeMobileSlider();
+                    }
+
+                    // Re-initialize zoom functionality
+                    if (typeof initMobileZoom === 'function') {
+                        initMobileZoom();
+                    }
+                }
             } else if (variant.image) {
                 let imagePath = variant.image;
                 const fullImagePath = imagePath.startsWith('http') ? imagePath : '{{ url('') }}/' + imagePath
@@ -3569,6 +3727,28 @@ if (!window.__cartClicksBound) {
                 if (thumbnailContainer) {
                     thumbnailContainer.innerHTML =
                         `<div class="thumbnail h-fit w-full overflow-hidden rounded-lg border-2 cursor-pointer border-secondary" data-display="${fullImagePath}" data-large="${fullImagePath}" onclick="updateMainImage('${fullImagePath}', PRODUCT_NAME, this)"><img src="${fullImagePath}" class="w-full h-full object-cover object-center object-top" alt="{{ $product?->name }}" /></div>`;
+                }
+
+                // Update mobile slider with single image
+                if (mobileSliderTrack && mobileSliderDots) {
+                    mobileSliderTrack.innerHTML = `
+                        <div class="mobile-slide w-full flex-shrink-0 relative">
+                            <img src="${fullImagePath}"
+                                class="w-full h-auto object-cover object-center object-top"
+                                alt="{{ $product->name }}" loading="lazy" />
+                        </div>
+                    `;
+                    mobileSliderDots.innerHTML = `<button class="slider-dot w-2 h-2 rounded-full bg-secondary transition-colors" data-slide="0"></button>`;
+
+                    // Re-initialize mobile slider
+                    if (typeof window.reinitializeMobileSlider === 'function') {
+                        window.reinitializeMobileSlider();
+                    }
+
+                    // Re-initialize zoom functionality
+                    if (typeof initMobileZoom === 'function') {
+                        initMobileZoom();
+                    }
                 }
             }
         }
@@ -4409,6 +4589,16 @@ function checkVariantInCart(variantId) {
                 });
             }
 
+            // Mobile wishlist button (static, outside slider)
+            const mobileWishlistBtn = document.getElementById('wishlist-btn-mobile');
+            if (mobileWishlistBtn) {
+                mobileWishlistBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleWishlist({{ $product?->id }}, this);
+                });
+            }
+
             // Related products wishlist buttons
             document.querySelectorAll('.wishlist-btn-related').forEach(btn => {
                 btn.addEventListener('click', function(event) {
@@ -4480,14 +4670,33 @@ function checkVariantInCart(variantId) {
             }
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) return;
+            if (!csrfToken) {
+                alert('Security token not found. Please refresh the page.');
+                return;
+            }
 
-            const isInWishlist = button.classList.contains('text-red-500');
+            // Check if product is in wishlist based on button state
+            // Check for both possible indicators of wishlist state
+            const isInWishlist = button.classList.contains('text-red-500') ||
+                                 button.classList.contains('border-red-500') ||
+                                 button.innerHTML.includes('fas fa-heart');
             const url = isInWishlist ? '/wishlist/remove' : '/wishlist/add';
             const wishEventId = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+
+            // Store original content for both buttons
             const originalContent = button.innerHTML;
+            const otherButtonId = button.id === 'wishlist-btn' ? 'wishlist-btn-mobile' : 'wishlist-btn';
+            const otherButton = document.getElementById(otherButtonId);
+            const otherOriginalContent = otherButton ? otherButton.innerHTML : null;
+
+            // Show loading state on both buttons
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
+
+            if (otherButton) {
+                otherButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                otherButton.disabled = true;
+            }
 
             fetch(url, {
                     method: 'POST',
@@ -4507,23 +4716,35 @@ function checkVariantInCart(variantId) {
                         const currentUrl = window.location.href.split('#')[0];
                         const redirectUrl = currentUrl + '#action-buttons-section';
                         window.location.href = loginUrl + '?redirect=' + encodeURIComponent(redirectUrl);
-                        return;
+                        return Promise.reject('Authentication required');
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-
-                    if (!data) return;
+                    if (!data) {
+                        throw new Error('No data received from server');
+                    }
 
                     if (data.success) {
+                        // Update both buttons based on new state
+                        const newState = !isInWishlist;
 
-                        if (isInWishlist) {
-                            button.classList.remove('text-red-500');
-                            button.innerHTML = '<i class="far fa-heart"></i>';
-                        } else {
+                        // Update clicked button
+                        if (newState) {
                             button.classList.add('text-red-500');
+                            if (button.id === 'wishlist-btn') {
+                                button.classList.add('border-red-500');
+                                button.classList.remove('border-gray-300');
+                            } else {
+                                button.classList.remove('text-gray-700');
+                            }
                             button.innerHTML = '<i class="fas fa-heart"></i>';
-                                                        if (typeof fbq !== 'undefined') {
+
+                            // Track Facebook Pixel event
+                            if (typeof fbq !== 'undefined') {
                                 fbq('track', 'AddToWishlist', {
                                     content_name: @json($product->name ?? ''),
                                     content_ids: [String(productId)],
@@ -4532,32 +4753,83 @@ function checkVariantInCart(variantId) {
                                     currency: 'INR'
                                 }, { eventID: wishEventId });
                             }
+                        } else {
+                            button.classList.remove('text-red-500');
+                            if (button.id === 'wishlist-btn') {
+                                button.classList.remove('border-red-500');
+                                button.classList.add('border-gray-300');
+                            } else {
+                                button.classList.add('text-gray-700');
+                            }
+                            button.innerHTML = '<i class="far fa-heart"></i>';
                         }
 
-                        // Update all wishlist badges
-                        // document.querySelectorAll('.wishlist-count').forEach(function(item) {
-                        //     item.textContent = data.wishlist_count;
-                        // });
-                        updateWishlistCount(data.wishlist_count);
+                        // Update other button to match
+                        if (otherButton) {
+                            if (newState) {
+                                otherButton.classList.add('text-red-500');
+                                if (otherButton.id === 'wishlist-btn') {
+                                    otherButton.classList.add('border-red-500');
+                                    otherButton.classList.remove('border-gray-300');
+                                } else {
+                                    otherButton.classList.remove('text-gray-700');
+                                }
+                                otherButton.innerHTML = '<i class="fas fa-heart"></i>';
+                            } else {
+                                otherButton.classList.remove('text-red-500');
+                                if (otherButton.id === 'wishlist-btn') {
+                                    otherButton.classList.remove('border-red-500');
+                                    otherButton.classList.add('border-gray-300');
+                                } else {
+                                    otherButton.classList.add('text-gray-700');
+                                }
+                                otherButton.innerHTML = '<i class="far fa-heart"></i>';
+                            }
+                        }
+
+                        // Update wishlist count
+                        if (data.wishlist_count !== undefined) {
+                            updateWishlistCount(data.wishlist_count);
+                        }
+
+                        // Show success notification
+                        const message = newState ? 'Added to wishlist!' : 'Removed from wishlist!';
+                        showNotification(message, 'success');
 
                     } else {
+                        // Restore original state on failure
+                        button.innerHTML = originalContent;
+                        if (otherButton && otherOriginalContent) {
+                            otherButton.innerHTML = otherOriginalContent;
+                        }
 
                         Swal.fire({
                             icon: 'info',
                             title: 'Wishlist',
-                            text: data.message,
+                            text: data.message || 'Unable to update wishlist',
                             timer: 1800,
                             showConfirmButton: false
                         });
-
                     }
-
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error('Wishlist error:', error);
+
+                    // Restore original state on error
+                    button.innerHTML = originalContent;
+                    if (otherButton && otherOriginalContent) {
+                        otherButton.innerHTML = otherOriginalContent;
+                    }
+
+                    if (error !== 'Authentication required') {
+                        showNotification('An error occurred. Please try again.', 'error');
+                    }
                 })
                 .finally(() => {
                     button.disabled = false;
+                    if (otherButton) {
+                        otherButton.disabled = false;
+                    }
                 });
         }
 
@@ -4593,37 +4865,65 @@ function checkVariantInCart(variantId) {
             if (!productId) return;
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) return;
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
 
             fetch('/wishlist/check', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         product_id: productId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    updateWishlistButton(data.in_wishlist);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                .catch(error => console.error('Error checking wishlist:', error));
+                .then(data => {
+                    if (data && typeof data.in_wishlist !== 'undefined') {
+                        updateWishlistButton(data.in_wishlist);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking wishlist:', error);
+                    // Don't show alert on check error, just log it
+                });
         }
 
         function updateWishlistButton(inWishlist) {
             const wishlistBtn = document.getElementById('wishlist-btn');
-            if (!wishlistBtn) return;
+            const mobileWishlistBtn = document.getElementById('wishlist-btn-mobile');
 
-            if (inWishlist) {
-                wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
-                wishlistBtn.classList.add('border-red-500', 'text-red-500');
-                wishlistBtn.classList.remove('border-gray-300');
-            } else {
-                wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
-                wishlistBtn.classList.remove('border-red-500', 'text-red-500');
-                wishlistBtn.classList.add('border-gray-300');
+            if (wishlistBtn) {
+                if (inWishlist) {
+                    wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                    wishlistBtn.classList.add('border-red-500', 'text-red-500');
+                    wishlistBtn.classList.remove('border-gray-300');
+                } else {
+                    wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
+                    wishlistBtn.classList.remove('border-red-500', 'text-red-500');
+                    wishlistBtn.classList.add('border-gray-300');
+                }
+            }
+
+            if (mobileWishlistBtn) {
+                if (inWishlist) {
+                    mobileWishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                    mobileWishlistBtn.classList.add('text-red-500');
+                    mobileWishlistBtn.classList.remove('text-gray-700');
+                } else {
+                    mobileWishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
+                    mobileWishlistBtn.classList.remove('text-red-500');
+                    mobileWishlistBtn.classList.add('text-gray-700');
+                }
             }
         }
 
@@ -5100,6 +5400,312 @@ function checkVariantInCart(variantId) {
                 eventID: '{{ $metaEventId ?? '' }}'
             });
         }
+    </script>
+
+    <!-- Mobile Image Slider JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile slider state variables (outside function to persist)
+            let mobileSliderState = {
+                currentSlide: 0,
+                totalSlides: 0,
+                startX: 0,
+                currentTranslate: 0,
+                prevTranslate: 0,
+                isDragging: false
+            };
+
+            // Global function to reinitialize mobile slider
+            window.reinitializeMobileSlider = function() {
+                const mobileSlider = document.getElementById('mobile-image-slider');
+                const sliderTrack = document.getElementById('mobile-slider-track');
+                const sliderDots = document.getElementById('mobile-slider-dots');
+
+                if (!mobileSlider || !sliderTrack || !sliderDots) return;
+
+                const dots = document.querySelectorAll('.slider-dot');
+                if (dots.length === 0) return;
+
+                // Update total slides
+                mobileSliderState.totalSlides = dots.length;
+
+                // Helper functions
+                function touchStart(event) {
+                    mobileSliderState.isDragging = true;
+                    if (event.touches && event.touches.length > 0) {
+                        mobileSliderState.startX = event.touches[0].clientX;
+                        mobileSliderState.startY = event.touches[0].clientY;
+                    } else {
+                        mobileSliderState.startX = event.pageX;
+                        mobileSliderState.startY = event.pageY;
+                    }
+                    mobileSliderState.prevTranslate = mobileSliderState.currentTranslate;
+                    sliderTrack.style.transition = 'none';
+                }
+
+                function touchMove(event) {
+                    if (!mobileSliderState.isDragging) return;
+
+                    let currentPositionX, currentPositionY;
+                    if (event.touches && event.touches.length > 0) {
+                        currentPositionX = event.touches[0].clientX;
+                        currentPositionY = event.touches[0].clientY;
+                    } else {
+                        currentPositionX = event.pageX;
+                        currentPositionY = event.pageY;
+                    }
+
+                    const diffX = currentPositionX - mobileSliderState.startX;
+                    const diffY = currentPositionY - mobileSliderState.startY;
+
+                    // Only handle horizontal swipes, allow vertical scrolling
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        // Horizontal movement - prevent default to stop page scroll
+                        event.preventDefault();
+                        mobileSliderState.currentTranslate = mobileSliderState.prevTranslate + diffX;
+                        sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    }
+                }
+
+                function touchEnd() {
+                    if (!mobileSliderState.isDragging) return;
+
+                    mobileSliderState.isDragging = false;
+                    const movedBy = mobileSliderState.currentTranslate - mobileSliderState.prevTranslate;
+                    const threshold = 30; // Reduced threshold for easier swiping
+
+                    if (movedBy < -threshold && mobileSliderState.currentSlide < mobileSliderState.totalSlides - 1) {
+                        mobileSliderState.currentSlide += 1;
+                    } else if (movedBy > threshold && mobileSliderState.currentSlide > 0) {
+                        mobileSliderState.currentSlide -= 1;
+                    }
+
+                    snapToSlide();
+                }
+
+                function getPositionX(event) {
+                    if (event.touches && event.touches.length > 0) {
+                        return event.touches[0].clientX;
+                    }
+                    return event.pageX;
+                }
+
+                function snapToSlide() {
+                    const slideWidth = sliderTrack.offsetWidth;
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * slideWidth;
+                    sliderTrack.style.transition = 'transform 300ms ease-out';
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    updateDots();
+                    updateDesktopMainImage();
+                }
+
+                function goToSlide(index) {
+                    mobileSliderState.currentSlide = index;
+                    const slideWidth = sliderTrack.offsetWidth;
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * slideWidth;
+                    sliderTrack.style.transition = 'transform 300ms ease-out';
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                    updateDots();
+                    updateDesktopMainImage();
+                }
+
+                function updateDesktopMainImage() {
+                    // Update the desktop main image to match the mobile slide
+                    const currentSlideImg = sliderTrack.children[mobileSliderState.currentSlide].querySelector('img');
+                    const desktopMainImage = document.getElementById('main-image');
+                    if (currentSlideImg && desktopMainImage) {
+                        desktopMainImage.src = currentSlideImg.src;
+                    }
+
+                    // Update desktop thumbnails to match mobile slide
+                    const thumbnailContainer = document.getElementById('thumbnail-container');
+                    if (thumbnailContainer) {
+                        const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
+                        thumbnails.forEach((thumb, index) => {
+                            const thumbImg = thumb.querySelector('img');
+                            if (thumbImg && thumbImg.src === currentSlideImg.src) {
+                                thumb.classList.add('selected', 'border-secondary');
+                                thumb.classList.remove('border-transparent');
+                            } else {
+                                thumb.classList.remove('selected', 'border-secondary');
+                                thumb.classList.add('border-transparent');
+                            }
+                        });
+                    }
+                }
+
+                function updateDots() {
+                    dots.forEach((dot, index) => {
+                        if (index === mobileSliderState.currentSlide) {
+                            dot.classList.remove('bg-gray-300');
+                            dot.classList.add('bg-secondary');
+                        } else {
+                            dot.classList.remove('bg-secondary');
+                            dot.classList.add('bg-gray-300');
+                        }
+                    });
+                }
+
+                // Initialize dots click handlers
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => goToSlide(index));
+                });
+
+                // Touch events for mobile slider - attach to track for better capture
+                sliderTrack.addEventListener('touchstart', touchStart, { passive: false });
+                sliderTrack.addEventListener('touchmove', touchMove, { passive: false });
+                sliderTrack.addEventListener('touchend', touchEnd);
+                sliderTrack.addEventListener('touchcancel', touchEnd);
+
+                // Mouse events for desktop testing
+                sliderTrack.addEventListener('mousedown', touchStart);
+                sliderTrack.addEventListener('mousemove', touchMove);
+                sliderTrack.addEventListener('mouseup', touchEnd);
+                sliderTrack.addEventListener('mouseleave', () => {
+                    if (mobileSliderState.isDragging) {
+                        mobileSliderState.isDragging = false;
+                        snapToSlide();
+                    }
+                });
+
+                // Handle window resize
+                window.removeEventListener('resize', function() {
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                });
+                window.addEventListener('resize', () => {
+                    mobileSliderState.currentTranslate = -mobileSliderState.currentSlide * mobileSlider.offsetWidth;
+                    sliderTrack.style.transform = `translateX(${mobileSliderState.currentTranslate}px)`;
+                });
+
+                // Initialize first slide
+                snapToSlide();
+            };
+
+            // Initial initialization
+            window.reinitializeMobileSlider();
+
+            // Mobile Image Zoom Functionality
+            window.initMobileZoom = function() {
+                const mobileSlider = document.getElementById('mobile-image-slider');
+                if (!mobileSlider) return;
+
+                const slides = mobileSlider.querySelectorAll('.mobile-slide');
+                slides.forEach(slide => {
+                    const img = slide.querySelector('img');
+                    if (!img) return;
+
+                    let scale = 1;
+                    let pannedX = 0;
+                    let pannedY = 0;
+                    let startX = 0;
+                    let startY = 0;
+                    let isZooming = false;
+                    let isPanning = false;
+
+                    // Touch event variables
+                    let initialDistance = 0;
+                    let initialScale = 1;
+
+                    // Set up image container for zoom
+                    img.style.transition = 'transform 0.3s ease-out';
+                    img.style.transformOrigin = 'center center';
+
+                    // Double tap to zoom
+                    let lastTap = 0;
+                    img.addEventListener('touchend', function(e) {
+                        const currentTime = new Date().getTime();
+                        const tapLength = currentTime - lastTap;
+                        if (tapLength < 300 && tapLength > 0) {
+                            // Double tap detected
+                            if (scale === 1) {
+                                scale = 2;
+                                pannedX = 0;
+                                pannedY = 0;
+                            } else {
+                                scale = 1;
+                                pannedX = 0;
+                                pannedY = 0;
+                            }
+                            updateTransform();
+                        }
+                        lastTap = currentTime;
+                    });
+
+                    // Pinch to zoom
+                    img.addEventListener('touchstart', function(e) {
+                        if (e.touches.length === 2) {
+                            isZooming = true;
+                            initialDistance = getDistance(e.touches[0], e.touches[1]);
+                            initialScale = scale;
+                            e.preventDefault();
+                        }
+                    });
+
+                    img.addEventListener('touchmove', function(e) {
+                        if (isZooming && e.touches.length === 2) {
+                            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                            const scaleChange = currentDistance / initialDistance;
+                            scale = Math.min(Math.max(initialScale * scaleChange, 1), 4); // Limit zoom between 1x and 4x
+                            updateTransform();
+                            e.preventDefault();
+                        } else if (scale > 1 && e.touches.length === 1) {
+                            // Pan when zoomed
+                            if (!isPanning) {
+                                isPanning = true;
+                                startX = e.touches[0].clientX - pannedX;
+                                startY = e.touches[0].clientY - pannedY;
+                            }
+                            pannedX = e.touches[0].clientX - startX;
+                            pannedY = e.touches[0].clientY - startY;
+                            updateTransform();
+                            e.preventDefault();
+                        }
+                    });
+
+                    img.addEventListener('touchend', function(e) {
+                        if (e.touches.length < 2) {
+                            isZooming = false;
+                        }
+                        if (e.touches.length === 0) {
+                            isPanning = false;
+                        }
+                    });
+
+                    // Mouse events for desktop testing
+                    img.addEventListener('wheel', function(e) {
+                        e.preventDefault();
+                        const delta = e.deltaY * -0.001;
+                        scale = Math.min(Math.max(scale + delta, 1), 4);
+                        updateTransform();
+                    });
+
+                    img.addEventListener('dblclick', function() {
+                        if (scale === 1) {
+                            scale = 2;
+                        } else {
+                            scale = 1;
+                            pannedX = 0;
+                            pannedY = 0;
+                        }
+                        updateTransform();
+                    });
+
+                    function getDistance(touch1, touch2) {
+                        const dx = touch1.clientX - touch2.clientX;
+                        const dy = touch1.clientY - touch2.clientY;
+                        return Math.sqrt(dx * dx + dy * dy);
+                    }
+
+                    function updateTransform() {
+                        img.style.transform = `translate(${pannedX}px, ${pannedY}px) scale(${scale})`;
+                    }
+                });
+            };
+
+            // Initialize zoom
+            window.initMobileZoom();
+        });
     </script>
 
 @endsection

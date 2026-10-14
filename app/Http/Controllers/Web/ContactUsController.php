@@ -28,7 +28,17 @@ class ContactUsController extends Controller
         'email'   => 'required|email|max:255',
         'mobile'  => 'required|string|max:20',
         'subject' => 'required|string|max:255',
-        'message' => 'required|string',
+        'message' => [
+            'required',
+            'string',
+            function ($attribute, $value, $fail) {
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    $fail(
+                        'The message contains invalid text encoding. Please review it and try again.'
+                    );
+                }
+            },
+        ],
     ]);
 
     $validatedData['inquiry_type'] = $validatedData['subject'];
