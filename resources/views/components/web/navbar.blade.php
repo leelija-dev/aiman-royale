@@ -1448,7 +1448,8 @@
 
 <!-- Mobile Sidebar -->
 <div id="mobile-sidebar"
-    class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px]">
+ class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px] flex flex-col">
+    <!-- class="fixed inset-y-0 left-0 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden w-full max-w-[320px]"> -->
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b">
         <a href="/" class="flex items-center gap-3">
@@ -1687,7 +1688,8 @@
     </nav>
 
     <!-- Quick Links Footer -->
-    <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
+    <!-- <div class="absolute bottom-0 left-0 right-0 p-4 border-t bg-white"> -->
+        <div class="p-4 border-t bg-white flex-shrink-0">
         <div class="grid grid-cols-2 gap-2">
             @if(Auth::check())
               <form method="POST" action="{{ route('web.logout') }}" class="contents">
