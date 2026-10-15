@@ -107,9 +107,7 @@
                 </a>
                 --}}
 
-                  @php
-    // Prefer current request (buy_now clicked → login page),
-    // fall back to whatever was stashed earlier in the session.
+                 @php
     $oauthParams = [
         'buy_now'           => 1,
         'variant_id'        => request('variant_id',        session('guest_variant_id')),
@@ -119,15 +117,17 @@
         'event_id'          => request('event_id',          session('guest_event_id')),
         'custom_dimensions' => request('custom_dimensions', session('guest_custom_dimensions')),
         'redirect'          => request('redirect',          session('guest_redirect')),
+        'from'              => url()->previous(), // ✅ ADD THIS
     ];
 
-    // Only send buy_now=1 if we actually have the data
     $hasBuyNow = request()->boolean('buy_now') || session()->has('guest_variant_id');
 
-    // Remove nulls/empties so the URL stays clean
     $googleParams = $hasBuyNow
         ? array_filter($oauthParams, fn ($v) => !is_null($v) && $v !== '')
-        : array_filter(['redirect' => request('redirect')]);
+        : array_filter([
+            'redirect' => request('redirect'),
+            'from'     => url()->previous(), // ✅ ADD THIS
+        ]);
 @endphp
 
 <a href="{{ route('google.redirect', $googleParams) }}" class="google-btn">
