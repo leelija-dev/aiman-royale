@@ -113,10 +113,11 @@
 
     // Fallbacks (in priority order): from param → url.intended → referer → home
     $fromUrl = request('from')
-        ?? $redirectTarget
-        ?? session('url.intended')
-        ?? url()->previous()
-        ?? url('/');
+    ?? session('auth_source_url')      // ✅ NEW — highest-priority fallback
+    ?? $redirectTarget
+    ?? session('url.intended')
+    ?? url()->previous()
+    ?? url('/');
 
     // Never bounce back to auth pages
     if (str_contains($fromUrl, '/login') || str_contains($fromUrl, '/register')) {

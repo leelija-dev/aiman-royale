@@ -348,6 +348,7 @@ class GoogleAuthController extends Controller
             // }
 
             if ($fromUrl = session()->pull('oauth_from_url')) {
+                session()->forget('auth_source_url'); // ✅ add this line
                 $fromHost = parse_url($fromUrl, PHP_URL_HOST);
                 $appHost  = request()->getHost(); // ✅ use actual request host
 
