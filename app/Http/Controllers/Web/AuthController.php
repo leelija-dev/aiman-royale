@@ -107,7 +107,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|min:10|max:255', // "email" here = combined email/phone field
             'password' => 'required|min:6',
-            'cf-turnstile-response' => ['required', new Turnstile],
+            // 'cf-turnstile-response' => ['required', new Turnstile],
         ]);
 
         // 2. Detect if input is email or phone
@@ -156,7 +156,15 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
+             $guestUuid = $this->guestIdentity->get();
 
+            if ($guestUuid) {
+
+                $this->cartMergeService->merge(
+                    $guestUuid,
+                    $user->id
+                );
+            }
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
             if($user){
@@ -1279,8 +1287,17 @@ class AuthController extends Controller
                 'password' => Hash::make(Str::random(24)),
                 'email_verified_at' => now(),
             ]);
+             $guestUuid = $this->guestIdentity->get();
 
+            if ($guestUuid) {
+
+                $this->cartMergeService->merge(
+                    $guestUuid,
+                    $user->id
+                );
+            }
             Auth::login($user);
+            
             // Track CompleteRegistration for Google signup
             $this->trackRegistration([
                 'em' => $user->email,

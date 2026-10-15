@@ -1044,7 +1044,7 @@
         $guestUuid = app(\App\Services\GuestIdentityService::class)
             ->getOrCreate();
 
-        $cartCount = \App\Models\Cart::where('guest_uuid', $guestUuid)
+        $cartCount = \App\Models\Cart::where('guest_uuid', $guestUuid)->where('user_id', null)
             ->sum('count');
     }
 @endphp

@@ -64,12 +64,13 @@ class CartController extends Controller
         } else {
 
             $guestUuid = app(\App\Services\GuestIdentityService::class)->get();
-
             if ($guestUuid) {
 
                 $cartItems = Cart::with(['product.images', 'variant'])
                     ->where('guest_uuid', $guestUuid)
+                    ->where('user_id', null)
                     ->get();
+                
             } else {
 
                 $cartItems = collect();
@@ -160,7 +161,7 @@ class CartController extends Controller
                 ->when(
                     !$userId,
                     function ($query) use ($guestUuid) {
-                        $query->where('guest_uuid', $guestUuid);
+                        $query->where('guest_uuid', $guestUuid)->whereNull('user_id');
                     }
                 )
                 ->first();
@@ -445,12 +446,13 @@ class CartController extends Controller
         $userId = Auth::id();
         $sessionId = session()->getId();
         $guestId = $this->guestIdentity->get();
+        
         return Cart::where(function ($query) use ($userId, $sessionId,$guestId) {
             if ($userId) {
                 $query->where('user_id', $userId);
             }
             elseif($guestId){
-                $query->where('guest_uuid', $guestId);
+                $query->where('guest_uuid', $guestId)->where('user_id', null);
                 }
             else {
                 $query->where('session_id', $sessionId);
@@ -464,13 +466,14 @@ class CartController extends Controller
         $userId = Auth::id();
         $sessionId = session()->getId();
         $guestId = $this->guestIdentity->get();
+        // $recentGuest = Cart::where('guest_uuid', $guestId)->where('user_id', null)->first();
         log::info('guest_id'.$guestId);
         $cartItem = Cart::where('variant_id', $variantId)
-            ->where(function ($query) use ($userId, $sessionId, $guestId) {
+            ->where(function ($query) use ($userId, $sessionId, $guestId,) {
                 if ($userId) {
                     $query->where('user_id', $userId);
                 }elseif($guestId) {
-                    $query->where('guest_uuid', $guestId);
+                    $query->where('guest_uuid', $guestId)->where('user_id', null);
                 }else {
                     $query->where('session_id', $sessionId);
                 }
