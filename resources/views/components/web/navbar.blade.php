@@ -1153,7 +1153,7 @@
     <div class="w-full h-[2px] mt-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
 
     <!-- Main Header -->
-    <div class="py-4 flex items-center justify-between gap-[5px] xl:container mx-auto px-3">
+    <div class="py-4 flex items-center justify-between gap-[5px] xl:container mx-auto px-3 {{ request()->routeIs('page.single-product') ? 'hidden lgg:flex' : 'flex' }}">
         <!-- Left: Logo + Desktop Nav -->
         <div class="lgg:flex hidden items-center gap-8 flex-1">
             <!-- Desktop Navigation with Enhanced Hover Effects -->
