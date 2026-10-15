@@ -335,6 +335,11 @@ class MetaConversionsService
             }
 
             switch ($key) {
+                case 'fbc':
+                case 'fbp':
+                    $valid = $this->validFbCookie($value);
+                    if ($valid) $userData[$key] = $valid;
+                    break;
 
                 case 'em':
                     $hashedEmail = $this->hashEmail($value);
@@ -507,21 +512,46 @@ protected function hashZip(?string $v): ?string
 
     //     return null;
     // }
-    protected function resolveFbc(): ?string
+//     protected function resolveFbc(): ?string
+// {
+//     $req = request();
+//     $existing = $this->validFbCookie($req->cookie('_fbc') ?: ($_COOKIE['_fbc'] ?? null));
+
+//     if ($fbclid = $req->query('fbclid')) {
+//         if ($existing && str_ends_with($existing, '.' . $fbclid)) {
+//             return $existing;
+//         }
+//         $fbc = 'fb.1.' . (int) (microtime(true) * 1000) . '.' . $fbclid;
+//         Cookie::queue('_fbc', $fbc, 60 * 24 * 90, '/', null, null, false);
+//         return $fbc;
+//     }
+
+//     return $existing;
+// }
+protected function resolveFbc(): ?string
 {
     $req = request();
-    $existing = $this->validFbCookie($req->cookie('_fbc') ?: ($_COOKIE['_fbc'] ?? null));
+    $cookieFbc = $this->validFbCookie($req->cookie('_fbc') ?: ($_COOKIE['_fbc'] ?? null));
 
-    if ($fbclid = $req->query('fbclid')) {
-        if ($existing && str_ends_with($existing, '.' . $fbclid)) {
-            return $existing;
-        }
-        $fbc = 'fb.1.' . (int) (microtime(true) * 1000) . '.' . $fbclid;
-        Cookie::queue('_fbc', $fbc, 60 * 24 * 90, '/', null, null, false);
-        return $fbc;
+    $fbclid = null;
+    if (preg_match('/(?:^|&)fbclid=([^&]+)/', (string) $req->server('QUERY_STRING'), $m)) {
+        $fbclid = rawurldecode($m[1]);
     }
 
-    return $existing;
+    if (!$fbclid) {
+        return $cookieFbc;
+    }
+
+    if ($cookieFbc && str_ends_with($cookieFbc, '.' . $fbclid)) {
+        return $cookieFbc;
+    }
+
+    if ($fbclid === strtolower($fbclid) && strlen($fbclid) > 20) {
+        Log::warning('Meta fbclid looks altered', ['fbclid' => $fbclid, 'url' => $req->fullUrl()]);
+        return $cookieFbc;
+    }
+
+    return 'fb.1.' . (int) (microtime(true) * 1000) . '.' . $fbclid;
 }
 
 protected function resolveFbp(): ?string
