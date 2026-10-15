@@ -311,22 +311,39 @@ class GoogleAuthController extends Controller
             }
 
             // ─── NEW: Return to the page the user came from (works for register too) ─
+            // if ($fromUrl = session()->pull('oauth_from_url')) {
+            //     $fromHost = parse_url($fromUrl, PHP_URL_HOST);
+            //     $appHost  = parse_url(config('app.url'), PHP_URL_HOST);
+
+            //     // Only allow same-host redirects (prevent open-redirect attacks)
+            //     if ($fromHost && $appHost && strcasecmp($fromHost, $appHost) === 0) {
+            //         Log::info('Google auth: returning to source URL', [
+            //             'user_id'  => $user->id,
+            //             'from_url' => $fromUrl,
+            //         ]);
+
+            //         return redirect()->to($fromUrl)
+            //             ->with('jwt_token', $token)
+            //             ->with('success', 'Logged in successfully with Google!');
+            //     }
+            // }
+
             if ($fromUrl = session()->pull('oauth_from_url')) {
-                $fromHost = parse_url($fromUrl, PHP_URL_HOST);
-                $appHost  = parse_url(config('app.url'), PHP_URL_HOST);
+    $fromHost = parse_url($fromUrl, PHP_URL_HOST);
+    $appHost  = request()->getHost(); // ✅ use actual request host
 
-                // Only allow same-host redirects (prevent open-redirect attacks)
-                if ($fromHost && $appHost && strcasecmp($fromHost, $appHost) === 0) {
-                    Log::info('Google auth: returning to source URL', [
-                        'user_id'  => $user->id,
-                        'from_url' => $fromUrl,
-                    ]);
+    // Only allow same-host (or relative) redirects (prevent open-redirect attacks)
+    if (!$fromHost || strcasecmp($fromHost, $appHost) === 0) {
+        Log::info('Google auth: returning to source URL', [
+            'user_id'  => $user->id,
+            'from_url' => $fromUrl,
+        ]);
 
-                    return redirect()->to($fromUrl)
-                        ->with('jwt_token', $token)
-                        ->with('success', 'Logged in successfully with Google!');
-                }
-            }
+        return redirect()->to($fromUrl)
+            ->with('jwt_token', $token)
+            ->with('success', 'Logged in successfully with Google!');
+    }
+}
 
             // ─── Default: intended page ──────────────────────────────────
             return redirect()->intended(route('page.index'))
