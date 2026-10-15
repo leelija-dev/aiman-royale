@@ -58,18 +58,35 @@ class GoogleAuthController extends Controller
 
             // ✅ NEW: remember where the user came from (works for both login & register)
             // Priority: explicit ?from= param → current full URL → referrer
+            // if ($request->filled('from')) {
+            //     session()->put('oauth_from_url', $request->input('from'));
+            // } elseif ($request->headers->get('referer')) {
+            //     session()->put('oauth_from_url', $request->headers->get('referer'));
+            // } else {
+            //     session()->put('oauth_from_url', url()->current());
+            // }
+
             if ($request->filled('from')) {
                 session()->put('oauth_from_url', $request->input('from'));
+            } elseif (session()->has('url.intended')) {
+                session()->put('oauth_from_url', session('url.intended'));
             } elseif ($request->headers->get('referer')) {
                 session()->put('oauth_from_url', $request->headers->get('referer'));
             } else {
-                session()->put('oauth_from_url', url()->current());
+                session()->put('oauth_from_url', url()->previous());
             }
 
             Log::info('Google OAuth Redirect Started', [
                 'redirect_uri' => config('services.google.redirect'),
                 'client_id'    => config('services.google.client_id'),
                 'from_url'     => session('oauth_from_url'),
+            ]);
+
+            Log::info('Google redirect debug', [
+                'from_param'   => $request->input('from'),
+                'referer'      => $request->headers->get('referer'),
+                'url_intended' => session('url.intended'),
+                'previous'     => url()->previous(),
             ]);
 
             return Socialite::driver('google')->redirect();
@@ -311,12 +328,29 @@ class GoogleAuthController extends Controller
             }
 
             // ─── NEW: Return to the page the user came from (works for register too) ─
+            // if ($fromUrl = session()->pull('oauth_from_url')) {
+            //     $fromHost = parse_url($fromUrl, PHP_URL_HOST);
+            //     $appHost  = parse_url(config('app.url'), PHP_URL_HOST);
+
+            //     // Only allow same-host redirects (prevent open-redirect attacks)
+            //     if ($fromHost && $appHost && strcasecmp($fromHost, $appHost) === 0) {
+            //         Log::info('Google auth: returning to source URL', [
+            //             'user_id'  => $user->id,
+            //             'from_url' => $fromUrl,
+            //         ]);
+
+            //         return redirect()->to($fromUrl)
+            //             ->with('jwt_token', $token)
+            //             ->with('success', 'Logged in successfully with Google!');
+            //     }
+            // }
+
             if ($fromUrl = session()->pull('oauth_from_url')) {
                 $fromHost = parse_url($fromUrl, PHP_URL_HOST);
-                $appHost  = parse_url(config('app.url'), PHP_URL_HOST);
+                $appHost  = request()->getHost(); // ✅ use actual request host
 
-                // Only allow same-host redirects (prevent open-redirect attacks)
-                if ($fromHost && $appHost && strcasecmp($fromHost, $appHost) === 0) {
+                // Only allow same-host (or relative) redirects (prevent open-redirect attacks)
+                if (!$fromHost || strcasecmp($fromHost, $appHost) === 0) {
                     Log::info('Google auth: returning to source URL', [
                         'user_id'  => $user->id,
                         'from_url' => $fromUrl,
@@ -332,7 +366,6 @@ class GoogleAuthController extends Controller
             return redirect()->intended(route('page.index'))
                 ->with('jwt_token', $token)
                 ->with('success', 'Logged in successfully with Google!');
-
         } catch (\Exception $e) {
             Log::error('Google authentication error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
