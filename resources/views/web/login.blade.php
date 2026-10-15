@@ -289,14 +289,12 @@
                 </form>
 
               
-                
+                {{--
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Don't have an account?
-                        {{-- <a href="{{ route('page.register') }}"
-                            class="text-purple-600 font-medium hover:text-purple-500">
-                            Create one
-                        </a> --}}
+
+                        
                         <a href="{{ route('page.register', request()->boolean('buy_now') ? [
                             'buy_now' => 1,
                             'variant_id' => request('variant_id'),
@@ -310,6 +308,45 @@
                         </a>
                     </p>
                 </div>
+                --}}
+
+<div class="mt-6 text-center">
+    <p class="text-sm text-gray-600">
+        Don't have an account?
+
+        @php
+            // ✅ Save redirect to session so it survives the /login → /register hop
+            if (request()->filled('redirect')) {
+                session()->put('auth_source_url', request('redirect'));
+            }
+
+            // Build params to forward to /register
+            if (request()->boolean('buy_now')) {
+                $registerParams = [
+                    'buy_now'           => 1,
+                    'variant_id'        => request('variant_id'),
+                    'count'             => request('count', 1),
+                    'type'              => request('type'),
+                    'product_id'        => request('product_id'),
+                    'event_id'          => request('event_id'),
+                    'custom_dimensions' => request('custom_dimensions'),
+                ];
+            } else {
+                $registerParams = [];
+            }
+
+            // Forward redirect param too (harmless, useful for debugging)
+            if (request()->filled('redirect')) {
+                $registerParams['redirect'] = request('redirect');
+            }
+        @endphp
+
+        <a href="{{ route('page.register', array_filter($registerParams)) }}"
+           class="text-purple-600 font-medium hover:text-purple-500">
+            Create one
+        </a>
+    </p>
+</div>
             </div>
         </div>
     </div>
