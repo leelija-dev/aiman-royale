@@ -68,12 +68,14 @@ class GoogleAuthController extends Controller
 
             if ($request->filled('from')) {
                 session()->put('oauth_from_url', $request->input('from'));
+            } elseif ($request->filled('redirect')) {
+                session()->put('oauth_from_url', $request->input('redirect'));
             } elseif (session()->has('url.intended')) {
                 session()->put('oauth_from_url', session('url.intended'));
             } elseif ($request->headers->get('referer')) {
                 session()->put('oauth_from_url', $request->headers->get('referer'));
             } else {
-                session()->put('oauth_from_url', url()->previous());
+                session()->put('oauth_from_url', url('/'));
             }
 
             Log::info('Google OAuth Redirect Started', [
@@ -346,6 +348,7 @@ class GoogleAuthController extends Controller
             // }
 
             if ($fromUrl = session()->pull('oauth_from_url')) {
+                session()->forget('auth_source_url'); // ✅ add this line
                 $fromHost = parse_url($fromUrl, PHP_URL_HOST);
                 $appHost  = request()->getHost(); // ✅ use actual request host
 

@@ -156,7 +156,8 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-             $guestUuid = $this->guestIdentity->get();
+
+            $guestUuid = $this->guestIdentity->get();
 
             if ($guestUuid) {
 
@@ -165,10 +166,11 @@ class AuthController extends Controller
                     $user->id
                 );
             }
+
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
-            if($user){
-            $this->trackRegistration();
+            if ($user) {
+                $this->trackRegistration();
             }
             // Store JWT token in session
             session(['jwt_token' => $token]);
@@ -411,12 +413,12 @@ class AuthController extends Controller
 
             // Auto login with Laravel Auth
             Auth::login($user);
-        //    $this->trackRegistration([
-        //         'em' => $user->email,
-        //         'ph' => $user->phone,
-        //         'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
-        //         'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
-        //     ]);
+            //    $this->trackRegistration([
+            //         'em' => $user->email,
+            //         'ph' => $user->phone,
+            //         'fn' => $user->name ? preg_split('/\s+/', trim($user->name), 2)[0] : null,
+            //         'ln' => $user->name ? (preg_split('/\s+/', trim($user->name), 2)[1] ?? null) : null,
+            //     ]);
             // Store JWT token in session for frontend
             session(['jwt_token' => $token]);
 
@@ -1333,17 +1335,17 @@ class AuthController extends Controller
         }
     }
     private function trackRegistration(array $userData = []): void
-{
-    $eventId = (string) Str::uuid();
+    {
+        $eventId = (string) Str::uuid();
 
-    // Browser fires the same event on the next page load (layout reads this)
-    session()->put('meta_registration_event_id', $eventId);
+        // Browser fires the same event on the next page load (layout reads this)
+        session()->put('meta_registration_event_id', $eventId);
 
-    try {
-        $this->metaService->trackCompleteRegistration($userData, $eventId);
-        Log::info('Meta CompleteRegistration tracked', ['event_id' => $eventId]);
-    } catch (\Exception $e) {
-        Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+        try {
+            $this->metaService->trackCompleteRegistration($userData, $eventId);
+            Log::info('Meta CompleteRegistration tracked', ['event_id' => $eventId]);
+        } catch (\Exception $e) {
+            Log::error('Meta CompleteRegistration failed: ' . $e->getMessage());
+        }
     }
-}
 }

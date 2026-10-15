@@ -109,32 +109,41 @@
 
                  @php
 
-                  $fromUrl = request('from', session('url.intended', url()->previous()));
+                     $redirectTarget = request('redirect', session('guest_redirect'));
 
-    // Don't bounce back to login or register pages — that causes loops
+    // Fallbacks (in priority order): from param → url.intended → referer → home
+    $fromUrl = request('from')
+    ?? session('auth_source_url')      // ✅ NEW — highest-priority fallback
+    ?? $redirectTarget
+    ?? session('url.intended')
+    ?? url()->previous()
+    ?? url('/');
+
+    // Never bounce back to auth pages
     if (str_contains($fromUrl, '/login') || str_contains($fromUrl, '/register')) {
         $fromUrl = url('/');
     }
-   $oauthParams = [
-    'buy_now'           => 1,
-    'variant_id'        => request('variant_id',        session('guest_variant_id')),
-    'product_id'        => request('product_id',        session('guest_product_id')),
-    'count'             => request('count', 1,          session('guest_count', 1)),
-    'type'              => request('type',              session('guest_type', 'stitched')),
-    'event_id'          => request('event_id',          session('guest_event_id')),
-    'custom_dimensions' => request('custom_dimensions', session('guest_custom_dimensions')),
-    'redirect'          => request('redirect',          session('guest_redirect')),
-    'from'              => $fromUrl,   // ✅ use the cleaned-up URL
-];
 
-$hasBuyNow = request()->boolean('buy_now') || session()->has('guest_variant_id');
+    $oauthParams = [
+        'buy_now'           => 1,
+        'variant_id'        => request('variant_id',        session('guest_variant_id')),
+        'product_id'        => request('product_id',        session('guest_product_id')),
+        'count'             => request('count', 1,          session('guest_count', 1)),
+        'type'              => request('type',              session('guest_type', 'stitched')),
+        'event_id'          => request('event_id',          session('guest_event_id')),
+        'custom_dimensions' => request('custom_dimensions', session('guest_custom_dimensions')),
+        'redirect'          => $redirectTarget,
+        'from'              => $fromUrl,
+    ];
 
-$googleParams = $hasBuyNow
-    ? array_filter($oauthParams, fn ($v) => !is_null($v) && $v !== '')
-    : array_filter([
-        'redirect' => request('redirect'),
-        'from'     => $fromUrl,   // ✅ use the cleaned-up URL
-    ]);
+    $hasBuyNow = request()->boolean('buy_now') || session()->has('guest_variant_id');
+
+    $googleParams = $hasBuyNow
+        ? array_filter($oauthParams, fn ($v) => !is_null($v) && $v !== '')
+        : array_filter([
+            'redirect' => $redirectTarget,
+            'from'     => $fromUrl,
+        ]);
 @endphp
 
 <a href="{{ route('google.redirect', $googleParams) }}" class="google-btn">
