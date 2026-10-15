@@ -108,14 +108,14 @@ class CartController extends Controller
                 'count' => 'required|integer|min:1',
                 // 'event_id' => 'nullable|string',
                 'event_id' => 'nullable|string',
-                'fbc' => ['nullable', 'string', 'max:255'],
-                'fbp' => ['nullable', 'string', 'max:255'],
+                // 'fbc' => ['nullable', 'string', 'max:255'],
+                // 'fbp' => ['nullable', 'string', 'max:255'],
             ]);
             $eventId = $request->input('event_id');
-            $metaUserData = array_filter([                          // <-- add these 4 lines
-                'fbc' => $request->input('fbc'),
-                'fbp' => $request->input('fbp'),
-            ]);
+            $metaUserData =[]; //array_filter([                          // <-- add these 4 lines
+            //     'fbc' => $request->input('fbc'),
+            //     'fbp' => $request->input('fbp'),
+            // ]);
             // if (!Auth::check()) {
             //     session(['guest_variant_id' => $request->variant_id]);
 
