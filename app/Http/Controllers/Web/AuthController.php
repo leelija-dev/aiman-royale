@@ -1289,8 +1289,17 @@ class AuthController extends Controller
                 'password' => Hash::make(Str::random(24)),
                 'email_verified_at' => now(),
             ]);
+             $guestUuid = $this->guestIdentity->get();
 
+            if ($guestUuid) {
+
+                $this->cartMergeService->merge(
+                    $guestUuid,
+                    $user->id
+                );
+            }
             Auth::login($user);
+            
             // Track CompleteRegistration for Google signup
             $this->trackRegistration([
                 'em' => $user->email,
