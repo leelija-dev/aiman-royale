@@ -730,6 +730,115 @@
             }
         </style>
 
+        <style>
+
+            /* ========== SAVING ZONE ========== */
+.checkout-saving-card {
+    background: #fff;
+    border: 1px solid #f0e4d8;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+.checkout-saving-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c241c;
+    margin-bottom: 0.75rem;
+}
+.checkout-saving-icon { width: 22px; height: 22px; object-fit: contain; }
+.checkout-saving-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.checkout-saving-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px dashed #e0cdb8;
+    border-radius: 12px;
+    background: #fffaf5;
+    transition: border-color .2s, background .2s;
+}
+.checkout-saving-item.is-applied {
+    border-style: solid;
+    border-color: #86c98b;
+    background: #f1faf2;
+}
+.checkout-saving-info { min-width: 0; }
+.checkout-saving-code {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #2c241c;
+}
+.checkout-saving-desc { font-size: 0.78rem; color: #4b5563; margin-top: 2px; }
+.checkout-saving-note { font-size: 0.7rem; color: #8b7355; margin-top: 2px; }
+.checkout-saving-item.is-applied .checkout-saving-note { color: #2d6a2d; }
+
+.checkout-saving-apply,
+.checkout-saving-unapply,
+.checkout-saving-applied {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .2s;
+}
+.checkout-saving-apply {
+    background: var(--secondary, #b8652e);
+    color: #fff;
+    border: 1px solid var(--secondary, #b8652e);
+}
+.checkout-saving-apply:hover:not(:disabled) { opacity: .85; transform: translateY(-1px); }
+.checkout-saving-apply:disabled { opacity: .4; cursor: not-allowed; }
+.checkout-saving-unapply {
+    background: #fff;
+    color: #c0392b;
+    border: 1px solid #e6b3ad;
+}
+.checkout-saving-unapply:hover { background: #fdf0ee; }
+.checkout-saving-applied {
+    background: #e8f3e6;
+    color: #2d6a2d;
+    border: 1px solid #bfe0bf;
+    cursor: default;
+}
+.checkout-saving-empty { font-size: 0.8rem; color: #8b7355; text-align: center; padding: 0.5rem 0; }
+
+/* "View all coupons" accordion */
+.checkout-saving-more { margin-top: 0.25rem; }
+.checkout-saving-more-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--secondary, #b8652e);
+    padding: 0.4rem 0;
+}
+.checkout-saving-more-toggle::-webkit-details-marker { display: none; }
+.checkout-saving-more-toggle i { font-size: 0.7rem; transition: transform .25s; }
+.checkout-saving-more[open] .checkout-saving-more-toggle i { transform: rotate(180deg); }
+.checkout-saving-more-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
+
+@media (max-width: 480px) {
+    .checkout-saving-item { padding: 0.6rem 0.7rem; }
+    .checkout-saving-apply,
+    .checkout-saving-unapply,
+    .checkout-saving-applied { padding: 0.35rem 0.8rem; }
+}
+        </style>
+
+
         <!-- Share Modal -->
         <div id="shareModal" class="fixed inset-0 z-[20000000] hidden">
             <!-- Overlay -->
@@ -1292,6 +1401,107 @@
                                     </li>
                                 </ul>
                             </div>
+
+                            @php
+                $savingCoupons = \App\Models\Coupon::where('is_active', true)
+                    ->where(function ($query) {
+                        $query->whereNull('expiry_date')
+                            ->orWhere('expiry_date', '>=', now());
+                    })
+                    ->orderByRaw("CASE WHEN code_type = 'special-discount' THEN 0 ELSE 1 END")
+                    ->orderByDesc('discount')
+                    ->get();
+                $sessionAppliedCodes = collect(session('applied_coupons', []))
+                    ->pluck('code')
+                    ->filter()
+                    ->map(function ($code) {
+                        return strtoupper(trim($code));
+                    })
+                    ->unique();
+                $specialIsApplied = $coupon
+                    && ($coupon->minimum_amount ?? 0) <= ($total ?? 0);
+                $appliedSavingCoupons = $savingCoupons->filter(function ($savingCoupon) use ($sessionAppliedCodes, $specialIsApplied) {
+                    if ($savingCoupon->code_type === 'special-discount') {
+                        return $specialIsApplied;
+                    }
+                    return $sessionAppliedCodes->contains(strtoupper(trim($savingCoupon->code)));
+                });
+                $otherSavingCoupons = $savingCoupons->reject(function ($savingCoupon) use ($appliedSavingCoupons) {
+                    return $appliedSavingCoupons->contains('id', $savingCoupon->id);
+                });
+            @endphp
+            <div class="checkout-saving-card">
+                <h2 class="checkout-saving-title">
+                    <img src="{{ asset('web/images/icons/saving-zone-wow.png') }}" alt="" class="checkout-saving-icon">
+                    Saving zone
+                </h2>
+                <div class="checkout-saving-list">
+                    @forelse($appliedSavingCoupons as $savingCoupon)
+                    <div class="checkout-saving-item is-applied">
+                        <div class="checkout-saving-info">
+                            <p class="checkout-saving-code">{{ $savingCoupon->code }}</p>
+                            <p class="checkout-saving-desc">
+                                {{ rtrim(rtrim(number_format((float) $savingCoupon->discount, 2), '0'), '.') }}% off
+                                @if($savingCoupon->code_for)
+                                    · {{ $savingCoupon->code_for }}
+                                @elseif($savingCoupon->name)
+                                    · {{ $savingCoupon->name }}
+                                @endif
+                            </p>
+                            @if($savingCoupon->code_type !== 'special-discount')
+                            <p class="checkout-saving-note">Applied on item</p>
+                            @endif
+                        </div>
+                        @if($savingCoupon->code_type === 'special-discount')
+                        <span class="checkout-saving-applied">Applied</span>
+                        @else
+                        <button type="button" class="checkout-saving-unapply" data-code="{{ $savingCoupon->code }}">Remove</button>
+                        @endif
+                    </div>
+                    @empty
+                    @if($otherSavingCoupons->isEmpty())
+                    <p class="checkout-saving-empty">No coupon available right now</p>
+                    @endif
+                    @endforelse
+
+                    @if($otherSavingCoupons->isNotEmpty())
+                    <details class="checkout-saving-more">
+                        <summary class="checkout-saving-more-toggle">
+                            <span>View all coupons and offers</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <div class="checkout-saving-more-list">
+                            @foreach($otherSavingCoupons as $savingCoupon)
+                            <div class="checkout-saving-item">
+                                <div class="checkout-saving-info">
+                                    <p class="checkout-saving-code">{{ $savingCoupon->code }}</p>
+                                    <p class="checkout-saving-desc">
+                                        {{ rtrim(rtrim(number_format((float) $savingCoupon->discount, 2), '0'), '.') }}% off
+                                        @if($savingCoupon->code_for)
+                                            · {{ $savingCoupon->code_for }}
+                                        @elseif($savingCoupon->name)
+                                            · {{ $savingCoupon->name }}
+                                        @endif
+                                    </p>
+                                    @if($savingCoupon->code_type === 'special-discount')
+                                    <p class="checkout-saving-note">
+                                        Auto applied on orders above {{ config('app.currency') }}{{ number_format($savingCoupon->minimum_amount, 2) }}
+                                    </p>
+                                    @else
+                                    <p class="checkout-saving-note">Use this code in the item coupon box</p>
+                                    @endif
+                                </div>
+                                @if($savingCoupon->code_type !== 'special-discount')
+                                <button type="button" class="checkout-saving-apply" data-code="{{ $savingCoupon->code }}">Apply</button>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </details>
+                    @endif
+                </div>
+            </div>
+
 
                             <!-- Action Buttons -->
                             <div id="action-buttons-section"
@@ -3816,6 +4026,13 @@ if (!window.__cartClicksBound) {
         function updatePrice(variant) {
             const priceContainer = document.getElementById('price-container');
             if (priceContainer && variant) {
+                priceContainer.dataset.variantId = variant.id;
+priceContainer.dataset.originalPrice = variant.price;
+priceContainer.dataset.currentPrice = currentPrice;
+priceContainer.dataset.productDiscount = discount || 0;
+
+// a coupon applied on another variant no longer applies here
+document.dispatchEvent(new CustomEvent('coupon:reset'));
                 const currentPrice = variant.discount_price || variant.price;
                 const originalPrice = variant.price;
                 const discount = variant.discount;
@@ -5270,8 +5487,10 @@ function checkVariantInCart(variantId) {
                 `;
                                 }
                             }
+                             document.dispatchEvent(new CustomEvent('coupon:applied', { detail: { code: couponCode } }));
                         } else {
                             showCouponMessage(data.message || 'Invalid coupon code', 'red');
+                            document.dispatchEvent(new CustomEvent('coupon:failed'));
                         }
                     })
                     .catch(error => {
@@ -5279,6 +5498,7 @@ function checkVariantInCart(variantId) {
                         applyCouponBtn.disabled = false;
                         applyCouponBtn.textContent = 'Apply';
                         showCouponMessage('Error applying coupon. Please try again.', 'red');
+                        document.dispatchEvent(new CustomEvent('coupon:failed'));
                     });
             });
             if (
@@ -5821,5 +6041,120 @@ function checkVariantInCart(variantId) {
             window.initMobileZoom();
         });
     </script>
+
+    <script>
+(function () {
+    const card = document.querySelector('.checkout-saving-card');
+    if (!card) return;
+
+    const couponInput   = document.getElementById('coupon-input');
+    const couponApplyBtn = document.getElementById('apply-coupon-btn');
+    const couponBlock   = document.getElementById('coupon-block');
+    const couponArrow   = document.getElementById('coupon-arrow');
+    const couponMessage = document.getElementById('coupon-message');
+
+    function setButton(btn, mode, code) {
+        btn.classList.remove('checkout-saving-apply', 'checkout-saving-unapply');
+        btn.classList.add(mode === 'apply' ? 'checkout-saving-apply' : 'checkout-saving-unapply');
+        btn.setAttribute('data-code', code);
+        btn.textContent = mode === 'apply' ? 'Apply' : 'Remove';
+        btn.disabled = false;
+    }
+
+    // Only one coupon per item: lock every "Apply" while one is applied
+    function syncButtons() {
+        const locked = !!card.querySelector('.checkout-saving-unapply');
+        card.querySelectorAll('.checkout-saving-apply').forEach(b => b.disabled = locked);
+    }
+
+    function restorePrice() {
+        const variant = (window.productVariants || []).find(v => v.id == selectedVariantId);
+        if (variant && typeof updatePrice === 'function') updatePrice(variant);
+    }
+
+    function resetCouponUI() {
+        if (couponInput) couponInput.value = '';
+        if (couponApplyBtn) { couponApplyBtn.disabled = false; couponApplyBtn.textContent = 'Apply'; }
+        if (couponMessage) { couponMessage.classList.add('hidden'); couponMessage.textContent = ''; }
+        card.querySelectorAll('.checkout-saving-item.is-applied').forEach(item => {
+            const btn = item.querySelector('.checkout-saving-unapply');
+            if (btn) {
+                setButton(btn, 'apply', btn.getAttribute('data-code'));
+                item.classList.remove('is-applied');
+                const note = item.querySelector('.checkout-saving-note');
+                if (note) note.textContent = 'Use this code in the item coupon box';
+            }
+        });
+        syncButtons();
+    }
+
+    card.addEventListener('click', function (e) {
+        const applyBtn   = e.target.closest('.checkout-saving-apply');
+        const unapplyBtn = e.target.closest('.checkout-saving-unapply');
+
+        // ---- APPLY: reuse the existing coupon box ----
+        if (applyBtn) {
+            if (applyBtn.disabled || !couponInput || !couponApplyBtn) return;
+            couponInput.value = applyBtn.getAttribute('data-code') || '';
+            if (couponBlock && couponBlock.classList.contains('hidden')) {
+                couponBlock.classList.remove('hidden');
+                if (couponArrow) couponArrow.style.transform = 'rotate(180deg)';
+            }
+            card.querySelectorAll('.checkout-saving-apply').forEach(b => b.disabled = true); // while request runs
+            couponApplyBtn.click();
+            return;
+        }
+
+        // ---- REMOVE ----
+        if (unapplyBtn) {
+            const code = unapplyBtn.getAttribute('data-code') || '';
+            if (!code) return;
+            unapplyBtn.disabled = true;
+
+            fetch("{{ route('remove.coupon') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    coupon_code: code,
+                    variant_id: document.getElementById('price-container')?.dataset.variantId
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (!res.status) { unapplyBtn.disabled = false; return; }
+                resetCouponUI();
+                restorePrice();
+            })
+            .catch(err => { console.error(err); unapplyBtn.disabled = false; });
+        }
+    });
+
+    // Coupon applied (from the saving zone OR typed manually)
+    document.addEventListener('coupon:applied', function (e) {
+        const code = String(e.detail?.code || '').toUpperCase();
+        card.querySelectorAll('[data-code]').forEach(btn => {
+            if (btn.getAttribute('data-code').toUpperCase() === code) {
+                setButton(btn, 'unapply', btn.getAttribute('data-code'));
+                const item = btn.closest('.checkout-saving-item');
+                if (item) {
+                    item.classList.add('is-applied');
+                    const note = item.querySelector('.checkout-saving-note');
+                    if (note) note.textContent = 'Applied on item';
+                }
+            }
+        });
+        syncButtons();
+    });
+
+    document.addEventListener('coupon:failed', syncButtons);
+    document.addEventListener('coupon:reset', resetCouponUI);
+
+    syncButtons();
+})();
+</script>
 
 @endsection

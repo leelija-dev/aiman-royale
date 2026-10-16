@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\Occasion;
 use App\Models\OfferProducts;
 use App\Models\ProductVariant;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Size;
@@ -1419,6 +1420,7 @@ class HomeController extends Controller
 
         // Check for applied coupon in session
         $appliedCoupon = session('applied_coupon');
+        $coupon = Coupon::where('code_type', 'special-discount')->where('is_active', true)->first();
 
         return view('web.single-product', compact(
             'product',
@@ -1427,7 +1429,8 @@ class HomeController extends Controller
             'colors',
             'mostWishlistedProducts',
             'lastViewedProducts',
-            'appliedCoupon'
+            'appliedCoupon',
+            'coupon'
         ));
     }
 
