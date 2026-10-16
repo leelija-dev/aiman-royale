@@ -4028,8 +4028,8 @@ if (!window.__cartClicksBound) {
             if (priceContainer && variant) {
                 priceContainer.dataset.variantId = variant.id;
 priceContainer.dataset.originalPrice = variant.price;
-priceContainer.dataset.currentPrice = currentPrice;
-priceContainer.dataset.productDiscount = discount || 0;
+priceContainer.dataset.currentPrice = $variant.discount_price || 0;//currentPrice;
+priceContainer.dataset.productDiscount = variant.discount || 0;//discount || 0;
 
 // a coupon applied on another variant no longer applies here
 document.dispatchEvent(new CustomEvent('coupon:reset'));
