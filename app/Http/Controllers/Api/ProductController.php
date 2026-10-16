@@ -422,7 +422,7 @@ class ProductController extends Controller
                 // Get lowest price from variants
                 $lowestPrice = null;
                 if ($variants->isNotEmpty()) {
-                    $lowestPrice = $variants->min('price');
+                    $lowestPrice = $variants->min('discount_price');
                 }
 
                 // Get first image
@@ -442,7 +442,7 @@ class ProductController extends Controller
                     'fabric' => $product->fabric,
                     'fit' => $product->fit,
                     'price' => $product->price,
-                    'discount_price' => $product->discount_price,
+                    'discount_price' => $lowestPrice,//$product->discount_price,
                     'stock' => $product->stock,
                     'is_featured' => $product->is_featured,
                     'lowest_price' => $lowestPrice,
