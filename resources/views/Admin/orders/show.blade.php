@@ -177,7 +177,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <div class="mr-3" style="min-width: 50px; min-height: 50px;">
                                                             @if($orderProduct->product->featured_image)
-                                                                <img src="{{ asset($orderProduct->product->featured_image) }}" 
+                                                                <img src="{{ asset('img/' . $orderProduct->product->featured_image) }}" 
                                                                      alt="{{ $orderProduct->product->name }}" 
                                                                      class="img-thumbnail" 
                                                                      style="width: 50px; height: 50px; object-fit: cover;"  onclick="showImagePreview(this.src, '{{ $orderProduct->product->name }}')">
