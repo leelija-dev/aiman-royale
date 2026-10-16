@@ -93,7 +93,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Phone:</strong></td>
-                                    <td>{{ $order->user->phone ?? 'N/A' }}</td>
+                                    <td>{{ $order->phone_no ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Address:</strong></td>
@@ -176,8 +176,8 @@
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="mr-3" style="min-width: 50px; min-height: 50px;">
-                                                            @if($orderProduct->product->images && $orderProduct->product->images->first())
-                                                                <img src="{{ asset($orderProduct->product->images->first()->image) }}" 
+                                                            @if($orderProduct->product->featured_image)
+                                                                <img src="{{ asset($orderProduct->product->featured_image) }}" 
                                                                      alt="{{ $orderProduct->product->name }}" 
                                                                      class="img-thumbnail" 
                                                                      style="width: 50px; height: 50px; object-fit: cover;"  onclick="showImagePreview(this.src, '{{ $orderProduct->product->name }}')">
